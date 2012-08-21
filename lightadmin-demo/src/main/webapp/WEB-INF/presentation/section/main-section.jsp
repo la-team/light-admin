@@ -3,13 +3,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<div class="page-header">
-	<h1>Entry</h1>
-</div>
-
 <ul class="breadcrumb">
 	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span>
-	<li class="active">Entry</li>
+	<li class="active">Entries</li>
 </ul>
 
 <c:choose>
@@ -17,7 +13,7 @@
 		<table class="table table-striped table-bordered table-hover">
 			<thead>
 			<tr>
-				<th>#</th>
+				<th>ID</th>
 				<th>Name</th>
 			</tr>
 			</thead>

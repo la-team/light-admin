@@ -5,23 +5,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<div class="well sidebar-nav">
-	<ul class="nav nav-list">
-		<li class="nav-header">Navigation Block</li>
-		<li class="active"><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li class="nav-header">Navigation Block</li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li class="nav-header">Navigation Block</li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-		<li><a href="#">Link</a></li>
-	</ul>
-</div>
+<ul class="nav nav-list menu-sidenav">
+	<li class="active"><a href="#"><i class="icon-chevron-right"></i> Entries</a></li>
+	<li><a href="#"><i class="icon-chevron-right"></i> Users</a></li>
+	<li><a href="#"><i class="icon-chevron-right"></i> Roles</a></li>
+	<li><a href="#"><i class="icon-chevron-right"></i> Products</a></li>
+	<li><a href="#"><i class="icon-chevron-right"></i> Categories</a></li>
+</ul>
