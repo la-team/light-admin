@@ -12,6 +12,7 @@
 	<http pattern="/login" security="none"/>
 
 	<http use-expressions="true">
+		<!--<intercept-url pattern="/**" access="permitAll" />-->
 		<intercept-url pattern="/**" access="isAuthenticated()" />
 		<form-login login-page="/login" authentication-failure-url="/login?login_error=1"/>
 		<http-basic/>
