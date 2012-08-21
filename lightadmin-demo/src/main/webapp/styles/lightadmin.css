@@ -1,0 +1,18 @@
+body {
+	padding-top: 60px;
+	padding-bottom: 40px;
+	/*background: #E9E9E9 url(../images/body-bg.png) repeat 0 0;*/
+}
+.sidebar-nav {
+	padding: 9px 0;
+}
+.footer {
+	margin-top: 0;
+	border-top: 1px solid #292929;
+}
+.footer-inner {
+	padding: 15px 0;
+	font-size: 12px;
+	background: #111;
+	color: #999;
+}

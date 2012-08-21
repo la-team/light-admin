@@ -1,7 +1,11 @@
 <web-app xmlns="http://java.sun.com/xml/ns/javaee"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-fragment_3_0.xsd"
-	version="3.0">
+		 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		 xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+		 version="2.5">
+
+	<display-name>LightAdmin</display-name>
+
+	<description>LightAdmin - Administration framework for Java web applications.</description>
 
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
@@ -13,16 +17,50 @@
 	</listener>
 
 	<servlet>
-		<servlet-name>dispatcher</servlet-name>
+		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
 		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>/WEB-INF/webmvc-config.xml</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
 	</servlet>
+
 	<servlet-mapping>
-		<servlet-name>dispatcher</servlet-name>
-		<url-pattern>*.html</url-pattern>
+		<servlet-name>Spring MVC Dispatcher Servlet</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
-	
+
+	<filter>
+		<filter-name>charsetFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+		<init-param>
+			<param-name>forceEncoding</param-name>
+			<param-value>true</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>charsetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+
 	<welcome-file-list>
-		<welcome-file>welcome.html</welcome-file>
+		<welcome-file>/</welcome-file>
 	</welcome-file-list>
+
+	<error-page>
+		<error-code>404</error-code>
+		<location>/</location>
+	</error-page>
+
+	<session-config>
+		<session-timeout>60</session-timeout>
+	</session-config>
 
 </web-app>

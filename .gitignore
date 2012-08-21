@@ -8,6 +8,12 @@
 *.swp
 *.zip
 *.vi
+*.class
+
+# Package Files #
+*.jar
+*.war
+*.ear
 *~
 *.sass-cache
 
@@ -23,6 +29,7 @@ Thumbs.db
 nbproject
 *.sublime-project
 *.sublime-workspace
+*.iml
 
 # Komodo
 *.komodoproject

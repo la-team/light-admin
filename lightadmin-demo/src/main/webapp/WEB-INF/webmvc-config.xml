@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:p="http://www.springframework.org/schema/p" xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
+
+	<mvc:annotation-driven/>
+
+	<context:component-scan base-package="org.lightadmin.demo.web"/>
+
+	<bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource"
+		  p:basename="classpath:messages" p:defaultEncoding="UTF-8" p:fileEncodings="UTF-8" p:cacheSeconds="5"/>
+
+	<mvc:resources mapping="/styles/**" location="/styles/" cache-period="31556926"/>
+	<mvc:resources mapping="/scripts/**" location="/scripts/"/>
+	<mvc:resources mapping="/images/**" location="/images/" cache-period="31556926"/>
+
+	<bean id="tilesViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver" p:viewClass="org.springframework.web.servlet.view.tiles2.TilesView"/>
+
+	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" p:checkRefresh="true">
+		<property name="definitions">
+			<list>
+				<value>/WEB-INF/tiles/definitions.xml</value>
+			</list>
+		</property>
+	</bean>
+
+</beans>

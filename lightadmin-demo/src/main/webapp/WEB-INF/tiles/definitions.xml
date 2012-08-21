@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+
+<tiles-definitions>
+
+    <definition name="application.layout" template="/WEB-INF/presentation/layout/layout.jsp">
+        <put-attribute name="HEADER_SECTION" value="/WEB-INF/presentation/section/header-section.jsp"/>
+        <put-attribute name="LEFT_SECTION" value="/WEB-INF/presentation/section/left-section.jsp"/>
+        <put-attribute name="FOOTER_SECTION" value="/WEB-INF/presentation/section/footer-section.jsp"/>
+    </definition>
+
+    <definition name="index" extends="application.layout">
+        <put-attribute name="MAIN_SECTION" value="/WEB-INF/presentation/section/main-section.jsp"/>
+    </definition>
+
+</tiles-definitions>
