@@ -46,7 +46,7 @@
 						<ul class="dropdown-menu">
 							<li><a href="#"><spring:message code="application.menu.profile"/></a></li>
 							<li class="divider"></li>
-							<li><a href="#"><spring:message code="application.menu.logout"/></a></li>
+							<li><a href="<spring:url value='/logout'/>"><spring:message code="application.menu.logout"/></a></li>
 						</ul>
 					</li>
 				</ul>

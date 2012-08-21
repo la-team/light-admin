@@ -13,4 +13,10 @@
         <put-attribute name="MAIN_SECTION" value="/WEB-INF/presentation/section/main-section.jsp"/>
     </definition>
 
+	<definition name="dashboard" extends="application.layout">
+		<put-attribute name="MAIN_SECTION" value="/WEB-INF/presentation/dashboard.jsp"/>
+	</definition>
+
+	<definition name="login" template="/WEB-INF/presentation/login.jsp"/>
+
 </tiles-definitions>

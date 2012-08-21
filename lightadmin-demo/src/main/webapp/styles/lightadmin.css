@@ -1,18 +1,59 @@
 body {
 	padding-top: 60px;
 	padding-bottom: 40px;
-	/*background: #E9E9E9 url(../images/body-bg.png) repeat 0 0;*/
 }
+
+body.login {
+	padding-top: 0px;
+	background: #E9E9E9 url(../images/body-bg.png) repeat 0 0;
+}
+
 .sidebar-nav {
 	padding: 9px 0;
 }
+
 .footer {
 	margin-top: 0;
 	border-top: 1px solid #292929;
 }
+
 .footer-inner {
 	padding: 15px 0;
 	font-size: 12px;
 	background: #111;
 	color: #999;
+}
+
+#login {
+	width: 500px;
+	float: left;
+	margin-top: 0;
+}
+
+#login .title {
+	width: auto;
+	letter-spacing: -1px;
+	margin: 0;
+	border: 1px solid #DDD;
+	background: #000000;
+	padding: 15px 30px;
+	font-size: 22px;
+	color: #fff;
+	-moz-border-radius-topleft: 6px;
+	-moz-border-radius-topright: 6px;
+}
+
+#login fieldset {
+	width: auto;
+	margin: 0;
+	padding: 30px 0 0 0;
+	background-color: white;
+	border: 1px solid #DDD;
+	border-top: none;
+	-moz-border-radius-bottomleft: 6px;
+	-moz-border-radius-bottomright: 6px;
+}
+
+#login form {
+	margin: 0;
 }
