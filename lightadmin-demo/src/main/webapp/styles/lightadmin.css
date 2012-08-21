@@ -57,3 +57,7 @@ body.login {
 #login form {
 	margin: 0;
 }
+
+#login .alert {
+	margin-bottom: 0;
+}
