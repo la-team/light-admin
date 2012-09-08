@@ -31,6 +31,17 @@
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 
+	<servlet>
+		<servlet-name>Repository Rest Exporter Servlet</servlet-name>
+		<servlet-class>org.springframework.data.rest.webmvc.RepositoryRestExporterServlet</servlet-class>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>Repository Rest Exporter Servlet</servlet-name>
+		<url-pattern>/rest/*</url-pattern>
+	</servlet-mapping>
+
 	<filter>
 		<filter-name>springSecurityFilterChain</filter-name>
 		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
@@ -59,15 +70,9 @@
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
 
-
 	<welcome-file-list>
 		<welcome-file>/</welcome-file>
 	</welcome-file-list>
-
-	<error-page>
-		<error-code>404</error-code>
-		<location>/</location>
-	</error-page>
 
 	<session-config>
 		<session-timeout>60</session-timeout>

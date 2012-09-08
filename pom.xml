@@ -11,6 +11,19 @@
 		<module>lightadmin-demo</module>
 	</modules>
 
+	<repositories>
+		<repository>
+			<id>maven-central</id>
+			<name>Maven Central</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<id>spring-milestone</id>
+			<name>Spring Maven MILESTONE Repository</name>
+			<url>http://repo.springsource.org/libs-milestone</url>
+		</repository>
+	</repositories>
+
 	<dependencyManagement>
 		<dependencies>
 
@@ -63,7 +76,17 @@
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-config</artifactId>
 				<version>3.1.2.RELEASE</version>
-			  </dependency>			
+			  </dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-jpa</artifactId>
+				<version>1.1.0.RELEASE</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-rest-webmvc</artifactId>
+				<version>1.0.0.RC2</version>
+			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
@@ -78,6 +101,16 @@
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
 				<version>4.1.5.SP1</version>
+			</dependency>
+			<dependency>
+				<groupId>org.hibernate</groupId>
+				<artifactId>hibernate-validator</artifactId>
+				<version>4.3.0.Final</version>
+			</dependency>
+			<dependency>
+				<groupId>javax.validation</groupId>
+				<artifactId>validation-api</artifactId>
+				<version>1.1.0.Alpha1</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hsqldb</groupId>
@@ -103,12 +136,17 @@
 		        <groupId>org.slf4j</groupId>
 		        <artifactId>slf4j-api</artifactId>
 		        <version>1.6.1</version>
-		    </dependency>			
-		    <dependency>
-		        <groupId>org.slf4j</groupId>
-		        <artifactId>slf4j-nop</artifactId>
-		        <version>1.6.1</version>
-		    </dependency>			
+		    </dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>jcl-over-slf4j</artifactId>
+				<version>1.6.6</version>
+			</dependency>
+			<dependency>
+				<groupId>joda-time</groupId>
+				<artifactId>joda-time</artifactId>
+				<version>2.1</version>
+			</dependency>
 			<dependency>
 				<groupId>javax.servlet.jsp.jstl</groupId>
 				<artifactId>jstl-api</artifactId>
