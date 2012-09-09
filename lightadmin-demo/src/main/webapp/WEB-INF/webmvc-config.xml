@@ -41,7 +41,7 @@
 		<property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory"/>
 	</bean>
 
-	<bean id="menuPreparer" class="org.lightadmin.demo.MenuPreparer"/>
+	<bean id="menuPreparer" class="org.lightadmin.core.view.preparer.MenuPreparer"/>
 
 	<mvc:view-controller path="/login" view-name="login"/>
 </beans>

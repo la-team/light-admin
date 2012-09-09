@@ -13,7 +13,7 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import org.lightadmin.demo.DynamicJpaRepository;
+import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.demo.model.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
