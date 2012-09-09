@@ -19,6 +19,30 @@ public class Entry {
 	@Size( min = 1, max = 50 )
 	private String name;
 
+	@Column( length = 32 )
+	@NotEmpty
+	private String email;
+
+	@Column( name = "FAVORITE_COLOR", length = 32 )
+	@NotEmpty
+	private String favoriteColor;
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getFavoriteColor() {
+		return favoriteColor;
+	}
+
+	public void setFavoriteColor(String favoriteColor) {
+		this.favoriteColor = favoriteColor;
+	}
+
 	public Integer getId() {
 		return id;
 	}

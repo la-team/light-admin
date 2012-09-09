@@ -16,6 +16,14 @@
 	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/bootstrap.css"/>" media="screen">
 	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/lightadmin.css"/>" media="screen">
 	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/bootstrap-responsive.css"/>" media="screen">
+	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/DT_bootstrap.css"/>" media="screen">
+
+	<script type="text/javascript" src="<spring:url value="/scripts/jquery-1.8.0.min.js"/>"></script>
+
+	<script type="text/javascript" src="<spring:url value="/scripts/bootstrap.min.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/scripts/jquery.dataTables.min.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/scripts/DT_bootstrap.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/scripts/lightadmin.js"/>"></script>
 
 	<!--[if lt IE 9]>
 	<script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
@@ -39,10 +47,6 @@
 </div>
 
 <tiles:insertAttribute name="FOOTER_SECTION"/>
-
-<script type="text/javascript" src="<spring:url value="/scripts/jquery-1.8.0.min.js"/>"></script>
-<script type="text/javascript" src="<spring:url value="/scripts/bootstrap.min.js"/>"></script>
-<script type="text/javascript" src="<spring:url value="/scripts/lightadmin.js"/>"></script>
 
 </body>
 </html>

@@ -1,33 +1,26 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ page import="static com.google.common.collect.Sets.newLinkedHashSet" %>
+<%@ page import="java.util.Set" %>
+<%@ page import="org.lightadmin.demo.Pair" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<%@ taglib prefix="light" tagdir="/WEB-INF/tags" %>
 
 <ul class="breadcrumb">
 	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span>
 	<li class="active">Entries</li>
 </ul>
 
-<c:choose>
-	<c:when test="${not empty entries}">
-		<table class="table table-striped table-bordered table-hover">
-			<thead>
-			<tr>
-				<th>ID</th>
-				<th>Name</th>
-			</tr>
-			</thead>
-			<tbody>
-			<c:forEach var="entry" items="${entries}">
-				<tr>
-					<td><c:out value="${entry.id}"/></td>
-					<td><c:out value="${entry.name}" default="N/A" escapeXml="true"/></td>
-				</tr>
-			</c:forEach>
-			</tbody>
-		</table>
-	</c:when>
-	<c:otherwise>
-		<p><spring:message code="message.nothing-found"/></p>
-	</c:otherwise>
-</c:choose>
+	<light:data-table entityName="entry" columns="<%= entryColumns() %>"/>
+
+<%!
+	private Set<Pair<String, String>> entryColumns() {
+		Set<Pair<String, String>> result = newLinkedHashSet();
+		result.add( Pair.stringPair( "name", "Name") );
+		result.add( Pair.stringPair( "email", "Email") );
+		result.add( Pair.stringPair( "favoriteColor", "Favorite Color") );
+		return result;
+	}
+%>
