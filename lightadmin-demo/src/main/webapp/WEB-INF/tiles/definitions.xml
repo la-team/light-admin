@@ -5,7 +5,9 @@
 
     <definition name="application.layout" template="/WEB-INF/presentation/layout/layout.jsp">
         <put-attribute name="HEADER_SECTION" value="/WEB-INF/presentation/section/header-section.jsp"/>
-        <put-attribute name="LEFT_SECTION" value="/WEB-INF/presentation/section/left-section.jsp"/>
+        <put-attribute name="LEFT_SECTION">
+			<definition name="left-section" template="/WEB-INF/presentation/section/left-section.jsp" preparer="menuPreparer"/>
+        </put-attribute>
         <put-attribute name="FOOTER_SECTION" value="/WEB-INF/presentation/section/footer-section.jsp"/>
     </definition>
 

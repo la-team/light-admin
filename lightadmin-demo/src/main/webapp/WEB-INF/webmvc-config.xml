@@ -38,7 +38,10 @@
 				<value>/WEB-INF/tiles/definitions.xml</value>
 			</list>
 		</property>
+		<property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory"/>
 	</bean>
+
+	<bean id="menuPreparer" class="org.lightadmin.demo.MenuPreparer"/>
 
 	<mvc:view-controller path="/login" view-name="login"/>
 </beans>

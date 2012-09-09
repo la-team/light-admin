@@ -6,9 +6,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
 <ul class="nav nav-list menu-sidenav">
-	<li class="active"><a href="#"><i class="icon-chevron-right"></i> Entries</a></li>
-	<li><a href="#"><i class="icon-chevron-right"></i> Users</a></li>
-	<li><a href="#"><i class="icon-chevron-right"></i> Roles</a></li>
-	<li><a href="#"><i class="icon-chevron-right"></i> Products</a></li>
-	<li><a href="#"><i class="icon-chevron-right"></i> Categories</a></li>
+	<c:forEach var="menuItem" items="${requestScope.menuItems}" varStatus="status">
+		<li class="${status.first ? 'active' : ''}"><a href="<spring:url value='${menuItem.second}'/>"><i class="icon-chevron-right"></i> <c:out value="${menuItem.first}"/></a></li>
+	</c:forEach>
 </ul>

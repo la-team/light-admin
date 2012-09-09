@@ -8,6 +8,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.HashMap;
 
+// TODO: max: Kill this later!
 public class DynamicJpaRepositoryExporter extends JpaRepositoryExporter {
 
 	public void refresh() {
