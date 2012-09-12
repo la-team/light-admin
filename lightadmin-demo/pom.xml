@@ -144,149 +144,43 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<servlet.port>8080</servlet.port>
+
+		<container.port>8080</container.port>
+		<container.scan.sec>10</container.scan.sec>
+		<container.mode.reload>automatic</container.mode.reload>
+		<!--<container.mode.reload>manual</container.mode.reload>-->
 	</properties>
 
+
 	<build>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-war-plugin</artifactId>
-					<version>2.2</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-surefire-plugin</artifactId>
-					<version>2.8</version>
-				</plugin>
-				<plugin>
-					<groupId>org.apache.maven.plugins</groupId>
-					<artifactId>maven-failsafe-plugin</artifactId>
-					<version>2.8</version>
-				</plugin>
-				<plugin>
-					<groupId>org.codehaus.cargo</groupId>
-					<artifactId>cargo-maven2-plugin</artifactId>
-					<version>1.2.3</version>
-					<configuration>
-						<container>
-							<dependencies>
-								<dependency>
-									<groupId>org.hsqldb</groupId>
-									<artifactId>hsqldb</artifactId>
-								</dependency>
-								<dependency>
-									<groupId>org.hsqldb</groupId>
-									<artifactId>sqltool</artifactId>
-								</dependency>
-							</dependencies>
-						</container>
-						<deployables>
-							<!-- The project's artifact is automatically deployed if no deployable 
-								is defined. However, we define it here so that we can specify the context 
-								(we don't want the version to be included in the context). -->
-							<deployable>
-								<groupId>${project.groupId}</groupId>
-								<artifactId>${project.artifactId}</artifactId>
-								<type>war</type>
-								<properties>
-									<context>lightadmin</context>
-								</properties>
-							</deployable>
-						</deployables>
-						<configuration>
-							<properties>
-								<cargo.servlet.port>${servlet.port}</cargo.servlet.port>
-								<cargo.datasource.datasource.hsqldb>cargo.datasource.driver=org.hsqldb.jdbc.JDBCDriver|
-									cargo.datasource.url=jdbc:hsqldb:file:${basedir}/src/test/db/demo-db;hsqldb.readonly=true;hsqldb.lock_file=false;hsqldb.applog=3|
-									cargo.datasource.jndi=jdbc/DemoDS|
-									cargo.datasource.username=sa
-								</cargo.datasource.datasource.hsqldb>
-								 <cargo.jvmargs>
-									 -Xdebug -Xrunjdwp:transport=dt_socket,address=5005,suspend=n,server=y
-								<!-- -Xnoagent -->
-								<!-- -Djava.compiler=NONE -->
-								 </cargo.jvmargs>
-							</properties>
-						</configuration>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-failsafe-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>perform-it</id>
-						<goals>
-							<goal>integration-test</goal>
-						</goals>
-						<configuration>
-							<systemProperties>
-								<property>
-									<name>servlet.port</name>
-									<value>${servlet.port}</value>
-								</property>
-							</systemProperties>
-						</configuration>
-					</execution>
-					<execution>
-						<id>verify-it</id>
-						<goals>
-							<goal>verify</goal>
-						</goals>
-					</execution>
-				</executions>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>2.2</version>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>start-cargo</id>
-						<phase>pre-integration-test</phase>
-						<goals>
-							<goal>start</goal>
-						</goals>
-					</execution>
-					<execution>
-						<id>stop-cargo</id>
-						<phase>post-integration-test</phase>
-						<goals>
-							<goal>stop</goal>
-						</goals>
-					</execution>
-				</executions>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<version>8.1.6.v20120903</version>
+				<configuration>
+					<webApp>
+						<contextPath>/lightadmin</contextPath>
+					</webApp>
+					<scanIntervalSeconds>${container.scan.sec}</scanIntervalSeconds>
+					<systemProperties>
+						<systemProperty>
+							<name>jetty.port</name>
+							<value>${container.port}</value>
+						</systemProperty>
+						<systemProperty>
+							<name>jetty.reload</name>
+							<value>${container.mode.reload}</value>
+						</systemProperty>
+					</systemProperties>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
 
-	<profiles>
-		<profile>
-			<id>tomcat7x</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.codehaus.cargo</groupId>
-							<artifactId>cargo-maven2-plugin</artifactId>
-							<configuration>
-								<container>
-									<containerId>tomcat7x</containerId>
-									<zipUrlInstaller>
-										<url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.29/bin/apache-tomcat-7.0.29.zip</url>
-									</zipUrlInstaller>
-								</container>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
 </project>

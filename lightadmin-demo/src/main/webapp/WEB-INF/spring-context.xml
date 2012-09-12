@@ -2,21 +2,34 @@
 <beans xmlns="http://www.springframework.org/schema/beans" xmlns:p="http://www.springframework.org/schema/p"
 	   xmlns:context="http://www.springframework.org/schema/context" xmlns:tx="http://www.springframework.org/schema/tx"
 	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:light="http://www.lightadmin.org/schema/light"
+	   xmlns:jdbc="http://www.springframework.org/schema/jdbc"
 	   xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
-		http://www.lightadmin.org/schema/light http://www.lightadmin.org/schema/light/spring-light-admin.xsd">
+		http://www.lightadmin.org/schema/light http://www.lightadmin.org/schema/light/spring-light-admin.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
 	<context:annotation-config/>
 	<context:component-scan base-package="org.lightadmin.demo.web"/>
 
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
-	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean"/>
+	<bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean" p:persistenceUnitName="DEMO" p:dataSource-ref="dataSource">
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true"/>
+				<property name="database" value="HSQL"/>
+			</bean>
+		</property>
+	</bean>
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" p:entityManagerFactory-ref="entityManagerFactory"/>
 
 	<light:administration base-package="org.lightadmin.demo.config"/>
+
+	<jdbc:embedded-database id="dataSource" type="HSQL">
+		<jdbc:script location="classpath:db/schema.sql"/>
+		<jdbc:script location="classpath:db/data.sql"/>
+	</jdbc:embedded-database>
 
 	<import resource="spring-security.xml"/>
 

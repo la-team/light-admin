@@ -4,9 +4,11 @@
 	xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
 	<persistence-unit name="DEMO" transaction-type="RESOURCE_LOCAL">
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
-		<non-jta-data-source>jdbc/DemoDS</non-jta-data-source>
-		
-		<class>org.lightadmin.demo.model.Entry</class>
-		
+		<class>org.lightadmin.demo.model.Address</class>
+		<class>org.lightadmin.demo.model.Customer</class>
+		<class>org.lightadmin.demo.model.EmailAddress</class>
+		<class>org.lightadmin.demo.model.Product</class>
+		<class>org.lightadmin.demo.model.Order</class>
+		<class>org.lightadmin.demo.model.LineItem</class>
 	</persistence-unit>
 </persistence>

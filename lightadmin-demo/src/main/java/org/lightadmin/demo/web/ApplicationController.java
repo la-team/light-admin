@@ -1,20 +1,7 @@
 package org.lightadmin.demo.web;
 
-import static com.google.common.collect.Sets.newHashSet;
-
-import java.util.List;
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
-
 import org.lightadmin.core.repository.DynamicJpaRepository;
-import org.lightadmin.demo.model.Entry;
+import org.lightadmin.demo.model.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.data.jpa.domain.Specification;
@@ -29,6 +16,19 @@ import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.annotation.PostConstruct;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+import java.math.BigDecimal;
+import java.util.List;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newHashSet;
+
 @Controller
 public class ApplicationController {
 
@@ -39,15 +39,15 @@ public class ApplicationController {
 	private ApplicationContext applicationContext;
 
 //	@Autowired
-//	@Qualifier("entryRepository")
-	private DynamicJpaRepository entryRepository;
+//	@Qualifier("productRepository")
+	private DynamicJpaRepository productRepository;
 
 	@Autowired
 	private Validator validator;
 
 	@PostConstruct
 	public void postConstruct() {
-		entryRepository = ( DynamicJpaRepository ) applicationContext.getBean( "entryRepository" );
+		productRepository = ( DynamicJpaRepository ) applicationContext.getBean( "productRepository" );
 	}
 
 	@ExceptionHandler( Exception.class )
@@ -67,23 +67,23 @@ public class ApplicationController {
 
 	@RequestMapping( "/" )
 	public String index( Model model ) {
-		Entry entry = new Entry();
-		Errors errors = new BeanPropertyBindingResult( entry, "entry" );
-		validator.validate( entry, errors );
+		Product product = new Product( "Box", BigDecimal.TEN );
+		Errors errors = new BeanPropertyBindingResult( product, "product" );
+		validator.validate( product, errors );
 
 		model.addAttribute( "entries", loadEntries() );
 		return "index";
 	}
 
-	private List<Entry> loadEntries() {
-		return entryRepository.findAll( entryNameEqHello() );
+	private List<Product> loadEntries() {
+		return productRepository.findAll( entryNameEqHello() );
 	}
 
-	public static Specification<Entry> entryNameEqHello() {
-		return new Specification<Entry>() {
+	public static Specification<Product> entryNameEqHello() {
+		return new Specification<Product>() {
 			@Override
-			public Predicate toPredicate( final Root<Entry> root, final CriteriaQuery<?> query, final CriteriaBuilder cb ) {
-				return cb.equal( root.get( "name" ), "Hello!" );
+			public Predicate toPredicate( final Root<Product> root, final CriteriaQuery<?> query, final CriteriaBuilder cb ) {
+				return cb.equal( root.get( "name" ), "Box" );
 			}
 		};
 	}

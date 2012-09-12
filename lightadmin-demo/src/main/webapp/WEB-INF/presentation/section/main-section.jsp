@@ -10,17 +10,17 @@
 
 <ul class="breadcrumb">
 	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span>
-	<li class="active">Entries</li>
+	<li class="active">Product</li>
 </ul>
 
-	<light:data-table entityName="entry" columns="<%= entryColumns() %>"/>
+<light:data-table entityName="product" columns="<%= entryColumns() %>"/>
 
 <%!
 	private Set<org.lightadmin.core.util.Pair<String, String>> entryColumns() {
-		Set<org.lightadmin.core.util.Pair<String, String>> result = newLinkedHashSet();
+		Set<Pair<String, String>> result = newLinkedHashSet();
 		result.add( org.lightadmin.core.util.Pair.stringPair( "name", "Name" ) );
-		result.add( org.lightadmin.core.util.Pair.stringPair( "email", "Email" ) );
-		result.add( org.lightadmin.core.util.Pair.stringPair( "favoriteColor", "Favorite Color" ) );
+		result.add( org.lightadmin.core.util.Pair.stringPair( "description", "Description" ) );
+		result.add( org.lightadmin.core.util.Pair.stringPair( "price", "Price" ) );
 		return result;
 	}
 %>
