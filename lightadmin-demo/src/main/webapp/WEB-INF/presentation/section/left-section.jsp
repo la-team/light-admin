@@ -7,6 +7,6 @@
 
 <ul class="nav nav-list menu-sidenav">
 	<c:forEach var="menuItem" items="${requestScope.menuItems}" varStatus="status">
-		<li class="${status.first ? 'active' : ''}"><a href="<spring:url value='${menuItem.second}'/>"><i class="icon-chevron-right"></i> <c:out value="${menuItem.first}"/></a></li>
+		<li class="${menuItem.first eq domainType ? 'active' : ''}"><a href="<spring:url value='${menuItem.second}'/>"><i class="icon-chevron-right"></i> <c:out value="${menuItem.first}"/></a></li>
 	</c:forEach>
 </ul>

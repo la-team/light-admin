@@ -6,6 +6,7 @@ import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.core.repository.support.DynamicJpaRepositoryFactoryBean;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
+import org.lightadmin.core.util.Pair;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -18,10 +19,16 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.util.ClassUtils;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import org.w3c.dom.Element;
 
+import java.lang.reflect.Method;
 import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newLinkedHashSet;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
@@ -37,10 +44,14 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations = new ManagedMap<Class<?>, RuntimeBeanReference>(  );
 
 		for ( BeanDefinition definition : provider.findCandidateComponents( basePackage ) ) {
-			Class<?> domainType = domainType( ( AnnotatedBeanDefinition ) definition );
+			final Class<?> domainType = domainType( ( AnnotatedBeanDefinition ) definition );
 			registerDomainRepository( domainType, parserContext );
 
-			String domainConfigurationBeanName = registerDomainTypeAdministrationConfiguration( parserContext, domainType );
+			final Class<?> configurationClass = configurationClass( ( AnnotatedBeanDefinition ) definition );
+
+			final Set<Pair<String, String>> listColumns = listColumns( configurationClass );
+
+			String domainConfigurationBeanName = registerDomainTypeAdministrationConfiguration( parserContext, domainType, listColumns );
 
 			domainTypeConfigurations.put( domainType, new RuntimeBeanReference( domainConfigurationBeanName ) );
 		}
@@ -52,10 +63,28 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		return null;
 	}
 
-	private String registerDomainTypeAdministrationConfiguration( final ParserContext parserContext, Class<?> domainType ) {
+	private Set<Pair<String, String>> listColumns( final Class<?> configurationClass ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "listColumns" );
+
+		Set<Pair<String, String>> listColumns = newLinkedHashSet();
+		if ( method != null ) {
+			listColumns.addAll( ( Set<Pair<String, String>> ) ReflectionUtils.invokeMethod( method, null ) );
+		}
+		return listColumns;
+	}
+
+	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
+		final String configurationClassName = ( ( AnnotatedBeanDefinition ) definition ).getMetadata().getClassName();
+		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
+	}
+
+	private String registerDomainTypeAdministrationConfiguration( final ParserContext parserContext, Class<?> domainType, final Set<Pair<String, String>> listColumns ) {
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DomainTypeAdministrationConfiguration.class );
 		builder.addConstructorArgValue( domainType );
 		builder.addConstructorArgReference( repositoryBeanName( domainType ) );
+
+		builder.addPropertyValue( "listColumns", listColumns );
+
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
 		final String beanName = domainTypeConfigurationBeanName( domainType );
 		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, beanName ) );

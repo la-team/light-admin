@@ -12,7 +12,9 @@
     </definition>
 
     <definition name="index" extends="application.layout">
-        <put-attribute name="MAIN_SECTION" value="/WEB-INF/presentation/section/main-section.jsp"/>
+        <put-attribute name="MAIN_SECTION">
+			<definition template="/WEB-INF/presentation/section/main-section.jsp" preparer="listViewPreparer"/>
+		</put-attribute>
     </definition>
 
 	<definition name="dashboard" extends="application.layout">
