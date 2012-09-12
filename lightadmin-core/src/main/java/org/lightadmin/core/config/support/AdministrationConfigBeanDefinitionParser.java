@@ -44,14 +44,14 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations = new ManagedMap<Class<?>, RuntimeBeanReference>(  );
 
 		for ( BeanDefinition definition : provider.findCandidateComponents( basePackage ) ) {
-			final Class<?> domainType = domainType( ( AnnotatedBeanDefinition ) definition );
+			final AnnotatedBeanDefinition annotatedBeanDefinition = ( AnnotatedBeanDefinition ) definition;
+
+			final Class<?> configurationClass = configurationClass( annotatedBeanDefinition );
+			final Class<?> domainType = domainType( annotatedBeanDefinition );
+
 			registerDomainRepository( domainType, parserContext );
 
-			final Class<?> configurationClass = configurationClass( ( AnnotatedBeanDefinition ) definition );
-
-			final Set<Pair<String, String>> listColumns = listColumns( configurationClass );
-
-			String domainConfigurationBeanName = registerDomainTypeAdministrationConfiguration( parserContext, domainType, listColumns );
+			String domainConfigurationBeanName = registerDomainTypeAdministrationConfiguration( parserContext, domainType, configurationClass );
 
 			domainTypeConfigurations.put( domainType, new RuntimeBeanReference( domainConfigurationBeanName ) );
 		}
@@ -74,21 +74,23 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
-		final String configurationClassName = ( ( AnnotatedBeanDefinition ) definition ).getMetadata().getClassName();
+		final String configurationClassName = definition.getMetadata().getClassName();
 		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
 	}
 
-	private String registerDomainTypeAdministrationConfiguration( final ParserContext parserContext, Class<?> domainType, final Set<Pair<String, String>> listColumns ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DomainTypeAdministrationConfiguration.class );
-		builder.addConstructorArgValue( domainType );
-		builder.addConstructorArgReference( repositoryBeanName( domainType ) );
-
-		builder.addPropertyValue( "listColumns", listColumns );
-
-		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
+	private String registerDomainTypeAdministrationConfiguration( final ParserContext parserContext, Class<?> domainType, final Class<?> configurationClass ) {
+		AbstractBeanDefinition beanDefinition = domainTypeAdministrationConfigBeanDefinition( domainType, configurationClass );
 		final String beanName = domainTypeConfigurationBeanName( domainType );
 		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, beanName ) );
 		return beanName;
+	}
+
+	private AbstractBeanDefinition domainTypeAdministrationConfigBeanDefinition( final Class<?> domainType, final Class<?> configurationClass ) {
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DomainTypeAdministrationConfiguration.class );
+		builder.addConstructorArgValue( domainType );
+		builder.addConstructorArgReference( repositoryBeanName( domainType ) );
+		builder.addPropertyValue( "listColumns", listColumns( configurationClass ) );
+		return builder.getBeanDefinition();
 	}
 
 	private void registerGlobalAdministrationConfiguration( final ParserContext parserContext, final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations ) {
@@ -106,8 +108,8 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 	private String registerDomainRepository( final Class<?> domainType, final ParserContext parserContext ) {
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DynamicJpaRepositoryFactoryBean.class );
+		builder.addConstructorArgValue( domainType );
 		builder.addPropertyValue( "repositoryInterface", DynamicJpaRepository.class );
-		builder.addPropertyValue( "domainType", domainType );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
 		final String repositoryBeanName = repositoryBeanName( domainType );
 		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, repositoryBeanName ) );

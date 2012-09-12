@@ -1,8 +1,6 @@
 package org.lightadmin.core.repository.support;
 
-import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.repository.core.EntityInformation;
@@ -16,32 +14,34 @@ import java.io.Serializable;
 
 public class DynamicJpaRepositoryFactoryBean<R extends JpaRepository<T, I>, T, I extends Serializable> extends JpaRepositoryFactoryBean<R, T, I> {
 
+	private final Class<T> domainType;
+
 	private EntityManager entityManager;
 
-	private Class<T> domainType;
-
-	protected RepositoryFactorySupport createRepositoryFactory( EntityManager entityManager ) {
-		return new DynamicRepositoryFactory<T, I>( domainType, getEntityInformation().getIdType(), entityManager );
+	public DynamicJpaRepositoryFactoryBean( final Class<T> domainType ) {
+		this.domainType = domainType;
 	}
 
 	@Override
+	protected RepositoryFactorySupport createRepositoryFactory( EntityManager entityManager ) {
+		return new DynamicRepositoryFactory( getEntityInformation(), entityManager );
+	}
+
+	@Override
+	@SuppressWarnings( "unchecked" )
 	public EntityInformation<T, I> getEntityInformation() {
-		return ( JpaEntityInformation<T, I> ) JpaEntityInformationSupport.getMetadata( domainType, entityManager );
+		return ( EntityInformation<T, I> ) JpaEntityInformationSupport.getMetadata( domainType, entityManager );
 	}
 
 	@Override
 	public RepositoryInformation getRepositoryInformation() {
-		RepositoryMetadata metadata = new DynamicRepositoryMetadata<T, I>( domainType, getEntityInformation().getIdType(), DynamicJpaRepository.class );
-		return new DynamicRepositoryInformation( metadata, DynamicJpaRepository.class, null );
+		RepositoryMetadata metadata = new DynamicRepositoryMetadata( getObjectType(), getEntityInformation() );
+		return new DynamicRepositoryInformation( metadata );
 	}
 
 	@PersistenceContext
 	public void setEntityManager( EntityManager entityManager ) {
 		super.setEntityManager( entityManager );
 		this.entityManager = entityManager;
-	}
-
-	public void setDomainType( final Class<T> domainType ) {
-		this.domainType = domainType;
 	}
 }

@@ -13,4 +13,8 @@ public class GlobalAdministrationConfiguration {
 	public Map<Class<?>, DomainTypeAdministrationConfiguration> getDomainTypeConfigurations() {
 		return domainTypeConfigurations;
 	}
+
+	public DomainTypeAdministrationConfiguration forDomainType( Class<?> domainType ) {
+		return domainTypeConfigurations.get( domainType );
+	}
 }
