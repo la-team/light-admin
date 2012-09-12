@@ -1,5 +1,6 @@
 package org.lightadmin.core.rest;
 
+import org.lightadmin.core.repository.support.DynamicRepositoriesDecorator;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.repository.annotation.RestResource;
 import org.springframework.data.rest.repository.jpa.JpaRepositoryExporter;
@@ -15,7 +16,7 @@ public class DynamicJpaRepositoryExporter extends JpaRepositoryExporter {
 		if ( null != repositories ) {
 			return;
 		}
-		repositories = new Repositories( applicationContext );
+		repositories = new DynamicRepositoriesDecorator( applicationContext );
 		repositoryMetadata = new HashMap<String, JpaRepositoryMetadata>();
 		for ( Class<?> domainType : repositories ) {
 			if ( exportOnlyTheseClasses.isEmpty() || exportOnlyTheseClasses.contains( domainType.getName() ) ) {

@@ -4,7 +4,7 @@ import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.demo.model.Address;
 import org.lightadmin.demo.model.Product;
 
-//@Administration( Address.class )
+@Administration( Address.class )
 public class AddressAdministration {
 
 }

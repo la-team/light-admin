@@ -1,5 +1,7 @@
 package org.lightadmin.demo.model;
 
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.codehaus.jackson.map.ser.std.ToStringSerializer;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
 
