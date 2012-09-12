@@ -143,8 +143,8 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<servlet.port>8080</servlet.port>
 
+		<application.context>lightadmin</application.context>
 		<container.port>8080</container.port>
 		<container.scan.sec>10</container.scan.sec>
 		<container.mode.reload>automatic</container.mode.reload>
@@ -165,7 +165,7 @@
 				<version>8.1.6.v20120903</version>
 				<configuration>
 					<webApp>
-						<contextPath>/lightadmin</contextPath>
+						<contextPath>/${application.context}</contextPath>
 					</webApp>
 					<scanIntervalSeconds>${container.scan.sec}</scanIntervalSeconds>
 					<systemProperties>
