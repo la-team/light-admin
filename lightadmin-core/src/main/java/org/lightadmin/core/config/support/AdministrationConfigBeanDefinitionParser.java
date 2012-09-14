@@ -20,6 +20,7 @@ import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
@@ -59,11 +60,20 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerGlobalAdministrationConfiguration( parserContext, domainTypeConfigurations );
 
+		registerRepositoryRestConfiguration( parserContext );
+
 		registerRepositoryExporter( parserContext );
 
 		registerViewPreparers( parserContext );
 
 		return null;
+	}
+
+	private void registerRepositoryRestConfiguration( final ParserContext parserContext ) {
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( RepositoryRestConfiguration.class );
+		builder.addPropertyValue( "defaultPageSize", 5 );
+		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, "repositoryRestConfiguration" ) );
 	}
 
 	private void registerViewPreparers( final ParserContext parserContext ) {
