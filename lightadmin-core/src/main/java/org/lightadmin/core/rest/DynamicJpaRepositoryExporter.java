@@ -2,7 +2,6 @@ package org.lightadmin.core.rest;
 
 import org.lightadmin.core.repository.support.DynamicRepositoriesDecorator;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
-import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.rest.repository.annotation.RestResource;
 import org.springframework.data.rest.repository.jpa.JpaRepositoryExporter;

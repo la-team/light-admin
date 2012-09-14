@@ -3,7 +3,10 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+
+<tiles:useAttribute name="screenContext" ignore="true"/>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +14,7 @@
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-	<title><spring:message code="application.name"/></title>
+	<title><spring:message code="application.name"/> <c:out value="${ (not empty(screenContext)) and (fn:length(screenContext.screenName) > 0) ? screenContext.screenName : ''}"/></title>
 
 	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/bootstrap.css"/>" media="screen">
 	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/lightadmin.css"/>" media="screen">

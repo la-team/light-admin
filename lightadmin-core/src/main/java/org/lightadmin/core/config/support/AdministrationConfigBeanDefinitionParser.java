@@ -6,8 +6,12 @@ import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.core.repository.support.DynamicJpaRepositoryFactoryBean;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
-import org.lightadmin.core.util.Pair;
+import org.lightadmin.core.view.DefaultScreenContext;
+import org.lightadmin.core.view.ScreenContext;
 import org.lightadmin.core.view.preparer.*;
+import org.lightadmin.core.view.support.Fragment;
+import org.lightadmin.core.view.support.FragmentBuilder;
+import org.lightadmin.core.view.support.TableFragmentBuilder;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -28,9 +32,6 @@ import org.w3c.dom.Element;
 
 import java.lang.reflect.Method;
 import java.util.Map;
-import java.util.Set;
-
-import static com.google.common.collect.Sets.newLinkedHashSet;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
@@ -43,7 +44,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		final String basePackage = element.getAttribute( BASE_PACKAGE );
 
-		final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations = new ManagedMap<Class<?>, RuntimeBeanReference>(  );
+		final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations = new ManagedMap<Class<?>, RuntimeBeanReference>();
 
 		for ( BeanDefinition definition : provider.findCandidateComponents( basePackage ) ) {
 			final AnnotatedBeanDefinition annotatedBeanDefinition = ( AnnotatedBeanDefinition ) definition;
@@ -91,16 +92,6 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, viewPreparerName ) );
 	}
 
-	private Set<Pair<String, String>> listColumns( final Class<?> configurationClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "listColumns" );
-
-		Set<Pair<String, String>> listColumns = newLinkedHashSet();
-		if ( method != null ) {
-			listColumns.addAll( ( Set<Pair<String, String>> ) ReflectionUtils.invokeMethod( method, null ) );
-		}
-		return listColumns;
-	}
-
 	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
 		final String configurationClassName = definition.getMetadata().getClassName();
 		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
@@ -117,7 +108,8 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DomainTypeAdministrationConfiguration.class );
 		builder.addConstructorArgValue( domainType );
 		builder.addConstructorArgReference( repositoryBeanName( domainType ) );
-		builder.addPropertyValue( "listColumns", listColumns( configurationClass ) );
+		builder.addPropertyValue( "listViewFragment", listViewFragment( configurationClass ) );
+		builder.addPropertyValue( "screenContext", screenContext( configurationClass ) );
 		return builder.getBeanDefinition();
 	}
 
@@ -142,6 +134,28 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		final String repositoryBeanName = repositoryBeanName( domainType );
 		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, repositoryBeanName ) );
 		return repositoryBeanName;
+	}
+
+	private Fragment listViewFragment( final Class<?> configurationClass ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "listView", FragmentBuilder.class );
+
+		FragmentBuilder fragmentBuilder = new TableFragmentBuilder();
+		if ( method != null ) {
+			return ( Fragment ) ReflectionUtils.invokeMethod( method, null, fragmentBuilder );
+		}
+
+		return fragmentBuilder.build();
+	}
+
+	private ScreenContext screenContext( final Class<?> configurationClass ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "configureScreen", ScreenContext.class );
+
+		ScreenContext screenContext = new DefaultScreenContext();
+		if ( method != null ) {
+			ReflectionUtils.invokeMethod( method, null, screenContext );
+		}
+
+		return screenContext;
 	}
 
 	private String repositoryBeanName( final Class<?> domainType ) {

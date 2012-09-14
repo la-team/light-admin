@@ -29,8 +29,8 @@ public abstract class ViewContextPreparer implements ViewPreparer {
 	}
 
 	protected void execute( TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration ) {
-		attributeContext.putAttribute( "domainType", new Attribute( configuration.getDomainType() ), true );
-		attributeContext.putAttribute( "domainTypeName", new Attribute( configuration.getDomainTypeName() ), true );
+		addAttribute( attributeContext, "domainType", configuration.getDomainType(), true );
+		addAttribute( attributeContext, "domainTypeName", configuration.getDomainTypeName(), true );
 	}
 
 	private Object attributeFromRequest( TilesRequestContext tilesContext, String attributeName ) {
@@ -38,5 +38,13 @@ public abstract class ViewContextPreparer implements ViewPreparer {
 		final HttpServletRequest httpServletRequest = servletTilesRequestContext.getRequest();
 
 		return httpServletRequest.getAttribute( attributeName );
+	}
+
+	protected void addAttribute( AttributeContext attributeContext, String attributeName, Object attributeValue ) {
+		addAttribute( attributeContext, attributeName, attributeValue, false );
+	}
+
+	protected void addAttribute( AttributeContext attributeContext, String attributeName, Object attributeValue, boolean cascade ) {
+		attributeContext.putAttribute( attributeName, new Attribute( attributeValue ), cascade );
 	}
 }

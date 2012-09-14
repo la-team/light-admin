@@ -1,21 +1,22 @@
 package org.lightadmin.demo.config;
 
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.util.Pair;
+import org.lightadmin.core.view.ScreenContext;
+import org.lightadmin.core.view.support.Fragment;
+import org.lightadmin.core.view.support.FragmentBuilder;
 import org.lightadmin.demo.model.Customer;
-
-import java.util.Set;
-
-import static com.google.common.collect.Sets.newLinkedHashSet;
 
 @Administration( Customer.class )
 public class CustomerAdministration {
 
-	public static Set<Pair<String, String>> listColumns() {
-		Set<Pair<String, String>> result = newLinkedHashSet();
-		result.add( Pair.stringPair( "firstname", "First Name" ) );
-		result.add( Pair.stringPair( "lastname", "Last Name" ) );
-		result.add( Pair.stringPair( "emailAddress", "Email Address" ) );
-		return result;
+	public static void configureScreen( ScreenContext screenContext ) {
+		screenContext.screenName( "Customers Administration" ).menuName( "Customers" );
+	}
+
+	public static Fragment listView( FragmentBuilder fragmentBuilder ) {
+		return fragmentBuilder
+			.field( "firstname" ).alias( "First Name")
+			.field("lastname").alias("Last Name")
+			.field( "emailAddress" ).alias( "Email Address" ).build();
 	}
 }

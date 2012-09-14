@@ -1,8 +1,6 @@
 package org.lightadmin.core.view.preparer;
 
 import com.google.common.collect.Sets;
-import org.apache.commons.lang.StringUtils;
-import org.apache.tiles.Attribute;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.context.TilesRequestContext;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
@@ -27,6 +25,6 @@ public class LeftSectionViewPreparer extends ViewContextPreparer {
 			result.add( Pair.stringPair( domainTypeName, pageUrl ) );
 		}
 
-		attributeContext.putAttribute( "menuItems", new Attribute( result ) );
+		addAttribute( attributeContext, "menuItems", result );
 	}
 }

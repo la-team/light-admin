@@ -1,6 +1,7 @@
-package radmin;
+package org.lightadmin.core.view;
 
 import java.util.concurrent.Callable;
+
 public interface ScreenContext {
 
 	ScreenContext screenName( String screenName );

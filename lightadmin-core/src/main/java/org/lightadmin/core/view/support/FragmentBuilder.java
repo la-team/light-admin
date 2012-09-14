@@ -1,4 +1,4 @@
-package radmin;
+package org.lightadmin.core.view.support;
 
 public interface FragmentBuilder {
 

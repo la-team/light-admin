@@ -13,9 +13,9 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import static radmin.Filters.*;
+import static radmin.Renderers.*;
 import static radmin.Scopes.*;
 import static radmin.annotation.Sidebar.Location.*;
-import static radmin.Renderers.*;
 
 @Configuration
 @Import( ApplicationConfiguration.class )
