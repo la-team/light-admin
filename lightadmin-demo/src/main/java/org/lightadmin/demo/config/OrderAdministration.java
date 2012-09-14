@@ -1,9 +1,6 @@
 package org.lightadmin.demo.config;
 
-import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.util.Pair;
-import org.lightadmin.demo.model.Customer;
-import org.lightadmin.demo.model.Order;
 
 import java.util.Set;
 

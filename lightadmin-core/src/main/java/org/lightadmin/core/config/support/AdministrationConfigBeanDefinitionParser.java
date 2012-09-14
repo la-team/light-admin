@@ -7,6 +7,7 @@ import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.core.repository.support.DynamicJpaRepositoryFactoryBean;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
 import org.lightadmin.core.util.Pair;
+import org.lightadmin.core.view.preparer.*;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
@@ -60,7 +61,24 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerRepositoryExporter( parserContext );
 
+		registerViewPreparers( parserContext );
+
 		return null;
+	}
+
+	private void registerViewPreparers( final ParserContext parserContext ) {
+		registerViewPreparer( "footerSectionViewPreparer", FooterSectionViewPreparer.class, parserContext );
+		registerViewPreparer( "headerSectionViewPreparer", HeaderSectionViewPreparer.class, parserContext );
+		registerViewPreparer( "leftSectionViewPreparer", LeftSectionViewPreparer.class, parserContext );
+		registerViewPreparer( "listViewPreparer", ListViewPreparer.class, parserContext );
+		registerViewPreparer( "screenViewPreparer", ScreenViewPreparer.class, parserContext );
+		registerViewPreparer( "dashboardViewPreparer", DashboardViewPreparer.class, parserContext );
+	}
+
+	private void registerViewPreparer( final String viewPreparerName, final Class<? extends ViewContextPreparer> viewPreparerClass, final ParserContext parserContext ) {
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( viewPreparerClass );
+		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, viewPreparerName ) );
 	}
 
 	private Set<Pair<String, String>> listColumns( final Class<?> configurationClass ) {

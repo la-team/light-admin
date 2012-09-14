@@ -4,6 +4,7 @@ import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.core.util.Pair;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -45,7 +46,7 @@ public class DomainTypeAdministrationConfiguration {
 	}
 
 	public String getDomainTypeName() {
-		return entityInformation.getEntityName();
+		return StringUtils.uncapitalize( entityInformation.getEntityName() );
 	}
 
 	public void setListColumns( final Set<Pair<String, String>> listColumns ) {

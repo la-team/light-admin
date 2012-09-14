@@ -3,22 +3,28 @@
 
 <tiles-definitions>
 
-    <definition name="application.layout" template="/WEB-INF/presentation/layout/layout.jsp">
-        <put-attribute name="HEADER_SECTION" value="/WEB-INF/presentation/section/header-section.jsp"/>
+    <definition name="application.layout" template="/WEB-INF/presentation/layout/layout.jsp" preparer="screenViewPreparer">
+		<put-attribute name="HEADER_SECTION">
+			<definition template="/WEB-INF/presentation/section/header-section.jsp" preparer="headerSectionViewPreparer"/>
+		</put-attribute>
         <put-attribute name="LEFT_SECTION">
-			<definition name="left-section" template="/WEB-INF/presentation/section/left-section.jsp" preparer="menuPreparer"/>
+			<definition template="/WEB-INF/presentation/section/left-section.jsp" preparer="leftSectionViewPreparer"/>
         </put-attribute>
-        <put-attribute name="FOOTER_SECTION" value="/WEB-INF/presentation/section/footer-section.jsp"/>
+		<put-attribute name="FOOTER_SECTION">
+			<definition template="/WEB-INF/presentation/section/footer-section.jsp" preparer="footerSectionViewPreparer"/>
+		</put-attribute>
     </definition>
 
-    <definition name="index" extends="application.layout">
+    <definition name="listView" extends="application.layout">
         <put-attribute name="MAIN_SECTION">
 			<definition template="/WEB-INF/presentation/section/main-section.jsp" preparer="listViewPreparer"/>
 		</put-attribute>
     </definition>
 
-	<definition name="dashboard" extends="application.layout">
-		<put-attribute name="MAIN_SECTION" value="/WEB-INF/presentation/dashboard.jsp"/>
+	<definition name="dashboardView" extends="application.layout">
+		<put-attribute name="MAIN_SECTION">
+			<definition template="/WEB-INF/presentation/dashboard.jsp" preparer="dashboardViewPreparer"/>
+		</put-attribute>
 	</definition>
 
 	<definition name="login" template="/WEB-INF/presentation/login.jsp"/>

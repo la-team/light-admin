@@ -1,5 +1,7 @@
 package org.lightadmin.core.config;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Map;
 
 public class GlobalAdministrationConfiguration {
@@ -16,5 +18,14 @@ public class GlobalAdministrationConfiguration {
 
 	public DomainTypeAdministrationConfiguration forDomainType( Class<?> domainType ) {
 		return domainTypeConfigurations.get( domainType );
+	}
+
+	public DomainTypeAdministrationConfiguration forEntityName( String entityName ) {
+		for ( DomainTypeAdministrationConfiguration configuration : domainTypeConfigurations.values() ) {
+			if ( StringUtils.equalsIgnoreCase( entityName, configuration.getDomainTypeName() ) ) {
+				return configuration;
+			}
+		}
+		throw new RuntimeException( "Undefined entity name. Please check your configuration." );
 	}
 }
