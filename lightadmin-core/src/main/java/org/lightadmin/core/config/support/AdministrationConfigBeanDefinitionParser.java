@@ -78,23 +78,12 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private void registerViewPreparers( final ParserContext parserContext ) {
-		registerViewPreparer( "footerSectionViewPreparer", FooterSectionViewPreparer.class, parserContext );
-		registerViewPreparer( "headerSectionViewPreparer", HeaderSectionViewPreparer.class, parserContext );
-		registerViewPreparer( "leftSectionViewPreparer", LeftSectionViewPreparer.class, parserContext );
-		registerViewPreparer( "listViewPreparer", ListViewPreparer.class, parserContext );
-		registerViewPreparer( "screenViewPreparer", ScreenViewPreparer.class, parserContext );
-		registerViewPreparer( "dashboardViewPreparer", DashboardViewPreparer.class, parserContext );
-	}
-
-	private void registerViewPreparer( final String viewPreparerName, final Class<? extends ViewContextPreparer> viewPreparerClass, final ParserContext parserContext ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( viewPreparerClass );
-		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, viewPreparerName ) );
-	}
-
-	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
-		final String configurationClassName = definition.getMetadata().getClassName();
-		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
+		registerSimpleBean( "footerSectionViewPreparer", FooterSectionViewPreparer.class, parserContext );
+		registerSimpleBean( "headerSectionViewPreparer", HeaderSectionViewPreparer.class, parserContext );
+		registerSimpleBean( "leftSectionViewPreparer", LeftSectionViewPreparer.class, parserContext );
+		registerSimpleBean( "listViewPreparer", ListViewPreparer.class, parserContext );
+		registerSimpleBean( "screenViewPreparer", ScreenViewPreparer.class, parserContext );
+		registerSimpleBean( "dashboardViewPreparer", DashboardViewPreparer.class, parserContext );
 	}
 
 	private String registerDomainTypeAdministrationConfiguration( final ParserContext parserContext, Class<?> domainType, final Class<?> configurationClass ) {
@@ -121,9 +110,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private void registerRepositoryExporter( final ParserContext parserContext ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DynamicJpaRepositoryExporter.class );
-		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, "jpaRepositoryExporter" ) );
+		registerSimpleBean( "jpaRepositoryExporter", DynamicJpaRepositoryExporter.class, parserContext );
 	}
 
 	private String registerDomainRepository( final Class<?> domainType, final ParserContext parserContext ) {
@@ -134,6 +121,17 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		final String repositoryBeanName = repositoryBeanName( domainType );
 		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, repositoryBeanName ) );
 		return repositoryBeanName;
+	}
+
+	private void registerSimpleBean( final String viewPreparerName, final Class<?> viewPreparerClass, final ParserContext parserContext ) {
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( viewPreparerClass );
+		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, viewPreparerName ) );
+	}
+
+	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
+		final String configurationClassName = definition.getMetadata().getClassName();
+		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
 	}
 
 	private Fragment listViewFragment( final Class<?> configurationClass ) {
