@@ -5,6 +5,7 @@ import org.lightadmin.core.view.ScreenContext;
 import org.lightadmin.core.view.support.Fragment;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -24,6 +25,9 @@ public class DomainTypeAdministrationConfiguration {
 	private ScreenContext screenContext;
 
 	public DomainTypeAdministrationConfiguration( final Class<?> domainType, final DynamicJpaRepository<?, ?> repository ) {
+		Assert.notNull( domainType );
+		Assert.notNull( repository );
+
 		this.domainType = domainType;
 		this.repository = repository;
 	}

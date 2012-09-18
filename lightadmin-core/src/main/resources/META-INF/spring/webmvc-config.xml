@@ -7,6 +7,8 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd
 		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd">
 
+	<context:annotation-config/>
+
 	<mvc:annotation-driven validator="validator" conversion-service="conversionService"/>
 
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
@@ -35,11 +37,13 @@
 	<bean id="tilesConfigurer" class="org.springframework.web.servlet.view.tiles2.TilesConfigurer" p:checkRefresh="true">
 		<property name="definitions">
 			<list>
-				<value>/WEB-INF/tiles/definitions.xml</value>
+				<value>classpath*:META-INF/tiles/**/*.xml</value>
 			</list>
 		</property>
 		<property name="preparerFactoryClass" value="org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory"/>
 	</bean>
 
 	<mvc:view-controller path="/login" view-name="login"/>
+
+	<mvc:default-servlet-handler/>
 </beans>

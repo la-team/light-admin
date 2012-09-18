@@ -9,7 +9,6 @@
 		http://www.lightadmin.org/schema/light http://www.lightadmin.org/schema/light/spring-light-admin.xsd http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd">
 
 	<context:annotation-config/>
-	<context:component-scan base-package="org.lightadmin.demo.web"/>
 
 	<tx:annotation-driven transaction-manager="transactionManager"/>
 
@@ -30,9 +29,5 @@
 		<jdbc:script location="classpath:db/schema.sql"/>
 		<jdbc:script location="classpath:db/data.sql"/>
 	</jdbc:embedded-database>
-
-	<import resource="spring-security.xml"/>
-
-	<import resource="webmvc-config.xml"/>
 
 </beans>

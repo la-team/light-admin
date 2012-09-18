@@ -34,8 +34,8 @@ public class DynamicRepositoryFactory extends JpaRepositoryFactory {
 	}
 
 	@Override
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	protected <T, ID extends Serializable> JpaRepository<?, ?> getTargetRepository(RepositoryMetadata metadata, EntityManager entityManager) {
+	@SuppressWarnings( {"unchecked", "rawtypes"} )
+	protected <T, ID extends Serializable> JpaRepository<?, ?> getTargetRepository( RepositoryMetadata metadata, EntityManager entityManager ) {
 		return new DynamicJpaRepositoryImpl( metadata.getDomainType(), entityManager );
 	}
 
@@ -50,6 +50,7 @@ public class DynamicRepositoryFactory extends JpaRepositoryFactory {
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	public <T> T getRepository( final Class<T> repositoryInterface, final Object customImplementation ) {
 		RepositoryMetadata metadata = getRepositoryMetadata( repositoryInterface );
 		RepositoryInformation information = getRepositoryInformation( metadata, null );

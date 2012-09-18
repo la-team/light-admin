@@ -18,11 +18,12 @@ import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanDefinitionReader;
 import org.springframework.beans.factory.support.ManagedMap;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
+import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
-import org.springframework.core.annotation.AnnotationAttributes;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.util.ClassUtils;
@@ -35,6 +36,8 @@ import java.util.Map;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
+	private static final String SPRING_SECURITY_CONTEXT_RESOURCE = "classpath*:META-INF/spring/spring-security.xml";
+
 	private static final String BASE_PACKAGE = "base-package";
 
 	@Override
@@ -46,11 +49,14 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations = new ManagedMap<Class<?>, RuntimeBeanReference>();
 
+		loadSpringSecurityDefinitions( parserContext );
+
 		for ( BeanDefinition definition : provider.findCandidateComponents( basePackage ) ) {
 			final AnnotatedBeanDefinition annotatedBeanDefinition = ( AnnotatedBeanDefinition ) definition;
 
 			final Class<?> configurationClass = configurationClass( annotatedBeanDefinition );
-			final Class<?> domainType = domainType( annotatedBeanDefinition );
+
+			final Class<?> domainType = configurationClass.getAnnotation( Administration.class ).value();
 
 			registerDomainRepository( domainType, parserContext );
 
@@ -68,6 +74,11 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		registerViewPreparers( parserContext );
 
 		return null;
+	}
+
+	private void loadSpringSecurityDefinitions( final ParserContext parserContext ) {
+		BeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader( parserContext.getRegistry() );
+		beanDefinitionReader.loadBeanDefinitions( SPRING_SECURITY_CONTEXT_RESOURCE );
 	}
 
 	private void registerRepositoryRestConfiguration( final ParserContext parserContext ) {
@@ -114,12 +125,15 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private String registerDomainRepository( final Class<?> domainType, final ParserContext parserContext ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DynamicJpaRepositoryFactoryBean.class );
+		final String repositoryBeanName = repositoryBeanName( domainType );
+
+		final BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DynamicJpaRepositoryFactoryBean.class );
 		builder.addConstructorArgValue( domainType );
 		builder.addPropertyValue( "repositoryInterface", DynamicJpaRepository.class );
+
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		final String repositoryBeanName = repositoryBeanName( domainType );
 		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, repositoryBeanName ) );
+
 		return repositoryBeanName;
 	}
 
@@ -162,9 +176,5 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 	private String domainTypeConfigurationBeanName( final Class<?> domainType ) {
 		return StringUtils.uncapitalize( domainType.getSimpleName() ) + "AdministrationConfiguration";
-	}
-
-	private Class<?> domainType( final AnnotatedBeanDefinition definition ) {
-		return AnnotationAttributes.fromMap( definition.getMetadata().getAnnotationAttributes( Administration.class.getName(), false ) ).getClass( "value" );
 	}
 }

@@ -27,6 +27,6 @@
 		</put-attribute>
 	</definition>
 
-	<definition name="login" template="/WEB-INF/presentation/login.jsp"/>
+	<definition name="login" template="/presentation/login.jsp"/>
 
 </tiles-definitions>

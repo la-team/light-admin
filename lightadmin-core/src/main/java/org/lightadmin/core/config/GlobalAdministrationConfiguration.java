@@ -17,7 +17,11 @@ public class GlobalAdministrationConfiguration {
 	}
 
 	public DomainTypeAdministrationConfiguration forDomainType( Class<?> domainType ) {
-		return domainTypeConfigurations.get( domainType );
+		final DomainTypeAdministrationConfiguration configuration = domainTypeConfigurations.get( domainType );
+		if ( configuration == null ) {
+			throw new RuntimeException( "Undefined entity name. Please check your configuration." );
+		}
+		return configuration;
 	}
 
 	public DomainTypeAdministrationConfiguration forEntityName( String entityName ) {
