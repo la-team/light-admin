@@ -53,6 +53,7 @@ public class ApplicationController {
 
 		model.addAttribute( "entityMetadata", entityMetadata );
 		model.addAttribute( "entityDTO", entityDto( entity, entityMetadata ) );
+		model.addAttribute( "entity", entity );
 		model.addAttribute( "domainType", configuration.forEntityName( domainType ).getDomainType() );
 
 		return "editView";
