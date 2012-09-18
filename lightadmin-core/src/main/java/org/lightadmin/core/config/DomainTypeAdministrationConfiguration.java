@@ -1,10 +1,13 @@
 package org.lightadmin.core.config;
 
 import org.lightadmin.core.repository.DynamicJpaRepository;
+import org.lightadmin.core.repository.support.DomainEntityMetadata;
 import org.lightadmin.core.view.ScreenContext;
 import org.lightadmin.core.view.support.Fragment;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
+import org.springframework.data.rest.repository.EntityMetadata;
+import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -15,6 +18,8 @@ import java.io.Serializable;
 public class DomainTypeAdministrationConfiguration {
 
 	private JpaEntityInformation<?, ? extends Serializable> entityInformation;
+
+	private EntityMetadata<JpaAttributeMetadata> entityMetadata;
 
 	private final Class<?> domainType;
 
@@ -35,10 +40,16 @@ public class DomainTypeAdministrationConfiguration {
 	@PersistenceContext
 	public void setEntityManager( EntityManager entityManager ) {
 		entityInformation = JpaEntityInformationSupport.getMetadata( domainType, entityManager );
+
+		entityMetadata = new DomainEntityMetadata( entityManager.getMetamodel().entity( entityInformation.getJavaType() ));
 	}
 
 	public JpaEntityInformation getEntityInformation() {
 		return entityInformation;
+	}
+
+	public EntityMetadata<JpaAttributeMetadata> getEntityMetadata() {
+		return entityMetadata;
 	}
 
 	public Class<?> getDomainType() {

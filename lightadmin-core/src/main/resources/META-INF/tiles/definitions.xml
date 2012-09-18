@@ -15,11 +15,7 @@
 		</put-attribute>
     </definition>
 
-    <definition name="listView" extends="application.layout">
-        <put-attribute name="MAIN_SECTION">
-			<definition template="/WEB-INF/presentation/section/main-section.jsp" preparer="listViewPreparer"/>
-		</put-attribute>
-    </definition>
+	<definition name="login" template="/presentation/login.jsp"/>
 
 	<definition name="dashboardView" extends="application.layout">
 		<put-attribute name="MAIN_SECTION">
@@ -27,6 +23,16 @@
 		</put-attribute>
 	</definition>
 
-	<definition name="login" template="/presentation/login.jsp"/>
+	<definition name="listView" extends="application.layout">
+        <put-attribute name="MAIN_SECTION">
+			<definition template="/WEB-INF/presentation/list.jsp" preparer="listViewPreparer"/>
+		</put-attribute>
+    </definition>
+
+	<definition name="editView" extends="application.layout">
+		<put-attribute name="MAIN_SECTION">
+			<definition template="/WEB-INF/presentation/edit.jsp" preparer="editViewPreparer"/>
+		</put-attribute>
+	</definition>
 
 </tiles-definitions>

@@ -11,6 +11,12 @@
 
 	<mvc:annotation-driven validator="validator" conversion-service="conversionService"/>
 
+	<mvc:interceptors>
+		<bean class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">
+			<property name="entityManagerFactory" ref="entityManagerFactory" />
+		</bean>
+	</mvc:interceptors>
+
 	<bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
 
 	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean"/>
