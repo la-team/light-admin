@@ -95,14 +95,6 @@
 		    <artifactId>tiles-extras</artifactId>
 		</dependency>					
 		<dependency>
-			<groupId>javax.servlet.jsp.jstl</groupId>
-			<artifactId>jstl-api</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.glassfish.web</groupId>
-			<artifactId>jstl-impl</artifactId>
-		</dependency>
-		<dependency>
 		    <groupId>com.google.guava</groupId>
 		    <artifactId>guava</artifactId>
 		</dependency>
@@ -127,9 +119,8 @@
 			<artifactId>joda-time</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>javax.servlet</groupId>
-			<artifactId>servlet-api</artifactId>
-			<version>2.5</version>
+			<groupId>javax</groupId>
+			<artifactId>javaee-web-api</artifactId>
 			<scope>provided</scope>
 		</dependency>
 
@@ -162,7 +153,7 @@
 			<plugin>
 				<groupId>org.mortbay.jetty</groupId>
 				<artifactId>jetty-maven-plugin</artifactId>
-				<version>8.1.6.v20120903</version>
+				<version>8.1.7.v20120910</version>
 				<configuration>
 					<webApp>
 						<contextPath>/${application.context}</contextPath>
