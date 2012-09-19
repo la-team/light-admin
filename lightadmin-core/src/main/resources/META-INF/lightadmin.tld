@@ -9,4 +9,24 @@
 	<short-name>light</short-name>
 	<uri>http://www.lightadmin.org/tags</uri>
 
+	<tag>
+		<description>Renders dynamic html element using the bound value.</description>
+		<name>input</name>
+		<tag-class>org.lightadmin.core.web.tags.form.DynamicHtmlElementTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>Entity Attribute Metadata</description>
+			<name>attributeMetadata</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Equivalent to "class" - HTML Optional Attribute</description>
+			<name>cssClass</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<dynamic-attributes>true</dynamic-attributes>
+	</tag>
+
 </taglib>

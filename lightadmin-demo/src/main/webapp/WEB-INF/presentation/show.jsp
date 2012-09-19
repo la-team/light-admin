@@ -17,6 +17,10 @@
 	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span><li class="active">Show <c:out value="${domainTypeName}"/></li>
 </ul>
 
+<div class="page-header">
+	<h2>Show <c:out value="${domainTypeName}"/></h2>
+</div>
+
 <table class="table table-striped table-bordered table-hover">
 	<thead>
 	<tr>
