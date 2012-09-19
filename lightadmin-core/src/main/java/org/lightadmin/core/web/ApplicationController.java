@@ -1,4 +1,4 @@
-package org.lightadmin.demo.web;
+package org.lightadmin.core.web;
 
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;

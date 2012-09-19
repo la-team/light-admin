@@ -14,24 +14,25 @@ import org.lightadmin.core.view.support.FragmentBuilder;
 import org.lightadmin.core.view.support.TableFragmentBuilder;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.config.BeanReference;
 import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.parsing.BeanComponentDefinition;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionReader;
-import org.springframework.beans.factory.support.ManagedMap;
+import org.springframework.beans.factory.support.*;
 import org.springframework.beans.factory.xml.BeanDefinitionParser;
 import org.springframework.beans.factory.xml.ParserContext;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.data.rest.repository.context.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.w3c.dom.Element;
 
 import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Map;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
@@ -67,13 +68,37 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerGlobalAdministrationConfiguration( parserContext, domainTypeConfigurations );
 
-		registerRepositoryRestConfiguration( parserContext );
+		registerValidatingRepositoryEventListener( parserContext );
 
 		registerRepositoryExporter( parserContext );
+
+		registerRepositoryRestConfiguration( parserContext );
 
 		registerViewPreparers( parserContext );
 
 		return null;
+	}
+
+	private void registerValidatingRepositoryEventListener( final ParserContext parserContext ) {
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( ValidatingRepositoryEventListener.class );
+
+		Collection<BeanReference> validators = new ManagedSet<BeanReference>();
+		validators.add( localValidatorFactoryBean( parserContext ) );
+
+		Map<String, Collection<BeanReference>> eventValidators = new ManagedMap<String, Collection<BeanReference>>();
+		eventValidators.put( "beforeSave", validators );
+
+		builder.addPropertyValue( "validators", eventValidators );
+		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
+		final String beanName = parserContext.getReaderContext().generateBeanName( beanDefinition );
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, beanName ) );
+	}
+
+	private BeanReference localValidatorFactoryBean( final ParserContext parserContext ) {
+		RootBeanDefinition validatorDef = new RootBeanDefinition( LocalValidatorFactoryBean.class );
+		String validatorName = parserContext.getReaderContext().registerWithGeneratedName( validatorDef );
+		parserContext.registerComponent( new BeanComponentDefinition( validatorDef, validatorName ) );
+		return new RuntimeBeanReference( validatorName );
 	}
 
 	private void loadSpringSecurityDefinitions( final ParserContext parserContext ) {
@@ -85,7 +110,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( RepositoryRestConfiguration.class );
 		builder.addPropertyValue( "defaultPageSize", 5 );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, "repositoryRestConfiguration" ) );
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, parserContext.getReaderContext().generateBeanName( beanDefinition ) ) );
 	}
 
 	private void registerViewPreparers( final ParserContext parserContext ) {
