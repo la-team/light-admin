@@ -5,4 +5,15 @@
 
 	<bean id="jpaRepositoryExporter" class="org.lightadmin.core.rest.DynamicJpaRepositoryExporter"/>
 
+	<bean id="conversionService" class="org.springframework.context.support.ConversionServiceFactoryBean">
+		<property name="converters">
+			<set>
+				<bean class="org.lightadmin.core.repository.support.DomainClassConverter">
+					<constructor-arg ref="conversionService" />
+					<constructor-arg ref="entityManager" />
+				</bean>
+			</set>
+		</property>
+	</bean>
+
 </beans>
