@@ -5,7 +5,7 @@ import org.apache.tiles.context.TilesRequestContext;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.view.support.TableFragment;
 
-public class ListViewPreparer extends ViewContextPreparer {
+public class ListViewPreparer extends ConfigurationAwareViewPreparer {
 
 	@Override
 	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration ) {

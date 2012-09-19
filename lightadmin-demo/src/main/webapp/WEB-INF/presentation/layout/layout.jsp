@@ -35,21 +35,21 @@
 
 <body>
 
-<tiles:insertAttribute name="HEADER_SECTION"/>
+<tiles:insertAttribute name="header.section"/>
 
 <div class="container-fluid">
 
 	<div class="row-fluid">
 		<div class="span3">
-			<tiles:insertAttribute name="LEFT_SECTION"/>
+			<tiles:insertAttribute name="left.section"/>
 		</div>
 		<div class="span9">
-			<tiles:insertAttribute name="MAIN_SECTION"/>
+			<tiles:insertAttribute name="main.section"/>
 		</div>
 	</div>
 </div>
 
-<tiles:insertAttribute name="FOOTER_SECTION"/>
+<tiles:insertAttribute name="footer.section"/>
 
 </body>
 </html>

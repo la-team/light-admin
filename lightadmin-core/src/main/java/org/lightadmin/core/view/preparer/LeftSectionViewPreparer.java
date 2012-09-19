@@ -10,7 +10,7 @@ import org.lightadmin.core.util.Pair;
 import java.util.Collection;
 import java.util.Set;
 
-public class LeftSectionViewPreparer extends ViewContextPreparer {
+public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
 
 	@Override
 	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration ) {

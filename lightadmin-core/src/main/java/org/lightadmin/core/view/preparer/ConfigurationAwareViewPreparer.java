@@ -12,7 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
-public abstract class ViewContextPreparer implements ViewPreparer {
+public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
 
 	@Autowired
 	private GlobalAdministrationConfiguration configuration;

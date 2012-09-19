@@ -42,6 +42,24 @@ public class ApplicationController {
 	}
 
 	@SuppressWarnings( "unchecked" )
+	@RequestMapping( value = "/domain/{domainType}/{entityId}", method = RequestMethod.GET )
+	public String show( @PathVariable String domainType, @PathVariable long entityId, Model model  ) {
+		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( domainType );
+
+		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+		final EntityMetadata<JpaAttributeMetadata> entityMetadata = domainTypeAdministrationConfiguration.getEntityMetadata();
+
+		final Object entity = repository.findOne( entityId );
+
+		model.addAttribute( "entityMetadata", entityMetadata );
+		model.addAttribute( "entityDTO", entityDto( entity, entityMetadata ) );
+		model.addAttribute( "entity", entity );
+		model.addAttribute( "domainType", configuration.forEntityName( domainType ).getDomainType() );
+
+		return "showView";
+	}
+
+	@SuppressWarnings( "unchecked" )
 	@RequestMapping( value = "/domain/{domainType}/{entityId}/edit", method = RequestMethod.GET )
 	public String edit( @PathVariable String domainType, @PathVariable long entityId, Model model  ) {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( domainType );

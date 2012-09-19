@@ -4,13 +4,13 @@
 <tiles-definitions>
 
     <definition name="application.layout" template="/WEB-INF/presentation/layout/layout.jsp" preparer="screenViewPreparer">
-		<put-attribute name="HEADER_SECTION">
+		<put-attribute name="header.section">
 			<definition template="/WEB-INF/presentation/section/header-section.jsp" preparer="headerSectionViewPreparer"/>
 		</put-attribute>
-        <put-attribute name="LEFT_SECTION">
+        <put-attribute name="left.section">
 			<definition template="/WEB-INF/presentation/section/left-section.jsp" preparer="leftSectionViewPreparer"/>
         </put-attribute>
-		<put-attribute name="FOOTER_SECTION">
+		<put-attribute name="footer.section">
 			<definition template="/WEB-INF/presentation/section/footer-section.jsp" preparer="footerSectionViewPreparer"/>
 		</put-attribute>
     </definition>
@@ -18,20 +18,26 @@
 	<definition name="login" template="/presentation/login.jsp"/>
 
 	<definition name="dashboardView" extends="application.layout">
-		<put-attribute name="MAIN_SECTION">
+		<put-attribute name="main.section">
 			<definition template="/WEB-INF/presentation/dashboard.jsp" preparer="dashboardViewPreparer"/>
 		</put-attribute>
 	</definition>
 
 	<definition name="listView" extends="application.layout">
-        <put-attribute name="MAIN_SECTION">
+        <put-attribute name="main.section">
 			<definition template="/WEB-INF/presentation/list.jsp" preparer="listViewPreparer"/>
 		</put-attribute>
     </definition>
 
 	<definition name="editView" extends="application.layout">
-		<put-attribute name="MAIN_SECTION">
+		<put-attribute name="main.section">
 			<definition template="/WEB-INF/presentation/edit.jsp" preparer="editViewPreparer"/>
+		</put-attribute>
+	</definition>
+
+	<definition name="showView" extends="application.layout">
+		<put-attribute name="main.section">
+			<definition template="/WEB-INF/presentation/show.jsp" preparer="showViewPreparer"/>
 		</put-attribute>
 	</definition>
 

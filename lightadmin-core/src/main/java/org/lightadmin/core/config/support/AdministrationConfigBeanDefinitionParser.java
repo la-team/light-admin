@@ -119,6 +119,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		registerSimpleBean( "leftSectionViewPreparer", LeftSectionViewPreparer.class, parserContext );
 		registerSimpleBean( "listViewPreparer", ListViewPreparer.class, parserContext );
 		registerSimpleBean( "editViewPreparer", EditViewPreparer.class, parserContext );
+		registerSimpleBean( "showViewPreparer", ShowViewPreparer.class, parserContext );
 		registerSimpleBean( "screenViewPreparer", ScreenViewPreparer.class, parserContext );
 		registerSimpleBean( "dashboardViewPreparer", DashboardViewPreparer.class, parserContext );
 	}
