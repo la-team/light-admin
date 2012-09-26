@@ -1,17 +1,13 @@
 package org.lightadmin.core.config.support;
 
+import com.google.common.collect.Collections2;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.core.repository.support.DynamicJpaRepositoryFactoryBean;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
-import org.lightadmin.core.view.DefaultScreenContext;
-import org.lightadmin.core.view.ScreenContext;
+import org.lightadmin.core.util.Pair;
 import org.lightadmin.core.view.preparer.*;
-import org.lightadmin.core.view.support.Fragment;
-import org.lightadmin.core.view.support.FragmentBuilder;
-import org.lightadmin.core.view.support.TableFragmentBuilder;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanReference;
@@ -26,14 +22,15 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.data.rest.repository.context.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.w3c.dom.Element;
 
-import java.lang.reflect.Method;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newLinkedHashSet;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
@@ -43,30 +40,15 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 	@Override
 	public BeanDefinition parse( final Element element, final ParserContext parserContext ) {
-		ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider( false );
-		provider.addIncludeFilter( new AnnotationTypeFilter( Administration.class ) );
+		loadSpringSecurityContext( parserContext );
 
-		final String basePackage = element.getAttribute( BASE_PACKAGE );
+		final Set<BeanDefinition> administrationConfigurationsDefinitions = findAdministrationConfigurations( scanBasePackage( element ) );
 
-		final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations = new ManagedMap<Class<?>, RuntimeBeanReference>();
+		final Set<Pair<Class, Class>> dslConfigurations = transformToDslConfigurations( administrationConfigurationsDefinitions );
 
-		loadSpringSecurityDefinitions( parserContext );
+		registerDomainTypeRepositories( domainTypes( dslConfigurations ), parserContext );
 
-		for ( BeanDefinition definition : provider.findCandidateComponents( basePackage ) ) {
-			final AnnotatedBeanDefinition annotatedBeanDefinition = ( AnnotatedBeanDefinition ) definition;
-
-			final Class<?> configurationClass = configurationClass( annotatedBeanDefinition );
-
-			final Class<?> domainType = configurationClass.getAnnotation( Administration.class ).value();
-
-			registerDomainRepository( domainType, parserContext );
-
-			String domainConfigurationBeanName = registerDomainTypeAdministrationConfiguration( parserContext, domainType, configurationClass );
-
-			domainTypeConfigurations.put( domainType, new RuntimeBeanReference( domainConfigurationBeanName ) );
-		}
-
-		registerGlobalAdministrationConfiguration( parserContext, domainTypeConfigurations );
+		registerConfigurationBeans( dslConfigurations, parserContext );
 
 		registerValidatingRepositoryEventListener( parserContext );
 
@@ -77,6 +59,69 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		registerViewPreparers( parserContext );
 
 		return null;
+	}
+
+	private void registerConfigurationBeans( final Set<Pair<Class, Class>> dslConfigurations, final ParserContext parserContext ) {
+		final Map<Class<?>, BeanReference> domainTypeConfigurations = registerDomainConfigurations( dslConfigurations, parserContext );
+
+		registerGlobalAdministrationConfiguration( parserContext, domainTypeConfigurations );
+	}
+
+	private Map<Class<?>, BeanReference> registerDomainConfigurations( final Set<Pair<Class, Class>> dslConfigurations, final ParserContext parserContext ) {
+		final Map<Class<?>, BeanReference> domainTypeConfigurations = new ManagedMap<Class<?>, BeanReference>();
+		for ( Pair<Class, Class> configuration : dslConfigurations ) {
+			final Class<?> domainType = configuration.first;
+			final Class<?> configurationClass = configuration.second;
+
+			final String beanName = domainTypeConfigurationBeanName( domainType );
+
+			final BeanReference beanReference = registerDomainConfigurationBean( beanName, configurationClass, parserContext );
+
+			domainTypeConfigurations.put( domainType, beanReference );
+		}
+		return domainTypeConfigurations;
+	}
+
+	private BeanReference registerDomainConfigurationBean( final String beanName, final Class<?> configurationClass, final ParserContext parserContext ) {
+		final BeanDefinition domainConfigurationBeanDefinition = new ConfigurationClassToBeanDefinitionTransformation().apply( configurationClass );
+		parserContext.registerBeanComponent( new BeanComponentDefinition( domainConfigurationBeanDefinition, beanName ) );
+		return new RuntimeBeanReference( beanName );
+	}
+
+	private Collection<Class> domainTypes( final Set<Pair<Class, Class>> dynamicConfigurations ) {
+		return Collections2.transform( dynamicConfigurations, Pair.<Class>extractFirstTransformer() );
+	}
+
+	private void registerDomainTypeRepositories( final Collection<Class> domainTypes, final ParserContext parserContext ) {
+		for ( Class domainType : domainTypes ) {
+			registerDomainRepository( domainType, parserContext );
+		}
+	}
+
+	private Class<?> configurationDomainType( final Class<?> configurationClass ) {
+		return configurationClass.getAnnotation( Administration.class ).value();
+	}
+
+	private Set<Pair<Class, Class>> transformToDslConfigurations( Set<BeanDefinition> configurationBeanDefinitions ) {
+		final Set<Pair<Class, Class>> result = newLinkedHashSet();
+		for ( BeanDefinition configurationBeanDefinition : configurationBeanDefinitions ) {
+			final AnnotatedBeanDefinition annotatedBeanDefinition = ( AnnotatedBeanDefinition ) configurationBeanDefinition;
+			final Class configurationClass = configurationClass( annotatedBeanDefinition );
+			final Class domainType = configurationDomainType( configurationClass );
+
+			result.add( Pair.create( domainType, configurationClass ) );
+		}
+		return result;
+	}
+
+	private Set<BeanDefinition> findAdministrationConfigurations( final String basePackage ) {
+		ClassPathScanningCandidateComponentProvider provider = new ClassPathScanningCandidateComponentProvider( false );
+		provider.addIncludeFilter( new AnnotationTypeFilter( Administration.class ) );
+		return provider.findCandidateComponents( basePackage );
+	}
+
+	private String scanBasePackage( final Element element ) {
+		return element.getAttribute( BASE_PACKAGE );
 	}
 
 	private void registerValidatingRepositoryEventListener( final ParserContext parserContext ) {
@@ -101,7 +146,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		return new RuntimeBeanReference( validatorName );
 	}
 
-	private void loadSpringSecurityDefinitions( final ParserContext parserContext ) {
+	private void loadSpringSecurityContext( final ParserContext parserContext ) {
 		BeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader( parserContext.getRegistry() );
 		beanDefinitionReader.loadBeanDefinitions( SPRING_SECURITY_CONTEXT_RESOURCE );
 	}
@@ -124,23 +169,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		registerSimpleBean( "dashboardViewPreparer", DashboardViewPreparer.class, parserContext );
 	}
 
-	private String registerDomainTypeAdministrationConfiguration( final ParserContext parserContext, Class<?> domainType, final Class<?> configurationClass ) {
-		AbstractBeanDefinition beanDefinition = domainTypeAdministrationConfigBeanDefinition( domainType, configurationClass );
-		final String beanName = domainTypeConfigurationBeanName( domainType );
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, beanName ) );
-		return beanName;
-	}
-
-	private AbstractBeanDefinition domainTypeAdministrationConfigBeanDefinition( final Class<?> domainType, final Class<?> configurationClass ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DomainTypeAdministrationConfiguration.class );
-		builder.addConstructorArgValue( domainType );
-		builder.addConstructorArgReference( repositoryBeanName( domainType ) );
-		builder.addPropertyValue( "listViewFragment", listViewFragment( configurationClass ) );
-		builder.addPropertyValue( "screenContext", screenContext( configurationClass ) );
-		return builder.getBeanDefinition();
-	}
-
-	private void registerGlobalAdministrationConfiguration( final ParserContext parserContext, final Map<Class<?>, RuntimeBeanReference> domainTypeConfigurations ) {
+	private void registerGlobalAdministrationConfiguration( final ParserContext parserContext, final Map<Class<?>, BeanReference> domainTypeConfigurations ) {
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( GlobalAdministrationConfiguration.class );
 		builder.addPropertyValue( "domainTypeConfigurations", domainTypeConfigurations );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
@@ -173,28 +202,6 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
 		final String configurationClassName = definition.getMetadata().getClassName();
 		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
-	}
-
-	private Fragment listViewFragment( final Class<?> configurationClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "listView", FragmentBuilder.class );
-
-		FragmentBuilder fragmentBuilder = new TableFragmentBuilder();
-		if ( method != null ) {
-			return ( Fragment ) ReflectionUtils.invokeMethod( method, null, fragmentBuilder );
-		}
-
-		return fragmentBuilder.build();
-	}
-
-	private ScreenContext screenContext( final Class<?> configurationClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "configureScreen", ScreenContext.class );
-
-		ScreenContext screenContext = new DefaultScreenContext();
-		if ( method != null ) {
-			ReflectionUtils.invokeMethod( method, null, screenContext );
-		}
-
-		return screenContext;
 	}
 
 	private String repositoryBeanName( final Class<?> domainType ) {
