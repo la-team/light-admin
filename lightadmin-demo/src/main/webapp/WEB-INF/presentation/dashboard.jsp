@@ -4,7 +4,6 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <%@ taglib prefix="light" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
-<ul class="breadcrumb">
-	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li>
-</ul>
+<breadcrumb:breadcrumb/>

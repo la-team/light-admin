@@ -7,6 +7,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
+<%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
 <tiles:useAttribute name="domainTypeName"/>
 
@@ -15,11 +16,12 @@
 
 <c:set var="entityAttributes" value="<%= entityMetadata.embeddedAttributes().values() %>"/>
 
-<ul class="breadcrumb">
-	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span>
-	<li><a href="<spring:url value="/domain/${domainTypeName}"/>">List <c:out value="${domainTypeName}"/></a></li><span class="divider">/</span>
-	<li class="active">Edit <c:out value="${domainTypeName}"/></li>
-</ul>
+<spring:url var="domainBaseUrl" value="/domain" scope="page"/>
+
+<breadcrumb:breadcrumb>
+	<breadcrumb:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}/${domainTypeName}"/>
+	<breadcrumb:breadcrumb-item name="Edit ${domainTypeName}"/>
+</breadcrumb:breadcrumb>
 
 <div class="page-header">
 	<h2>Edit <c:out value="${domainTypeName}"/></h2>

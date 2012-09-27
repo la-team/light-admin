@@ -5,13 +5,13 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
 <%@ taglib prefix="light" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
 <tiles:useAttribute name="listColumns"/>
 <tiles:useAttribute name="domainTypeName"/>
 
-<ul class="breadcrumb">
-	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span>
-	<li class="active">List ${domainTypeName}</li>
-</ul>
+<breadcrumb:breadcrumb>
+	<breadcrumb:breadcrumb-item name="List ${domainTypeName}"/>
+</breadcrumb:breadcrumb>
 
 <light:data-table entityName="${domainTypeName}" columns="${listColumns}"/>
