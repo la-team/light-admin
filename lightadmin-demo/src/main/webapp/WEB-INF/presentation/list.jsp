@@ -10,7 +10,8 @@
 <tiles:useAttribute name="domainTypeName"/>
 
 <ul class="breadcrumb">
-	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span><li class="active">${domainTypeName}</li>
+	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span>
+	<li class="active">List ${domainTypeName}</li>
 </ul>
 
 <light:data-table entityName="${domainTypeName}" columns="${listColumns}"/>

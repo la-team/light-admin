@@ -14,7 +14,9 @@
 <c:set var="entityAttributes" value="<%= entityMetadata.embeddedAttributes().values() %>"/>
 
 <ul class="breadcrumb">
-	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span><li class="active">Show <c:out value="${domainTypeName}"/></li>
+	<li><a href="<spring:url value="/"/>"><spring:message code="application.menu.dashboard"/></a></li><span class="divider">/</span>
+	<li><a href="<spring:url value="/domain/${domainTypeName}"/>">List <c:out value="${domainTypeName}"/></a></li><span class="divider">/</span>
+	<li class="active">Show <c:out value="${domainTypeName}"/></li>
 </ul>
 
 <div class="page-header">

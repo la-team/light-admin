@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
 <%@ attribute name="entityName" required="true" type="java.lang.String"%>
@@ -12,6 +13,7 @@
 		<c:forEach var="column" items="${columns}">
 			<th><c:out value="${column.second}"/></th>
 		</c:forEach>
+		<th>Actions</th>
 	</tr>
 	</thead>
 	<tbody/>
@@ -26,6 +28,20 @@
 			<c:forEach var="column" items="${columns}" varStatus="status">
 			   {     mDataProp : '${column.first}'    }<c:out value="${!status.last ? ',' : ''}"/>
 			</c:forEach>
+		   ],
+		   "aoColumnDefs":[
+			   {
+				   "aTargets":[ ${fn:length(columns) } ],
+				   "mData":null,
+				   "mRender":function ( data, type, full ) {
+					   var restEntityServiceUrl = full._links[0]['href'];
+					   var entityId = new RegExp( /${entityName}\/(\d+)/ ).exec(restEntityServiceUrl)[1];
+					   var viewEntityUrl = "<spring:url value='/domain/${entityName}/'/>" + entityId;
+					   var editEntityUrl = viewEntityUrl + "/edit";
+
+					   return '<a href="' + viewEntityUrl + '">View</a>' + '&nbsp;&nbsp;' + '<a href="' + editEntityUrl + '">Edit</a>';
+				   }
+			   }
 		   ],
 		   "bServerSide" : true,
 		   "fnServerData" : dataTableRESTAdapter,
