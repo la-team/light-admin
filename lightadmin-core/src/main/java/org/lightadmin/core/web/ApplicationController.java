@@ -3,6 +3,8 @@ package org.lightadmin.core.web;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.repository.DynamicJpaRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.repository.EntityMetadata;
 import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
@@ -20,6 +22,8 @@ import static com.google.common.collect.Maps.newHashMap;
 @Controller
 public class ApplicationController {
 
+	private static final Logger LOG = LoggerFactory.getLogger( ApplicationController.class );
+
 	@Autowired
 	private GlobalAdministrationConfiguration configuration;
 
@@ -36,6 +40,8 @@ public class ApplicationController {
 	@SuppressWarnings( "unchecked" )
 	@RequestMapping( value = "/domain/{domainType}", method = RequestMethod.GET )
 	public String list( @PathVariable String domainType, Model model ) {
+		LOG.info( "Handling request" );
+
 		model.addAttribute( "domainType", configuration.forEntityName( domainType ).getDomainType() );
 
 		return "listView";

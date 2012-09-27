@@ -5,29 +5,22 @@
 	<artifactId>lightadmin-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
+
 	<name>lightadmin-parent</name>
+
+	<properties>
+		<spring.version>3.1.2.RELEASE</spring.version>
+		<slf4j.version>1.7.1</slf4j.version>
+		<logback.version>1.0.6</logback.version>
+		<apache.tiles.version>2.2.2</apache.tiles.version>
+		<spring.data.jpa.version>1.1.0.RELEASE</spring.data.jpa.version>
+		<spring.data.rest.webmvc.version>1.0.0.RC2</spring.data.rest.webmvc.version>
+	</properties>
+
 	<modules>
 		<module>lightadmin-core</module>
 		<module>lightadmin-demo</module>
 	</modules>
-
-	<repositories>
-		<repository>
-			<id>maven-central</id>
-			<name>Maven Central</name>
-			<url>http://repo.maven.apache.org/maven2</url>
-		</repository>
-		<repository>
-			<id>java.net2</id>
-			<name>Repository hosting the jee6 artifacts</name>
-			<url>http://download.java.net/maven/2</url>
-		</repository>
-		<repository>
-			<id>spring-milestone</id>
-			<name>Spring Maven MILESTONE Repository</name>
-			<url>http://repo.springsource.org/libs-milestone</url>
-		</repository>
-	</repositories>
 
 	<dependencyManagement>
 		<dependencies>
@@ -35,62 +28,68 @@
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-core</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
+				<exclusions>
+					<exclusion>
+						<groupId>commons-logging</groupId>
+						<artifactId>commons-logging</artifactId>
+					</exclusion>
+				</exclusions>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-context</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-beans</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-web</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-webmvc</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-expression</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework</groupId>
 				<artifactId>spring-orm</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-core</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			 </dependency> 
 			 <dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-web</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			  </dependency> 
 			  <dependency>
 				<groupId>org.springframework.security</groupId>
 				<artifactId>spring-security-config</artifactId>
-				<version>3.1.2.RELEASE</version>
+				<version>${spring.version}</version>
 			  </dependency>
 			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
-				<version>1.1.0.RELEASE</version>
+				<version>${spring.data.jpa.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-rest-webmvc</artifactId>
-				<version>1.0.0.RC2</version>
+				<version>${spring.data.rest.webmvc.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -123,14 +122,9 @@
 				<version>2.2.8</version>
 			</dependency>
 			<dependency>
-				<groupId>org.hsqldb</groupId>
-				<artifactId>sqltool</artifactId>
-				<version>2.2.8</version>
-			</dependency>
-			<dependency>
 			    <groupId>org.apache.tiles</groupId>
 			    <artifactId>tiles-extras</artifactId>
-			    <version>2.2.2</version>
+			    <version>${apache.tiles.version}</version>
 			</dependency>			
 			<dependency>
 			    <groupId>com.google.guava</groupId>
@@ -140,12 +134,18 @@
 		    <dependency>
 		        <groupId>org.slf4j</groupId>
 		        <artifactId>slf4j-api</artifactId>
-		        <version>1.6.1</version>
+		        <version>${slf4j.version}</version>
 		    </dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>jcl-over-slf4j</artifactId>
-				<version>1.6.6</version>
+				<version>${slf4j.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>ch.qos.logback</groupId>
+				<artifactId>logback-classic</artifactId>
+				<version>${logback.version}</version>
+				<scope>runtime</scope>
 			</dependency>
 			<dependency>
 				<groupId>joda-time</groupId>
@@ -172,4 +172,23 @@
 
 		</dependencies>
 	</dependencyManagement>
+
+	<repositories>
+		<repository>
+			<id>maven-central</id>
+			<name>Maven Central</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</repository>
+		<repository>
+			<id>java.net2</id>
+			<name>Repository hosting the jee6 artifacts</name>
+			<url>http://download.java.net/maven/2</url>
+		</repository>
+		<repository>
+			<id>spring-milestone</id>
+			<name>Spring Maven MILESTONE Repository</name>
+			<url>http://repo.springsource.org/libs-milestone</url>
+		</repository>
+	</repositories>
+
 </project>
