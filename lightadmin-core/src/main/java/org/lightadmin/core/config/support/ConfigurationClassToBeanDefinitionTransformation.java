@@ -6,16 +6,17 @@ import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.view.DefaultScreenContext;
 import org.lightadmin.core.view.ScreenContext;
 import org.lightadmin.core.view.support.*;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+import static org.springframework.util.ReflectionUtils.*;
 
 public class ConfigurationClassToBeanDefinitionTransformation implements Function<Class<?>, BeanDefinition> {
 
@@ -42,53 +43,44 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 
 		builder.addPropertyValue( "scopes", scopes( configurationClass ) );
 
-		builder.addPropertyValue( "filters", filters( configurationClass, domainType ) );
+		builder.addPropertyValue( "filters", filters( configurationClass ) );
 
 		return builder.getBeanDefinition();
 	}
 
-	private Filters filters( final Class<?> configurationClass, final Class domainType ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "filters", FilterBuilder.class );
-
-		FilterBuilder filterBuilder = new DefaultFilterBuilder();
-		if ( method != null ) {
-			return ( Filters ) ReflectionUtils.invokeMethod( method, null, filterBuilder );
-		}
-
-		return filterBuilder.build();
+	private Filters filters( final Class<?> configurationClass ) {
+		return invokeMethodWithBuilder( configurationClass, "filters", FilterBuilder.class, DefaultFilterBuilder.class );
 	}
 
 	private Scopes scopes( final Class<?> configurationClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "scopes", ScopeBuilder.class );
-
-		ScopeBuilder scopeBuilder = new DefaultScopeBuilder();
-		if ( method != null ) {
-			return ( Scopes ) ReflectionUtils.invokeMethod( method, null, scopeBuilder );
-		}
-
-		return scopeBuilder.build();
+		return invokeMethodWithBuilder( configurationClass, "scopes", ScopeBuilder.class, DefaultScopeBuilder.class );
 	}
 
 	private Fragment listViewFragment( final Class<?> configurationClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "listView", FragmentBuilder.class );
-
-		FragmentBuilder fragmentBuilder = new TableFragmentBuilder();
-		if ( method != null ) {
-			return ( Fragment ) ReflectionUtils.invokeMethod( method, null, fragmentBuilder );
-		}
-
-		return fragmentBuilder.build();
+		return invokeMethodWithBuilder( configurationClass, "listView", FragmentBuilder.class, TableFragmentBuilder.class );
 	}
 
 	private ScreenContext screenContext( final Class<?> configurationClass ) {
+
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "configureScreen", ScreenContext.class );
 
 		ScreenContext screenContext = new DefaultScreenContext();
 		if ( method != null ) {
-			ReflectionUtils.invokeMethod( method, null, screenContext );
+			invokeMethod( method, null, screenContext );
 		}
 
 		return screenContext;
+	}
+
+	private <T> T invokeMethodWithBuilder( final Class<?> configurationClass, String methodName, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, methodName, builderInterface );
+
+		final Builder<T> builder = BeanUtils.instantiateClass( concreteBuilderClass );
+		if ( method != null ) {
+			return ( T ) invokeMethod( method, null, builder );
+		}
+
+		return builder.build();
 	}
 
 	private String repositoryBeanName( final Class<?> domainType ) {
