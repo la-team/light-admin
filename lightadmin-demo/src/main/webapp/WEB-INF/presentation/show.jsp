@@ -1,3 +1,4 @@
+<%@ page import="org.springframework.data.rest.repository.EntityMetadata" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -8,11 +9,11 @@
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
 <tiles:useAttribute name="domainTypeName"/>
+<tiles:useAttribute name="entityMetadata"/>
 
-<jsp:useBean id="entityMetadata" type="org.springframework.data.rest.repository.EntityMetadata" scope="request"/>
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 
-<c:set var="entityAttributes" value="<%= entityMetadata.embeddedAttributes().values() %>"/>
+<c:set var="entityAttributes" value="<%= ((EntityMetadata) entityMetadata).embeddedAttributes().values() %>"/>
 
 <spring:url var="domainBaseUrl" value="/domain" scope="page"/>
 
@@ -36,9 +37,9 @@
 
 	<tbody>
 	<tr>
-		<td><c:out value="<%= entityMetadata.idAttribute().name()%>"/></td>
-		<td><c:out value="<%= entityMetadata.idAttribute().type().getName() %>"/></td>
-		<td><c:out value="<%= entityMetadata.idAttribute().get( entity ) %>"/></td>
+		<td><c:out value="<%= ((EntityMetadata) entityMetadata).idAttribute().name()%>"/></td>
+		<td><c:out value="<%= ((EntityMetadata) entityMetadata).idAttribute().type().getName() %>"/></td>
+		<td><c:out value="<%= ((EntityMetadata) entityMetadata).idAttribute().get( entity ) %>"/></td>
 	</tr>
 	<c:forEach var="attributeEntry" items="${entityAttributes}">
 		<jsp:useBean id="attributeEntry" type="org.springframework.data.rest.repository.jpa.JpaAttributeMetadata"/>

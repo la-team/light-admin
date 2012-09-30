@@ -5,9 +5,7 @@ import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.view.DefaultScreenContext;
 import org.lightadmin.core.view.ScreenContext;
-import org.lightadmin.core.view.support.Fragment;
-import org.lightadmin.core.view.support.FragmentBuilder;
-import org.lightadmin.core.view.support.TableFragmentBuilder;
+import org.lightadmin.core.view.support.*;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.util.Assert;
@@ -39,9 +37,36 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 		builder.addConstructorArgReference( repositoryBeanName( domainType ) );
 
 		builder.addPropertyValue( "listViewFragment", listViewFragment( configurationClass ) );
+
 		builder.addPropertyValue( "screenContext", screenContext( configurationClass ) );
 
+		builder.addPropertyValue( "scopes", scopes( configurationClass ) );
+
+		builder.addPropertyValue( "filters", filters( configurationClass, domainType ) );
+
 		return builder.getBeanDefinition();
+	}
+
+	private Filters filters( final Class<?> configurationClass, final Class domainType ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "filters", FilterBuilder.class );
+
+		FilterBuilder filterBuilder = new DefaultFilterBuilder();
+		if ( method != null ) {
+			return ( Filters ) ReflectionUtils.invokeMethod( method, null, filterBuilder );
+		}
+
+		return filterBuilder.build();
+	}
+
+	private Scopes scopes( final Class<?> configurationClass ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "scopes", ScopeBuilder.class );
+
+		ScopeBuilder scopeBuilder = new DefaultScopeBuilder();
+		if ( method != null ) {
+			return ( Scopes ) ReflectionUtils.invokeMethod( method, null, scopeBuilder );
+		}
+
+		return scopeBuilder.build();
 	}
 
 	private Fragment listViewFragment( final Class<?> configurationClass ) {

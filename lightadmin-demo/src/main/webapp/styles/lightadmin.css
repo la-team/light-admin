@@ -128,3 +128,8 @@ body.login {
 	background-image: url(../images/glyphicons-halflings-white.png);
 	opacity: 1;
 }
+
+#breadcrumb li i {
+	margin-right: 5px;
+	opacity: .6;
+}

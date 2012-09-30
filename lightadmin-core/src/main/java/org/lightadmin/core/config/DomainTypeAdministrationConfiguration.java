@@ -3,7 +3,9 @@ package org.lightadmin.core.config;
 import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.core.repository.support.DomainEntityMetadata;
 import org.lightadmin.core.view.ScreenContext;
+import org.lightadmin.core.view.support.Filters;
 import org.lightadmin.core.view.support.Fragment;
+import org.lightadmin.core.view.support.Scopes;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.data.rest.repository.EntityMetadata;
@@ -28,6 +30,10 @@ public class DomainTypeAdministrationConfiguration {
 	private Fragment listViewFragment;
 
 	private ScreenContext screenContext;
+
+	private Scopes scopes;
+
+	private Filters filters;
 
 	public DomainTypeAdministrationConfiguration( final Class<?> domainType, final DynamicJpaRepository<?, ?> repository ) {
 		Assert.notNull( domainType );
@@ -78,5 +84,21 @@ public class DomainTypeAdministrationConfiguration {
 
 	public ScreenContext getScreenContext() {
 		return this.screenContext;
+	}
+
+	public Scopes getScopes() {
+		return scopes;
+	}
+
+	public void setScopes( final Scopes scopes ) {
+		this.scopes = scopes;
+	}
+
+	public Filters getFilters() {
+		return filters;
+	}
+
+	public void setFilters( final Filters filters ) {
+		this.filters = filters;
 	}
 }

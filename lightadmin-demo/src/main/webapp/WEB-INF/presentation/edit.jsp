@@ -1,3 +1,4 @@
+<%@ page import="org.springframework.data.rest.repository.EntityMetadata" %>
 <%@ page import="org.springframework.util.StringUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
@@ -10,11 +11,11 @@
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
 <tiles:useAttribute name="domainTypeName"/>
+<tiles:useAttribute name="entityMetadata"/>
 
-<jsp:useBean id="entityMetadata" type="org.springframework.data.rest.repository.EntityMetadata" scope="request"/>
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 
-<c:set var="entityAttributes" value="<%= entityMetadata.embeddedAttributes().values() %>"/>
+<c:set var="entityAttributes" value="<%= ((EntityMetadata) entityMetadata).embeddedAttributes().values() %>"/>
 
 <spring:url var="domainBaseUrl" value="/domain" scope="page"/>
 

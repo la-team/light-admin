@@ -23,7 +23,7 @@
 
 	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" p:entityManagerFactory-ref="entityManagerFactory"/>
 
-	<light:administration base-package="org.lightadmin.demo.config"/>
+	<light:administration base-package="org.lightadmin.demo.config" entity-manager-factory-ref="entityManagerFactory"/>
 
 	<jdbc:embedded-database id="dataSource" type="HSQL">
 		<jdbc:script location="classpath:db/schema.sql"/>

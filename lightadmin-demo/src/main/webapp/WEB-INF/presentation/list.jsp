@@ -8,10 +8,17 @@
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
 <tiles:useAttribute name="listColumns"/>
+<tiles:useAttribute name="scopes"/>
+<tiles:useAttribute name="filters"/>
 <tiles:useAttribute name="domainTypeName"/>
+<tiles:useAttribute name="entityMetadata"/>
 
 <breadcrumb:breadcrumb>
 	<breadcrumb:breadcrumb-item name="List ${domainTypeName}"/>
 </breadcrumb:breadcrumb>
+
+<light:scopes scopes="${scopes}"/>
+
+<light:search filters="${filters}" />
 
 <light:data-table entityName="${domainTypeName}" columns="${listColumns}"/>

@@ -2,6 +2,7 @@ package org.lightadmin.core.config.support;
 
 import com.google.common.collect.Collections2;
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.DomainTypeAdministrationConfigPostProcessor;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.repository.DynamicJpaRepository;
 import org.lightadmin.core.repository.support.DynamicJpaRepositoryFactoryBean;
@@ -36,11 +37,15 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 	private static final String SPRING_SECURITY_CONTEXT_RESOURCE = "classpath*:META-INF/spring/spring-security.xml";
 
+	private static final String ENTITY_MANAGER_FACTORY_REF = "entity-manager-factory-ref";
 	private static final String BASE_PACKAGE = "base-package";
 
 	@Override
 	public BeanDefinition parse( final Element element, final ParserContext parserContext ) {
 		loadSpringSecurityContext( parserContext );
+
+		// TODO: max: For the future!
+		BeanReference entityManagerFactoryRef = entityManagerFactoryRef( element );
 
 		final Set<BeanDefinition> administrationConfigurationsDefinitions = findAdministrationConfigurations( scanBasePackage( element ) );
 
@@ -50,6 +55,8 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerConfigurationBeans( dslConfigurations, parserContext );
 
+		registerDomainConfigurationPostProcessor( parserContext );
+
 		registerValidatingRepositoryEventListener( parserContext );
 
 		registerRepositoryExporter( parserContext );
@@ -58,6 +65,17 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerViewPreparers( parserContext );
 
+		return null;
+	}
+
+	private void registerDomainConfigurationPostProcessor( final ParserContext parserContext ) {
+		registerSimpleBean( "domainTypeAdministrationConfigPostProcessor", DomainTypeAdministrationConfigPostProcessor.class, parserContext );
+	}
+
+	private BeanReference entityManagerFactoryRef( final Element element ) {
+		if (element.hasAttribute( ENTITY_MANAGER_FACTORY_REF )) {
+			return new RuntimeBeanReference(element.getAttribute("entity-manager-factory-ref"));
+		}
 		return null;
 	}
 

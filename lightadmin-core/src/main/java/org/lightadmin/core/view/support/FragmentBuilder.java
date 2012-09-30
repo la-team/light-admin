@@ -1,6 +1,6 @@
 package org.lightadmin.core.view.support;
 
-public interface FragmentBuilder {
+public interface FragmentBuilder extends Builder<Fragment> {
 
 	FragmentBuilder field( String fieldName );
 

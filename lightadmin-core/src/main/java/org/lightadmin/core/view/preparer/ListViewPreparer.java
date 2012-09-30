@@ -14,5 +14,11 @@ public class ListViewPreparer extends ConfigurationAwareViewPreparer {
 		final TableFragment listViewFragment = ( TableFragment ) configuration.getListViewFragment();
 
 		addAttribute( attributeContext, "listColumns", listViewFragment.getColumns() );
+
+		addAttribute( attributeContext, "scopes", configuration.getScopes() );
+
+		addAttribute( attributeContext, "filters", configuration.getFilters() );
+
+		addAttribute( attributeContext, "entityMetadata", configuration.getEntityMetadata() );
 	}
 }

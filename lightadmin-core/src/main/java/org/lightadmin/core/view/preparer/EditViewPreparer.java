@@ -9,5 +9,7 @@ public class EditViewPreparer extends ConfigurationAwareViewPreparer {
 	@Override
 	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration ) {
 		super.execute( tilesContext, attributeContext, configuration );
+
+		addAttribute( attributeContext, "entityMetadata", configuration.getEntityMetadata() );
 	}
 }

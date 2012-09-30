@@ -6,16 +6,16 @@
 
 <jsp:doBody/>
 
-<ul class="breadcrumb">
+<ul class="breadcrumb" id="breadcrumb">
 
 	<spring:message var="dashboardLabel" code="application.menu.dashboard" />
 
 	<c:if test="${empty tag_breadcrumb_breadcrumbItems}">
-		<li><c:out value="${dashboardLabel}"/></li>
+		<li><i class="icon-home"></i><c:out value="${dashboardLabel}"/></li>
 	</c:if>
 
 	<c:if test="${not empty tag_breadcrumb_breadcrumbItems}">
-		<li><a href="<spring:url value="/"/>" title="${dashboardLabel}"><c:out value="${dashboardLabel}"/></a></li>
+		<li><a href="<spring:url value="/"/>" title="${dashboardLabel}"><i class="icon-home"></i><c:out value="${dashboardLabel}"/></a></li>
 	</c:if>
 
 	<c:forEach var="breadcrumbItem" items="${tag_breadcrumb_breadcrumbItems}" varStatus="status">

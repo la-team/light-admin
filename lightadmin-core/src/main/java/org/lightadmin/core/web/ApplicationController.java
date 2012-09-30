@@ -53,14 +53,13 @@ public class ApplicationController {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( domainType );
 
 		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
-		final EntityMetadata<JpaAttributeMetadata> entityMetadata = domainTypeAdministrationConfiguration.getEntityMetadata();
 
 		final Object entity = repository.findOne( entityId );
 
-		model.addAttribute( "entityMetadata", entityMetadata );
-		model.addAttribute( "entityDTO", entityDto( entity, entityMetadata ) );
-		model.addAttribute( "entity", entity );
 		model.addAttribute( "domainType", configuration.forEntityName( domainType ).getDomainType() );
+
+		model.addAttribute( "entityDTO", entityDto( entity, domainTypeAdministrationConfiguration.getEntityMetadata() ) );
+		model.addAttribute( "entity", entity );
 
 		return "showView";
 	}
@@ -71,14 +70,13 @@ public class ApplicationController {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( domainType );
 
 		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
-		final EntityMetadata<JpaAttributeMetadata> entityMetadata = domainTypeAdministrationConfiguration.getEntityMetadata();
 
 		final Object entity = repository.findOne( entityId );
 
-		model.addAttribute( "entityMetadata", entityMetadata );
-		model.addAttribute( "entityDTO", entityDto( entity, entityMetadata ) );
-		model.addAttribute( "entity", entity );
 		model.addAttribute( "domainType", configuration.forEntityName( domainType ).getDomainType() );
+
+		model.addAttribute( "entityDTO", entityDto( entity, domainTypeAdministrationConfiguration.getEntityMetadata() ) );
+		model.addAttribute( "entity", entity );
 
 		return "editView";
 	}
