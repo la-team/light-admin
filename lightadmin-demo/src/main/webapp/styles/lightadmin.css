@@ -8,6 +8,10 @@ body.login {
 	background: #E9E9E9 url(../images/body-bg.png) repeat 0 0;
 }
 
+.progress {
+	margin-bottom: 0;
+}
+
 .span3 {
 	min-height: 1px;
 }

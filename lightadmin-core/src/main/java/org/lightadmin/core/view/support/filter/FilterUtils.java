@@ -1,4 +1,4 @@
-package org.lightadmin.core.view.support;
+package org.lightadmin.core.view.support.filter;
 
 import com.google.common.base.Predicate;
 import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;

@@ -23,7 +23,6 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.data.rest.repository.context.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.w3c.dom.Element;
 
@@ -32,13 +31,31 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.springframework.util.StringUtils.*;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private static final String SPRING_SECURITY_CONTEXT_RESOURCE = "classpath*:META-INF/spring/spring-security.xml";
 
-	private static final String ENTITY_MANAGER_FACTORY_REF = "entity-manager-factory-ref";
+	private static final String FOOTER_SECTION_VIEW_PREPARER_BEAN_NAME = "footerSectionViewPreparer";
+	private static final String HEADER_SECTION_VIEW_PREPARER_BEAN_NAME = "headerSectionViewPreparer";
+	private static final String LEFT_SECTION_VIEW_PREPARER_BEAN_NAME = "leftSectionViewPreparer";
+	private static final String LIST_VIEW_PREPARER_BEAN_NAME = "listViewPreparer";
+	private static final String EDIT_VIEW_PREPARER_BEAN_NAME = "editViewPreparer";
+	private static final String SHOW_VIEW_PREPARER_BEAN_NAME = "showViewPreparer";
+	private static final String SCREEN_VIEW_PREPARER_BEAN_NAME = "screenViewPreparer";
+	private static final String DASHBOARD_VIEW_PREPARER_BEAN_NAME = "dashboardViewPreparer";
+
+	private static final String GLOBAL_ADMINISTRATION_CONFIGURATION_BEAN_NAME = "globalAdministrationConfiguration";
+
+	private static final String JPA_REPOSITORY_EXPORTER_BEAN_NAME = "jpaRepositoryExporter";
+
+	private static final String REPOSITORY_BEAN_NAME_FORMAT = "%sRepository";
+
+	private static final String DOMAIN_CONFIGURATION_BEAN_NAME_FORMAT = "%sAdministrationConfiguration";
+
 	private static final String BASE_PACKAGE = "base-package";
+	private static final String ENTITY_MANAGER_FACTORY_REF_ATTRIBUTE = "entity-manager-factory-ref";
 
 	@Override
 	public BeanDefinition parse( final Element element, final ParserContext parserContext ) {
@@ -69,12 +86,12 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private void registerDomainConfigurationPostProcessor( final ParserContext parserContext ) {
-		registerSimpleBean( "domainTypeAdministrationConfigPostProcessor", DomainTypeAdministrationConfigPostProcessor.class, parserContext );
+		registerSimpleBean( DomainTypeAdministrationConfigPostProcessor.class, parserContext );
 	}
 
 	private BeanReference entityManagerFactoryRef( final Element element ) {
-		if (element.hasAttribute( ENTITY_MANAGER_FACTORY_REF )) {
-			return new RuntimeBeanReference(element.getAttribute("entity-manager-factory-ref"));
+		if ( element.hasAttribute( ENTITY_MANAGER_FACTORY_REF_ATTRIBUTE ) ) {
+			return new RuntimeBeanReference( element.getAttribute( ENTITY_MANAGER_FACTORY_REF_ATTRIBUTE ) );
 		}
 		return null;
 	}
@@ -177,25 +194,25 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private void registerViewPreparers( final ParserContext parserContext ) {
-		registerSimpleBean( "footerSectionViewPreparer", FooterSectionViewPreparer.class, parserContext );
-		registerSimpleBean( "headerSectionViewPreparer", HeaderSectionViewPreparer.class, parserContext );
-		registerSimpleBean( "leftSectionViewPreparer", LeftSectionViewPreparer.class, parserContext );
-		registerSimpleBean( "listViewPreparer", ListViewPreparer.class, parserContext );
-		registerSimpleBean( "editViewPreparer", EditViewPreparer.class, parserContext );
-		registerSimpleBean( "showViewPreparer", ShowViewPreparer.class, parserContext );
-		registerSimpleBean( "screenViewPreparer", ScreenViewPreparer.class, parserContext );
-		registerSimpleBean( "dashboardViewPreparer", DashboardViewPreparer.class, parserContext );
+		registerSimpleBean( FOOTER_SECTION_VIEW_PREPARER_BEAN_NAME, FooterSectionViewPreparer.class, parserContext );
+		registerSimpleBean( HEADER_SECTION_VIEW_PREPARER_BEAN_NAME, HeaderSectionViewPreparer.class, parserContext );
+		registerSimpleBean( LEFT_SECTION_VIEW_PREPARER_BEAN_NAME, LeftSectionViewPreparer.class, parserContext );
+		registerSimpleBean( LIST_VIEW_PREPARER_BEAN_NAME, ListViewPreparer.class, parserContext );
+		registerSimpleBean( EDIT_VIEW_PREPARER_BEAN_NAME, EditViewPreparer.class, parserContext );
+		registerSimpleBean( SHOW_VIEW_PREPARER_BEAN_NAME, ShowViewPreparer.class, parserContext );
+		registerSimpleBean( SCREEN_VIEW_PREPARER_BEAN_NAME, ScreenViewPreparer.class, parserContext );
+		registerSimpleBean( DASHBOARD_VIEW_PREPARER_BEAN_NAME, DashboardViewPreparer.class, parserContext );
 	}
 
 	private void registerGlobalAdministrationConfiguration( final ParserContext parserContext, final Map<Class<?>, BeanReference> domainTypeConfigurations ) {
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( GlobalAdministrationConfiguration.class );
 		builder.addPropertyValue( "domainTypeConfigurations", domainTypeConfigurations );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, "globalAdministrationConfiguration" ) );
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, GLOBAL_ADMINISTRATION_CONFIGURATION_BEAN_NAME ) );
 	}
 
 	private void registerRepositoryExporter( final ParserContext parserContext ) {
-		registerSimpleBean( "jpaRepositoryExporter", DynamicJpaRepositoryExporter.class, parserContext );
+		registerSimpleBean( JPA_REPOSITORY_EXPORTER_BEAN_NAME, DynamicJpaRepositoryExporter.class, parserContext );
 	}
 
 	private String registerDomainRepository( final Class<?> domainType, final ParserContext parserContext ) {
@@ -211,10 +228,15 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		return repositoryBeanName;
 	}
 
-	private void registerSimpleBean( final String viewPreparerName, final Class<?> viewPreparerClass, final ParserContext parserContext ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( viewPreparerClass );
+	private BeanReference registerSimpleBean( final Class<?> beanClass, final ParserContext parserContext ) {
+		return new RuntimeBeanReference( parserContext.getReaderContext().registerWithGeneratedName( BeanDefinitionBuilder.rootBeanDefinition( beanClass ).getBeanDefinition() ) );
+	}
+
+	private BeanReference registerSimpleBean( final String beanName, final Class<?> beanClass, final ParserContext parserContext ) {
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( beanClass );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, viewPreparerName ) );
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, beanName ) );
+		return new RuntimeBeanReference( beanName );
 	}
 
 	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
@@ -223,10 +245,10 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private String repositoryBeanName( final Class<?> domainType ) {
-		return StringUtils.uncapitalize( domainType.getSimpleName() ) + "Repository";
+		return String.format( REPOSITORY_BEAN_NAME_FORMAT, uncapitalize( domainType.getSimpleName() ) );
 	}
 
 	private String domainTypeConfigurationBeanName( final Class<?> domainType ) {
-		return StringUtils.uncapitalize( domainType.getSimpleName() ) + "AdministrationConfiguration";
+		return String.format( DOMAIN_CONFIGURATION_BEAN_NAME_FORMAT, uncapitalize( domainType.getSimpleName() ) );
 	}
 }

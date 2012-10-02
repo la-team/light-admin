@@ -10,6 +10,6 @@
 
 <ul class="nav nav-list menu-sidenav">
 	<c:forEach var="menuItem" items="${menuItems}" varStatus="status">
-		<li class="${menuItem.first eq domainTypeName ? 'active' : ''}"><a href="<spring:url value='${menuItem.second}'/>"><i class="icon-chevron-right"></i> <c:out value="${menuItem.first}"/></a></li>
+		<li class="${menuItem.value eq domainTypeName ? 'active' : ''}"><a href="<spring:url value='${menuItem.link}'/>"><i class="icon-chevron-right"></i> <c:out value="${menuItem.value}"/></a></li>
 	</c:forEach>
 </ul>

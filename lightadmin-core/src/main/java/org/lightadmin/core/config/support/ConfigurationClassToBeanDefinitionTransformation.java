@@ -5,7 +5,16 @@ import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.view.DefaultScreenContext;
 import org.lightadmin.core.view.ScreenContext;
-import org.lightadmin.core.view.support.*;
+import org.lightadmin.core.view.support.Builder;
+import org.lightadmin.core.view.support.filter.DefaultFilterBuilder;
+import org.lightadmin.core.view.support.filter.FilterBuilder;
+import org.lightadmin.core.view.support.filter.Filters;
+import org.lightadmin.core.view.support.fragment.Fragment;
+import org.lightadmin.core.view.support.fragment.FragmentBuilder;
+import org.lightadmin.core.view.support.fragment.TableFragmentBuilder;
+import org.lightadmin.core.view.support.scope.DefaultScopeBuilder;
+import org.lightadmin.core.view.support.scope.ScopeBuilder;
+import org.lightadmin.core.view.support.scope.Scopes;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -16,7 +25,7 @@ import org.springframework.util.StringUtils;
 import java.lang.reflect.Method;
 
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
-import static org.springframework.util.ReflectionUtils.*;
+import static org.springframework.util.ReflectionUtils.invokeMethod;
 
 public class ConfigurationClassToBeanDefinitionTransformation implements Function<Class<?>, BeanDefinition> {
 
@@ -61,7 +70,6 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 	}
 
 	private ScreenContext screenContext( final Class<?> configurationClass ) {
-
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "configureScreen", ScreenContext.class );
 
 		ScreenContext screenContext = new DefaultScreenContext();

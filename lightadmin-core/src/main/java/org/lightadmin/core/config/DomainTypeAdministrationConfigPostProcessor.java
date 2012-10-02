@@ -1,6 +1,6 @@
 package org.lightadmin.core.config;
 
-import org.lightadmin.core.view.support.Filter;
+import org.lightadmin.core.view.support.filter.Filter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.config.BeanPostProcessor;

@@ -3,9 +3,9 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<%@ attribute name="filters" required="true" rtexprvalue="true" type="org.lightadmin.core.view.support.Filters"%>
+<%@ attribute name="filters" required="true" rtexprvalue="true" type="org.lightadmin.core.view.support.filter.Filters"%>
 
-<c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.view.support.Filter.class ) %>"/>
+<c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.view.support.filter.Filter.class ) %>"/>
 
 <c:if test="${not empty tag_search_filterList}">
 	<div class="well well-small">
@@ -19,7 +19,7 @@
 
 			<tbody>
 			<c:forEach var="filter" items="${tag_search_filterList}">
-				<jsp:useBean id="filter" type="org.lightadmin.core.view.support.Filter"/>
+				<jsp:useBean id="filter" type="org.lightadmin.core.view.support.filter.Filter"/>
 				<tr>
 					<td><c:out value="${filter.fieldName}"/></td>
 					<td><c:out value="<%= filter.getAttributeMetadata().type().getName() %>"/></td>

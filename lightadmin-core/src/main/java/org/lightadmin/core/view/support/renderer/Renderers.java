@@ -1,4 +1,4 @@
-package org.lightadmin.core.view.support;
+package org.lightadmin.core.view.support.renderer;
 
 import com.google.common.base.Function;
 

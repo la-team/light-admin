@@ -93,16 +93,16 @@ public class ApplicationController {
 		return result;
 	}
 
-	//	private List<Product> loadEntries() {
-	//		return productRepository.findAll( entryNameEqHello() );
-	//	}
-	//
-	//	public static Specification<Product> entryNameEqHello() {
-	//		return new Specification<Product>() {
-	//			@Override
-	//			public Predicate toPredicate( final Root<Product> root, final CriteriaQuery<?> query, final CriteriaBuilder cb ) {
-	//				return cb.equal( root.get( "name" ), "Box" );
-	//			}
-	//		};
-	//	}
+//		private List<Product> loadEntries() {
+//			return productRepository.findAll( entryNameEqHello() );
+//		}
+//
+//		public static Specification<Product> entryNameEqHello() {
+//			return new Specification<Product>() {
+//				@Override
+//				public Predicate toPredicate( final Root<Product> root, final CriteriaQuery<?> query, final CriteriaBuilder cb ) {
+//					return cb.equal( root.get( "name" ), "Box" );
+//				}
+//			};
+//		}
 }

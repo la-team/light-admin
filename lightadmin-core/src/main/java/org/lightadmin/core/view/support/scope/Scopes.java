@@ -1,4 +1,4 @@
-package org.lightadmin.core.view.support;
+package org.lightadmin.core.view.support.scope;
 
 import org.springframework.util.Assert;
 

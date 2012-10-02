@@ -3,12 +3,17 @@ package org.lightadmin.demo.config;
 import com.google.common.base.Predicates;
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.view.ScreenContext;
-import org.lightadmin.core.view.support.*;
+import org.lightadmin.core.view.support.filter.FilterBuilder;
+import org.lightadmin.core.view.support.filter.Filters;
+import org.lightadmin.core.view.support.fragment.Fragment;
+import org.lightadmin.core.view.support.fragment.FragmentBuilder;
+import org.lightadmin.core.view.support.scope.ScopeBuilder;
+import org.lightadmin.core.view.support.scope.Scopes;
 import org.lightadmin.demo.model.Customer;
 
-import static org.lightadmin.core.view.support.Renderers.select;
-import static org.lightadmin.core.view.support.ScopeUtils.all;
-import static org.lightadmin.core.view.support.ScopeUtils.filter;
+import static org.lightadmin.core.view.support.renderer.Renderers.select;
+import static org.lightadmin.core.view.support.scope.ScopeUtils.all;
+import static org.lightadmin.core.view.support.scope.ScopeUtils.filter;
 
 @Administration( Customer.class )
 public class CustomerAdministration {

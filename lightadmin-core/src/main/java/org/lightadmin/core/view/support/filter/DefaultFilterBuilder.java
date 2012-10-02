@@ -1,4 +1,6 @@
-package org.lightadmin.core.view.support;
+package org.lightadmin.core.view.support.filter;
+
+import org.lightadmin.core.view.support.renderer.Renderer;
 
 import java.util.List;
 

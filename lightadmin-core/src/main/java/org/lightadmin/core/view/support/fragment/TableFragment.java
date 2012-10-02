@@ -1,4 +1,4 @@
-package org.lightadmin.core.view.support;
+package org.lightadmin.core.view.support.fragment;
 
 import org.lightadmin.core.util.Pair;
 

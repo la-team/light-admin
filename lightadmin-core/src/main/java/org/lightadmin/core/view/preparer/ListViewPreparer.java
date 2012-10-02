@@ -3,7 +3,7 @@ package org.lightadmin.core.view.preparer;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.context.TilesRequestContext;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.view.support.TableFragment;
+import org.lightadmin.core.view.support.fragment.TableFragment;
 
 public class ListViewPreparer extends ConfigurationAwareViewPreparer {
 

@@ -1,5 +1,6 @@
-package org.lightadmin.core.view.support;
+package org.lightadmin.core.view.support.fragment;
 
+import org.lightadmin.core.view.support.renderer.Renderer;
 public class TableFragmentBuilder implements FragmentBuilder {
 
 	private TableFragment tableFragment;

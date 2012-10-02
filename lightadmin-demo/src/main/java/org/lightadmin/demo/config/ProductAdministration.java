@@ -2,8 +2,8 @@ package org.lightadmin.demo.config;
 
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.view.ScreenContext;
-import org.lightadmin.core.view.support.Fragment;
-import org.lightadmin.core.view.support.FragmentBuilder;
+import org.lightadmin.core.view.support.fragment.Fragment;
+import org.lightadmin.core.view.support.fragment.FragmentBuilder;
 import org.lightadmin.demo.model.Product;
 
 @Administration( Product.class )
