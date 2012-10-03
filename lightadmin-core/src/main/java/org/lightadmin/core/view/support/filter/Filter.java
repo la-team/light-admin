@@ -1,13 +1,13 @@
 package org.lightadmin.core.view.support.filter;
 
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
 public interface Filter {
 
 	String getFieldName();
 
-	void setAttributeMetadata( AttributeMetadata attributeMetadata );
+	void setAttributeMetadata( DomainTypeAttributeMetadata attributeMetadata );
 
-	AttributeMetadata getAttributeMetadata();
+	DomainTypeAttributeMetadata getAttributeMetadata();
 
 }

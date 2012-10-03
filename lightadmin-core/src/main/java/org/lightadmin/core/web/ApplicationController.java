@@ -2,12 +2,12 @@ package org.lightadmin.core.web;
 
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -88,14 +88,14 @@ public class ApplicationController {
 		model.addAttribute( "domainTypeAdministrationConfiguration", configuration.forEntityName( domainTypeName ) );
 	}
 
-	private Map<String, Object> entityDto( final Object entity, final DomainTypeEntityMetadata<? extends AttributeMetadata> entityMetadata ) {
-		final Collection<? extends AttributeMetadata> attributes = entityMetadata.getAttributes().values();
+	private Map<String, Object> entityDto( final Object entity, final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata ) {
+		final Collection<? extends DomainTypeAttributeMetadata> attributes = entityMetadata.getAttributes().values();
 
 		final Map<String, Object> result = newHashMap();
 
-		for ( AttributeMetadata attribute : attributes ) {
-			String name = attribute.name();
-			Object val = attribute.get( entity );
+		for ( DomainTypeAttributeMetadata attribute : attributes ) {
+			String name = attribute.getName();
+			Object val = attribute.getValue( entity );
 			if ( null != val ) {
 				result.put( name, val );
 			}

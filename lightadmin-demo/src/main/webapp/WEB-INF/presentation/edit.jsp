@@ -1,5 +1,5 @@
-<%@ page import="org.springframework.util.StringUtils" %>
 <%@ page import="org.lightadmin.core.config.DomainTypeAdministrationConfiguration" %>
+<%@ page import="org.springframework.util.StringUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -31,10 +31,10 @@
 <form:form modelAttribute="entity" cssClass="form-horizontal" method="POST">
 	<fieldset>
 		<c:forEach var="attributeEntry" items="${entityAttributes}">
-			<jsp:useBean id="attributeEntry" type="org.springframework.data.rest.repository.jpa.JpaAttributeMetadata"/>
+			<jsp:useBean id="attributeEntry" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata"/>
 
 			<div class="control-group">
-				<label class="control-label" for="<%= attributeEntry.name()%>"><c:out value="<%= StringUtils.capitalize( attributeEntry.name() ) %>"/></label>
+				<label class="control-label" for="${attributeEntry.name}"><c:out value="<%= StringUtils.capitalize( attributeEntry.getName() ) %>"/></label>
 				<div class="controls">
 					<light:input attributeMetadata="${attributeEntry}" cssClass="input-xlarge"/>
 				</div>

@@ -41,16 +41,16 @@
 
 	<tbody>
 	<tr>
-		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().name()%>"/></td>
-		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().type().getName() %>"/></td>
-		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().get( entity ) %>"/></td>
+		<td><c:out value="${domainTypeEntityMetadata.idAttribute.name}"/></td>
+		<td><c:out value="${domainTypeEntityMetadata.idAttribute.type.name}"/></td>
+		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/></td>
 	</tr>
 	<c:forEach var="attributeEntry" items="${entityAttributes}">
-		<jsp:useBean id="attributeEntry" type="org.springframework.data.rest.repository.jpa.JpaAttributeMetadata"/>
+		<jsp:useBean id="attributeEntry" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata"/>
 		<tr>
-			<td><c:out value="<%= attributeEntry.name()%>"/></td>
-			<td><c:out value="<%= attributeEntry.type().getName() %>"/></td>
-			<td><c:out value="<%= attributeEntry.get( entity ) %>"/></td>
+			<td><c:out value="${attributeEntry.name}"/></td>
+			<td><c:out value="${attributeEntry.type.name}"/></td>
+			<td><c:out value="<%= attributeEntry.getValue( entity ) %>"/></td>
 		</tr>
 	</c:forEach>
 	</tbody>

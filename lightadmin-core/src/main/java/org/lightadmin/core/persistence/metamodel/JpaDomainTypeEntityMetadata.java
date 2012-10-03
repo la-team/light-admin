@@ -15,15 +15,15 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<JpaAttributeMetadata> {
+public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<JpaDomainTypeAttributeMetadata> {
 
 	private final Class<?> domainType;
 
-	private final JpaAttributeMetadata idAttribute;
-	private final JpaAttributeMetadata versionAttribute;
+	private final JpaDomainTypeAttributeMetadata idAttribute;
+	private final JpaDomainTypeAttributeMetadata versionAttribute;
 
-	private final Map<String, JpaAttributeMetadata> embeddedAttributes = newHashMap();
-	private final Map<String, JpaAttributeMetadata> linkedAttributes = newHashMap();
+	private final Map<String, JpaDomainTypeAttributeMetadata> embeddedAttributes = newHashMap();
+	private final Map<String, JpaDomainTypeAttributeMetadata> linkedAttributes = newHashMap();
 
 	public JpaDomainTypeEntityMetadata( EntityType<?> entityType ) {
 		domainType = entityType.getJavaType();
@@ -40,12 +40,12 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 			final String attributeName = attribute.getName();
 
 			if ( !BeanUtils.isSimpleValueType( attributeType( attribute ) ) ) {
-				linkedAttributes.put( attributeName, new JpaAttributeMetadata( entityType, attribute ) );
+				linkedAttributes.put( attributeName, new JpaDomainTypeAttributeMetadata( new JpaAttributeMetadata( entityType, attribute ) ) );
 				continue;
 			}
 
 			if ( notIdAttribute( attribute ) && notVersionAttribute( attribute ) ) {
-				embeddedAttributes.put( attributeName, new JpaAttributeMetadata( entityType, attribute ) );
+				embeddedAttributes.put( attributeName, new JpaDomainTypeAttributeMetadata( new JpaAttributeMetadata( entityType, attribute ) ) );
 			}
 		}
 	}
@@ -63,40 +63,40 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 	}
 
 	@Override
-	public Map<String, JpaAttributeMetadata> getEmbeddedAttributes() {
+	public Map<String, JpaDomainTypeAttributeMetadata> getEmbeddedAttributes() {
 		return embeddedAttributes;
 	}
 
 	@Override
-	public Map<String, JpaAttributeMetadata> getLinkedAttributes() {
+	public Map<String, JpaDomainTypeAttributeMetadata> getLinkedAttributes() {
 		return linkedAttributes;
 	}
 
 	@Override
-	public Map<String, JpaAttributeMetadata> getAttributes() {
-		Map<String, JpaAttributeMetadata> attributes = newHashMap();
+	public Map<String, JpaDomainTypeAttributeMetadata> getAttributes() {
+		Map<String, JpaDomainTypeAttributeMetadata> attributes = newHashMap();
 		attributes.putAll( embeddedAttributes );
 		attributes.putAll( linkedAttributes );
 		return attributes;
 	}
 
 	@Override
-	public JpaAttributeMetadata getVersionAttribute() {
+	public JpaDomainTypeAttributeMetadata getVersionAttribute() {
 		return versionAttribute;
 	}
 
 	@Override
-	public JpaAttributeMetadata getIdAttribute() {
+	public JpaDomainTypeAttributeMetadata getIdAttribute() {
 		return idAttribute;
 	}
 
 	@Override
-	public JpaAttributeMetadata getAttribute( String name ) {
-		if ( idAttribute.name().equals( name ) ) {
+	public JpaDomainTypeAttributeMetadata getAttribute( String name ) {
+		if ( idAttribute.getName().equals( name ) ) {
 			return idAttribute;
 		}
 
-		if ( null != versionAttribute && versionAttribute.name().equals( name ) ) {
+		if ( null != versionAttribute && versionAttribute.getName().equals( name ) ) {
 			return versionAttribute;
 		}
 
@@ -123,11 +123,11 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 		return !( attribute instanceof SingularAttribute && ( ( SingularAttribute ) attribute ).isId() );
 	}
 
-	private JpaAttributeMetadata versionAttribute( final EntityType<?> entityType ) {
-		return entityType.getVersion( Long.class ) != null ? new JpaAttributeMetadata( entityType, entityType.getVersion( Long.class ) ) : null;
+	private JpaDomainTypeAttributeMetadata versionAttribute( final EntityType<?> entityType ) {
+		return entityType.getVersion( Long.class ) != null ? new JpaDomainTypeAttributeMetadata( new JpaAttributeMetadata( entityType, entityType.getVersion( Long.class ) ) ) : null;
 	}
 
-	private JpaAttributeMetadata idAttribute( final EntityType<?> entityType ) {
-		return new JpaAttributeMetadata( entityType, entityType.getId( entityType.getIdType().getJavaType() ) );
+	private JpaDomainTypeAttributeMetadata idAttribute( final EntityType<?> entityType ) {
+		return new JpaDomainTypeAttributeMetadata( new JpaAttributeMetadata( entityType, entityType.getId( entityType.getIdType().getJavaType() ) ) );
 	}
 }

@@ -1,10 +1,8 @@
 package org.lightadmin.core.persistence.metamodel;
 
-import org.springframework.data.rest.repository.AttributeMetadata;
-
 import java.util.Map;
 
-public interface DomainTypeEntityMetadata<A extends AttributeMetadata> {
+public interface DomainTypeEntityMetadata<A extends DomainTypeAttributeMetadata> {
 
 	Class<?> getDomainType();
 

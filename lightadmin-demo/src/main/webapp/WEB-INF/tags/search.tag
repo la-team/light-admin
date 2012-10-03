@@ -22,7 +22,7 @@
 				<jsp:useBean id="filter" type="org.lightadmin.core.view.support.filter.Filter"/>
 				<tr>
 					<td><c:out value="${filter.fieldName}"/></td>
-					<td><c:out value="<%= filter.getAttributeMetadata().type().getName() %>"/></td>
+					<td><c:out value="${filter.attributeMetadata.type.name}"/></td>
 				</tr>
 			</c:forEach>
 			</tbody>

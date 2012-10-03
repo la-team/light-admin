@@ -1,8 +1,8 @@
 package org.lightadmin.core.web.tags.form;
 
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
-import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.tags.form.AbstractHtmlInputElementTag;
@@ -17,7 +17,7 @@ import java.io.Serializable;
 
 public class DynamicHtmlElementTag extends AbstractHtmlInputElementTag {
 
-	private AttributeMetadata attributeMetadata;
+	private DomainTypeAttributeMetadata attributeMetadata;
 
 	@Override
 	protected int writeTagContent( final TagWriter tagWriter ) throws JspException {
@@ -47,9 +47,9 @@ public class DynamicHtmlElementTag extends AbstractHtmlInputElementTag {
 		selectTag.setCssClass( getCssClass() );
 		selectTag.setPageContext( pageContext );
 		selectTag.setParent( getParent() );
-		selectTag.setPath( attributeMetadata.name() );
+		selectTag.setPath( attributeMetadata.getName() );
 
-		final Class<?> optionElementClass = attributeMetadata.elementType();
+		final Class<?> optionElementClass = attributeMetadata.getElementType();
 
 		final String idAttributeName = entityInformation( optionElementClass ).getIdAttribute().getName();
 
@@ -61,17 +61,17 @@ public class DynamicHtmlElementTag extends AbstractHtmlInputElementTag {
 	private InputTag inputTag() {
 		InputTag inputTag = new InputTag();
 		inputTag.setCssClass( getCssClass() );
-		inputTag.setPath( attributeMetadata.name() );
+		inputTag.setPath( attributeMetadata.getName() );
 		inputTag.setPageContext( pageContext );
 		inputTag.setParent( getParent() );
 		return inputTag;
 	}
 
-	public AttributeMetadata getAttributeMetadata() {
+	public DomainTypeAttributeMetadata getAttributeMetadata() {
 		return attributeMetadata;
 	}
 
-	public void setAttributeMetadata( final AttributeMetadata attributeMetadata ) {
+	public void setAttributeMetadata( final DomainTypeAttributeMetadata attributeMetadata ) {
 		this.attributeMetadata = attributeMetadata;
 	}
 

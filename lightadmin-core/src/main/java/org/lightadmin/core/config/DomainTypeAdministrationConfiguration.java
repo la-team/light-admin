@@ -1,12 +1,12 @@
 package org.lightadmin.core.config;
 
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.view.ScreenContext;
 import org.lightadmin.core.view.support.filter.Filters;
 import org.lightadmin.core.view.support.fragment.Fragment;
 import org.lightadmin.core.view.support.scope.Scopes;
-import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 public class DomainTypeAdministrationConfiguration {
 
-	private DomainTypeEntityMetadata<? extends AttributeMetadata> domainTypeEntityMetadata;
+	private DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata;
 
 	private final Class<?> domainType;
 
@@ -36,11 +36,11 @@ public class DomainTypeAdministrationConfiguration {
 		this.repository = repository;
 	}
 
-	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata<? extends AttributeMetadata> domainTypeEntityMetadata ) {
+	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata ) {
 		this.domainTypeEntityMetadata = domainTypeEntityMetadata;
 	}
 
-	public DomainTypeEntityMetadata<? extends AttributeMetadata> getDomainTypeEntityMetadata() {
+	public DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> getDomainTypeEntityMetadata() {
 		return domainTypeEntityMetadata;
 	}
 
