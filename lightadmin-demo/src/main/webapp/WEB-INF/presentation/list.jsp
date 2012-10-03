@@ -10,8 +10,8 @@
 <tiles:useAttribute name="listColumns"/>
 <tiles:useAttribute name="scopes"/>
 <tiles:useAttribute name="filters"/>
-<tiles:useAttribute name="domainTypeName"/>
-<tiles:useAttribute name="entityMetadata"/>
+<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
 
 <breadcrumb:breadcrumb>
 	<breadcrumb:breadcrumb-item name="List ${domainTypeName}"/>

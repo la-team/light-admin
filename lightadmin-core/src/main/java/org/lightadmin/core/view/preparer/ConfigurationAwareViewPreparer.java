@@ -15,13 +15,13 @@ import javax.servlet.http.HttpServletRequest;
 public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
 
 	@Autowired
-	private GlobalAdministrationConfiguration configuration;
+	private GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
 	public final void execute( TilesRequestContext tilesContext, AttributeContext attributeContext ) {
-		execute( tilesContext, attributeContext, configuration );
-		Class<?> domainType = ( Class<?> ) attributeFromRequest( tilesContext, "domainType" );
-		if ( domainType != null ) {
-			execute( tilesContext, attributeContext, configuration.forDomainType( domainType ) );
+		execute( tilesContext, attributeContext, globalAdministrationConfiguration );
+		DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = domainTypeConfiguration( tilesContext );
+		if ( domainTypeAdministrationConfiguration != null ) {
+			execute( tilesContext, attributeContext, domainTypeAdministrationConfiguration );
 		}
 	}
 
@@ -29,8 +29,11 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
 	}
 
 	protected void execute( TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration ) {
-		addAttribute( attributeContext, "domainType", configuration.getDomainType(), true );
-		addAttribute( attributeContext, "domainTypeName", configuration.getDomainTypeName(), true );
+		addAttribute( attributeContext, "domainTypeAdministrationConfiguration", configuration, true );
+	}
+
+	private DomainTypeAdministrationConfiguration domainTypeConfiguration( final TilesRequestContext tilesContext ) {
+		return ( DomainTypeAdministrationConfiguration ) attributeFromRequest( tilesContext, "domainTypeAdministrationConfiguration" );
 	}
 
 	private Object attributeFromRequest( TilesRequestContext tilesContext, String attributeName ) {

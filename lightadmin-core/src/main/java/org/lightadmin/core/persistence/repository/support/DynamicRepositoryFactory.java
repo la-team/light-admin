@@ -1,7 +1,7 @@
-package org.lightadmin.core.repository.support;
+package org.lightadmin.core.persistence.repository.support;
 
-import org.lightadmin.core.repository.DynamicJpaRepository;
-import org.lightadmin.core.repository.DynamicJpaRepositoryImpl;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryImpl;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactory;

@@ -1,4 +1,4 @@
-<%@ page import="org.springframework.data.rest.repository.EntityMetadata" %>
+<%@ page import="org.lightadmin.core.config.DomainTypeAdministrationConfiguration" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -8,12 +8,16 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
-<tiles:useAttribute name="domainTypeName"/>
-<tiles:useAttribute name="entityMetadata"/>
+<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+
+<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
 
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 
-<c:set var="entityAttributes" value="<%= ((EntityMetadata) entityMetadata).embeddedAttributes().values() %>"/>
+<c:set var="domainTypeEntityMetadata" value="<%= ((DomainTypeAdministrationConfiguration) domainTypeAdministrationConfiguration).getDomainTypeEntityMetadata() %>"/>
+<c:set var="entityAttributes" value="<%= ((DomainTypeAdministrationConfiguration) domainTypeAdministrationConfiguration).getDomainTypeEntityMetadata().getAttributes().values() %>"/>
+
+<jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
 
 <spring:url var="domainBaseUrl" value="/domain" scope="page"/>
 
@@ -37,9 +41,9 @@
 
 	<tbody>
 	<tr>
-		<td><c:out value="<%= ((EntityMetadata) entityMetadata).idAttribute().name()%>"/></td>
-		<td><c:out value="<%= ((EntityMetadata) entityMetadata).idAttribute().type().getName() %>"/></td>
-		<td><c:out value="<%= ((EntityMetadata) entityMetadata).idAttribute().get( entity ) %>"/></td>
+		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().name()%>"/></td>
+		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().type().getName() %>"/></td>
+		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().get( entity ) %>"/></td>
 	</tr>
 	<c:forEach var="attributeEntry" items="${entityAttributes}">
 		<jsp:useBean id="attributeEntry" type="org.springframework.data.rest.repository.jpa.JpaAttributeMetadata"/>

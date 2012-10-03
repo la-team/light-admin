@@ -1,5 +1,5 @@
-<%@ page import="org.springframework.data.rest.repository.EntityMetadata" %>
 <%@ page import="org.springframework.util.StringUtils" %>
+<%@ page import="org.lightadmin.core.config.DomainTypeAdministrationConfiguration" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -10,12 +10,12 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
-<tiles:useAttribute name="domainTypeName"/>
-<tiles:useAttribute name="entityMetadata"/>
-
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 
-<c:set var="entityAttributes" value="<%= ((EntityMetadata) entityMetadata).embeddedAttributes().values() %>"/>
+<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+
+<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
+<c:set var="entityAttributes" value="<%= ((DomainTypeAdministrationConfiguration) domainTypeAdministrationConfiguration).getDomainTypeEntityMetadata().getAttributes().values() %>"/>
 
 <spring:url var="domainBaseUrl" value="/domain" scope="page"/>
 

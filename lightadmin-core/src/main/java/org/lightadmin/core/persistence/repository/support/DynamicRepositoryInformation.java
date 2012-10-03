@@ -1,4 +1,4 @@
-package org.lightadmin.core.repository.support;
+package org.lightadmin.core.persistence.repository.support;
 
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.MethodParameter;

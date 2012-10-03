@@ -2,10 +2,10 @@ package org.lightadmin.core.config.support;
 
 import com.google.common.collect.Collections2;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.DomainTypeAdministrationConfigPostProcessor;
+import org.lightadmin.core.config.DomainTypeAdministrationConfigurationPostProcessor;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
-import org.lightadmin.core.repository.DynamicJpaRepository;
-import org.lightadmin.core.repository.support.DynamicJpaRepositoryFactoryBean;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.lightadmin.core.persistence.repository.support.DynamicJpaRepositoryFactoryBean;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
 import org.lightadmin.core.util.Pair;
 import org.lightadmin.core.view.preparer.*;
@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
-import static org.springframework.util.StringUtils.*;
+import static org.springframework.util.StringUtils.uncapitalize;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
@@ -54,7 +54,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 	private static final String DOMAIN_CONFIGURATION_BEAN_NAME_FORMAT = "%sAdministrationConfiguration";
 
-	private static final String BASE_PACKAGE = "base-package";
+	private static final String BASE_PACKAGE_ATTRIBUTE = "base-package";
 	private static final String ENTITY_MANAGER_FACTORY_REF_ATTRIBUTE = "entity-manager-factory-ref";
 
 	@Override
@@ -86,7 +86,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private void registerDomainConfigurationPostProcessor( final ParserContext parserContext ) {
-		registerSimpleBean( DomainTypeAdministrationConfigPostProcessor.class, parserContext );
+		registerSimpleBean( DomainTypeAdministrationConfigurationPostProcessor.class, parserContext );
 	}
 
 	private BeanReference entityManagerFactoryRef( final Element element ) {
@@ -156,7 +156,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private String scanBasePackage( final Element element ) {
-		return element.getAttribute( BASE_PACKAGE );
+		return element.getAttribute( BASE_PACKAGE_ATTRIBUTE );
 	}
 
 	private void registerValidatingRepositoryEventListener( final ParserContext parserContext ) {

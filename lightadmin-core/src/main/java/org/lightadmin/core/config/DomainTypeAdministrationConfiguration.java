@@ -1,31 +1,24 @@
 package org.lightadmin.core.config;
 
-import org.lightadmin.core.repository.DynamicJpaRepository;
-import org.lightadmin.core.repository.support.DomainEntityMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.view.ScreenContext;
 import org.lightadmin.core.view.support.filter.Filters;
 import org.lightadmin.core.view.support.fragment.Fragment;
 import org.lightadmin.core.view.support.scope.Scopes;
-import org.springframework.data.jpa.repository.support.JpaEntityInformation;
-import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
-import org.springframework.data.rest.repository.EntityMetadata;
-import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
+import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.io.Serializable;
 
 public class DomainTypeAdministrationConfiguration {
 
-	private JpaEntityInformation<?, ? extends Serializable> entityInformation;
-
-	private EntityMetadata<JpaAttributeMetadata> entityMetadata;
+	private DomainTypeEntityMetadata<? extends AttributeMetadata> domainTypeEntityMetadata;
 
 	private final Class<?> domainType;
 
-	private final DynamicJpaRepository<?, ?> repository;
+	private final DynamicJpaRepository<?, ? extends Serializable> repository;
 
 	private Fragment listViewFragment;
 
@@ -43,19 +36,12 @@ public class DomainTypeAdministrationConfiguration {
 		this.repository = repository;
 	}
 
-	@PersistenceContext
-	public void setEntityManager( EntityManager entityManager ) {
-		entityInformation = JpaEntityInformationSupport.getMetadata( domainType, entityManager );
-
-		entityMetadata = new DomainEntityMetadata( entityManager.getMetamodel().entity( entityInformation.getJavaType() ));
+	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata<? extends AttributeMetadata> domainTypeEntityMetadata ) {
+		this.domainTypeEntityMetadata = domainTypeEntityMetadata;
 	}
 
-	public JpaEntityInformation getEntityInformation() {
-		return entityInformation;
-	}
-
-	public EntityMetadata<JpaAttributeMetadata> getEntityMetadata() {
-		return entityMetadata;
+	public DomainTypeEntityMetadata<? extends AttributeMetadata> getDomainTypeEntityMetadata() {
+		return domainTypeEntityMetadata;
 	}
 
 	public Class<?> getDomainType() {
@@ -67,7 +53,7 @@ public class DomainTypeAdministrationConfiguration {
 	}
 
 	public String getDomainTypeName() {
-		return StringUtils.uncapitalize( entityInformation.getEntityName() );
+		return StringUtils.uncapitalize( domainTypeEntityMetadata.getEntityName() );
 	}
 
 	public Fragment getListViewFragment() {

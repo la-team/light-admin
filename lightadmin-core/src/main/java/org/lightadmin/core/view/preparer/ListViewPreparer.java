@@ -18,7 +18,5 @@ public class ListViewPreparer extends ConfigurationAwareViewPreparer {
 		addAttribute( attributeContext, "scopes", configuration.getScopes() );
 
 		addAttribute( attributeContext, "filters", configuration.getFilters() );
-
-		addAttribute( attributeContext, "entityMetadata", configuration.getEntityMetadata() );
 	}
 }

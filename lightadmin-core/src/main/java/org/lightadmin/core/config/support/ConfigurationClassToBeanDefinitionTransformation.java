@@ -80,6 +80,7 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 		return screenContext;
 	}
 
+	@SuppressWarnings( {"unchecked"} )
 	private <T> T invokeMethodWithBuilder( final Class<?> configurationClass, String methodName, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, methodName, builderInterface );
 

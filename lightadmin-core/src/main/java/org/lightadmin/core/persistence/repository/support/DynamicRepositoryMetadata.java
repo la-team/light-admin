@@ -1,4 +1,4 @@
-package org.lightadmin.core.repository.support;
+package org.lightadmin.core.persistence.repository.support;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.core.EntityInformation;

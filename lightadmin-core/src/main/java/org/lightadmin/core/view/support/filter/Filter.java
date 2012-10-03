@@ -1,13 +1,13 @@
 package org.lightadmin.core.view.support.filter;
 
-import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
+import org.springframework.data.rest.repository.AttributeMetadata;
 
 public interface Filter {
 
 	String getFieldName();
 
-	void setAttributeMetadata( JpaAttributeMetadata attributeMetadata );
+	void setAttributeMetadata( AttributeMetadata attributeMetadata );
 
-	JpaAttributeMetadata getAttributeMetadata();
+	AttributeMetadata getAttributeMetadata();
 
 }

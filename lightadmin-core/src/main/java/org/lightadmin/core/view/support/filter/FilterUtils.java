@@ -1,7 +1,7 @@
 package org.lightadmin.core.view.support.filter;
 
 import com.google.common.base.Predicate;
-import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
+import org.springframework.data.rest.repository.AttributeMetadata;
 
 public final class FilterUtils {
 
@@ -20,7 +20,7 @@ public final class FilterUtils {
 
 		private final String fieldName;
 
-		private JpaAttributeMetadata attributeMetadata;
+		private AttributeMetadata attributeMetadata;
 
 		public DefaultFilter( final String fieldName ) {
 			this.fieldName = fieldName;
@@ -31,12 +31,12 @@ public final class FilterUtils {
 		}
 
 		@Override
-		public void setAttributeMetadata( final JpaAttributeMetadata attributeMetadata ) {
+		public void setAttributeMetadata( final AttributeMetadata attributeMetadata ) {
 			this.attributeMetadata = attributeMetadata;
 		}
 
 		@Override
-		public JpaAttributeMetadata getAttributeMetadata() {
+		public AttributeMetadata getAttributeMetadata() {
 			return attributeMetadata;
 		}
 	}

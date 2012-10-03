@@ -1,4 +1,4 @@
-package org.lightadmin.core.repository;
+package org.lightadmin.core.persistence.repository;
 
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
 
