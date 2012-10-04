@@ -29,4 +29,16 @@
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
+	<function>
+		<name>capitalize</name>
+		<function-class>org.springframework.util.StringUtils</function-class>
+		<function-signature>java.lang.String capitalize(java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<name>invokeMethod</name>
+		<function-class>org.springframework.util.ReflectionUtils</function-class>
+		<function-signature>java.lang.Object invokeMethod(java.lang.reflect.Method,java.lang.Object,java.lang.Object...)</function-signature>
+	</function>
+
 </taglib>

@@ -87,4 +87,8 @@ public class DomainTypeAdministrationConfiguration {
 	public void setFilters( final Filters filters ) {
 		this.filters = filters;
 	}
+
+	public String getNameField() {
+		return "name";
+	}
 }

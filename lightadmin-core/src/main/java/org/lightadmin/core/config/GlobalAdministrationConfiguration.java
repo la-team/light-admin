@@ -1,7 +1,6 @@
 package org.lightadmin.core.config;
 
 import org.apache.commons.lang.StringUtils;
-import org.springframework.util.Assert;
 
 import java.util.Map;
 
@@ -18,9 +17,7 @@ public class GlobalAdministrationConfiguration {
 	}
 
 	public DomainTypeAdministrationConfiguration forDomainType( Class<?> domainType ) {
-		final DomainTypeAdministrationConfiguration configuration = domainTypeConfigurations.get( domainType );
-		Assert.notNull( configuration, "Undefined entity name. Please check your configuration." );
-		return configuration;
+		return domainTypeConfigurations.get( domainType );
 	}
 
 	public DomainTypeAdministrationConfiguration forEntityName( String entityName ) {

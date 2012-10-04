@@ -89,15 +89,13 @@ public class ApplicationController {
 	}
 
 	private Map<String, Object> entityDto( final Object entity, final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata ) {
-		final Collection<? extends DomainTypeAttributeMetadata> attributes = entityMetadata.getAttributes().values();
+		final Collection<? extends DomainTypeAttributeMetadata> attributes = entityMetadata.getAttributes();
 
 		final Map<String, Object> result = newHashMap();
-
 		for ( DomainTypeAttributeMetadata attribute : attributes ) {
-			String name = attribute.getName();
 			Object val = attribute.getValue( entity );
 			if ( null != val ) {
-				result.put( name, val );
+				result.put( attribute.getName(), val );
 			}
 		}
 		return result;

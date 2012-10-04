@@ -1,8 +1,7 @@
-<%@ page import="org.lightadmin.core.config.DomainTypeAdministrationConfiguration" %>
-<%@ page import="org.springframework.util.StringUtils" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
@@ -15,7 +14,6 @@
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
-<c:set var="entityAttributes" value="<%= ((DomainTypeAdministrationConfiguration) domainTypeAdministrationConfiguration).getDomainTypeEntityMetadata().getAttributes().values() %>"/>
 
 <spring:url var="domainBaseUrl" value="/domain" scope="page"/>
 
@@ -30,11 +28,11 @@
 
 <form:form modelAttribute="entity" cssClass="form-horizontal" method="POST">
 	<fieldset>
-		<c:forEach var="attributeEntry" items="${entityAttributes}">
+		<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}">
 			<jsp:useBean id="attributeEntry" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata"/>
 
 			<div class="control-group">
-				<label class="control-label" for="${attributeEntry.name}"><c:out value="<%= StringUtils.capitalize( attributeEntry.getName() ) %>"/></label>
+				<label class="control-label" for="${attributeEntry.name}"><c:out value="${light:capitalize(attributeEntry.name)}"/></label>
 				<div class="controls">
 					<light:input attributeMetadata="${attributeEntry}" cssClass="input-xlarge"/>
 				</div>

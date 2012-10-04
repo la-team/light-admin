@@ -1,4 +1,3 @@
-<%@ page import="org.lightadmin.core.config.DomainTypeAdministrationConfiguration" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -14,8 +13,7 @@
 
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 
-<c:set var="domainTypeEntityMetadata" value="<%= ((DomainTypeAdministrationConfiguration) domainTypeAdministrationConfiguration).getDomainTypeEntityMetadata() %>"/>
-<c:set var="entityAttributes" value="<%= ((DomainTypeAdministrationConfiguration) domainTypeAdministrationConfiguration).getDomainTypeEntityMetadata().getAttributes().values() %>"/>
+<c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
 
 <jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
 
@@ -45,7 +43,7 @@
 		<td><c:out value="${domainTypeEntityMetadata.idAttribute.type.name}"/></td>
 		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/></td>
 	</tr>
-	<c:forEach var="attributeEntry" items="${entityAttributes}">
+	<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}">
 		<jsp:useBean id="attributeEntry" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata"/>
 		<tr>
 			<td><c:out value="${attributeEntry.name}"/></td>

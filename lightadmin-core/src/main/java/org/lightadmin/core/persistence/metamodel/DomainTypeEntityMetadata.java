@@ -1,6 +1,6 @@
 package org.lightadmin.core.persistence.metamodel;
 
-import java.util.Map;
+import java.util.Collection;
 
 public interface DomainTypeEntityMetadata<A extends DomainTypeAttributeMetadata> {
 
@@ -8,16 +8,18 @@ public interface DomainTypeEntityMetadata<A extends DomainTypeAttributeMetadata>
 
 	String getEntityName();
 
-	Map<String, A> getEmbeddedAttributes();
+	Collection<A> getEmbeddedAttributes();
 
-	Map<String, A> getLinkedAttributes();
+	Collection<A> getLinkedAttributes();
 
-	Map<String, A> getAttributes();
+	Collection<A> getAttributes();
 
 	A getAttribute( String name );
 
 	A getIdAttribute();
 
 	A getVersionAttribute();
+
+	A getNameAttribute();
 
 }

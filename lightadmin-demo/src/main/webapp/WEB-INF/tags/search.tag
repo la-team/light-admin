@@ -19,7 +19,6 @@
 
 			<tbody>
 			<c:forEach var="filter" items="${tag_search_filterList}">
-				<jsp:useBean id="filter" type="org.lightadmin.core.view.support.filter.Filter"/>
 				<tr>
 					<td><c:out value="${filter.fieldName}"/></td>
 					<td><c:out value="${filter.attributeMetadata.type.name}"/></td>

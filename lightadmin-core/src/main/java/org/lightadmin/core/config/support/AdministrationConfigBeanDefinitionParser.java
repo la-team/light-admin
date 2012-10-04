@@ -2,8 +2,8 @@ package org.lightadmin.core.config.support;
 
 import com.google.common.collect.Collections2;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.DomainTypeAdministrationConfigurationPostProcessor;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.GlobalAdministrationConfigurationPostProcessor;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.persistence.repository.support.DynamicJpaRepositoryFactoryBean;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
@@ -72,7 +72,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerConfigurationBeans( dslConfigurations, parserContext );
 
-		registerDomainConfigurationPostProcessor( parserContext );
+		registerGlobalConfigurationPostProcessor( parserContext );
 
 		registerValidatingRepositoryEventListener( parserContext );
 
@@ -85,8 +85,8 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		return null;
 	}
 
-	private void registerDomainConfigurationPostProcessor( final ParserContext parserContext ) {
-		registerSimpleBean( DomainTypeAdministrationConfigurationPostProcessor.class, parserContext );
+	private void registerGlobalConfigurationPostProcessor( final ParserContext parserContext ) {
+		registerSimpleBean( GlobalAdministrationConfigurationPostProcessor.class, parserContext );
 	}
 
 	private BeanReference entityManagerFactoryRef( final Element element ) {
