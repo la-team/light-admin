@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
+import java.util.Date;
 
 public class BasicAttributeRendererFactory implements AttributeRendererFactory, GlobalAdministrationConfigurationAware {
 
@@ -29,6 +30,10 @@ public class BasicAttributeRendererFactory implements AttributeRendererFactory, 
 	}
 
 	private AbstractAttributeRenderer createAttributeRenderer( final Class<?> type ) {
+		if ( Date.class.isAssignableFrom( type ) ) {
+			return new DateAttributeRenderer();
+		}
+
 		if ( BeanUtils.isSimpleValueType( type ) ) {
 			return new PrimitiveAttributeRenderer();
 		}
