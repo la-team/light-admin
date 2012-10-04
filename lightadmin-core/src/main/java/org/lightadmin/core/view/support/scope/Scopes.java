@@ -20,4 +20,13 @@ public class Scopes implements Iterable<Scope> {
 	public Iterator<Scope> iterator() {
 		return scopes.iterator();
 	}
+
+	public Scope getScope( String name ) {
+		for ( Scope scope : scopes ) {
+			if (scope.getName().equalsIgnoreCase( name )) {
+				return scope;
+			}
+		}
+		return null;
+	}
 }

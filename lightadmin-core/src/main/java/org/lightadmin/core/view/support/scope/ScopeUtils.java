@@ -2,16 +2,23 @@ package org.lightadmin.core.view.support.scope;
 
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
+import org.springframework.data.jpa.domain.Specification;
 
 public final class ScopeUtils {
 
 	private ScopeUtils() {
 	}
 
+	@SuppressWarnings( "unchecked" )
 	public static Scope scope( Scope scope ) {
 		if ( PredicateScope.class.isAssignableFrom( scope.getClass() ) ) {
-			return new PredicateScope( scope );
+			return new PredicateScope( ( PredicateScope ) scope );
 		}
+
+		if ( SpecificationScope.class.isAssignableFrom( scope.getClass() ) ) {
+			return new SpecificationScope( ( SpecificationScope ) scope );
+		}
+
 		return new DefaultScope( scope );
 	}
 
@@ -23,7 +30,29 @@ public final class ScopeUtils {
 		return new PredicateScope<T>( filter ).name( filter.getClass().getSimpleName() );
 	}
 
-	private static class PredicateScope<T> extends AbstractScope {
+	public static <T> Scope specification( Specification<T> specification ) {
+		return new SpecificationScope<T>( specification ).name( specification.getClass().getSimpleName() );
+	}
+
+	public static class SpecificationScope<T> extends AbstractScope {
+
+		private final Specification<T> specification;
+
+		private SpecificationScope( final Specification<T> specification ) {
+			this.specification = specification;
+		}
+
+		private SpecificationScope( final SpecificationScope<T> scope ) {
+			super( scope );
+			this.specification = scope.specification();
+		}
+
+		public Specification<T> specification() {
+			return specification;
+		}
+	}
+
+	public static class PredicateScope<T> extends AbstractScope {
 
 		private Predicate<T> predicate = Predicates.alwaysTrue();
 
@@ -31,8 +60,9 @@ public final class ScopeUtils {
 			this.predicate = predicate;
 		}
 
-		public PredicateScope( Scope scope ) {
+		public PredicateScope( PredicateScope<T> scope ) {
 			super( scope );
+			this.predicate = scope.predicate();
 		}
 
 		public Predicate<T> predicate() {
@@ -40,7 +70,7 @@ public final class ScopeUtils {
 		}
 	}
 
-	private static class DefaultScope extends AbstractScope {
+	public static class DefaultScope extends AbstractScope {
 
 		private DefaultScope() {
 		}
@@ -50,7 +80,7 @@ public final class ScopeUtils {
 		}
 	}
 
-	private static abstract class AbstractScope implements Scope {
+	public static abstract class AbstractScope implements Scope {
 
 		private String name = "Undefined";
 

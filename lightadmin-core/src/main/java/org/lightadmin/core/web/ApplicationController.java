@@ -1,10 +1,12 @@
 package org.lightadmin.core.web;
 
+import com.google.common.collect.Collections2;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.lightadmin.core.view.support.scope.Scope;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +18,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newHashMap;
+import static org.lightadmin.core.view.support.scope.ScopeUtils.*;
 
 @Controller
 public class ApplicationController {
@@ -44,6 +49,21 @@ public class ApplicationController {
 		LOG.info( "Handling request to domain root" );
 
 		addDomainTypeConfigurationToModel( domainType, model );
+
+		return "listView";
+	}
+
+	@RequestMapping( value = "/domain/{domainType}/scope/{scopeName}", method = RequestMethod.GET )
+	public String list( @PathVariable String domainType, @PathVariable String scopeName, Model model ) {
+		LOG.info( "Handling request to domain search scope" );
+
+		addDomainTypeConfigurationToModel( domainType, model );
+
+		final Scope scope = configuration.forEntityName( domainType ).getScopes().getScope( scopeName );
+
+		final DynamicJpaRepository repository = configuration.forEntityName( domainType ).getRepository();
+
+		model.addAttribute( "items", findItems( scope, repository ) );
 
 		return "listView";
 	}
@@ -88,6 +108,20 @@ public class ApplicationController {
 		model.addAttribute( "domainTypeAdministrationConfiguration", configuration.forEntityName( domainTypeName ) );
 	}
 
+	@SuppressWarnings( "unchecked" )
+	private List<?> findItems( Scope scope, DynamicJpaRepository repository ) {
+		if ( scope instanceof DefaultScope ) {
+			return repository.findAll();
+		}
+
+		if ( scope instanceof PredicateScope ) {
+			return newArrayList( Collections2.filter( repository.findAll(), ( ( PredicateScope ) scope ).predicate() ) );
+		}
+
+		SpecificationScope specificationScope = ( SpecificationScope ) scope;
+		return newArrayList( repository.findAll( specificationScope.specification() ) );
+	}
+
 	private Map<String, Object> entityDto( final Object entity, final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata ) {
 		final Collection<? extends DomainTypeAttributeMetadata> attributes = entityMetadata.getAttributes();
 
@@ -100,17 +134,4 @@ public class ApplicationController {
 		}
 		return result;
 	}
-
-	//		private List<Product> loadEntries() {
-	//			return productRepository.findAll( entryNameEqHello() );
-	//		}
-	//
-	//		public static Specification<Product> entryNameEqHello() {
-	//			return new Specification<Product>() {
-	//				@Override
-	//				public Predicate toPredicate( final Root<Product> root, final CriteriaQuery<?> query, final CriteriaBuilder cb ) {
-	//					return cb.equal( root.get( "name" ), "Box" );
-	//				}
-	//			};
-	//		}
 }
