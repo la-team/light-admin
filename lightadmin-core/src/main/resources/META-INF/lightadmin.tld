@@ -11,7 +11,7 @@
 
 	<tag>
 		<description>Renders dynamic html element using the bound value.</description>
-		<name>input</name>
+		<name>dynamic-element</name>
 		<tag-class>org.lightadmin.core.web.tags.form.DynamicHtmlElementTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
@@ -27,6 +27,25 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<dynamic-attributes>true</dynamic-attributes>
+	</tag>
+
+	<tag>
+		<description>Renders dynamic entity attribute</description>
+		<name>attribute</name>
+		<tag-class>org.lightadmin.core.web.tags.AttributeRendererTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>Entity Attribute Metadata</description>
+			<name>attributeMetadata</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Entity</description>
+			<name>entity</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
 
 	<function>

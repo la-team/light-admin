@@ -34,7 +34,7 @@
 			<div class="control-group">
 				<label class="control-label" for="${attributeEntry.name}"><c:out value="${light:capitalize(attributeEntry.name)}"/></label>
 				<div class="controls">
-					<light:input attributeMetadata="${attributeEntry}" cssClass="input-xlarge"/>
+					<light:dynamic-element attributeMetadata="${attributeEntry}" cssClass="input-xlarge"/>
 				</div>
 			</div>
 		</c:forEach>

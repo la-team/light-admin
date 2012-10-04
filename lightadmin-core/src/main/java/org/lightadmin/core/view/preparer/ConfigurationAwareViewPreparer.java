@@ -8,13 +8,13 @@ import org.apache.tiles.servlet.context.ServletTilesRequestContext;
 import org.apache.tiles.servlet.context.ServletUtil;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.GlobalAdministrationConfigurationAware;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
-public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
+public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, GlobalAdministrationConfigurationAware {
 
-	@Autowired
 	private GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
 	public final void execute( TilesRequestContext tilesContext, AttributeContext attributeContext ) {
@@ -49,5 +49,11 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
 
 	protected void addAttribute( AttributeContext attributeContext, String attributeName, Object attributeValue, boolean cascade ) {
 		attributeContext.putAttribute( attributeName, new Attribute( attributeValue ), cascade );
+	}
+
+	@Override
+	@Autowired
+	public void setGlobalAdministrationConfigurationAware( final GlobalAdministrationConfiguration configuration ) {
+		this.globalAdministrationConfiguration = configuration;
 	}
 }

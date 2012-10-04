@@ -48,7 +48,7 @@
 		<tr>
 			<td><c:out value="${attributeEntry.name}"/></td>
 			<td><c:out value="${attributeEntry.type.name}"/></td>
-			<td><c:out value="<%= attributeEntry.getValue( entity ) %>"/></td>
+			<td><light:attribute attributeMetadata="${attributeEntry}" entity="${entity}"/></td>
 		</tr>
 	</c:forEach>
 	</tbody>

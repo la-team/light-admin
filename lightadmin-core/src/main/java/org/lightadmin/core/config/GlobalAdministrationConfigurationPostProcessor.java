@@ -10,7 +10,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.Collection;
 
 public class GlobalAdministrationConfigurationPostProcessor implements BeanPostProcessor {
 

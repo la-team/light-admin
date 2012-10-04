@@ -9,6 +9,7 @@ import org.lightadmin.core.persistence.repository.support.DynamicJpaRepositoryFa
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
 import org.lightadmin.core.util.Pair;
 import org.lightadmin.core.view.preparer.*;
+import org.lightadmin.core.view.renderer.BasicAttributeRendererFactory;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanReference;
@@ -72,7 +73,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerConfigurationBeans( dslConfigurations, parserContext );
 
-		registerGlobalConfigurationPostProcessor( parserContext );
+		registerBeanPostProcessors( parserContext );
 
 		registerValidatingRepositoryEventListener( parserContext );
 
@@ -82,7 +83,17 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerViewPreparers( parserContext );
 
+		registerRendererFactory( parserContext );
+
 		return null;
+	}
+
+	private void registerBeanPostProcessors( final ParserContext parserContext ) {
+		registerGlobalConfigurationPostProcessor( parserContext );
+	}
+
+	private void registerRendererFactory( final ParserContext parserContext ) {
+		registerSimpleBean( BasicAttributeRendererFactory.class, parserContext );
 	}
 
 	private void registerGlobalConfigurationPostProcessor( final ParserContext parserContext ) {
