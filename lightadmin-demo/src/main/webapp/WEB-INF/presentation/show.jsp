@@ -44,7 +44,6 @@
 		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/></td>
 	</tr>
 	<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}">
-		<jsp:useBean id="attributeEntry" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata"/>
 		<tr>
 			<td><c:out value="${attributeEntry.name}"/></td>
 			<td><c:out value="${attributeEntry.type.name}"/></td>

@@ -29,8 +29,6 @@
 <form:form modelAttribute="entity" cssClass="form-horizontal" method="POST">
 	<fieldset>
 		<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}">
-			<jsp:useBean id="attributeEntry" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata"/>
-
 			<div class="control-group">
 				<label class="control-label" for="${attributeEntry.name}"><c:out value="${light:capitalize(attributeEntry.name)}"/></label>
 				<div class="controls">
