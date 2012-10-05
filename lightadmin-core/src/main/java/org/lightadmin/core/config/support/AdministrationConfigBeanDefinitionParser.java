@@ -2,6 +2,7 @@ package org.lightadmin.core.config.support;
 
 import com.google.common.collect.Collections2;
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.BeanNameGenerator;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfigurationPostProcessor;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
@@ -32,7 +33,6 @@ import java.util.Map;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
-import static org.springframework.util.StringUtils.uncapitalize;
 
 public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
@@ -47,13 +47,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	private static final String SCREEN_VIEW_PREPARER_BEAN_NAME = "screenViewPreparer";
 	private static final String DASHBOARD_VIEW_PREPARER_BEAN_NAME = "dashboardViewPreparer";
 
-	private static final String GLOBAL_ADMINISTRATION_CONFIGURATION_BEAN_NAME = "globalAdministrationConfiguration";
-
 	private static final String JPA_REPOSITORY_EXPORTER_BEAN_NAME = "jpaRepositoryExporter";
-
-	private static final String REPOSITORY_BEAN_NAME_FORMAT = "%sRepository";
-
-	private static final String DOMAIN_CONFIGURATION_BEAN_NAME_FORMAT = "%sAdministrationConfiguration";
 
 	private static final String BASE_PACKAGE_ATTRIBUTE = "base-package";
 	private static final String ENTITY_MANAGER_FACTORY_REF_ATTRIBUTE = "entity-manager-factory-ref";
@@ -119,7 +113,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 			final Class<?> domainType = configuration.first;
 			final Class<?> configurationClass = configuration.second;
 
-			final String beanName = domainTypeConfigurationBeanName( domainType );
+			final String beanName = BeanNameGenerator.INSTANCE.domainTypeConfigurationBeanName( domainType );
 
 			final BeanReference beanReference = registerDomainConfigurationBean( beanName, configurationClass, parserContext );
 
@@ -219,7 +213,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( GlobalAdministrationConfiguration.class );
 		builder.addPropertyValue( "domainTypeConfigurations", domainTypeConfigurations );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, GLOBAL_ADMINISTRATION_CONFIGURATION_BEAN_NAME ) );
+		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, BeanNameGenerator.INSTANCE.globalAdministrationConfiguration() ) );
 	}
 
 	private void registerRepositoryExporter( final ParserContext parserContext ) {
@@ -227,7 +221,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private String registerDomainRepository( final Class<?> domainType, final ParserContext parserContext ) {
-		final String repositoryBeanName = repositoryBeanName( domainType );
+		final String repositoryBeanName = BeanNameGenerator.INSTANCE.repositoryBeanName( domainType );
 
 		final BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DynamicJpaRepositoryFactoryBean.class );
 		builder.addConstructorArgValue( domainType );
@@ -253,13 +247,5 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
 		final String configurationClassName = definition.getMetadata().getClassName();
 		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
-	}
-
-	private String repositoryBeanName( final Class<?> domainType ) {
-		return String.format( REPOSITORY_BEAN_NAME_FORMAT, uncapitalize( domainType.getSimpleName() ) );
-	}
-
-	private String domainTypeConfigurationBeanName( final Class<?> domainType ) {
-		return String.format( DOMAIN_CONFIGURATION_BEAN_NAME_FORMAT, uncapitalize( domainType.getSimpleName() ) );
 	}
 }

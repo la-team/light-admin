@@ -2,6 +2,7 @@ package org.lightadmin.core.config.support;
 
 import com.google.common.base.Function;
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.BeanNameGenerator;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.view.DefaultScreenContext;
 import org.lightadmin.core.view.ScreenContext;
@@ -20,7 +21,6 @@ import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 
 import java.lang.reflect.Method;
 
@@ -44,7 +44,7 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DomainTypeAdministrationConfiguration.class );
 
 		builder.addConstructorArgValue( domainType );
-		builder.addConstructorArgReference( repositoryBeanName( domainType ) );
+		builder.addConstructorArgReference( BeanNameGenerator.INSTANCE.repositoryBeanName( domainType ) );
 
 		builder.addPropertyValue( "listViewFragment", listViewFragment( configurationClass ) );
 
@@ -90,9 +90,5 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 		}
 
 		return builder.build();
-	}
-
-	private String repositoryBeanName( final Class<?> domainType ) {
-		return StringUtils.uncapitalize( domainType.getSimpleName() ) + "Repository";
 	}
 }

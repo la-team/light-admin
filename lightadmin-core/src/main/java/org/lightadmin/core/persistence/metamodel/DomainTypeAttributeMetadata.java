@@ -47,11 +47,9 @@ public interface DomainTypeAttributeMetadata {
 	/**
 	 * Get the path of this attribute.
 	 *
-	 * @param target
-	 *     The entity to inspect for this attribute.
-	 *
+	 * @param target The entity to inspect for this attribute.
 	 * @return attribute value
 	 */
-	Object getValue(Object target);
+	Object getValue( Object target );
 
 }

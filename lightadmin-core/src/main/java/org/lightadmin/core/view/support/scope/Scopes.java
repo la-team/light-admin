@@ -23,7 +23,7 @@ public class Scopes implements Iterable<Scope> {
 
 	public Scope getScope( String name ) {
 		for ( Scope scope : scopes ) {
-			if (scope.getName().equalsIgnoreCase( name )) {
+			if ( scope.getName().equalsIgnoreCase( name ) ) {
 				return scope;
 			}
 		}

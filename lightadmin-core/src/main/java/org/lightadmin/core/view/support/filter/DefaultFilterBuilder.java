@@ -10,7 +10,7 @@ public class DefaultFilterBuilder implements FilterBuilder {
 
 	private List<Filter> filters = newLinkedList();
 
-	public DefaultFilterBuilder( ) {
+	public DefaultFilterBuilder() {
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class Pair<T, V> {
 	}
 
 	public static <T> Function<Pair<?, T>, T> extractSecondTransformer() {
-		return new Function<Pair<?,T>, T>() {
+		return new Function<Pair<?, T>, T>() {
 			@Override
 			public T apply( final Pair<?, T> pair ) {
 				return pair.second;

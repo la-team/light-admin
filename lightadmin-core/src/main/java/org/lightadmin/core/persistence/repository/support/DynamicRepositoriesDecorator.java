@@ -1,5 +1,6 @@
 package org.lightadmin.core.persistence.repository.support;
 
+import org.lightadmin.core.config.BeanNameGenerator;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -11,7 +12,6 @@ import org.springframework.data.repository.core.support.RepositoryFactoryInforma
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 import java.util.*;
@@ -35,7 +35,7 @@ public class DynamicRepositoriesDecorator extends Repositories {
 			final Class<?> domainType = info.getRepositoryInformation().getDomainType();
 
 			this.domainClassToBeanName.put( domainType, info );
-			this.repositories.put( info, jpaRepositories.get( repositoryBeanName( domainType ) ) );
+			this.repositories.put( info, jpaRepositories.get( BeanNameGenerator.INSTANCE.repositoryBeanName( domainType ) ) );
 		}
 	}
 
@@ -46,10 +46,6 @@ public class DynamicRepositoriesDecorator extends Repositories {
 
 	private static StaticListableBeanFactory emptyBeanFactory() {
 		return new StaticListableBeanFactory();
-	}
-
-	private String repositoryBeanName( final Class<?> domainType ) {
-		return StringUtils.uncapitalize( domainType.getSimpleName() ) + "Repository";
 	}
 
 	/**
