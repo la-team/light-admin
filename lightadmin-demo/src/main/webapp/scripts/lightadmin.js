@@ -29,8 +29,8 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 					 "url":sSource,
 					 "data":restParams,
 					 "success":function ( data ) {
-						 data.iTotalRecords = data.totalCount;
-						 data.iTotalDisplayRecords = data.totalCount;
+						 data.iTotalRecords = data.page.totalElements;
+						 data.iTotalDisplayRecords = data.page.totalElements;
 
 						 fnCallback( data );
 					 }

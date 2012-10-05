@@ -73,6 +73,11 @@ public class DynamicRepositoryInformation implements RepositoryInformation {
 	}
 
 	@Override
+	public boolean isQueryMethod( final Method method ) {
+		return false;
+	}
+
+	@Override
 	public boolean hasCustomMethod() {
 		return false;
 	}

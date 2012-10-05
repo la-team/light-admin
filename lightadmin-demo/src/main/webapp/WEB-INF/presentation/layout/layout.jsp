@@ -24,7 +24,7 @@
 	<script type="text/javascript" src="<spring:url value="/scripts/jquery-1.8.0.min.js"/>"></script>
 
 	<script type="text/javascript" src="<spring:url value="/scripts/bootstrap.min.js"/>"></script>
-	<script type="text/javascript" src="<spring:url value="/scripts/jquery.dataTables.min.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/scripts/jquery.dataTables.js"/>"></script>
 	<script type="text/javascript" src="<spring:url value="/scripts/DT_bootstrap.js"/>"></script>
 	<script type="text/javascript" src="<spring:url value="/scripts/lightadmin.js"/>"></script>
 

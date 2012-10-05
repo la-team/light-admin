@@ -10,11 +10,14 @@
 
 	<properties>
 		<spring.version>3.1.2.RELEASE</spring.version>
+		<hibernate.version>4.1.6.Final</hibernate.version>
 		<slf4j.version>1.7.1</slf4j.version>
 		<logback.version>1.0.6</logback.version>
 		<apache.tiles.version>2.2.2</apache.tiles.version>
-		<spring.data.jpa.version>1.1.0.RELEASE</spring.data.jpa.version>
-		<spring.data.rest.webmvc.version>1.0.0.RC2</spring.data.rest.webmvc.version>
+		<spring.data.jpa.version>1.2.0.BUILD-SNAPSHOT</spring.data.jpa.version>
+		<spring.data.commons.core.version>1.4.0.BUILD-SNAPSHOT</spring.data.commons.core.version>
+		<spring.data.rest.webmvc.version>1.0.0.RC3</spring.data.rest.webmvc.version>
+		<spring.hateoas.version>0.3.0.BUILD-SNAPSHOT</spring.hateoas.version>
 	</properties>
 
 	<modules>
@@ -83,8 +86,18 @@
 			  </dependency>
 			<dependency>
 				<groupId>org.springframework.data</groupId>
+				<artifactId>spring-data-commons-core</artifactId>
+				<version>${spring.data.commons.core.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.data</groupId>
 				<artifactId>spring-data-jpa</artifactId>
 				<version>${spring.data.jpa.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.springframework.hateoas</groupId>
+				<artifactId>spring-hateoas</artifactId>
+				<version>${spring.hateoas.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.springframework.data</groupId>
@@ -94,7 +107,7 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>4.1.5.SP1</version>
+				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate.javax.persistence</groupId>
@@ -104,7 +117,7 @@
 			<dependency>
 				<groupId>org.hibernate</groupId>
 				<artifactId>hibernate-entitymanager</artifactId>
-				<version>4.1.5.SP1</version>
+				<version>${hibernate.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.hibernate</groupId>
@@ -175,6 +188,30 @@
 
 	<repositories>
 		<repository>
+			<id>spring-snapshots</id>
+			<name>Spring Maven Snapshot Repository</name>
+			<url>http://repo.springsource.org/libs-snapshot</url>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>spring-milestones</id>
+			<name>Spring Maven MILESTONE Repository</name>
+			<url>http://repo.springsource.org/libs-milestone</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+		<repository>
+			<id>spring-release</id>
+			<name>Spring Maven Release Repository</name>
+			<url>http://repo.springsource.org/libs-release</url>
+		</repository>
+		<repository>
 			<id>maven-central</id>
 			<name>Maven Central</name>
 			<url>http://repo.maven.apache.org/maven2</url>
@@ -183,11 +220,6 @@
 			<id>java.net2</id>
 			<name>Repository hosting the jee6 artifacts</name>
 			<url>http://download.java.net/maven/2</url>
-		</repository>
-		<repository>
-			<id>spring-milestone</id>
-			<name>Spring Maven MILESTONE Repository</name>
-			<url>http://repo.springsource.org/libs-milestone</url>
 		</repository>
 	</repositories>
 

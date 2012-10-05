@@ -23,7 +23,7 @@
 	$(function() {
 		$('#${entityName}Table').dataTable({
 		   "sAjaxSource" : '${restServiceUrl}',
-		   "sAjaxDataProp" : 'results',
+		   "sAjaxDataProp" : 'content',
 		   "aoColumns" : [
 			<c:forEach var="column" items="${columns}" varStatus="status">
 			   {     mDataProp : '${column.first}'    }<c:out value="${!status.last ? ',' : ''}"/>
@@ -34,7 +34,7 @@
 				   "aTargets":[ ${fn:length(columns) } ],
 				   "mData":null,
 				   "mRender":function ( data, type, full ) {
-					   var restEntityServiceUrl = full._links[0]['href'];
+					   var restEntityServiceUrl = full.links[0]['href'];
 					   var entityId = new RegExp( /${entityName}\/(\d+)/ ).exec(restEntityServiceUrl)[1];
 					   var viewEntityUrl = "<spring:url value='/domain/${entityName}/'/>" + entityId;
 					   var editEntityUrl = viewEntityUrl + "/edit";
