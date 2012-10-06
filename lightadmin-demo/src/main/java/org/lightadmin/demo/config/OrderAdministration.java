@@ -15,8 +15,9 @@ public class OrderAdministration {
 
 	public static Fragment listView( FragmentBuilder fragmentBuilder ) {
 		return fragmentBuilder
-			.field( "customer" ).alias( "Customer")
-			.field( "billingAddress" ).alias("Billing Address")
-			.field( "shippingAddress" ).alias("Shipping Address").build();
+			.field( "customer.firstname" ).alias( "Customer")
+			.field( "billingAddress.city" ).alias("Billing Address")
+			.field( "shippingAddress.street" ).alias("Shipping Address")
+			.field( "lineItems.0" ).alias("Line Items").build();
 	}
 }
