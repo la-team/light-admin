@@ -1,5 +1,6 @@
 package org.lightadmin.core.persistence.metamodel;
 
+import javax.persistence.metamodel.Attribute;
 public interface DomainTypeAttributeMetadata {
 
 	/**
@@ -52,4 +53,5 @@ public interface DomainTypeAttributeMetadata {
 	 */
 	Object getValue( Object target );
 
+	Attribute getAttribute();
 }

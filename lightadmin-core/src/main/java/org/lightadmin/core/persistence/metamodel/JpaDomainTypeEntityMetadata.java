@@ -1,19 +1,16 @@
 package org.lightadmin.core.persistence.metamodel;
 
-import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.PluralAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 
-import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
 
 public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<JpaDomainTypeAttributeMetadata> {
@@ -24,10 +21,9 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 	private final JpaDomainTypeAttributeMetadata nameAttribute;
 	private final JpaDomainTypeAttributeMetadata versionAttribute;
 
-	private final Map<String, JpaDomainTypeAttributeMetadata> embeddedAttributes = newHashMap();
-	private final Map<String, JpaDomainTypeAttributeMetadata> linkedAttributes = newHashMap();
+	private final Map<String, JpaDomainTypeAttributeMetadata> attributes = newHashMap();
 
-	public JpaDomainTypeEntityMetadata( EntityType<?> entityType, String nameFieldName, GlobalAdministrationConfiguration configuration ) {
+	public JpaDomainTypeEntityMetadata( EntityType<?> entityType, String nameFieldName ) {
 		domainType = entityType.getJavaType();
 
 		idAttribute = idAttribute( entityType );
@@ -40,15 +36,8 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 				continue;
 			}
 
-			final String attributeName = attribute.getName();
-
-			if ( null != configuration.forDomainType( attributeType( attribute ) ) ) {
-				linkedAttributes.put( attributeName, new JpaDomainTypeAttributeMetadata( entityType, attribute ) );
-				continue;
-			}
-
 			if ( notIdAttribute( attribute ) && notVersionAttribute( attribute ) && notNameAttribute( attribute ) ) {
-				embeddedAttributes.put( attributeName, new JpaDomainTypeAttributeMetadata( entityType, attribute ) );
+				attributes.put( attribute.getName(), new JpaDomainTypeAttributeMetadata( entityType, attribute ) );
 			}
 		}
 	}
@@ -66,21 +55,8 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 	}
 
 	@Override
-	public Collection<JpaDomainTypeAttributeMetadata> getEmbeddedAttributes() {
-		return embeddedAttributes.values();
-	}
-
-	@Override
-	public Collection<JpaDomainTypeAttributeMetadata> getLinkedAttributes() {
-		return linkedAttributes.values();
-	}
-
-	@Override
 	public Collection<JpaDomainTypeAttributeMetadata> getAttributes() {
-		Collection<JpaDomainTypeAttributeMetadata> attributes = newLinkedList();
-		attributes.addAll( embeddedAttributes.values() );
-		attributes.addAll( linkedAttributes.values() );
-		return attributes;
+		return attributes.values();
 	}
 
 	@Override
@@ -112,19 +88,11 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 			return nameAttribute;
 		}
 
-		if ( embeddedAttributes.containsKey( name ) ) {
-			return embeddedAttributes.get( name );
-		}
-
-		if ( linkedAttributes.containsKey( name ) ) {
-			return linkedAttributes.get( name );
+		if ( attributes.containsKey( name ) ) {
+			return attributes.get( name );
 		}
 
 		return null;
-	}
-
-	private Class attributeType( final Attribute attribute ) {
-		return ( attribute instanceof PluralAttribute ? ( ( PluralAttribute ) attribute ).getElementType().getJavaType() : attribute.getJavaType() );
 	}
 
 	private boolean notVersionAttribute( final Attribute attribute ) {

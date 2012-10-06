@@ -9,12 +9,15 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
 	private JpaAttributeMetadata attributeMetadata;
 
+	private Attribute attribute;
+
 	public JpaDomainTypeAttributeMetadata( JpaAttributeMetadata attributeMetadata ) {
 		this.attributeMetadata = attributeMetadata;
 	}
 
 	public JpaDomainTypeAttributeMetadata( EntityType<?> entityType, Attribute attribute ) {
 		this( new JpaAttributeMetadata( entityType, attribute ) );
+		this.attribute = attribute;
 	}
 
 	@Override
@@ -50,5 +53,9 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 	@Override
 	public Object getValue( final Object target ) {
 		return attributeMetadata.get( target );
+	}
+
+	public Attribute getAttribute() {
+		return attribute;
 	}
 }

@@ -8,10 +8,6 @@ public interface DomainTypeEntityMetadata<A extends DomainTypeAttributeMetadata>
 
 	String getEntityName();
 
-	Collection<A> getEmbeddedAttributes();
-
-	Collection<A> getLinkedAttributes();
-
 	Collection<A> getAttributes();
 
 	A getAttribute( String name );

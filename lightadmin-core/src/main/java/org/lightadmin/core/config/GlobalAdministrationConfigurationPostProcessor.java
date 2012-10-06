@@ -31,12 +31,12 @@ public class GlobalAdministrationConfigurationPostProcessor implements BeanPostP
 
 	private void configurationPostInitialization( final GlobalAdministrationConfiguration configuration ) throws BeanCreationException {
 		for ( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration : configuration.getDomainTypeConfigurations().values() ) {
-			configurationPostInitialization( domainTypeAdministrationConfiguration, configuration );
+			configurationPostInitialization( domainTypeAdministrationConfiguration );
 		}
 	}
 
-	private void configurationPostInitialization( final DomainTypeAdministrationConfiguration configuration, final GlobalAdministrationConfiguration globalAdministrationConfiguration ) throws BeanCreationException {
-		DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeMetadata( configuration.getDomainType(), configuration.getNameField(), globalAdministrationConfiguration );
+	private void configurationPostInitialization( final DomainTypeAdministrationConfiguration configuration ) throws BeanCreationException {
+		DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeMetadata( configuration.getDomainType(), configuration.getNameField() );
 
 		configuration.setDomainTypeEntityMetadata( entityMetadata );
 
@@ -49,7 +49,7 @@ public class GlobalAdministrationConfigurationPostProcessor implements BeanPostP
 		}
 	}
 
-	private JpaDomainTypeEntityMetadata domainTypeMetadata( final Class<?> domainType, final String nameField, final GlobalAdministrationConfiguration configuration ) {
-		return new JpaDomainTypeEntityMetadata( entityManager.getMetamodel().entity( domainType ), nameField, configuration );
+	private JpaDomainTypeEntityMetadata domainTypeMetadata( final Class<?> domainType, final String nameField ) {
+		return new JpaDomainTypeEntityMetadata( entityManager.getMetamodel().entity( domainType ), nameField );
 	}
 }
