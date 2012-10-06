@@ -1,10 +1,11 @@
 package org.lightadmin.demo.model;
 
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Entity
@@ -13,8 +14,10 @@ public class LineItem extends AbstractEntity {
 	@ManyToOne
 	private Product product;
 
-	@Column( nullable = false )
+	@NotNull
+	@NumberFormat(style = NumberFormat.Style.CURRENCY)
 	private BigDecimal price;
+
 	private int amount;
 
 	/**

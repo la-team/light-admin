@@ -1,10 +1,11 @@
 package org.lightadmin.demo.model;
 
+import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
-import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Collections;
@@ -15,13 +16,14 @@ import static com.google.common.collect.Maps.newHashMap;
 @Entity
 public class Product extends AbstractEntity {
 
-	@Column( nullable = false )
+	@NotNull
 	@Size( min = 10, max = 100 )
 	private String name;
 
 	private String description;
 
-	@Column( nullable = false )
+	@NotNull
+	@NumberFormat(style = NumberFormat.Style.CURRENCY)
 	private BigDecimal price;
 
 	@ElementCollection
