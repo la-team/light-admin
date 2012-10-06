@@ -4,12 +4,14 @@
 
 <%@ attribute name="entityName" required="true" type="java.lang.String"%>
 <%@ attribute name="columns" required="true" type="java.util.Set"%>
+<%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
 <spring:url value="/rest/${entityName}" var="restServiceUrl" />
 
 <table id="${entityName}Table" class="table table-striped table-bordered table-hover">
 	<thead>
 	<tr>
+		<th class="info"></th>
 		<c:forEach var="column" items="${columns}">
 			<th><c:out value="${column.second}"/></th>
 		</c:forEach>
@@ -21,28 +23,46 @@
 
 <script type="text/javascript">
 	$(function() {
-		$('#${entityName}Table').dataTable({
+		var tableElement = $('#${entityName}Table');
+
+		var oTable = tableElement.dataTable({
 		   "sAjaxSource" : '${restServiceUrl}',
 		   "sAjaxDataProp" : 'content',
-		   "aoColumns" : [
-			<c:forEach var="column" items="${columns}" varStatus="status">
-			   {     mDataProp : '${column.first}'    }<c:out value="${!status.last ? ',' : ''}"/>
-			</c:forEach>
-		   ],
 		   "aoColumnDefs":[
 			   {
-				   "aTargets":[ ${fn:length(columns) } ],
+				   "bSortable":false,
+				   "aTargets":[ 0 ],
+				   "mData": null,
+				   "sClass": "center",
+				   "mRender": function ( data, type, full ) {
+					   return '<img src="<spring:url value='/images/details_open.png'/>" style="cursor:pointer;" title="Click to show Info"/>';
+				   }
+			   },
+			   <c:forEach var="column" items="${columns}" varStatus="status">
+			   {
+				   "aTargets":[ ${status.index + 1 } ],
+				   "mData" : '${column.first}'
+			   },
+			   </c:forEach>
+			   {
+				   "bSortable":false,
+				   "aTargets":[ ${fn:length(columns) + 1 } ],
 				   "mData":null,
 				   "mRender":function ( data, type, full ) {
-					   var restEntityServiceUrl = full.links[0]['href'];
-					   var entityId = new RegExp( /${entityName}\/(\d+)/ ).exec(restEntityServiceUrl)[1];
+					   var entityId = full['${domainTypeEntityMetadata.idAttribute.name}'];
+
 					   var viewEntityUrl = "<spring:url value='/domain/${entityName}/'/>" + entityId;
-					   var editEntityUrl = viewEntityUrl + "/edit";
+
+					   var editEntityUrl = "<spring:url value='/domain/${entityName}/'/>" + entityId + "/edit";
 
 					   return '<a href="' + viewEntityUrl + '">View</a>' + '&nbsp;&nbsp;' + '<a href="' + editEntityUrl + '">Edit</a>';
 				   }
 			   }
 		   ],
+		   "aaSorting":[
+			   [1, 'asc']
+		   ],
+			"sScrollY": "600px",
 		   "bServerSide" : true,
 		   "fnServerData" : dataTableRESTAdapter,
 		   "sPaginationType": "bootstrap",
@@ -53,5 +73,12 @@
 		   "bFilter": false,
 		   "bInfo": false
 	   });
+
+		bindInfoClinkHanlders( tableElement, oTable );
 	});
+</script>
+
+<script type="text/javascript">
+
+
 </script>

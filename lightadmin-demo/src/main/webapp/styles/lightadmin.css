@@ -32,6 +32,14 @@ body.login {
 	color: #999;
 }
 
+td.center {
+	text-align: center;
+}
+
+th.info {
+	width: 32px;
+}
+
 #login {
 	width: 500px;
 	float: left;

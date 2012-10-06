@@ -11,7 +11,9 @@
 <tiles:useAttribute name="scopes"/>
 <tiles:useAttribute name="filters"/>
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
+<c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
 
 <breadcrumb:breadcrumb>
 	<breadcrumb:breadcrumb-item name="List ${domainTypeName}"/>
@@ -21,4 +23,4 @@
 
 <light:search filters="${filters}" />
 
-<light:data-table entityName="${domainTypeName}" columns="${listColumns}"/>
+<light:data-table entityName="${domainTypeName}" columns="${listColumns}" domainTypeEntityMetadata="${domainTypeEntityMetadata}" />

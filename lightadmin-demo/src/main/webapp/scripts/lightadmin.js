@@ -36,3 +36,56 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 					 }
 				 } );
 }
+
+/* Formating function for row details */
+function fnFormatDetails( oTable, nTr ) {
+	var aData = oTable.fnGetData( nTr );
+
+	var detailsHtmlBlock = '<div class="innerDetails"><dl class="dl-horizontal">';
+	for (var prop in aData) {
+		if ( prop != 'links' && prop != 'stringRepresentation') {
+			detailsHtmlBlock += '<dt>' + prop + '</dt>';
+			var value = aData[prop];
+			if ( value instanceof Array ) {
+				var items = '[';
+				for (var arrayIndex in value) {
+					var arrayItem = value[arrayIndex];
+					if ( arrayItem['stringRepresentation'] !== undefined) {
+						items += arrayItem['stringRepresentation'] + ', ';
+					}
+				}
+				items += ']';
+				value = items;
+			} else if (typeof value === 'object' && value['stringRepresentation'] !== undefined) {
+				value = value['stringRepresentation'];
+			}
+			detailsHtmlBlock += '<dd>' + value + '</dd>';
+		}
+	}
+	detailsHtmlBlock += '</dl></div>';
+
+	return detailsHtmlBlock;
+}
+
+/* Add event listener for opening and closing details
+ * Note that the indicator for showing which row is open is not controlled by DataTables,
+ * rather it is done here
+ */
+function bindInfoClinkHanlders( tableElement, dataTable ) {
+	$( 'tbody td img', $(tableElement) ).live( 'click', function () {
+		var nTr = $( this ).parents( 'tr' )[0];
+		if ( dataTable.fnIsOpen( nTr ) ) {
+			this.src = "../images/details_open.png";
+			$('div.innerDetails', $(nTr).next()[0]).slideUp('slow', function () {
+				dataTable.fnClose( nTr );
+			});
+		} else {
+			this.src = "../images/details_close.png";
+			var nDetailsRow = dataTable.fnOpen( nTr, fnFormatDetails( dataTable, nTr ), 'details' );
+			$('div.innerDetails', nDetailsRow).hide();
+			$('div.innerDetails', nDetailsRow).slideDown('slow', function () {
+				$("div.dataTables_scrollBody").scrollTop(nTr.offsetTop);
+			});
+		}
+	} );
+}
