@@ -10,6 +10,9 @@ public class TableFragment implements Fragment {
 
 	private Set<Pair<String, String>> columns = newLinkedHashSet();
 
+	TableFragment() {
+	}
+
 	public void addColumn( String fieldName, String alias ) {
 		columns.add( Pair.stringPair( fieldName, alias ) );
 	}

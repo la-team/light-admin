@@ -11,7 +11,7 @@ public class Filters implements Iterable<Filter> {
 
 	private final List<Filter> filters;
 
-	public Filters( final List<Filter> filters ) {
+	Filters( final List<Filter> filters ) {
 		Assert.notNull( filters );
 		this.filters = newLinkedList( filters );
 	}

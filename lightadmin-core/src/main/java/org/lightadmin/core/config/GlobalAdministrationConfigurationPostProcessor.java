@@ -36,7 +36,7 @@ public class GlobalAdministrationConfigurationPostProcessor implements BeanPostP
 	}
 
 	private void configurationPostInitialization( final DomainTypeAdministrationConfiguration configuration ) throws BeanCreationException {
-		DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeMetadata( configuration.getDomainType(), configuration.getNameField() );
+		DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeMetadata( configuration.getDomainType(), configuration.getEntityConfiguration().getNameField() );
 
 		configuration.setDomainTypeEntityMetadata( entityMetadata );
 

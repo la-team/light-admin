@@ -1,7 +1,7 @@
 package org.lightadmin.demo.config;
 
-// @Administration( type = AdministrationType.Dashboard )
-// @Dashboard
+// TODO: max: @Administration( type = AdministrationType.Dashboard ) //?
+// TODO: max: @Dashboard //?
 public class DashboardConfiguration {
 
 }

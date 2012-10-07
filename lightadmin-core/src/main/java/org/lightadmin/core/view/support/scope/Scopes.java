@@ -11,7 +11,7 @@ public class Scopes implements Iterable<Scope> {
 
 	private final List<Scope> scopes;
 
-	public Scopes( final List<Scope> scopes ) {
+	Scopes( final List<Scope> scopes ) {
 		Assert.notNull( scopes );
 		this.scopes = newLinkedList( scopes );
 	}

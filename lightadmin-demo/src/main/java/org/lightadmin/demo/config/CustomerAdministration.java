@@ -2,7 +2,10 @@ package org.lightadmin.demo.config;
 
 import com.google.common.base.Predicates;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.view.ScreenContext;
+import org.lightadmin.core.view.support.configuration.EntityConfiguration;
+import org.lightadmin.core.view.support.configuration.EntityConfigurationBuilder;
+import org.lightadmin.core.view.support.context.ScreenContext;
+import org.lightadmin.core.view.support.context.ScreenContextBuilder;
 import org.lightadmin.core.view.support.filter.FilterBuilder;
 import org.lightadmin.core.view.support.filter.Filters;
 import org.lightadmin.core.view.support.fragment.Fragment;
@@ -23,8 +26,14 @@ import static org.lightadmin.core.view.support.scope.ScopeUtils.*;
 @Administration( Customer.class )
 public class CustomerAdministration {
 
-	public static void screenContext( ScreenContext screenContext ) {
-		screenContext.screenName( "Customers Administration" ).menuName( "Customers" );
+	public static EntityConfiguration configuration( EntityConfigurationBuilder configurationBuilder ) {
+		return configurationBuilder.nameField( "firstname" ).build();
+	}
+
+	public static ScreenContext screenContext( ScreenContextBuilder screenContextBuilder ) {
+		return screenContextBuilder
+			.screenName( "Customers Administration" )
+			.menuName( "Customers" ).build();
 	}
 
 	public static Fragment listView( final FragmentBuilder fragmentBuilder ) {

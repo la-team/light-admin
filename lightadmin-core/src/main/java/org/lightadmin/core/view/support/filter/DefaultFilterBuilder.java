@@ -8,7 +8,7 @@ import static com.google.common.collect.Lists.newLinkedList;
 
 public class DefaultFilterBuilder implements FilterBuilder {
 
-	private List<Filter> filters = newLinkedList();
+	private final List<Filter> filters = newLinkedList();
 
 	public DefaultFilterBuilder() {
 	}

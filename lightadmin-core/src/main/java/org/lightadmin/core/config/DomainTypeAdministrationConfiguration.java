@@ -3,7 +3,8 @@ package org.lightadmin.core.config;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
-import org.lightadmin.core.view.ScreenContext;
+import org.lightadmin.core.view.support.configuration.EntityConfiguration;
+import org.lightadmin.core.view.support.context.ScreenContext;
 import org.lightadmin.core.view.support.filter.Filters;
 import org.lightadmin.core.view.support.fragment.Fragment;
 import org.lightadmin.core.view.support.scope.Scopes;
@@ -20,9 +21,11 @@ public class DomainTypeAdministrationConfiguration {
 
 	private final DynamicJpaRepository<?, ? extends Serializable> repository;
 
-	private Fragment listViewFragment;
+	private EntityConfiguration entityConfiguration;
 
 	private ScreenContext screenContext;
+
+	private Fragment listViewFragment;
 
 	private Scopes scopes;
 
@@ -88,7 +91,11 @@ public class DomainTypeAdministrationConfiguration {
 		this.filters = filters;
 	}
 
-	public String getNameField() {
-		return "name";
+	public EntityConfiguration getEntityConfiguration() {
+		return entityConfiguration;
+	}
+
+	public void setEntityConfiguration( final EntityConfiguration entityConfiguration ) {
+		this.entityConfiguration = entityConfiguration;
 	}
 }

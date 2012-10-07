@@ -4,9 +4,13 @@ import com.google.common.base.Function;
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.BeanNameGenerator;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.view.DefaultScreenContext;
-import org.lightadmin.core.view.ScreenContext;
 import org.lightadmin.core.view.support.Builder;
+import org.lightadmin.core.view.support.configuration.DefaultEntityConfigurationBuilder;
+import org.lightadmin.core.view.support.configuration.EntityConfiguration;
+import org.lightadmin.core.view.support.configuration.EntityConfigurationBuilder;
+import org.lightadmin.core.view.support.context.DefaultScreenContextBuilder;
+import org.lightadmin.core.view.support.context.ScreenContext;
+import org.lightadmin.core.view.support.context.ScreenContextBuilder;
 import org.lightadmin.core.view.support.filter.DefaultFilterBuilder;
 import org.lightadmin.core.view.support.filter.FilterBuilder;
 import org.lightadmin.core.view.support.filter.Filters;
@@ -46,9 +50,11 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 		builder.addConstructorArgValue( domainType );
 		builder.addConstructorArgReference( BeanNameGenerator.INSTANCE.repositoryBeanName( domainType ) );
 
-		builder.addPropertyValue( "listViewFragment", listViewFragment( configurationClass ) );
+		builder.addPropertyValue( "entityConfiguration", configuration( configurationClass ) );
 
 		builder.addPropertyValue( "screenContext", screenContext( configurationClass ) );
+
+		builder.addPropertyValue( "listViewFragment", listViewFragment( configurationClass ) );
 
 		builder.addPropertyValue( "scopes", scopes( configurationClass ) );
 
@@ -70,14 +76,11 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 	}
 
 	private ScreenContext screenContext( final Class<?> configurationClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "screenContext", ScreenContext.class );
+		return invokeMethodWithBuilder( configurationClass, "screenContext", ScreenContextBuilder.class, DefaultScreenContextBuilder.class );
+	}
 
-		ScreenContext screenContext = new DefaultScreenContext();
-		if ( method != null ) {
-			invokeMethod( method, null, screenContext );
-		}
-
-		return screenContext;
+	private EntityConfiguration configuration( final Class<?> configurationClass ) {
+		return invokeMethodWithBuilder( configurationClass, "configuration", EntityConfigurationBuilder.class, DefaultEntityConfigurationBuilder.class );
 	}
 
 	@SuppressWarnings( {"unchecked"} )

@@ -14,7 +14,7 @@ public class DomainConfigToMenuItemTransformation implements Function<DomainType
 
 	@Override
 	public MenuItem apply( final DomainTypeAdministrationConfiguration domainConfiguration ) {
-		return menuItem( domainConfiguration.getDomainTypeName(), resolveDomainContextUrl( domainConfiguration ) );
+		return menuItem( domainConfiguration.getScreenContext().getMenuItemName(), resolveDomainContextUrl( domainConfiguration ) );
 	}
 
 	private String resolveDomainContextUrl( DomainTypeAdministrationConfiguration domainConfiguration ) {
