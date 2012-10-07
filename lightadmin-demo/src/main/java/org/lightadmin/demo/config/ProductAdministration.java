@@ -9,7 +9,7 @@ import org.lightadmin.demo.model.Product;
 @Administration( Product.class )
 public class ProductAdministration {
 
-	public static void configureScreen( ScreenContext screenContext ) {
+	public static void screenContext( ScreenContext screenContext ) {
 		screenContext.screenName( "Products Administration" ).menuName( "Products" );
 	}
 

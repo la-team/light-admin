@@ -70,7 +70,7 @@ public class ConfigurationClassToBeanDefinitionTransformation implements Functio
 	}
 
 	private ScreenContext screenContext( final Class<?> configurationClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "configureScreen", ScreenContext.class );
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, "screenContext", ScreenContext.class );
 
 		ScreenContext screenContext = new DefaultScreenContext();
 		if ( method != null ) {

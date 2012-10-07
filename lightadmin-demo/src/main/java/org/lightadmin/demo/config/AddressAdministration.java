@@ -9,7 +9,7 @@ import org.lightadmin.demo.model.Address;
 @Administration( Address.class )
 public class AddressAdministration {
 
-	public static void configureScreen( ScreenContext screenContext ) {
+	public static void screenContext( ScreenContext screenContext ) {
 		screenContext.screenName( "Addresses Administration" ).menuName( "Addresses" );
 	}
 

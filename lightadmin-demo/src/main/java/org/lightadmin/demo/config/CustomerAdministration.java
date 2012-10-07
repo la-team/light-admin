@@ -23,7 +23,7 @@ import static org.lightadmin.core.view.support.scope.ScopeUtils.*;
 @Administration( Customer.class )
 public class CustomerAdministration {
 
-	public static void configureScreen( ScreenContext screenContext ) {
+	public static void screenContext( ScreenContext screenContext ) {
 		screenContext.screenName( "Customers Administration" ).menuName( "Customers" );
 	}
 
