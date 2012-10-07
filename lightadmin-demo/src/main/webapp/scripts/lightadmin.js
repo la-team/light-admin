@@ -73,18 +73,19 @@ function fnFormatDetails( oTable, nTr ) {
  */
 function bindInfoClinkHanlders( tableElement, dataTable ) {
 	$( 'tbody td img', $(tableElement) ).live( 'click', function () {
-		var nTr = $( this ).parents( 'tr' )[0];
+		var infoImg = $( this );
+		var nTr = infoImg.parents( 'tr' )[0];
 		if ( dataTable.fnIsOpen( nTr ) ) {
-			this.src = "../images/details_open.png";
 			$('div.innerDetails', $(nTr).next()[0]).slideUp('slow', function () {
 				dataTable.fnClose( nTr );
+				infoImg.attr('src', "../images/details_open.png");
 			});
 		} else {
-			this.src = "../images/details_close.png";
 			var nDetailsRow = dataTable.fnOpen( nTr, fnFormatDetails( dataTable, nTr ), 'details' );
 			$('div.innerDetails', nDetailsRow).hide();
 			$('div.innerDetails', nDetailsRow).slideDown('slow', function () {
 				$("div.dataTables_scrollBody").scrollTop(nTr.offsetTop);
+				infoImg.attr('src', "../images/details_close.png");
 			});
 		}
 	} );
