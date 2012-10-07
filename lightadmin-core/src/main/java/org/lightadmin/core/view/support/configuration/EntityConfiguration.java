@@ -4,19 +4,13 @@ import com.google.common.base.Function;
 
 public class EntityConfiguration {
 
-	private final String nameField;
-	private final Function<?, String> nameExtractor;
+	private final Function<Object, String> nameExtractor;
 
-	EntityConfiguration( final String nameField, final Function<?, String> nameExtractor ) {
-		this.nameField = nameField;
+	EntityConfiguration( final Function<Object, String> nameExtractor ) {
 		this.nameExtractor = nameExtractor;
 	}
 
-	public String getNameField() {
-		return nameField;
-	}
-
-	public Function<?, String> getNameExtractor() {
+	public Function<Object, String> getNameExtractor() {
 		return nameExtractor;
 	}
 }

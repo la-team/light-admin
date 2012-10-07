@@ -23,6 +23,7 @@ import javax.persistence.criteria.Root;
 import static org.lightadmin.core.view.support.renderer.Renderers.select;
 import static org.lightadmin.core.view.support.scope.ScopeUtils.*;
 
+@SuppressWarnings( "unused" )
 @Administration( Customer.class )
 public class CustomerAdministration {
 

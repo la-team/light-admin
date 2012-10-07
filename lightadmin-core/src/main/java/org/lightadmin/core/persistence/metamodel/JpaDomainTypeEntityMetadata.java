@@ -18,17 +18,13 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 	private final Class<?> domainType;
 
 	private final JpaDomainTypeAttributeMetadata idAttribute;
-	private final JpaDomainTypeAttributeMetadata nameAttribute;
-	private final JpaDomainTypeAttributeMetadata versionAttribute;
 
 	private final Map<String, JpaDomainTypeAttributeMetadata> attributes = newHashMap();
 
-	public JpaDomainTypeEntityMetadata( EntityType<?> entityType, String nameFieldName ) {
+	public JpaDomainTypeEntityMetadata( EntityType<?> entityType ) {
 		domainType = entityType.getJavaType();
 
 		idAttribute = idAttribute( entityType );
-		versionAttribute = versionAttribute( entityType );
-		nameAttribute = nameAttribute( entityType, nameFieldName );
 
 		for ( Attribute attribute : entityType.getAttributes() ) {
 			final Field field = ReflectionUtils.findField( domainType, attribute.getJavaMember().getName() );
@@ -36,7 +32,7 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 				continue;
 			}
 
-			if ( notIdAttribute( attribute ) && notVersionAttribute( attribute ) && notNameAttribute( attribute ) ) {
+			if ( notIdAttribute( attribute ) ) {
 				attributes.put( attribute.getName(), new JpaDomainTypeAttributeMetadata( entityType, attribute ) );
 			}
 		}
@@ -60,32 +56,14 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 	}
 
 	@Override
-	public JpaDomainTypeAttributeMetadata getVersionAttribute() {
-		return versionAttribute;
-	}
-
-	@Override
 	public JpaDomainTypeAttributeMetadata getIdAttribute() {
 		return idAttribute;
-	}
-
-	@Override
-	public JpaDomainTypeAttributeMetadata getNameAttribute() {
-		return nameAttribute;
 	}
 
 	@Override
 	public JpaDomainTypeAttributeMetadata getAttribute( String name ) {
 		if ( idAttribute.getName().equals( name ) ) {
 			return idAttribute;
-		}
-
-		if ( null != versionAttribute && versionAttribute.getName().equals( name ) ) {
-			return versionAttribute;
-		}
-
-		if ( null != nameAttribute && nameAttribute.getName().equals( name ) ) {
-			return nameAttribute;
 		}
 
 		if ( attributes.containsKey( name ) ) {
@@ -95,34 +73,8 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 		return null;
 	}
 
-	private boolean notVersionAttribute( final Attribute attribute ) {
-		return !( attribute instanceof SingularAttribute && ( ( SingularAttribute ) attribute ).isVersion() );
-	}
-
 	private boolean notIdAttribute( final Attribute attribute ) {
 		return !( attribute instanceof SingularAttribute && ( ( SingularAttribute ) attribute ).isId() );
-	}
-
-	private boolean notNameAttribute( final Attribute attribute ) {
-		return !( nameAttribute != null && attribute instanceof SingularAttribute && nameAttribute.getName().equals( attribute.getName() ) );
-	}
-
-	private JpaDomainTypeAttributeMetadata nameAttribute( final EntityType<?> entityType, String nameFieldName ) {
-		final Attribute<?, ?> attribute = entityType.getAttribute( nameFieldName );
-		if ( attribute == null || !( attribute instanceof SingularAttribute ) ) {
-			return null;
-		}
-
-		final Field field = ReflectionUtils.findField( domainType, attribute.getJavaMember().getName() );
-		if ( null == field ) {
-			return null;
-		}
-
-		return new JpaDomainTypeAttributeMetadata( entityType, attribute );
-	}
-
-	private JpaDomainTypeAttributeMetadata versionAttribute( final EntityType<?> entityType ) {
-		return entityType.getVersion( Long.class ) != null ? new JpaDomainTypeAttributeMetadata( entityType, entityType.getVersion( Long.class ) ) : null;
 	}
 
 	private JpaDomainTypeAttributeMetadata idAttribute( final EntityType<?> entityType ) {

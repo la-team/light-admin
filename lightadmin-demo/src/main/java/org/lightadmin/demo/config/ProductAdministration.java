@@ -9,6 +9,7 @@ import org.lightadmin.core.view.support.fragment.Fragment;
 import org.lightadmin.core.view.support.fragment.FragmentBuilder;
 import org.lightadmin.demo.model.Product;
 
+@SuppressWarnings( "unused" )
 @Administration( Product.class )
 public class ProductAdministration {
 

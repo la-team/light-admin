@@ -10,6 +10,7 @@ import org.lightadmin.core.view.support.fragment.Fragment;
 import org.lightadmin.core.view.support.fragment.FragmentBuilder;
 import org.lightadmin.demo.model.Address;
 
+@SuppressWarnings( "unused" )
 @Administration( Address.class )
 public class AddressAdministration {
 

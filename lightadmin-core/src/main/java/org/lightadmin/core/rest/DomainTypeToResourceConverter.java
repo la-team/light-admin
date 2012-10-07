@@ -70,13 +70,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 
 		entityDto.put( entityMetadata.getIdAttribute().getName(), entityMetadata.getIdAttribute().getValue( source ) );
 
-		if ( entityMetadata.getNameAttribute() != null ) {
-			final Object nameValue = entityMetadata.getNameAttribute().getValue( source );
-			entityDto.put( entityMetadata.getNameAttribute().getName(), nameValue );
-			entityDto.put( "stringRepresentation", nameValue );
-		} else {
-			entityDto.put( "stringRepresentation", String.format( "%s #%s", domainTypeConfiguration.getDomainTypeName(), entityMetadata.getIdAttribute().getValue( source ).toString() ) );
-		}
+		entityDto.put( "stringRepresentation", domainTypeConfiguration.getEntityConfiguration().getNameExtractor().apply( source ) );
 
 		for ( DomainTypeAttributeMetadata attribute : attributes ) {
 			Object val;

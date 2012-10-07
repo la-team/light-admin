@@ -14,8 +14,4 @@ public interface DomainTypeEntityMetadata<A extends DomainTypeAttributeMetadata>
 
 	A getIdAttribute();
 
-	A getVersionAttribute();
-
-	A getNameAttribute();
-
 }
