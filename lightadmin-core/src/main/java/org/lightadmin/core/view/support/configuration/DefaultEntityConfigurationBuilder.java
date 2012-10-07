@@ -30,8 +30,6 @@ public class DefaultEntityConfigurationBuilder implements EntityConfigurationBui
 
 		@Override
 		public String apply( final Object input ) {
-//			String.format( "%s #%s", domainTypeConfiguration.getDomainTypeName(), entityMetadata.getIdAttribute().getValue( source ).toString()
-
 			return String.format( "%s", input.getClass().getSimpleName() );
 		}
 	}

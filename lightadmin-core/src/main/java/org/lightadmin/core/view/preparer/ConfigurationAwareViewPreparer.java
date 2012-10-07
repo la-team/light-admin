@@ -53,7 +53,7 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, Gl
 
 	@Override
 	@Autowired
-	public void setGlobalAdministrationConfigurationAware( final GlobalAdministrationConfiguration configuration ) {
+	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
 		this.globalAdministrationConfiguration = configuration;
 	}
 }

@@ -2,19 +2,17 @@ package org.lightadmin.core.config;
 
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.view.support.filter.Filter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 public class GlobalAdministrationConfigurationPostProcessor implements BeanPostProcessor {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	@Autowired
+	private DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> entityMetadataResolver;
 
 	@Override
 	public Object postProcessBeforeInitialization( final Object bean, final String beanName ) throws BeansException {
@@ -35,8 +33,9 @@ public class GlobalAdministrationConfigurationPostProcessor implements BeanPostP
 		}
 	}
 
+	@SuppressWarnings( "unchecked" )
 	private void configurationPostInitialization( final DomainTypeAdministrationConfiguration configuration ) throws BeanCreationException {
-		DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeMetadata( configuration.getDomainType() );
+		DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = entityMetadataResolver.resolveEntityMetadata( configuration.getDomainType() );
 
 		configuration.setDomainTypeEntityMetadata( entityMetadata );
 
@@ -47,9 +46,5 @@ public class GlobalAdministrationConfigurationPostProcessor implements BeanPostP
 			}
 			filter.setAttributeMetadata( attributeMetadata );
 		}
-	}
-
-	private JpaDomainTypeEntityMetadata domainTypeMetadata( final Class<?> domainType ) {
-		return new JpaDomainTypeEntityMetadata( entityManager.getMetamodel().entity( domainType ) );
 	}
 }

@@ -98,7 +98,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 
 	@Override
 	@Autowired
-	public void setGlobalAdministrationConfigurationAware( final GlobalAdministrationConfiguration configuration ) {
+	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
 		this.configuration = configuration;
 	}
 }

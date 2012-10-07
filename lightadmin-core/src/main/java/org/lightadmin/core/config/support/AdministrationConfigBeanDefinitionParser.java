@@ -5,6 +5,7 @@ import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.BeanNameGenerator;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfigurationPostProcessor;
+import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.persistence.repository.support.DynamicJpaRepositoryFactoryBean;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
@@ -67,6 +68,8 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 
 		registerConfigurationBeans( dslConfigurations, parserContext );
 
+		registerEntityMetadataResolver( parserContext );
+
 		registerBeanPostProcessors( parserContext );
 
 		registerValidatingRepositoryEventListener( parserContext );
@@ -80,6 +83,10 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 		registerRendererFactory( parserContext );
 
 		return null;
+	}
+
+	private void registerEntityMetadataResolver( final ParserContext parserContext ) {
+		registerSimpleBean( JpaDomainTypeEntityMetadataResolver.class, parserContext );
 	}
 
 	private void registerBeanPostProcessors( final ParserContext parserContext ) {
