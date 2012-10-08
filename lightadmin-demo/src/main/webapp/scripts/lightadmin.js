@@ -71,7 +71,7 @@ function fnFormatDetails( oTable, nTr ) {
  * Note that the indicator for showing which row is open is not controlled by DataTables,
  * rather it is done here
  */
-function bindInfoClinkHanlders( tableElement, dataTable ) {
+function bindInfoClickHandlers( tableElement, dataTable ) {
 	$( 'tbody td img', $(tableElement) ).live( 'click', function () {
 		var infoImg = $( this );
 		var nTr = infoImg.parents( 'tr' )[0];
@@ -84,7 +84,6 @@ function bindInfoClinkHanlders( tableElement, dataTable ) {
 			var nDetailsRow = dataTable.fnOpen( nTr, fnFormatDetails( dataTable, nTr ), 'details' );
 			$('div.innerDetails', nDetailsRow).hide();
 			$('div.innerDetails', nDetailsRow).slideDown('slow', function () {
-				$("div.dataTables_scrollBody").scrollTop(nTr.offsetTop);
 				infoImg.attr('src', "../images/details_close.png");
 			});
 		}

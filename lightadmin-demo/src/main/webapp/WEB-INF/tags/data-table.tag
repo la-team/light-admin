@@ -2,13 +2,13 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 
-<%@ attribute name="entityName" required="true" type="java.lang.String"%>
+<%@ attribute name="domainTypeName" required="true" type="java.lang.String"%>
 <%@ attribute name="columns" required="true" type="java.util.Set"%>
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
-<spring:url value="/rest/${entityName}" var="restServiceUrl" />
+<spring:url value="/rest/${domainTypeName}" var="restServiceUrl" />
 
-<table id="${entityName}Table" class="table table-bordered table-hover">
+<table id="${domainTypeName}Table" class="table table-bordered table-hover">
 	<thead>
 	<tr>
 		<th class="info"></th>
@@ -23,9 +23,10 @@
 
 <script type="text/javascript">
 	$(function() {
-		var tableElement = $('#${entityName}Table');
+		var tableElement = $('#${domainTypeName}Table');
 
 		var oTable = tableElement.dataTable({
+			"bStateSave": true,
 		   "sAjaxSource" : '${restServiceUrl}',
 		   "sAjaxDataProp" : 'content',
 		   "aoColumnDefs":[
@@ -51,9 +52,9 @@
 				   "mRender":function ( data, type, full ) {
 					   var entityId = full['${domainTypeEntityMetadata.idAttribute.name}'];
 
-					   var viewEntityUrl = "<spring:url value='/domain/${entityName}/'/>" + entityId;
+					   var viewEntityUrl = "<spring:url value='/domain/${domainTypeName}/'/>" + entityId;
 
-					   var editEntityUrl = "<spring:url value='/domain/${entityName}/'/>" + entityId + "/edit";
+					   var editEntityUrl = "<spring:url value='/domain/${domainTypeName}/'/>" + entityId + "/edit";
 
 					   return '<a href="' + viewEntityUrl + '">View</a>' + '&nbsp;&nbsp;' + '<a href="' + editEntityUrl + '">Edit</a>';
 				   }
@@ -62,7 +63,6 @@
 		   "aaSorting":[
 			   [1, 'asc']
 		   ],
-			"sScrollY": "600px",
 		   "bServerSide" : true,
 		   "fnServerData" : dataTableRESTAdapter,
 		   "sPaginationType": "bootstrap",
@@ -74,11 +74,8 @@
 		   "bInfo": false
 	   });
 
-		bindInfoClinkHanlders( tableElement, oTable );
+		$( document ).data('lightadmin.dataTable', oTable );
+
+		bindInfoClickHandlers( tableElement, oTable );
 	});
-</script>
-
-<script type="text/javascript">
-
-
 </script>

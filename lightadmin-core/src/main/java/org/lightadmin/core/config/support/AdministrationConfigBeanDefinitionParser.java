@@ -24,7 +24,6 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.data.rest.repository.context.ValidatingRepositoryEventListener;
-import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.util.ClassUtils;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.w3c.dom.Element;
@@ -75,8 +74,6 @@ class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 		registerValidatingRepositoryEventListener( parserContext );
 
 		registerRepositoryExporter( parserContext );
-
-		registerRepositoryRestConfiguration( parserContext );
 
 		registerViewPreparers( parserContext );
 
@@ -196,13 +193,6 @@ class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 	private void loadSpringSecurityContext( final ParserContext parserContext ) {
 		BeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader( parserContext.getRegistry() );
 		beanDefinitionReader.loadBeanDefinitions( SPRING_SECURITY_CONTEXT_RESOURCE );
-	}
-
-	private void registerRepositoryRestConfiguration( final ParserContext parserContext ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( RepositoryRestConfiguration.class );
-		builder.addPropertyValue( "defaultPageSize", 5 );
-		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
-		parserContext.registerBeanComponent( new BeanComponentDefinition( beanDefinition, parserContext.getReaderContext().generateBeanName( beanDefinition ) ) );
 	}
 
 	private void registerViewPreparers( final ParserContext parserContext ) {

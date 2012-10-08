@@ -23,4 +23,4 @@
 
 <light:search filters="${filters}" />
 
-<light:data-table entityName="${domainTypeName}" columns="${listColumns}" domainTypeEntityMetadata="${domainTypeEntityMetadata}" />
+<light:data-table domainTypeName="${domainTypeName}" columns="${listColumns}" domainTypeEntityMetadata="${domainTypeEntityMetadata}" />

@@ -5,6 +5,12 @@
 
 	<bean id="jpaRepositoryExporter" class="org.lightadmin.core.rest.DynamicJpaRepositoryExporter"/>
 
+	<bean id="repositoryRestController" class="org.lightadmin.core.rest.DynamicRepositoryRestController"/>
+
+	<bean id="repositoryRestConfig" class="org.springframework.data.rest.webmvc.RepositoryRestConfiguration">
+		<property name="defaultPageSize" value="10"/>
+	</bean>
+
 	<bean class="org.springframework.context.support.ConversionServiceFactoryBean">
 		<property name="converters">
 			<set>

@@ -60,4 +60,16 @@
 		<function-signature>java.lang.Object invokeMethod(java.lang.reflect.Method,java.lang.Object,java.lang.Object...)</function-signature>
 	</function>
 
+	<function>
+		<name>isPrimitiveOrWrapper</name>
+		<function-class>org.springframework.util.ClassUtils</function-class>
+		<function-signature>boolean isPrimitiveOrWrapper(java.lang.Class)</function-signature>
+	</function>
+
+	<function>
+		<name>isSimpleValueType</name>
+		<function-class>org.springframework.beans.BeanUtils</function-class>
+		<function-signature>boolean isSimpleValueType(java.lang.Class)</function-signature>
+	</function>
+
 </taglib>

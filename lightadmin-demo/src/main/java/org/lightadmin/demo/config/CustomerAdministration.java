@@ -54,7 +54,7 @@ public class CustomerAdministration {
 	public static Filters filters( final FilterBuilder filterBuilder ) {
 		return filterBuilder
 			.field( "firstname" ).renderer( select( new String[] { "Yes", "No" } ))
-			.field( "addresses" ).build();
+			.field( "lastname" ).build();
 	}
 
 	public static Specification<Customer> customerNameEqDave() {
