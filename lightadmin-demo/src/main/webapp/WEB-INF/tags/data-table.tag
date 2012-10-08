@@ -8,7 +8,7 @@
 
 <spring:url value="/rest/${entityName}" var="restServiceUrl" />
 
-<table id="${entityName}Table" class="table table-striped table-bordered table-hover">
+<table id="${entityName}Table" class="table table-bordered table-hover">
 	<thead>
 	<tr>
 		<th class="info"></th>

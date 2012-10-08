@@ -1,12 +1,12 @@
 package org.lightadmin.core.view.support.configuration;
 
-import com.google.common.base.Function;
+import org.lightadmin.core.util.Transformer;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
 public class DefaultEntityConfigurationBuilder implements EntityConfigurationBuilder {
 
-	private Function<?, String> nameExtractor = new ObjectNameExtractor();
+	private Transformer<?, String> nameExtractor = new ObjectNameExtractor();
 
 	@Override
 	public EntityConfigurationBuilder nameField( final String nameField ) {
@@ -15,7 +15,7 @@ public class DefaultEntityConfigurationBuilder implements EntityConfigurationBui
 	}
 
 	@Override
-	public EntityConfigurationBuilder nameExtractor( final Function<?, String> nameExtractor ) {
+	public EntityConfigurationBuilder nameExtractor( final Transformer<?, String> nameExtractor ) {
 		this.nameExtractor = nameExtractor;
 		return this;
 	}
@@ -23,10 +23,10 @@ public class DefaultEntityConfigurationBuilder implements EntityConfigurationBui
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public EntityConfiguration build() {
-		return new EntityConfiguration( ( Function<Object, String> ) nameExtractor );
+		return new EntityConfiguration( ( Transformer<Object, String> ) nameExtractor );
 	}
 
-	private static class ObjectNameExtractor implements Function<Object, String> {
+	private static class ObjectNameExtractor implements Transformer<Object, String> {
 
 		@Override
 		public String apply( final Object input ) {
@@ -34,7 +34,7 @@ public class DefaultEntityConfigurationBuilder implements EntityConfigurationBui
 		}
 	}
 
-	private static class DomainTypeObjectNameExtractor implements Function<Object, String> {
+	private static class DomainTypeObjectNameExtractor implements Transformer<Object, String> {
 
 		private final String nameField;
 

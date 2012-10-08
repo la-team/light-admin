@@ -1,9 +1,9 @@
 package org.lightadmin.core.config.support;
 
-import com.google.common.base.Function;
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.BeanNameGenerator;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.util.Transformer;
 import org.lightadmin.core.view.support.Builder;
 import org.lightadmin.core.view.support.configuration.DefaultEntityConfigurationBuilder;
 import org.lightadmin.core.view.support.configuration.EntityConfiguration;
@@ -31,7 +31,12 @@ import java.lang.reflect.Method;
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
 import static org.springframework.util.ReflectionUtils.invokeMethod;
 
-public class ConfigurationClassToBeanDefinitionTransformation implements Function<Class<?>, BeanDefinition> {
+public class ConfigurationClassToBeanDefinitionTransformer implements Transformer<Class<?>, BeanDefinition> {
+
+	public static final ConfigurationClassToBeanDefinitionTransformer INSTANCE = new ConfigurationClassToBeanDefinitionTransformer();
+
+	private ConfigurationClassToBeanDefinitionTransformer() {
+	}
 
 	@Override
 	public BeanDefinition apply( final Class<?> dslConfiguration ) {

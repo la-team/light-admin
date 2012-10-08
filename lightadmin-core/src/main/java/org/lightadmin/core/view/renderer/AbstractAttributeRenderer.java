@@ -26,7 +26,7 @@ public abstract class AbstractAttributeRenderer implements AttributeRenderer, Gl
 	protected abstract Object evaluateValue( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject );
 
 	@Override
-	public void setGlobalAdministrationConfigurationAware( final GlobalAdministrationConfiguration configuration ) {
+	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
 		this.configuration = configuration;
 	}
 }

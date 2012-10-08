@@ -3,6 +3,7 @@ package org.lightadmin.core.view.renderer;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -15,6 +16,9 @@ public class BasicAttributeRendererFactory implements AttributeRendererFactory, 
 	private static final AttributeRenderer EMPTY_ATTRIBUTE_RENDERER = new EmptyAttributeRenderer();
 
 	private GlobalAdministrationConfiguration globalAdministrationConfiguration;
+
+	@Autowired
+	private DomainTypeEntityMetadataResolver entityMetadataResolver;
 
 	@Override
 	public AttributeRenderer getRenderer( final DomainTypeAttributeMetadata attributeMetadata ) {
@@ -42,14 +46,14 @@ public class BasicAttributeRendererFactory implements AttributeRendererFactory, 
 	}
 
 	private AbstractAttributeRenderer createObjectAttributeRenderer() {
-		final ObjectAttributeRenderer objectAttributeRenderer = new ObjectAttributeRenderer();
-		objectAttributeRenderer.setGlobalAdministrationConfigurationAware( globalAdministrationConfiguration );
+		final ObjectAttributeRenderer objectAttributeRenderer = new ObjectAttributeRenderer( entityMetadataResolver );
+		objectAttributeRenderer.setGlobalAdministrationConfiguration( globalAdministrationConfiguration );
 		return objectAttributeRenderer;
 	}
 
 	@Override
 	@Autowired
-	public void setGlobalAdministrationConfigurationAware( final GlobalAdministrationConfiguration configuration ) {
+	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
 		this.globalAdministrationConfiguration = configuration;
 	}
 

@@ -1,15 +1,15 @@
 package org.lightadmin.core.view.preparer;
 
-import com.google.common.base.Function;
 import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.beans.SimpleMenuItem;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.util.Transformer;
 
-public class DomainConfigToMenuItemTransformation implements Function<DomainTypeAdministrationConfiguration, MenuItem> {
+public class DomainConfigToMenuItemTransformer implements Transformer<DomainTypeAdministrationConfiguration, MenuItem> {
 
-	public static final DomainConfigToMenuItemTransformation INSTANCE = new DomainConfigToMenuItemTransformation();
+	public static final DomainConfigToMenuItemTransformer INSTANCE = new DomainConfigToMenuItemTransformer();
 
-	private DomainConfigToMenuItemTransformation() {
+	private DomainConfigToMenuItemTransformer() {
 	}
 
 	@Override

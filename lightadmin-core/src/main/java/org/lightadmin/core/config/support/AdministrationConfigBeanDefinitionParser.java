@@ -130,7 +130,7 @@ public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionP
 	}
 
 	private BeanReference registerDomainConfigurationBean( final String beanName, final Class<?> configurationClass, final ParserContext parserContext ) {
-		final BeanDefinition domainConfigurationBeanDefinition = new ConfigurationClassToBeanDefinitionTransformation().apply( configurationClass );
+		final BeanDefinition domainConfigurationBeanDefinition = ConfigurationClassToBeanDefinitionTransformer.INSTANCE.apply( configurationClass );
 		parserContext.registerBeanComponent( new BeanComponentDefinition( domainConfigurationBeanDefinition, beanName ) );
 		return new RuntimeBeanReference( beanName );
 	}

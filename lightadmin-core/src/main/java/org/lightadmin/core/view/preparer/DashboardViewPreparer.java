@@ -29,6 +29,6 @@ public class DashboardViewPreparer extends ConfigurationAwareViewPreparer {
 	}
 
 	private MenuItem menuItem( final DomainTypeAdministrationConfiguration configuration ) {
-		return DomainConfigToMenuItemTransformation.INSTANCE.apply( configuration );
+		return DomainConfigToMenuItemTransformer.INSTANCE.apply( configuration );
 	}
 }

@@ -19,6 +19,6 @@ public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
 	}
 
 	private Collection<MenuItem> menuItems( Collection<DomainTypeAdministrationConfiguration> configurations ) {
-		return Collections2.transform( configurations, DomainConfigToMenuItemTransformation.INSTANCE );
+		return Collections2.transform( configurations, DomainConfigToMenuItemTransformer.INSTANCE );
 	}
 }

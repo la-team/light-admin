@@ -1,7 +1,7 @@
 package org.lightadmin.demo.config;
 
-import com.google.common.base.Function;
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.util.Transformer;
 import org.lightadmin.core.view.support.configuration.EntityConfiguration;
 import org.lightadmin.core.view.support.configuration.EntityConfigurationBuilder;
 import org.lightadmin.core.view.support.context.ScreenContext;
@@ -31,8 +31,8 @@ public class AddressAdministration {
 			.field("street").alias("Street").build();
 	}
 
-	private static Function<?, String> addressNameExtractor() {
-		return new Function<Address, String>() {
+	private static Transformer<?, String> addressNameExtractor() {
+		return new Transformer<Address, String>() {
 			@Override
 			public String apply( final Address address ) {
 				return String.format( "%s, %s, %s", address.getCountry(), address.getCity(), address.getStreet() );

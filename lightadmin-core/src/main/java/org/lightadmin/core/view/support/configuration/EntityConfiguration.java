@@ -1,16 +1,16 @@
 package org.lightadmin.core.view.support.configuration;
 
-import com.google.common.base.Function;
+import org.lightadmin.core.util.Transformer;
 
 public class EntityConfiguration {
 
-	private final Function<Object, String> nameExtractor;
+	private final Transformer<Object, String> nameExtractor;
 
-	EntityConfiguration( final Function<Object, String> nameExtractor ) {
+	EntityConfiguration( final Transformer<Object, String> nameExtractor ) {
 		this.nameExtractor = nameExtractor;
 	}
 
-	public Function<Object, String> getNameExtractor() {
+	public Transformer<Object, String> getNameExtractor() {
 		return nameExtractor;
 	}
 }

@@ -1,7 +1,7 @@
 package org.lightadmin.demo.config;
 
-import com.google.common.base.Function;
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.util.Transformer;
 import org.lightadmin.core.view.support.configuration.EntityConfiguration;
 import org.lightadmin.core.view.support.configuration.EntityConfigurationBuilder;
 import org.lightadmin.core.view.support.context.ScreenContext;
@@ -32,8 +32,8 @@ public class OrderAdministration {
 			.field( "lineItems.0" ).alias("Line Items").build();
 	}
 
-	private static Function<?, String> orderNameExtractor() {
-		return new Function<Order, String>() {
+	private static Transformer<?, String> orderNameExtractor() {
+		return new Transformer<Order, String>() {
 			@Override
 			public String apply( final Order order ) {
 				return String.format( "Order %s for $%d", order.getCustomer().getFirstname(), order.getTotal().intValue() );
