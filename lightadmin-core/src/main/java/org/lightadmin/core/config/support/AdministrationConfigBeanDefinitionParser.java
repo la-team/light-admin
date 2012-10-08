@@ -35,7 +35,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
-public class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
+class AdministrationConfigBeanDefinitionParser implements BeanDefinitionParser {
 
 	private static final String SPRING_SECURITY_CONTEXT_RESOURCE = "classpath*:META-INF/spring/spring-security.xml";
 

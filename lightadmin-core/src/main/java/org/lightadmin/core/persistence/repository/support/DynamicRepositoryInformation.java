@@ -144,10 +144,6 @@ public class DynamicRepositoryInformation implements RepositoryInformation {
 		Type boundType = variable.getBounds()[0];
 		String referenceName = boundType instanceof TypeVariable ? boundType.toString() : variable.toString();
 
-		if ( entityType.getSimpleName().equals( referenceName ) && parameterType.isAssignableFrom( entityType ) ) {
-			return true;
-		}
-
-		return false;
+		return entityType.getSimpleName().equals( referenceName ) && parameterType.isAssignableFrom( entityType );
 	}
 }

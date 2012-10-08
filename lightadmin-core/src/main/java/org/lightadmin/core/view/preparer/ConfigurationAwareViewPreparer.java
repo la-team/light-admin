@@ -36,7 +36,7 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, Gl
 		return ( DomainTypeAdministrationConfiguration ) attributeFromRequest( tilesContext, "domainTypeAdministrationConfiguration" );
 	}
 
-	private Object attributeFromRequest( TilesRequestContext tilesContext, String attributeName ) {
+	protected Object attributeFromRequest( TilesRequestContext tilesContext, String attributeName ) {
 		final ServletTilesRequestContext servletTilesRequestContext = ServletUtil.getServletRequest( tilesContext );
 		final HttpServletRequest httpServletRequest = servletTilesRequestContext.getRequest();
 
