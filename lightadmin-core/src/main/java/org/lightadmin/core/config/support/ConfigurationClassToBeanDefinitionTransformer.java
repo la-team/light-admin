@@ -20,6 +20,8 @@ import org.lightadmin.core.view.support.fragment.TableFragmentBuilder;
 import org.lightadmin.core.view.support.scope.DefaultScopeBuilder;
 import org.lightadmin.core.view.support.scope.ScopeBuilder;
 import org.lightadmin.core.view.support.scope.Scopes;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
@@ -34,6 +36,8 @@ import static org.springframework.util.ReflectionUtils.invokeMethod;
 public class ConfigurationClassToBeanDefinitionTransformer implements Transformer<Class<?>, BeanDefinition> {
 
 	public static final ConfigurationClassToBeanDefinitionTransformer INSTANCE = new ConfigurationClassToBeanDefinitionTransformer();
+
+	private static final Logger LOG = LoggerFactory.getLogger( ConfigurationClassToBeanDefinitionTransformer.class );
 
 	private ConfigurationClassToBeanDefinitionTransformer() {
 	}
@@ -94,7 +98,12 @@ public class ConfigurationClassToBeanDefinitionTransformer implements Transforme
 
 		final Builder<T> builder = BeanUtils.instantiateClass( concreteBuilderClass );
 		if ( method != null ) {
-			return ( T ) invokeMethod( method, null, builder );
+			try {
+				return ( T ) invokeMethod( method, null, builder );
+			} catch ( Exception ex ) {
+				LOG.error( String.format( "Something bad happened during %s phase of configuration", methodName ), ex );
+				return BeanUtils.instantiateClass( concreteBuilderClass ).build();
+			}
 		}
 
 		return builder.build();
