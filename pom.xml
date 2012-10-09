@@ -17,7 +17,7 @@
 		<spring.data.jpa.version>1.2.0.BUILD-SNAPSHOT</spring.data.jpa.version>
 		<spring.data.commons.core.version>1.4.0.BUILD-SNAPSHOT</spring.data.commons.core.version>
 		<spring.data.rest.webmvc.version>1.0.0.RC3</spring.data.rest.webmvc.version>
-		<spring.hateoas.version>0.3.0.BUILD-SNAPSHOT</spring.hateoas.version>
+		<spring.hateoas.version>0.3.0.RELEASE</spring.hateoas.version>
 	</properties>
 
 	<modules>
