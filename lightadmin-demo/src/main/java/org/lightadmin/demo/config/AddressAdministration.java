@@ -31,7 +31,7 @@ public class AddressAdministration {
 			.field("street").alias("Street").build();
 	}
 
-	private static Transformer<?, String> addressNameExtractor() {
+	private static Transformer<Address, String> addressNameExtractor() {
 		return new Transformer<Address, String>() {
 			@Override
 			public String apply( final Address address ) {

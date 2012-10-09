@@ -32,7 +32,7 @@ public class OrderAdministration {
 			.field( "lineItems.0" ).alias("Line Items").build();
 	}
 
-	private static Transformer<?, String> orderNameExtractor() {
+	private static Transformer<Order, String> orderNameExtractor() {
 		return new Transformer<Order, String>() {
 			@Override
 			public String apply( final Order order ) {
