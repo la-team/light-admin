@@ -3,15 +3,13 @@ package org.lightadmin.core.rest;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.apache.commons.lang.StringUtils;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.config.domain.scope.Scope;
 import org.lightadmin.core.config.domain.scope.ScopeUtils;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.lightadmin.core.search.SpecificationCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,11 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 
@@ -47,6 +41,14 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 	private GlobalAdministrationConfiguration configuration;
 
 	private RestResponseNegotiator responseNegotiator;
+
+	private SpecificationCreator specificationCreator;
+
+	@PostConstruct
+	public void init() {
+		responseNegotiator = new RestResponseNegotiator( getRepositoryRestConfig(), getHttpMessageConverters(), getMappingHttpMessageConverter() );
+		specificationCreator = new SpecificationCreator();
+	}
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}", method = RequestMethod.GET )
@@ -75,7 +77,9 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 
 		final Map<String, String[]> parameters = request.getServletRequest().getParameterMap();
 
-		Page page = findItemsBySpecification( repository, toSpecification( domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata(), parameters ), pageSort );
+		final Specification specification = specificationCreator.toSpecification( domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata(), parameters );
+
+		Page page = findItemsBySpecification( repository, specification, pageSort );
 
 		return negotiateResponse( request, page, pageMetadata( page ) );
 	}
@@ -83,37 +87,6 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 	@SuppressWarnings( {"unchecked"} )
 	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata ) throws IOException {
 		return responseNegotiator.negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page ), pageMetadata, Lists.<Link>newArrayList() ) );
-	}
-
-	private Specification toSpecification( DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata, final Map<String, String[]> parameters ) {
-		final Collection<? extends DomainTypeAttributeMetadata> attributes = domainTypeEntityMetadata.getAttributes();
-
-		return new Specification<Object>() {
-			@Override
-			public javax.persistence.criteria.Predicate toPredicate( final Root<Object> root, final CriteriaQuery<?> query, final CriteriaBuilder builder ) {
-				final List<javax.persistence.criteria.Predicate> attributesPredicates = newLinkedList();
-				for ( DomainTypeAttributeMetadata attribute : attributes ) {
-					final String attributeName = attribute.getName();
-					if ( parameters.containsKey( attributeName ) ) {
-						final String[] parameterValues = parameters.get( attributeName );
-						final String parameterValue = parameterValues[0];
-						if ( StringUtils.isBlank( parameterValue ) ) {
-							continue;
-						}
-
-						javax.persistence.criteria.Predicate attributePredicate = builder.like( root.<String>get( attributeName ), "%" + parameterValue + "%" );
-
-						attributesPredicates.add( attributePredicate );
-					}
-				}
-
-				final javax.persistence.criteria.Predicate[] predicates = attributesPredicates.toArray( new javax.persistence.criteria.Predicate[attributesPredicates.size()] );
-
-				query.where( builder.and( predicates ) );
-
-				return null;
-			}
-		};
 	}
 
 	@SuppressWarnings( "unchecked" )
@@ -157,11 +130,6 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		final List<Object> filteredItems = newArrayList( Collections2.filter( items, predicate ) );
 
 		return new PageImpl<Object>( filteredItems, pageSort, items.size() );
-	}
-
-	@PostConstruct
-	public void init() {
-		responseNegotiator = new RestResponseNegotiator( getRepositoryRestConfig(), getHttpMessageConverters(), getMappingHttpMessageConverter() );
 	}
 
 	@Override
