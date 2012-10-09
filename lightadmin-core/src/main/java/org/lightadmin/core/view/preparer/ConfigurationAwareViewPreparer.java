@@ -9,11 +9,14 @@ import org.apache.tiles.servlet.context.ServletUtil;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.GlobalAdministrationConfigurationAware;
+import org.lightadmin.core.web.ApplicationController;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
 public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, GlobalAdministrationConfigurationAware {
+
+	private static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = ApplicationController.DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY;
 
 	private GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
@@ -29,11 +32,11 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, Gl
 	}
 
 	protected void execute( TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration ) {
-		addAttribute( attributeContext, "domainTypeAdministrationConfiguration", configuration, true );
+		addAttribute( attributeContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration, true );
 	}
 
 	private DomainTypeAdministrationConfiguration domainTypeConfiguration( final TilesRequestContext tilesContext ) {
-		return ( DomainTypeAdministrationConfiguration ) attributeFromRequest( tilesContext, "domainTypeAdministrationConfiguration" );
+		return ( DomainTypeAdministrationConfiguration ) attributeFromRequest( tilesContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY );
 	}
 
 	protected Object attributeFromRequest( TilesRequestContext tilesContext, String attributeName ) {

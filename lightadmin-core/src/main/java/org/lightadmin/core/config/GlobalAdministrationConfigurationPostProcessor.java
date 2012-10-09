@@ -1,9 +1,9 @@
 package org.lightadmin.core.config;
 
+import org.lightadmin.core.config.domain.filter.Filter;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
-import org.lightadmin.core.view.support.filter.Filter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanCreationException;
 import org.springframework.beans.factory.annotation.Autowired;

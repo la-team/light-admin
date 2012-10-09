@@ -17,10 +17,10 @@
 
 <jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
 
-<spring:url var="domainBaseUrl" value="/domain" scope="page"/>
+<spring:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
 
 <breadcrumb:breadcrumb>
-	<breadcrumb:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}/${domainTypeName}"/>
+	<breadcrumb:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}"/>
 	<breadcrumb:breadcrumb-item name="Show ${domainTypeName}"/>
 </breadcrumb:breadcrumb>
 

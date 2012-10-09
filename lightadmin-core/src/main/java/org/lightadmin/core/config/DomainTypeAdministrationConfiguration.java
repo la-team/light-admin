@@ -1,13 +1,13 @@
 package org.lightadmin.core.config;
 
+import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
+import org.lightadmin.core.config.domain.context.ScreenContext;
+import org.lightadmin.core.config.domain.filter.Filters;
+import org.lightadmin.core.config.domain.fragment.Fragment;
+import org.lightadmin.core.config.domain.scope.Scopes;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
-import org.lightadmin.core.view.support.configuration.EntityConfiguration;
-import org.lightadmin.core.view.support.context.ScreenContext;
-import org.lightadmin.core.view.support.filter.Filters;
-import org.lightadmin.core.view.support.fragment.Fragment;
-import org.lightadmin.core.view.support.scope.Scopes;
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 

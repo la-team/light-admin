@@ -12,7 +12,7 @@
 	<tag>
 		<description>Renders dynamic html element using the bound value.</description>
 		<name>dynamic-element</name>
-		<tag-class>org.lightadmin.core.web.tags.form.DynamicHtmlElementTag</tag-class>
+		<tag-class>org.lightadmin.core.view.tags.form.DynamicHtmlElementTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<description>Entity Attribute Metadata</description>
@@ -32,7 +32,7 @@
 	<tag>
 		<description>Renders dynamic entity attribute</description>
 		<name>attribute</name>
-		<tag-class>org.lightadmin.core.web.tags.AttributeRendererTag</tag-class>
+		<tag-class>org.lightadmin.core.view.tags.AttributeRendererTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
 			<description>Entity Attribute Metadata</description>
@@ -47,6 +47,30 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 	</tag>
+
+	<function>
+		<name>domainBaseUrl</name>
+		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+		<function-signature>java.lang.String domainBaseUrl(java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<name>domainRestBaseUrl</name>
+		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+		<function-signature>java.lang.String domainRestBaseUrl(java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<name>domainRestFilterBaseUrl</name>
+		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+		<function-signature>java.lang.String domainRestFilterBaseUrl(java.lang.String)</function-signature>
+	</function>
+
+	<function>
+		<name>domainRestScopeBaseUrl</name>
+		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+		<function-signature>java.lang.String domainRestScopeBaseUrl(java.lang.String)</function-signature>
+	</function>
 
 	<function>
 		<name>capitalize</name>

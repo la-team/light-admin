@@ -1,12 +1,12 @@
 package org.lightadmin.demo.config;
 
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.view.support.configuration.EntityConfiguration;
-import org.lightadmin.core.view.support.configuration.EntityConfigurationBuilder;
-import org.lightadmin.core.view.support.context.ScreenContext;
-import org.lightadmin.core.view.support.context.ScreenContextBuilder;
-import org.lightadmin.core.view.support.fragment.Fragment;
-import org.lightadmin.core.view.support.fragment.FragmentBuilder;
+import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
+import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
+import org.lightadmin.core.config.domain.context.ScreenContext;
+import org.lightadmin.core.config.domain.context.ScreenContextBuilder;
+import org.lightadmin.core.config.domain.fragment.Fragment;
+import org.lightadmin.core.config.domain.fragment.FragmentBuilder;
 import org.lightadmin.demo.model.Product;
 
 @SuppressWarnings( "unused" )

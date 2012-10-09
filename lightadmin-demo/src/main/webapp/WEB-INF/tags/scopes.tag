@@ -4,16 +4,17 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
-<%@ attribute name="scopes" required="true" rtexprvalue="true" type="org.lightadmin.core.view.support.scope.Scopes"%>
+<%@ attribute name="scopes" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.scope.Scopes"%>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
 
-<c:set var="tag_scopes_scopeList" value="<%= Iterables.toArray( scopes, org.lightadmin.core.view.support.scope.Scope.class ) %>"/>
+<spring:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeName)}" scope="page"/>
 
-<spring:url var="restServiceUrl" value="/rest/${domainTypeName}" scope="page"/>
+<c:set var="tag_scopes_scopeList" value="<%= Iterables.toArray( scopes, org.lightadmin.core.config.domain.scope.Scope.class ) %>"/>
 
 <c:if test="${not empty tag_scopes_scopeList}">
 	<div class="well well-small">
@@ -24,11 +25,15 @@
 </c:if>
 
 <script type="text/javascript">
+	function domainRestScopeBaseUrl( scopeName ) {
+		return '${domainRestScopeBaseUrl}' + '/' + scopeName;
+	}
+
 	$(function() {
 		$("a.scope" ).click(function() {
 			var dataTable = $(document ).data('lightadmin.dataTable');
 			var scopeName = $( this ).attr('scope-name');
-			dataTable.fnReloadAjax( '${restServiceUrl}/scope/' + scopeName );
+			dataTable.fnReloadAjax( domainRestScopeBaseUrl( scopeName ) );
 		});
 	});
 </script>

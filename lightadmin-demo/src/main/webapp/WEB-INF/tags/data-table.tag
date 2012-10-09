@@ -1,12 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <%@ attribute name="domainTypeName" required="true" type="java.lang.String"%>
 <%@ attribute name="columns" required="true" type="java.util.Set"%>
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
-<spring:url value="/rest/${domainTypeName}" var="restServiceUrl" />
+<spring:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl" />
+<spring:url value="${light:domainRestBaseUrl(domainTypeName)}" var="domainRestBaseUrl" />
 
 <table id="${domainTypeName}Table" class="table table-bordered table-hover">
 	<thead>
@@ -22,12 +24,20 @@
 </table>
 
 <script type="text/javascript">
+	function viewEntityUrl( entityId ) {
+		return '${domainBaseUrl}' + '/' + entityId;
+	}
+
+	function editEntityUrl( entityId ) {
+		return '${domainBaseUrl}' + '/' + entityId + '/edit';
+	}
+
 	$(function() {
 		var tableElement = $('#${domainTypeName}Table');
 
-		var oTable = tableElement.dataTable({
+		var dataTable = tableElement.dataTable({
 			"bStateSave": true,
-		   "sAjaxSource" : '${restServiceUrl}',
+		   "sAjaxSource" : '${domainRestBaseUrl}',
 		   "sAjaxDataProp" : 'content',
 		   "aoColumnDefs":[
 			   {
@@ -52,11 +62,9 @@
 				   "mRender":function ( data, type, full ) {
 					   var entityId = full['${domainTypeEntityMetadata.idAttribute.name}'];
 
-					   var viewEntityUrl = "<spring:url value='/domain/${domainTypeName}/'/>" + entityId;
-
-					   var editEntityUrl = "<spring:url value='/domain/${domainTypeName}/'/>" + entityId + "/edit";
-
-					   return '<a href="' + viewEntityUrl + '">View</a>' + '&nbsp;&nbsp;' + '<a href="' + editEntityUrl + '">Edit</a>';
+					   return '<a href="' + viewEntityUrl( entityId ) + '">View</a>'
+									  + '&nbsp;&nbsp;'
+									  + '<a href="' + editEntityUrl( entityId ) + '">Edit</a>';
 				   }
 			   }
 		   ],
@@ -74,8 +82,8 @@
 		   "bInfo": false
 	   });
 
-		$( document ).data('lightadmin.dataTable', oTable );
+		$( document ).data('lightadmin.dataTable', dataTable );
 
-		bindInfoClickHandlers( tableElement, oTable );
+		bindInfoClickHandlers( tableElement, dataTable );
 	});
 </script>

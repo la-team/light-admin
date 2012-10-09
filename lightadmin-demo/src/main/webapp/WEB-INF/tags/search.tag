@@ -6,14 +6,14 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<%@ attribute name="filters" required="true" rtexprvalue="true" type="org.lightadmin.core.view.support.filter.Filters"%>
+<%@ attribute name="filters" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.filter.Filters"%>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
-<c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.view.support.filter.Filter.class ) %>"/>
+<spring:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration.domainTypeName)}" scope="page"/>
+<spring:url var="domainRestFilterBaseUrl" value="${light:domainRestFilterBaseUrl(domainTypeAdministrationConfiguration.domainTypeName)}" scope="page"/>
 
-<spring:url var="restServiceUrl" value="/rest/${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
-<spring:url var="restFilterServiceUrl" value="/rest/${domainTypeAdministrationConfiguration.domainTypeName}/filter" scope="page"/>
+<c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.config.domain.filter.Filter.class ) %>"/>
 
 <c:if test="${not empty tag_search_filterList}">
 	<div class="well well-small">
@@ -39,21 +39,16 @@
 </c:if>
 
 <script type="text/javascript">
-
 	$(function() {
 		$("#reset-filter" ).click(function() {
 			$("input", $("form[name='filter-form']") ).val('');
-			$(document ).data('lightadmin.dataTable').fnReloadAjax( '${restServiceUrl}' );
+			$(document ).data('lightadmin.dataTable').fnReloadAjax( '${domainRestBaseUrl}' );
 		});
 
 		$("form[name='filter-form']").submit(function(event) {
 			event.preventDefault();
 			var filter_criteria = $("form[name='filter-form']" ).serialize();
-
-			<%--// $.get('${restFilterServiceUrl}', filter_criteria);--%>
-
-			$(document ).data('lightadmin.dataTable').fnReloadAjax( '${restFilterServiceUrl}' + '?' + filter_criteria );
+			$(document ).data('lightadmin.dataTable').fnReloadAjax( '${domainRestFilterBaseUrl}' + '?' + filter_criteria );
 		});
 	});
-
 </script>
