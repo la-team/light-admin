@@ -23,6 +23,7 @@
 	<modules>
 		<module>lightadmin-core</module>
 		<module>lightadmin-demo</module>
+		<module>lightadmin-tests</module>
 	</modules>
 
 	<dependencyManagement>
