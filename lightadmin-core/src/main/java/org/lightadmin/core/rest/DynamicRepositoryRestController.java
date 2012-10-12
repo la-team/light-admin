@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -52,9 +51,7 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}", method = RequestMethod.GET )
-	public ResponseEntity<?> scopeEntities( ServletServerHttpRequest request, UriComponentsBuilder uriBuilder, PagingAndSorting pageSort, @PathVariable String repositoryName, @PathVariable String scopeName ) throws IOException {
-		BASE_URI.set( uriBuilder.build().toUri() );
-
+	public ResponseEntity<?> scopeEntities( ServletServerHttpRequest request, PagingAndSorting pageSort, @PathVariable String repositoryName, @PathVariable String scopeName ) throws IOException {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
 
 		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
@@ -68,9 +65,7 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/filter", method = RequestMethod.GET )
-	public ResponseEntity<?> filterEntities( ServletServerHttpRequest request, UriComponentsBuilder uriBuilder, PagingAndSorting pageSort, @PathVariable String repositoryName ) throws IOException {
-		BASE_URI.set( uriBuilder.build().toUri() );
-
+	public ResponseEntity<?> filterEntities( ServletServerHttpRequest request, PagingAndSorting pageSort, @PathVariable String repositoryName ) throws IOException {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
 
 		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
