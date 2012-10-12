@@ -50,7 +50,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
 		final JpaRepositoryMetadata repositoryMetadata = jpaRepositoryExporter.repositoryMetadataFor( domainType );
 
-		final URI selfUri = selfURI( domainType, entityMetadata, source );
+//		final URI selfUri = selfURI( domainType, entityMetadata, source );
 
 		final Set<Link> links = newLinkedHashSet();
 
@@ -59,12 +59,12 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 			final String attributeName = attribute.getName();
 			DomainTypeAdministrationConfiguration domainConfiguration;
 			if ( null != ( domainConfiguration = configuration.forDomainType( attributeType( attribute.getAttribute() ) ) ) ) {
-				URI uri = buildUri( selfUri, attributeName );
-				String rel = repositoryMetadata.rel() + "." + domainConfiguration.getDomainTypeName() + "." + attributeName;
-				links.add( new Link( uri.toString(), rel ) );
+//				URI uri = buildUri( selfUri, attributeName );
+//				String rel = repositoryMetadata.rel() + "." + domainConfiguration.getDomainTypeName() + "." + attributeName;
+//				links.add( new Link( uri.toString(), rel ) );
 			}
 		}
-		links.add( new Link( selfUri.toString(), "self" ) );
+//		links.add( new Link( selfUri.toString(), "self" ) );
 
 		Map<String, Object> entityDto = newLinkedHashMap();
 
@@ -82,11 +82,10 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		return new EntityResource( entityDto, links );
 	}
 
-	private URI selfURI( Class<?> domainType, DomainTypeEntityMetadata entityMetadata, Object source ) {
-		URI baseUri = RepositoryRestController.BASE_URI.get();
-		Serializable id = ( Serializable ) entityMetadata.getIdAttribute().getValue( source );
-		return buildUri( baseUri, BeanNameGenerator.INSTANCE.repositoryServiceExporterName( domainType ), id.toString() );
-	}
+//	private URI selfURI( Class<?> domainType, DomainTypeEntityMetadata entityMetadata, Object source ) {
+//		Serializable id = ( Serializable ) entityMetadata.getIdAttribute().getValue( source );
+//		return buildUri( baseUri, BeanNameGenerator.INSTANCE.repositoryServiceExporterName( domainType ), id.toString() );
+//	}
 
 	private Class attributeType( final Attribute attribute ) {
 		return ( attribute instanceof PluralAttribute ? ( ( PluralAttribute ) attribute ).getElementType().getJavaType() : attribute.getJavaType() );
