@@ -141,6 +141,9 @@
                                 </deployable>
                             </deployables>
                             <configuration>
+                                <properties>
+                                    <cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+                                </properties>
                                 <configfiles>
                                     <configfile>
                                         <file>${basedir}/src/test/jetty8x/jetty-logging.xml</file>
