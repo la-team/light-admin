@@ -127,9 +127,61 @@
 			<groupId>org.easymock</groupId>
 			<artifactId>easymock</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>org.dbunit</groupId>
-			<artifactId>dbunit</artifactId>
-		</dependency>
 	</dependencies>
+
+	<build>
+		<finalName>${project.artifactId}</finalName>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.12</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.12</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<includes>
+						<include>**/*.class</include>
+					</includes>
+					<excludedGroups>org.lightadmin.core.IntegrationTest</excludedGroups>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.12</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.apache.maven.surefire</groupId>
+						<artifactId>surefire-junit47</artifactId>
+						<version>2.12</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<groups>org.lightadmin.core.IntegrationTest</groups>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+						<configuration>
+							<includes>
+								<include>**/*.class</include>
+							</includes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>2.3.2</version>
+			</plugin>
+		</plugins>
+	</build>
+
 </project>
