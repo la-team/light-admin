@@ -8,6 +8,16 @@
 	<description>LightAdmin - Administration framework for Java web applications. [DEMO]</description>
 
 	<context-param>
+		<param-name>light:administration:base-url</param-name>
+		<param-value>/</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>light:administration:base-package</param-name>
+		<param-value>org.lightadmin.demo.config</param-value>
+	</context-param>
+
+	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/spring-context.xml</param-value>
 	</context-param>

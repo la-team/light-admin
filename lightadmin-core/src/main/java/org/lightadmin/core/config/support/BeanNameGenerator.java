@@ -1,4 +1,4 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.config.support;
 
 import org.springframework.util.StringUtils;
 

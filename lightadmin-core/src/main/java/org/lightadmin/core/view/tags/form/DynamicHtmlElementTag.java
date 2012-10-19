@@ -1,10 +1,10 @@
 package org.lightadmin.core.view.tags.form;
 
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.web.util.WebContextUtils;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.tags.form.AbstractHtmlInputElementTag;
 import org.springframework.web.servlet.tags.form.InputTag;
 import org.springframework.web.servlet.tags.form.SelectTag;
@@ -84,7 +84,7 @@ public class DynamicHtmlElementTag extends AbstractHtmlInputElementTag {
 	}
 
 	private WebApplicationContext webApplicationContext() {
-		return WebApplicationContextUtils.getWebApplicationContext( pageContext.getServletContext() );
+		return WebContextUtils.getWebApplicationContext( pageContext.getServletContext() );
 	}
 
 	private EntityManager entityManager() {

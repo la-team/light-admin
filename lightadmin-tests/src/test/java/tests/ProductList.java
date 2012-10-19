@@ -1,10 +1,10 @@
 package tests;
 
+import data.Domain;
 import data.User;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import data.Domain;
 import pages.ProductPage;
 
 public class ProductList extends BaseTest {

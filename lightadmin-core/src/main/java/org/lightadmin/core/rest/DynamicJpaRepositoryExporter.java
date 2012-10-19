@@ -1,6 +1,6 @@
 package org.lightadmin.core.rest;
 
-import org.lightadmin.core.config.BeanNameGenerator;
+import org.lightadmin.core.config.support.BeanNameGenerator;
 import org.lightadmin.core.persistence.repository.support.DynamicRepositoriesDecorator;
 import org.springframework.data.rest.repository.jpa.JpaRepositoryExporter;
 

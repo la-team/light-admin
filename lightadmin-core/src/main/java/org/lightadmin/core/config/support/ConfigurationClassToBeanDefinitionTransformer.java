@@ -1,7 +1,6 @@
 package org.lightadmin.core.config.support;
 
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.BeanNameGenerator;
 import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.Builder;
 import org.lightadmin.core.config.domain.configuration.DefaultEntityConfigurationBuilder;

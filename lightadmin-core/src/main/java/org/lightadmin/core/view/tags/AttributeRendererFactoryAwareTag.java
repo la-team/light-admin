@@ -3,8 +3,8 @@ package org.lightadmin.core.view.tags;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.view.renderer.AttributeRenderer;
 import org.lightadmin.core.view.renderer.AttributeRendererFactory;
+import org.lightadmin.core.web.util.WebContextUtils;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
@@ -51,6 +51,6 @@ public abstract class AttributeRendererFactoryAwareTag extends TagSupport implem
 	}
 
 	private WebApplicationContext applicationContext() {
-		return WebApplicationContextUtils.getWebApplicationContext( pageContext.getServletContext() );
+		return WebContextUtils.getWebApplicationContext(pageContext.getServletContext());
 	}
 }
