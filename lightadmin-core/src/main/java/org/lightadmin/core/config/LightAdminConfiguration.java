@@ -5,7 +5,6 @@ import org.lightadmin.core.web.ApplicationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
@@ -22,12 +21,12 @@ import org.springframework.web.servlet.view.tiles2.TilesView;
 import javax.persistence.EntityManagerFactory;
 
 @Configuration
-@ComponentScan( basePackageClasses = {LightAdminConfiguration.class} )
 @Import( {
 			 LightAdminDataConfiguration.class, LightAdminRepositoryRestConfiguration.class,
 			 LightAdminSecurityConfiguration.class, LightAdminViewConfiguration.class
 		 } )
-public class LightAdminConfiguration extends WebMvcConfigurationSupport {
+@EnableWebMvc
+public class LightAdminConfiguration extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
