@@ -1,4 +1,4 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.config.domain;
 
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
 import org.lightadmin.core.config.domain.context.ScreenContext;

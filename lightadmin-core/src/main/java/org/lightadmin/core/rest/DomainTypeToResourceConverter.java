@@ -1,7 +1,7 @@
 package org.lightadmin.core.rest;
 
-import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.config.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.beans.factory.annotation.Autowired;

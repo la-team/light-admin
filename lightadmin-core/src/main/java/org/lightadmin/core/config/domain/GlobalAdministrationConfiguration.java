@@ -1,4 +1,4 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.config.domain;
 
 import org.apache.commons.lang.StringUtils;
 

@@ -1,6 +1,6 @@
 package org.lightadmin.core.persistence.repository.support;
 
-import org.lightadmin.core.config.support.BeanNameGenerator;
+import org.lightadmin.core.config.beans.support.BeanNameGenerator;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;

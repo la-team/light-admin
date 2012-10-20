@@ -2,7 +2,7 @@ package org.lightadmin.core.view.preparer;
 
 import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.beans.SimpleMenuItem;
-import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.util.Transformer;
 
 import static org.lightadmin.core.web.util.ApplicationUrlResolver.domainBaseUrl;

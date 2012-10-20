@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.support;
+package org.lightadmin.core.config.beans.support;
 
 import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;

@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.domain.scope;
 
-import org.lightadmin.core.config.domain.Builder;
+import org.lightadmin.core.config.domain.support.Builder;
 public interface ScopeBuilder extends Builder<Scopes> {
 
 	ScopeBuilder scope( final Scope scope );

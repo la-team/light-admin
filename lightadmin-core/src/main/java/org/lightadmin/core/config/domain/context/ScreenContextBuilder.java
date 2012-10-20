@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.domain.context;
 
-import org.lightadmin.core.config.domain.Builder;
+import org.lightadmin.core.config.domain.support.Builder;
 
 public interface ScreenContextBuilder extends Builder<ScreenContext> {
 

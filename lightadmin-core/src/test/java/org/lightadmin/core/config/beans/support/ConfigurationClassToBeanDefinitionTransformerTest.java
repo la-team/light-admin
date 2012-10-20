@@ -1,8 +1,8 @@
-package org.lightadmin.core.config.support;
+package org.lightadmin.core.config.beans.support;
 
 import org.junit.Test;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContext;
@@ -14,6 +14,8 @@ import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.util.ClassUtils;
 
 import static org.junit.Assert.*;
+import static org.lightadmin.core.test.util.BeanDefinitionUtils.constructorArgValue;
+import static org.lightadmin.core.test.util.BeanDefinitionUtils.propertyValue;
 
 public class ConfigurationClassToBeanDefinitionTransformerTest {
 
@@ -122,13 +124,5 @@ public class ConfigurationClassToBeanDefinitionTransformerTest {
 
 		assertNotNull( configurationUnit );
 		assertTrue ( ClassUtils.isAssignableValue(configurationUnitClass, configurationUnit) );
-	}
-
-	private static Object propertyValue( BeanDefinition beanDefinition, final String propertyName ) {
-		return beanDefinition.getPropertyValues().getPropertyValue( propertyName ).getValue();
-	}
-
-	private static Object constructorArgValue( BeanDefinition beanDefinition, int index ) {
-		return beanDefinition.getConstructorArgumentValues().getIndexedArgumentValue( index, Object.class ).getValue();
 	}
 }

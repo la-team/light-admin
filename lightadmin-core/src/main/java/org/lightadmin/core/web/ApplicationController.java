@@ -1,6 +1,6 @@
 package org.lightadmin.core.web;
 
-import org.lightadmin.core.config.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

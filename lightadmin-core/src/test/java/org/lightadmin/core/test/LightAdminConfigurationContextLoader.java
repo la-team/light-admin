@@ -1,6 +1,6 @@
 package org.lightadmin.core.test;
 
-import org.lightadmin.core.config.support.AdministrationConfigBeanRegistryPostProcessor;
+import org.lightadmin.core.config.beans.AdministrationConfigBeanRegistryPostProcessor;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 

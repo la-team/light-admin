@@ -3,7 +3,7 @@ package org.lightadmin.core;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.lightadmin.core.config.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.test.IntegrationTest;
 import org.lightadmin.core.test.LightAdminConfigurationContextLoader;
 import org.lightadmin.core.test.LightAdminTestConfiguration;

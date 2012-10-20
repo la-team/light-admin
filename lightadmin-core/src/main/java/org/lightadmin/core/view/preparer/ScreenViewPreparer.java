@@ -2,7 +2,7 @@ package org.lightadmin.core.view.preparer;
 
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.context.TilesRequestContext;
-import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 
 public class ScreenViewPreparer extends ConfigurationAwareViewPreparer {
 

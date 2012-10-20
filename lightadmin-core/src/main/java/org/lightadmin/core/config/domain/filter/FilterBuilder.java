@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.domain.filter;
 
-import org.lightadmin.core.config.domain.Builder;
+import org.lightadmin.core.config.domain.support.Builder;
 import org.lightadmin.core.config.domain.renderer.Renderer;
 public interface FilterBuilder extends Builder<Filters> {
 

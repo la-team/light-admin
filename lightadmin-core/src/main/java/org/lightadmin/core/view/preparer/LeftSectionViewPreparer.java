@@ -4,8 +4,8 @@ import com.google.common.collect.Collections2;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.context.TilesRequestContext;
-import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.config.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 
 import java.util.Collection;
 

@@ -1,7 +1,7 @@
 package org.lightadmin.core.config;
 
 import org.apache.commons.lang.StringUtils;
-import org.lightadmin.core.config.support.AdministrationConfigBeanRegistryPostProcessor;
+import org.lightadmin.core.config.beans.AdministrationConfigBeanRegistryPostProcessor;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;

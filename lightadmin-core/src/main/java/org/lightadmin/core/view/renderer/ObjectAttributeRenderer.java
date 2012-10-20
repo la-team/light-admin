@@ -1,6 +1,6 @@
 package org.lightadmin.core.view.renderer;
 
-import org.lightadmin.core.config.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.PropertyAccessorFactory;
