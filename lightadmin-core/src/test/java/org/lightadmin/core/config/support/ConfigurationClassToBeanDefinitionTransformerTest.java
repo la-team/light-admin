@@ -106,10 +106,9 @@ public class ConfigurationClassToBeanDefinitionTransformerTest {
 	private static class EmptyConfiguration {
 	}
 
-	@Administration( DomainEntity.class )
 	@SuppressWarnings( "unused" )
+	@Administration( DomainEntity.class )
 	private static class ConfigurationWithException {
-
 		public static EntityConfiguration configuration( EntityConfigurationBuilder configurationBuilder ) {
 			throw new RuntimeException(  );
 		}

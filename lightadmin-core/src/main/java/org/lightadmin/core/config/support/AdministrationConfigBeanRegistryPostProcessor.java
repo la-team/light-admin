@@ -123,7 +123,7 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 		builder.addPropertyValue( "domainTypeConfigurations", domainTypeConfigurations );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
 
-		beanDefinitionRegistry.registerBeanDefinition( BeanNameGenerator.INSTANCE.globalAdministrationConfiguration(), beanDefinition );
+		beanDefinitionRegistry.registerBeanDefinition( BeanNameGenerator.INSTANCE.globalAdministrationConfigurationBeanName(), beanDefinition );
 	}
 
 	private Map<Class<?>, BeanReference> registerDomainConfigurations( final Set<Pair<Class, Class>> dslConfigurations, final BeanDefinitionRegistry beanDefinitionRegistry ) {

@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.support;
 
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import static org.springframework.util.StringUtils.uncapitalize;
@@ -18,18 +19,24 @@ public final class BeanNameGenerator {
 	}
 
 	public String repositoryBeanName( final Class<?> domainType ) {
+		Assert.notNull( domainType );
+
 		return String.format( REPOSITORY_BEAN_NAME_FORMAT, uncapitalize( domainType.getSimpleName() ) );
 	}
 
-	public String globalAdministrationConfiguration() {
+	public String globalAdministrationConfigurationBeanName() {
 		return GLOBAL_ADMINISTRATION_CONFIGURATION_BEAN_NAME;
 	}
 
 	public String domainTypeConfigurationBeanName( final Class<?> domainType ) {
+		Assert.notNull( domainType );
+
 		return String.format( DOMAIN_CONFIGURATION_BEAN_NAME_FORMAT, uncapitalize( domainType.getSimpleName() ) );
 	}
 
 	public String repositoryServiceExporterName( final Class<?> domainType ) {
+		Assert.notNull( domainType );
+
 		return StringUtils.uncapitalize( domainType.getSimpleName() );
 	}
 }
