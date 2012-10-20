@@ -1,4 +1,4 @@
-package org.lightadmin.core.model;
+package org.lightadmin.core.test.model;
 
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.ser.std.ToStringSerializer;

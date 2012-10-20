@@ -24,14 +24,21 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
+@SuppressWarnings( "unused" )
 public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
 	private org.springframework.beans.factory.support.BeanNameGenerator beanNameGenerator = new DefaultBeanNameGenerator();
 
-	private String configurationsBasePackage;
+	private final Set<Pair<Class, Class>> dslConfigurations = newLinkedHashSet();
 
 	public AdministrationConfigBeanRegistryPostProcessor( final String configurationsBasePackage ) {
-		this.configurationsBasePackage = configurationsBasePackage;
+		dslConfigurations.addAll( transformToDslConfigurations( findAdministrationConfigurations( configurationsBasePackage ) ) );
+	}
+
+	public AdministrationConfigBeanRegistryPostProcessor( final Class... configurationClasses ) {
+		for ( Class configurationClass : configurationClasses ) {
+			dslConfigurations.add( Pair.create( configurationDomainType( configurationClass ), configurationClass ) );
+		}
 	}
 
 	@Override
@@ -40,15 +47,15 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 
 	@Override
 	public void postProcessBeanDefinitionRegistry( final BeanDefinitionRegistry registry ) throws BeansException {
-		final Set<BeanDefinition> administrationConfigurationsDefinitions = findAdministrationConfigurations( configurationsBasePackage );
-
-		final Set<Pair<Class, Class>> dslConfigurations = transformToDslConfigurations( administrationConfigurationsDefinitions );
-
 		registerDomainTypeRepositories( domainTypes( dslConfigurations ), registry );
 
 		registerConfigurationBeans( dslConfigurations, registry );
 
 		registerBeanPostProcessors( registry );
+	}
+
+	public Set<Pair<Class, Class>> getDslConfigurations() {
+		return newLinkedHashSet( dslConfigurations );
 	}
 
 	private Set<BeanDefinition> findAdministrationConfigurations( final String basePackage ) {
@@ -83,12 +90,12 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 		return Collections2.transform( dynamicConfigurations, Pair.<Class>extractFirstTransformer() );
 	}
 
-	private Class<?> configurationClass( final AnnotatedBeanDefinition definition ) {
+	private Class configurationClass( final AnnotatedBeanDefinition definition ) {
 		final String configurationClassName = definition.getMetadata().getClassName();
 		return ClassUtils.resolveClassName( configurationClassName, ClassUtils.getDefaultClassLoader() );
 	}
 
-	private Class<?> configurationDomainType( final Class<?> configurationClass ) {
+	private Class configurationDomainType( final Class<?> configurationClass ) {
 		return configurationClass.getAnnotation( Administration.class ).value();
 	}
 
@@ -101,7 +108,7 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 	private String registerDomainRepository( final Class<?> domainType, final BeanDefinitionRegistry beanDefinitionRegistry ) {
 		final String repositoryBeanName = BeanNameGenerator.INSTANCE.repositoryBeanName( domainType );
 
-		final BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DynamicJpaRepositoryFactoryBean.class );
+		final BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition( DynamicJpaRepositoryFactoryBean.class );
 		builder.addConstructorArgValue( domainType );
 		builder.addPropertyValue( "repositoryInterface", DynamicJpaRepository.class );
 
@@ -112,7 +119,7 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 	}
 
 	private void registerGlobalAdministrationConfiguration( final BeanDefinitionRegistry beanDefinitionRegistry, final Map<Class<?>, BeanReference> domainTypeConfigurations ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( GlobalAdministrationConfiguration.class );
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition( GlobalAdministrationConfiguration.class );
 		builder.addPropertyValue( "domainTypeConfigurations", domainTypeConfigurations );
 		AbstractBeanDefinition beanDefinition = builder.getBeanDefinition();
 
@@ -141,7 +148,7 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 	}
 
 	private void registerSimpleBean( final Class<?> beanClass, final BeanDefinitionRegistry beanDefinitionRegistry ) {
-		final AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.rootBeanDefinition( beanClass ).getBeanDefinition();
+		final AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition( beanClass ).getBeanDefinition();
 		final String beanName = generateBeanName( beanDefinition, beanDefinitionRegistry );
 
 		beanDefinitionRegistry.registerBeanDefinition( beanName, beanDefinition );

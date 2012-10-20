@@ -1,4 +1,4 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.test.config;
 
 import com.google.common.base.Predicates;
 import org.lightadmin.core.annotation.Administration;
@@ -12,7 +12,7 @@ import org.lightadmin.core.config.domain.fragment.Fragment;
 import org.lightadmin.core.config.domain.fragment.FragmentBuilder;
 import org.lightadmin.core.config.domain.scope.ScopeBuilder;
 import org.lightadmin.core.config.domain.scope.Scopes;
-import org.lightadmin.core.model.Customer;
+import org.lightadmin.core.test.model.Customer;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;

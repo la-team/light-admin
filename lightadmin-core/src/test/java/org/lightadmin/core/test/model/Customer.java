@@ -1,4 +1,4 @@
-package org.lightadmin.core.model;
+package org.lightadmin.core.test.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;

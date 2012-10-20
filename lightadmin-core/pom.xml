@@ -147,7 +147,7 @@
 					<includes>
 						<include>**/*.class</include>
 					</includes>
-					<excludedGroups>org.lightadmin.core.IntegrationTest</excludedGroups>
+					<excludedGroups>org.lightadmin.core.test.IntegrationTest</excludedGroups>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -161,7 +161,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
-					<groups>org.lightadmin.core.IntegrationTest</groups>
+					<groups>org.lightadmin.core.test.IntegrationTest</groups>
 				</configuration>
 				<executions>
 					<execution>

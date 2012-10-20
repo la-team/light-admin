@@ -53,7 +53,7 @@ public class ConfigurationClassToBeanDefinitionTransformer implements Transforme
 	}
 
 	private BeanDefinition domainTypeAdministrationConfigBeanDefinition( final Class<?> domainType, final Class<?> configurationClass ) {
-		BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition( DomainTypeAdministrationConfiguration.class );
+		BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition( DomainTypeAdministrationConfiguration.class );
 
 		builder.addConstructorArgValue( domainType );
 		builder.addConstructorArgReference( BeanNameGenerator.INSTANCE.repositoryBeanName( domainType ) );

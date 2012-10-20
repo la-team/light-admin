@@ -1,4 +1,4 @@
-package org.lightadmin.core;
+package org.lightadmin.core.test;
 
 public interface IntegrationTest {
 

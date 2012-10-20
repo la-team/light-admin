@@ -1,4 +1,4 @@
-package org.lightadmin.core.model;
+package org.lightadmin.core.test.model;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
