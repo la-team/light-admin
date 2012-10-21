@@ -1,5 +1,6 @@
 package org.lightadmin.core.reporting;
 
+import org.apache.commons.lang.builder.ToStringBuilder;
 public class Problem {
 
 	private final String message;
@@ -21,5 +22,12 @@ public class Problem {
 
 	public Throwable getRootCause() {
 		return rootCause;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder( this )
+			.append( "message", message )
+			.append( "rootCause", rootCause ).toString();
 	}
 }

@@ -81,7 +81,9 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 		BeanDefinitionRegistrar configurationBeanDefinitionRegistrar = new ConfigurationBeanDefinitionRegistrar( dslConfigurations );
 		BeanDefinitionRegistrar configurationBeanPostProcessorRegistrar = new ConfigurationBeanPostProcessorRegistrar();
 
-		return new CompositeBeanDefinitionRegistrar( domainTypeRepositoryBeanDefinitionsRegistrar, configurationBeanDefinitionRegistrar, configurationBeanPostProcessorRegistrar );
+		return new CompositeBeanDefinitionRegistrar( domainTypeRepositoryBeanDefinitionsRegistrar,
+													 configurationBeanDefinitionRegistrar,
+													 configurationBeanPostProcessorRegistrar );
 	}
 
 	public BeanDefinitionRegistrar getBeanDefinitionRegistrar() {
