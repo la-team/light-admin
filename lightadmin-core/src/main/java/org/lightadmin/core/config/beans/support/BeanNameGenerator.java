@@ -15,7 +15,7 @@ public final class BeanNameGenerator {
 
 	public static final BeanNameGenerator INSTANCE = new BeanNameGenerator();
 
-	private BeanNameGenerator() {
+	public BeanNameGenerator() {
 	}
 
 	public String repositoryBeanName( final Class<?> domainType ) {

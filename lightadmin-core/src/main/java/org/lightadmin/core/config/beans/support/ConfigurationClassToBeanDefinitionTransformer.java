@@ -13,7 +13,7 @@ public class ConfigurationClassToBeanDefinitionTransformer implements Transforme
 
 	private final BeanNameGenerator beanNameGenerator = BeanNameGenerator.INSTANCE;
 
-	private ConfigurationClassToBeanDefinitionTransformer() {
+	public ConfigurationClassToBeanDefinitionTransformer() {
 	}
 
 	@Override

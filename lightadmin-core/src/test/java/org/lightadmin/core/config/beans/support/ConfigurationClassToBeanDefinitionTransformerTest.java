@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.beans.support;
 
+import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
@@ -18,7 +19,12 @@ import static org.lightadmin.core.test.util.DummyConfigurationsHelper.*;
 
 public class ConfigurationClassToBeanDefinitionTransformerTest {
 
-	private ConfigurationClassToBeanDefinitionTransformer subject = ConfigurationClassToBeanDefinitionTransformer.INSTANCE;
+	private ConfigurationClassToBeanDefinitionTransformer subject;
+
+	@Before
+	public void setup() {
+		subject = new ConfigurationClassToBeanDefinitionTransformer();
+	}
 
 	@Test( expected = IllegalArgumentException.class )
 	public void nullConfigurationNotAllowed() {

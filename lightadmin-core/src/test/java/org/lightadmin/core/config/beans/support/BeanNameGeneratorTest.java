@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.beans.support;
 
+import org.junit.Before;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
@@ -7,7 +8,12 @@ import static org.lightadmin.core.test.util.DummyConfigurationsHelper.DomainEnti
 
 public class BeanNameGeneratorTest {
 
-	private BeanNameGenerator subject = BeanNameGenerator.INSTANCE;
+	private BeanNameGenerator subject;
+
+	@Before
+	public void setup() {
+		subject = new BeanNameGenerator();
+	}
 
 	@Test( expected = IllegalArgumentException.class )
 	public void nullDomainTypeNotAllowed() {
