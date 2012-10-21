@@ -2,7 +2,6 @@ package org.lightadmin.core.config.beans.support;
 
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.config.domain.support.Builder;
 import org.lightadmin.core.config.domain.configuration.DefaultEntityConfigurationBuilder;
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
@@ -18,6 +17,7 @@ import org.lightadmin.core.config.domain.fragment.TableFragmentBuilder;
 import org.lightadmin.core.config.domain.scope.DefaultScopeBuilder;
 import org.lightadmin.core.config.domain.scope.ScopeBuilder;
 import org.lightadmin.core.config.domain.scope.Scopes;
+import org.lightadmin.core.config.domain.support.Builder;
 import org.lightadmin.core.util.Transformer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

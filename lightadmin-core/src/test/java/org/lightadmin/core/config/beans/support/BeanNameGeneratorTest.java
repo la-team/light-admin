@@ -3,6 +3,7 @@ package org.lightadmin.core.config.beans.support;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.lightadmin.core.test.util.DummyConfigurationsHelper.DomainEntity;
 
 public class BeanNameGeneratorTest {
 
@@ -31,8 +32,5 @@ public class BeanNameGeneratorTest {
 	@Test
 	public void testName() throws Exception {
 		assertEquals( "org.lightadmin.core.persistence.repository.domainEntityRepository", subject.repositoryBeanName( DomainEntity.class ) );
-	}
-
-	private static class DomainEntity {
 	}
 }

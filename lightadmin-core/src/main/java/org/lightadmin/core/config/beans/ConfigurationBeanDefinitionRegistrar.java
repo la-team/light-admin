@@ -1,9 +1,9 @@
 package org.lightadmin.core.config.beans;
 
 import com.google.common.collect.Sets;
-import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.beans.support.BeanNameGenerator;
 import org.lightadmin.core.config.beans.support.ConfigurationClassToBeanDefinitionTransformer;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanReference;
 import org.springframework.beans.factory.config.RuntimeBeanReference;

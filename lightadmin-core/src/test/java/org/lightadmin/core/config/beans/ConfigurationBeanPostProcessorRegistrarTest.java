@@ -29,7 +29,7 @@ public class ConfigurationBeanPostProcessorRegistrarTest {
 		final BeanDefinitionRegistry beanDefinitionRegistry = EasyMock.createMock( BeanDefinitionRegistry.class );
 
 		beanDefinitionRegistry.registerBeanDefinition( EasyMock.eq( GLOBAL_ADMINISTRATION_CONFIGURATION_POST_PROCESSOR_BEAN_NAME ), EasyMock.<BeanDefinition>capture( beanDefinitionCapture ) );
-		EasyMock.expectLastCall();
+		EasyMock.expectLastCall().once();
 
 		EasyMock.replay( beanDefinitionRegistry );
 
