@@ -23,7 +23,7 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 	@Override
 	public void onStartup( final ServletContext servletContext ) throws ServletException {
 		if ( lightAdminConfigurationNotEnabled( servletContext ) ) {
-			servletContext.log( "No LightAdmin required configuration found." );
+			servletContext.log( "LightAdmin Web Administration Module is disabled by default. Skipping." );
 			return;
 		}
 
