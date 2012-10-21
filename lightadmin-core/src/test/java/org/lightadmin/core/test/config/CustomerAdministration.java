@@ -32,29 +32,21 @@ public class CustomerAdministration {
 	}
 
 	public static ScreenContext screenContext( ScreenContextBuilder screenContextBuilder ) {
-		return screenContextBuilder
-			.screenName( "Customers Administration" )
-			.menuName( "Customers" ).build();
+		return screenContextBuilder.screenName( "Customers Administration" ).menuName( "Customers" ).build();
 	}
 
 	public static Fragment listView( final FragmentBuilder fragmentBuilder ) {
-		return fragmentBuilder
-			.field( "firstname" ).alias( "First Name" )
-			.field( "lastname" ).alias( "Last Name" )
-			.field( "emailAddress" ).alias( "Email Address" ).build();
+		return fragmentBuilder.field( "firstname" ).alias( "First Name" ).field( "lastname" ).alias( "Last Name" ).field( "emailAddress" ).alias( "Email Address" ).build();
 	}
 
 	public static Scopes scopes( final ScopeBuilder scopeBuilder ) {
-		return scopeBuilder
-			.scope( "All", all() ).defaultScope()
-			.scope( "Buyers", filter( Predicates.alwaysTrue() ) )
-			.scope( "Sellers", specification( customerNameEqDave() ) ).build();
+		return scopeBuilder.scope( "All", all() ).defaultScope().scope( "Buyers", filter( Predicates.alwaysTrue() ) ).scope( "Sellers", specification( customerNameEqDave() ) ).build();
 	}
 
 	public static Filters filters( final FilterBuilder filterBuilder ) {
-		return filterBuilder
-			.field( "firstname" ).renderer( select( new String[] { "Yes", "No" } ))
-			.field( "lastname" ).build();
+		return filterBuilder.field( "firstname" ).renderer( select( new String[] {
+			"Yes", "No"
+		} ) ).field( "lastname" ).build();
 	}
 
 	public static Specification<Customer> customerNameEqDave() {

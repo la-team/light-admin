@@ -15,7 +15,7 @@ public class LineItem extends AbstractEntity {
 	private Product product;
 
 	@NotNull
-	@NumberFormat(style = NumberFormat.Style.CURRENCY)
+	@NumberFormat( style = NumberFormat.Style.CURRENCY )
 	private BigDecimal price;
 
 	private int amount;

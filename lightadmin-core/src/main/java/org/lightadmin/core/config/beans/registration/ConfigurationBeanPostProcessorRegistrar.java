@@ -1,5 +1,6 @@
-package org.lightadmin.core.config.beans;
+package org.lightadmin.core.config.beans.registration;
 
+import org.lightadmin.core.config.beans.GlobalAdministrationConfigurationPostProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.*;
 

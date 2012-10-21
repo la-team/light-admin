@@ -1,9 +1,10 @@
-package org.lightadmin.core.config.beans;
+package org.lightadmin.core.config.beans.registration;
 
 import org.easymock.Capture;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.core.config.beans.GlobalAdministrationConfigurationPostProcessor;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanNameGenerator;

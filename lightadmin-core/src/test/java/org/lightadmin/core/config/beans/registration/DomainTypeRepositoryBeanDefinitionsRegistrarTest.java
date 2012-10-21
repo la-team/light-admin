@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.beans;
+package org.lightadmin.core.config.beans.registration;
 
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -13,7 +13,7 @@ import static org.junit.Assert.assertEquals;
 import static org.lightadmin.core.test.util.BeanDefinitionUtils.constructorArgValue;
 import static org.lightadmin.core.test.util.BeanDefinitionUtils.propertyValue;
 import static org.lightadmin.core.test.util.DummyConfigurationsHelper.DomainEntity;
-import static org.lightadmin.core.test.util.DummyConfigurationsHelper.DomainEntityEmptyConfiguration;
+import static org.lightadmin.core.test.util.DummyConfigurationsHelper.emptyDomainEntityConfiguration;
 
 public class DomainTypeRepositoryBeanDefinitionsRegistrarTest {
 
@@ -23,7 +23,7 @@ public class DomainTypeRepositoryBeanDefinitionsRegistrarTest {
 
 	@Before
 	public void setup() {
-		subject = new DomainTypeRepositoryBeanDefinitionRegistrar( DomainEntityEmptyConfiguration.class );
+		subject = new DomainTypeRepositoryBeanDefinitionRegistrar( emptyDomainEntityConfiguration() );
 	}
 
 	@Test

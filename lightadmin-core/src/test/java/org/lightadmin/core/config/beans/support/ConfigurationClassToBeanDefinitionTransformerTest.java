@@ -25,77 +25,72 @@ public class ConfigurationClassToBeanDefinitionTransformerTest {
 		subject.apply( null );
 	}
 
-	@Test( expected = IllegalArgumentException.class )
-	public void missingAdministrationAnnotation() {
-		subject.apply( WrongConfiguration.class );
-	}
-
 	@Test
 	public void emptyConfigurationBeanDefinitionCreation() {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertNotNull( beanDefinition );
 	}
 
 	@Test
 	public void beanDefinitionHasCorrectBeanClass() {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertEquals( DomainTypeAdministrationConfiguration.class.getName(), beanDefinition.getBeanClassName() );
 	}
 
 	@Test
 	public void beanDefinitionInitializedWithDomainType() {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertEquals( DomainEntity.class, constructorArgValue( beanDefinition, 0 ) );
 	}
 
 	@Test
 	public void beanDefinitionInitializedWithRepositoryBeanReference() {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertEquals( RuntimeBeanReference.class, constructorArgValue( beanDefinition, 1 ).getClass() );
 	}
 
 	@Test
-	public void emptyEntityConfigurationCreatedIfNotDefined() throws Exception {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+	public void emptyEntityConfigurationCreatedIfNotDefined() {
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertDefaultConfigurationUnitCreated( beanDefinition, "entityConfiguration", EntityConfiguration.class );
 	}
 
 	@Test
-	public void emptyScreenContextCreatedIfNotDefined() throws Exception {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+	public void emptyScreenContextCreatedIfNotDefined() {
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertDefaultConfigurationUnitCreated( beanDefinition, "screenContext", ScreenContext.class );
 	}
 
 	@Test
-	public void emptyListViewFragmentCreatedIfNotDefined() throws Exception {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+	public void emptyListViewFragmentCreatedIfNotDefined() {
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertDefaultConfigurationUnitCreated( beanDefinition, "listViewFragment", Fragment.class );
 	}
 
 	@Test
-	public void emptyScopesCreatedIfNotDefined() throws Exception {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+	public void emptyScopesCreatedIfNotDefined() {
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertDefaultConfigurationUnitCreated( beanDefinition, "scopes", Scopes.class );
 	}
 
 	@Test
-	public void emptyFiltersCreatedIfNotDefined() throws Exception {
-		final BeanDefinition beanDefinition = subject.apply( DomainEntityEmptyConfiguration.class );
+	public void emptyFiltersCreatedIfNotDefined() {
+		final BeanDefinition beanDefinition = subject.apply( emptyDomainEntityConfiguration() );
 
 		assertDefaultConfigurationUnitCreated( beanDefinition, "filters", Filters.class );
 	}
 
 	@Test
 	public void emptyConfigurationUnitCreatedInCaseOfException() {
-		final BeanDefinition beanDefinition = subject.apply( ConfigurationWithException.class );
+		final BeanDefinition beanDefinition = subject.apply( domainEntityConfigurationWithException() );
 
 		assertDefaultConfigurationUnitCreated( beanDefinition, "entityConfiguration", EntityConfiguration.class );
 	}
@@ -104,6 +99,6 @@ public class ConfigurationClassToBeanDefinitionTransformerTest {
 		final Object configurationUnit = propertyValue( beanDefinition, configurationPropertyName );
 
 		assertNotNull( configurationUnit );
-		assertTrue ( ClassUtils.isAssignableValue(configurationUnitClass, configurationUnit) );
+		assertTrue( ClassUtils.isAssignableValue( configurationUnitClass, configurationUnit ) );
 	}
 }

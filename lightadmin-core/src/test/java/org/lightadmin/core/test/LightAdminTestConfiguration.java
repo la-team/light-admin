@@ -31,7 +31,7 @@ public class LightAdminTestConfiguration {
 		@Bean
 		public DataSource dataSource() {
 			EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-			return builder.setType( EmbeddedDatabaseType.HSQL ).addScript("classpath:db/schema.sql").addScript("classpath:db/data.sql").build();
+			return builder.setType( EmbeddedDatabaseType.HSQL ).addScript( "classpath:db/schema.sql" ).addScript( "classpath:db/data.sql" ).build();
 		}
 
 		@Bean

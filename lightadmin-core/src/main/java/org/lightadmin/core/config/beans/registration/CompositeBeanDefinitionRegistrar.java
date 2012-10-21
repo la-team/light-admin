@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.beans;
+package org.lightadmin.core.config.beans.registration;
 
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 

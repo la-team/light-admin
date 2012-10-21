@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.beans;
+package org.lightadmin.core.config.beans.registration;
 
 import org.easymock.Capture;
 import org.easymock.EasyMock;
@@ -16,7 +16,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.lightadmin.core.test.util.BeanDefinitionUtils.propertyValue;
 import static org.lightadmin.core.test.util.DummyConfigurationsHelper.DomainEntity;
-import static org.lightadmin.core.test.util.DummyConfigurationsHelper.DomainEntityEmptyConfiguration;
+import static org.lightadmin.core.test.util.DummyConfigurationsHelper.emptyDomainEntityConfiguration;
 
 public class ConfigurationBeanDefinitionRegistrarTest {
 
@@ -46,12 +46,12 @@ public class ConfigurationBeanDefinitionRegistrarTest {
 
 		assertCorrectGlobalConfigurationBeanDefinitionRegistered( beanDefinition );
 
-		assertTrue( ((ManagedMap) propertyValue( beanDefinition, "domainTypeConfigurations" )).isEmpty() );
+		assertTrue( ( ( ManagedMap ) propertyValue( beanDefinition, "domainTypeConfigurations" ) ).isEmpty() );
 	}
 
 	@Test
 	public void registerGlobalConfWithDomainTypeConfiguration() throws Exception {
-		subject = new ConfigurationBeanDefinitionRegistrar( DomainEntityEmptyConfiguration.class );
+		subject = new ConfigurationBeanDefinitionRegistrar( emptyDomainEntityConfiguration() );
 
 		final Capture<BeanDefinition> globalConfigurationBeanDefinitionCapturer = new Capture<BeanDefinition>();
 		final Capture<BeanDefinition> domainConfigurationBeanDefinitionCapturer = new Capture<BeanDefinition>();

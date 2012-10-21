@@ -4,7 +4,7 @@ import org.lightadmin.core.config.beans.AdministrationConfigBeanRegistryPostProc
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
-public class LightAdminConfigurationContextLoader extends AnnotationConfigContextLoader  {
+public class LightAdminConfigurationContextLoader extends AnnotationConfigContextLoader {
 
 	private static final String CONFIGURATIONS_BASE_PACKAGE = "org.lightadmin.core.test.config";
 

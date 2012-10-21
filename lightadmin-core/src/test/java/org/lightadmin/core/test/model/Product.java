@@ -23,7 +23,7 @@ public class Product extends AbstractEntity {
 	private String description;
 
 	@NotNull
-	@NumberFormat(style = NumberFormat.Style.CURRENCY)
+	@NumberFormat( style = NumberFormat.Style.CURRENCY )
 	private BigDecimal price;
 
 	@ElementCollection
