@@ -55,7 +55,7 @@ public class DslConfigurationClass {
 	}
 
 	public Filters getFilters() {
-		final Filters filters = initializeConfigurationUnitWithBuilder( configurationClass, "filters", FilterBuilder.class, DefaultFilterBuilder.class );
+		final Filters filters = initializeConfigurationUnitWithBuilder( configurationClass, DslConfigurationUnit.FILTERS, FilterBuilder.class, DefaultFilterBuilder.class );
 
 		for ( Filter filter : filters ) {
 			filter.setAttributeMetadata( domainTypeEntityMetadata.getAttribute( filter.getFieldName() ) );
@@ -65,35 +65,35 @@ public class DslConfigurationClass {
 	}
 
 	public Scopes getScopes() {
-		return initializeConfigurationUnitWithBuilder( configurationClass, "scopes", ScopeBuilder.class, DefaultScopeBuilder.class );
+		return initializeConfigurationUnitWithBuilder( configurationClass, DslConfigurationUnit.SCOPES, ScopeBuilder.class, DefaultScopeBuilder.class );
 	}
 
 	public Fragment getListViewFragment() {
-		return initializeConfigurationUnitWithBuilder( configurationClass, "listView", FragmentBuilder.class, TableFragmentBuilder.class );
+		return initializeConfigurationUnitWithBuilder( configurationClass, DslConfigurationUnit.LIST_VIEW, FragmentBuilder.class, TableFragmentBuilder.class );
 	}
 
 	public ScreenContext getScreenContext() {
-		return initializeConfigurationUnitWithBuilder( configurationClass, "screenContext", ScreenContextBuilder.class, DefaultScreenContextBuilder.class );
+		return initializeConfigurationUnitWithBuilder( configurationClass, DslConfigurationUnit.SCREEN_CONTEXT, ScreenContextBuilder.class, DefaultScreenContextBuilder.class );
 	}
 
 	public EntityConfiguration getConfiguration() {
-		return initializeConfigurationUnitWithBuilder( configurationClass, "configuration", EntityConfigurationBuilder.class, DefaultEntityConfigurationBuilder.class );
+		return initializeConfigurationUnitWithBuilder( configurationClass, DslConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class, DefaultEntityConfigurationBuilder.class );
 	}
 
 	public void validate( ProblemReporter problemReporter ) {
-		if ( isNotConfigurationUnitDefined( configurationClass, "screenContext", ScreenContextBuilder.class ) ) {
+		if ( isNotConfigurationUnitDefined( configurationClass, DslConfigurationUnit.SCREEN_CONTEXT, ScreenContextBuilder.class ) ) {
 			problemReporter.error( new DslConfigurationProblem( this, "You need to define screenContext configuration unit!" ) );
 		}
 
-		if ( isNotConfigurationUnitDefined( configurationClass, "configuration", EntityConfigurationBuilder.class ) ) {
+		if ( isNotConfigurationUnitDefined( configurationClass, DslConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class ) ) {
 			problemReporter.warning( new DslConfigurationProblem( this, "It's better to define Entity configuration unit or system will use DomainTypeClass#getSimpleName for entity string representation!" ) );
 		}
 
-		if ( isConfigurationUnitDefined( configurationClass, "filters", FilterBuilder.class ) ) {
+		if ( isConfigurationUnitDefined( configurationClass, DslConfigurationUnit.FILTERS, FilterBuilder.class ) ) {
 			validateFilters( problemReporter );
 		}
 
-		if ( isConfigurationUnitDefined( configurationClass, "listView", FragmentBuilder.class ) ) {
+		if ( isConfigurationUnitDefined( configurationClass, DslConfigurationUnit.LIST_VIEW, FragmentBuilder.class ) ) {
 			validateListView( problemReporter );
 		}
 	}
@@ -103,20 +103,20 @@ public class DslConfigurationClass {
 		final Set<Pair<String, String>> columnsPairs = listViewFragment.getColumns();
 
 		for ( Pair<String, String> columnsPair : columnsPairs ) {
-			validateEntityFieldName( columnsPair.first, "listView", problemReporter );
+			validateEntityFieldName( columnsPair.first, DslConfigurationUnit.LIST_VIEW, problemReporter );
 		}
 	}
 
 	private void validateFilters( final ProblemReporter problemReporter ) {
 		for ( Filter filter : getFilters() ) {
-			validateEntityFieldName( filter.getFieldName(), "filters", problemReporter );
+			validateEntityFieldName( filter.getFieldName(), DslConfigurationUnit.FILTERS, problemReporter );
 		}
 	}
 
-	private void validateEntityFieldName( final String fieldName, String configurationUnitName, final ProblemReporter problemReporter ) {
+	private void validateEntityFieldName( final String fieldName, DslConfigurationUnit configurationUnit, final ProblemReporter problemReporter ) {
 		final DomainTypeAttributeMetadata attributeMetadata = domainTypeEntityMetadata.getAttribute( fieldName );
 		if ( attributeMetadata == null ) {
-			problemReporter.warning( new DslConfigurationProblem( this, String.format( "Unexisting property '%s' defined in %s configuration unit!", fieldName, configurationUnitName ) ) );
+			problemReporter.warning( new DslConfigurationProblem( this, configurationUnit, String.format( "Unexisting property '%s' defined!", fieldName ) ) );
 		}
 	}
 

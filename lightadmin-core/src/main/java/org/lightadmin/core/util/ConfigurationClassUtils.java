@@ -1,6 +1,7 @@
 package org.lightadmin.core.util;
 
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.beans.parsing.DslConfigurationUnit;
 import org.lightadmin.core.config.domain.support.Builder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ClassUtils;
@@ -23,17 +24,17 @@ public abstract class ConfigurationClassUtils {
 	}
 
 
-	public static boolean isConfigurationUnitDefined( final Class<?> configurationClass, String methodName, Class<? extends Builder> builderInterface ) {
-		return ClassUtils.getMethodIfAvailable( configurationClass, methodName, builderInterface ) != null;
+	public static boolean isConfigurationUnitDefined( final Class<?> configurationClass, DslConfigurationUnit configurationUnit, Class<? extends Builder> builderInterface ) {
+		return ClassUtils.getMethodIfAvailable( configurationClass, configurationUnit.getName(), builderInterface ) != null;
 	}
 
-	public static boolean isNotConfigurationUnitDefined( final Class<?> configurationClass, String methodName, Class<? extends Builder> builderInterface ) {
-		return !isConfigurationUnitDefined( configurationClass, methodName, builderInterface );
+	public static boolean isNotConfigurationUnitDefined( final Class<?> configurationClass, DslConfigurationUnit configurationUnit, Class<? extends Builder> builderInterface ) {
+		return !isConfigurationUnitDefined( configurationClass, configurationUnit, builderInterface );
 	}
 
 	@SuppressWarnings( {"unchecked"} )
-	public static <T> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, String methodName, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
-		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, methodName, builderInterface );
+	public static <T> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DslConfigurationUnit configurationUnit, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, configurationUnit.getName(), builderInterface );
 
 		final Builder<T> builder = BeanUtils.instantiateClass( concreteBuilderClass );
 		if ( method != null ) {
