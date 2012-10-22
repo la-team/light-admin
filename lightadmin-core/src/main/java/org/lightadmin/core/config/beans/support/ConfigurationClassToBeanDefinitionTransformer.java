@@ -25,6 +25,8 @@ public class ConfigurationClassToBeanDefinitionTransformer implements Transforme
 		builder.addConstructorArgValue( dslConfiguration.getDomainType() );
 		builder.addConstructorArgReference( beanNameGenerator.repositoryBeanName( dslConfiguration.getDomainType() ) );
 
+		builder.addPropertyValue( "domainTypeEntityMetadata", dslConfiguration.getDomainTypeEntityMetadata() );
+
 		builder.addPropertyValue( "entityConfiguration", dslConfiguration.getConfiguration() );
 
 		builder.addPropertyValue( "screenContext", dslConfiguration.getScreenContext() );

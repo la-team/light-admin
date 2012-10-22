@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.beans.parsing;
 
-import com.google.common.collect.Sets;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.lightadmin.core.reporting.ProblemReporterLogImpl;
 
@@ -14,19 +15,19 @@ public class DslConfigurationClassParser {
 
 	private ProblemReporter problemReporter = new ProblemReporterLogImpl();
 
+	private DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> domainTypeEntityMetadataResolver;
+
 	private final Set<DslConfigurationClass> dslConfigurations = newLinkedHashSet();
 
-	public DslConfigurationClassParser() {
-	}
-
-	public void parse( Class... configurationClasses ) {
-		parse( Sets.newHashSet( configurationClasses ) );
+	public DslConfigurationClassParser( DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> domainTypeEntityMetadataResolver ) {
+		this.domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver;
 	}
 
 	public void parse( Set<Class> configurationClasses ) {
 		for ( Class configurationClass : configurationClasses ) {
 			if ( isConfigurationCandidate( configurationClass ) ) {
-				processConfigurationClass( new DslConfigurationClass( configurationDomainType( configurationClass ), configurationClass ) );
+				final Class<?> domainType = configurationDomainType( configurationClass );
+				processConfigurationClass( new DslConfigurationClass( domainEntityMetadata( domainType ), configurationClass ) );
 			}
 		}
 	}
@@ -39,6 +40,10 @@ public class DslConfigurationClassParser {
 		for ( DslConfigurationClass configClass : this.dslConfigurations ) {
 			configClass.validate( problemReporter );
 		}
+	}
+
+	private DomainTypeEntityMetadata domainEntityMetadata( final Class<?> domainType ) {
+		return domainTypeEntityMetadataResolver.resolveEntityMetadata( domainType );
 	}
 
 	public Set<DslConfigurationClass> getDslConfigurations() {

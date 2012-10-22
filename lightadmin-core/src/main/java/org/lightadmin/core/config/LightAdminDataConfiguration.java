@@ -4,11 +4,17 @@ import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataReso
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 @Configuration
 public class LightAdminDataConfiguration {
 
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	@Bean
 	public JpaDomainTypeEntityMetadataResolver jpaDomainTypeEntityMetadataResolver() {
-		return new JpaDomainTypeEntityMetadataResolver();
+		return new JpaDomainTypeEntityMetadataResolver( entityManager );
 	}
 }

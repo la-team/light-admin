@@ -1,6 +1,7 @@
 package org.lightadmin.core.test;
 
 import org.lightadmin.core.config.beans.AdministrationConfigBeanRegistryPostProcessor;
+import org.lightadmin.core.test.util.DummyConfigurationsHelper;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
@@ -10,7 +11,9 @@ public class LightAdminConfigurationContextLoader extends AnnotationConfigContex
 
 	@Override
 	protected void customizeContext( final GenericApplicationContext context ) {
-		final AdministrationConfigBeanRegistryPostProcessor postProcessor = new AdministrationConfigBeanRegistryPostProcessor( CONFIGURATIONS_BASE_PACKAGE );
-		postProcessor.postProcessBeanDefinitionRegistry( context );
+		final AdministrationConfigBeanRegistryPostProcessor configBeanRegistryPostProcessor = new AdministrationConfigBeanRegistryPostProcessor( CONFIGURATIONS_BASE_PACKAGE );
+		configBeanRegistryPostProcessor.setDomainTypeEntityMetadataResolver( DummyConfigurationsHelper.entityMetadataResolver() );
+
+		context.addBeanFactoryPostProcessor( configBeanRegistryPostProcessor );
 	}
 }

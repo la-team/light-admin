@@ -3,6 +3,7 @@ package org.lightadmin.core.config.beans;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.lightadmin.core.config.beans.registration.BeanDefinitionRegistrar;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
@@ -24,28 +25,10 @@ public class AdministrationConfigBeanRegistryPostProcessorTest {
 
 		subject.setBeanDefinitionRegistrar( beanDefinitionRegistrar );
 
+		subject.setDomainTypeEntityMetadataResolver( EasyMock.createMock( DomainTypeEntityMetadataResolver.class ) );
+
 		subject.postProcessBeanDefinitionRegistry( beanDefinitionRegistry );
 
 		EasyMock.verify( beanDefinitionRegistrar );
 	}
-
-//	@Test
-//	public void correctCompositeNestedRegistrarsCreated() throws Exception {
-//		subject = new AdministrationConfigBeanRegistryPostProcessor( DomainEntityEmptyConfiguration.class );
-//
-//		final BeanDefinitionRegistrar beanDefinitionRegistrar = subject.getBeanDefinitionRegistrar();
-//
-//		assertTrue( ClassUtils.isAssignableValue( CompositeBeanDefinitionRegistrar.class, beanDefinitionRegistrar ) );
-//
-//		assertCorrectNestedRegistrarsCreated( ( CompositeBeanDefinitionRegistrar ) beanDefinitionRegistrar );
-//	}
-//
-//	private void assertCorrectNestedRegistrarsCreated( final CompositeBeanDefinitionRegistrar compositeBeanDefinitionRegistrar ) {
-//		final List<BeanDefinitionRegistrar> beanDefinitionRegistrars = compositeBeanDefinitionRegistrar.getBeanDefinitionRegistrars();
-//
-//		assertTrue( ClassUtils.isAssignableValue( DomainTypeRepositoryBeanDefinitionRegistrar.class, beanDefinitionRegistrars.get( 0 ) ) );
-//		assertTrue( ClassUtils.isAssignableValue( ConfigurationBeanDefinitionRegistrar.class, beanDefinitionRegistrars.get( 1 ) ) );
-//		assertTrue( ClassUtils.isAssignableValue( ConfigurationBeanPostProcessorRegistrar.class, beanDefinitionRegistrars.get( 2 ) ) );
-//	}
-
 }

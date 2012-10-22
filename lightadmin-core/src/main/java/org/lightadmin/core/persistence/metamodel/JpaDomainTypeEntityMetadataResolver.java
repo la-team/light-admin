@@ -1,12 +1,17 @@
 package org.lightadmin.core.persistence.metamodel;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 public class JpaDomainTypeEntityMetadataResolver implements DomainTypeEntityMetadataResolver<JpaDomainTypeEntityMetadata> {
 
-	@PersistenceContext
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
+
+	@Autowired
+	public JpaDomainTypeEntityMetadataResolver( EntityManager entityManager ) {
+		this.entityManager = entityManager;
+	}
 
 	@Override
 	public JpaDomainTypeEntityMetadata resolveEntityMetadata( final Class<?> domainType ) {

@@ -18,7 +18,7 @@ public class DslConfigurationProblem extends Problem {
 
 	@Override
 	public String getMessage() {
-		return super.getMessage() + " in DSL Configuration Class: " + configurationClass.getConfigurationClass();
+		return String.format( "DSL Configuration %s: %s", configurationClass.getConfigurationClass().getSimpleName(), super.getMessage() );
 	}
 
 	@Override
