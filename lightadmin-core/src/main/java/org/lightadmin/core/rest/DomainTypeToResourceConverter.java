@@ -2,6 +2,8 @@ package org.lightadmin.core.rest;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.fragment.FieldMetadata;
+import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,6 +77,14 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		entityDto.put( "stringRepresentation", domainTypeConfiguration.getEntityConfiguration().getNameExtractor().apply( source ) );
 
 		for ( DomainTypeAttributeMetadata attribute : attributes ) {
+			final FieldMetadata field = domainTypeConfiguration.getListViewFragment().getField( attribute.getName() );
+			FieldValueRenderer<Object> fieldValueRenderer;
+			if ( field != null && null != ( fieldValueRenderer = field.getRenderer() ) ) {
+				final String fieldValue = fieldValueRenderer.apply( source );
+				entityDto.put( attribute.getName(), fieldValue );
+				continue;
+			}
+
 			Object val;
 			if ( null != ( val = attribute.getValue( source ) ) ) {
 				entityDto.put( attribute.getName(), val );
