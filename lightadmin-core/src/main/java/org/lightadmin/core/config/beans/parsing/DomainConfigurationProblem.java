@@ -37,4 +37,12 @@ public class DomainConfigurationProblem extends Problem {
 	public String toString() {
 		return getMessage();
 	}
+
+	public DomainConfigurationInterface getDomainConfiguration() {
+		return domainConfiguration;
+	}
+
+	public DomainConfigurationUnit getConfigurationUnit() {
+		return configurationUnit;
+	}
 }

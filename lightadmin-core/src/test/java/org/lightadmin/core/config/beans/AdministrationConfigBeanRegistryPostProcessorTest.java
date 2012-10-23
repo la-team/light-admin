@@ -3,7 +3,7 @@ package org.lightadmin.core.config.beans;
 import org.easymock.EasyMock;
 import org.junit.Test;
 import org.lightadmin.core.config.beans.registration.BeanDefinitionRegistrar;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
+import org.lightadmin.core.test.util.DummyConfigurationsHelper;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 
@@ -25,7 +25,7 @@ public class AdministrationConfigBeanRegistryPostProcessorTest {
 
 		subject.setBeanDefinitionRegistrar( beanDefinitionRegistrar );
 
-		subject.setDomainTypeEntityMetadataResolver( EasyMock.createMock( DomainTypeEntityMetadataResolver.class ) );
+		subject.setDomainTypeEntityMetadataResolver( DummyConfigurationsHelper.entityMetadataResolver() );
 
 		subject.postProcessBeanDefinitionRegistry( beanDefinitionRegistry );
 

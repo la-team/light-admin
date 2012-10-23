@@ -18,7 +18,6 @@ import org.lightadmin.core.util.Pair;
 
 import java.util.Set;
 
-import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationUnitDefined;
 import static org.lightadmin.core.util.DomainConfigurationUtils.isNotConfigurationUnitDefined;
 
 public class DomainConfigurationValidator {
@@ -34,30 +33,36 @@ public class DomainConfigurationValidator {
 	}
 
 	public void validate( DomainConfigurationInterface domainConfiguration, ProblemReporter problemReporter ) {
-		final Class configurationClass = domainConfiguration.getConfigurationClass();
+		validateScreenContext( domainConfiguration, problemReporter );
 
-		if ( isNotConfigurationUnitDefined( configurationClass, DomainConfigurationUnit.SCREEN_CONTEXT, ScreenContextBuilder.class ) ) {
-			problemReporter.error( new DomainConfigurationProblem( domainConfiguration, "You need to define \"screenContext\" configuration unit!" ) );
-		}
+		validateEntityConfiguration( domainConfiguration, problemReporter );
 
-		if ( isNotConfigurationUnitDefined( configurationClass, DomainConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class ) ) {
-			problemReporter.warning( new DomainConfigurationProblem( domainConfiguration, "It's better to define \"configuration\" unit or system will use DomainTypeClass#getSimpleName for entity string representation!" ) );
-		}
+		validateFilters( domainConfiguration, problemReporter );
 
-		if ( isConfigurationUnitDefined( configurationClass, DomainConfigurationUnit.FILTERS, FilterBuilder.class ) ) {
-			validateFilters( domainConfiguration, problemReporter );
-		}
-
-		if ( isConfigurationUnitDefined( configurationClass, DomainConfigurationUnit.LIST_VIEW, FragmentBuilder.class ) ) {
-			validateListView( domainConfiguration, problemReporter );
-		}
+		validateListView( domainConfiguration, problemReporter );
 	}
 
 	public ConfigurationUnitPropertyFilter validPropertyFilter( DomainConfigurationInterface domainConfiguration ) {
 		return new ValidPropertyFilter( domainConfiguration.getDomainTypeEntityMetadata() );
 	}
 
-	private void validateListView( final DomainConfigurationInterface domainConfiguration, final ProblemReporter problemReporter ) {
+	void validateEntityConfiguration( final DomainConfigurationInterface domainConfiguration, final ProblemReporter problemReporter ) {
+		if ( isNotConfigurationUnitDefined( domainConfiguration.getConfigurationClass(), DomainConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class ) ) {
+			problemReporter.warning( new DomainConfigurationProblem( domainConfiguration, DomainConfigurationUnit.CONFIGURATION, "It's better to define \"configuration\" unit or system will use DomainTypeClass#getSimpleName for entity string representation!" ) );
+		}
+	}
+
+	void validateScreenContext( final DomainConfigurationInterface domainConfiguration, final ProblemReporter problemReporter ) {
+		if ( isNotConfigurationUnitDefined( domainConfiguration.getConfigurationClass(), DomainConfigurationUnit.SCREEN_CONTEXT, ScreenContextBuilder.class ) ) {
+			problemReporter.error( new DomainConfigurationProblem( domainConfiguration, DomainConfigurationUnit.SCREEN_CONTEXT, "You need to define \"screenContext\" configuration unit!" ) );
+		}
+	}
+
+	void validateListView( final DomainConfigurationInterface domainConfiguration, final ProblemReporter problemReporter ) {
+		if ( isNotConfigurationUnitDefined( domainConfiguration.getConfigurationClass(), DomainConfigurationUnit.LIST_VIEW, FragmentBuilder.class ) ) {
+			return;
+		}
+
 		final TableFragment listViewFragment = ( TableFragment ) domainConfiguration.getListViewFragment();
 		final Set<Pair<String, String>> columnsPairs = listViewFragment.getColumns();
 
@@ -68,7 +73,11 @@ public class DomainConfigurationValidator {
 		}
 	}
 
-	private void validateFilters( final DomainConfigurationInterface domainConfiguration, final ProblemReporter problemReporter ) {
+	void validateFilters( final DomainConfigurationInterface domainConfiguration, final ProblemReporter problemReporter ) {
+		if ( isNotConfigurationUnitDefined( domainConfiguration.getConfigurationClass(), DomainConfigurationUnit.FILTERS, FilterBuilder.class ) ) {
+			return;
+		}
+
 		for ( Filter filter : domainConfiguration.getFilters() ) {
 			final String fieldName = filter.getFieldName();
 			if ( domainTypePropertyValidator.isInvalidProperty( fieldName, domainConfiguration.getDomainTypeEntityMetadata() ) ) {
