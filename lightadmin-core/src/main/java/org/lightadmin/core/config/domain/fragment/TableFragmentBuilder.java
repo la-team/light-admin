@@ -1,12 +1,12 @@
 package org.lightadmin.core.config.domain.fragment;
 
-import org.lightadmin.core.config.domain.renderer.Renderer;
+import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 
 public class TableFragmentBuilder implements FragmentBuilder {
 
 	private TableFragment tableFragment;
 
-	private String currentFieldName = null;
+	private FieldMetadata currentFieldMetadata = null;
 
 	public TableFragmentBuilder() {
 		this.tableFragment = new TableFragment();
@@ -14,39 +14,43 @@ public class TableFragmentBuilder implements FragmentBuilder {
 
 	@Override
 	public FragmentBuilder field( final String fieldName ) {
-		if ( currentFieldName != null ) {
-			tableFragment.addColumn( currentFieldName, currentFieldName );
+		if ( currentFieldMetadata != null ) {
+			tableFragment.addField( currentFieldMetadata );
 		}
-		currentFieldName = fieldName;
+		currentFieldMetadata = new FieldMetadata( fieldName );
 		return this;
 	}
 
 	@Override
 	public FragmentBuilder alias( final String alias ) {
-		if ( currentFieldName == null ) {
+		if ( currentFieldMetadata == null ) {
 			throw new RuntimeException( "FieldName for alias was not specified correctly." );
 		}
-		tableFragment.addColumn( currentFieldName, alias );
-		currentFieldName = null;
+		currentFieldMetadata.setAlias( alias );
 		return this;
 	}
 
 	@Override
 	public FragmentBuilder attribute( final String fieldName ) {
+		// Transient/User runtime attributes
 		return this;
 	}
 
 	@Override
-	public FragmentBuilder renderer( final Renderer renderer ) {
-		return this;
-	}
-
-	@Override
-	public Fragment build() {
-		if ( currentFieldName != null ) {
-			tableFragment.addColumn( currentFieldName, currentFieldName );
+	public FragmentBuilder renderer( final FieldValueRenderer renderer ) {
+		if ( currentFieldMetadata == null ) {
+			throw new RuntimeException( "FieldName for renderer was not specified correctly." );
 		}
-		currentFieldName = null;
+		currentFieldMetadata.setRenderer( renderer );
+		return this;
+	}
+
+	@Override
+	public TableFragment build() {
+		if ( currentFieldMetadata != null ) {
+			tableFragment.addField( currentFieldMetadata );
+		}
+		currentFieldMetadata = null;
 		return tableFragment;
 	}
 }

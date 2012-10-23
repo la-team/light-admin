@@ -7,7 +7,7 @@
 <%@ taglib prefix="light" tagdir="/WEB-INF/tags" %>
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
-<tiles:useAttribute name="listColumns"/>
+<tiles:useAttribute name="fields"/>
 <tiles:useAttribute name="scopes"/>
 <tiles:useAttribute name="filters"/>
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
@@ -23,4 +23,4 @@
 
 <light:search filters="${filters}" />
 
-<light:data-table domainTypeName="${domainTypeName}" columns="${listColumns}" domainTypeEntityMetadata="${domainTypeEntityMetadata}" />
+<light:data-table domainTypeName="${domainTypeName}" fields="${fields}" domainTypeEntityMetadata="${domainTypeEntityMetadata}" />

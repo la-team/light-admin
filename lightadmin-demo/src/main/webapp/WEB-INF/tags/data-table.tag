@@ -4,7 +4,7 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <%@ attribute name="domainTypeName" required="true" type="java.lang.String"%>
-<%@ attribute name="columns" required="true" type="java.util.Set"%>
+<%@ attribute name="fields" required="true" type="java.util.Set"%>
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
 <spring:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl" />
@@ -14,8 +14,8 @@
 	<thead>
 	<tr>
 		<th class="info"></th>
-		<c:forEach var="column" items="${columns}">
-			<th><c:out value="${column.second}"/></th>
+		<c:forEach var="field" items="${fields}">
+			<th><c:out value="${field.alias}"/></th>
 		</c:forEach>
 		<th>Actions</th>
 	</tr>
@@ -49,15 +49,18 @@
 					   return '<img src="<spring:url value='/images/details_open.png'/>" style="cursor:pointer;" title="Click to show Info"/>';
 				   }
 			   },
-			   <c:forEach var="column" items="${columns}" varStatus="status">
+			   <c:forEach var="field" items="${fields}" varStatus="status">
 			   {
+				   <c:if test="${field.renderer != null}">
+				   "bSortable":false,
+				   </c:if>
 				   "aTargets":[ ${status.index + 1 } ],
-				   "mData" : '${column.first}'
+				   "mData" : '${field.fieldName}'
 			   },
 			   </c:forEach>
 			   {
 				   "bSortable":false,
-				   "aTargets":[ ${fn:length(columns) + 1 } ],
+				   "aTargets":[ ${fn:length(fields) + 1 } ],
 				   "mData":null,
 				   "mRender":function ( data, type, full ) {
 					   var entityId = full['${domainTypeEntityMetadata.idAttribute.name}'];

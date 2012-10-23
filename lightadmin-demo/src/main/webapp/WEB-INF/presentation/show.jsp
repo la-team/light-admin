@@ -24,29 +24,28 @@
 	<breadcrumb:breadcrumb-item name="Show ${domainTypeName}"/>
 </breadcrumb:breadcrumb>
 
+<c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
+
 <div class="page-header">
-	<h2>Show <c:out value="${domainTypeName}"/></h2>
+	<h2>Show <c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h2>
 </div>
 
 <table class="table table-striped table-bordered table-hover">
 	<thead>
 	<tr>
-		<th>Attribute Name</th>
-		<th>Attribute Type</th>
-		<th>Attribute Value</th>
+		<th>Field Name</th>
+		<th>Field Value</th>
 	</tr>
 	</thead>
 
 	<tbody>
 	<tr>
 		<td><c:out value="${domainTypeEntityMetadata.idAttribute.name}"/></td>
-		<td><c:out value="${domainTypeEntityMetadata.idAttribute.type.name}"/></td>
 		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/></td>
 	</tr>
 	<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}">
 		<tr>
 			<td><c:out value="${attributeEntry.name}"/></td>
-			<td><c:out value="${attributeEntry.type.name}"/></td>
 			<td><light:attribute attributeMetadata="${attributeEntry}" entity="${entity}"/></td>
 		</tr>
 	</c:forEach>

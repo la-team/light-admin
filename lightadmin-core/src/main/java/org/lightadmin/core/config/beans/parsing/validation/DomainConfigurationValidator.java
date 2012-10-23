@@ -9,12 +9,12 @@ import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilde
 import org.lightadmin.core.config.domain.context.ScreenContextBuilder;
 import org.lightadmin.core.config.domain.filter.Filter;
 import org.lightadmin.core.config.domain.filter.FilterBuilder;
+import org.lightadmin.core.config.domain.fragment.FieldMetadata;
+import org.lightadmin.core.config.domain.fragment.Fragment;
 import org.lightadmin.core.config.domain.fragment.FragmentBuilder;
-import org.lightadmin.core.config.domain.fragment.TableFragment;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
-import org.lightadmin.core.util.Pair;
 
 import java.util.Set;
 
@@ -63,12 +63,12 @@ public class DomainConfigurationValidator {
 			return;
 		}
 
-		final TableFragment listViewFragment = ( TableFragment ) domainConfiguration.getListViewFragment();
-		final Set<Pair<String, String>> columnsPairs = listViewFragment.getColumns();
+		final Fragment listViewFragment = domainConfiguration.getListViewFragment();
+		Set<FieldMetadata> fields = listViewFragment.getFields();
 
-		for ( Pair<String, String> columnsPair : columnsPairs ) {
-			if ( domainTypePropertyValidator.isInvalidProperty( columnsPair.first, domainConfiguration.getDomainTypeEntityMetadata() ) ) {
-				problemReporter.warning( new InvalidPropertyConfigurationProblem( columnsPair.first, domainConfiguration, DomainConfigurationUnit.LIST_VIEW ) );
+		for ( FieldMetadata field : fields ) {
+			if ( domainTypePropertyValidator.isInvalidProperty( field.getFieldName(), domainConfiguration.getDomainTypeEntityMetadata() ) ) {
+				problemReporter.warning( new InvalidPropertyConfigurationProblem( field.getFieldName(), domainConfiguration, DomainConfigurationUnit.LIST_VIEW ) );
 			}
 		}
 	}

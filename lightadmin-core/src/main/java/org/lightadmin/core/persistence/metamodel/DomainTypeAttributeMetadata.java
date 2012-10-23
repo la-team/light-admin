@@ -1,6 +1,7 @@
 package org.lightadmin.core.persistence.metamodel;
 
 import javax.persistence.metamodel.Attribute;
+
 public interface DomainTypeAttributeMetadata {
 
 	/**

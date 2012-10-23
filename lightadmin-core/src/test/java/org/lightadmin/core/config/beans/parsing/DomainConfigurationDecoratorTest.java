@@ -5,8 +5,8 @@ import org.junit.Test;
 import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationInterface;
 import org.lightadmin.core.config.domain.filter.Filter;
 import org.lightadmin.core.config.domain.filter.Filters;
+import org.lightadmin.core.config.domain.fragment.FieldMetadata;
 import org.lightadmin.core.config.domain.fragment.TableFragment;
-import org.lightadmin.core.util.Pair;
 
 import java.util.Iterator;
 
@@ -78,10 +78,10 @@ public class DomainConfigurationDecoratorTest {
 
 		EasyMock.verify( domainConfiguration, propertyFilter );
 
-		final Iterator<Pair<String, String>> columnsIterator = listViewFragment.getColumns().iterator();
+		Iterator<FieldMetadata> columnsIterator = listViewFragment.getFields().iterator();
 
-		assertEquals( 2, listViewFragment.getColumns().size() );
-		assertEquals( "field2", columnsIterator.next().getFirst() );
-		assertEquals( "field3", columnsIterator.next().getFirst() );
+		assertEquals( 2, listViewFragment.getFields().size() );
+		assertEquals( "field2", columnsIterator.next().getFieldName() );
+		assertEquals( "field3", columnsIterator.next().getFieldName() );
 	}
 }
