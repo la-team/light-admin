@@ -1,7 +1,5 @@
 package org.lightadmin.core.view.renderer;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-
 import java.io.IOException;
 import java.io.Writer;
 import java.text.DateFormat;
@@ -15,10 +13,5 @@ public class DateAttributeRenderer extends AbstractAttributeRenderer {
 	@Override
 	protected void write( final Object value, final Writer writer ) throws IOException {
 		writer.write( DATE_FORMAT.format( ( Date ) value ) );
-	}
-
-	@Override
-	protected Object evaluateValue( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject ) {
-		return attributeMetadata.getValue( domainTypeObject );
 	}
 }

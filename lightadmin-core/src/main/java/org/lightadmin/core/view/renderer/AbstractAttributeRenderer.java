@@ -1,5 +1,6 @@
 package org.lightadmin.core.view.renderer;
 
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.support.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
@@ -23,7 +24,13 @@ public abstract class AbstractAttributeRenderer implements AttributeRenderer, Gl
 		writer.write( value.toString() );
 	}
 
-	protected abstract Object evaluateValue( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject );
+	protected Object evaluateValue( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject ) {
+		return attributeMetadata.getValue( domainTypeObject );
+	}
+
+	protected DomainTypeAdministrationConfiguration domainTypeConfiguration( Class domainType ) {
+		return configuration.forDomainType( domainType );
+	}
 
 	@Override
 	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {

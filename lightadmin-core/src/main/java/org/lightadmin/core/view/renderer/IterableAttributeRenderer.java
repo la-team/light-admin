@@ -1,12 +1,9 @@
 package org.lightadmin.core.view.renderer;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-
-import javax.servlet.jsp.PageContext;
 import java.io.IOException;
 import java.io.Writer;
 
-class IterableAttributeRenderer implements AttributeRenderer {
+class IterableAttributeRenderer extends AbstractAttributeRenderer {
 
 	private final AbstractAttributeRenderer attributeRenderer;
 
@@ -15,14 +12,12 @@ class IterableAttributeRenderer implements AttributeRenderer {
 	}
 
 	@Override
-	public void render( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject, final PageContext pageContext ) throws IOException {
-		final Writer writer = pageContext.getOut();
+	protected void write( final Object value, final Writer writer ) throws IOException {
+		final Iterable items = ( Iterable ) value;
 
-		final Iterable value = ( Iterable ) attributeMetadata.getValue( domainTypeObject );
-
-		for ( Object element : value ) {
-			attributeRenderer.write( element, writer );
-			attributeRenderer.write( "<br/>", writer );
+		for ( Object item : items ) {
+			attributeRenderer.write( item, writer );
+			writer.write( "<br/>" );
 		}
 	}
 }

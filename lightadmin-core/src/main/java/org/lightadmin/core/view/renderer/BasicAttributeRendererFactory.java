@@ -1,8 +1,10 @@
 package org.lightadmin.core.view.renderer;
 
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.support.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,13 +44,46 @@ public class BasicAttributeRendererFactory implements AttributeRendererFactory, 
 			return new PrimitiveAttributeRenderer();
 		}
 
+		if ( isDomainTypeEntity( type ) ) {
+			return domainTypeEntityAttributeRenderer( type );
+		}
+
+		if ( isPersistentEntity( type ) ) {
+			return persistentEntityAttributeRenderer( type );
+		}
+
 		return createObjectAttributeRenderer();
 	}
 
+	private AbstractAttributeRenderer persistentEntityAttributeRenderer( final Class<?> type ) {
+		final PersistentEntityAttributeRenderer persistentEntityAttributeRenderer = new PersistentEntityAttributeRenderer( entityMetadataResolver.resolveEntityMetadata( type ) );
+		persistentEntityAttributeRenderer.setGlobalAdministrationConfiguration( globalAdministrationConfiguration );
+		return persistentEntityAttributeRenderer;
+	}
+
+	private AbstractAttributeRenderer domainTypeEntityAttributeRenderer( final Class<?> type ) {
+		final DomainTypeEntityAttributeRenderer domainTypeEntityAttributeRenderer = new DomainTypeEntityAttributeRenderer( domainTypeEntityMetadata( type ) );
+		domainTypeEntityAttributeRenderer.setGlobalAdministrationConfiguration( globalAdministrationConfiguration );
+		return domainTypeEntityAttributeRenderer;
+	}
+
 	private AbstractAttributeRenderer createObjectAttributeRenderer() {
-		final ObjectAttributeRenderer objectAttributeRenderer = new ObjectAttributeRenderer( entityMetadataResolver );
+		final ObjectAttributeRenderer objectAttributeRenderer = new ObjectAttributeRenderer();
 		objectAttributeRenderer.setGlobalAdministrationConfiguration( globalAdministrationConfiguration );
 		return objectAttributeRenderer;
+	}
+
+	private DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata( final Class<?> type ) {
+		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forDomainType( type );
+		return domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+	}
+
+	private boolean isPersistentEntity( final Class<?> type ) {
+		return entityMetadataResolver.resolveEntityMetadata( type ) != null;
+	}
+
+	private boolean isDomainTypeEntity( final Class<?> type ) {
+		return globalAdministrationConfiguration.forDomainType( type ) != null;
 	}
 
 	@Override
