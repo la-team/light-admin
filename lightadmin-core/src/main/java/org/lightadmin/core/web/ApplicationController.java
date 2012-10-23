@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+@SuppressWarnings( { "unused", "unchecked" } )
 @Controller
 public class ApplicationController {
 
-	@SuppressWarnings( "unused" )
 	private static final Logger LOG = LoggerFactory.getLogger( ApplicationController.class );
 
 	public static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = "domainTypeAdministrationConfiguration";
@@ -23,7 +23,6 @@ public class ApplicationController {
 	@Autowired
 	private GlobalAdministrationConfiguration configuration;
 
-	@SuppressWarnings( "unused" )
 	@ExceptionHandler( Exception.class )
 	public String handleException() {
 		return "redirect:/";
@@ -34,7 +33,6 @@ public class ApplicationController {
 		return "dashboardView";
 	}
 
-	@SuppressWarnings( "unchecked" )
 	@RequestMapping( value = "/domain/{domainType}", method = RequestMethod.GET )
 	public String list( @PathVariable String domainType, Model model ) {
 		addDomainTypeConfigurationToModel( domainType, model );
@@ -42,7 +40,6 @@ public class ApplicationController {
 		return "listView";
 	}
 
-	@SuppressWarnings( "unchecked" )
 	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET )
 	public String show( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
@@ -52,7 +49,6 @@ public class ApplicationController {
 		return "showView";
 	}
 
-	@SuppressWarnings( "unchecked" )
 	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET )
 	public String edit( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );

@@ -51,6 +51,6 @@ public abstract class AttributeRendererFactoryAwareTag extends TagSupport implem
 	}
 
 	private WebApplicationContext applicationContext() {
-		return WebContextUtils.getWebApplicationContext(pageContext.getServletContext());
+		return WebContextUtils.getWebApplicationContext( pageContext.getServletContext() );
 	}
 }

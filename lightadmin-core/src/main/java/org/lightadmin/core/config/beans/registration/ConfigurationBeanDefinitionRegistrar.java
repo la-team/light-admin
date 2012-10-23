@@ -1,9 +1,9 @@
 package org.lightadmin.core.config.beans.registration;
 
 import com.google.common.collect.Sets;
-import org.lightadmin.core.config.beans.parsing.DslConfigurationClass;
+import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationInterface;
 import org.lightadmin.core.config.beans.support.BeanNameGenerator;
-import org.lightadmin.core.config.beans.support.ConfigurationClassToBeanDefinitionTransformer;
+import org.lightadmin.core.config.beans.support.DomainConfigurationToBeanDefinitionTransformer;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanReference;
@@ -20,23 +20,23 @@ import static org.springframework.beans.factory.support.BeanDefinitionBuilder.ge
 
 public class ConfigurationBeanDefinitionRegistrar implements BeanDefinitionRegistrar {
 
-	private BeanNameGenerator beanNameGenerator = BeanNameGenerator.INSTANCE;
+	private final BeanNameGenerator beanNameGenerator = BeanNameGenerator.INSTANCE;
 
-	private ConfigurationClassToBeanDefinitionTransformer configurationClassToBeanDefinitionTransformer = ConfigurationClassToBeanDefinitionTransformer.INSTANCE;
+	private final DomainConfigurationToBeanDefinitionTransformer domainConfigurationToBeanDefinitionTransformer = DomainConfigurationToBeanDefinitionTransformer.INSTANCE;
 
-	private final Set<DslConfigurationClass> configurations;
+	private final Set<DomainConfigurationInterface> domainConfigurations;
 
-	public ConfigurationBeanDefinitionRegistrar( Set<DslConfigurationClass> configurations ) {
-		this.configurations = configurations;
+	public ConfigurationBeanDefinitionRegistrar( Set<DomainConfigurationInterface> domainConfigurations ) {
+		this.domainConfigurations = domainConfigurations;
 	}
 
-	public ConfigurationBeanDefinitionRegistrar( final DslConfigurationClass... configurationClasses ) {
-		this( Sets.newHashSet( configurationClasses ) );
+	public ConfigurationBeanDefinitionRegistrar( final DomainConfigurationInterface... domainConfigurations ) {
+		this( Sets.newHashSet( domainConfigurations ) );
 	}
 
 	@Override
 	public void registerBeanDefinitions( final BeanDefinitionRegistry beanDefinitionRegistry ) {
-		final Map<Class, BeanReference> domainTypeConfigurations = registerDomainConfigurations( configurations, beanDefinitionRegistry );
+		final Map<Class, BeanReference> domainTypeConfigurations = registerDomainConfigurations( domainConfigurations, beanDefinitionRegistry );
 
 		registerGlobalAdministrationConfiguration( beanDefinitionRegistry, domainTypeConfigurations );
 	}
@@ -49,31 +49,23 @@ public class ConfigurationBeanDefinitionRegistrar implements BeanDefinitionRegis
 		beanDefinitionRegistry.registerBeanDefinition( beanNameGenerator.globalAdministrationConfigurationBeanName(), beanDefinition );
 	}
 
-	private Map<Class, BeanReference> registerDomainConfigurations( final Set<DslConfigurationClass> configurationsClasses, final BeanDefinitionRegistry beanDefinitionRegistry ) {
-		final Map<Class, BeanReference> domainTypeConfigurations = new ManagedMap<Class, BeanReference>();
-		for ( DslConfigurationClass configurationClass : configurationsClasses ) {
-			final Class<?> domainType = configurationClass.getDomainType();
+	private Map<Class, BeanReference> registerDomainConfigurations( final Set<DomainConfigurationInterface> domainConfigurations, final BeanDefinitionRegistry beanDefinitionRegistry ) {
+		final Map<Class, BeanReference> domainTypeConfigurationsBeanDefs = new ManagedMap<Class, BeanReference>();
+		for ( DomainConfigurationInterface domainConfiguration : domainConfigurations ) {
+			final Class<?> domainType = domainConfiguration.getDomainType();
 
 			final String beanName = beanNameGenerator.domainTypeConfigurationBeanName( domainType );
 
-			final BeanReference beanReference = registerDomainConfigurationBean( beanName, configurationClass, beanDefinitionRegistry );
+			final BeanReference beanReference = registerDomainConfigurationBean( beanName, domainConfiguration, beanDefinitionRegistry );
 
-			domainTypeConfigurations.put( domainType, beanReference );
+			domainTypeConfigurationsBeanDefs.put( domainType, beanReference );
 		}
-		return domainTypeConfigurations;
+		return domainTypeConfigurationsBeanDefs;
 	}
 
-	private BeanReference registerDomainConfigurationBean( final String beanName, final DslConfigurationClass configurationClass, final BeanDefinitionRegistry beanDefinitionRegistry ) {
-		final BeanDefinition domainConfigurationBeanDefinition = configurationClassToBeanDefinitionTransformer.apply( configurationClass );
+	private BeanReference registerDomainConfigurationBean( final String beanName, final DomainConfigurationInterface domainConfiguration, final BeanDefinitionRegistry beanDefinitionRegistry ) {
+		final BeanDefinition domainConfigurationBeanDefinition = domainConfigurationToBeanDefinitionTransformer.apply( domainConfiguration );
 		beanDefinitionRegistry.registerBeanDefinition( beanName, domainConfigurationBeanDefinition );
 		return new RuntimeBeanReference( beanName );
-	}
-
-	public void setBeanNameGenerator( final BeanNameGenerator beanNameGenerator ) {
-		this.beanNameGenerator = beanNameGenerator;
-	}
-
-	public void setConfigurationClassToBeanDefinitionTransformer( final ConfigurationClassToBeanDefinitionTransformer configurationClassToBeanDefinitionTransformer ) {
-		this.configurationClassToBeanDefinitionTransformer = configurationClassToBeanDefinitionTransformer;
 	}
 }

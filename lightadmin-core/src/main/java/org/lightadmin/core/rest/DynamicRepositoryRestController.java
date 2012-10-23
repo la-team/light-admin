@@ -35,7 +35,8 @@ import java.util.Map;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 
-@RequestMapping("/rest")
+@SuppressWarnings( "unchecked" )
+@RequestMapping( "/rest" )
 public class DynamicRepositoryRestController extends RepositoryRestController implements GlobalAdministrationConfigurationAware {
 
 	private GlobalAdministrationConfiguration configuration;
@@ -80,12 +81,10 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		return negotiateResponse( request, page, pageMetadata( page ) );
 	}
 
-	@SuppressWarnings( {"unchecked"} )
 	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata ) throws IOException {
 		return responseNegotiator.negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page ), pageMetadata, Lists.<Link>newArrayList() ) );
 	}
 
-	@SuppressWarnings( "unchecked" )
 	private Page<?> findItemsPage( DynamicJpaRepository repository, Scope scope, PagingAndSorting pageSort ) {
 		if ( scope instanceof ScopeUtils.DefaultScope ) {
 			return repository.findAll( pageSort );
@@ -114,12 +113,10 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		return allResources;
 	}
 
-	@SuppressWarnings( "unchecked" )
 	private Page<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification, final PagingAndSorting pageSort ) {
 		return repository.findAll( specification, pageSort );
 	}
 
-	@SuppressWarnings( "unchecked" )
 	private Page<?> findItemsByPredicate( final DynamicJpaRepository repository, final Predicate predicate, final PagingAndSorting pageSort ) {
 		final List<Object> items = repository.findAll( pageSort ).getContent();
 

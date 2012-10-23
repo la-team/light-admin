@@ -73,6 +73,11 @@ public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<Jpa
 		return null;
 	}
 
+	@Override
+	public boolean containsAttribute( final String name ) {
+		return getAttribute( name ) != null;
+	}
+
 	private boolean notIdAttribute( final Attribute attribute ) {
 		return !( attribute instanceof SingularAttribute && ( ( SingularAttribute ) attribute ).isId() );
 	}

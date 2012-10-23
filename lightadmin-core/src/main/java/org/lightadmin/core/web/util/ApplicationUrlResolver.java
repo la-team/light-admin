@@ -14,10 +14,10 @@ public final class ApplicationUrlResolver {
 	}
 
 	public static String domainRestScopeBaseUrl( String domainTypeName ) {
-		return domainRestBaseUrl(domainTypeName) + "/scope";
+		return domainRestBaseUrl( domainTypeName ) + "/scope";
 	}
 
 	public static String domainRestFilterBaseUrl( String domainTypeName ) {
-		return domainRestBaseUrl(domainTypeName) + "/filter";
+		return domainRestBaseUrl( domainTypeName ) + "/filter";
 	}
 }

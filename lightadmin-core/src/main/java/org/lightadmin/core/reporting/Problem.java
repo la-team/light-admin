@@ -1,6 +1,7 @@
 package org.lightadmin.core.reporting;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+
 public class Problem {
 
 	private final String message;
@@ -26,8 +27,6 @@ public class Problem {
 
 	@Override
 	public String toString() {
-		return new ToStringBuilder( this )
-			.append( "message", message )
-			.append( "rootCause", rootCause ).toString();
+		return new ToStringBuilder( this ).append( "message", message ).append( "rootCause", rootCause ).toString();
 	}
 }

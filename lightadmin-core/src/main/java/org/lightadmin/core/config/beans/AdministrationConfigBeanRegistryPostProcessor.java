@@ -2,8 +2,8 @@ package org.lightadmin.core.config.beans;
 
 import com.google.common.collect.Sets;
 import org.apache.commons.lang.StringUtils;
-import org.lightadmin.core.config.beans.parsing.DslConfigurationClass;
-import org.lightadmin.core.config.beans.parsing.DslConfigurationClassParser;
+import org.lightadmin.core.config.beans.parsing.DomainConfigurationParser;
+import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationInterface;
 import org.lightadmin.core.config.beans.registration.BeanDefinitionRegistrar;
 import org.lightadmin.core.config.beans.registration.CompositeBeanDefinitionRegistrar;
 import org.lightadmin.core.config.beans.registration.ConfigurationBeanDefinitionRegistrar;
@@ -26,14 +26,13 @@ import javax.persistence.EntityManagerFactory;
 import java.util.Collections;
 import java.util.Set;
 
-@SuppressWarnings( "unused" )
 public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
 	private BeanDefinitionRegistrar beanDefinitionRegistrar;
 
 	private ClassProvider configurationClassProvider;
 
-	private DslConfigurationClassParser configurationClassParser;
+	private DomainConfigurationParser configurationParser;
 
 	private DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> domainTypeEntityMetadataResolver;
 
@@ -65,37 +64,37 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 		}
 
 		if ( domainTypeEntityMetadataResolver == null ) {
-			domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver( entityManager( registry  ) );
+			domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver( entityManager( registry ) );
 		}
 
-		if ( configurationClassParser == null ) {
-			configurationClassParser = new DslConfigurationClassParser( domainTypeEntityMetadataResolver );
+		if ( configurationParser == null ) {
+			configurationParser = new DomainConfigurationParser( domainTypeEntityMetadataResolver );
 		}
 
 		if ( StringUtils.isNotBlank( configurationClassesBasePackage ) ) {
-			configurationClassParser.parse( configurationClassProvider.findClassCandidates( configurationClassesBasePackage ) );
+			configurationParser.parse( configurationClassProvider.findClassCandidates( configurationClassesBasePackage ) );
 		}
 
 		if ( !CollectionUtils.isEmpty( configurationClasses ) ) {
-			configurationClassParser.parse( configurationClassProvider.findClassCandidates( configurationClasses ) );
+			configurationParser.parse( configurationClassProvider.findClassCandidates( configurationClasses ) );
 		}
 
-		configurationClassParser.validate();
+		configurationParser.validate();
 
-		final Set<DslConfigurationClass> dslConfigurations = configurationClassParser.getDslConfigurations();
+		final Set<DomainConfigurationInterface> domainConfigurations = configurationParser.getDomainConfigurations();
 
 		if ( beanDefinitionRegistrar == null ) {
-			beanDefinitionRegistrar = compositeBeanDefinitionRegistrar( dslConfigurations );
+			beanDefinitionRegistrar = compositeBeanDefinitionRegistrar( domainConfigurations );
 		}
 
 		beanDefinitionRegistrar.registerBeanDefinitions( registry );
 	}
 
-	private BeanDefinitionRegistrar compositeBeanDefinitionRegistrar( Set<DslConfigurationClass> dslConfigurations ) {
-		BeanDefinitionRegistrar domainTypeRepositoryBeanDefinitionsRegistrar = new DomainTypeRepositoryBeanDefinitionRegistrar( dslConfigurations );
-		BeanDefinitionRegistrar configurationBeanDefinitionRegistrar = new ConfigurationBeanDefinitionRegistrar( dslConfigurations );
+	private BeanDefinitionRegistrar compositeBeanDefinitionRegistrar( Set<DomainConfigurationInterface> domainConfigurations ) {
+		BeanDefinitionRegistrar domainTypeRepositoryBeanDefinitionsRegistrar = new DomainTypeRepositoryBeanDefinitionRegistrar( domainConfigurations );
+		BeanDefinitionRegistrar configurationBeanDefinitionRegistrar = new ConfigurationBeanDefinitionRegistrar( domainConfigurations );
 
-		return new CompositeBeanDefinitionRegistrar( domainTypeRepositoryBeanDefinitionsRegistrar, configurationBeanDefinitionRegistrar);
+		return new CompositeBeanDefinitionRegistrar( domainTypeRepositoryBeanDefinitionsRegistrar, configurationBeanDefinitionRegistrar );
 	}
 
 	private DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> domainTypeEntityMetadataResolver( EntityManager entityManager ) {
@@ -106,29 +105,15 @@ public class AdministrationConfigBeanRegistryPostProcessor implements BeanDefini
 		return ( ( BeanFactory ) registry ).getBean( EntityManagerFactory.class ).createEntityManager();
 	}
 
-	public BeanDefinitionRegistrar getBeanDefinitionRegistrar() {
-		return beanDefinitionRegistrar;
-	}
-
 	public void setBeanDefinitionRegistrar( final BeanDefinitionRegistrar beanDefinitionRegistrar ) {
 		Assert.notNull( beanDefinitionRegistrar );
 
 		this.beanDefinitionRegistrar = beanDefinitionRegistrar;
 	}
 
-	public void setConfigurationClassProvider( final ClassProvider configurationClassProvider ) {
-		Assert.notNull( configurationClassProvider );
-
-		this.configurationClassProvider = configurationClassProvider;
-	}
-
-	public void setConfigurationClassParser( final DslConfigurationClassParser configurationClassParser ) {
-		Assert.notNull( configurationClassParser );
-
-		this.configurationClassParser = configurationClassParser;
-	}
-
 	public void setDomainTypeEntityMetadataResolver( final DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> domainTypeEntityMetadataResolver ) {
+		Assert.notNull( domainTypeEntityMetadataResolver );
+
 		this.domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver;
 	}
 }

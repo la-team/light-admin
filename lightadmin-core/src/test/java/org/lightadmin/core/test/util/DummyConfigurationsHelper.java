@@ -3,7 +3,7 @@ package org.lightadmin.core.test.util;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.beans.parsing.DslConfigurationClass;
+import org.lightadmin.core.config.beans.parsing.configuration.DomainConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
@@ -11,12 +11,12 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolve
 
 public class DummyConfigurationsHelper {
 
-	public static DslConfigurationClass emptyDomainEntityConfiguration() {
-		return new DslConfigurationClass( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
+	public static DomainConfiguration emptyDomainEntityConfiguration() {
+		return new DomainConfiguration( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
 	}
 
-	public static DslConfigurationClass domainEntityConfigurationWithException() {
-		return new DslConfigurationClass( domainTypeEntityMetadataMock( DomainEntity.class ), ConfigurationWithException.class );
+	public static DomainConfiguration domainEntityConfigurationWithException() {
+		return new DomainConfiguration( domainTypeEntityMetadataMock( DomainEntity.class ), ConfigurationWithException.class );
 	}
 
 	public static DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> entityMetadataResolver() {

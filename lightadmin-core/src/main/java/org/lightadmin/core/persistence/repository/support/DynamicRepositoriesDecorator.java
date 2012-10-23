@@ -18,12 +18,12 @@ import java.util.*;
 
 import static com.google.common.collect.Maps.newHashMap;
 
+@SuppressWarnings( {"rawtypes", "unchecked"} )
 public class DynamicRepositoriesDecorator extends Repositories {
 
 	private final Map<Class<?>, RepositoryFactoryInformation<Object, Serializable>> domainClassToBeanName = newHashMap();
 	private final Map<RepositoryFactoryInformation<Object, Serializable>, DynamicJpaRepository<Object, Serializable>> repositories = newHashMap();
 
-	@SuppressWarnings( {"rawtypes", "unchecked"} )
 	public DynamicRepositoriesDecorator( ListableBeanFactory factory ) {
 		super( emptyBeanFactory() );
 
@@ -39,7 +39,6 @@ public class DynamicRepositoriesDecorator extends Repositories {
 		}
 	}
 
-	@SuppressWarnings( {"rawtypes", "unchecked"} )
 	private Map<String, DynamicJpaRepository> dynamicJpaRepositories( final ListableBeanFactory factory ) {
 		return BeanFactoryUtils.beansOfTypeIncludingAncestors( factory, DynamicJpaRepository.class );
 	}
@@ -58,7 +57,6 @@ public class DynamicRepositoriesDecorator extends Repositories {
 	/**
 	 * Returns the repository managing the given domain class.
 	 */
-	@SuppressWarnings( "unchecked" )
 	public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor( Class<?> domainClass ) {
 		return ( CrudRepository<T, S> ) repositories.get( domainClassToBeanName.get( domainClass ) );
 	}
@@ -66,7 +64,6 @@ public class DynamicRepositoriesDecorator extends Repositories {
 	/**
 	 * Returns the {@link org.springframework.data.repository.core.EntityInformation} for the given domain class.
 	 */
-	@SuppressWarnings( "unchecked" )
 	public <T, S extends Serializable> EntityInformation<T, S> getEntityInformationFor( Class<?> domainClass ) {
 		RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor( domainClass );
 		return information == null ? null : ( EntityInformation<T, S> ) information.getEntityInformation();

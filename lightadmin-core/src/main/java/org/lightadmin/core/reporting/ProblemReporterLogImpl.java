@@ -22,6 +22,7 @@ public class ProblemReporterLogImpl implements ProblemReporter {
 		logger.warn( problem.getMessage(), problem.getRootCause() );
 	}
 
+	@SuppressWarnings( "unused" )
 	public void setLogger( Logger logger ) {
 		this.logger = ( logger != null ? logger : LoggerFactory.getLogger( getClass() ) );
 	}

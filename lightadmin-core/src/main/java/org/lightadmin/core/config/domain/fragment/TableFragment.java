@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.domain.fragment;
 
+import org.lightadmin.core.config.beans.parsing.ConfigurationUnitPropertyFilter;
 import org.lightadmin.core.util.Pair;
 
 import java.util.Set;
@@ -19,5 +20,16 @@ public class TableFragment implements Fragment {
 
 	public Set<Pair<String, String>> getColumns() {
 		return columns;
+	}
+
+	@Override
+	public Fragment filter( final ConfigurationUnitPropertyFilter propertyFilter ) {
+		TableFragment tableFragment = new TableFragment();
+		for ( Pair<String, String> column : columns ) {
+			if ( propertyFilter.apply( column.first ) ) {
+				tableFragment.addColumn( column.first, column.second );
+			}
+		}
+		return tableFragment;
 	}
 }

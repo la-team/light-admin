@@ -14,4 +14,6 @@ public interface DomainTypeEntityMetadata<A extends DomainTypeAttributeMetadata>
 
 	A getIdAttribute();
 
+	boolean containsAttribute( String name );
+
 }

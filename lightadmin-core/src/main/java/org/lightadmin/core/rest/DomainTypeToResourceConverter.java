@@ -52,8 +52,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
 		final JpaRepositoryMetadata repositoryMetadata = repositoryExporter.repositoryMetadataFor( domainType );
 
-		Serializable id = (Serializable)repositoryMetadata.entityMetadata().idAttribute().get(source);
-		URI selfUri = buildUri(repositoryRestConfiguration.getBaseUri(), repositoryMetadata.name(), id.toString());
+		URI selfUri = selfUri( source, repositoryMetadata );
 
 		final Set<Link> links = newLinkedHashSet();
 
@@ -83,6 +82,11 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		}
 
 		return new EntityResource( entityDto, links );
+	}
+
+	private URI selfUri( final Object source, final JpaRepositoryMetadata repositoryMetadata ) {
+		Serializable id = ( Serializable ) repositoryMetadata.entityMetadata().idAttribute().get( source );
+		return buildUri( repositoryRestConfiguration.getBaseUri(), repositoryMetadata.name(), id.toString() );
 	}
 
 	private Class attributeType( final Attribute attribute ) {

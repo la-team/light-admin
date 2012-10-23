@@ -11,7 +11,7 @@ import org.springframework.data.rest.webmvc.RepositoryRestMvcConfiguration;
 
 @Lazy
 @Configuration
-public class LightAdminRepositoryRestConfiguration extends RepositoryRestMvcConfiguration  {
+public class LightAdminRepositoryRestConfiguration extends RepositoryRestMvcConfiguration {
 
 	@Bean
 	public RepositoryRestConfiguration repositoryRestConfiguration() {

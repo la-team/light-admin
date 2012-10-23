@@ -10,7 +10,7 @@ import org.springframework.util.ClassUtils;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
-import static org.lightadmin.core.util.ConfigurationClassUtils.isConfigurationCandidate;
+import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationCandidate;
 
 public class ConfigurationClassProvider implements ClassProvider {
 

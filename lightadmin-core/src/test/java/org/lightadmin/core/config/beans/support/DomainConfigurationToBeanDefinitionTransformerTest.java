@@ -17,13 +17,13 @@ import static org.lightadmin.core.test.util.BeanDefinitionUtils.constructorArgVa
 import static org.lightadmin.core.test.util.BeanDefinitionUtils.propertyValue;
 import static org.lightadmin.core.test.util.DummyConfigurationsHelper.*;
 
-public class ConfigurationClassToBeanDefinitionTransformerTest {
+public class DomainConfigurationToBeanDefinitionTransformerTest {
 
-	private ConfigurationClassToBeanDefinitionTransformer subject;
+	private DomainConfigurationToBeanDefinitionTransformer subject;
 
 	@Before
 	public void setup() {
-		subject = new ConfigurationClassToBeanDefinitionTransformer();
+		subject = new DomainConfigurationToBeanDefinitionTransformer();
 	}
 
 	@Test( expected = IllegalArgumentException.class )

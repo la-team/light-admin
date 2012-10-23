@@ -20,8 +20,4 @@ public class CompositeBeanDefinitionRegistrar implements BeanDefinitionRegistrar
 			beanDefinitionRegistrar.registerBeanDefinitions( registry );
 		}
 	}
-
-	public List<BeanDefinitionRegistrar> getBeanDefinitionRegistrars() {
-		return newArrayList( beanDefinitionRegistrars );
-	}
 }
