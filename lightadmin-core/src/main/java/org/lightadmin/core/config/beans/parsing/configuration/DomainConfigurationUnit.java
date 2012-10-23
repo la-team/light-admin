@@ -18,6 +18,15 @@ public enum DomainConfigurationUnit {
 		return name;
 	}
 
+	public static DomainConfigurationUnit forName( String name ) {
+		for ( DomainConfigurationUnit domainConfigurationUnit : values() ) {
+			if ( domainConfigurationUnit.getName().equals( name ) ) {
+				return domainConfigurationUnit;
+			}
+		}
+		throw new IllegalArgumentException( String.format( "Configuration Unit for name %s nor defined!", name ) );
+	}
+
 	@Override
 	public String toString() {
 		return String.format( "Domain Configuration Unit: %s", getName() );

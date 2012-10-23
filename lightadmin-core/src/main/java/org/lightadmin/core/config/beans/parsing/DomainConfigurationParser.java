@@ -2,6 +2,7 @@ package org.lightadmin.core.config.beans.parsing;
 
 import org.lightadmin.core.config.beans.parsing.configuration.DomainConfiguration;
 import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationInterface;
+import org.lightadmin.core.config.beans.parsing.validation.DomainConfigurationValidator;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;

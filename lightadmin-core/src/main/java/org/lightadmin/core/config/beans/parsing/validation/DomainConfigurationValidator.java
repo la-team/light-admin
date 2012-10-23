@@ -1,5 +1,8 @@
-package org.lightadmin.core.config.beans.parsing;
+package org.lightadmin.core.config.beans.parsing.validation;
 
+import org.lightadmin.core.config.beans.parsing.ConfigurationUnitPropertyFilter;
+import org.lightadmin.core.config.beans.parsing.DomainConfigurationProblem;
+import org.lightadmin.core.config.beans.parsing.InvalidPropertyConfigurationProblem;
 import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationInterface;
 import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationUnit;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
@@ -18,9 +21,13 @@ import java.util.Set;
 import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationUnitDefined;
 import static org.lightadmin.core.util.DomainConfigurationUtils.isNotConfigurationUnitDefined;
 
-class DomainConfigurationValidator {
+public class DomainConfigurationValidator {
 
-	private DomainTypePropertyValidator domainTypePropertyValidator;
+	private DomainTypePropertyValidatorInterface domainTypePropertyValidator;
+
+	DomainConfigurationValidator( final DomainTypePropertyValidatorInterface domainTypePropertyValidator ) {
+		this.domainTypePropertyValidator = domainTypePropertyValidator;
+	}
 
 	public DomainConfigurationValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
 		this.domainTypePropertyValidator = new DomainTypePropertyValidator( entityMetadataResolver );

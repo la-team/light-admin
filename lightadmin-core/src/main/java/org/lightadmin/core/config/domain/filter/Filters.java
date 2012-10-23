@@ -23,12 +23,15 @@ public class Filters implements Iterable<Filter> {
 		return filters.iterator();
 	}
 
+	public int size() {
+		return filters.size();
+	}
+
 	public Filters apply( DomainTypeEntityMetadata entityMetadata ) {
-		List<Filter> result = newLinkedList();
 		for ( Filter filter : filters ) {
 			filter.setAttributeMetadata( entityMetadata.getAttribute( filter.getFieldName() ) );
 		}
-		return new Filters( result );
+		return this;
 	}
 
 	public Filters filter( ConfigurationUnitPropertyFilter propertyFilter ) {

@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.domain.fragment;
 
 import org.lightadmin.core.config.domain.renderer.Renderer;
+
 public class TableFragmentBuilder implements FragmentBuilder {
 
 	private TableFragment tableFragment;
@@ -13,6 +14,9 @@ public class TableFragmentBuilder implements FragmentBuilder {
 
 	@Override
 	public FragmentBuilder field( final String fieldName ) {
+		if ( currentFieldName != null ) {
+			tableFragment.addColumn( currentFieldName, currentFieldName );
+		}
 		currentFieldName = fieldName;
 		return this;
 	}

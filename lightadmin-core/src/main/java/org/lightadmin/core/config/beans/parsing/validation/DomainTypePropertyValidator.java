@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.beans.parsing;
+package org.lightadmin.core.config.beans.parsing.validation;
 
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
@@ -7,7 +7,7 @@ import org.springframework.data.mapping.PropertyPath;
 import java.util.Iterator;
 
 @SuppressWarnings( "unchecked" )
-public class DomainTypePropertyValidator {
+public class DomainTypePropertyValidator implements DomainTypePropertyValidatorInterface {
 
 	private DomainTypeEntityMetadataResolver entityMetadataResolver;
 
@@ -15,10 +15,12 @@ public class DomainTypePropertyValidator {
 		this.entityMetadataResolver = entityMetadataResolver;
 	}
 
+	@Override
 	public boolean isInvalidProperty( String propertyName, DomainTypeEntityMetadata entityMetadata ) {
 		return !isValidProperty( propertyName, entityMetadata );
 	}
 
+	@Override
 	public boolean isValidProperty( String propertyName, DomainTypeEntityMetadata entityMetadata ) {
 		try {
 			final PropertyPath propertyPath = PropertyPath.from( propertyName, entityMetadata.getDomainType() );
