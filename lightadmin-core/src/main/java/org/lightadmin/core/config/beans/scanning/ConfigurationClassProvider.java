@@ -21,6 +21,7 @@ public class ConfigurationClassProvider implements ClassProvider {
 		this.provider.addIncludeFilter( new AnnotationTypeFilter( Administration.class ) );
 	}
 
+	@Override
 	public Set<Class> findClassCandidates( Set<Class> classes ) {
 		Set<Class> configurations = newLinkedHashSet();
 		for ( Class clazz : classes ) {
@@ -31,6 +32,7 @@ public class ConfigurationClassProvider implements ClassProvider {
 		return configurations;
 	}
 
+	@Override
 	public Set<Class> findClassCandidates( String basePackage ) {
 		final Set<BeanDefinition> candidateComponents = provider.findCandidateComponents( basePackage );
 		Set<Class> configurations = newLinkedHashSet();

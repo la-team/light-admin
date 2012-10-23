@@ -36,34 +36,42 @@ public class DomainConfiguration implements DomainConfigurationInterface {
 		this.domainTypeEntityMetadata = domainTypeEntityMetadata;
 	}
 
+	@Override
 	public Class<?> getDomainType() {
 		return domainTypeEntityMetadata.getDomainType();
 	}
 
+	@Override
 	public DomainTypeEntityMetadata getDomainTypeEntityMetadata() {
 		return domainTypeEntityMetadata;
 	}
 
+	@Override
 	public Class<?> getConfigurationClass() {
 		return configurationClass;
 	}
 
+	@Override
 	public Filters getFilters() {
 		return initializeConfigurationUnit( DomainConfigurationUnit.FILTERS, FilterBuilder.class, DefaultFilterBuilder.class );
 	}
 
+	@Override
 	public Scopes getScopes() {
 		return initializeConfigurationUnit( DomainConfigurationUnit.SCOPES, ScopeBuilder.class, DefaultScopeBuilder.class );
 	}
 
+	@Override
 	public Fragment getListViewFragment() {
 		return initializeConfigurationUnit( DomainConfigurationUnit.LIST_VIEW, FragmentBuilder.class, TableFragmentBuilder.class );
 	}
 
+	@Override
 	public ScreenContext getScreenContext() {
 		return initializeConfigurationUnit( DomainConfigurationUnit.SCREEN_CONTEXT, ScreenContextBuilder.class, DefaultScreenContextBuilder.class );
 	}
 
+	@Override
 	public EntityConfiguration getConfiguration() {
 		return initializeConfigurationUnit( DomainConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class, DefaultEntityConfigurationBuilder.class );
 	}
