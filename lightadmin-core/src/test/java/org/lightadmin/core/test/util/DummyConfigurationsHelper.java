@@ -80,8 +80,8 @@ public class DummyConfigurationsHelper {
 		return domainTypeEntityMetadata;
 	}
 
-	public static Filters filters( String... fieldNames ) {
-		FilterBuilder filterBuilder = new DefaultFilterBuilder();
+	public static Filters filters( final DomainTypeEntityMetadata entityMetadata, String... fieldNames ) {
+		FilterBuilder filterBuilder = new DefaultFilterBuilder( entityMetadata );
 		for ( String fieldName : fieldNames ) {
 			filterBuilder.field( fieldName );
 		}

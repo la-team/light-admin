@@ -47,14 +47,13 @@ function fnFormatDetails( oTable, nTr ) {
 			detailsHtmlBlock += '<dt>' + prop + '</dt>';
 			var value = aData[prop];
 			if ( value instanceof Array ) {
-				var items = '[';
+				var items = '';
 				for (var arrayIndex in value) {
 					var arrayItem = value[arrayIndex];
 					if ( arrayItem['stringRepresentation'] !== undefined) {
-						items += arrayItem['stringRepresentation'] + ', ';
+						items += arrayItem['stringRepresentation'] + '<br/>';
 					}
 				}
-				items += ']';
 				value = items;
 			} else if (typeof value === 'object' && value['stringRepresentation'] !== undefined) {
 				value = value['stringRepresentation'];

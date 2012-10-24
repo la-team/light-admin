@@ -1,7 +1,6 @@
 package org.lightadmin.core.config.domain.filter;
 
 import org.lightadmin.core.config.beans.parsing.ConfigurationUnitPropertyFilter;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;
@@ -25,13 +24,6 @@ public class Filters implements Iterable<Filter> {
 
 	public int size() {
 		return filters.size();
-	}
-
-	public Filters apply( DomainTypeEntityMetadata entityMetadata ) {
-		for ( Filter filter : filters ) {
-			filter.setAttributeMetadata( entityMetadata.getAttribute( filter.getFieldName() ) );
-		}
-		return this;
 	}
 
 	public Filters filter( ConfigurationUnitPropertyFilter propertyFilter ) {

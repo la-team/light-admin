@@ -1,6 +1,7 @@
 package org.lightadmin.core.view.renderer;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.configuration.EntityNameExtractor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.web.util.ApplicationUrlResolver;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -21,7 +22,10 @@ public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer
 		final DomainTypeAdministrationConfiguration domainTypeConfiguration = domainTypeConfiguration( domainTypeEntityMetadata.getDomainType() );
 
 		final String entityViewUrl = entityShowUrl( value, domainTypeConfiguration );
-		final String stringValue = domainTypeConfiguration.getEntityConfiguration().getNameExtractor().apply( value );
+
+		final EntityNameExtractor<Object> nameExtractor = domainTypeConfiguration.getEntityConfiguration().getNameExtractor();
+
+		final String stringValue = nameExtractor.apply( value );
 
 		writer.write( String.format( "<a href=\"%s\">%s</a>", entityViewUrl, stringValue ) );
 	}

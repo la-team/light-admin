@@ -36,7 +36,7 @@ public class DomainConfigurationDecorator implements DomainConfigurationInterfac
 
 	@Override
 	public Filters getFilters() {
-		return domainConfiguration.getFilters().filter( propertyFilter ).apply( domainConfiguration.getDomainTypeEntityMetadata() );
+		return domainConfiguration.getFilters().filter( propertyFilter );
 	}
 
 	@Override

@@ -3,12 +3,12 @@ package org.lightadmin.demo.config;
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
+import org.lightadmin.core.config.domain.configuration.EntityNameExtractor;
 import org.lightadmin.core.config.domain.context.ScreenContext;
 import org.lightadmin.core.config.domain.context.ScreenContextBuilder;
 import org.lightadmin.core.config.domain.fragment.Fragment;
 import org.lightadmin.core.config.domain.fragment.FragmentBuilder;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
-import org.lightadmin.core.util.Transformer;
 import org.lightadmin.demo.model.LineItem;
 import org.lightadmin.demo.model.Order;
 import org.springframework.util.StringUtils;
@@ -39,8 +39,8 @@ public class OrderAdministration {
 			.field( "lineItems" ).alias( "Order Items" ).renderer( lineItemsFieldValueRenderer() ).build();
 	}
 
-	private static Transformer<Order, String> orderNameExtractor() {
-		return new Transformer<Order, String>() {
+	private static EntityNameExtractor<Order> orderNameExtractor() {
+		return new EntityNameExtractor<Order>() {
 			@Override
 			public String apply( final Order order ) {
 				return String.format( "Order %s for $%d", order.getCustomer().getFirstname(), order.getTotal().intValue() );

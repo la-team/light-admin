@@ -1,16 +1,14 @@
 package org.lightadmin.core.config.domain.configuration;
 
-import org.lightadmin.core.util.Transformer;
-
 public class EntityConfiguration {
 
-	private final Transformer<Object, String> nameExtractor;
+	private final EntityNameExtractor<?> nameExtractor;
 
-	EntityConfiguration( final Transformer<Object, String> nameExtractor ) {
+	EntityConfiguration( final EntityNameExtractor<?> nameExtractor ) {
 		this.nameExtractor = nameExtractor;
 	}
 
-	public Transformer<Object, String> getNameExtractor() {
+	public EntityNameExtractor getNameExtractor() {
 		return nameExtractor;
 	}
 }

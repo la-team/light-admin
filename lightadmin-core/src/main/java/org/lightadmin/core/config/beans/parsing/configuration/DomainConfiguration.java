@@ -77,7 +77,7 @@ public class DomainConfiguration implements DomainConfigurationInterface {
 	}
 
 	private <T> T initializeConfigurationUnit( DomainConfigurationUnit configurationUnit, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
-		return initializeConfigurationUnitWithBuilder( configurationClass, configurationUnit, builderInterface, concreteBuilderClass );
+		return initializeConfigurationUnitWithBuilder( configurationClass, configurationUnit, builderInterface, concreteBuilderClass, domainTypeEntityMetadata );
 	}
 
 	@Override

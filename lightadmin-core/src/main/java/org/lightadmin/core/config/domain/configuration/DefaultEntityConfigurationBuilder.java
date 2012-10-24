@@ -1,21 +1,23 @@
 package org.lightadmin.core.config.domain.configuration;
 
-import org.lightadmin.core.util.Transformer;
-import org.springframework.beans.BeanWrapper;
-import org.springframework.beans.PropertyAccessorFactory;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
 public class DefaultEntityConfigurationBuilder implements EntityConfigurationBuilder {
 
-	private Transformer<?, String> nameExtractor = new ObjectNameExtractor();
+	private EntityNameExtractor<?> nameExtractor;
+
+	public DefaultEntityConfigurationBuilder( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
+		this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity( domainTypeEntityMetadata );
+	}
 
 	@Override
 	public EntityConfigurationBuilder nameField( final String nameField ) {
-		this.nameExtractor = new DomainTypeObjectNameExtractor( nameField );
+		this.nameExtractor = EntityNameExtractorFactory.forNamedPersistentEntity( nameField );
 		return this;
 	}
 
 	@Override
-	public EntityConfigurationBuilder nameExtractor( final Transformer<?, String> nameExtractor ) {
+	public EntityConfigurationBuilder nameExtractor( final EntityNameExtractor<?> nameExtractor ) {
 		this.nameExtractor = nameExtractor;
 		return this;
 	}
@@ -23,29 +25,6 @@ public class DefaultEntityConfigurationBuilder implements EntityConfigurationBui
 	@Override
 	@SuppressWarnings( "unchecked" )
 	public EntityConfiguration build() {
-		return new EntityConfiguration( ( Transformer<Object, String> ) nameExtractor );
-	}
-
-	private static class ObjectNameExtractor implements Transformer<Object, String> {
-
-		@Override
-		public String apply( final Object input ) {
-			return String.format( "%s", input.getClass().getSimpleName() );
-		}
-	}
-
-	private static class DomainTypeObjectNameExtractor implements Transformer<Object, String> {
-
-		private final String nameField;
-
-		private DomainTypeObjectNameExtractor( final String nameField ) {
-			this.nameField = nameField;
-		}
-
-		@Override
-		public String apply( final Object input ) {
-			BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess( input );
-			return beanWrapper.getPropertyValue( nameField ).toString();
-		}
+		return new EntityConfiguration( nameExtractor );
 	}
 }
