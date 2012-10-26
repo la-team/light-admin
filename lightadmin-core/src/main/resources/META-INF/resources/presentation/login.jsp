@@ -38,8 +38,10 @@
 				<c:if test="${not empty param.login_error}">
 					<div class="alert alert-block">
 						<button type="button" class="close" data-dismiss="alert">×</button>
-						<spring:message code="message.security.bad-credentials"/><br/>
-						<spring:message code="message.security.reason"/>&nbsp;<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
+						<div class="alert-message">
+							<spring:message code="message.security.bad-credentials"/><br/>
+							<spring:message code="message.security.reason"/>&nbsp;<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
+						</div>
 					</div>
 				</c:if>
 				<form class="form-horizontal" action="<spring:url value='j_spring_security_check'/>" method="POST">

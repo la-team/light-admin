@@ -1,7 +1,0 @@
-<suite name="UI tests">
-    <test name="UI tests">
-        <packages>
-            <package name="tests" />
-        </packages>
-    </test>
-</suite>

@@ -12,7 +12,7 @@
 <tiles:useAttribute name="dashboardDomainTypes"/>
 
 <c:if test="${not empty dashboardDomainTypes}">
-	<table class="table">
+	<table id="dashboardLinks" class="table">
 		<thead>
 		<tr>
 			<th class="span3">Domain Type</th>

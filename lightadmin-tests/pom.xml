@@ -9,19 +9,13 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <selenium-version>2.25.0</selenium-version>
-        <testng-version>6.8</testng-version>
-        <suite.file>ui-tests.xml</suite.file>
+		<spring.version>3.1.2.RELEASE</spring.version>
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
         <cargo.servlet.port>8080</cargo.servlet.port>
     </properties>
 
     <dependencies>
-        <dependency>
-            <groupId>org.testng</groupId>
-            <artifactId>testng</artifactId>
-            <version>${testng-version}</version>
-        </dependency>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
@@ -33,14 +27,28 @@
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-test</artifactId>
+			<version>${spring.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+		</dependency>
     </dependencies>
 
     <build>
         <plugins>
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-failsafe-plugin</artifactId>
-                <version>2.11</version>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>2.12</version>
                 <executions>
                     <execution>
                         <id>integration-test</id>
@@ -49,10 +57,10 @@
                             <goal>integration-test</goal>
                         </goals>
                         <configuration>
-                            <suiteXmlFiles>
-                                <suiteXmlFile>${suite.file}</suiteXmlFile>
-                            </suiteXmlFiles>
-                            <printSummary>true</printSummary>
+							<includes>
+								<include>**/page/*.class</include>
+							</includes>
+							<printSummary>true</printSummary>
                             <systemProperties>
                                 <property>
                                     <name>servlet.port</name>

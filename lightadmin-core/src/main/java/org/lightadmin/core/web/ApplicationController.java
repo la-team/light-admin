@@ -29,6 +29,11 @@ public class ApplicationController {
 	}
 
 	@RequestMapping( value = "/", method = RequestMethod.GET )
+	public String root() {
+		return "redirect:/dashboard";
+	}
+
+	@RequestMapping( value = "/dashboard", method = RequestMethod.GET )
 	public String dashboard() {
 		return "dashboardView";
 	}

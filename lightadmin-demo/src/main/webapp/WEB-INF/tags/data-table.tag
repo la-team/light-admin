@@ -10,7 +10,7 @@
 <spring:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl" />
 <spring:url value="${light:domainRestBaseUrl(domainTypeName)}" var="domainRestBaseUrl" />
 
-<table id="${domainTypeName}Table" class="table table-bordered table-hover">
+<table id="listViewTable" class="table table-bordered table-hover">
 	<thead>
 	<tr>
 		<th class="info"></th>
@@ -33,7 +33,7 @@
 	}
 
 	$(function() {
-		var tableElement = $('#${domainTypeName}Table');
+		var tableElement = $('#listViewTable');
 
 		var dataTable = tableElement.dataTable({
 			"bStateSave": true,

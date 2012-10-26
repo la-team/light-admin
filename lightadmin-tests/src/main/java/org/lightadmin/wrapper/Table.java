@@ -1,4 +1,4 @@
-package containers;
+package org.lightadmin.wrapper;
 
 
 import org.openqa.selenium.By;
@@ -7,6 +7,7 @@ import org.openqa.selenium.WebElement;
 import java.util.ArrayList;
 import java.util.List;
 
+// TODO: max: Too much complicated => Refactor
 public class Table {
 
     private WebElement table;
