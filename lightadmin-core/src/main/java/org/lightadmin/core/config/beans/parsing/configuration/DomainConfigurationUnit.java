@@ -24,7 +24,7 @@ public enum DomainConfigurationUnit {
 				return domainConfigurationUnit;
 			}
 		}
-		throw new IllegalArgumentException( String.format( "Configuration Unit for name %s nor defined!", name ) );
+		throw new IllegalArgumentException( String.format( "Configuration Unit for name %s not defined!", name ) );
 	}
 
 	@Override
