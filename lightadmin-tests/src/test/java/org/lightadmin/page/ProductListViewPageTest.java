@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
-import org.lightadmin.component.DataTableComponent;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,23 +31,14 @@ public class ProductListViewPageTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void allProductsAreDisplayedForAdmin() {
-		final DataTableComponent dataTable = listViewPage.getDataTable();
-
-		assertProductsDisplayed( expectedProducts, dataTable );
+		assertProductsDisplayed( expectedProducts );
 	}
 
-	private void assertProductsDisplayed( final String[][] expectedProducts, final DataTableComponent dataTable ) {
-		for ( int row = 0; row < dataTable.getRowCount(); row++ ) {
-			for ( int column = 0; column < dataTable.getColumnCount(); column++ ) {
-				final String expectedCellValue = expectedProducts[row][column];
-				final String actualCellValue = dataTable.getValueAt( row, column );
+	private void assertProductsDisplayed( final String[][] expectedProducts ) {
+        assertTableData( expectedProducts, listViewPage.getDataTable() );
+    }
 
-				assertEquals( String.format( "Row: %d, column: %d: ", row + 1, column + 1 ), expectedCellValue, actualCellValue );
-			}
-		}
-	}
-
-	private final String[][] expectedProducts = {
+    private final String[][] expectedProducts = {
 		{"Dock", "Dock for iPhone/iPad", "49"},
 		{"MacBook Pro", "Apple notebook", "1299"},
 		{"iPad", "Apple tablet device", "499"}

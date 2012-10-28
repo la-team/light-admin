@@ -1,6 +1,7 @@
 package org.lightadmin;
 
 import org.junit.runner.RunWith;
+import org.lightadmin.component.DataTableComponent;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -8,6 +9,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import java.net.URL;
+
+import static org.junit.Assert.assertEquals;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( loader = AnnotationConfigContextLoader.class, classes = SeleniumConfig.class )
@@ -26,4 +29,15 @@ public class SeleniumIntegrationTest {
 	protected URL baseUrl() {
 		return baseUrl;
 	}
+
+    public void assertTableData( final String[][] expectedData, final DataTableComponent dataTable ) {
+        for ( int row = 0; row < dataTable.getRowCount(); row++ ) {
+            for ( int column = 0; column < dataTable.getColumnCount(); column++ ) {
+                final String expectedCellValue = expectedData[row][column];
+                final String actualCellValue = dataTable.getValueAt( row, column );
+
+                assertEquals(String.format("Row: %d, column: %d: ", row + 1, column + 1), expectedCellValue, actualCellValue);
+            }
+        }
+    }
 }
