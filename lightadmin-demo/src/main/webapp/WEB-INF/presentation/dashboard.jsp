@@ -21,11 +21,11 @@
 		</thead>
 		<tbody>
 		<c:forEach var="dashboardDomainType" items="${dashboardDomainTypes}">
-			<tr>
-				<td><a href="<spring:url value='${dashboardDomainType.first.link}'/>"><c:out value="${dashboardDomainType.first.value}"/></a></td>
+			<tr id="stat-row-${dashboardDomainType.first.value}">
+				<td><a class="domain-link" href="<spring:url value='${dashboardDomainType.first.link}'/>"><c:out value="${dashboardDomainType.first.value}"/></a></td>
 				<td>
 					<div class="progress">
-						<div class="bar" style="width: ${dashboardDomainType.second}%;"><c:out value="${dashboardDomainType.second}"/></div>
+						<div class="bar" style="width: ${dashboardDomainType.second}%;"><span class="row-count"><c:out value="${dashboardDomainType.second}"/></span></div>
 					</div>
 				</td>
 			</tr>
