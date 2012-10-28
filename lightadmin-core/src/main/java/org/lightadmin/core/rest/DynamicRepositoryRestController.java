@@ -8,12 +8,16 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.scope.Scope;
 import org.lightadmin.core.config.domain.scope.ScopeUtils;
 import org.lightadmin.core.config.domain.support.GlobalAdministrationConfigurationAware;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.search.SpecificationCreator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.domain.Specifications;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Link;
@@ -29,6 +33,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
@@ -52,49 +57,80 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 	}
 
 	@ResponseBody
-	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}", method = RequestMethod.GET )
-	public ResponseEntity<?> scopeEntities( ServletServerHttpRequest request, PagingAndSorting pageSort, @PathVariable String repositoryName, @PathVariable String scopeName ) throws IOException {
+	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search", method = RequestMethod.GET )
+	public ResponseEntity<?> filterEntities( ServletServerHttpRequest request, @SuppressWarnings( "unused" ) URI baseUri, PagingAndSorting pageSort,
+											 @PathVariable String repositoryName, @PathVariable String scopeName ) throws IOException {
+
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
 
+		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
 
 		final Scope scope = domainTypeAdministrationConfiguration.getScopes().getScope( scopeName );
 
-		Page page = findItemsPage( repository, scope, pageSort );
+		final Specification filterSpecification = specificationFromRequest( request, domainTypeEntityMetadata );
+
+		if ( isPredicateScope( scope ) ) {
+			final ScopeUtils.PredicateScope predicateScope = ( ScopeUtils.PredicateScope ) scope;
+
+			final Page page = findBySpecificationAndPredicate( repository, filterSpecification, predicateScope.predicate(), pageSort );
+
+			return negotiateResponse( request, page, pageMetadata( page ) );
+		}
+
+		if ( isSpecificationScope( scope ) ) {
+			final Specification scopeSpecification = ( ( ScopeUtils.SpecificationScope ) scope ).specification();
+
+			Page page = findItemsBySpecification( repository, and( scopeSpecification, filterSpecification ), pageSort );
+
+			return negotiateResponse( request, page, pageMetadata( page ) );
+		}
+
+		Page page = findItemsBySpecification( repository, filterSpecification, pageSort );
 
 		return negotiateResponse( request, page, pageMetadata( page ) );
 	}
 
-	@ResponseBody
-	@RequestMapping( value = "/{repositoryName}/filter", method = RequestMethod.GET )
-	public ResponseEntity<?> filterEntities( ServletServerHttpRequest request, PagingAndSorting pageSort, @PathVariable String repositoryName ) throws IOException {
-		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
+	private Page findBySpecificationAndPredicate( DynamicJpaRepository repository, final Specification specification, Predicate predicate, final PagingAndSorting pageSort ) {
+		final List<?> items = findItemsBySpecification( repository, specification, pageSort.getSort() );
 
-		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+		return selectPage( newArrayList( Collections2.filter( items, predicate ) ), pageSort );
+	}
 
+	private Page<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification, final PagingAndSorting pageSort ) {
+		return repository.findAll( specification, pageSort );
+	}
+
+	private List<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification, final Sort sort ) {
+		return repository.findAll( specification, sort );
+	}
+
+	private Page<?> selectPage( List<Object> items, PagingAndSorting pageSort ) {
+		final List<Object> itemsOnPage = items.subList( pageSort.getOffset(), Math.min( items.size(), pageSort.getOffset() + pageSort.getPageSize() ) );
+
+		return new PageImpl<Object>( itemsOnPage, pageSort, items.size() );
+	}
+
+	private boolean isSpecificationScope( final Scope scope ) {
+		return scope instanceof ScopeUtils.SpecificationScope;
+	}
+
+	private boolean isPredicateScope( final Scope scope ) {
+		return scope instanceof ScopeUtils.PredicateScope;
+	}
+
+	private Specification and( Specification specification, Specification otherSpecification ) {
+		return Specifications.where( specification ).and( otherSpecification );
+	}
+
+	private Specification specificationFromRequest( ServletServerHttpRequest request, final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata ) {
 		final Map<String, String[]> parameters = request.getServletRequest().getParameterMap();
 
-		final Specification specification = specificationCreator.toSpecification( domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata(), parameters );
-
-		Page page = findItemsBySpecification( repository, specification, pageSort );
-
-		return negotiateResponse( request, page, pageMetadata( page ) );
+		return specificationCreator.toSpecification( entityMetadata, parameters );
 	}
 
 	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata ) throws IOException {
 		return responseNegotiator.negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page ), pageMetadata, Lists.<Link>newArrayList() ) );
-	}
-
-	private Page<?> findItemsPage( DynamicJpaRepository repository, Scope scope, PagingAndSorting pageSort ) {
-		if ( scope instanceof ScopeUtils.DefaultScope ) {
-			return repository.findAll( pageSort );
-		}
-
-		if ( scope instanceof ScopeUtils.PredicateScope ) {
-			return findItemsByPredicate( repository, ( ( ScopeUtils.PredicateScope ) scope ).predicate(), pageSort );
-		}
-
-		return findItemsBySpecification( repository, ( ( ScopeUtils.SpecificationScope ) scope ).specification(), pageSort );
 	}
 
 	private PagedResources.PageMetadata pageMetadata( final Page page ) {
@@ -111,18 +147,6 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 			allResources.add( item );
 		}
 		return allResources;
-	}
-
-	private Page<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification, final PagingAndSorting pageSort ) {
-		return repository.findAll( specification, pageSort );
-	}
-
-	private Page<?> findItemsByPredicate( final DynamicJpaRepository repository, final Predicate predicate, final PagingAndSorting pageSort ) {
-		final List<Object> items = repository.findAll( pageSort ).getContent();
-
-		final List<Object> filteredItems = newArrayList( Collections2.filter( items, predicate ) );
-
-		return new PageImpl<Object>( filteredItems, pageSort, items.size() );
 	}
 
 	@Override

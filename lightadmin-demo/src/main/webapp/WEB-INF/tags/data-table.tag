@@ -8,7 +8,6 @@
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
 <spring:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl" />
-<spring:url value="${light:domainRestBaseUrl(domainTypeName)}" var="domainRestBaseUrl" />
 
 <table id="listViewTable" class="table table-bordered table-hover">
 	<thead>
@@ -37,7 +36,6 @@
 
 		var dataTable = tableElement.dataTable({
 			"bStateSave": true,
-		   "sAjaxSource" : '${domainRestBaseUrl}',
 		   "sAjaxDataProp" : 'content',
 		   "aoColumnDefs":[
 			   {
@@ -87,6 +85,8 @@
 	   });
 
 		$( document ).data('lightadmin.dataTable', dataTable );
+
+		searchScope(activeScopeName());
 
 		bindInfoClickHandlers( tableElement, dataTable );
 	});

@@ -10,9 +10,6 @@
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
-<spring:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration.domainTypeName)}" scope="page"/>
-<spring:url var="domainRestFilterBaseUrl" value="${light:domainRestFilterBaseUrl(domainTypeAdministrationConfiguration.domainTypeName)}" scope="page"/>
-
 <c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.config.domain.filter.Filter.class ) %>"/>
 
 <c:if test="${not empty tag_search_filterList}">
@@ -36,19 +33,19 @@
 			</div>
 		</form>
 	</div>
+
+	<script type="text/javascript">
+		$(function() {
+			$("#reset-filter" ).click(function() {
+				$("input", $("form[name='filter-form']") ).val('');
+				searchScope(activeScopeName());
+			});
+
+			$("form[name='filter-form']").submit(function(event) {
+				event.preventDefault();
+				var filter_criteria = $("form[name='filter-form']" ).serialize();
+				searchScope(activeScopeName(), filter_criteria );
+			});
+		});
+	</script>
 </c:if>
-
-<script type="text/javascript">
-	$(function() {
-		$("#reset-filter" ).click(function() {
-			$("input", $("form[name='filter-form']") ).val('');
-			$(document ).data('lightadmin.dataTable').fnReloadAjax( '${domainRestBaseUrl}' );
-		});
-
-		$("form[name='filter-form']").submit(function(event) {
-			event.preventDefault();
-			var filter_criteria = $("form[name='filter-form']" ).serialize();
-			$(document ).data('lightadmin.dataTable').fnReloadAjax( '${domainRestFilterBaseUrl}' + '?' + filter_criteria );
-		});
-	});
-</script>

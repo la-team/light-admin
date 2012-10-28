@@ -41,9 +41,7 @@ public class SpecificationCreator {
 
 				final javax.persistence.criteria.Predicate[] predicates = attributesPredicates.toArray( new javax.persistence.criteria.Predicate[attributesPredicates.size()] );
 
-				query.where( builder.and( predicates ) );
-
-				return null;
+				return builder.and( predicates );
 			}
 		};
 	}

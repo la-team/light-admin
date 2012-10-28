@@ -2,6 +2,7 @@ package org.lightadmin.core.config.domain.scope;
 
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 
 public class DefaultScopeBuilder implements ScopeBuilder {
@@ -35,6 +36,9 @@ public class DefaultScopeBuilder implements ScopeBuilder {
 
 	@Override
 	public Scopes build() {
+		if ( scopes.isEmpty() ) {
+			return new Scopes( newArrayList( ScopeUtils.all().defaultScope( true ) ) );
+		}
 		return new Scopes( scopes );
 	}
 }
