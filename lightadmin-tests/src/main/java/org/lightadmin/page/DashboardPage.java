@@ -30,6 +30,10 @@ public class DashboardPage extends SecuredPage<DashboardPage> {
 		return webDriver.getCurrentUrl().endsWith( "/dashboard" );
 	}
 
+    public int getDomainLinksCount(){
+        return dashboardStatisticsComponent.getDomainLinksCount();
+    }
+
 	@Override
 	protected void load() {
 		webDriver.get( baseUrl.toString() + "/dashboard" );
@@ -41,4 +45,16 @@ public class DashboardPage extends SecuredPage<DashboardPage> {
 
 		assertTrue( "Not on the Dashboard page: " + url, isDashboardPageLoaded() );
 	}
+
+    public boolean isProgressBarDisplayed( Domain domain ) {
+        return dashboardStatisticsComponent.isProgressBarDisplayed( domain );
+    }
+
+    public int getDomainRecordsCount( Domain domain ) {
+        return dashboardStatisticsComponent.getDomainRecordsCount( domain );
+    }
+
+    public int getDomainRecordsPercentage(Domain domain) {
+        return dashboardStatisticsComponent.getDomainRecordsPercentage( domain );
+    }
 }
