@@ -60,7 +60,7 @@
 						</div>
 						<div class="control-group">
 							<div class="controls">
-								<button type="submit" class="btn"><i class="icon-lock"></i>&nbsp;Sign in</button>
+								<button id="signIn" type="submit" class="btn"><i class="icon-lock"></i>&nbsp;Sign in</button>
 							</div>
 						</div>
 					</fieldset>

@@ -1,7 +1,6 @@
 package org.lightadmin.page;
 
 import org.lightadmin.component.DashboardStatisticsComponent;
-import org.lightadmin.component.NavigationMenuComponent;
 import org.lightadmin.data.Domain;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +11,14 @@ import java.net.URL;
 import static org.junit.Assert.assertTrue;
 
 @Component
-public class DashboardPage extends BasePage<DashboardPage> {
+public class DashboardPage extends SecuredPage<DashboardPage> {
 
-	private final NavigationMenuComponent navigationMenuComponent;
-
-	private DashboardStatisticsComponent dashboardStatisticsComponent;
+	private final DashboardStatisticsComponent dashboardStatisticsComponent;
 
 	@Autowired
 	public DashboardPage( WebDriver driver, URL baseUrl ) {
 		super( driver, baseUrl );
 
-		navigationMenuComponent = new NavigationMenuComponent( driver, baseUrl );
 		dashboardStatisticsComponent = new DashboardStatisticsComponent( driver, baseUrl );
 	}
 
@@ -30,16 +26,12 @@ public class DashboardPage extends BasePage<DashboardPage> {
 		return dashboardStatisticsComponent.domainLinkDisplayed( domain );
 	}
 
-	public ListViewPage navigateToDomain( Domain domain ) {
-		return navigationMenuComponent.navigateToDomain( domain );
-	}
-
 	public boolean isDashboardPageLoaded() {
 		return webDriver.getCurrentUrl().endsWith( "/dashboard" );
 	}
 
 	@Override
-	protected void loadPage() {
+	protected void load() {
 		webDriver.get( baseUrl.toString() + "/dashboard" );
 	}
 

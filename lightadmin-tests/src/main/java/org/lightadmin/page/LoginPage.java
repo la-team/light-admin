@@ -1,5 +1,6 @@
 package org.lightadmin.page;
 
+import org.lightadmin.data.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -21,7 +22,7 @@ public class LoginPage extends BasePage<LoginPage> {
 	@FindBy( id = "j_password" )
 	private WebElement password;
 
-	@FindBy( className = "btn" )
+	@FindBy( id = "signIn" )
 	private WebElement submitButton;
 
 	@Autowired
@@ -43,16 +44,22 @@ public class LoginPage extends BasePage<LoginPage> {
 		submitButton.submit();
 	}
 
-	public LoginPage logout() {
-		webDriver.get( baseUrl + "/logout" );
+	public boolean isLoggedOut() {
+		return isElementPresent( submitButton );
+	}
 
-		return new LoginPage( webDriver, baseUrl );
+	public DashboardPage loginAs( User user ) {
+		return loginAs( user.getLogin(), user.getPassword() );
 	}
 
 	public DashboardPage loginAs( String login, String password ) {
 		enterLogin( login ).enterPassword( password ).submit();
 
 		return new DashboardPage( webDriver, baseUrl );
+	}
+
+	public LoginPage loginAsExpectingError( User user ) {
+		return loginAsExpectingError( user.getLogin(), user.getPassword() );
 	}
 
 	public LoginPage loginAsExpectingError( String login, String password ) {
@@ -66,7 +73,7 @@ public class LoginPage extends BasePage<LoginPage> {
 	}
 
 	@Override
-	protected void loadPage() {
+	protected void load() {
 		webDriver.get( baseUrl + "/login" );
 	}
 

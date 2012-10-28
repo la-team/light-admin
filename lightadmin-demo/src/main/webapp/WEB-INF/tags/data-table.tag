@@ -15,7 +15,7 @@
 	<tr>
 		<th class="info"></th>
 		<c:forEach var="field" items="${fields}">
-			<th><c:out value="${field.alias}"/></th>
+			<th class="header"><c:out value="${field.alias}"/></th>
 		</c:forEach>
 		<th>Actions</th>
 	</tr>
@@ -55,7 +55,8 @@
 				   "bSortable":false,
 				   </c:if>
 				   "aTargets":[ ${status.index + 1 } ],
-				   "mData" : '${field.fieldName}'
+				   "mData" : '${field.fieldName}',
+				   "sClass": "data-cell"
 			   },
 			   </c:forEach>
 			   {

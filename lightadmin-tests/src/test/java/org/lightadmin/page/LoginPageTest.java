@@ -21,15 +21,21 @@ public class LoginPageTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void administratorIsRedirectedToDashboard() {
-		final DashboardPage dashboardPage = loginPage.loginAs( User.ADMINISTRATOR.getLogin(), User.ADMINISTRATOR.getPassword() );
+		final DashboardPage dashboardPage = loginPage.loginAs( User.ADMINISTRATOR );
 
+		assertTrue( dashboardPage.isLoggedIn() );
 		assertTrue( dashboardPage.isDashboardPageLoaded() );
+
+		final LoginPage actualLogoutPage = dashboardPage.logout();
+
+		assertTrue( actualLogoutPage.isLoggedOut() );
 	}
 
 	@Test
 	public void validationMessageIsDisplayedForInvalidLogin() {
-		final LoginPage returnedLoginPage = loginPage.loginAsExpectingError( User.INVALID_USER.getLogin(), User.INVALID_USER.getPassword() );
+		final LoginPage returnedLoginPage = loginPage.loginAsExpectingError( User.INVALID_USER );
 
-		assertEquals( "Your login attempt was not successful, try again.\n" + "Reason: Bad credentials.", returnedLoginPage.errorMessage() );
+		assertEquals( "Your login attempt was not successful, try again.\n"
+					  + "Reason: Bad credentials.", returnedLoginPage.errorMessage() );
 	}
 }

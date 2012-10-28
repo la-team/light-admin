@@ -1,5 +1,6 @@
 package org.lightadmin.page;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
@@ -14,15 +15,25 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 	@Autowired
 	private LoginPage loginPage;
 
+	private DashboardPage dashboardPage;
+
 	@Before
 	public void setup() throws Exception {
-		loginPage.get();
+		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
+	}
+
+	@After
+	public void tearDown() throws Exception {
+		dashboardPage.logout();
 	}
 
 	@Test
 	public void domainLinksLoaded() throws Exception {
-		final DashboardPage dashboardPage = loginPage.loginAs( User.ADMINISTRATOR.getLogin(), User.ADMINISTRATOR.getPassword() );
-
 		assertTrue( dashboardPage.domainLinkDisplayed( Domain.PRODUCTS ) );
+	}
+
+	@Test
+	public void dashboardBreadcrumbPresent() throws Exception {
+		assertTrue( dashboardPage.dashboardBreadcrumbItemPresent() );
 	}
 }

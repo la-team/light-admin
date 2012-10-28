@@ -25,7 +25,7 @@
 					</a></li>
 				</ul>
 				<ul class="nav pull-right">
-					<li class="dropdown">
+					<li id="setting-menu" class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="icon-cog icon-white"></i>
 							<spring:message code="application.menu.settings"/>
@@ -37,7 +37,7 @@
 							<li><a href="#"><spring:message code="application.menu.help"/></a></li>
 						</ul>
 					</li>
-					<li class="dropdown">
+					<li id="user-menu" class="dropdown">
 						<a href="#" class="dropdown-toggle" data-toggle="dropdown">
 							<i class="icon-user icon-white"></i>
 							<c:out value="${currentUsername}"/>
