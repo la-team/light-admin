@@ -15,7 +15,8 @@ public class DataTableComponent implements Component {
 	}
 
 	public List<String> getColumnNames() {
-		return WebElementTransformer.transform( dataTableElement.findElements( By.xpath( "thead/th[@class='header']" ) ) );
+		return WebElementTransformer.transform(
+                dataTableElement.findElements( By.xpath( "thead//th[contains(@class,'header')]" ) ) );
 	}
 
 	public int getColumnCount() {
@@ -47,6 +48,6 @@ public class DataTableComponent implements Component {
 	}
 
 	private List<WebElement> cellElements( WebElement rowElement ) {
-		return rowElement.findElements( By.xpath( "td[@class='data-cell']" ) );
+		return rowElement.findElements( By.xpath( "td[contains(@class,'data-cell')]" ) );
 	}
 }
