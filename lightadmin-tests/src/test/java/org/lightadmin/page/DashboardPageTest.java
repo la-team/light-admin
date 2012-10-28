@@ -47,10 +47,7 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
     @Test
     public void domainRecordStatisticsIsDisplayed() {
 
-        Domain.PRODUCTS.setExpectedRecordCount( 3 );
-        Domain.ORDERS.setExpectedRecordCount( 2 );
-        Domain.ADDRESSES.setExpectedRecordCount( 2 );
-        Domain.CUSTOMERS.setExpectedRecordCount( 24 );
+        setExpectedDomainsRecordCount();
 
         for ( Domain domain : Domain.values() ){
             assertTrue( String.format( "Progress bar is not displayed for domain \'%s\':", domain.getLinkText() ),
@@ -62,6 +59,13 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
             assertEquals( String.format( "Incorrect progress bar percentage for domain \'%s\':", domain.getLinkText() ),
                     domain.getExpectedRecordsPercentage() , dashboardPage.getDomainRecordsPercentage( domain ) );
         }
+    }
+
+    private void setExpectedDomainsRecordCount() {
+        Domain.PRODUCTS.setExpectedRecordCount( 3 );
+        Domain.ORDERS.setExpectedRecordCount( 2 );
+        Domain.ADDRESSES.setExpectedRecordCount( 2 );
+        Domain.CUSTOMERS.setExpectedRecordCount( 24 );
     }
 
 }
