@@ -58,7 +58,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
         filterFormComponent.resetFilter();
     }
 
-    public void filterBy( String filterField, String filterValue ) {
+    public void filter(String filterField, String filterValue) {
         filterFormComponent.filter( filterField, filterValue );
     }
 

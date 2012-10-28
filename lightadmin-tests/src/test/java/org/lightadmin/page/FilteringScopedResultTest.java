@@ -21,38 +21,52 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
     @Before
     public void setup() {
         customerListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.CUSTOMERS );
-        customerListViewPage.selectScope( SELLERS_SCOPE );
     }
 
+    //todo: make tests run in fixed order
     @Test
-    public void ordersAreFilteredByScope() {
+    public void customersAreFilteredByScope() {
+        customerListViewPage.selectScope( SELLERS_SCOPE );
+
         assertScopeIsApplied( SELLERS_SCOPE );
     }
 
     @Test
     public void resettingFilterDoesNotResetScope() {
-        customerListViewPage.filterBy( "lastname", "Matthews1" );
-        assertFilterIsApplied();
+        customerListViewPage.selectScope( SELLERS_SCOPE );
+
+        customerListViewPage.filter( "lastname", "Matthews1" );
+        assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable() );
 
         customerListViewPage.resetFilter();
         assertScopeIsApplied( SELLERS_SCOPE );
     }
 
-    private void assertFilterIsApplied() {
+    @Test
+    public void scopeIsAppliedToFilteredCustomers() {
+        customerListViewPage.filter( "lastname", "Matthews1" );
         assertTableData( expectedFilteredCustomers, customerListViewPage.getDataTable() );
+
+        customerListViewPage.selectScope( SELLERS_SCOPE );
+        assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable() );
     }
 
     private void assertScopeIsApplied( String scope ) {
-        assertScopeIsAppliedToOrders();
+        assertScopeIsAppliedToCustomers();
 
         assertTrue( "Selected scope is not highlighted", customerListViewPage.scopeIsHighlighted( scope ) );
     }
 
-    private void assertScopeIsAppliedToOrders() {
+    private void assertScopeIsAppliedToCustomers() {
         assertTableData( expectedScopedCustomers, customerListViewPage.getDataTable() );
     }
 
-    private String[][] expectedFilteredCustomers = {{"Dave", "Matthews1", "dave@dmband1.com" }};
+    private String[][] expectedFilteredAndScopedCustomers = {{"Dave", "Matthews1", "dave@dmband1.com" }};
+
+    private String[][] expectedFilteredCustomers = {
+            {"Boyd", "Matthews1", "boyd@dmband25.com" },
+            {"Dave", "Matthews1", "dave@dmband1.com" }
+    };
 
     private String[][] expectedScopedCustomers = new String[][] {
             {"Dave", "Matthews1", "dave@dmband1.com"},

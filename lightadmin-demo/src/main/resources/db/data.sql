@@ -22,6 +22,7 @@ insert into Customer (id, email, firstname, lastname) values (21, 'boyd@dmband21
 insert into Customer (id, email, firstname, lastname) values (22, 'dave@dmband22.com', 'Dave', 'Matthews8')
 insert into Customer (id, email, firstname, lastname) values (23, 'carter@dmband23.com', 'Carter', 'Beauford');
 insert into Customer (id, email, firstname, lastname) values (24, 'boyd@dmband24.com', 'Boyd', 'Tinsley');
+insert into Customer (id, email, firstname, lastname) values (25, 'boyd@dmband25.com', 'Boyd', 'Matthews1');
 
 insert into Address (id, street, city, country, customer_id) values (1, '27 Broadway', 'New York', 'United States', 1);
 insert into Address (id, street, city, country, customer_id) values (2, '27 Broadway', 'New York', 'United States', 1);

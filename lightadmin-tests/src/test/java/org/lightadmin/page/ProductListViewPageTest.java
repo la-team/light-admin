@@ -8,8 +8,6 @@ import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
-
 public class ProductListViewPageTest extends SeleniumIntegrationTest {
 
 	@Autowired
