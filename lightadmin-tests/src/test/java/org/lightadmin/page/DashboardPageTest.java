@@ -18,7 +18,7 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 
 	private DashboardPage dashboardPage;
 
-    @Before
+	@Before
 	public void setup() throws Exception {
 		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
 	}
@@ -28,44 +28,38 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 		dashboardPage.logout();
 	}
 
-    @Test
-    public void dashboardBreadcrumbPresent() throws Exception {
-        assertTrue(dashboardPage.dashboardBreadcrumbItemPresent());
-    }
+	@Test
+	public void dashboardBreadcrumbPresent() throws Exception {
+		assertTrue( dashboardPage.dashboardBreadcrumbItemPresent() );
+	}
 
 	@Test
 	public void allDomainLinksLoaded() throws Exception {
 		for ( Domain domain : Domain.values() ) {
-            assertTrue( String.format( "Link for \'%s\' is not displayed", domain.getLinkText() ),
-                    dashboardPage.domainLinkDisplayed( domain ) );
-        }
+			assertTrue( String.format( "Link for \'%s\' is not displayed", domain.getLinkText() ), dashboardPage.domainLinkDisplayed( domain ) );
+		}
 
-        assertEquals( String.format( "Unexpected domain links are displayed:" ), Domain.values().length,
-                dashboardPage.getDomainLinksCount() );
+		assertEquals( String.format( "Unexpected domain links are displayed:" ), Domain.values().length, dashboardPage.getDomainLinksCount() );
 	}
 
-    @Test
-    public void domainRecordStatisticsIsDisplayed() {
+	@Test
+	public void domainRecordStatisticsIsDisplayed() {
+		setExpectedDomainsRecordCount();
 
-        setExpectedDomainsRecordCount();
+		for ( Domain domain : Domain.values() ) {
+			assertTrue( String.format( "Progress bar is not displayed for domain \'%s\':", domain.getLinkText() ), dashboardPage.isProgressBarDisplayed( domain ) );
 
-        for ( Domain domain : Domain.values() ){
-            assertTrue( String.format( "Progress bar is not displayed for domain \'%s\':", domain.getLinkText() ),
-                    dashboardPage.isProgressBarDisplayed( domain ) );
+			assertEquals( String.format( "Incorrect record count for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsCount(), dashboardPage.getDomainRecordsCount( domain ) );
 
-            assertEquals( String.format( "Incorrect record count for domain \'%s\':", domain.getLinkText() ),
-                    domain.getExpectedRecordsCount(), dashboardPage.getDomainRecordsCount( domain ) );
+			assertEquals( String.format( "Incorrect progress bar percentage for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsPercentage(), dashboardPage.getDomainRecordsPercentage( domain ) );
+		}
+	}
 
-            assertEquals( String.format( "Incorrect progress bar percentage for domain \'%s\':", domain.getLinkText() ),
-                    domain.getExpectedRecordsPercentage() , dashboardPage.getDomainRecordsPercentage( domain ) );
-        }
-    }
-
-    private void setExpectedDomainsRecordCount() {
-        Domain.PRODUCTS.setExpectedRecordCount( 3 );
-        Domain.ORDERS.setExpectedRecordCount( 2 );
-        Domain.ADDRESSES.setExpectedRecordCount( 2 );
-        Domain.CUSTOMERS.setExpectedRecordCount( 25 );
-    }
+	private void setExpectedDomainsRecordCount() {
+		Domain.PRODUCTS.setExpectedRecordCount( 3 );
+		Domain.ORDERS.setExpectedRecordCount( 2 );
+		Domain.ADDRESSES.setExpectedRecordCount( 2 );
+		Domain.CUSTOMERS.setExpectedRecordCount( 25 );
+	}
 
 }

@@ -26,4 +26,9 @@ public abstract class BaseComponent implements Component {
 			return false;
 		}
 	}
+
+	protected void clearAndType( WebElement field, String text ) {
+		field.clear();
+		field.sendKeys( text );
+	}
 }

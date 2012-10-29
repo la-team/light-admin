@@ -26,27 +26,27 @@ public class DashboardStatisticsComponent extends BaseComponent {
 		}
 	}
 
-    public int getDomainLinksCount() {
-        return statisticsTable.findElements( By.tagName( "a" ) ).size();
-    }
+	public int getDomainLinksCount() {
+		return statisticsTable.findElements( By.tagName( "a" ) ).size();
+	}
 
-    public boolean isProgressBarDisplayed( Domain domain ) {
-        try {
-            return getProgressBarForDomain( domain ).isDisplayed();
-        } catch ( NoSuchElementException e ) {
-            return false;
-        }
-    }
+	public boolean isProgressBarDisplayed( Domain domain ) {
+		try {
+			return progressBarForDomain( domain ).isDisplayed();
+		} catch ( NoSuchElementException e ) {
+			return false;
+		}
+	}
 
-    public int getDomainRecordsCount(Domain domain) {
-        return Integer.parseInt( getProgressBarForDomain( domain ).findElement( By.className( "row-count" ) ).getText() );
-    }
+	public int getDomainRecordsCount( Domain domain ) {
+		return Integer.parseInt( progressBarForDomain( domain ).findElement( By.className( "row-count" ) ).getText() );
+	}
 
-    private WebElement getProgressBarForDomain( Domain domain ) {
-        return statisticsTable.findElement( By.xpath("//tr[@id='stat-row-" + domain.getLinkText() + "']/td//div[@class='bar']") );
-    }
+	public int getDomainRecordsPercentage( Domain domain ) {
+		return Integer.parseInt( progressBarForDomain( domain ).getAttribute( "style" ).replaceAll( "[\\D]", "" ) );
+	}
 
-    public int getDomainRecordsPercentage( Domain domain ) {
-        return Integer.parseInt( getProgressBarForDomain( domain ).getAttribute( "style" ).replaceAll("[\\D]", "") );
-    }
+	private WebElement progressBarForDomain( Domain domain ) {
+		return statisticsTable.findElement( By.xpath( "//tr[@id='stat-row-" + domain.getLinkText() + "']/td//div[@class='bar']" ) );
+	}
 }

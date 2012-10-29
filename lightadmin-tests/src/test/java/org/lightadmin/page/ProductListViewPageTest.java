@@ -33,12 +33,11 @@ public class ProductListViewPageTest extends SeleniumIntegrationTest {
 	}
 
 	private void assertProductsDisplayed( final String[][] expectedProducts ) {
-        assertTableData( expectedProducts, listViewPage.getDataTable() );
-    }
+		assertTableData( expectedProducts, listViewPage.getDataTable() );
+	}
 
-    private final String[][] expectedProducts = {
-		{"Dock", "Dock for iPhone/iPad", "49"},
-		{"MacBook Pro", "Apple notebook", "1299"},
+	private final String[][] expectedProducts = {
+		{"Dock", "Dock for iPhone/iPad", "49"}, {"MacBook Pro", "Apple notebook", "1299"},
 		{"iPad", "Apple tablet device", "499"}
 	};
 }

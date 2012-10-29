@@ -15,8 +15,7 @@ public class DataTableComponent implements Component {
 	}
 
 	public List<String> getColumnNames() {
-		return WebElementTransformer.transform(
-                dataTableElement.findElements( By.xpath( "thead//th[contains(@class,'header')]" ) ) );
+		return WebElementTransformer.transform( dataTableElement.findElements( By.xpath( "thead//th[contains(@class,'header')]" ) ) );
 	}
 
 	public int getColumnCount() {

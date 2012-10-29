@@ -35,7 +35,6 @@ public class LoginPageTest extends SeleniumIntegrationTest {
 	public void validationMessageIsDisplayedForInvalidLogin() {
 		final LoginPage returnedLoginPage = loginPage.loginAsExpectingError( User.INVALID_USER );
 
-		assertEquals( "Your login attempt was not successful, try again.\n"
-					  + "Reason: Bad credentials.", returnedLoginPage.errorMessage() );
+		assertEquals( "Your login attempt was not successful, try again.\n" + "Reason: Bad credentials.", returnedLoginPage.errorMessage() );
 	}
 }
