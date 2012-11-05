@@ -15,7 +15,7 @@
 
 	<http use-expressions="true" disable-url-rewriting="true">
 		<!--<intercept-url pattern="/**" access="permitAll" />-->
-		<intercept-url pattern="/**" access="isAuthenticated()" />
+		<intercept-url pattern="/**" access="isAuthenticated()"/>
 		<form-login login-page="/login" authentication-failure-url="/login?login_error=1"/>
 		<http-basic/>
 		<logout logout-url="/logout" logout-success-url="/login"/>
@@ -27,7 +27,7 @@
 		<authentication-provider>
 			<password-encoder ref="encoder"/>
 			<user-service>
-				<user name="admin" password="admin" authorities="admin" />
+				<user name="admin" password="admin" authorities="admin"/>
 			</user-service>
 		</authentication-provider>
 	</authentication-manager>

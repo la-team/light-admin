@@ -3,8 +3,7 @@ package org.lightadmin.core.test.util;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.beans.parsing.ConfigurationUnitPropertyFilter;
-import org.lightadmin.core.config.beans.parsing.configuration.DomainConfiguration;
+import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationClassSource;
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
 import org.lightadmin.core.config.domain.filter.DefaultFilterBuilder;
@@ -20,12 +19,12 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolve
 @SuppressWarnings( {"unused", "unchecked"} )
 public class DummyConfigurationsHelper {
 
-	public static DomainConfiguration emptyDomainEntityConfiguration() {
-		return new DomainConfiguration( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
+	public static DomainConfigurationClassSource emptyDomainEntityConfiguration() {
+		return new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
 	}
 
-	public static DomainConfiguration domainEntityConfigurationWithException() {
-		return new DomainConfiguration( domainTypeEntityMetadataMock( DomainEntity.class ), ConfigurationWithException.class );
+	public static DomainConfigurationClassSource domainEntityConfigurationWithException() {
+		return new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), ConfigurationWithException.class );
 	}
 
 	public static DomainTypeEntityMetadataResolver<? extends DomainTypeEntityMetadata> entityMetadataResolver() {
@@ -94,15 +93,6 @@ public class DummyConfigurationsHelper {
 			fragmentBuilder.field( fieldName );
 		}
 		return ( TableFragment ) fragmentBuilder.build();
-	}
-
-	public static ConfigurationUnitPropertyFilter alwaysTrueFilter() {
-		return new ConfigurationUnitPropertyFilter() {
-			@Override
-			public boolean apply( final String property ) {
-				return true;
-			}
-		};
 	}
 
 	public static class DomainEntity {

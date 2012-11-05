@@ -1,7 +1,5 @@
 package org.lightadmin.core.config.domain.fragment;
 
-import org.lightadmin.core.config.beans.parsing.ConfigurationUnitPropertyFilter;
-
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
@@ -29,16 +27,5 @@ public class TableFragment implements Fragment {
 			}
 		}
 		return null;
-	}
-
-	@Override
-	public Fragment filter( final ConfigurationUnitPropertyFilter propertyFilter ) {
-		TableFragment tableFragment = new TableFragment();
-		for ( FieldMetadata field : fields ) {
-			if ( propertyFilter.apply( field.getFieldName() ) ) {
-				tableFragment.addField( field );
-			}
-		}
-		return tableFragment;
 	}
 }

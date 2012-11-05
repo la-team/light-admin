@@ -3,7 +3,7 @@ package org.lightadmin.core.reporting;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ProblemReporterLogImpl implements ProblemReporter {
+class ProblemReporterLogImpl implements ProblemReporter {
 
 	private Logger logger = LoggerFactory.getLogger( getClass() );
 

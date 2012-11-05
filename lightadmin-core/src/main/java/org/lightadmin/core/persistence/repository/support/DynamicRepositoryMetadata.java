@@ -1,6 +1,6 @@
 package org.lightadmin.core.persistence.repository.support;
 
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.util.Assert;
@@ -10,17 +10,12 @@ import java.lang.reflect.Method;
 
 public class DynamicRepositoryMetadata implements RepositoryMetadata {
 
-	private final Class<?> repositoryInterface;
+	private final Class<?> repositoryInterface = DynamicJpaRepository.class;
 
 	private EntityInformation<?, ? extends Serializable> entityInformation;
 
-	public DynamicRepositoryMetadata( Class<?> repositoryInterface, EntityInformation<?, ? extends Serializable> entityInformation ) {
-		Assert.isTrue( repositoryInterface.isInterface() );
-		Assert.isTrue( JpaRepository.class.isAssignableFrom( repositoryInterface ) );
-
+	public DynamicRepositoryMetadata( EntityInformation<?, ? extends Serializable> entityInformation ) {
 		Assert.notNull( entityInformation );
-
-		this.repositoryInterface = repositoryInterface;
 		this.entityInformation = entityInformation;
 	}
 

@@ -1,101 +1,111 @@
 package org.lightadmin.core.persistence.repository.support;
 
-import org.lightadmin.core.config.beans.support.BeanNameGenerator;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
-import org.springframework.beans.factory.BeanFactoryUtils;
-import org.springframework.beans.factory.ListableBeanFactory;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.RepositoryInformation;
+import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.data.repository.core.support.RepositoryFactoryInformation;
 import org.springframework.data.repository.query.QueryMethod;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 
-import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newLinkedHashMap;
 
 @SuppressWarnings( {"rawtypes", "unchecked"} )
 public class DynamicRepositoriesDecorator extends Repositories {
 
-	private final Map<Class<?>, RepositoryFactoryInformation<Object, Serializable>> domainClassToBeanName = newHashMap();
-	private final Map<RepositoryFactoryInformation<Object, Serializable>, DynamicJpaRepository<Object, Serializable>> repositories = newHashMap();
+	private final Map<Class<?>, DomainTypeAdministrationConfiguration> domainTypeAdministrationConfigurations;
 
-	public DynamicRepositoriesDecorator( ListableBeanFactory factory ) {
+	private final DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver;
+
+	public DynamicRepositoriesDecorator( GlobalAdministrationConfiguration globalAdministrationConfiguration, DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver ) {
 		super( emptyBeanFactory() );
 
-		final Collection<DynamicJpaRepositoryFactoryBean> providers = BeanFactoryUtils.beansOfTypeIncludingAncestors( factory, DynamicJpaRepositoryFactoryBean.class ).values();
-
-		final Map<String, DynamicJpaRepository> jpaRepositories = dynamicJpaRepositories( factory );
-
-		for ( RepositoryFactoryInformation<Object, Serializable> info : providers ) {
-			final Class<?> domainType = info.getRepositoryInformation().getDomainType();
-
-			this.domainClassToBeanName.put( domainType, info );
-			this.repositories.put( info, jpaRepositories.get( BeanNameGenerator.INSTANCE.repositoryBeanName( domainType ) ) );
-		}
+		this.domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver;
+		this.domainTypeAdministrationConfigurations = newLinkedHashMap( globalAdministrationConfiguration.getDomainTypeConfigurations() );
 	}
 
-	private Map<String, DynamicJpaRepository> dynamicJpaRepositories( final ListableBeanFactory factory ) {
-		return BeanFactoryUtils.beansOfTypeIncludingAncestors( factory, DynamicJpaRepository.class );
+	@Override
+	public boolean hasRepositoryFor( Class<?> domainClass ) {
+		return domainTypeAdministrationConfigurations.containsKey( domainClass );
+	}
+
+	@Override
+	public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor( Class<?> domainClass ) {
+		if ( hasRepositoryFor( domainClass ) ) {
+			return ( CrudRepository<T, S> ) domainTypeAdministrationConfigurations.get( domainClass ).getRepository();
+		}
+		return null;
+	}
+
+	@Override
+	public <T, S extends Serializable> EntityInformation<T, S> getEntityInformationFor( Class<?> domainClass ) {
+		RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor( domainClass );
+		return information == null ? null : ( EntityInformation<T, S> ) information.getEntityInformation();
+	}
+
+	@Override
+	public RepositoryInformation getRepositoryInformationFor( Class<?> domainClass ) {
+		RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor( domainClass );
+		return information == null ? null : information.getRepositoryInformation();
+	}
+
+	@Override
+	public List<QueryMethod> getQueryMethodsFor( Class<?> domainClass ) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public Iterator<Class<?>> iterator() {
+		return domainTypeAdministrationConfigurations.keySet().iterator();
 	}
 
 	private static StaticListableBeanFactory emptyBeanFactory() {
 		return new StaticListableBeanFactory();
 	}
 
-	/**
-	 * Returns whether we have a repository instance registered to manage instances of the given domain class.
-	 */
-	public boolean hasRepositoryFor( Class<?> domainClass ) {
-		return domainClassToBeanName.containsKey( domainClass );
-	}
-
-	/**
-	 * Returns the repository managing the given domain class.
-	 */
-	public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor( Class<?> domainClass ) {
-		return ( CrudRepository<T, S> ) repositories.get( domainClassToBeanName.get( domainClass ) );
-	}
-
-	/**
-	 * Returns the {@link org.springframework.data.repository.core.EntityInformation} for the given domain class.
-	 */
-	public <T, S extends Serializable> EntityInformation<T, S> getEntityInformationFor( Class<?> domainClass ) {
-		RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor( domainClass );
-		return information == null ? null : ( EntityInformation<T, S> ) information.getEntityInformation();
-	}
-
-	/**
-	 * Returns the {@link EntityInformation} for the given domain class.
-	 *
-	 * @param domainClass must not be {@literal null}.
-	 * @return the {@link EntityInformation} for the given domain class or {@literal null} if no repository registered for
-	 *         this domain class.
-	 */
-	public RepositoryInformation getRepositoryInformationFor( Class<?> domainClass ) {
-		RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor( domainClass );
-		return information == null ? null : information.getRepositoryInformation();
-	}
-
-	public List<QueryMethod> getQueryMethodsFor( Class<?> domainClass ) {
-		return Collections.emptyList();
-	}
-
 	private RepositoryFactoryInformation<Object, Serializable> getRepoInfoFor( Class<?> domainClass ) {
 		Assert.notNull( domainClass );
-		for ( RepositoryFactoryInformation<Object, Serializable> information : repositories.keySet() ) {
-			if ( domainClass.equals( information.getEntityInformation().getJavaType() ) ) {
-				return information;
-			}
+		if ( hasRepositoryFor( domainClass ) ) {
+			return new ConfigurationRepositoryFactoryInformationAdapter( domainTypeAdministrationConfigurations.get( domainClass ) );
+
 		}
 		return null;
 	}
 
-	public Iterator<Class<?>> iterator() {
-		return domainClassToBeanName.keySet().iterator();
+	private class ConfigurationRepositoryFactoryInformationAdapter<T, ID extends Serializable> implements RepositoryFactoryInformation<T, ID> {
+
+		private final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration;
+
+		public ConfigurationRepositoryFactoryInformationAdapter( final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
+			this.domainTypeAdministrationConfiguration = domainTypeAdministrationConfiguration;
+		}
+
+		@Override
+		@SuppressWarnings( "unchecked" )
+		public EntityInformation<T, ID> getEntityInformation() {
+			return domainTypeEntityMetadataResolver.getEntityInformation( domainTypeAdministrationConfiguration.getDomainType() );
+		}
+
+		@Override
+		public RepositoryInformation getRepositoryInformation() {
+			RepositoryMetadata metadata = new DynamicRepositoryMetadata( getEntityInformation() );
+			return new DynamicRepositoryInformation( metadata );
+		}
+
+		@Override
+		public List<QueryMethod> getQueryMethods() {
+			return Collections.emptyList();
+		}
 	}
 }

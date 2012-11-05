@@ -22,11 +22,12 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @Import( {
-			 LightAdminDataConfiguration.class, LightAdminRepositoryRestConfiguration.class,
-			 LightAdminSecurityConfiguration.class, LightAdminViewConfiguration.class
+			 LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class,
+			 LightAdminRepositoryRestConfiguration.class, LightAdminSecurityConfiguration.class,
+			 LightAdminViewConfiguration.class
 		 } )
 @EnableWebMvc
-public class LightAdminConfiguration extends WebMvcConfigurerAdapter {
+public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
@@ -99,5 +100,4 @@ public class LightAdminConfiguration extends WebMvcConfigurerAdapter {
 		configurer.setCheckRefresh( true );
 		return configurer;
 	}
-
 }

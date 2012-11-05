@@ -22,13 +22,13 @@ import org.springframework.util.Assert;
 
 import static org.lightadmin.core.util.DomainConfigurationUtils.initializeConfigurationUnitWithBuilder;
 
-public class DomainConfiguration implements DomainConfigurationInterface {
+public class DomainConfigurationClassSource implements DomainConfigurationSource<Class> {
 
-	private final Class<?> configurationClass;
+	private final Class configurationClass;
 
 	private final DomainTypeEntityMetadata domainTypeEntityMetadata;
 
-	public DomainConfiguration( final DomainTypeEntityMetadata domainTypeEntityMetadata, final Class<?> configurationClass ) {
+	public DomainConfigurationClassSource( final DomainTypeEntityMetadata domainTypeEntityMetadata, final Class<?> configurationClass ) {
 		Assert.notNull( domainTypeEntityMetadata );
 		Assert.notNull( configurationClass );
 
@@ -42,12 +42,17 @@ public class DomainConfiguration implements DomainConfigurationInterface {
 	}
 
 	@Override
+	public String getConfigurationName() {
+		return configurationClass.getSimpleName();
+	}
+
+	@Override
 	public DomainTypeEntityMetadata getDomainTypeEntityMetadata() {
 		return domainTypeEntityMetadata;
 	}
 
 	@Override
-	public Class<?> getConfigurationClass() {
+	public Class getSource() {
 		return configurationClass;
 	}
 
@@ -89,7 +94,7 @@ public class DomainConfiguration implements DomainConfigurationInterface {
 			return false;
 		}
 
-		final DomainConfiguration that = ( DomainConfiguration ) o;
+		final DomainConfigurationClassSource that = ( DomainConfigurationClassSource ) o;
 
 		return configurationClass.equals( that.configurationClass ) && getDomainType().equals( that.getDomainType() );
 	}

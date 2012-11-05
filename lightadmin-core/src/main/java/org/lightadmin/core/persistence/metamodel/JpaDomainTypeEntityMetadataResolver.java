@@ -1,6 +1,7 @@
 package org.lightadmin.core.persistence.metamodel;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
+import org.springframework.data.repository.core.EntityInformation;
 
 import javax.persistence.EntityManager;
 
@@ -8,7 +9,6 @@ public class JpaDomainTypeEntityMetadataResolver implements DomainTypeEntityMeta
 
 	private final EntityManager entityManager;
 
-	@Autowired
 	public JpaDomainTypeEntityMetadataResolver( EntityManager entityManager ) {
 		this.entityManager = entityManager;
 	}
@@ -20,5 +20,10 @@ public class JpaDomainTypeEntityMetadataResolver implements DomainTypeEntityMeta
 		} catch ( IllegalArgumentException ex ) {
 			return null;
 		}
+	}
+
+	@Override
+	public EntityInformation getEntityInformation( final Class<?> domainType ) {
+		return JpaEntityInformationSupport.getMetadata( domainType, entityManager );
 	}
 }

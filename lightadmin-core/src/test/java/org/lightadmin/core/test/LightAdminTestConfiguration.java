@@ -1,6 +1,6 @@
 package org.lightadmin.core.test;
 
-import org.lightadmin.core.config.LightAdminDataConfiguration;
+import org.lightadmin.core.config.LightAdminDomainConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,7 +19,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@Import( {LightAdminTestConfiguration.PersistanceConfiguration.class, LightAdminDataConfiguration.class} )
+@Import( {
+			 LightAdminTestConfiguration.PersistanceConfiguration.class,
+			 LightAdminDomainConfiguration.class
+		 } )
 public class LightAdminTestConfiguration {
 
 	@Configuration
@@ -27,6 +30,11 @@ public class LightAdminTestConfiguration {
 	public static class PersistanceConfiguration {
 
 		private static final String MODEL_BASE_PACKAGE = "org.lightadmin.core.test.model";
+
+		@Bean
+		public PlatformTransactionManager transactionManager() {
+			return new JpaTransactionManager( entityManagerFactory() );
+		}
 
 		@Bean
 		public DataSource dataSource() {
@@ -54,13 +62,5 @@ public class LightAdminTestConfiguration {
 		public JpaDialect jpaDialect() {
 			return new HibernateJpaDialect();
 		}
-
-		@Bean
-		public PlatformTransactionManager transactionManager() {
-			JpaTransactionManager txManager = new JpaTransactionManager();
-			txManager.setEntityManagerFactory( entityManagerFactory() );
-			return txManager;
-		}
-
 	}
 }

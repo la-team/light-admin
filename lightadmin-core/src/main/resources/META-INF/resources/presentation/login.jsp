@@ -40,27 +40,36 @@
 						<button type="button" class="close" data-dismiss="alert">×</button>
 						<div class="alert-message">
 							<spring:message code="message.security.bad-credentials"/><br/>
-							<spring:message code="message.security.reason"/>&nbsp;<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
+							<spring:message code="message.security.reason"/>&nbsp;<c:out
+								value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
 						</div>
 					</div>
 				</c:if>
 				<form class="form-horizontal" action="<spring:url value='j_spring_security_check'/>" method="POST">
 					<fieldset>
 						<div class="control-group">
-							<label class="control-label" for="j_username"><spring:message code="label.username"/></label>
+							<label class="control-label" for="j_username"><spring:message
+									code="label.username"/></label>
+
 							<div class="controls">
-								<input type="text" id="j_username" name="j_username" placeholder="Please enter your name here" value='<c:if test="${not empty param.login_error}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'>
+								<input type="text" id="j_username" name="j_username"
+									   placeholder="Please enter your name here"
+									   value='<c:if test="${not empty param.login_error}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'>
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="j_password"><spring:message code="label.password"/></label>
+							<label class="control-label" for="j_password"><spring:message
+									code="label.password"/></label>
+
 							<div class="controls">
-								<input type="password" id="j_password" name="j_password" placeholder="Please enter your password">
+								<input type="password" id="j_password" name="j_password"
+									   placeholder="Please enter your password">
 							</div>
 						</div>
 						<div class="control-group">
 							<div class="controls">
-								<button id="signIn" type="submit" class="btn"><i class="icon-lock"></i>&nbsp;Sign in</button>
+								<button id="signIn" type="submit" class="btn"><i class="icon-lock"></i>&nbsp;Sign in
+								</button>
 							</div>
 						</div>
 					</fieldset>
@@ -71,9 +80,9 @@
 </div>
 
 <script type="text/javascript">
-	$(function() {
-		$("#j_username" ).focus();
-	});
+	$( function () {
+		$( "#j_username" ).focus();
+	} );
 </script>
 </body>
 </html>

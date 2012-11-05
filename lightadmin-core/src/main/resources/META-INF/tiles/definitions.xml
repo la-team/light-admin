@@ -1,19 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN" "http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
+<!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 2.1//EN"
+		"http://tiles.apache.org/dtds/tiles-config_2_1.dtd">
 
 <tiles-definitions>
 
-    <definition name="application.layout" template="/WEB-INF/presentation/layout/layout.jsp" preparer="screenViewPreparer">
+	<definition name="application.layout" template="/WEB-INF/presentation/layout/layout.jsp"
+				preparer="screenViewPreparer">
 		<put-attribute name="header.section">
-			<definition template="/WEB-INF/presentation/section/header-section.jsp" preparer="headerSectionViewPreparer"/>
+			<definition template="/WEB-INF/presentation/section/header-section.jsp"
+						preparer="headerSectionViewPreparer"/>
 		</put-attribute>
-        <put-attribute name="left.section">
+		<put-attribute name="left.section">
 			<definition template="/WEB-INF/presentation/section/left-section.jsp" preparer="leftSectionViewPreparer"/>
-        </put-attribute>
-		<put-attribute name="footer.section">
-			<definition template="/WEB-INF/presentation/section/footer-section.jsp" preparer="footerSectionViewPreparer"/>
 		</put-attribute>
-    </definition>
+		<put-attribute name="footer.section">
+			<definition template="/WEB-INF/presentation/section/footer-section.jsp"
+						preparer="footerSectionViewPreparer"/>
+		</put-attribute>
+	</definition>
 
 	<definition name="login" template="/presentation/login.jsp"/>
 
@@ -24,10 +28,10 @@
 	</definition>
 
 	<definition name="listView" extends="application.layout">
-        <put-attribute name="main.section">
+		<put-attribute name="main.section">
 			<definition template="/WEB-INF/presentation/list.jsp" preparer="listViewPreparer"/>
 		</put-attribute>
-    </definition>
+	</definition>
 
 	<definition name="editView" extends="application.layout">
 		<put-attribute name="main.section">

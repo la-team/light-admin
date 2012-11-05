@@ -3,13 +3,21 @@ package org.lightadmin.core.config.domain;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class GlobalAdministrationConfiguration {
 
-	private Map<Class<?>, DomainTypeAdministrationConfiguration> domainTypeConfigurations;
+	private final Map<Class<?>, DomainTypeAdministrationConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
 
-	public void setDomainTypeConfigurations( final Map<Class<?>, DomainTypeAdministrationConfiguration> domainTypeConfigurations ) {
-		this.domainTypeConfigurations = domainTypeConfigurations;
+	public void registerDomainTypeConfiguration( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
+		domainTypeConfigurations.put( domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration );
+	}
+
+	public void registerDomainTypeConfigurations( Set<DomainTypeAdministrationConfiguration> domainTypeAdministrationConfigurations ) {
+		for ( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration : domainTypeAdministrationConfigurations ) {
+			registerDomainTypeConfiguration( domainTypeAdministrationConfiguration );
+		}
 	}
 
 	public Map<Class<?>, DomainTypeAdministrationConfiguration> getDomainTypeConfigurations() {

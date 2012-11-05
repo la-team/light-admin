@@ -7,13 +7,13 @@ import static org.junit.Assert.assertTrue;
 import static org.lightadmin.core.test.util.DummyConfigurationsHelper.domainTypeEntityMetadataMock;
 import static org.lightadmin.core.test.util.DummyConfigurationsHelper.entityMetadataResolver;
 
-public class DomainTypePropertyValidatorTest {
+public class SimpleDomainTypePropertyValidatorTest {
 
-	private DomainTypePropertyValidatorInterface subject;
+	private DomainTypePropertyValidator subject;
 
 	@Test
 	public void persistentExistingSimpleProperty() throws Exception {
-		subject = new DomainTypePropertyValidator( entityMetadataResolver() );
+		subject = new SimpleDomainTypePropertyValidator( entityMetadataResolver() );
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeEntityMetadataMock( Entity.class, "nestedEntity" );
 
@@ -22,7 +22,7 @@ public class DomainTypePropertyValidatorTest {
 
 	@Test
 	public void transientExistingSimpleProperty() throws Exception {
-		subject = new DomainTypePropertyValidator( entityMetadataResolver() );
+		subject = new SimpleDomainTypePropertyValidator( entityMetadataResolver() );
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeEntityMetadataMock( Entity.class );
 
@@ -31,7 +31,7 @@ public class DomainTypePropertyValidatorTest {
 
 	@Test
 	public void invalidSimpleProperty() throws Exception {
-		subject = new DomainTypePropertyValidator( entityMetadataResolver() );
+		subject = new SimpleDomainTypePropertyValidator( entityMetadataResolver() );
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeEntityMetadataMock( Entity.class );
 
@@ -40,9 +40,7 @@ public class DomainTypePropertyValidatorTest {
 
 	@Test
 	public void persistentEntityNestedProperty() {
-		subject = new DomainTypePropertyValidator( entityMetadataResolver(
-			domainTypeEntityMetadataMock( Entity.class, "nestedEntity" ),
-			domainTypeEntityMetadataMock( NestedEntity.class, "nestedEntityProperty" ) ) );
+		subject = new SimpleDomainTypePropertyValidator( entityMetadataResolver( domainTypeEntityMetadataMock( Entity.class, "nestedEntity" ), domainTypeEntityMetadataMock( NestedEntity.class, "nestedEntityProperty" ) ) );
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeEntityMetadataMock( Entity.class, "nestedEntity" );
 
@@ -51,7 +49,7 @@ public class DomainTypePropertyValidatorTest {
 
 	@Test
 	public void transientObjectNestedProperty() {
-		subject = new DomainTypePropertyValidator( entityMetadataResolver( domainTypeEntityMetadataMock( Entity.class, "nestedEntity" ) ) );
+		subject = new SimpleDomainTypePropertyValidator( entityMetadataResolver( domainTypeEntityMetadataMock( Entity.class, "nestedEntity" ) ) );
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeEntityMetadataMock( Entity.class, "nestedEntity" );
 
@@ -60,9 +58,7 @@ public class DomainTypePropertyValidatorTest {
 
 	@Test
 	public void persistentEntityInvalidNestedProperty() {
-		subject = new DomainTypePropertyValidator( entityMetadataResolver(
-			domainTypeEntityMetadataMock( Entity.class, "nestedEntity" ),
-			domainTypeEntityMetadataMock( NestedEntity.class, "nestedEntityProperty" ) ) );
+		subject = new SimpleDomainTypePropertyValidator( entityMetadataResolver( domainTypeEntityMetadataMock( Entity.class, "nestedEntity" ), domainTypeEntityMetadataMock( NestedEntity.class, "nestedEntityProperty" ) ) );
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeEntityMetadataMock( Entity.class, "nestedEntity" );
 

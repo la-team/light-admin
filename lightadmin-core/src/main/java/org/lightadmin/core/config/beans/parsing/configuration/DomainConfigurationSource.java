@@ -7,13 +7,15 @@ import org.lightadmin.core.config.domain.fragment.Fragment;
 import org.lightadmin.core.config.domain.scope.Scopes;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
-public interface DomainConfigurationInterface {
+public interface DomainConfigurationSource<T> {
+
+	T getSource();
 
 	Class<?> getDomainType();
 
-	DomainTypeEntityMetadata getDomainTypeEntityMetadata();
+	String getConfigurationName();
 
-	Class<?> getConfigurationClass();
+	DomainTypeEntityMetadata getDomainTypeEntityMetadata();
 
 	Filters getFilters();
 

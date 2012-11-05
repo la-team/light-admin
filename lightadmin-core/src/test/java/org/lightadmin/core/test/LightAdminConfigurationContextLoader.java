@@ -1,8 +1,8 @@
 package org.lightadmin.core.test;
 
-import org.lightadmin.core.config.beans.AdministrationConfigBeanRegistryPostProcessor;
-import org.lightadmin.core.test.util.DummyConfigurationsHelper;
+import org.lightadmin.core.util.LightAdminConfigurationUtils;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.mock.env.MockPropertySource;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 public class LightAdminConfigurationContextLoader extends AnnotationConfigContextLoader {
@@ -11,9 +11,8 @@ public class LightAdminConfigurationContextLoader extends AnnotationConfigContex
 
 	@Override
 	protected void customizeContext( final GenericApplicationContext context ) {
-		final AdministrationConfigBeanRegistryPostProcessor configBeanRegistryPostProcessor = new AdministrationConfigBeanRegistryPostProcessor( CONFIGURATIONS_BASE_PACKAGE );
-		configBeanRegistryPostProcessor.setDomainTypeEntityMetadataResolver( DummyConfigurationsHelper.entityMetadataResolver() );
-
-		context.addBeanFactoryPostProcessor( configBeanRegistryPostProcessor );
+		MockPropertySource mockPropertySource = new MockPropertySource();
+		mockPropertySource.setProperty( LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE, CONFIGURATIONS_BASE_PACKAGE );
+		context.getEnvironment().getPropertySources().addFirst( mockPropertySource );
 	}
 }

@@ -1,6 +1,5 @@
 package org.lightadmin.core.config.domain.filter;
 
-import org.lightadmin.core.config.beans.parsing.ConfigurationUnitPropertyFilter;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;
@@ -24,15 +23,5 @@ public class Filters implements Iterable<Filter> {
 
 	public int size() {
 		return filters.size();
-	}
-
-	public Filters filter( ConfigurationUnitPropertyFilter propertyFilter ) {
-		List<Filter> result = newLinkedList();
-		for ( Filter filter : filters ) {
-			if ( propertyFilter.apply( filter.getFieldName() ) ) {
-				result.add( filter );
-			}
-		}
-		return new Filters( result );
 	}
 }

@@ -81,7 +81,8 @@
 	<function>
 		<name>invokeMethod</name>
 		<function-class>org.springframework.util.ReflectionUtils</function-class>
-		<function-signature>java.lang.Object invokeMethod(java.lang.reflect.Method,java.lang.Object,java.lang.Object...)</function-signature>
+		<function-signature>java.lang.Object invokeMethod(java.lang.reflect.Method,java.lang.Object,java.lang.Object...)
+		</function-signature>
 	</function>
 
 	<function>
