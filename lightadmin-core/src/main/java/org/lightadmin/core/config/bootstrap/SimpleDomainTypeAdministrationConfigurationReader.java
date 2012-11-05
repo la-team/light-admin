@@ -50,17 +50,17 @@ public class SimpleDomainTypeAdministrationConfigurationReader implements Domain
 	}
 
 	@SuppressWarnings( "unchecked" )
-	private DomainTypeAdministrationConfiguration createConfiguration( DomainConfigurationSource<Class> domainConfiguration ) {
-		final DynamicJpaRepository<?, ? extends Serializable> repository = dynamicJpaRepositoryFactory.createRepository( domainConfiguration.getDomainType() );
+	private DomainTypeAdministrationConfiguration createConfiguration( DomainConfigurationSource<Class> domainConfigurationSource ) {
+		final DynamicJpaRepository<?, ? extends Serializable> repository = dynamicJpaRepositoryFactory.createRepository( domainConfigurationSource.getDomainType() );
 
-		DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = new DomainTypeAdministrationConfiguration( domainConfiguration.getDomainType(), repository );
+		DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = new DomainTypeAdministrationConfiguration( domainConfigurationSource.getDomainType(), repository );
 
-		domainTypeAdministrationConfiguration.setDomainTypeEntityMetadata( domainConfiguration.getDomainTypeEntityMetadata() );
-		domainTypeAdministrationConfiguration.setEntityConfiguration( domainConfiguration.getConfiguration() );
-		domainTypeAdministrationConfiguration.setScreenContext( domainConfiguration.getScreenContext() );
-		domainTypeAdministrationConfiguration.setListViewFragment( domainConfiguration.getListViewFragment() );
-		domainTypeAdministrationConfiguration.setScopes( domainConfiguration.getScopes() );
-		domainTypeAdministrationConfiguration.setFilters( domainConfiguration.getFilters() );
+		domainTypeAdministrationConfiguration.setDomainTypeEntityMetadata( domainConfigurationSource.getDomainTypeEntityMetadata() );
+		domainTypeAdministrationConfiguration.setEntityConfiguration( domainConfigurationSource.getConfiguration() );
+		domainTypeAdministrationConfiguration.setScreenContext( domainConfigurationSource.getScreenContext() );
+		domainTypeAdministrationConfiguration.setListViewFragment( domainConfigurationSource.getListViewFragment() );
+		domainTypeAdministrationConfiguration.setScopes( domainConfigurationSource.getScopes() );
+		domainTypeAdministrationConfiguration.setFilters( domainConfigurationSource.getFilters() );
 
 		return domainTypeAdministrationConfiguration;
 	}
