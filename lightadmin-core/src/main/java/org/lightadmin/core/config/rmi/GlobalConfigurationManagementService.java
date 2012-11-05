@@ -1,9 +1,9 @@
 package org.lightadmin.core.config.rmi;
 
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceDTO;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassDTO;
 
 public interface GlobalConfigurationManagementService {
 
-	void registerDomainTypeConfiguration( DomainConfigurationSourceDTO domainConfigurationSourceDTO );
+	void registerDomainTypeConfiguration( DomainConfigurationClassDTO domainConfigurationClassDTO );
 
 }

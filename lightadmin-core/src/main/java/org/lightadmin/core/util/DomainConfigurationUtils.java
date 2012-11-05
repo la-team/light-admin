@@ -35,6 +35,22 @@ public abstract class DomainConfigurationUtils {
 	}
 
 	@SuppressWarnings( {"unchecked"} )
+	public static <T> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnit configurationUnit, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
+		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, configurationUnit.getName(), builderInterface );
+
+		Builder<T> builder = BeanUtils.instantiateClass( concreteBuilderClass );
+		if ( method != null ) {
+			try {
+				return ( T ) invokeMethod( method, null, builder );
+			} catch ( Exception ex ) {
+				return BeanUtils.instantiateClass( concreteBuilderClass ).build();
+			}
+		}
+
+		return builder.build();
+	}
+
+	@SuppressWarnings( {"unchecked"} )
 	public static <T> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnit configurationUnit, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass, final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, configurationUnit.getName(), builderInterface );
 

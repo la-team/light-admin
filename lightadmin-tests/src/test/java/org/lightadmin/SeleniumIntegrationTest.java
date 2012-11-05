@@ -2,6 +2,7 @@ package org.lightadmin;
 
 import org.junit.runner.RunWith;
 import org.lightadmin.component.DataTableComponent;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassDTO;
 import org.lightadmin.core.config.rmi.GlobalConfigurationManagementService;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +26,11 @@ public class SeleniumIntegrationTest {
 
 	@Autowired
 	private GlobalConfigurationManagementService globalConfigurationManagementService;
+
+	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
+		final DomainConfigurationClassDTO domainConfigurationClassDTO = new DomainConfigurationClassDTO( configurationClass );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( domainConfigurationClassDTO );
+	}
 
 	protected WebDriver webDriver() {
 		return webDriver;
