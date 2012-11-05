@@ -8,7 +8,7 @@ import org.springframework.util.Assert;
 import java.io.Serializable;
 import java.lang.reflect.Method;
 
-public class DynamicRepositoryMetadata implements RepositoryMetadata {
+class DynamicRepositoryMetadata implements RepositoryMetadata {
 
 	private final Class<?> repositoryInterface = DynamicJpaRepository.class;
 

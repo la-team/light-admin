@@ -1,7 +1,7 @@
 package org.lightadmin.core.util;
 
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationUnit;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnit;
 import org.lightadmin.core.config.domain.support.Builder;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.beans.BeanUtils;

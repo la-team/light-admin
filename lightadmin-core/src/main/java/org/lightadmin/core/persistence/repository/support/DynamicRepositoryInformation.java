@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import static com.google.common.collect.Sets.newHashSet;
 
-public class DynamicRepositoryInformation implements RepositoryInformation {
+class DynamicRepositoryInformation implements RepositoryInformation {
 
 	private final Map<Method, Method> methodCache = new ConcurrentHashMap<Method, Method>();
 

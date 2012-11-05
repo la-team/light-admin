@@ -22,7 +22,7 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @Import( {
-			 LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class,
+			 LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminExternalConfiguration.class,
 			 LightAdminRepositoryRestConfiguration.class, LightAdminSecurityConfiguration.class,
 			 LightAdminViewConfiguration.class
 		 } )

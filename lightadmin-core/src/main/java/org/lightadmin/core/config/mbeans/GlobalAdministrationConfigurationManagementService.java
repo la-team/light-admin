@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.mbeans;
 
-import org.lightadmin.core.config.beans.DomainTypeAdministrationConfigurationReader;
+import org.lightadmin.core.config.bootstrap.DomainTypeAdministrationConfigurationReader;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.reporting.ProblemReporterFactory;

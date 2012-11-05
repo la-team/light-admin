@@ -2,6 +2,7 @@ package org.lightadmin;
 
 import org.junit.runner.RunWith;
 import org.lightadmin.component.DataTableComponent;
+import org.lightadmin.core.config.rmi.GlobalConfigurationManagementService;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -21,6 +22,9 @@ public class SeleniumIntegrationTest {
 
 	@Autowired
 	private URL baseUrl;
+
+	@Autowired
+	private GlobalConfigurationManagementService globalConfigurationManagementService;
 
 	protected WebDriver webDriver() {
 		return webDriver;

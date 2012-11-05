@@ -3,7 +3,7 @@ package org.lightadmin.core.test.util;
 import org.easymock.EasyMock;
 import org.easymock.IAnswer;
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.beans.parsing.configuration.DomainConfigurationClassSource;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassSource;
 import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
 import org.lightadmin.core.config.domain.filter.DefaultFilterBuilder;
