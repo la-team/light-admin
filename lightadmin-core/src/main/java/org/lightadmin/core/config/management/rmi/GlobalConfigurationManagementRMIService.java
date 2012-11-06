@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.rmi;
+package org.lightadmin.core.config.management.rmi;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassDTO;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
@@ -7,6 +7,8 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.Set;
 
 public class GlobalConfigurationManagementRMIService implements GlobalConfigurationManagementService {
 
@@ -26,6 +28,13 @@ public class GlobalConfigurationManagementRMIService implements GlobalConfigurat
 		final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigFactory.createAdministrationConfiguration( configurationSource );
 
 		globalAdministrationConfiguration.registerDomainTypeConfiguration( administrationConfiguration );
+	}
+
+	@Override
+	public void registerDomainTypeConfigurations( final Set<DomainConfigurationClassDTO> domainConfigurationClassDTO ) {
+		for ( DomainConfigurationClassDTO configurationClassDTO : domainConfigurationClassDTO ) {
+			registerDomainTypeConfiguration( configurationClassDTO );
+		}
 	}
 
 	@Override

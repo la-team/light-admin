@@ -58,31 +58,31 @@ class DomainConfigurationClassSource implements DomainConfigurationSource<Class>
 
 	@Override
 	public Filters getFilters() {
-		return initializeConfigurationUnit( DomainConfigurationUnit.FILTERS, FilterBuilder.class, DefaultFilterBuilder.class );
+		return initializeConfigurationUnit( DomainConfigurationUnitType.FILTERS, FilterBuilder.class, DefaultFilterBuilder.class );
 	}
 
 	@Override
 	public Scopes getScopes() {
-		return initializeConfigurationUnit( DomainConfigurationUnit.SCOPES, ScopeBuilder.class, DefaultScopeBuilder.class );
+		return initializeConfigurationUnit( DomainConfigurationUnitType.SCOPES, ScopeBuilder.class, DefaultScopeBuilder.class );
 	}
 
 	@Override
 	public Fragment getListViewFragment() {
-		return initializeConfigurationUnit( DomainConfigurationUnit.LIST_VIEW, FragmentBuilder.class, TableFragmentBuilder.class );
+		return initializeConfigurationUnit( DomainConfigurationUnitType.LIST_VIEW, FragmentBuilder.class, TableFragmentBuilder.class );
 	}
 
 	@Override
 	public ScreenContext getScreenContext() {
-		return initializeConfigurationUnit( DomainConfigurationUnit.SCREEN_CONTEXT, ScreenContextBuilder.class, DefaultScreenContextBuilder.class );
+		return initializeConfigurationUnit( DomainConfigurationUnitType.SCREEN_CONTEXT, ScreenContextBuilder.class, DefaultScreenContextBuilder.class );
 	}
 
 	@Override
 	public EntityConfiguration getEntityConfiguration() {
-		return initializeConfigurationUnit( DomainConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class, DefaultEntityConfigurationBuilder.class );
+		return initializeConfigurationUnit( DomainConfigurationUnitType.CONFIGURATION, EntityConfigurationBuilder.class, DefaultEntityConfigurationBuilder.class );
 	}
 
-	private <T> T initializeConfigurationUnit( DomainConfigurationUnit configurationUnit, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
-		return initializeConfigurationUnitWithBuilder( configurationClass, configurationUnit, builderInterface, concreteBuilderClass, domainTypeEntityMetadata );
+	private <T> T initializeConfigurationUnit( DomainConfigurationUnitType configurationUnitType, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
+		return initializeConfigurationUnitWithBuilder( configurationClass, configurationUnitType, builderInterface, concreteBuilderClass, domainTypeEntityMetadata );
 	}
 
 	@Override

@@ -3,7 +3,6 @@ package org.lightadmin.core.config.domain;
 import org.apache.commons.lang.StringUtils;
 
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class GlobalAdministrationConfiguration {
@@ -12,12 +11,6 @@ public class GlobalAdministrationConfiguration {
 
 	public void registerDomainTypeConfiguration( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
 		domainTypeConfigurations.put( domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration );
-	}
-
-	public void registerDomainTypeConfigurations( Set<DomainTypeAdministrationConfiguration> domainTypeAdministrationConfigurations ) {
-		for ( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration : domainTypeAdministrationConfigurations ) {
-			registerDomainTypeConfiguration( domainTypeAdministrationConfiguration );
-		}
 	}
 
 	public void removeDomainTypeConfiguration( final Class<?> domainType ) {

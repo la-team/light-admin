@@ -1,8 +1,8 @@
 package org.lightadmin.core.config;
 
-import org.lightadmin.core.config.mbeans.LightAdminConfigurationMonitoringServiceMBean;
-import org.lightadmin.core.config.rmi.GlobalConfigurationManagementRMIService;
-import org.lightadmin.core.config.rmi.GlobalConfigurationManagementService;
+import org.lightadmin.core.config.management.jmx.LightAdminConfigurationMonitoringServiceMBean;
+import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementRMIService;
+import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.annotation.AnnotationMBeanExporter;
@@ -11,7 +11,7 @@ import org.springframework.remoting.rmi.RmiServiceExporter;
 import java.rmi.RemoteException;
 
 @Configuration
-public class LightAdminExternalConfiguration {
+public class LightAdminRemoteConfiguration {
 
 	@Bean
 	public GlobalConfigurationManagementService globalConfigurationManagementService() {

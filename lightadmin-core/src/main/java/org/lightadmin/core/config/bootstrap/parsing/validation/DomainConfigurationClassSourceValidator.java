@@ -3,7 +3,7 @@ package org.lightadmin.core.config.bootstrap.parsing.validation;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.InvalidPropertyConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnit;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextBuilder;
 import org.lightadmin.core.config.domain.filter.Filter;
@@ -42,19 +42,19 @@ public class DomainConfigurationClassSourceValidator implements DomainConfigurat
 	}
 
 	void validateEntityConfiguration( final DomainConfigurationSource<Class> domainConfigurationSource, final ProblemReporter problemReporter ) {
-		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class ) ) {
-			problemReporter.warning( new DomainConfigurationProblem( domainConfigurationSource, DomainConfigurationUnit.CONFIGURATION, "It's better to define \"configuration\" unit or system will use DomainTypeClass#getSimpleName for entity string representation!" ) );
+		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnitType.CONFIGURATION, EntityConfigurationBuilder.class ) ) {
+			problemReporter.warning( new DomainConfigurationProblem( domainConfigurationSource, DomainConfigurationUnitType.CONFIGURATION, "It's better to define \"configuration\" unit or system will use DomainTypeClass#getSimpleName for entity string representation!" ) );
 		}
 	}
 
 	void validateScreenContext( final DomainConfigurationSource<Class> domainConfigurationSource, final ProblemReporter problemReporter ) {
-		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnit.SCREEN_CONTEXT, ScreenContextBuilder.class ) ) {
-			problemReporter.fatal( new DomainConfigurationProblem( domainConfigurationSource, DomainConfigurationUnit.SCREEN_CONTEXT, "You need to define \"screenContext\" configuration unit!" ) );
+		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnitType.SCREEN_CONTEXT, ScreenContextBuilder.class ) ) {
+			problemReporter.fatal( new DomainConfigurationProblem( domainConfigurationSource, DomainConfigurationUnitType.SCREEN_CONTEXT, "You need to define \"screenContext\" configuration unit!" ) );
 		}
 	}
 
 	void validateListView( final DomainConfigurationSource<Class> domainConfigurationSource, final ProblemReporter problemReporter ) {
-		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnit.LIST_VIEW, FragmentBuilder.class ) ) {
+		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnitType.LIST_VIEW, FragmentBuilder.class ) ) {
 			return;
 		}
 
@@ -63,20 +63,20 @@ public class DomainConfigurationClassSourceValidator implements DomainConfigurat
 
 		for ( FieldMetadata field : fields ) {
 			if ( domainTypePropertyValidator.isInvalidProperty( field.getFieldName(), domainConfigurationSource.getDomainTypeEntityMetadata() ) ) {
-				problemReporter.error( new InvalidPropertyConfigurationProblem( field.getFieldName(), domainConfigurationSource, DomainConfigurationUnit.LIST_VIEW ) );
+				problemReporter.error( new InvalidPropertyConfigurationProblem( field.getFieldName(), domainConfigurationSource, DomainConfigurationUnitType.LIST_VIEW ) );
 			}
 		}
 	}
 
 	void validateFilters( final DomainConfigurationSource<Class> domainConfigurationSource, final ProblemReporter problemReporter ) {
-		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnit.FILTERS, FilterBuilder.class ) ) {
+		if ( isNotConfigurationUnitDefined( domainConfigurationSource.getSource(), DomainConfigurationUnitType.FILTERS, FilterBuilder.class ) ) {
 			return;
 		}
 
 		for ( Filter filter : domainConfigurationSource.getFilters() ) {
 			final String fieldName = filter.getFieldName();
 			if ( domainTypePropertyValidator.isInvalidProperty( fieldName, domainConfigurationSource.getDomainTypeEntityMetadata() ) ) {
-				problemReporter.warning( new InvalidPropertyConfigurationProblem( fieldName, domainConfigurationSource, DomainConfigurationUnit.FILTERS ) );
+				problemReporter.warning( new InvalidPropertyConfigurationProblem( fieldName, domainConfigurationSource, DomainConfigurationUnitType.FILTERS ) );
 			}
 		}
 	}

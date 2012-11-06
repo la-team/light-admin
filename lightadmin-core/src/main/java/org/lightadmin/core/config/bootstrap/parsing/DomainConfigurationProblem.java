@@ -1,23 +1,24 @@
 package org.lightadmin.core.config.bootstrap.parsing;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnit;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.reporting.Problem;
 
+@SuppressWarnings( "unused" )
 public class DomainConfigurationProblem extends Problem {
 
 	private final DomainConfigurationSource domainConfiguration;
 
-	private DomainConfigurationUnit configurationUnit;
+	private DomainConfigurationUnitType configurationUnitType;
 
 	public DomainConfigurationProblem( final DomainConfigurationSource domainConfiguration, final String message ) {
 		super( message );
 		this.domainConfiguration = domainConfiguration;
 	}
 
-	public DomainConfigurationProblem( final DomainConfigurationSource domainConfiguration, DomainConfigurationUnit configurationUnit, final String message ) {
+	public DomainConfigurationProblem( final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, final String message ) {
 		this( domainConfiguration, message );
-		this.configurationUnit = configurationUnit;
+		this.configurationUnitType = configurationUnitType;
 	}
 
 	@Override
@@ -25,8 +26,8 @@ public class DomainConfigurationProblem extends Problem {
 		StringBuilder stringBuilder = new StringBuilder();
 		stringBuilder.append( "Domain Configuration " );
 		stringBuilder.append( "\"" ).append( domainConfiguration.getConfigurationName() ).append( "\"" ).append( ": " );
-		if ( configurationUnit != null ) {
-			stringBuilder.append( "Unit " ).append( "\"" ).append( configurationUnit.getName() ).append( "\"" ).append( ": " );
+		if ( configurationUnitType != null ) {
+			stringBuilder.append( "Unit " ).append( "\"" ).append( configurationUnitType.getName() ).append( "\"" ).append( ": " );
 		}
 		stringBuilder.append( super.getMessage() );
 
@@ -42,7 +43,7 @@ public class DomainConfigurationProblem extends Problem {
 		return domainConfiguration;
 	}
 
-	public DomainConfigurationUnit getConfigurationUnit() {
-		return configurationUnit;
+	public DomainConfigurationUnitType getConfigurationUnitType() {
+		return configurationUnitType;
 	}
 }

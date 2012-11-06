@@ -3,7 +3,7 @@ package org.lightadmin;
 import org.junit.runner.RunWith;
 import org.lightadmin.component.DataTableComponent;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassDTO;
-import org.lightadmin.core.config.rmi.GlobalConfigurationManagementService;
+import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.util.DomainConfigurationUtils;
 import org.openqa.selenium.WebDriver;
 import org.springframework.beans.factory.annotation.Autowired;

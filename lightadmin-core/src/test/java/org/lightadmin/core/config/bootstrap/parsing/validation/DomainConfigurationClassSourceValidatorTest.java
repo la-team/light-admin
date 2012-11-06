@@ -25,7 +25,7 @@ public class DomainConfigurationClassSourceValidatorTest {
 	//		EasyMock.verify( problemReporter );
 	//
 	//		assertEquals( domainConfiguration, problemCapture.getValue().getDomainConfiguration() );
-	//		assertEquals( DomainConfigurationUnit.SCREEN_CONTEXT, problemCapture.getValue().getConfigurationUnit() );
+	//		assertEquals( DomainConfigurationUnitType.SCREEN_CONTEXT, problemCapture.getValue().getConfigurationUnitType() );
 	//	}
 	//
 	//	@Test
@@ -49,6 +49,6 @@ public class DomainConfigurationClassSourceValidatorTest {
 	//		EasyMock.verify( problemReporter );
 	//
 	//		assertEquals( domainConfiguration, problemCapture.getValue().getDomainConfiguration() );
-	//		assertEquals( DomainConfigurationUnit.CONFIGURATION, problemCapture.getValue().getConfigurationUnit() );
+	//		assertEquals( DomainConfigurationUnitType.CONFIGURATION, problemCapture.getValue().getConfigurationUnitType() );
 	//	}
 }

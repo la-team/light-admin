@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
-public enum DomainConfigurationUnit {
+public enum DomainConfigurationUnitType {
 
 	SCREEN_CONTEXT( "screenContext" ),
 	CONFIGURATION( "configuration" ),
@@ -10,7 +10,7 @@ public enum DomainConfigurationUnit {
 
 	private String name;
 
-	private DomainConfigurationUnit( final String name ) {
+	private DomainConfigurationUnitType( final String name ) {
 		this.name = name;
 	}
 
@@ -18,10 +18,10 @@ public enum DomainConfigurationUnit {
 		return name;
 	}
 
-	public static DomainConfigurationUnit forName( String name ) {
-		for ( DomainConfigurationUnit domainConfigurationUnit : values() ) {
-			if ( domainConfigurationUnit.getName().equals( name ) ) {
-				return domainConfigurationUnit;
+	public static DomainConfigurationUnitType forName( String name ) {
+		for ( DomainConfigurationUnitType domainConfigurationUnitType : values() ) {
+			if ( domainConfigurationUnitType.getName().equals( name ) ) {
+				return domainConfigurationUnitType;
 			}
 		}
 		throw new IllegalArgumentException( String.format( "Configuration Unit for name %s not defined!", name ) );

@@ -20,6 +20,7 @@ public class DomainTypeAdministrationConfigFactory {
 
 		DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = new DomainTypeAdministrationConfiguration( domainConfigurationSource.getDomainType(), repository );
 
+		domainTypeAdministrationConfiguration.setConfigurationName( domainConfigurationSource.getConfigurationName() );
 		domainTypeAdministrationConfiguration.setDomainTypeEntityMetadata( domainConfigurationSource.getDomainTypeEntityMetadata() );
 		domainTypeAdministrationConfiguration.setEntityConfiguration( domainConfigurationSource.getEntityConfiguration() );
 		domainTypeAdministrationConfiguration.setScreenContext( domainConfigurationSource.getScreenContext() );

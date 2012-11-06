@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.mbeans;
+package org.lightadmin.core.config.management.jmx;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -22,12 +22,23 @@ public class LightAdminConfigurationMonitoringServiceMBean {
 
 	@ManagedOperation( description = "List all registered Domain Type Configurations" )
 	public Set<String> getDomainTypeAdministrationConfigurations() {
-		final Collection<DomainTypeAdministrationConfiguration> configurations = globalAdministrationConfiguration.getDomainTypeConfigurations().values();
+		final Set<String> result = newLinkedHashSet();
+		for ( DomainTypeAdministrationConfiguration configuration : domainTypeConfigurations() ) {
+			result.add( configuration.getConfigurationName() );
+		}
+		return result;
+	}
 
-		Set<String> result = newLinkedHashSet();
-		for ( DomainTypeAdministrationConfiguration configuration : configurations ) {
+	@ManagedOperation( description = "List all registered Domain Types" )
+	public Set<String> getDomainTypes() {
+		final Set<String> result = newLinkedHashSet();
+		for ( DomainTypeAdministrationConfiguration configuration : domainTypeConfigurations() ) {
 			result.add( configuration.getDomainTypeName() );
 		}
 		return result;
+	}
+
+	private Collection<DomainTypeAdministrationConfiguration> domainTypeConfigurations() {
+		return globalAdministrationConfiguration.getDomainTypeConfigurations().values();
 	}
 }

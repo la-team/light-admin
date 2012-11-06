@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.domain.context;
 
 import java.io.Serializable;
+
 public class ScreenContext implements Serializable {
 
 	private final String screenName;

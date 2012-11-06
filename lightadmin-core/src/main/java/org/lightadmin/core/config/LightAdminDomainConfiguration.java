@@ -6,6 +6,7 @@ import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurati
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class LightAdminDomainConfiguration {
 	private EntityManager entityManager;
 
 	@Bean
-	public JpaDomainTypeEntityMetadataResolver jpaDomainTypeEntityMetadataResolver() {
+	public DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver() {
 		return new JpaDomainTypeEntityMetadataResolver( entityManager );
 	}
 
@@ -39,7 +40,7 @@ public class LightAdminDomainConfiguration {
 
 	@Bean
 	public DomainConfigurationSourceFactory domainConfigurationSourceFactory() {
-		return new DomainConfigurationSourceFactory( jpaDomainTypeEntityMetadataResolver() );
+		return new DomainConfigurationSourceFactory( domainTypeEntityMetadataResolver() );
 	}
 
 	@Bean
@@ -56,7 +57,7 @@ public class LightAdminDomainConfiguration {
 	@Bean
 	@Autowired
 	public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor( DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory ) {
-		final DomainConfigurationSourceValidator configurationSourceValidator = new DomainConfigurationClassSourceValidator( jpaDomainTypeEntityMetadataResolver() );
+		final DomainConfigurationSourceValidator configurationSourceValidator = new DomainConfigurationClassSourceValidator( domainTypeEntityMetadataResolver() );
 
 		return new GlobalAdministrationConfigurationProcessor( domainTypeAdministrationConfigFactory,
 															   domainConfigurationSourceFactory(),

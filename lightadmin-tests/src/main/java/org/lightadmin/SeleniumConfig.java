@@ -1,6 +1,6 @@
 package org.lightadmin;
 
-import org.lightadmin.core.config.rmi.GlobalConfigurationManagementService;
+import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;

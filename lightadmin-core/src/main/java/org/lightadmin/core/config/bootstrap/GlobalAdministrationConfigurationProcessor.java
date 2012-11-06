@@ -22,13 +22,13 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 	private final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory;
 	private final DomainConfigurationSourceFactory domainConfigurationSourceFactory;
 
-	private final DomainConfigurationSourceValidator configurationSourceValidator;
+	private final DomainConfigurationSourceValidator<DomainConfigurationSource> configurationSourceValidator;
 
 	private final Environment environment;
 
 	public GlobalAdministrationConfigurationProcessor( final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory,
 													   final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
-													   final DomainConfigurationSourceValidator configurationSourceValidator,
+													   final DomainConfigurationSourceValidator<DomainConfigurationSource> configurationSourceValidator,
 													   final Environment environment ) {
 
 		this.domainConfigurationSourceFactory = domainConfigurationSourceFactory;

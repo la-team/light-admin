@@ -4,15 +4,15 @@ import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
 
-public class DomainConfigurationUnitTest {
+public class DomainConfigurationUnitTypeTest {
 
 	@Test( expected = IllegalArgumentException.class )
 	public void undefinedConfigurationUnit() {
-		DomainConfigurationUnit.forName( "Undefined configuration unit" );
+		DomainConfigurationUnitType.forName( "Undefined configuration unit" );
 	}
 
 	@Test
 	public void findConfigurationUnitByName() throws Exception {
-		assertEquals( DomainConfigurationUnit.SCREEN_CONTEXT, DomainConfigurationUnit.forName( "screenContext" ) );
+		assertEquals( DomainConfigurationUnitType.SCREEN_CONTEXT, DomainConfigurationUnitType.forName( "screenContext" ) );
 	}
 }

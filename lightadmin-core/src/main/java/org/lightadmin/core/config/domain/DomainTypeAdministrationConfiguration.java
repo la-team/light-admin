@@ -15,6 +15,8 @@ import java.io.Serializable;
 
 public class DomainTypeAdministrationConfiguration {
 
+	private String configurationName;
+
 	private DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata;
 
 	private final Class<?> domainType;
@@ -97,5 +99,13 @@ public class DomainTypeAdministrationConfiguration {
 
 	public void setEntityConfiguration( final EntityConfiguration entityConfiguration ) {
 		this.entityConfiguration = entityConfiguration;
+	}
+
+	public void setConfigurationName( final String configurationName ) {
+		this.configurationName = configurationName;
+	}
+
+	public String getConfigurationName() {
+		return configurationName;
 	}
 }
