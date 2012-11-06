@@ -20,7 +20,7 @@ public final class FilterUtils {
 
 		private final String fieldName;
 
-		private DomainTypeAttributeMetadata attributeMetadata;
+		private transient DomainTypeAttributeMetadata attributeMetadata;
 
 		public DefaultFilter( final String fieldName ) {
 			this.fieldName = fieldName;

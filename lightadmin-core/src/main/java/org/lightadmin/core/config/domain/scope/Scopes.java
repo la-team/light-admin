@@ -2,12 +2,13 @@ package org.lightadmin.core.config.domain.scope;
 
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newLinkedList;
 
-public class Scopes implements Iterable<Scope> {
+public class Scopes implements Iterable<Scope>, Serializable {
 
 	private final List<Scope> scopes;
 

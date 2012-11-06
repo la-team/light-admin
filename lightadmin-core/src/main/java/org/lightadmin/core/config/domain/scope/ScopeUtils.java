@@ -36,7 +36,7 @@ public final class ScopeUtils {
 
 	public static class SpecificationScope<T> extends AbstractScope {
 
-		private final Specification<T> specification;
+		private transient final Specification<T> specification;
 
 		private SpecificationScope( final Specification<T> specification ) {
 			this.specification = specification;
@@ -54,7 +54,7 @@ public final class ScopeUtils {
 
 	public static class PredicateScope<T> extends AbstractScope {
 
-		private Predicate<T> predicate = Predicates.alwaysTrue();
+		private transient Predicate<T> predicate = Predicates.alwaysTrue();
 
 		private PredicateScope( final Predicate<T> predicate ) {
 			this.predicate = predicate;

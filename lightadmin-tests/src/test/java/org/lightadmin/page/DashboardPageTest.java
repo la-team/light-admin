@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
-import org.lightadmin.config.TestAddressAdministration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +20,7 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() throws Exception {
-		registerDomainTypeAdministrationConfiguration( TestAddressAdministration.class );
+//		registerDomainTypeAdministrationConfiguration( TestLineItemConfiguration.class );
 
 		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
 	}
@@ -29,6 +28,8 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 	@After
 	public void tearDown() throws Exception {
 		dashboardPage.logout();
+
+//		removeDomainTypeAdministrationConfiguration( TestLineItemConfiguration.class );
 	}
 
 	@Test

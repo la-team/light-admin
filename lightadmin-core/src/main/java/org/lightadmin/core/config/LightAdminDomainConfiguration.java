@@ -1,13 +1,13 @@
 package org.lightadmin.core.config;
 
-import org.lightadmin.core.config.bootstrap.DomainTypeAdministrationConfigurationReader;
 import org.lightadmin.core.config.bootstrap.GlobalAdministrationConfigurationProcessor;
-import org.lightadmin.core.config.bootstrap.SimpleDomainTypeAdministrationConfigurationReader;
-import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationClassSourceParser;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
+import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationClassSourceValidator;
+import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryFactory;
-import org.lightadmin.core.reporting.ProblemReporterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,26 +38,29 @@ public class LightAdminDomainConfiguration {
 	}
 
 	@Bean
+	public DomainConfigurationSourceFactory domainConfigurationSourceFactory() {
+		return new DomainConfigurationSourceFactory( jpaDomainTypeEntityMetadataResolver() );
+	}
+
+	@Bean
+	@Autowired
+	public DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
+		return new DomainTypeAdministrationConfigFactory( dynamicJpaRepositoryFactory );
+	}
+
+	@Bean
 	public GlobalAdministrationConfiguration globalAdministrationConfiguration() {
 		return new GlobalAdministrationConfiguration();
 	}
 
 	@Bean
 	@Autowired
-	public DomainTypeAdministrationConfigurationReader<Class> domainTypeAdministrationConfigurationReader( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
-		return new SimpleDomainTypeAdministrationConfigurationReader(
-			new DomainConfigurationClassSourceParser( jpaDomainTypeEntityMetadataResolver() ),
-			dynamicJpaRepositoryFactory,
-			ProblemReporterFactory.failFastReporter()
-		);
-	}
+	public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor( DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory ) {
+		final DomainConfigurationSourceValidator configurationSourceValidator = new DomainConfigurationClassSourceValidator( jpaDomainTypeEntityMetadataResolver() );
 
-	@Bean
-	@Autowired
-	public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
-		return new GlobalAdministrationConfigurationProcessor(
-			domainTypeAdministrationConfigurationReader( dynamicJpaRepositoryFactory ),
-			environment
-		);
+		return new GlobalAdministrationConfigurationProcessor( domainTypeAdministrationConfigFactory,
+															   domainConfigurationSourceFactory(),
+															   configurationSourceValidator,
+															   environment );
 	}
 }

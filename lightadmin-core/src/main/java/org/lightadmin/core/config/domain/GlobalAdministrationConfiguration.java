@@ -20,6 +20,10 @@ public class GlobalAdministrationConfiguration {
 		}
 	}
 
+	public void removeDomainTypeConfiguration( final Class<?> domainType ) {
+		domainTypeConfigurations.remove( domainType );
+	}
+
 	public Map<Class<?>, DomainTypeAdministrationConfiguration> getDomainTypeConfigurations() {
 		return domainTypeConfigurations;
 	}

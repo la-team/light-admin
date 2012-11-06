@@ -1,8 +1,10 @@
 package org.lightadmin.core.config.domain.configuration;
 
-public class EntityConfiguration {
+import java.io.Serializable;
 
-	private final EntityNameExtractor<?> nameExtractor;
+public class EntityConfiguration implements Serializable {
+
+	private transient final EntityNameExtractor<?> nameExtractor;
 
 	EntityConfiguration( final EntityNameExtractor<?> nameExtractor ) {
 		this.nameExtractor = nameExtractor;

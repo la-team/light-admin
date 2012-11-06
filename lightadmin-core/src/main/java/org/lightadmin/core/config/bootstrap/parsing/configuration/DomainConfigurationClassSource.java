@@ -22,7 +22,7 @@ import org.springframework.util.Assert;
 
 import static org.lightadmin.core.util.DomainConfigurationUtils.initializeConfigurationUnitWithBuilder;
 
-public class DomainConfigurationClassSource implements DomainConfigurationSource<Class> {
+class DomainConfigurationClassSource implements DomainConfigurationSource<Class> {
 
 	private final Class configurationClass;
 
@@ -77,7 +77,7 @@ public class DomainConfigurationClassSource implements DomainConfigurationSource
 	}
 
 	@Override
-	public EntityConfiguration getConfiguration() {
+	public EntityConfiguration getEntityConfiguration() {
 		return initializeConfigurationUnit( DomainConfigurationUnit.CONFIGURATION, EntityConfigurationBuilder.class, DefaultEntityConfigurationBuilder.class );
 	}
 

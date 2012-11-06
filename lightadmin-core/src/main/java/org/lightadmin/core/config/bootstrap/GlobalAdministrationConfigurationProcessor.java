@@ -1,9 +1,14 @@
 package org.lightadmin.core.config.bootstrap;
 
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
+import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
 import org.lightadmin.core.config.bootstrap.scanning.AdministrationClassScanner;
 import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
-import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.reporting.ProblemReporter;
+import org.lightadmin.core.reporting.ProblemReporterFactory;
 import org.lightadmin.core.util.LightAdminConfigurationUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -14,14 +19,23 @@ import java.util.Set;
 
 public class GlobalAdministrationConfigurationProcessor implements BeanPostProcessor {
 
+	private final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory;
+	private final DomainConfigurationSourceFactory domainConfigurationSourceFactory;
+
+	private final DomainConfigurationSourceValidator configurationSourceValidator;
+
 	private final Environment environment;
 
-	private final DomainTypeAdministrationConfigurationReader<Class> domainTypeAdministrationConfigurationReader;
+	public GlobalAdministrationConfigurationProcessor( final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory,
+													   final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
+													   final DomainConfigurationSourceValidator configurationSourceValidator,
+													   final Environment environment ) {
 
-	public GlobalAdministrationConfigurationProcessor( DomainTypeAdministrationConfigurationReader<Class> domainTypeAdministrationConfigurationReader, Environment environment ) {
+		this.domainConfigurationSourceFactory = domainConfigurationSourceFactory;
+		this.domainTypeAdministrationConfigFactory = domainTypeAdministrationConfigFactory;
 		this.environment = environment;
 
-		this.domainTypeAdministrationConfigurationReader = domainTypeAdministrationConfigurationReader;
+		this.configurationSourceValidator = configurationSourceValidator;
 	}
 
 	@Override
@@ -32,11 +46,17 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 
 		final GlobalAdministrationConfiguration globalAdministrationConfiguration = ( GlobalAdministrationConfiguration ) bean;
 
-		final Set<Class> sourceClasses = scanPackageForAdministrationClasses();
+		final Set<Class> metadataClasses = scanPackageForAdministrationClasses();
 
-		final Set<DomainTypeAdministrationConfiguration> domainTypeAdministrationConfigurations = domainTypeAdministrationConfigurationReader.loadDomainTypeConfiguration( sourceClasses );
+		final ProblemReporter problemReporter = ProblemReporterFactory.failFastReporter();
 
-		globalAdministrationConfiguration.registerDomainTypeConfigurations( domainTypeAdministrationConfigurations );
+		for ( Class metadataClass : metadataClasses ) {
+			final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource( metadataClass );
+
+			configurationSourceValidator.validate( configurationSource, problemReporter );
+
+			globalAdministrationConfiguration.registerDomainTypeConfiguration( domainTypeAdministrationConfigFactory.createAdministrationConfiguration( configurationSource ) );
+		}
 
 		return globalAdministrationConfiguration;
 	}

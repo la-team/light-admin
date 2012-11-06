@@ -6,4 +6,5 @@ public interface GlobalConfigurationManagementService {
 
 	void registerDomainTypeConfiguration( DomainConfigurationClassDTO domainConfigurationClassDTO );
 
+	void removeDomainTypeAdministrationConfiguration( Class<?> domainType );
 }

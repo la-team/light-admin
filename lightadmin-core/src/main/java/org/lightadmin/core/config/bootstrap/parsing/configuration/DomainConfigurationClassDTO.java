@@ -16,10 +16,12 @@ import org.lightadmin.core.config.domain.scope.DefaultScopeBuilder;
 import org.lightadmin.core.config.domain.scope.ScopeBuilder;
 import org.lightadmin.core.config.domain.scope.Scopes;
 
+import java.io.Serializable;
+
 import static org.lightadmin.core.util.DomainConfigurationUtils.configurationDomainType;
 import static org.lightadmin.core.util.DomainConfigurationUtils.initializeConfigurationUnitWithBuilder;
 
-public class DomainConfigurationClassDTO {
+public class DomainConfigurationClassDTO implements Serializable {
 
 	private final Class<?> domainType;
 	private final Filters filters;

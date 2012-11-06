@@ -52,4 +52,12 @@ public class DomainConfigurationClassSourceTest {
 
 		assertFalse( domainConfigurationClassSource.equals( otherDomainConfigurationClassSource ) );
 	}
+
+	public static DomainConfigurationClassSource emptyDomainEntityConfiguration() {
+		return new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
+	}
+
+	public static DomainConfigurationClassSource domainEntityConfigurationWithException() {
+		return new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), ConfigurationWithException.class );
+	}
 }

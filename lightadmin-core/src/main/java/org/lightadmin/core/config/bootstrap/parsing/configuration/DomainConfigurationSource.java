@@ -25,5 +25,5 @@ public interface DomainConfigurationSource<T> {
 
 	ScreenContext getScreenContext();
 
-	EntityConfiguration getConfiguration();
+	EntityConfiguration getEntityConfiguration();
 }

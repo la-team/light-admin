@@ -2,12 +2,13 @@ package org.lightadmin.core.config.domain.filter;
 
 import org.springframework.util.Assert;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newLinkedList;
 
-public class Filters implements Iterable<Filter> {
+public class Filters implements Iterable<Filter>, Serializable {
 
 	private final List<Filter> filters;
 

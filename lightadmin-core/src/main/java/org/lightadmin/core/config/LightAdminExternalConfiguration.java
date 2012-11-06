@@ -1,8 +1,8 @@
 package org.lightadmin.core.config;
 
-import org.lightadmin.core.config.mbeans.GlobalAdministrationConfigurationManagementService;
+import org.lightadmin.core.config.mbeans.LightAdminConfigurationMonitoringServiceMBean;
+import org.lightadmin.core.config.rmi.GlobalConfigurationManagementRMIService;
 import org.lightadmin.core.config.rmi.GlobalConfigurationManagementService;
-import org.lightadmin.core.config.rmi.GlobalConfigurationManagementServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.annotation.AnnotationMBeanExporter;
@@ -15,7 +15,7 @@ public class LightAdminExternalConfiguration {
 
 	@Bean
 	public GlobalConfigurationManagementService globalConfigurationManagementService() {
-		return new GlobalConfigurationManagementServiceImpl();
+		return new GlobalConfigurationManagementRMIService();
 	}
 
 	@Bean
@@ -35,8 +35,8 @@ public class LightAdminExternalConfiguration {
 	}
 
 	@Bean
-	public GlobalAdministrationConfigurationManagementService domainTypeConfigurationManagementService() {
-		return new GlobalAdministrationConfigurationManagementService();
+	public LightAdminConfigurationMonitoringServiceMBean lightAdminConfigurationMonitoringServiceMBean() {
+		return new LightAdminConfigurationMonitoringServiceMBean();
 	}
 
 }

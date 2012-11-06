@@ -1,5 +1,7 @@
 package org.lightadmin.core.config.domain.renderer;
 
-public interface Renderer {
+import java.io.Serializable;
+
+public interface Renderer extends Serializable  {
 
 }

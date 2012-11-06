@@ -11,7 +11,10 @@ public class DefaultFilterBuilder implements FilterBuilder {
 
 	private final List<Filter> filters = newLinkedList();
 
-	private final DomainTypeEntityMetadata domainTypeEntityMetadata;
+	private DomainTypeEntityMetadata domainTypeEntityMetadata;
+
+	public DefaultFilterBuilder() {
+	}
 
 	public DefaultFilterBuilder( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
 		this.domainTypeEntityMetadata = domainTypeEntityMetadata;

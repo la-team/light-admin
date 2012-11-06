@@ -6,6 +6,9 @@ public class DefaultEntityConfigurationBuilder implements EntityConfigurationBui
 
 	private EntityNameExtractor<?> nameExtractor;
 
+	public DefaultEntityConfigurationBuilder() {
+	}
+
 	public DefaultEntityConfigurationBuilder( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
 		this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity( domainTypeEntityMetadata );
 	}

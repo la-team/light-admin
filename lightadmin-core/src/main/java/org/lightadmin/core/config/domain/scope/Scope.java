@@ -1,6 +1,8 @@
 package org.lightadmin.core.config.domain.scope;
 
-public interface Scope {
+import java.io.Serializable;
+
+public interface Scope extends Serializable  {
 
 	Scope name( String name );
 

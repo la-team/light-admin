@@ -3,7 +3,9 @@ package org.lightadmin.core.config.domain.fragment;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.springframework.util.Assert;
 
-public class FieldMetadata {
+import java.io.Serializable;
+
+public class FieldMetadata implements Serializable {
 
 	private final String fieldName;
 

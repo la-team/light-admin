@@ -25,6 +25,9 @@ public abstract class DomainConfigurationUtils {
 		return findAnnotation( clazz, Administration.class ) != null;
 	}
 
+	public static boolean isConfigurationCandidate( Object candidate ) {
+		return ClassUtils.isAssignableValue( Class.class, candidate ) && isConfigurationCandidate( ( Class ) candidate );
+	}
 
 	public static boolean isConfigurationUnitDefined( final Class<?> configurationClass, DomainConfigurationUnit configurationUnit, Class<? extends Builder> builderInterface ) {
 		return ClassUtils.getMethodIfAvailable( configurationClass, configurationUnit.getName(), builderInterface ) != null;
