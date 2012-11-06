@@ -150,6 +150,7 @@
 				<artifactId>maven-war-plugin</artifactId>
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
+					<attachClasses>true</attachClasses>
 				</configuration>
 				<version>2.2</version>
 			</plugin>

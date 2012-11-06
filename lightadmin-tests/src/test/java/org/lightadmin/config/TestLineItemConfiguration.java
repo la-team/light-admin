@@ -20,7 +20,8 @@ public class TestLineItemConfiguration {
 
 	public static Fragment listView( FragmentBuilder fragmentBuilder ) {
 		return fragmentBuilder
-			.field("price").alias( "Price")
-			.field("amount").alias("Amount").build();
+			.field( "unitPrice" ).alias( "Unit Price")
+			.field("amount").alias("Amount")
+			.field("total").alias("Total").build();
 	}
 }

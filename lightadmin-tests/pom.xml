@@ -22,12 +22,18 @@
             <artifactId>selenium-java</artifactId>
             <version>${selenium-version}</version>
         </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>lightadmin-demo</artifactId>
-            <version>${project.version}</version>
-            <type>war</type>
-        </dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>lightadmin-demo</artifactId>
+			<version>${project.version}</version>
+			<type>war</type>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>lightadmin-demo</artifactId>
+			<version>${project.version}</version>
+			<classifier>classes</classifier>
+		</dependency>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>lightadmin-core</artifactId>
@@ -79,8 +85,11 @@
                         </goals>
                         <configuration>
 							<includes>
-								<include>**/page/*.class</include>
+								<include>**/*.class</include>
 							</includes>
+							<excludes>
+								<exclude>**/SeleniumIntegrationTest.class</exclude>
+							</excludes>
 							<printSummary>true</printSummary>
                             <systemProperties>
                                 <property>

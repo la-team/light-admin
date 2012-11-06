@@ -20,16 +20,12 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() throws Exception {
-//		registerDomainTypeAdministrationConfiguration( TestLineItemConfiguration.class );
-
 		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		dashboardPage.logout();
-
-//		removeDomainTypeAdministrationConfiguration( TestLineItemConfiguration.class );
 	}
 
 	@Test
