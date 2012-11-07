@@ -17,6 +17,10 @@ public class GlobalAdministrationConfiguration {
 		domainTypeConfigurations.remove( domainType );
 	}
 
+	public void removeAllDomainTypeAdministrationConfigurations() {
+		domainTypeConfigurations.clear();
+	}
+
 	public Map<Class<?>, DomainTypeAdministrationConfiguration> getDomainTypeConfigurations() {
 		return domainTypeConfigurations;
 	}

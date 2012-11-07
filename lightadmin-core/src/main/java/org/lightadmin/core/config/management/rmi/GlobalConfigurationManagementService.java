@@ -7,4 +7,6 @@ public interface GlobalConfigurationManagementService {
 	void registerDomainTypeConfiguration( ConfigurationUnits configurationUnits );
 
 	void removeDomainTypeAdministrationConfiguration( Class<?> domainType );
+
+	void removeAllDomainTypeAdministrationConfigurations();
 }

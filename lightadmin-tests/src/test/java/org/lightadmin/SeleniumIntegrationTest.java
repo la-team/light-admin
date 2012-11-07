@@ -36,6 +36,10 @@ public abstract class SeleniumIntegrationTest {
 		globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration( DomainConfigurationUtils.configurationDomainType( configurationClass ) );
 	}
 
+	protected void removeAllDomainTypeAdministrationConfigurations() {
+		globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
+	}
+
 	protected WebDriver webDriver() {
 		return webDriver;
 	}

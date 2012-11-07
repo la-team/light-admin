@@ -43,4 +43,9 @@ public class GlobalConfigurationManagementRMIService implements GlobalConfigurat
 	public void removeDomainTypeAdministrationConfiguration( final Class<?> domainType ) {
 		globalAdministrationConfiguration.removeDomainTypeConfiguration( domainType );
 	}
+
+	@Override
+	public void removeAllDomainTypeAdministrationConfigurations() {
+		globalAdministrationConfiguration.removeAllDomainTypeAdministrationConfigurations();
+	}
 }
