@@ -28,7 +28,7 @@ public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurat
 
 	@Override
 	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
-		if ( nameExtractor != null ) {
+		if ( nameExtractor == null ) {
 			this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity( domainTypeEntityMetadata );
 		}
 	}
