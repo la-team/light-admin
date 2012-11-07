@@ -1,6 +1,8 @@
 package org.lightadmin.core.config.domain.filter;
 
-public interface FilterMetadata {
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
+
+public interface FilterMetadata extends DomainTypeAttributeMetadataAware {
 
 	String getFieldName();
 }

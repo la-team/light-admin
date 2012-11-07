@@ -1,6 +1,4 @@
-package org.lightadmin.core.config.domain.support;
-
-import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+package org.lightadmin.core.config.domain;
 
 public interface GlobalAdministrationConfigurationAware {
 

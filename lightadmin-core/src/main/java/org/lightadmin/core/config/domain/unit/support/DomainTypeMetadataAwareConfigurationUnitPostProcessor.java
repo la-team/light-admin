@@ -1,6 +1,8 @@
-package org.lightadmin.core.config.domain.support;
+package org.lightadmin.core.config.domain.unit.support;
 
+import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.util.ClassUtils;
 

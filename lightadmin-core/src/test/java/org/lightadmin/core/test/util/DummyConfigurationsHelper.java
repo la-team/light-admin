@@ -62,21 +62,21 @@ public class DummyConfigurationsHelper {
 		return domainTypeEntityMetadata;
 	}
 
-//	public static Filters filters( final DomainTypeEntityMetadata entityMetadata, String... fieldNames ) {
-//		FilterBuilder filterBuilder = new DefaultFilterBuilder( entityMetadata );
-//		for ( String fieldName : fieldNames ) {
-//			filterBuilder.field( fieldName );
-//		}
-//		return filterBuilder.build();
-//	}
-//
-//	public static TableFragment listView( String... fieldNames ) {
-//		FragmentBuilder fragmentBuilder = new TableFragmentBuilder();
-//		for ( String fieldName : fieldNames ) {
-//			fragmentBuilder.field( fieldName );
-//		}
-//		return ( TableFragment ) fragmentBuilder.build();
-//	}
+	//	public static Filters filters( final DomainTypeEntityMetadata entityMetadata, String... fieldNames ) {
+	//		FilterBuilder filterBuilder = new DefaultFilterBuilder( entityMetadata );
+	//		for ( String fieldName : fieldNames ) {
+	//			filterBuilder.field( fieldName );
+	//		}
+	//		return filterBuilder.build();
+	//	}
+	//
+	//	public static TableFragment listView( String... fieldNames ) {
+	//		FragmentBuilder fragmentBuilder = new TableFragmentBuilder();
+	//		for ( String fieldName : fieldNames ) {
+	//			fragmentBuilder.field( fieldName );
+	//		}
+	//		return ( TableFragment ) fragmentBuilder.build();
+	//	}
 
 	public static class DomainEntity {
 
@@ -85,9 +85,9 @@ public class DummyConfigurationsHelper {
 	@Administration( DomainEntity.class )
 	public static class ConfigurationWithException {
 
-//		public static EntityConfigurationMetadata configuration( EntityConfigurationBuilder configurationBuilder ) {
-//			throw new RuntimeException();
-//		}
+		//		public static EntityConfigurationMetadata configuration( EntityConfigurationBuilder configurationBuilder ) {
+		//			throw new RuntimeException();
+		//		}
 	}
 
 	@Administration( DomainEntity.class )

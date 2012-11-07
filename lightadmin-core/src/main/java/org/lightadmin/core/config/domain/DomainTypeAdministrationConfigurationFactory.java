@@ -6,11 +6,11 @@ import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryFactory;
 
 import java.io.Serializable;
 
-public class DomainTypeAdministrationConfigFactory {
+public class DomainTypeAdministrationConfigurationFactory {
 
 	private final DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory;
 
-	public DomainTypeAdministrationConfigFactory( final DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
+	public DomainTypeAdministrationConfigurationFactory( final DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
 		this.dynamicJpaRepositoryFactory = dynamicJpaRepositoryFactory;
 	}
 

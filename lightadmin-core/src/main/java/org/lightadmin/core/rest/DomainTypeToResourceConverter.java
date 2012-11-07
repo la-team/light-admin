@@ -51,7 +51,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 			return new Resource<Object>( source );
 		}
 
-		final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
+		final DomainTypeEntityMetadata entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
 		final JpaRepositoryMetadata repositoryMetadata = repositoryExporter.repositoryMetadataFor( domainType );
 
 		URI selfUri = selfUri( source, repositoryMetadata );

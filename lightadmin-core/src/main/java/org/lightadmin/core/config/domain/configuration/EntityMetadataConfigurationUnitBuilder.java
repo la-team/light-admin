@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.domain.configuration;
 
-import org.lightadmin.core.config.domain.support.ConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.support.EntityNameExtractor;
+import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 
 public interface EntityMetadataConfigurationUnitBuilder extends ConfigurationUnitBuilder<EntityMetadataConfigurationUnit> {
 

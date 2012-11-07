@@ -5,7 +5,7 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
-import org.lightadmin.core.config.domain.support.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.util.Assert;
 

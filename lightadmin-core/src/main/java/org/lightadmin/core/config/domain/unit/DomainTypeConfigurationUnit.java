@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.support;
+package org.lightadmin.core.config.domain.unit;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 

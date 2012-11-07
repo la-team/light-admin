@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.management.rmi;
 
-import org.lightadmin.core.config.domain.support.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 
 public interface GlobalConfigurationManagementService {
 

@@ -20,8 +20,7 @@ import javax.sql.DataSource;
 
 @Configuration
 @Import( {
-			 LightAdminTestConfiguration.PersistanceConfiguration.class,
-			 LightAdminDomainConfiguration.class
+			 LightAdminTestConfiguration.PersistanceConfiguration.class, LightAdminDomainConfiguration.class
 		 } )
 public class LightAdminTestConfiguration {
 

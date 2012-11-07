@@ -38,23 +38,19 @@ public class CustomerAdministration {
 	}
 
 	public static ListViewConfigurationUnit listView( final ListViewConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder
-			.field( "firstname" ).alias( "First Name")
-			.field( "lastname" ).alias("Last Name")
-			.field( "emailAddress" ).alias( "Email Address" ).build();
+		return fragmentBuilder.field( "firstname" ).alias( "First Name" )
+							  .field( "lastname" ).alias( "Last Name" )
+							  .field( "emailAddress" ).alias( "Email Address" ).build();
 	}
 
 	public static ScopesConfigurationUnit scopes( final ScopesConfigurationUnitBuilder scopeBuilder ) {
-		return scopeBuilder
-			.scope( "All", all() ).defaultScope()
-			.scope( "Buyers", filter( Predicates.alwaysTrue() ) )
-			.scope( "Sellers", specification( customerNameEqDave() ) ).build();
+		return scopeBuilder.scope( "All", all() ).defaultScope()
+						   .scope( "Buyers", filter( Predicates.alwaysTrue() ) )
+						   .scope( "Sellers", specification( customerNameEqDave() ) ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder
-			.field( "firstname" ).renderer( select( new String[] { "Yes", "No" } ))
-			.field( "lastname" ).build();
+		return filterBuilder.field( "firstname" ).renderer( select( new String[] { "Yes", "No" } ) ).field( "lastname" ).build();
 	}
 
 	public static Specification<Customer> customerNameEqDave() {

@@ -1,11 +1,11 @@
 package org.lightadmin.core.config.domain.configuration;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnit;
-import org.lightadmin.core.config.domain.support.DomainTypeEntityMetadataAware;
-import org.lightadmin.core.config.domain.support.EntityNameExtractor;
-import org.lightadmin.core.config.domain.support.EntityNameExtractorFactory;
+import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
+import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
 
 public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurationUnit implements EntityMetadataConfigurationUnit, DomainTypeEntityMetadataAware {
 
@@ -18,7 +18,7 @@ public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurat
 
 	@Override
 	public EntityNameExtractor getNameExtractor() {
-		return nameExtractor;
+		return nameExtractor != null ? nameExtractor : EntityNameExtractorFactory.forSimpleObject();
 	}
 
 	@Override
@@ -28,7 +28,7 @@ public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurat
 
 	@Override
 	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
-		if ( nameExtractor != null && nameExtractor instanceof EntityNameExtractorFactory.NamedPersistentEntityNameExtractor ) {
+		if ( nameExtractor != null ) {
 			this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity( domainTypeEntityMetadata );
 		}
 	}

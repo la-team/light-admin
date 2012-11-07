@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.domain.fragment;
 
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
-import org.lightadmin.core.config.domain.support.ConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 
 public interface ListViewConfigurationUnitBuilder extends ConfigurationUnitBuilder<ListViewConfigurationUnit> {
 

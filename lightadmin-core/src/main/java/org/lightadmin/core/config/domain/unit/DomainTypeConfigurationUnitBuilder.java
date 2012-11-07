@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.support;
+package org.lightadmin.core.config.domain.unit;
 
 public abstract class DomainTypeConfigurationUnitBuilder<U extends ConfigurationUnit> implements ConfigurationUnitBuilder<U> {
 

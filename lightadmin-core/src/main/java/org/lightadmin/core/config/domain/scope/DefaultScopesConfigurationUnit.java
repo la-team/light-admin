@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.domain.scope;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;

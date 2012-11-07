@@ -3,7 +3,7 @@ package org.lightadmin.core.config;
 import org.lightadmin.core.config.bootstrap.GlobalAdministrationConfigurationProcessor;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
-import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
@@ -49,8 +49,8 @@ public class LightAdminDomainConfiguration {
 
 	@Bean
 	@Autowired
-	public DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
-		return new DomainTypeAdministrationConfigFactory( dynamicJpaRepositoryFactory );
+	public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
+		return new DomainTypeAdministrationConfigurationFactory( dynamicJpaRepositoryFactory );
 	}
 
 	@Bean
@@ -60,10 +60,7 @@ public class LightAdminDomainConfiguration {
 
 	@Bean
 	@Autowired
-	public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor( DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory ) {
-		return new GlobalAdministrationConfigurationProcessor( domainTypeAdministrationConfigFactory,
-															   domainConfigurationSourceFactory(),
-															   domainConfigurationSourceValidatorFactory(),
-															   environment );
+	public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor( DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory ) {
+		return new GlobalAdministrationConfigurationProcessor( domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory(), domainConfigurationSourceValidatorFactory(), environment );
 	}
 }

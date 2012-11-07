@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.domain.fragment;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
 
 public class FragmentListViewConfigurationUnit extends DomainTypeConfigurationUnit implements ListViewConfigurationUnit {
 

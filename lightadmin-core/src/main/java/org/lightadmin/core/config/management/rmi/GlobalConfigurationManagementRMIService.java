@@ -4,10 +4,10 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
-import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.support.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.reporting.ProblemReporterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -20,12 +20,13 @@ public class GlobalConfigurationManagementRMIService implements GlobalConfigurat
 	private DomainConfigurationSourceFactory domainConfigurationSourceFactory;
 
 	@Autowired
-	private DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory;
+	private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 
 	@Autowired
 	private DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	public void registerDomainTypeConfiguration( final ConfigurationUnits configurationUnits ) {
 		final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource( configurationUnits );
 
@@ -33,7 +34,7 @@ public class GlobalConfigurationManagementRMIService implements GlobalConfigurat
 
 		configurationSourceValidator.validate( configurationSource, ProblemReporterFactory.failFastReporter() );
 
-		final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigFactory.createAdministrationConfiguration( configurationSource );
+		final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration( configurationSource );
 
 		globalAdministrationConfiguration.registerDomainTypeConfiguration( administrationConfiguration );
 	}

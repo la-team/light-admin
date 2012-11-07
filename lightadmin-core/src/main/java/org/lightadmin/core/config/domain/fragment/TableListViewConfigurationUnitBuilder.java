@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.domain.fragment;
 
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
 public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<ListViewConfigurationUnit> implements ListViewConfigurationUnitBuilder {
 

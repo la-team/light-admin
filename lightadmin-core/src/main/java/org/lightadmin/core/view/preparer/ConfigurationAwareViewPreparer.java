@@ -8,7 +8,7 @@ import org.apache.tiles.servlet.context.ServletTilesRequestContext;
 import org.apache.tiles.servlet.context.ServletUtil;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.support.GlobalAdministrationConfigurationAware;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.web.ApplicationController;
 import org.springframework.beans.factory.annotation.Autowired;
 

@@ -2,7 +2,7 @@ package org.lightadmin.core.view.renderer;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.support.GlobalAdministrationConfigurationAware;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
@@ -73,7 +73,7 @@ public class BasicAttributeRendererFactory implements AttributeRendererFactory, 
 		return objectAttributeRenderer;
 	}
 
-	private DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata( final Class<?> type ) {
+	private DomainTypeEntityMetadata domainTypeEntityMetadata( final Class<?> type ) {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forDomainType( type );
 		return domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 	}

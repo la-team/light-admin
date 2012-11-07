@@ -6,7 +6,7 @@ import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurati
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.bootstrap.scanning.AdministrationClassScanner;
 import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
-import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.lightadmin.core.reporting.ProblemReporterFactory;
@@ -20,20 +20,20 @@ import java.util.Set;
 
 public class GlobalAdministrationConfigurationProcessor implements BeanPostProcessor {
 
-	private final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory;
+	private final DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 	private final DomainConfigurationSourceFactory domainConfigurationSourceFactory;
 
 	private final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
 
 	private final Environment environment;
 
-	public GlobalAdministrationConfigurationProcessor( final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory,
+	public GlobalAdministrationConfigurationProcessor( final DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory,
 													   final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
 													   final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory,
 													   final Environment environment ) {
 
 		this.domainConfigurationSourceFactory = domainConfigurationSourceFactory;
-		this.domainTypeAdministrationConfigFactory = domainTypeAdministrationConfigFactory;
+		this.domainTypeAdministrationConfigurationFactory = domainTypeAdministrationConfigurationFactory;
 		this.configurationSourceValidatorFactory = configurationSourceValidatorFactory;
 
 		this.environment = environment;
@@ -59,7 +59,7 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 
 			validator.validate( configurationSource, problemReporter );
 
-			globalAdministrationConfiguration.registerDomainTypeConfiguration( domainTypeAdministrationConfigFactory.createAdministrationConfiguration( configurationSource ) );
+			globalAdministrationConfiguration.registerDomainTypeConfiguration( domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration( configurationSource ) );
 		}
 
 		return globalAdministrationConfiguration;

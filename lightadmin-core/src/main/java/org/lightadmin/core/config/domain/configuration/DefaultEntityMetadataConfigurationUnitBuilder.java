@@ -1,8 +1,8 @@
 package org.lightadmin.core.config.domain.configuration;
 
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.support.EntityNameExtractor;
-import org.lightadmin.core.config.domain.support.EntityNameExtractorFactory;
+import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
+import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
 public class DefaultEntityMetadataConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<EntityMetadataConfigurationUnit> implements EntityMetadataConfigurationUnitBuilder {
 
@@ -10,7 +10,6 @@ public class DefaultEntityMetadataConfigurationUnitBuilder extends DomainTypeCon
 
 	public DefaultEntityMetadataConfigurationUnitBuilder( Class<?> domainType ) {
 		super( domainType );
-		this.nameExtractor = EntityNameExtractorFactory.forSimpleObject();
 	}
 
 	@Override

@@ -18,10 +18,9 @@ public class TestLineItemConfiguration {
 			.menuName( "Line Items" ).build();
 	}
 
-	public static ListViewConfigurationUnit listView( ListViewConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder
-			.field( "unitPrice" ).alias( "Unit Price")
-			.field("amount").alias("Amount")
-			.field("total").alias("Total").build();
+	public static ListViewConfigurationUnit listView( ListViewConfigurationUnitBuilder listViewBuilder ) {
+		return listViewBuilder
+			.field( "price" ).alias( "Unit Price")
+			.field("amount").alias("Amount").build();
 	}
 }

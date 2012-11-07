@@ -1,6 +1,4 @@
-package org.lightadmin.core.config.domain.support;
-
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+package org.lightadmin.core.persistence.metamodel;
 
 public interface DomainTypeEntityMetadataAware {
 

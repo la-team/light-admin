@@ -22,9 +22,9 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @Import( {
-			 LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class,
-			 LightAdminRepositoryRestConfiguration.class, LightAdminSecurityConfiguration.class,
-			 LightAdminViewConfiguration.class
+			 LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class,
+			 LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class,
+			 LightAdminSecurityConfiguration.class, LightAdminViewConfiguration.class
 		 } )
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {

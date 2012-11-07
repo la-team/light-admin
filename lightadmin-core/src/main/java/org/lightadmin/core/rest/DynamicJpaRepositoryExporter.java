@@ -19,9 +19,9 @@ public class DynamicJpaRepositoryExporter extends JpaRepositoryExporter {
 
 	@Override
 	public void refresh() {
-//		if ( repositoriesAlreadyInitialized() ) {
-//			return;
-//		}
+		//		if ( repositoriesAlreadyInitialized() ) {
+		//			return;
+		//		}
 
 		repositories = new DynamicRepositoriesDecorator( globalAdministrationConfiguration, domainTypeEntityMetadataResolver );
 

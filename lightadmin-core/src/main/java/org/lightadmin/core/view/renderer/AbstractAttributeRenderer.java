@@ -2,7 +2,7 @@ package org.lightadmin.core.view.renderer;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.support.GlobalAdministrationConfigurationAware;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
 import javax.servlet.jsp.PageContext;

@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.domain.scope;
 
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.domain.filter;
 
 import org.lightadmin.core.config.domain.renderer.Renderer;
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
 import java.util.Set;
 

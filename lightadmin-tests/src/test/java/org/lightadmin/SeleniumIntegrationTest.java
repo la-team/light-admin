@@ -2,7 +2,7 @@ package org.lightadmin;
 
 import org.junit.runner.RunWith;
 import org.lightadmin.component.DataTableComponent;
-import org.lightadmin.core.config.domain.support.ConfigurationUnitsConverter;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.util.DomainConfigurationUtils;
 import org.openqa.selenium.WebDriver;

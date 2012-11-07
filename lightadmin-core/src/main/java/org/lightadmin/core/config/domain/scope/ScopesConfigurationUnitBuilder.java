@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.domain.scope;
 
-import org.lightadmin.core.config.domain.support.ConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 
 public interface ScopesConfigurationUnitBuilder extends ConfigurationUnitBuilder<ScopesConfigurationUnit> {
 

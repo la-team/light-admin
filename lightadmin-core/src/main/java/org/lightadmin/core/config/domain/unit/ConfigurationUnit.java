@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.support;
+package org.lightadmin.core.config.domain.unit;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 

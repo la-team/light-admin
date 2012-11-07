@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.domain.context;
 
-import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
 public class DefaultScreenContextConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<ScreenContextConfigurationUnit> implements ScreenContextConfigurationUnitBuilder {
 
