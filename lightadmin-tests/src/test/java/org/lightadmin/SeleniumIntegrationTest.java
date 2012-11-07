@@ -17,7 +17,7 @@ import static org.junit.Assert.assertEquals;
 
 @RunWith( SpringJUnit4ClassRunner.class )
 @ContextConfiguration( loader = AnnotationConfigContextLoader.class, classes = SeleniumConfig.class )
-public class SeleniumIntegrationTest {
+public abstract class SeleniumIntegrationTest {
 
 	@Autowired
 	private WebDriver webDriver;
