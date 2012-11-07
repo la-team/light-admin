@@ -87,9 +87,6 @@
 							<includes>
 								<include>**/*.class</include>
 							</includes>
-							<excludes>
-								<exclude>**/SeleniumIntegrationTest.class</exclude>
-							</excludes>
 							<printSummary>true</printSummary>
                             <systemProperties>
                                 <property>
