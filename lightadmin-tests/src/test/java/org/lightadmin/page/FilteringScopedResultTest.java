@@ -18,7 +18,7 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
 	private ListViewPage customerListViewPage;
 
-	@Before
+    @Before
 	public void setup() {
 		customerListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.CUSTOMERS );
 	}
@@ -28,18 +28,19 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 	public void customersAreFilteredByScope() {
 		customerListViewPage.selectScope( SELLERS_SCOPE );
 
-		assertScopeIsApplied( SELLERS_SCOPE );
+		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 	}
 
 	@Test
 	public void resettingFilterDoesNotResetScope() {
 		customerListViewPage.selectScope( SELLERS_SCOPE );
+        assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 
-		customerListViewPage.filter( "lastname", "Matthews1" );
+        customerListViewPage.filter( "lastname", "Matthews1" );
 		assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable() );
 
 		customerListViewPage.resetFilter();
-		assertScopeIsApplied( SELLERS_SCOPE );
+		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 	}
 
 	@Test
@@ -48,20 +49,16 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 		assertTableData( expectedFilteredCustomers, customerListViewPage.getDataTable() );
 
 		customerListViewPage.selectScope( SELLERS_SCOPE );
-		assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable() );
+        assertScopeIsApplied( expectedFilteredAndScopedCustomers, SELLERS_SCOPE );
 	}
 
-	private void assertScopeIsApplied( String scope ) {
-		assertScopeIsAppliedToCustomers();
+	private void assertScopeIsApplied( String[][] expectedData, String scope ) {
+        assertTableData(expectedData, customerListViewPage.getDataTable() );
 
-		assertTrue( "Selected scope is not highlighted", customerListViewPage.scopeIsHighlighted( scope ) );
+        assertTrue( "Selected scope is not highlighted", customerListViewPage.scopeIsHighlighted( scope ) );
 	}
 
-	private void assertScopeIsAppliedToCustomers() {
-		assertTableData( expectedScopedCustomers, customerListViewPage.getDataTable() );
-	}
-
-	private String[][] expectedFilteredAndScopedCustomers = {{"Dave", "Matthews1", "dave@dmband1.com"}};
+    private String[][] expectedFilteredAndScopedCustomers = {{"Dave", "Matthews1", "dave@dmband1.com"}};
 
 	private String[][] expectedFilteredCustomers = {
 		{"Boyd", "Matthews1", "boyd@dmband25.com"}, {"Dave", "Matthews1", "dave@dmband1.com"}
