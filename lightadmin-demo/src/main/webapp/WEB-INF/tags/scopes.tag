@@ -6,7 +6,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
-<%@ attribute name="scopes" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.scope.Scopes"%>
+<%@ attribute name="scopes" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit"%>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
@@ -14,7 +14,7 @@
 
 <spring:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeName)}" scope="page"/>
 
-<c:set var="tag_scopes_scopeList" value="<%= Iterables.toArray( scopes, org.lightadmin.core.config.domain.scope.Scope.class ) %>"/>
+<c:set var="tag_scopes_scopeList" value="<%= Iterables.toArray( scopes, org.lightadmin.core.config.domain.scope.ScopeMetadata.class ) %>"/>
 
 <c:if test="${not empty tag_scopes_scopeList}">
 	<div class="well well-small" id="scopes">

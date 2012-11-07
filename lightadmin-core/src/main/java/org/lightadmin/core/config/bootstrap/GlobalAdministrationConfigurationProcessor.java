@@ -3,6 +3,7 @@ package org.lightadmin.core.config.bootstrap;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
+import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.bootstrap.scanning.AdministrationClassScanner;
 import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
@@ -22,23 +23,24 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 	private final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory;
 	private final DomainConfigurationSourceFactory domainConfigurationSourceFactory;
 
-	private final DomainConfigurationSourceValidator<DomainConfigurationSource> configurationSourceValidator;
+	private final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
 
 	private final Environment environment;
 
 	public GlobalAdministrationConfigurationProcessor( final DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory,
 													   final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
-													   final DomainConfigurationSourceValidator<DomainConfigurationSource> configurationSourceValidator,
+													   final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory,
 													   final Environment environment ) {
 
 		this.domainConfigurationSourceFactory = domainConfigurationSourceFactory;
 		this.domainTypeAdministrationConfigFactory = domainTypeAdministrationConfigFactory;
-		this.environment = environment;
+		this.configurationSourceValidatorFactory = configurationSourceValidatorFactory;
 
-		this.configurationSourceValidator = configurationSourceValidator;
+		this.environment = environment;
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	public Object postProcessAfterInitialization( final Object bean, final String beanName ) throws BeansException {
 		if ( !ClassUtils.isAssignableValue( GlobalAdministrationConfiguration.class, bean ) ) {
 			return bean;
@@ -48,12 +50,14 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 
 		final Set<Class> metadataClasses = scanPackageForAdministrationClasses();
 
+		final DomainConfigurationSourceValidator validator = configurationSourceValidatorFactory.getValidator();
+
 		final ProblemReporter problemReporter = ProblemReporterFactory.failFastReporter();
 
 		for ( Class metadataClass : metadataClasses ) {
 			final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource( metadataClass );
 
-			configurationSourceValidator.validate( configurationSource, problemReporter );
+			validator.validate( configurationSource, problemReporter );
 
 			globalAdministrationConfiguration.registerDomainTypeConfiguration( domainTypeAdministrationConfigFactory.createAdministrationConfiguration( configurationSource ) );
 		}

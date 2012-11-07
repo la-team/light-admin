@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.configuration;
+package org.lightadmin.core.config.domain.support;
 
 import org.lightadmin.core.util.Transformer;
 

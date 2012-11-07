@@ -2,7 +2,7 @@ package org.lightadmin;
 
 import org.junit.runner.RunWith;
 import org.lightadmin.component.DataTableComponent;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassDTO;
+import org.lightadmin.core.config.domain.support.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.util.DomainConfigurationUtils;
 import org.openqa.selenium.WebDriver;
@@ -29,9 +29,7 @@ public class SeleniumIntegrationTest {
 	private GlobalConfigurationManagementService globalConfigurationManagementService;
 
 	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
-		final DomainConfigurationClassDTO domainConfigurationClassDTO = new DomainConfigurationClassDTO( configurationClass );
-
-		globalConfigurationManagementService.registerDomainTypeConfiguration( domainConfigurationClassDTO );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( configurationClass ) );
 	}
 
 	protected void removeDomainTypeAdministrationConfiguration( Class configurationClass ) {

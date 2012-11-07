@@ -1,14 +1,10 @@
 package org.lightadmin.core.config.management.rmi;
 
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassDTO;
-
-import java.util.Set;
+import org.lightadmin.core.config.domain.support.ConfigurationUnits;
 
 public interface GlobalConfigurationManagementService {
 
-	void registerDomainTypeConfiguration( DomainConfigurationClassDTO domainConfigurationClassDTO );
-
-	void registerDomainTypeConfigurations( Set<DomainConfigurationClassDTO> domainConfigurationClassDTO );
+	void registerDomainTypeConfiguration( ConfigurationUnits configurationUnits );
 
 	void removeDomainTypeAdministrationConfiguration( Class<?> domainType );
 }

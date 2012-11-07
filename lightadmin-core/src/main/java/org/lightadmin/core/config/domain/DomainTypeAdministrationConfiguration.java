@@ -1,11 +1,11 @@
 package org.lightadmin.core.config.domain;
 
-import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
-import org.lightadmin.core.config.domain.context.ScreenContext;
-import org.lightadmin.core.config.domain.filter.Filters;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
+import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
+import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.Fragment;
-import org.lightadmin.core.config.domain.scope.Scopes;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.util.Assert;
@@ -15,42 +15,24 @@ import java.io.Serializable;
 
 public class DomainTypeAdministrationConfiguration {
 
-	private String configurationName;
-
-	private DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata;
-
-	private final Class<?> domainType;
-
 	private final DynamicJpaRepository<?, ? extends Serializable> repository;
 
-	private EntityConfiguration entityConfiguration;
+	private final DomainConfigurationSource domainConfigurationSource;
 
-	private ScreenContext screenContext;
-
-	private Fragment listViewFragment;
-
-	private Scopes scopes;
-
-	private Filters filters;
-
-	public DomainTypeAdministrationConfiguration( final Class<?> domainType, final DynamicJpaRepository<?, ?> repository ) {
-		Assert.notNull( domainType );
+	public DomainTypeAdministrationConfiguration( DomainConfigurationSource domainConfigurationSource, final DynamicJpaRepository<?, ?> repository ) {
+		Assert.notNull( domainConfigurationSource );
 		Assert.notNull( repository );
 
-		this.domainType = domainType;
+		this.domainConfigurationSource = domainConfigurationSource;
 		this.repository = repository;
 	}
 
-	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata ) {
-		this.domainTypeEntityMetadata = domainTypeEntityMetadata;
-	}
-
-	public DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> getDomainTypeEntityMetadata() {
-		return domainTypeEntityMetadata;
+	public DomainTypeEntityMetadata getDomainTypeEntityMetadata() {
+		return domainConfigurationSource.getDomainTypeEntityMetadata();
 	}
 
 	public Class<?> getDomainType() {
-		return domainType;
+		return domainConfigurationSource.getDomainType();
 	}
 
 	public DynamicJpaRepository<?, ?> getRepository() {
@@ -58,54 +40,30 @@ public class DomainTypeAdministrationConfiguration {
 	}
 
 	public String getDomainTypeName() {
-		return StringUtils.uncapitalize( domainTypeEntityMetadata.getEntityName() );
+		return StringUtils.uncapitalize( getDomainTypeEntityMetadata().getEntityName() );
 	}
 
 	public Fragment getListViewFragment() {
-		return listViewFragment;
+		return domainConfigurationSource.getListViewFragment().getFragment();
 	}
 
-	public void setListViewFragment( final Fragment listViewFragment ) {
-		this.listViewFragment = listViewFragment;
+	public ScreenContextConfigurationUnit getScreenContext() {
+		return domainConfigurationSource.getScreenContext();
 	}
 
-	public void setScreenContext( final ScreenContext screenContext ) {
-		this.screenContext = screenContext;
+	public ScopesConfigurationUnit getScopes() {
+		return domainConfigurationSource.getScopes();
 	}
 
-	public ScreenContext getScreenContext() {
-		return this.screenContext;
+	public FiltersConfigurationUnit getFilters() {
+		return domainConfigurationSource.getFilters();
 	}
 
-	public Scopes getScopes() {
-		return scopes;
-	}
-
-	public void setScopes( final Scopes scopes ) {
-		this.scopes = scopes;
-	}
-
-	public Filters getFilters() {
-		return filters;
-	}
-
-	public void setFilters( final Filters filters ) {
-		this.filters = filters;
-	}
-
-	public EntityConfiguration getEntityConfiguration() {
-		return entityConfiguration;
-	}
-
-	public void setEntityConfiguration( final EntityConfiguration entityConfiguration ) {
-		this.entityConfiguration = entityConfiguration;
-	}
-
-	public void setConfigurationName( final String configurationName ) {
-		this.configurationName = configurationName;
+	public EntityMetadataConfigurationUnit getEntityConfiguration() {
+		return domainConfigurationSource.getEntityConfiguration();
 	}
 
 	public String getConfigurationName() {
-		return configurationName;
+		return domainConfigurationSource.getConfigurationName();
 	}
 }

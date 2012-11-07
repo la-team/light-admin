@@ -1,14 +1,15 @@
 package org.lightadmin.core.config.management.rmi;
 
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationClassDTO;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
+import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
+import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.support.ConfigurationUnits;
+import org.lightadmin.core.reporting.ProblemReporterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import java.util.Set;
 
 public class GlobalConfigurationManagementRMIService implements GlobalConfigurationManagementService {
 
@@ -21,20 +22,20 @@ public class GlobalConfigurationManagementRMIService implements GlobalConfigurat
 	@Autowired
 	private DomainTypeAdministrationConfigFactory domainTypeAdministrationConfigFactory;
 
+	@Autowired
+	private DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
+
 	@Override
-	public void registerDomainTypeConfiguration( final DomainConfigurationClassDTO domainConfigurationClassDTO ) {
-		final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource( domainConfigurationClassDTO );
+	public void registerDomainTypeConfiguration( final ConfigurationUnits configurationUnits ) {
+		final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource( configurationUnits );
+
+		final DomainConfigurationSourceValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
+
+		configurationSourceValidator.validate( configurationSource, ProblemReporterFactory.failFastReporter() );
 
 		final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigFactory.createAdministrationConfiguration( configurationSource );
 
 		globalAdministrationConfiguration.registerDomainTypeConfiguration( administrationConfiguration );
-	}
-
-	@Override
-	public void registerDomainTypeConfigurations( final Set<DomainConfigurationClassDTO> domainConfigurationClassDTO ) {
-		for ( DomainConfigurationClassDTO configurationClassDTO : domainConfigurationClassDTO ) {
-			registerDomainTypeConfiguration( configurationClassDTO );
-		}
 	}
 
 	@Override

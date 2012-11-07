@@ -1,17 +1,31 @@
-package org.lightadmin.core.config.domain.configuration;
+package org.lightadmin.core.config.domain.support;
 
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 
+import java.io.Serializable;
+
 public abstract class EntityNameExtractorFactory {
+
+	public static EntityNameExtractor<?> forSimpleObject() {
+		return new SimpleObjectNameExtractor();
+	}
 
 	public static EntityNameExtractor<?> forPersistentEntity( DomainTypeEntityMetadata entityMetadata ) {
 		return new PersistentEntityNameExtractor( entityMetadata );
 	}
 
 	public static EntityNameExtractor<?> forNamedPersistentEntity( String name ) {
-		return new NamedPersistentEntityExtractor( name );
+		return new NamedPersistentEntityNameExtractor( name );
+	}
+
+	private static class SimpleObjectNameExtractor implements EntityNameExtractor<Object>, Serializable {
+
+		@Override
+		public String apply( final Object input ) {
+			return input.getClass().getSimpleName();
+		}
 	}
 
 	private static class PersistentEntityNameExtractor implements EntityNameExtractor<Object> {
@@ -28,11 +42,11 @@ public abstract class EntityNameExtractorFactory {
 		}
 	}
 
-	private static class NamedPersistentEntityExtractor implements EntityNameExtractor<Object> {
+	public static class NamedPersistentEntityNameExtractor implements EntityNameExtractor<Object>, Serializable {
 
 		private final String nameField;
 
-		private NamedPersistentEntityExtractor( final String nameField ) {
+		private NamedPersistentEntityNameExtractor( final String nameField ) {
 			this.nameField = nameField;
 		}
 

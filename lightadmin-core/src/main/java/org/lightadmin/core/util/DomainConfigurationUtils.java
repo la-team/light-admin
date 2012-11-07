@@ -2,8 +2,8 @@ package org.lightadmin.core.util;
 
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.config.domain.support.Builder;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.config.domain.support.ConfigurationUnit;
+import org.lightadmin.core.config.domain.support.ConfigurationUnitBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ClassUtils;
 
@@ -29,19 +29,19 @@ public abstract class DomainConfigurationUtils {
 		return ClassUtils.isAssignableValue( Class.class, candidate ) && isConfigurationCandidate( ( Class ) candidate );
 	}
 
-	public static boolean isConfigurationUnitDefined( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends Builder> builderInterface ) {
+	public static boolean isConfigurationUnitDefined( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder> builderInterface ) {
 		return ClassUtils.getMethodIfAvailable( configurationClass, configurationUnitType.getName(), builderInterface ) != null;
 	}
 
-	public static boolean isNotConfigurationUnitDefined( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends Builder> builderInterface ) {
+	public static boolean isNotConfigurationUnitDefined( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder> builderInterface ) {
 		return !isConfigurationUnitDefined( configurationClass, configurationUnitType, builderInterface );
 	}
 
 	@SuppressWarnings( {"unchecked"} )
-	public static <T> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass ) {
+	public static <T extends ConfigurationUnit> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder<T>> builderInterface, Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass ) {
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, configurationUnitType.getName(), builderInterface );
 
-		Builder<T> builder = BeanUtils.instantiateClass( concreteBuilderClass );
+		ConfigurationUnitBuilder<T> builder = BeanUtils.instantiateClass( concreteBuilderClass );
 		if ( method != null ) {
 			try {
 				return ( T ) invokeMethod( method, null, builder );
@@ -54,25 +54,25 @@ public abstract class DomainConfigurationUtils {
 	}
 
 	@SuppressWarnings( {"unchecked"} )
-	public static <T> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends Builder<T>> builderInterface, Class<? extends Builder<T>> concreteBuilderClass, final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
+	public static <T extends ConfigurationUnit> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder<T>> builderInterface, Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass, final Class domainType ) {
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, configurationUnitType.getName(), builderInterface );
 
-		Builder<T> builder = instantiateBuilder( concreteBuilderClass, domainTypeEntityMetadata );
+		ConfigurationUnitBuilder<T> builder = instantiateBuilder( concreteBuilderClass, domainType );
 		if ( method != null ) {
 			try {
 				return ( T ) invokeMethod( method, null, builder );
 			} catch ( Exception ex ) {
-				return instantiateBuilder( concreteBuilderClass, domainTypeEntityMetadata ).build();
+				return instantiateBuilder( concreteBuilderClass, domainType ).build();
 			}
 		}
 
 		return builder.build();
 	}
 
-	private static <T> Builder<T> instantiateBuilder( final Class<? extends Builder<T>> concreteBuilderClass, final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
-		Constructor<? extends Builder<T>> constructor = ClassUtils.getConstructorIfAvailable( concreteBuilderClass, DomainTypeEntityMetadata.class );
+	private static <T extends ConfigurationUnit> ConfigurationUnitBuilder<T> instantiateBuilder( final Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass, final Class domainType  ) {
+		Constructor<? extends ConfigurationUnitBuilder<T>> constructor = ClassUtils.getConstructorIfAvailable( concreteBuilderClass, Class.class );
 		if ( constructor != null ) {
-			return BeanUtils.instantiateClass( constructor, domainTypeEntityMetadata );
+			return BeanUtils.instantiateClass( constructor, domainType );
 		}
 		return BeanUtils.instantiateClass( concreteBuilderClass );
 	}

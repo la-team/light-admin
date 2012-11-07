@@ -1,14 +1,14 @@
 package org.lightadmin.demo.config;
 
 import org.lightadmin.core.annotation.Administration;
-import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
-import org.lightadmin.core.config.domain.configuration.EntityConfigurationBuilder;
-import org.lightadmin.core.config.domain.configuration.EntityNameExtractor;
-import org.lightadmin.core.config.domain.context.ScreenContext;
-import org.lightadmin.core.config.domain.context.ScreenContextBuilder;
-import org.lightadmin.core.config.domain.fragment.Fragment;
-import org.lightadmin.core.config.domain.fragment.FragmentBuilder;
+import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
+import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
+import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
+import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
+import org.lightadmin.core.config.domain.support.EntityNameExtractor;
 import org.lightadmin.demo.model.LineItem;
 import org.lightadmin.demo.model.Order;
 import org.springframework.util.StringUtils;
@@ -21,17 +21,17 @@ import static com.google.common.collect.Sets.newLinkedHashSet;
 @Administration( Order.class )
 public class OrderAdministration {
 
-	public static EntityConfiguration configuration( EntityConfigurationBuilder configurationBuilder ) {
+	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
 		return configurationBuilder.nameExtractor( orderNameExtractor() ).build();
 	}
 
-	public static ScreenContext screenContext( ScreenContextBuilder screenContextBuilder ) {
+	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
 		return screenContextBuilder
 			.screenName( "Orders Administration" )
 			.menuName( "Orders" ).build();
 	}
 
-	public static Fragment listView( FragmentBuilder fragmentBuilder ) {
+	public static ListViewConfigurationUnit listView( ListViewConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 			.field( "customer.firstname" ).alias( "Customer" )
 			.field( "billingAddress.city" ).alias( "Billing Address" )

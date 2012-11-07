@@ -1,15 +1,13 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
-import org.lightadmin.core.config.domain.configuration.EntityConfiguration;
-import org.lightadmin.core.config.domain.context.ScreenContext;
-import org.lightadmin.core.config.domain.filter.Filters;
-import org.lightadmin.core.config.domain.fragment.Fragment;
-import org.lightadmin.core.config.domain.scope.Scopes;
+import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
+import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
+import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
+import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
-public interface DomainConfigurationSource<T> {
-
-	T getSource();
+public interface DomainConfigurationSource {
 
 	Class<?> getDomainType();
 
@@ -17,13 +15,13 @@ public interface DomainConfigurationSource<T> {
 
 	DomainTypeEntityMetadata getDomainTypeEntityMetadata();
 
-	Filters getFilters();
+	FiltersConfigurationUnit getFilters();
 
-	Scopes getScopes();
+	ScopesConfigurationUnit getScopes();
 
-	Fragment getListViewFragment();
+	ListViewConfigurationUnit getListViewFragment();
 
-	ScreenContext getScreenContext();
+	ScreenContextConfigurationUnit getScreenContext();
 
-	EntityConfiguration getEntityConfiguration();
+	EntityMetadataConfigurationUnit getEntityConfiguration();
 }

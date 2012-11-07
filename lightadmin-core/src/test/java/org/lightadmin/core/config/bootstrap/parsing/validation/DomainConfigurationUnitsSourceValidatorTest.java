@@ -1,8 +1,8 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
-public class DomainConfigurationClassSourceValidatorTest {
+public class DomainConfigurationUnitsSourceValidatorTest {
 
-	private DomainConfigurationClassSourceValidator subject;
+	private DomainConfigurationUnitsSourceValidator subject;
 
 	//	@Test
 	//	public void screenContextNotDefinedError() throws Exception {
@@ -16,7 +16,7 @@ public class DomainConfigurationClassSourceValidatorTest {
 	//
 	//		final DomainTypePropertyValidator propertyValidator = EasyMock.createMock( DomainTypePropertyValidator.class );
 	//
-	//		subject = new DomainConfigurationClassSourceValidator( propertyValidator );
+	//		subject = new DomainConfigurationUnitsSourceValidator( propertyValidator );
 	//
 	//		final DomainConfigurationSource domainConfiguration = DummyConfigurationsHelper.emptyDomainEntityConfiguration();
 	//
@@ -40,7 +40,7 @@ public class DomainConfigurationClassSourceValidatorTest {
 	//
 	//		final DomainTypePropertyValidator propertyValidator = EasyMock.createMock( DomainTypePropertyValidator.class );
 	//
-	//		subject = new DomainConfigurationClassSourceValidator( propertyValidator );
+	//		subject = new DomainConfigurationUnitsSourceValidator( propertyValidator );
 	//
 	//		final DomainConfigurationSource domainConfiguration = DummyConfigurationsHelper.emptyDomainEntityConfiguration();
 	//

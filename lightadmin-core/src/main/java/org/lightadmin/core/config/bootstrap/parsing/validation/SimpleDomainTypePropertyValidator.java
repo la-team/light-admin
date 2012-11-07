@@ -7,7 +7,7 @@ import org.springframework.data.mapping.PropertyPath;
 import java.util.Iterator;
 
 @SuppressWarnings( "unchecked" )
-public class SimpleDomainTypePropertyValidator implements DomainTypePropertyValidator {
+class SimpleDomainTypePropertyValidator implements DomainTypePropertyValidator {
 
 	private DomainTypeEntityMetadataResolver entityMetadataResolver;
 

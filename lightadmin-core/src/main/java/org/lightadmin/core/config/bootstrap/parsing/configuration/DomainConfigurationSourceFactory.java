@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
+import org.lightadmin.core.config.domain.support.*;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.util.DomainConfigurationUtils;
@@ -10,8 +11,17 @@ public class DomainConfigurationSourceFactory {
 
 	private final DomainTypeEntityMetadataResolver entityMetadataResolver;
 
+	private final ConfigurationUnitPostProcessor configurationUnitPostProcessor;
+
 	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
+		this( entityMetadataResolver, new DomainTypeMetadataAwareConfigurationUnitPostProcessor( entityMetadataResolver ) );
+	}
+
+	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver,
+											 final ConfigurationUnitPostProcessor configurationUnitPostProcessor ) {
+
 		this.entityMetadataResolver = entityMetadataResolver;
+		this.configurationUnitPostProcessor = configurationUnitPostProcessor;
 	}
 
 	public DomainConfigurationSource createConfigurationSource( Object configurationMetadata ) {
@@ -19,27 +29,28 @@ public class DomainConfigurationSourceFactory {
 
 		if ( DomainConfigurationUtils.isConfigurationCandidate( configurationMetadata ) ) {
 			final Class configurationMetadataClass = ( Class ) configurationMetadata;
-			return domainConfigurationClassSource( configurationMetadataClass );
-		}
-		if ( configurationMetadata instanceof DomainConfigurationClassDTO ) {
-			final DomainConfigurationClassDTO configurationClassDTO = ( DomainConfigurationClassDTO ) configurationMetadata;
 
-			return domainConfigurationClassDTOSource( configurationClassDTO );
+			final ConfigurationUnits configurationUnits = ConfigurationUnitsConverter.fromConfiguration( configurationMetadataClass );
+
+			return domainConfigurationUnitsSource( configurationUnits );
+		}
+
+		if ( configurationMetadata instanceof ConfigurationUnits ) {
+			ConfigurationUnits configurationUnits = ( ConfigurationUnits ) configurationMetadata;
+
+			return domainConfigurationUnitsSource( configurationUnits );
 		}
 
 		throw new IllegalArgumentException( String.format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
 	}
 
-	private DomainConfigurationSource domainConfigurationClassDTOSource( final DomainConfigurationClassDTO configurationClassDTO ) {
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( configurationClassDTO.getDomainType() );
+	private DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
+		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( configurationUnits.getDomainType() );
 
-		return new DomainConfigurationClassDTOSource( domainTypeEntityMetadata, configurationClassDTO );
-	}
+		for ( ConfigurationUnit configurationUnit : configurationUnits ) {
+			configurationUnitPostProcessor.postProcess( configurationUnit );
+		}
 
-	private DomainConfigurationSource domainConfigurationClassSource( final Class configurationMetadataClass ) {
-		final Class<?> domainType = DomainConfigurationUtils.configurationDomainType( configurationMetadataClass );
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( domainType );
-
-		return new DomainConfigurationClassSource( domainTypeEntityMetadata, configurationMetadataClass );
+		return new DomainConfigurationUnitsSource( domainTypeEntityMetadata, configurationUnits );
 	}
 }

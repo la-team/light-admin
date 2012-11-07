@@ -5,8 +5,8 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.scope.Scope;
-import org.lightadmin.core.config.domain.scope.ScopeUtils;
+import org.lightadmin.core.config.domain.scope.ScopeMetadata;
+import org.lightadmin.core.config.domain.scope.ScopeMetadataUtils;
 import org.lightadmin.core.config.domain.support.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
@@ -65,12 +65,12 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
 
-		final Scope scope = domainTypeAdministrationConfiguration.getScopes().getScope( scopeName );
+		final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope( scopeName );
 
 		final Specification filterSpecification = specificationFromRequest( request, domainTypeEntityMetadata );
 
 		if ( isPredicateScope( scope ) ) {
-			final ScopeUtils.PredicateScope predicateScope = ( ScopeUtils.PredicateScope ) scope;
+			final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = ( ScopeMetadataUtils.PredicateScopeMetadata ) scope;
 
 			final Page page = findBySpecificationAndPredicate( repository, filterSpecification, predicateScope.predicate(), pageSort );
 
@@ -78,7 +78,7 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		}
 
 		if ( isSpecificationScope( scope ) ) {
-			final Specification scopeSpecification = ( ( ScopeUtils.SpecificationScope ) scope ).specification();
+			final Specification scopeSpecification = ( ( ScopeMetadataUtils.SpecificationScopeMetadata ) scope ).specification();
 
 			Page page = findItemsBySpecification( repository, and( scopeSpecification, filterSpecification ), pageSort );
 
@@ -110,12 +110,12 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		return new PageImpl<Object>( itemsOnPage, pageSort, items.size() );
 	}
 
-	private boolean isSpecificationScope( final Scope scope ) {
-		return scope instanceof ScopeUtils.SpecificationScope;
+	private boolean isSpecificationScope( final ScopeMetadata scope ) {
+		return scope instanceof ScopeMetadataUtils.SpecificationScopeMetadata;
 	}
 
-	private boolean isPredicateScope( final Scope scope ) {
-		return scope instanceof ScopeUtils.PredicateScope;
+	private boolean isPredicateScope( final ScopeMetadata scope ) {
+		return scope instanceof ScopeMetadataUtils.PredicateScopeMetadata;
 	}
 
 	private Specification and( Specification specification, Specification otherSpecification ) {

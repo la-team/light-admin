@@ -2,8 +2,11 @@ package org.lightadmin.core.config.domain.support;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 
-public interface ConfigurationUnit {
+import java.io.Serializable;
+
+public interface ConfigurationUnit extends Serializable {
 
 	DomainConfigurationUnitType getDomainConfigurationUnitType();
 
+	Class<?> getDomainType();
 }

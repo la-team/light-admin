@@ -6,11 +6,11 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<%@ attribute name="filters" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.filter.Filters"%>
+<%@ attribute name="filters" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit"%>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
-<c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.config.domain.filter.Filter.class ) %>"/>
+<c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.config.domain.filter.FilterMetadata.class ) %>"/>
 
 <c:if test="${not empty tag_search_filterList}">
 	<div class="well well-small">

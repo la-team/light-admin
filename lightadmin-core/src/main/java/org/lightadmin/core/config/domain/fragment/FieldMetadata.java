@@ -11,7 +11,7 @@ public class FieldMetadata implements Serializable {
 
 	private String alias;
 
-	private FieldValueRenderer renderer;
+	private transient FieldValueRenderer renderer;
 
 	public FieldMetadata( final String fieldName ) {
 		Assert.notNull( fieldName );

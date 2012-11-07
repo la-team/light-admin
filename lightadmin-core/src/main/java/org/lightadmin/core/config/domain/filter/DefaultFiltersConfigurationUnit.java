@@ -1,20 +1,27 @@
 package org.lightadmin.core.config.domain.filter;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.support.DomainTypeConfigurationUnit;
+import org.lightadmin.core.config.domain.support.DomainTypeEntityMetadataAware;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;
-import java.util.List;
+import java.util.Set;
 
-import static com.google.common.collect.Lists.newLinkedList;
+import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Sets.newLinkedHashSet;
 
-public class DefaultFiltersConfigurationUnit implements FiltersConfigurationUnit {
+public class DefaultFiltersConfigurationUnit extends DomainTypeConfigurationUnit implements FiltersConfigurationUnit, DomainTypeEntityMetadataAware {
 
-	private final List<FilterMetadata> filtersMetadata;
+	private final Set<FilterMetadata> filtersMetadata;
 
-	DefaultFiltersConfigurationUnit( final List<FilterMetadata> filtersMetadata ) {
+	DefaultFiltersConfigurationUnit( Class<?> domainType, final Set<FilterMetadata> filtersMetadata ) {
+		super( domainType );
+
 		Assert.notNull( filtersMetadata );
-		this.filtersMetadata = newLinkedList( filtersMetadata );
+
+		this.filtersMetadata = newLinkedHashSet( filtersMetadata );
 	}
 
 	@Override
@@ -29,5 +36,12 @@ public class DefaultFiltersConfigurationUnit implements FiltersConfigurationUnit
 	@Override
 	public DomainConfigurationUnitType getDomainConfigurationUnitType() {
 		return DomainConfigurationUnitType.FILTERS;
+	}
+
+	@Override
+	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
+		for ( FilterMetadata filterMetadata : newHashSet(filtersMetadata) ) {
+			filtersMetadata.add( FilterMetadataUtils.decorateAttributeMetadata( filterMetadata, domainTypeEntityMetadata.getAttribute( filterMetadata.getFieldName() ) ) );
+		}
 	}
 }

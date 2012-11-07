@@ -18,16 +18,6 @@ public class DomainTypeAdministrationConfigFactory {
 	public DomainTypeAdministrationConfiguration createAdministrationConfiguration( DomainConfigurationSource domainConfigurationSource ) {
 		final DynamicJpaRepository<?, ? extends Serializable> repository = dynamicJpaRepositoryFactory.createRepository( domainConfigurationSource.getDomainType() );
 
-		DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = new DomainTypeAdministrationConfiguration( domainConfigurationSource.getDomainType(), repository );
-
-		domainTypeAdministrationConfiguration.setConfigurationName( domainConfigurationSource.getConfigurationName() );
-		domainTypeAdministrationConfiguration.setDomainTypeEntityMetadata( domainConfigurationSource.getDomainTypeEntityMetadata() );
-		domainTypeAdministrationConfiguration.setEntityConfiguration( domainConfigurationSource.getEntityConfiguration() );
-		domainTypeAdministrationConfiguration.setScreenContext( domainConfigurationSource.getScreenContext() );
-		domainTypeAdministrationConfiguration.setListViewFragment( domainConfigurationSource.getListViewFragment() );
-		domainTypeAdministrationConfiguration.setScopes( domainConfigurationSource.getScopes() );
-		domainTypeAdministrationConfiguration.setFilters( domainConfigurationSource.getFilters() );
-
-		return domainTypeAdministrationConfiguration;
+		return new DomainTypeAdministrationConfiguration( domainConfigurationSource, repository );
 	}
 }
