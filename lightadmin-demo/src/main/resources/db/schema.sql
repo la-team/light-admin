@@ -35,3 +35,9 @@ CREATE TABLE lineitem (
   order_id BIGINT CONSTRAINT lineitem_orders_ref REFERENCES orders (id),
   amount BIGINT,
   price DECIMAL(8,2));
+
+CREATE TABLE filtertestentity(
+  id BIGINT IDENTITY PRIMARY KEY,
+  textfield VARCHAR (255),
+  integerfield BIGINT,
+  decimalfield DECIMAL (8,2));
