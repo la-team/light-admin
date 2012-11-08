@@ -26,13 +26,16 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.UndeclaredThrowableException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -44,17 +47,9 @@ import static com.google.common.collect.Lists.newLinkedList;
 @RequestMapping( "/rest" )
 public class DynamicRepositoryRestController extends RepositoryRestController implements GlobalAdministrationConfigurationAware {
 
+	private final SpecificationCreator specificationCreator = new SpecificationCreator();
+
 	private GlobalAdministrationConfiguration configuration;
-
-	private RestResponseNegotiator responseNegotiator;
-
-	private SpecificationCreator specificationCreator;
-
-	@PostConstruct
-	public void init() {
-		responseNegotiator = new RestResponseNegotiator( getRepositoryRestConfig(), getHttpMessageConverters(), getMappingHttpMessageConverter() );
-		specificationCreator = new SpecificationCreator();
-	}
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search", method = RequestMethod.GET )
@@ -129,7 +124,18 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 	}
 
 	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata ) throws IOException {
-		return responseNegotiator.negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page ), pageMetadata, Lists.<Link>newArrayList() ) );
+		Method negotiateResponseMethod = ReflectionUtils.findMethod( getClass(), "negotiateResponse", ServletServerHttpRequest.class, HttpStatus.class, HttpHeaders.class, Object.class );
+
+		ReflectionUtils.makeAccessible( negotiateResponseMethod );
+
+		try {
+			return ( ResponseEntity<?> ) negotiateResponseMethod.invoke( this, request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page ), pageMetadata, Lists.<Link>newArrayList() ) );
+		} catch ( InvocationTargetException ex ) {
+			ReflectionUtils.rethrowRuntimeException( ex.getTargetException() );
+			return null; // :)
+		} catch ( IllegalAccessException ex ) {
+			throw new UndeclaredThrowableException( ex );
+		}
 	}
 
 	private PagedResources.PageMetadata pageMetadata( final Page page ) {
