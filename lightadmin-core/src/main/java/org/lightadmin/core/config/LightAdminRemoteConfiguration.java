@@ -3,6 +3,7 @@ package org.lightadmin.core.config;
 import org.lightadmin.core.config.management.jmx.LightAdminConfigurationMonitoringServiceMBean;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementRMIService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
+import org.lightadmin.core.rest.HttpMessageConverterRefresher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jmx.export.annotation.AnnotationMBeanExporter;
@@ -16,6 +17,11 @@ public class LightAdminRemoteConfiguration {
 	@Bean
 	public GlobalConfigurationManagementService globalConfigurationManagementService() {
 		return new GlobalConfigurationManagementRMIService();
+	}
+
+	@Bean
+	public HttpMessageConverterRefresher httpMessageConverterRefresher() {
+		return new HttpMessageConverterRefresher();
 	}
 
 	@Bean
