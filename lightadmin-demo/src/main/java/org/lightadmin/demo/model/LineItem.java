@@ -72,7 +72,7 @@ public class LineItem extends AbstractEntity {
 	 *
 	 * @return the price
 	 */
-	public BigDecimal getUnitPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
