@@ -23,7 +23,7 @@ public class DataTableComponent implements Component {
 	}
 
 	public int getRowCount() {
-		return rowElements().size();
+		return dataRowElements().size();
 	}
 
 	public String getColumnName( int columnIndex ) {
@@ -35,15 +35,15 @@ public class DataTableComponent implements Component {
 	}
 
 	public List<String> getCells( int rowIndex ) {
-		return WebElementTransformer.transform( cellElements( rowElement( rowIndex ) ) );
+		return WebElementTransformer.transform( cellElements( dataRowElement( rowIndex ) ) );
 	}
 
-	private WebElement rowElement( int rowIndex ) {
-		return rowElements().get( rowIndex );
+	private WebElement dataRowElement( int rowIndex ) {
+		return dataRowElements().get( rowIndex );
 	}
 
-	private List<WebElement> rowElements() {
-		return dataTableElement.findElements( By.xpath( "tbody/tr" ) );
+	private List<WebElement> dataRowElements() {
+		return dataTableElement.findElements( By.xpath( "tbody/tr[td[contains(@class, 'data-cell')]]" ) );
 	}
 
 	private List<WebElement> cellElements( WebElement rowElement ) {
