@@ -92,6 +92,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 			for ( FieldMetadata field : fields ) {
 				if ( attribute.getName().equals( fieldNameSegment( field, configuration.getDomainType() ) )) {
 					result.add( attribute );
+					break;
 				}
 			}
 		}
