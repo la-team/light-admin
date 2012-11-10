@@ -28,21 +28,21 @@ public class FilterTest extends SeleniumIntegrationTest {
 
     @Test
     public void canFilterByIntegerField() {
-        productListViewPage.filter( "integerfield", "12345567" );
+        productListViewPage.filter( "integerField", "12345567" );
 
 		assertTableData( expectedResult1, productListViewPage.getDataTable() );
     }
 
     @Test
     public void canFilterByDecimalField() {
-		productListViewPage.filter( "decimalfield", "1499.99" );
+		productListViewPage.filter( "decimalField", "1499.99" );
 
 		assertTableData( expectedResult2, productListViewPage.getDataTable() );
     }
 
 	@Test
 	public void canFilterByTextWithSpecialCharacters() {
-		productListViewPage.filter( "textfield", "#<,&«$''(*@×¢¤₤€¥ª ™®© Аб/Cd ØøÅåÆæĈę123 ¦_{~>½" );
+		productListViewPage.filter( "textField", "#<,&«$''(*@×¢¤₤€¥ª ™®© Аб/Cd ØøÅåÆæĈę123 ¦_{~>½" );
 
 		assertTableData( expectedResult3, productListViewPage.getDataTable() );
 	}

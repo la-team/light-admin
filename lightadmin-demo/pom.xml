@@ -218,7 +218,7 @@
 							<configuration>
 								<container>
 									<containerId>jetty8x</containerId>
-									<artifactInstaller>
+                                    <artifactInstaller>
                                         <groupId>org.eclipse.jetty</groupId>
                                         <artifactId>jetty-distribution</artifactId>
                                         <version>8.1.8.v20121106</version>
