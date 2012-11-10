@@ -21,15 +21,15 @@ public class FilterTestEntityConfiguration {
 
 	public static ListViewConfigurationUnit listView( final ListViewConfigurationUnitBuilder listViewBuilder ) {
 		return listViewBuilder
-				.field( "textfield" ).alias( "Text Field" )
-				.field( "integerfield" ).alias( "Integer Field" )
-				.field( "decimalfield" ).alias( "Decimal Field" ).build();
+				.field( "textField" ).alias( "Text Field" )
+				.field( "integerField" ).alias( "Integer Field" )
+				.field( "decimalField" ).alias( "Decimal Field" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
 		return filterBuilder
-				.field( "textfield" )
-				.field( "integerfield" )
-				.field( "decimalfield" ).build();
+				.field( "textField" )
+				.field( "integerField" )
+				.field( "decimalField" ).build();
 	}
 }
