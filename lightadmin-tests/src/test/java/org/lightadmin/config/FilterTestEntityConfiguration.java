@@ -1,4 +1,4 @@
-package org.lightadmin.demo.config;
+package org.lightadmin.config;
 
 import org.lightadmin.core.annotation.Administration;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;

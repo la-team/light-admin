@@ -4,12 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
-import org.lightadmin.demo.config.FilterTestEntityConfiguration;
+import org.lightadmin.config.FilterTestEntityConfiguration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import static org.junit.Assert.assertTrue;
 
 public class FilterTest extends SeleniumIntegrationTest {
 
@@ -23,8 +21,15 @@ public class FilterTest extends SeleniumIntegrationTest {
 
     @Before
     public void setup() {
+		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
+
 		productListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_DOMAIN );
     }
+
+	@After
+	public void tearDown() throws Exception {
+		removeDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
+	}
 
     @Test
     public void canFilterByIntegerField() {

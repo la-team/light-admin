@@ -16,7 +16,7 @@ public final class FilterMetadataUtils {
 
 		private final String fieldName;
 
-		private DomainTypeAttributeMetadata attributeMetadata;
+		private transient DomainTypeAttributeMetadata attributeMetadata;
 
 		public DefaultFilterMetadata( final String fieldName ) {
 			Assert.notNull( fieldName );
