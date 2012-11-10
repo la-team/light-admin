@@ -6,7 +6,6 @@ import org.lightadmin.core.config.domain.fragment.FieldMetadata;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mapping.PropertyPath;
 import org.springframework.data.rest.repository.RepositoryExporter;
@@ -24,14 +23,19 @@ import static com.google.common.collect.Lists.newLinkedList;
 @SuppressWarnings( "unchecked" )
 public class DomainTypeToResourceConverter implements Converter<Object, Resource> {
 
-	@Autowired
 	private RepositoryExporter repositoryExporter;
 
-	@Autowired
 	private RepositoryRestConfiguration repositoryRestConfiguration;
 
-	@Autowired
 	private GlobalAdministrationConfiguration configuration;
+
+	public DomainTypeToResourceConverter( final RepositoryRestConfiguration repositoryRestConfiguration,
+										  final RepositoryExporter repositoryExporter,
+										  GlobalAdministrationConfiguration configuration) {
+		this.repositoryRestConfiguration = repositoryRestConfiguration;
+		this.repositoryExporter = repositoryExporter;
+		this.configuration = configuration;
+	}
 
 	@Override
 	public Resource convert( final Object source ) {
@@ -105,10 +109,6 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 
 	private void addAttributeValue( EntityResource resource, String attributeName, Object value ) {
 		resource.getContent().put( attributeName, value );
-	}
-
-	private void addAttributeValue( EntityResource resource, DomainTypeAttributeMetadata attributeMetadata, Object value ) {
-		addAttributeValue( resource, attributeMetadata.getName(), value );
 	}
 
 	private void addAttribute( EntityResource resource, DomainTypeAttributeMetadata attributeMetadata, Object source ) {
