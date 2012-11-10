@@ -42,3 +42,11 @@ insert into LineItem (id, product_id, amount, order_id, price) values (2, 2, 1, 
 insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (1, 'integer search test', 1234567, 22.2);
 insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (2, 'decimal search test', 456, 1499.99);
 insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (3, '#<,&«$''(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½', 789, 22.2);
+
+insert into ParentTestEntity (id, name) values (1, 'Parent Item1');
+insert into ParentTestEntity (id, name) values (2, 'Parent Item2');
+insert into ParentTestEntity (id, name) values (3, 'Parent Item3');
+
+insert into ChildTestEntity (id, name, parent_id) values (1, 'Child Item 1', 1);
+insert into ChildTestEntity (id, name, parent_id) values (2, 'Child Item 2', 2);
+insert into ChildTestEntity (id, name, parent_id) values (3, 'Child Item 3', 3);

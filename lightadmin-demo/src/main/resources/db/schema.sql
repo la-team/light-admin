@@ -36,8 +36,17 @@ CREATE TABLE lineitem (
   amount BIGINT,
   price DECIMAL(8,2));
 
-CREATE TABLE filtertestentity(
+CREATE TABLE filtertestentity (
   id BIGINT IDENTITY PRIMARY KEY,
   textfield VARCHAR (255),
   integerfield BIGINT,
   decimalfield DECIMAL (8,2));
+
+CREATE TABLE parenttestentity (
+  id BIGINT IDENTITY PRIMARY KEY,
+  name VARCHAR (255));
+
+CREATE TABLE childtestentity (
+  id BIGINT IDENTITY PRIMARY KEY,
+  parent_id BIGINT CONSTRAINT child_to_parent_ref REFERENCES parenttestentity (id),
+  name VARCHAR (255));
