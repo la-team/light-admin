@@ -7,9 +7,11 @@ import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.ArrayList;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.lightadmin.data.Domain.*;
 
 public class DashboardPageTest extends SeleniumIntegrationTest {
 
@@ -17,9 +19,11 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 	private LoginPage loginPage;
 
 	private DashboardPage dashboardPage;
+	private ArrayList<Domain> expectedDomains = new ArrayList<Domain>();
 
 	@Before
 	public void setup() throws Exception {
+		setExpectedDomains();
 		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
 	}
 
@@ -35,18 +39,17 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void allDomainLinksLoaded() throws Exception {
-		for ( Domain domain : Domain.values() ) {
+		for ( Domain domain : expectedDomains ) {
 			assertTrue( String.format( "Link for \'%s\' is not displayed", domain.getLinkText() ), dashboardPage.domainLinkDisplayed( domain ) );
 		}
 
-		assertEquals( String.format( "Unexpected domain links are displayed:" ), Domain.values().length, dashboardPage.getDomainLinksCount() );
+		assertEquals( String.format( "Unexpected domain links are displayed:" ), expectedDomains.size(), dashboardPage.getDomainLinksCount() );
 	}
 
 	@Test
 	public void domainRecordStatisticsIsDisplayed() {
-		setExpectedDomainsRecordCount();
 
-		for ( Domain domain : Domain.values() ) {
+		for ( Domain domain : expectedDomains ) {
 			assertTrue( String.format( "Progress bar is not displayed for domain \'%s\':", domain.getLinkText() ), dashboardPage.isProgressBarDisplayed( domain ) );
 
 			assertEquals( String.format( "Incorrect record count for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsCount(), dashboardPage.getDomainRecordsCount( domain ) );
@@ -55,11 +58,11 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 		}
 	}
 
-	private void setExpectedDomainsRecordCount() {
-		Domain.PRODUCTS.setExpectedRecordCount( 3 );
-		Domain.ORDERS.setExpectedRecordCount( 2 );
-		Domain.ADDRESSES.setExpectedRecordCount( 2 );
-		Domain.CUSTOMERS.setExpectedRecordCount( 25 );
+	private void setExpectedDomains() {
+		expectedDomains.add( PRODUCTS.setExpectedRecordCount( 3 ) );
+		expectedDomains.add( ORDERS.setExpectedRecordCount( 2 ) );
+		expectedDomains.add( ADDRESSES.setExpectedRecordCount( 2 ) );
+		expectedDomains.add( CUSTOMERS.setExpectedRecordCount( 25 ) );
 	}
 
 }

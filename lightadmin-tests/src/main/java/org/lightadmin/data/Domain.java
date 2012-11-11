@@ -27,8 +27,9 @@ public enum Domain {
 		return linkText;
 	}
 
-    public void setExpectedRecordCount(int expectedRecordCount) {
+    public Domain setExpectedRecordCount(int expectedRecordCount) {
         this.expectedRecordsCount = expectedRecordCount;
+		return this;
     }
 
     public int getExpectedRecordsCount() {
