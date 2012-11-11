@@ -28,6 +28,11 @@ public final class ConfigurationUnitsConverter implements Converter<Class, Confi
 	public ConfigurationUnits convert( final Class configurationClass ) {
 		final Class<?> domainType = configurationDomainType( configurationClass );
 
-		return new ConfigurationUnits( domainType, initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class, domainType ), initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class, domainType ), initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, ListViewConfigurationUnitBuilder.class, TableListViewConfigurationUnitBuilder.class, domainType ), initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class, domainType ), initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class, domainType ) );
+		return new ConfigurationUnits( domainType,
+									   initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class, domainType ),
+									   initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class, domainType ),
+									   initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, ListViewConfigurationUnitBuilder.class, TableListViewConfigurationUnitBuilder.class, domainType ),
+									   initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class, domainType ),
+									   initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class, domainType ) );
 	}
 }
