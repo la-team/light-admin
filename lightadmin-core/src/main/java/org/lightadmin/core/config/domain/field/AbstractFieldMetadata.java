@@ -1,10 +1,11 @@
-package org.lightadmin.core.config.domain.fragment.field;
+package org.lightadmin.core.config.domain.field;
 
+import java.io.Serializable;
 import java.util.UUID;
 
-abstract class AbstractFieldMetadata implements FieldMetadata {
+public abstract class AbstractFieldMetadata implements FieldMetadata, Serializable {
 
-	private final String name;
+	private String name;
 
 	private final int order;
 
@@ -20,16 +21,28 @@ abstract class AbstractFieldMetadata implements FieldMetadata {
 		this.uuid = UUID.randomUUID();
 	}
 
+	public void setName( String name ) {
+		this.name = name;
+	}
+
+	@Override
 	public String getName() {
 		return name;
 	}
 
-	public int getOrder() {
+	@Override
+	public int getSortOrder() {
 		return order;
 	}
 
-	public UUID getUuid() {
-		return uuid;
+	@Override
+	public String getUuid() {
+		return uuid.toString();
+	}
+
+	@Override
+	public boolean isSortable() {
+		return false;
 	}
 
 	@Override
@@ -43,7 +56,7 @@ abstract class AbstractFieldMetadata implements FieldMetadata {
 
 		final AbstractFieldMetadata that = ( AbstractFieldMetadata ) o;
 
-		return uuid.equals( that.getUuid() );
+		return uuid.equals( that.uuid );
 	}
 
 	@Override

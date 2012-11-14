@@ -5,7 +5,7 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 
 public interface FiltersConfigurationUnitBuilder extends ConfigurationUnitBuilder<FiltersConfigurationUnit> {
 
-	FiltersConfigurationUnitBuilder field( final String fieldName );
+	FiltersConfigurationUnitBuilder filter( final String filterName, String fieldName );
 
 	FiltersConfigurationUnitBuilder renderer( final Renderer renderer );
 

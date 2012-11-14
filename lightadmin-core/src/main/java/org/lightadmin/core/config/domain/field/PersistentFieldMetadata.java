@@ -1,19 +1,20 @@
-package org.lightadmin.core.config.domain.fragment.field;
+package org.lightadmin.core.config.domain.field;
 
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 
-public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware {
+public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
 
 	private final String field;
 
 	private DomainTypeAttributeMetadata attributeMetadata;
 
-	protected PersistentFieldMetadata( final String name, final String field ) {
+	public PersistentFieldMetadata( final String name, final String field ) {
 		super( name );
 		this.field = field;
 	}
 
+	@Override
 	public String getField() {
 		return field;
 	}
@@ -30,6 +31,6 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
 	@Override
 	public boolean isSortable() {
-		return false;
+		return true;
 	}
 }

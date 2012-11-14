@@ -1,5 +1,8 @@
 package org.lightadmin.core.config.domain.fragment;
 
+import org.lightadmin.core.config.domain.field.AbstractFieldMetadata;
+import org.lightadmin.core.config.domain.field.CustomFieldMetadata;
+import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
@@ -7,7 +10,7 @@ public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurati
 
 	private TableFragment tableFragment;
 
-	private FieldMetadata currentFieldMetadata = null;
+	private AbstractFieldMetadata currentFieldMetadata = null;
 
 	public TableListViewConfigurationUnitBuilder( Class<?> domainType ) {
 		super( domainType );
@@ -20,7 +23,7 @@ public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurati
 		if ( currentFieldMetadata != null ) {
 			tableFragment.addField( currentFieldMetadata );
 		}
-		currentFieldMetadata = new FieldMetadata( fieldName );
+		currentFieldMetadata = new PersistentFieldMetadata( fieldName, fieldName );
 		return this;
 	}
 
@@ -29,7 +32,7 @@ public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurati
 		if ( currentFieldMetadata == null ) {
 			throw new RuntimeException( "FieldName for alias was not specified correctly." );
 		}
-		currentFieldMetadata.setAlias( alias );
+		currentFieldMetadata.setName( alias );
 		return this;
 	}
 
@@ -40,11 +43,12 @@ public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurati
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	public ListViewConfigurationUnitBuilder renderer( final FieldValueRenderer renderer ) {
 		if ( currentFieldMetadata == null ) {
 			throw new RuntimeException( "FieldName for renderer was not specified correctly." );
 		}
-		currentFieldMetadata.setRenderer( renderer );
+		currentFieldMetadata = new CustomFieldMetadata( currentFieldMetadata.getName(), renderer );
 		return this;
 	}
 

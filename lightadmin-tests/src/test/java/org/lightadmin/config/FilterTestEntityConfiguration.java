@@ -28,8 +28,8 @@ public class FilterTestEntityConfiguration {
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
 		return filterBuilder
-				.field( "textField" )
-				.field( "integerField" )
-				.field( "decimalField" ).build();
+				.filter( "Text Field", "textField" )
+				.filter( "Integer Field", "integerField" )
+				.filter( "Decimal Field", "decimalField" ).build();
 	}
 }

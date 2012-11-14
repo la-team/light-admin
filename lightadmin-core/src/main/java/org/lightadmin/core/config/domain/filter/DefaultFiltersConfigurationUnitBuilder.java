@@ -16,8 +16,8 @@ public class DefaultFiltersConfigurationUnitBuilder extends DomainTypeConfigurat
 	}
 
 	@Override
-	public FiltersConfigurationUnitBuilder field( final String fieldName ) {
-		filtersMetadata.add( FilterMetadataUtils.field( fieldName ) );
+	public FiltersConfigurationUnitBuilder filter( final String filterName, String fieldName ) {
+		filtersMetadata.add( FilterMetadataUtils.filter( filterName, fieldName ) );
 		return this;
 	}
 

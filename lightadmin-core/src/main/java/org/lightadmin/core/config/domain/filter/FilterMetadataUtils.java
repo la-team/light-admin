@@ -1,5 +1,7 @@
 package org.lightadmin.core.config.domain.filter;
 
+import org.lightadmin.core.config.domain.field.FieldMetadataFactory;
+import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.springframework.util.Assert;
 
@@ -8,33 +10,48 @@ public final class FilterMetadataUtils {
 	private FilterMetadataUtils() {
 	}
 
-	public static FilterMetadata field( String fieldName ) {
-		return new DefaultFilterMetadata( fieldName );
+	public static FilterMetadata filter( String filterName, String fieldName ) {
+		return new DefaultFilterMetadata( filterName, fieldName );
 	}
 
 	private static class DefaultFilterMetadata implements FilterMetadata {
 
-		private final String fieldName;
+		private final PersistentFieldMetadata fieldMetadata;
 
-		private transient DomainTypeAttributeMetadata attributeMetadata;
-
-		public DefaultFilterMetadata( final String fieldName ) {
+		public DefaultFilterMetadata( final String filterName, final String fieldName ) {
+			Assert.notNull( filterName );
 			Assert.notNull( fieldName );
-			this.fieldName = fieldName;
+
+			this.fieldMetadata = ( PersistentFieldMetadata ) FieldMetadataFactory.persistentField( filterName, fieldName );
 		}
 
+		@Override
+		public String getName() {
+			return fieldMetadata.getName();
+		}
+
+		@Override
 		public String getFieldName() {
-			return fieldName;
+			return fieldMetadata.getField();
+		}
+
+		@Override
+		public String getUuid() {
+			return fieldMetadata.getUuid();
+		}
+
+		@Override
+		public Class<?> getType() {
+			return fieldMetadata.getAttributeMetadata().getType();
+		}
+
+		public DomainTypeAttributeMetadata getAttributeMetadata() {
+			return this.fieldMetadata.getAttributeMetadata();
 		}
 
 		@Override
 		public void setAttributeMetadata( final DomainTypeAttributeMetadata attributeMetadata ) {
-			this.attributeMetadata = attributeMetadata;
-		}
-
-		@Override
-		public DomainTypeAttributeMetadata getAttributeMetadata() {
-			return attributeMetadata;
+			this.fieldMetadata.setAttributeMetadata( attributeMetadata );
 		}
 
 		@Override
@@ -48,21 +65,12 @@ public final class FilterMetadataUtils {
 
 			final DefaultFilterMetadata that = ( DefaultFilterMetadata ) o;
 
-			if ( attributeMetadata != null ? !attributeMetadata.equals( that.attributeMetadata ) : that.attributeMetadata != null ) {
-				return false;
-			}
-			if ( !fieldName.equals( that.fieldName ) ) {
-				return false;
-			}
-
-			return true;
+			return fieldMetadata.equals( that.fieldMetadata );
 		}
 
 		@Override
 		public int hashCode() {
-			int result = fieldName.hashCode();
-			result = 31 * result + ( attributeMetadata != null ? attributeMetadata.hashCode() : 0 );
-			return result;
+			return fieldMetadata.hashCode();
 		}
 	}
 }

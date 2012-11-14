@@ -1,39 +1,28 @@
 package org.lightadmin.core.rest;
 
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.fragment.FieldMetadata;
-import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
+import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.mapping.PropertyPath;
-import org.springframework.data.rest.repository.RepositoryExporter;
-import org.springframework.data.rest.repository.RepositoryMetadata;
 import org.springframework.data.rest.webmvc.EntityResource;
-import org.springframework.data.rest.webmvc.EntityToResourceConverter;
-import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 
-import java.util.Collection;
 import java.util.Set;
-
-import static com.google.common.collect.Lists.newLinkedList;
 
 @SuppressWarnings( "unchecked" )
 public class DomainTypeToResourceConverter implements Converter<Object, Resource> {
 
-	private RepositoryExporter repositoryExporter;
-
-	private RepositoryRestConfiguration repositoryRestConfiguration;
-
 	private GlobalAdministrationConfiguration configuration;
 
-	public DomainTypeToResourceConverter( final RepositoryRestConfiguration repositoryRestConfiguration,
-										  final RepositoryExporter repositoryExporter,
-										  GlobalAdministrationConfiguration configuration) {
-		this.repositoryRestConfiguration = repositoryRestConfiguration;
-		this.repositoryExporter = repositoryExporter;
+	private FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
+
+	public DomainTypeToResourceConverter( GlobalAdministrationConfiguration configuration ) {
 		this.configuration = configuration;
 	}
 
@@ -48,59 +37,23 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 			return new Resource<Object>( source );
 		}
 
-		final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
+		final DomainTypeEntityMetadata entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
 
-		final EntityResource entityResource = convert( domainTypeConfiguration.getDomainType(), source );
+		final EntityResource entityResource = emptyEntityResource();
 
 		addAttribute( entityResource, entityMetadata.getIdAttribute(), source );
 
 		addObjectStringRepresentation( entityResource, domainTypeConfiguration, source );
 
-		final Collection<DomainTypeAttributeMetadata> listViewAttributes = selectForListView( entityMetadata.getAttributes(), domainTypeConfiguration );
-
-		final Set<FieldMetadata> fields = domainTypeConfiguration.getListViewFragment().getFields();
-
-		for ( FieldMetadata field : fields ) {
-			final FieldValueRenderer<Object> fieldValueRenderer = field.getRenderer();
-			if ( fieldValueRenderer != null ) {
-				addAttributeValue( entityResource, field.getFieldName(), fieldValueRenderer.apply( source ) );
-			} else {
-				final String attributeName = fieldNameSegment( field, domainTypeConfiguration.getDomainType() );
-
-				final DomainTypeAttributeMetadata attributeMetadata = findByName( attributeName, listViewAttributes );
-				addAttribute( entityResource, attributeMetadata, source );
-			}
+		for ( FieldMetadata field : fieldsForListView( domainTypeConfiguration ) ) {
+			addAttributeValue( entityResource, field.getUuid(), fieldValueEvaluator.evaluate( field, source ) );
 		}
 
 		return entityResource;
 	}
 
-	private DomainTypeAttributeMetadata findByName( String attributeName, Collection<DomainTypeAttributeMetadata> attributeMetadatas ) {
-		for ( DomainTypeAttributeMetadata attributeMetadata : attributeMetadatas ) {
-			if ( attributeMetadata.getName().equals( attributeName )) {
-				return attributeMetadata;
-			}
-		}
-		throw new RuntimeException( String.format( "No attribute found for name %s", attributeName ) );
-	}
-
-	private String fieldNameSegment( FieldMetadata fieldMetadata, Class<?> domainType ) {
-		return PropertyPath.from( fieldMetadata.getFieldName(), domainType ).getSegment();
-	}
-
-	private Collection<DomainTypeAttributeMetadata> selectForListView( final Collection<? extends DomainTypeAttributeMetadata> domainTypeAttributeMetadatas, final DomainTypeAdministrationConfiguration configuration ) {
-		final Set<FieldMetadata> fields = configuration.getListViewFragment().getFields();
-
-		Collection<DomainTypeAttributeMetadata> result = newLinkedList();
-		for ( DomainTypeAttributeMetadata attribute : domainTypeAttributeMetadatas ) {
-			for ( FieldMetadata field : fields ) {
-				if ( attribute.getName().equals( fieldNameSegment( field, configuration.getDomainType() ) )) {
-					result.add( attribute );
-					break;
-				}
-			}
-		}
-		return result;
+	private Set<FieldMetadata> fieldsForListView( final DomainTypeAdministrationConfiguration domainTypeConfiguration ) {
+		return domainTypeConfiguration.getListViewFragment().getFields();
 	}
 
 	private void addObjectStringRepresentation( final EntityResource resource, final DomainTypeAdministrationConfiguration configuration, final Object source ) {
@@ -108,23 +61,16 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 	}
 
 	private void addAttributeValue( EntityResource resource, String attributeName, Object value ) {
-		resource.getContent().put( attributeName, value );
-	}
-
-	private void addAttribute( EntityResource resource, DomainTypeAttributeMetadata attributeMetadata, Object source ) {
-		final Object attributeValue = attributeMetadata.getValue( source );
-		if ( attributeValue != null ) {
-			resource.getContent().put( attributeMetadata.getName(), attributeValue );
+		if ( value != null ) {
+			resource.getContent().put( attributeName, value );
 		}
 	}
 
-	private EntityResource convert( Class<?> domainType, Object source ) {
-		return ( EntityResource ) entityToResourceConverter( domainType ).convert( source );
+	private void addAttribute( EntityResource resource, DomainTypeAttributeMetadata attributeMetadata, Object source ) {
+		addAttributeValue( resource, attributeMetadata.getName(), attributeMetadata.getValue( source ) );
 	}
 
-	private EntityToResourceConverter entityToResourceConverter( final Class domainType ) {
-		final RepositoryMetadata repositoryMetadata = repositoryExporter.repositoryMetadataFor( domainType );
-
-		return new EntityToResourceConverter( repositoryRestConfiguration, repositoryMetadata );
+	private EntityResource emptyEntityResource() {
+		return new EntityResource( Maps.<String, Object>newHashMap(), Sets.<Link>newHashSet() );
 	}
 }

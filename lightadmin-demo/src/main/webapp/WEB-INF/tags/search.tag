@@ -17,11 +17,11 @@
 		<form action="" name="filter-form" class="form-horizontal">
 			<fieldset>
 				<c:forEach var="filter" items="${tag_search_filterList}">
-					<c:if test="${light:isSimpleValueType(filter.attributeMetadata.type)}">
+					<c:if test="${light:isSimpleValueType(filter.type)}">
 						<div class="control-group">
-							<label class="control-label" for="${filter.attributeMetadata.name}"><c:out value="${light:capitalize(filter.fieldName)}"/></label>
+							<label class="control-label" for="${filter.fieldName}"><c:out value="${filter.name}"/></label>
 							<div class="controls">
-								<input name="${filter.attributeMetadata.name}" type="text" class="input-xlarge"/>
+								<input name="${filter.fieldName}" type="text" class="input-xlarge"/>
 							</div>
 						</div>
 					</c:if>

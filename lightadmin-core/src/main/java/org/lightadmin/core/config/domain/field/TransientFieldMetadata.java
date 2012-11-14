@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.fragment.field;
+package org.lightadmin.core.config.domain.field;
 
 public class TransientFieldMetadata extends AbstractFieldMetadata {
 
@@ -11,10 +11,5 @@ public class TransientFieldMetadata extends AbstractFieldMetadata {
 
 	public String getProperty() {
 		return property;
-	}
-
-	@Override
-	public boolean isSortable() {
-		return false;
 	}
 }

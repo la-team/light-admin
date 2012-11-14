@@ -20,7 +20,6 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import static org.lightadmin.core.config.domain.renderer.Renderers.select;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
 
 @SuppressWarnings( "unused" )
@@ -50,7 +49,9 @@ public class CustomerAdministration {
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder.field( "firstname" ).renderer( select( new String[] { "Yes", "No" } ) ).field( "lastname" ).build();
+		return filterBuilder
+			.filter( "First Name", "firstname" )
+			.filter( "Last Name", "lastname" ).build();
 	}
 
 	public static Specification<Customer> customerNameEqDave() {

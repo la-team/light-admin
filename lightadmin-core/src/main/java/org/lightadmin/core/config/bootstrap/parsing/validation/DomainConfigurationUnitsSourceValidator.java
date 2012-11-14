@@ -3,13 +3,16 @@ package org.lightadmin.core.config.bootstrap.parsing.validation;
 import org.lightadmin.core.config.bootstrap.parsing.InvalidPropertyConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
-import org.lightadmin.core.config.domain.fragment.FieldMetadata;
 import org.lightadmin.core.config.domain.fragment.Fragment;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 
 import java.util.Set;
+
+import static com.google.common.collect.Sets.newLinkedHashSet;
 
 class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSourceValidator<DomainConfigurationSource> {
 
@@ -30,9 +33,10 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 		final Fragment listViewFragment = domainConfigurationSource.getListViewFragment().getFragment();
 		Set<FieldMetadata> fields = listViewFragment.getFields();
 
-		for ( FieldMetadata field : fields ) {
-			if ( domainTypePropertyValidator.isInvalidProperty( field.getFieldName(), domainConfigurationSource.getDomainTypeEntityMetadata() ) ) {
-				problemReporter.error( new InvalidPropertyConfigurationProblem( field.getFieldName(), domainConfigurationSource, DomainConfigurationUnitType.LIST_VIEW ) );
+		for ( FieldMetadata field : selectPersistentFields( fields ) ) {
+			PersistentFieldMetadata persistentFieldMetadata = ( PersistentFieldMetadata ) field;
+			if ( domainTypePropertyValidator.isInvalidProperty( persistentFieldMetadata.getField(), domainConfigurationSource.getDomainTypeEntityMetadata() ) ) {
+				problemReporter.error( new InvalidPropertyConfigurationProblem( field.getName(), domainConfigurationSource, DomainConfigurationUnitType.LIST_VIEW ) );
 			}
 		}
 	}
@@ -44,5 +48,15 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 				problemReporter.warning( new InvalidPropertyConfigurationProblem( fieldName, domainConfigurationSource, DomainConfigurationUnitType.FILTERS ) );
 			}
 		}
+	}
+
+	private Set<FieldMetadata> selectPersistentFields( Set<FieldMetadata> fields ) {
+		Set<FieldMetadata> result = newLinkedHashSet();
+		for ( FieldMetadata field : fields ) {
+			if ( field instanceof PersistentFieldMetadata ) {
+				result.add( field );
+			}
+		}
+		return result;
 	}
 }
