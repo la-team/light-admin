@@ -8,7 +8,7 @@ public enum DomainConfigurationUnitType {
 	SCOPES( "scopes" ),
 	FILTERS( "filters" );
 
-	private String name;
+	private final String name;
 
 	private DomainConfigurationUnitType( final String name ) {
 		this.name = name;

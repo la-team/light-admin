@@ -35,7 +35,7 @@ public class Customer extends AbstractEntity {
 		this.lastname = lastname;
 	}
 
-	protected Customer() {
+	public Customer() {
 	}
 
 	public void add( Address address ) {

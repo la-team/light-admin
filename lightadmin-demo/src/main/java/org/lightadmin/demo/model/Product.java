@@ -42,7 +42,7 @@ public class Product extends AbstractEntity {
 		this.description = description;
 	}
 
-	protected Product() {
+	public Product() {
 	}
 
 	public void setAttribute( String name, String value ) {

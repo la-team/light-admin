@@ -20,7 +20,7 @@ public class Address extends AbstractEntity {
 		this.country = country;
 	}
 
-	protected Address() {
+	public Address() {
 
 	}
 

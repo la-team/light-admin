@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.domain.filter;
 
+import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataFactory;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
@@ -47,6 +48,11 @@ public final class FilterMetadataUtils {
 
 		public DomainTypeAttributeMetadata getAttributeMetadata() {
 			return this.fieldMetadata.getAttributeMetadata();
+		}
+
+		@Override
+		public FieldMetadata getFieldMetadata() {
+			return fieldMetadata;
 		}
 
 		@Override
