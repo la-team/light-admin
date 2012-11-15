@@ -24,9 +24,9 @@
 	<script type="text/javascript" src="<spring:url value="/scripts/jquery-1.8.0.min.js"/>"></script>
 
 	<script type="text/javascript" src="<spring:url value="/scripts/bootstrap.min.js"/>"></script>
-	<script type="text/javascript" src="<spring:url value="/scripts/jquery.dataTables.min.js"/>"></script>
-	<script type="text/javascript" src="<spring:url value="/scripts/dataTables.bootstrapPagination.js"/>"></script>
-	<script type="text/javascript" src="<spring:url value="/scripts/dataTables.fnReloadAjax.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/scripts/jquery-dataTables.min.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/scripts/jquery-dataTables-bootstrapPagination.js"/>"></script>
+	<script type="text/javascript" src="<spring:url value="/scripts/jquery-dataTables-fnReloadAjax.js"/>"></script>
 	<script type="text/javascript" src="<spring:url value="/scripts/lightadmin.js"/>"></script>
 
 	<!--[if lt IE 9]>
