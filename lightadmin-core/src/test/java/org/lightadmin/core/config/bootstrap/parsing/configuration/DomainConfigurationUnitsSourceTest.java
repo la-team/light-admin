@@ -1,56 +1,79 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
+import org.easymock.EasyMock;
+import org.junit.Test;
+import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.test.util.ConfigurationUnitsUtils;
+
+import static org.junit.Assert.assertEquals;
+import static org.lightadmin.core.test.util.ConfigurationUnitsUtils.configurationUnitFor;
+
 public class DomainConfigurationUnitsSourceTest {
 
-//		private DomainConfigurationClassSource subject;
-//
-//		@Test( expected = IllegalArgumentException.class )
-//		public void nullDomainTypeEntityMetadataNotAllowed() {
-//			subject = new DomainConfigurationClassSource( null, DummyConfigurationsHelper.DomainEntityEmptyConfiguration.class );
-//		}
-//
-//		@Test( expected = IllegalArgumentException.class )
-//		public void nullConfigurationClassNotAllowed() {
-//			subject = new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), null );
-//		}
-//
-//		@Test
-//		public void correctDomainTypeReturned() {
-//			subject = emptyDomainEntityConfiguration();
-//
-//			assertEquals( DomainEntity.class, subject.getDomainType() );
-//		}
-//
-//		@Test
-//		public void correctEntityMetadataReturned() throws Exception {
-//			final DomainTypeEntityMetadata expectedMetadata = domainTypeEntityMetadataMock( DomainEntity.class );
-//
-//			subject = new DomainConfigurationClassSource( expectedMetadata, DomainEntityEmptyConfiguration.class );
-//
-//			assertEquals( expectedMetadata, subject.getDomainTypeEntityMetadata() );
-//		}
-//
-//		@Test
-//		public void equalDomainConfigurations() throws Exception {
-//			final DomainConfigurationClassSource domainConfigurationClassSource = new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
-//			final DomainConfigurationClassSource otherDomainConfigurationClassSource = new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
-//
-//			assertEquals( domainConfigurationClassSource, otherDomainConfigurationClassSource );
-//		}
-//
-//		@Test
-//		public void notEqualDomainConfigurations() throws Exception {
-//			final DomainConfigurationClassSource domainConfigurationClassSource = new DomainConfigurationClassSource( domainTypeEntityMetadataMock( Object.class ), DomainEntityEmptyConfiguration.class );
-//			final DomainConfigurationClassSource otherDomainConfigurationClassSource = new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
-//
-//			assertFalse( domainConfigurationClassSource.equals( otherDomainConfigurationClassSource ) );
-//		}
-//
-//		public static DomainConfigurationClassSource emptyDomainEntityConfiguration() {
-//			return new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), DomainEntityEmptyConfiguration.class );
-//		}
-//
-//		public static DomainConfigurationClassSource domainEntityConfigurationWithException() {
-//			return new DomainConfigurationClassSource( domainTypeEntityMetadataMock( DomainEntity.class ), ConfigurationWithException.class );
-//		}
+	private DomainConfigurationUnitsSource testee;
+
+	@Test( expected = IllegalArgumentException.class )
+	public void nullDomainTypeEntityMetadataNotAllowed() {
+		testee = new DomainConfigurationUnitsSource( null, domainTypeConfigurationUnits() );
+	}
+
+	@Test( expected = IllegalArgumentException.class )
+	public void nullConfigurationClassNotAllowed() {
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), null );
+	}
+
+	@Test
+	public void correctDomainTypeReturned() {
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), domainTypeConfigurationUnits() );
+
+		assertEquals( DomainType.class, testee.getDomainType() );
+	}
+
+	@Test
+	public void correctConfigurationNameReturnedForDomainType() {
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), domainTypeConfigurationUnits() );
+
+		assertEquals( "DomainTypeConfiguration", testee.getConfigurationName() );
+	}
+
+	@Test
+	public void correctEntityMetadataReturned() {
+		final DomainTypeEntityMetadata expectedMetadata = domainTypeEntityMetadata();
+
+		testee = new DomainConfigurationUnitsSource( expectedMetadata, domainTypeConfigurationUnits() );
+
+		assertEquals( expectedMetadata, testee.getDomainTypeEntityMetadata() );
+	}
+
+	@Test
+	public void correctConfigurationUnitsReturned() {
+		ConfigurationUnits domainTypeConfigurationUnits = ConfigurationUnitsUtils.configurationUnits( DomainType.class,
+			configurationUnitFor( DomainConfigurationUnitType.CONFIGURATION, EntityMetadataConfigurationUnit.class ),
+			configurationUnitFor( DomainConfigurationUnitType.FILTERS, FiltersConfigurationUnit.class )
+		);
+
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), domainTypeConfigurationUnits );
+
+		assertEquals( domainTypeConfigurationUnits.getEntityConfiguration(), testee.getEntityConfiguration() );
+		assertEquals( domainTypeConfigurationUnits.getFilters(), testee.getFilters() );
+	}
+
+	private DomainTypeEntityMetadata domainTypeEntityMetadata() {
+		DomainTypeEntityMetadata domainTypeEntityMetadata = EasyMock.createMock( DomainTypeEntityMetadata.class );
+		EasyMock.expect( domainTypeEntityMetadata.getDomainType() ).andReturn( DomainType.class ).anyTimes();
+		EasyMock.replay( domainTypeEntityMetadata );
+
+		return domainTypeEntityMetadata;
+	}
+
+	private ConfigurationUnits domainTypeConfigurationUnits() {
+		return new ConfigurationUnits( DomainType.class );
+	}
+
+	private static class DomainType {
+
+	}
 }

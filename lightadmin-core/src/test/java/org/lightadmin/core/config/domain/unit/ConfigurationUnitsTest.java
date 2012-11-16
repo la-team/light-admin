@@ -1,6 +1,5 @@
 package org.lightadmin.core.config.domain.unit;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
@@ -10,6 +9,7 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.junit.Assert.*;
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
+import static org.lightadmin.core.test.util.ConfigurationUnitsUtils.*;
 
 public class ConfigurationUnitsTest {
 
@@ -51,29 +51,6 @@ public class ConfigurationUnitsTest {
 		}
 
 		assertArrayEquals( actualUnitTypes.toArray(), expectedOrderedUnitTypes );
-	}
-
-	private ConfigurationUnits configurationUnits( Class<?> domainType, ConfigurationUnit... configurationUnits ) {
-		return new ConfigurationUnits( domainType, configurationUnits );
-	}
-
-	private ConfigurationUnit[] configurationUnitsFor( DomainConfigurationUnitType... unitTypes ) {
-		final Set<ConfigurationUnit> configurationUnits = newLinkedHashSet();
-		for ( DomainConfigurationUnitType unitType : unitTypes ) {
-			configurationUnits.add( configurationUnitFor( unitType ) );
-		}
-		return configurationUnits.toArray( new ConfigurationUnit[configurationUnits.size()] );
-	}
-
-	private ConfigurationUnit configurationUnitFor( DomainConfigurationUnitType unitType, Class<? extends ConfigurationUnit> configurationUnitInterface ) {
-		ConfigurationUnit configurationUnit = EasyMock.createMock( configurationUnitInterface );
-		EasyMock.expect( configurationUnit.getDomainConfigurationUnitType() ).andReturn( unitType ).anyTimes();
-		EasyMock.replay( configurationUnit );
-		return configurationUnit;
-	}
-
-	private ConfigurationUnit configurationUnitFor( DomainConfigurationUnitType unitType ) {
-		return configurationUnitFor( unitType, ConfigurationUnit.class );
 	}
 
 	private static class DomainType {
