@@ -5,16 +5,18 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.springframework.data.util.ClassTypeInformation;
 import org.springframework.data.util.TypeInformation;
 
+import java.util.Collections;
 import java.util.Iterator;
-import java.util.Set;
-import java.util.regex.Matcher;
+import java.util.List;
 import java.util.regex.Pattern;
 
-import static com.google.common.collect.Sets.newLinkedHashSet;
+import static com.google.common.collect.Lists.newArrayList;
 
 public abstract class AbstractFieldMetadataValidator<T extends FieldMetadata> implements FieldMetadataValidator<T> {
 
-	private static final Pattern SPLITTER = Pattern.compile( "(?:[\\.]?([\\.]*?[^\\.]+))" );
+	private static final Pattern PROPERTY_NAME_PATTERN = Pattern.compile( "([a-zA-Z_$][a-zA-Z\\d_$]*)(\\.[a-zA-Z_$][a-zA-Z\\d_$]*)*" );
+
+	private static final String PROPERTY_SEPARATOR = ".";
 
 	protected abstract String getFieldMetadataPropertyPath( final T fieldMetadata );
 
@@ -26,7 +28,7 @@ public abstract class AbstractFieldMetadataValidator<T extends FieldMetadata> im
 			return false;
 		}
 
-		final Set<String> properties = properties( propertyPath );
+		final List<String> properties = properties( propertyPath );
 		if ( properties.isEmpty() ) {
 			return false;
 		}
@@ -40,7 +42,7 @@ public abstract class AbstractFieldMetadataValidator<T extends FieldMetadata> im
 			if ( currentPropertyPath == null ) {
 				currentPropertyPath = new StringBuilder( propertiesIterator.next() );
 			} else {
-				currentPropertyPath.append( "." ).append( propertiesIterator.next() );
+				currentPropertyPath.append( PROPERTY_SEPARATOR ).append( propertiesIterator.next() );
 			}
 
 			if ( typeInformation.getProperty( currentPropertyPath.toString() ) == null ) {
@@ -51,13 +53,10 @@ public abstract class AbstractFieldMetadataValidator<T extends FieldMetadata> im
 		return true;
 	}
 
-	private Set<String> properties( final String propertyPath ) {
-		final Set<String> properties = newLinkedHashSet();
-
-		final Matcher matcher = SPLITTER.matcher( propertyPath );
-		while ( matcher.find() ) {
-			properties.add( matcher.group( 1 ) );
+	private List<String> properties( final String propertyPath ) {
+		if ( !PROPERTY_NAME_PATTERN.matcher( propertyPath ).matches() ) {
+			return Collections.emptyList();
 		}
-		return properties;
+		return newArrayList( StringUtils.split( propertyPath, PROPERTY_SEPARATOR ) );
 	}
 }

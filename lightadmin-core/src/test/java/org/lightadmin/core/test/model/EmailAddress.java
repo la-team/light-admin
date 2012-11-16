@@ -23,7 +23,7 @@ public class EmailAddress {
 		this.value = emailAddress;
 	}
 
-	protected EmailAddress() {
+	public EmailAddress() {
 	}
 
 	public static boolean isValid( String source ) {

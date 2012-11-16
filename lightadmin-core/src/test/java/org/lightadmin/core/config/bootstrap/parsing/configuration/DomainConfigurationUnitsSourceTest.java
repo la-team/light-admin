@@ -1,6 +1,5 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
-import org.easymock.EasyMock;
 import org.junit.Test;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
@@ -10,6 +9,7 @@ import org.lightadmin.core.test.util.ConfigurationUnitsUtils;
 
 import static org.junit.Assert.assertEquals;
 import static org.lightadmin.core.test.util.ConfigurationUnitsUtils.configurationUnitFor;
+import static org.lightadmin.core.test.util.DomainTypeEntityMetadataUtils.domainTypeEntityMetadata;
 
 public class DomainConfigurationUnitsSourceTest {
 
@@ -22,26 +22,26 @@ public class DomainConfigurationUnitsSourceTest {
 
 	@Test( expected = IllegalArgumentException.class )
 	public void nullConfigurationClassNotAllowed() {
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), null );
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), null );
 	}
 
 	@Test
 	public void correctDomainTypeReturned() {
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), domainTypeConfigurationUnits() );
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), domainTypeConfigurationUnits() );
 
 		assertEquals( DomainType.class, testee.getDomainType() );
 	}
 
 	@Test
 	public void correctConfigurationNameReturnedForDomainType() {
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), domainTypeConfigurationUnits() );
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), domainTypeConfigurationUnits() );
 
 		assertEquals( "DomainTypeConfiguration", testee.getConfigurationName() );
 	}
 
 	@Test
 	public void correctEntityMetadataReturned() {
-		final DomainTypeEntityMetadata expectedMetadata = domainTypeEntityMetadata();
+		final DomainTypeEntityMetadata expectedMetadata = domainTypeEntityMetadata( DomainType.class );
 
 		testee = new DomainConfigurationUnitsSource( expectedMetadata, domainTypeConfigurationUnits() );
 
@@ -50,23 +50,15 @@ public class DomainConfigurationUnitsSourceTest {
 
 	@Test
 	public void correctConfigurationUnitsReturned() {
-		ConfigurationUnits domainTypeConfigurationUnits = ConfigurationUnitsUtils.configurationUnits( DomainType.class,
+		final ConfigurationUnits domainTypeConfigurationUnits = ConfigurationUnitsUtils.configurationUnits( DomainType.class,
 			configurationUnitFor( DomainConfigurationUnitType.CONFIGURATION, EntityMetadataConfigurationUnit.class ),
 			configurationUnitFor( DomainConfigurationUnitType.FILTERS, FiltersConfigurationUnit.class )
 		);
 
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata(), domainTypeConfigurationUnits );
+		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), domainTypeConfigurationUnits );
 
 		assertEquals( domainTypeConfigurationUnits.getEntityConfiguration(), testee.getEntityConfiguration() );
 		assertEquals( domainTypeConfigurationUnits.getFilters(), testee.getFilters() );
-	}
-
-	private DomainTypeEntityMetadata domainTypeEntityMetadata() {
-		DomainTypeEntityMetadata domainTypeEntityMetadata = EasyMock.createMock( DomainTypeEntityMetadata.class );
-		EasyMock.expect( domainTypeEntityMetadata.getDomainType() ).andReturn( DomainType.class ).anyTimes();
-		EasyMock.replay( domainTypeEntityMetadata );
-
-		return domainTypeEntityMetadata;
 	}
 
 	private ConfigurationUnits domainTypeConfigurationUnits() {

@@ -52,7 +52,7 @@ public class Order extends AbstractEntity {
 		this.billingAddress = billingAddress == null ? null : billingAddress.getCopy();
 	}
 
-	protected Order() {
+	public Order() {
 
 	}
 

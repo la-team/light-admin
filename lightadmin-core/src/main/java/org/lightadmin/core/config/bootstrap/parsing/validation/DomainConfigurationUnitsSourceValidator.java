@@ -20,9 +20,14 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 	private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
 
 	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this.entityMetadataResolver = entityMetadataResolver;
+		this( entityMetadataResolver, new DomainTypeFieldMetadataValidator() );
+	}
 
-		this.fieldMetadataValidator = new DomainTypeFieldMetadataValidator();
+	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver,
+													final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator ) {
+
+		this.entityMetadataResolver = entityMetadataResolver;
+		this.fieldMetadataValidator = fieldMetadataValidator;
 	}
 
 	@Override
@@ -34,7 +39,7 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 		validateListView( domainConfigurationSource, problemReporter );
 	}
 
-	private void validateDomainType( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
+	void validateDomainType( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
 		final Class<?> domainType = domainConfigurationSource.getDomainType();
 
 		if ( !isPersistentEntityType( domainType ) ) {

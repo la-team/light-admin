@@ -28,6 +28,10 @@ public class FieldValueEvaluator {
 	}
 
 	private Object getPropertyValue( String property, Object source ) {
-		return PropertyAccessorFactory.forBeanPropertyAccess( source ).getPropertyValue( property );
+		try {
+			return PropertyAccessorFactory.forBeanPropertyAccess( source ).getPropertyValue( property );
+		} catch ( Exception ex ) {
+			return null;
+		}
 	}
 }

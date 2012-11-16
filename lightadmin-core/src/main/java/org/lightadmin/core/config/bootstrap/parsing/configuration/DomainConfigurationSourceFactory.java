@@ -48,7 +48,7 @@ public class DomainConfigurationSourceFactory {
 		throw new IllegalArgumentException( String.format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
 	}
 
-	private DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
+	DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
 		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( configurationUnits.getDomainType() );
 
 		for ( ConfigurationUnit configurationUnit : configurationUnits ) {
