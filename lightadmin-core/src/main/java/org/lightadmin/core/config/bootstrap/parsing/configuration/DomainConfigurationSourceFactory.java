@@ -21,7 +21,8 @@ public class DomainConfigurationSourceFactory {
 		this( entityMetadataResolver, new DomainTypeMetadataAwareConfigurationUnitPostProcessor( entityMetadataResolver ) );
 	}
 
-	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver, final ConfigurationUnitPostProcessor configurationUnitPostProcessor ) {
+	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver,
+											 final ConfigurationUnitPostProcessor configurationUnitPostProcessor ) {
 
 		this.entityMetadataResolver = entityMetadataResolver;
 		this.configurationUnitPostProcessor = configurationUnitPostProcessor;

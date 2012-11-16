@@ -4,7 +4,7 @@ public class TransientFieldMetadata extends AbstractFieldMetadata {
 
 	private final String property;
 
-	protected TransientFieldMetadata( final String name, final String property ) {
+	public TransientFieldMetadata( final String name, final String property ) {
 		super( name );
 		this.property = property;
 	}
