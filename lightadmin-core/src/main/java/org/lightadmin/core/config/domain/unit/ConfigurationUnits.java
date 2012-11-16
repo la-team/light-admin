@@ -7,12 +7,14 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Set;
 
-import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Sets.newLinkedHashSet;
 
 public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializable {
 
@@ -21,12 +23,14 @@ public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializ
 	private final Set<ConfigurationUnit> configurationUnits;
 
 	public ConfigurationUnits( Class<?> domainType, ConfigurationUnit... configurationUnits ) {
-		this( domainType, Sets.newHashSet( configurationUnits ) );
+		this( domainType, Sets.<ConfigurationUnit>newLinkedHashSet( Arrays.asList( configurationUnits ) ) );
 	}
 
 	public ConfigurationUnits( Class<?> domainType, final Set<ConfigurationUnit> configurationUnits ) {
+		Assert.notNull( domainType );
+
 		this.domainType = domainType;
-		this.configurationUnits = newHashSet( configurationUnits );
+		this.configurationUnits = newLinkedHashSet( configurationUnits );
 	}
 
 	@Override
