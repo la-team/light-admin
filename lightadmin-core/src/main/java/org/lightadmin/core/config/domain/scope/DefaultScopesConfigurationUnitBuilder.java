@@ -45,6 +45,24 @@ public class DefaultScopesConfigurationUnitBuilder extends DomainTypeConfigurati
 		if ( scopesMetadata.isEmpty() ) {
 			return new DefaultScopesConfigurationUnit( getDomainType(), newArrayList( ScopeMetadataUtils.all().defaultScope( true ) ) );
 		}
+
+		setDefaultScopeIfNotDefined();
+
 		return new DefaultScopesConfigurationUnit( getDomainType(), scopesMetadata );
+	}
+
+	private void setDefaultScopeIfNotDefined() {
+		if ( !defaultScopeDefined() ) {
+			scopesMetadata.get( 0 ).defaultScope( true );
+		}
+	}
+
+	private boolean defaultScopeDefined() {
+		for ( ScopeMetadata scopeMetadata : scopesMetadata ) {
+			if ( scopeMetadata.isDefaultScope() ) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
