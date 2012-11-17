@@ -1,5 +1,6 @@
 package org.lightadmin.page;
 
+import org.lightadmin.SeleniumContext;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -10,15 +11,24 @@ import java.net.URL;
 
 public abstract class BasePage<P extends LoadableComponent<P>> extends LoadableComponent<P> {
 
-	protected final WebDriver webDriver;
+	protected final SeleniumContext seleniumContext;
 
-	protected final URL baseUrl;
+	protected BasePage( SeleniumContext seleniumContext ) {
+		this.seleniumContext = seleniumContext;
 
-	protected BasePage( final WebDriver webDriver, final URL baseUrl ) {
-		this.webDriver = webDriver;
-		this.baseUrl = baseUrl;
+		PageFactory.initElements( webDriver(), this );
+	}
 
-		PageFactory.initElements( this.webDriver, this );
+	protected WebDriver webDriver() {
+		return seleniumContext.getWebDriver();
+	}
+
+	protected URL baseUrl() {
+		return seleniumContext.getBaseUrl();
+	}
+
+	protected long webDriverWaitTimeout() {
+		return seleniumContext.getWebDriverWaitTimeout();
 	}
 
 	protected void clearAndType( WebElement field, String text ) {

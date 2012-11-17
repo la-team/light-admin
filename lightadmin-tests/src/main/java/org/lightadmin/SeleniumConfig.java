@@ -31,20 +31,9 @@ public class SeleniumConfig {
 		return new PropertySourcesPlaceholderConfigurer();
 	}
 
-	@Bean
-	public URL baseUrl() throws MalformedURLException {
-		return new URL( environment.getProperty( "baseUrl" ) );
-	}
-
-	@Bean( destroyMethod = "quit" )
-	public WebDriver webDriver() {
-		final WebDriver driver = webDriver( environment.getProperty( "selenium.browser" ) );
-
-		driver.manage().timeouts().implicitlyWait( environment.getProperty( "element.wait.sec", Long.class ), TimeUnit.SECONDS );
-
-		driver.manage().window().maximize();
-
-		return driver;
+	@Bean( destroyMethod = "destroy" )
+	public SeleniumContext seleniumContext() {
+		return new SeleniumContext( webDriver(), baseUrl(), webDriverWaitTimeout() );
 	}
 
 	@Bean
@@ -54,6 +43,28 @@ public class SeleniumConfig {
 		rmiProxyFactoryBean.setServiceInterface( GlobalConfigurationManagementService.class );
 		rmiProxyFactoryBean.afterPropertiesSet();
 		return ( GlobalConfigurationManagementService ) rmiProxyFactoryBean.getObject();
+	}
+
+	private URL baseUrl() {
+		try {
+			return new URL( environment.getProperty( "baseUrl" ) );
+		} catch ( MalformedURLException e ) {
+			throw new RuntimeException( "Base URL wring format. Please check selenium.properties file." );
+		}
+	}
+
+	public WebDriver webDriver() {
+		final WebDriver driver = webDriver( environment.getProperty( "selenium.browser" ) );
+
+		driver.manage().timeouts().implicitlyWait( webDriverWaitTimeout(), TimeUnit.SECONDS );
+
+		driver.manage().window().maximize();
+
+		return driver;
+	}
+
+	private long webDriverWaitTimeout() {
+		return environment.getProperty( "element.wait.sec", Long.class );
 	}
 
 	private WebDriver webDriver( final String seleniumBrowser ) {

@@ -18,7 +18,6 @@ import javax.annotation.Nullable;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 @RunWith( SpringJUnit4ClassRunner.class )
@@ -26,10 +25,7 @@ import static org.junit.Assert.fail;
 public abstract class SeleniumIntegrationTest {
 
 	@Autowired
-	private WebDriver webDriver;
-
-	@Autowired
-	private URL baseUrl;
+	private SeleniumContext seleniumContext;
 
 	@Autowired
 	private GlobalConfigurationManagementService globalConfigurationManagementService;
@@ -47,11 +43,11 @@ public abstract class SeleniumIntegrationTest {
 	}
 
 	protected WebDriver webDriver() {
-		return webDriver;
+		return seleniumContext.getWebDriver();
 	}
 
 	protected URL baseUrl() {
-		return baseUrl;
+		return seleniumContext.getBaseUrl();
 	}
 
 	protected void assertTableData( final String[][] expectedData, final DataTableComponent dataTable ) {

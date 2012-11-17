@@ -1,12 +1,10 @@
 package org.lightadmin.page;
 
+import org.lightadmin.SeleniumContext;
 import org.lightadmin.component.BreadcrumbsComponent;
 import org.lightadmin.component.NavigationMenuComponent;
 import org.lightadmin.component.ToolbarComponent;
 import org.lightadmin.data.Domain;
-import org.openqa.selenium.WebDriver;
-
-import java.net.URL;
 
 public abstract class SecuredPage<P extends BasePage<P>> extends BasePage<P> {
 
@@ -16,12 +14,12 @@ public abstract class SecuredPage<P extends BasePage<P>> extends BasePage<P> {
 
 	private final ToolbarComponent toolbarComponent;
 
-	protected SecuredPage( final WebDriver driver, final URL baseUrl ) {
-		super( driver, baseUrl );
+	protected SecuredPage( SeleniumContext seleniumContext ) {
+		super( seleniumContext );
 
-		navigationMenuComponent = new NavigationMenuComponent( driver, baseUrl );
-		breadcrumbsComponent = new BreadcrumbsComponent( driver, baseUrl );
-		toolbarComponent = new ToolbarComponent( driver, baseUrl );
+		navigationMenuComponent = new NavigationMenuComponent( seleniumContext );
+		breadcrumbsComponent = new BreadcrumbsComponent( seleniumContext );
+		toolbarComponent = new ToolbarComponent( seleniumContext );
 	}
 
 	public boolean dashboardBreadcrumbItemPresent() {

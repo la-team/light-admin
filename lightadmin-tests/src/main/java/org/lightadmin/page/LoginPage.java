@@ -1,15 +1,13 @@
 package org.lightadmin.page;
 
+import org.lightadmin.SeleniumContext;
 import org.lightadmin.data.User;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.net.URL;
 
 import static org.junit.Assert.fail;
 
@@ -26,8 +24,8 @@ public class LoginPage extends BasePage<LoginPage> {
 	private WebElement submitButton;
 
 	@Autowired
-	public LoginPage( WebDriver webDriver, URL baseUrl ) {
-		super( webDriver, baseUrl );
+	public LoginPage( SeleniumContext seleniumContext ) {
+		super( seleniumContext );
 	}
 
 	public LoginPage enterLogin( String login ) {
@@ -55,7 +53,7 @@ public class LoginPage extends BasePage<LoginPage> {
 	public DashboardPage loginAs( String login, String password ) {
 		enterLogin( login ).enterPassword( password ).submit();
 
-		return new DashboardPage( webDriver, baseUrl );
+		return new DashboardPage( seleniumContext ).get();
 	}
 
 	public LoginPage loginAsExpectingError( User user ) {
@@ -65,22 +63,22 @@ public class LoginPage extends BasePage<LoginPage> {
 	public LoginPage loginAsExpectingError( String login, String password ) {
 		enterLogin( login ).enterPassword( password ).submit();
 
-		return new LoginPage( webDriver, baseUrl );
+		return new LoginPage( seleniumContext ).get();
 	}
 
 	public String errorMessage() {
-		return webDriver.findElement( By.className( "alert-message" ) ).getText();
+		return webDriver().findElement( By.className( "alert-message" ) ).getText();
 	}
 
 	@Override
 	protected void load() {
-		webDriver.get( baseUrl + "/login" );
+		webDriver().get( baseUrl() + "/login" );
 	}
 
 	@Override
 	protected void isLoaded() throws Error {
 		try {
-			webDriver.findElement( By.xpath( "//div[@id='login']" ) );
+			webDriver().findElement( By.xpath( "//div[@id='login']" ) );
 		} catch ( NoSuchElementException e ) {
 			fail();
 		}

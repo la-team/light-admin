@@ -1,12 +1,10 @@
 package org.lightadmin.component;
 
+import org.lightadmin.SeleniumContext;
 import org.lightadmin.page.LoginPage;
 import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.net.URL;
 
 public class ToolbarComponent extends BaseComponent {
 
@@ -17,6 +15,10 @@ public class ToolbarComponent extends BaseComponent {
 	private WebElement userMenu;
 
 
+	public ToolbarComponent( SeleniumContext seleniumContext ) {
+		super( seleniumContext );
+	}
+
 	private void openDropdownMenu( WebElement dropDownMenu ) {
 		dropDownMenu.findElement( By.className( "dropdown-toggle" ) ).click();
 	}
@@ -25,15 +27,11 @@ public class ToolbarComponent extends BaseComponent {
 		return userMenu.findElement( By.linkText( "Logout" ) );
 	}
 
-	public ToolbarComponent( final WebDriver webDriver, final URL baseUrl ) {
-		super( webDriver, baseUrl );
-	}
-
 	public LoginPage logout() {
 		openDropdownMenu( userMenu );
 		findLogoutLink().click();
 
-		return new LoginPage( webDriver, baseUrl );
+		return new LoginPage( seleniumContext ).get();
 	}
 
 	public boolean isLoggedIn() {

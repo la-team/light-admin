@@ -1,15 +1,13 @@
 package org.lightadmin.page;
 
+import org.lightadmin.SeleniumContext;
 import org.lightadmin.component.DataTableComponent;
 import org.lightadmin.component.FilterFormComponent;
 import org.lightadmin.data.Domain;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.net.URL;
 
 public class ListViewPage extends SecuredPage<ListViewPage> {
 
@@ -22,10 +20,10 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 
     private FilterFormComponent filterFormComponent;
 
-    public ListViewPage( WebDriver webDriver, URL baseUrl, Domain domain  ) {
-		super( webDriver, baseUrl );
+    public ListViewPage( SeleniumContext seleniumContext, Domain domain  ) {
+		super( seleniumContext );
 
-        filterFormComponent = new FilterFormComponent( webDriver, baseUrl );
+        filterFormComponent = new FilterFormComponent( seleniumContext );
 		this.domain = domain;
 	}
 
@@ -35,7 +33,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 
 	@Override
 	protected void load() {
-		webDriver.get( baseUrl.toString() + "/domain/" + domain.getDomainTypeName() );
+		webDriver().get( baseUrl().toString() + "/domain/" + domain.getDomainTypeName() );
 	}
 
 	@Override
@@ -63,6 +61,6 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
     }
 
     private WebElement getScope( String scopeLabel ) {
-        return webDriver.findElement( By.linkText( scopeLabel ) );
+        return webDriver().findElement( By.linkText( scopeLabel ) );
     }
 }

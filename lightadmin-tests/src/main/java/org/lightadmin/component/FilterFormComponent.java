@@ -1,12 +1,9 @@
 package org.lightadmin.component;
 
+import org.lightadmin.SeleniumContext;
 import org.openqa.selenium.By;
-import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.net.URL;
 
 public class FilterFormComponent extends BaseComponent {
 
@@ -19,8 +16,8 @@ public class FilterFormComponent extends BaseComponent {
 	@FindBy( id = "reset-filter" )
 	private WebElement resetButton;
 
-	public FilterFormComponent( final WebDriver webDriver, final URL baseUrl ) {
-		super( webDriver, baseUrl );
+	public FilterFormComponent( SeleniumContext seleniumContext ) {
+		super( seleniumContext );
 	}
 
 	public void resetFilter() {

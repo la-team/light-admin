@@ -1,21 +1,19 @@
 package org.lightadmin.component;
 
+import org.lightadmin.SeleniumContext;
 import org.lightadmin.page.DashboardPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.net.URL;
 
 public class BreadcrumbsComponent extends BaseComponent {
 
 	@FindBy( xpath = "//ul[@id='breadcrumb']" )
 	private WebElement breadcrumbsContainer;
 
-	public BreadcrumbsComponent( final WebDriver webDriver, final URL baseUrl ) {
-		super( webDriver, baseUrl );
+	public BreadcrumbsComponent( SeleniumContext seleniumContext ) {
+		super( seleniumContext );
 	}
 
 	public DashboardPage navigateToDashboard() {
@@ -23,7 +21,7 @@ public class BreadcrumbsComponent extends BaseComponent {
 			dashboardBreadcrumbLink().click();
 		}
 
-		return new DashboardPage( webDriver, baseUrl );
+		return new DashboardPage( seleniumContext ).get();
 	}
 
 	public boolean dashboardBreadcrumbLinkPresent() {
