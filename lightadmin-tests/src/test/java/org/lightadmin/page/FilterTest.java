@@ -18,6 +18,11 @@ public class FilterTest extends SeleniumIntegrationTest {
     private String[][] expectedResult1 = {{"integer search test", "1234567", "22.2"}};
     private String[][] expectedResult2 = {{"decimal search test", "456", "1499.99"}};
     private String[][] expectedResult3 = {{"#<,&«$'(*@×¢¤₤€¥ª ™®© Аб/Cd ØøÅåÆæĈę123 ¦_{~>½", "789", "22.2"}};
+    private String[][] expectedResult4 = {{"Case Sensitivity Test", "901", "22.2"}};
+    private String[][] expectedResult5 = {
+			{"partial querysearch test", "345", "22.2"},
+			{"query partial search test", "234", "22.2"},
+			{"search test by partial query", "567", "22.2"}};
 
     @Before
     public void setup() {
@@ -46,10 +51,24 @@ public class FilterTest extends SeleniumIntegrationTest {
     }
 
 	@Test
+	public void textFilterIsCaseSensitive() {
+		productListViewPage.filter( "textField", "Case Sensitivity Test" );
+
+		assertTableData( expectedResult4, productListViewPage.getDataTable() );
+	}
+
+	@Test
+	public void canFilterByPartialTextQuery() {
+		productListViewPage.filter( "textField", "query" );
+
+		assertTableData( expectedResult5, productListViewPage.getDataTable() );
+	}
+
+
+	@Test
 	public void canFilterByTextWithSpecialCharacters() {
 		productListViewPage.filter( "textField", "#<,&«$''(*@×¢¤₤€¥ª ™®© Аб/Cd ØøÅåÆæĈę123 ¦_{~>½" );
 
 		assertTableData( expectedResult3, productListViewPage.getDataTable() );
 	}
-
 }
