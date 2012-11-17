@@ -11,13 +11,9 @@ import static org.junit.Assert.assertNotNull;
 @SuppressWarnings( "unchecked" )
 public class DefaultEntityMetadataConfigurationUnitBuilderTest {
 
-	private DefaultEntityMetadataConfigurationUnitBuilder testee;
-
 	@Test
 	public void defaultConfigurationUnitCreatedForDomainType() throws Exception {
-		testee = new DefaultEntityMetadataConfigurationUnitBuilder( DomainType.class );
-
-		final EntityMetadataConfigurationUnit configurationUnit = testee.build();
+		final EntityMetadataConfigurationUnit configurationUnit = configurationBuilder().build();
 
 		assertEquals( DomainConfigurationUnitType.CONFIGURATION, configurationUnit.getDomainConfigurationUnitType() );
 		assertEquals( DomainType.class, configurationUnit.getDomainType() );
@@ -25,10 +21,9 @@ public class DefaultEntityMetadataConfigurationUnitBuilderTest {
 
 	@Test
 	public void configurationWithNameFieldExtractorCreated() throws Exception {
-		testee = new DefaultEntityMetadataConfigurationUnitBuilder( DomainType.class );
-		testee.nameField( "name" );
-
-		final EntityMetadataConfigurationUnit configurationUnit = testee.build();
+		final EntityMetadataConfigurationUnit configurationUnit = configurationBuilder()
+			.nameField( "name" )
+			.build();
 
 		assertNotNull( configurationUnit.getNameExtractor() );
 		assertEquals( "Domain Type Object Name", configurationUnit.getNameExtractor().apply( new DomainType() ) );
@@ -38,13 +33,16 @@ public class DefaultEntityMetadataConfigurationUnitBuilderTest {
 	public void configurationWithNameExtractorCreated() throws Exception {
 		final EntityNameExtractor expectedEntityNameExtractor = EasyMock.createNiceMock( EntityNameExtractor.class );
 
-		testee = new DefaultEntityMetadataConfigurationUnitBuilder( DomainType.class );
-		testee.nameExtractor( expectedEntityNameExtractor );
-
-		final EntityMetadataConfigurationUnit configurationUnit = testee.build();
+		final EntityMetadataConfigurationUnit configurationUnit = configurationBuilder()
+			.nameExtractor( expectedEntityNameExtractor )
+			.build();
 
 		assertNotNull( configurationUnit.getNameExtractor() );
 		assertEquals( expectedEntityNameExtractor, configurationUnit.getNameExtractor() );
+	}
+
+	private DefaultEntityMetadataConfigurationUnitBuilder configurationBuilder() {
+		return new DefaultEntityMetadataConfigurationUnitBuilder( DomainType.class );
 	}
 
 	private static class DomainType {
