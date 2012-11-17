@@ -8,12 +8,16 @@ import org.junit.Test;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.filter.FilterMetadata;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.lightadmin.core.test.util.DomainTypeEntityMetadataUtils;
 
+import java.util.Iterator;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.fail;
 
 public class DomainConfigurationUnitsSourceValidatorTest {
@@ -21,8 +25,8 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 	private DomainConfigurationUnitsSourceValidator testee;
 
 	@Test
-	public void domainTypeWithoutConstructorFailure() throws Exception {
-		testee = new DomainConfigurationUnitsSourceValidator( DomainTypeEntityMetadataUtils.entityMetadataResolver( DomainType.class ), fieldMetadataValidatorMock() );
+	public void domainTypeWithoutConstructorFailure() {
+		testee = new DomainConfigurationUnitsSourceValidator( DomainTypeEntityMetadataUtils.entityMetadataResolver( DomainType.class ), alwaysValidFieldMetadataValidatorMock() );
 
 		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 
@@ -34,12 +38,12 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 	}
 
 	@Test
-	public void domainTypeIsNotPersistentFailure() throws Exception {
+	public void domainTypeIsNotPersistentFailure() {
 		final DomainTypeEntityMetadataResolver entityMetadataResolver = EasyMock.createMock( DomainTypeEntityMetadataResolver.class );
 		EasyMock.expect( entityMetadataResolver.resolveEntityMetadata( DomainType.class ) ).andReturn( null ).once();
 		EasyMock.replay( entityMetadataResolver );
 
-		testee = new DomainConfigurationUnitsSourceValidator( entityMetadataResolver, fieldMetadataValidatorMock() );
+		testee = new DomainConfigurationUnitsSourceValidator( entityMetadataResolver, alwaysValidFieldMetadataValidatorMock() );
 
 		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 
@@ -48,6 +52,26 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 		final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
 
 		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Non-persistent type DomainType is not supported.", domainConfigurationProblems );
+	}
+
+	@Test
+	public void invalidFieldDefinedForFiltersProblemReported() throws Exception {
+		testee = new DomainConfigurationUnitsSourceValidator( DomainTypeEntityMetadataUtils.entityMetadataResolver( DomainType.class ), alwaysInvalidFieldMetadataValidator() );
+
+		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
+
+		testee.validateFilters( domainConfigurationSourceMock( DomainType.class ), problemReporter( problemCapture ) );
+
+		final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
+
+		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Unit \"filters\": Unexisting property/path 'Field' defined!", domainConfigurationProblems );
+	}
+
+	private FieldMetadataValidator<FieldMetadata> alwaysInvalidFieldMetadataValidator() {
+		final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator = EasyMock.createMock( FieldMetadataValidator.class );
+		EasyMock.expect( fieldMetadataValidator.isValidFieldMetadata( EasyMock.<FieldMetadata>anyObject(), EasyMock.<Class>anyObject() ) ).andReturn( false ).anyTimes();
+		EasyMock.replay( fieldMetadataValidator );
+		return fieldMetadataValidator;
 	}
 
 	private Capture<DomainConfigurationProblem> configurationProblemCapture() {
@@ -74,7 +98,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 	}
 
 	@SuppressWarnings( "unchecked" )
-	private FieldMetadataValidator<FieldMetadata> fieldMetadataValidatorMock() {
+	private FieldMetadataValidator<FieldMetadata> alwaysValidFieldMetadataValidatorMock() {
 		final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator = EasyMock.createMock( FieldMetadataValidator.class );
 		EasyMock.expect( fieldMetadataValidator.isValidFieldMetadata( EasyMock.<FieldMetadata>anyObject(), EasyMock.<Class>anyObject() ) ).andReturn( true ).anyTimes();
 		EasyMock.replay( fieldMetadataValidator );
@@ -86,8 +110,26 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 		DomainConfigurationSource domainConfigurationSource = EasyMock.createMock( DomainConfigurationSource.class );
 		EasyMock.expect( domainConfigurationSource.getDomainType() ).andReturn( domainType ).anyTimes();
 		EasyMock.expect( domainConfigurationSource.getConfigurationName() ).andReturn( "DomainTypeConfiguraiton" ).anyTimes();
+
+		EasyMock.expect( domainConfigurationSource.getFilters() ).andReturn( filterConfigurationUnitMock() ).anyTimes();
 		EasyMock.replay( domainConfigurationSource );
 		return domainConfigurationSource;
+	}
+
+	private FiltersConfigurationUnit filterConfigurationUnitMock() {
+		final FieldMetadata fieldMetadata = EasyMock.createMock( FieldMetadata.class );
+		EasyMock.expect( fieldMetadata.getName() ).andReturn( "Field" ).anyTimes();
+		EasyMock.replay( fieldMetadata );
+
+		FilterMetadata filterMetadata = EasyMock.createMock( FilterMetadata.class );
+		EasyMock.expect( filterMetadata.getFieldMetadata() ).andReturn( fieldMetadata ).anyTimes();
+		EasyMock.replay( filterMetadata );
+
+		final Iterator<FilterMetadata> iterator = newArrayList( filterMetadata ).iterator();
+		final FiltersConfigurationUnit filtersConfigurationUnit = EasyMock.createMock( FiltersConfigurationUnit.class );
+		EasyMock.expect( filtersConfigurationUnit.iterator() ).andReturn( iterator ).anyTimes();
+		EasyMock.replay( filtersConfigurationUnit );
+		return filtersConfigurationUnit;
 	}
 
 	private static class DomainType {

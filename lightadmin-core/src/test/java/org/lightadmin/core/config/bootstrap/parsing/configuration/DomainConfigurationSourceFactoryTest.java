@@ -60,7 +60,7 @@ public class DomainConfigurationSourceFactoryTest {
 		final DomainConfigurationSource domainConfigurationSource = testee.domainConfigurationUnitsSource( configurationUnits( expectedDomainType ) );
 
 		assertNotNull( domainConfigurationSource );
-		assertEquals( domainConfigurationSource.getDomainType(), expectedDomainType );
+		assertEquals( expectedDomainType, domainConfigurationSource.getDomainType() );
 	}
 
 	private static class DomainType {
