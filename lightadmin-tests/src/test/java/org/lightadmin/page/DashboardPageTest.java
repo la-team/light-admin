@@ -7,8 +7,10 @@ import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.ArrayList;
 
+import java.util.List;
+
+import static com.google.common.collect.Lists.newLinkedList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.lightadmin.data.Domain.*;
@@ -19,7 +21,8 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 	private LoginPage loginPage;
 
 	private DashboardPage dashboardPage;
-	private ArrayList<Domain> expectedDomains = new ArrayList<Domain>();
+
+	private List<Domain> expectedDomains = newLinkedList();
 
 	@Before
 	public void setup() throws Exception {
