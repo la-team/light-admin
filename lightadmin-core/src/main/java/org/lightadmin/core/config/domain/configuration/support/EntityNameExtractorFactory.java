@@ -42,7 +42,7 @@ public abstract class EntityNameExtractorFactory {
 		}
 	}
 
-	public static class NamedPersistentEntityNameExtractor implements EntityNameExtractor<Object>, Serializable {
+	private static class NamedPersistentEntityNameExtractor implements EntityNameExtractor<Object>, Serializable {
 
 		private final String nameField;
 
