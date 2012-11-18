@@ -1,6 +1,7 @@
 package org.lightadmin.demo.model;
 
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 @Entity
@@ -9,6 +10,7 @@ public class ComplexDataTypeEntity extends AbstractEntity  {
 	private String name;
 
 	@ManyToOne
+	@JoinColumn( name = "child_id" )
 	private ChildTestEntity childEntity;
 
 	public ComplexDataTypeEntity( final String name, ChildTestEntity childEntity ) {
@@ -16,7 +18,7 @@ public class ComplexDataTypeEntity extends AbstractEntity  {
 		this.childEntity = childEntity;
 	}
 
-	private ComplexDataTypeEntity() { }
+	public ComplexDataTypeEntity() { }
 
 	public String getName() {
 		return name;

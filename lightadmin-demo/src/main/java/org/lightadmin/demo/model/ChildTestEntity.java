@@ -11,7 +11,6 @@ public class ChildTestEntity extends AbstractEntity {
 	@ManyToOne
 	private ParentTestEntity parent;
 
-
 	public ChildTestEntity( final String name, final ParentTestEntity parentEntity ) {
 		this.name = name;
 		this.parent = parentEntity;
