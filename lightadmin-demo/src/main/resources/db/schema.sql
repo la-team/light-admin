@@ -50,3 +50,9 @@ CREATE TABLE childtestentity (
   id BIGINT IDENTITY PRIMARY KEY,
   parent_id BIGINT CONSTRAINT child_to_parent_ref REFERENCES parenttestentity (id),
   name VARCHAR (255));
+
+CREATE TABLE complexdatatypeentity (
+  id BIGINT IDENTITY PRIMARY KEY,
+  parent_id BIGINT CONSTRAINT complextype_to_parent_ref REFERENCES parenttestentity (id),
+  child_id BIGINT CONSTRAINT complextype_to_child_ref REFERENCES childtestentity (id),
+  name VARCHAR (255));

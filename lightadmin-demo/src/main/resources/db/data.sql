@@ -36,8 +36,10 @@ insert into Product_Attributes (attributes_key, product_id, attributes) values (
 
 insert into Orders (id, customer_id, billingaddress_id, shippingaddress_id) values (1, 1, 1, 2);
 insert into Orders (id, customer_id, billingaddress_id, shippingaddress_id) values (2, 3, 2, 1);
-insert into LineItem (id, product_id, amount, order_id, price) values (1, 1, 2, 1, 499.0);
-insert into LineItem (id, product_id, amount, order_id, price) values (2, 2, 1, 1, 1299.0);
+insert into Orders (id, customer_id, billingaddress_id, shippingaddress_id) values (3, 25, 2, 1);
+insert into LineItem (id, product_id, amount, order_id) values (1, 1, 120, 1);
+insert into LineItem (id, product_id, amount, order_id) values (2, 2, 1400, 1);
+insert into LineItem (id, product_id, amount, order_id) values (3, 3, 100, 2);
 
 insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (1, 'integer search test', 1234567, 22.2);
 insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (2, 'decimal search test', 456, 1499.99);
@@ -55,3 +57,9 @@ insert into ParentTestEntity (id, name) values (3, 'Parent Item3');
 insert into ChildTestEntity (id, name, parent_id) values (1, 'Child Item 1', 1);
 insert into ChildTestEntity (id, name, parent_id) values (2, 'Child Item 2', 2);
 insert into ChildTestEntity (id, name, parent_id) values (3, 'Child Item 3', 3);
+
+insert into ComplexDataTypeEntity (id, name, parent_id, child_id) values (1, 'Parent1.Entity 1', 1, 2);
+insert into ComplexDataTypeEntity (id, name, parent_id, child_id) values (2, 'Parent1.Entity 2', 1, 2);
+insert into ComplexDataTypeEntity (id, name, parent_id, child_id) values (3, 'Parent1.Entity 3', 3, 1);
+insert into ComplexDataTypeEntity (id, name, parent_id, child_id) values (4, 'Parent2.Entity 1', 2, 3);
+insert into ComplexDataTypeEntity (id, name, parent_id, child_id) values (5, 'Parent2.Entity 2', 2, 3);
