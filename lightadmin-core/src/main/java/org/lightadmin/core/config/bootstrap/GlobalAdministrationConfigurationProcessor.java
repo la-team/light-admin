@@ -15,10 +15,15 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.env.Environment;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.util.Set;
 
+import static com.google.common.collect.Sets.newLinkedHashSet;
+
 public class GlobalAdministrationConfigurationProcessor implements BeanPostProcessor {
+
+	private static final String CONFIG_LOCATION_DELIMITERS = ",; \t\n";
 
 	private final DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 	private final DomainConfigurationSourceFactory domainConfigurationSourceFactory;
@@ -68,11 +73,18 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 	private Set<Class> scanPackageForAdministrationClasses() {
 		final ClassScanner classScanner = new AdministrationClassScanner();
 
-		return classScanner.scan( configurationsBasePackage() );
+		final Set<Class> administrationConfigs = newLinkedHashSet();
+		for ( String configurationsBasePackage : configurationsBasePackages() ) {
+			administrationConfigs.addAll( classScanner.scan( configurationsBasePackage ) );
+		}
+
+		return administrationConfigs;
 	}
 
-	private String configurationsBasePackage() {
-		return environment.getProperty( LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE );
+	private String[] configurationsBasePackages() {
+		final String basePackageLocations = environment.getProperty( LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE );
+
+		return StringUtils.tokenizeToStringArray( basePackageLocations, CONFIG_LOCATION_DELIMITERS );
 	}
 
 	@Override
