@@ -1,4 +1,5 @@
-package org.lightadmin.demo.model;
+package org.lightadmin.test.model;
+import org.lightadmin.demo.model.AbstractEntity;
 
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;

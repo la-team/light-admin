@@ -7,7 +7,7 @@ import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
-import org.lightadmin.demo.model.FilterTestEntity;
+import org.lightadmin.test.model.FilterTestEntity;
 
 @SuppressWarnings( "unused" )
 @Administration( FilterTestEntity.class )
