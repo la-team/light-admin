@@ -4,7 +4,7 @@ import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 
 public class CustomFieldMetadata extends AbstractFieldMetadata {
 
-	private transient final FieldValueRenderer<Object> renderer;
+	private final FieldValueRenderer<Object> renderer;
 
 	public CustomFieldMetadata( final String name, final FieldValueRenderer<Object> renderer ) {
 		super( name );
