@@ -58,13 +58,13 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 		assertTrue( "Selected scope is not highlighted", customerListViewPage.scopeIsHighlighted( scope ) );
 	}
 
-	private String[][] expectedFilteredAndScopedCustomers = {{"Dave", "Matthews1", "dave@dmband1.com"}};
+	private static final String[][] expectedFilteredAndScopedCustomers = {{"Dave", "Matthews1", "dave@dmband1.com"}};
 
-	private String[][] expectedFilteredCustomers = {
+	private static final String[][] expectedFilteredCustomers = {
 		{"Boyd", "Matthews1", "boyd@dmband25.com"}, {"Dave", "Matthews1", "dave@dmband1.com"}
 	};
 
-	private String[][] expectedScopedCustomers = new String[][] {
+	private static final String[][] expectedScopedCustomers = new String[][] {
 		{"Dave", "Matthews1", "dave@dmband1.com"}, {"Dave", "Matthews2", "dave@dmband4.com"},
 		{"Dave", "Matthews3", "dave@dmband7.com"}, {"Dave", "Matthews4", "dave@dmband10.com"},
 		{"Dave", "Matthews5", "dave@dmband13.com"}, {"Dave", "Matthews6", "dave@dmband16.com"},

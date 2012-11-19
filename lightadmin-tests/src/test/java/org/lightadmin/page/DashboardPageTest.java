@@ -67,5 +67,4 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 		expectedDomains.add( ADDRESSES.setExpectedRecordCount( 2 ) );
 		expectedDomains.add( CUSTOMERS.setExpectedRecordCount( 25 ) );
 	}
-
 }

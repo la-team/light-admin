@@ -5,6 +5,8 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
+import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementServiceImpl;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryFactory;
@@ -56,6 +58,11 @@ public class LightAdminDomainConfiguration {
 	@Bean
 	public GlobalAdministrationConfiguration globalAdministrationConfiguration() {
 		return new GlobalAdministrationConfiguration();
+	}
+
+	@Bean
+	public GlobalConfigurationManagementService globalConfigurationManagementService() {
+		return new GlobalConfigurationManagementServiceImpl();
 	}
 
 	@Bean

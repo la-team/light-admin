@@ -2,6 +2,7 @@ package org.lightadmin.core.config.domain;
 
 import org.apache.commons.lang.StringUtils;
 
+import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -23,6 +24,10 @@ public class GlobalAdministrationConfiguration {
 
 	public Map<Class<?>, DomainTypeAdministrationConfiguration> getDomainTypeConfigurations() {
 		return domainTypeConfigurations;
+	}
+
+	public Collection<DomainTypeAdministrationConfiguration> getDomainTypeConfigurationsValues() {
+		return domainTypeConfigurations.values();
 	}
 
 	public DomainTypeAdministrationConfiguration forDomainType( Class<?> domainType ) {

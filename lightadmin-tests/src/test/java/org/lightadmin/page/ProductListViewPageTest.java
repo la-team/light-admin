@@ -36,8 +36,9 @@ public class ProductListViewPageTest extends SeleniumIntegrationTest {
 		assertTableData( expectedProducts, listViewPage.getDataTable() );
 	}
 
-	private final String[][] expectedProducts = {
-		{"Dock", "Dock for iPhone/iPad", "49"}, {"MacBook Pro", "Apple notebook", "1299"},
+	private static final String[][] expectedProducts = {
+		{"Dock", "Dock for iPhone/iPad", "49"},
+		{"MacBook Pro", "Apple notebook", "1299"},
 		{"iPad", "Apple tablet device", "499"}
 	};
 }

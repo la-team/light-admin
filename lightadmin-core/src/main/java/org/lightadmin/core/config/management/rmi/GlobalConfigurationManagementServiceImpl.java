@@ -12,7 +12,9 @@ import org.lightadmin.core.reporting.ProblemReporterFactory;
 import org.lightadmin.core.rest.HttpMessageConverterRefresher;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class GlobalConfigurationManagementRMIService implements GlobalConfigurationManagementService {
+import java.util.Collection;
+
+public class GlobalConfigurationManagementServiceImpl implements GlobalConfigurationManagementService {
 
 	@Autowired
 	private GlobalAdministrationConfiguration globalAdministrationConfiguration;
@@ -57,5 +59,15 @@ public class GlobalConfigurationManagementRMIService implements GlobalConfigurat
 		globalAdministrationConfiguration.removeAllDomainTypeAdministrationConfigurations();
 
 		httpMessageConverterRefresher.refresh();
+	}
+
+	@Override
+	public Collection<DomainTypeAdministrationConfiguration> getRegisteredDomainTypeConfigurations() {
+		return globalAdministrationConfiguration.getDomainTypeConfigurationsValues();
+	}
+
+	@Override
+	public DomainTypeAdministrationConfiguration getRegisteredDomainTypeConfiguration( final Class<?> domainType ) {
+		return globalAdministrationConfiguration.forDomainType( domainType );
 	}
 }

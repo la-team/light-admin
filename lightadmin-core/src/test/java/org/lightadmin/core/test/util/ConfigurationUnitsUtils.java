@@ -2,11 +2,17 @@ package org.lightadmin.core.test.util;
 
 import org.easymock.EasyMock;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.test.model.Address;
+import org.lightadmin.core.test.model.Customer;
 
+import java.util.Collection;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
 public abstract class ConfigurationUnitsUtils {
@@ -34,4 +40,23 @@ public abstract class ConfigurationUnitsUtils {
 		return configurationUnitFor( unitType, ConfigurationUnit.class );
 	}
 
+	private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
+		final Collection<DomainTypeAdministrationConfiguration> configurations = newArrayList(
+			domainTypeAdministrationConfiguration( Address.class, "AddressConfiguration" ),
+			domainTypeAdministrationConfiguration( Customer.class, "CustomerConfiguration" ) );
+
+		GlobalAdministrationConfiguration globalAdministrationConfiguration = EasyMock.createMock( GlobalAdministrationConfiguration.class );
+		EasyMock.expect( globalAdministrationConfiguration.getDomainTypeConfigurationsValues() ).andReturn( configurations ).once();
+		EasyMock.replay( globalAdministrationConfiguration );
+
+		return globalAdministrationConfiguration;
+	}
+
+	private DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration( Class domainType, String configurationName ) {
+		DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = EasyMock.createMock( DomainTypeAdministrationConfiguration.class );
+		EasyMock.expect( domainTypeAdministrationConfiguration.getDomainType() ).andReturn( domainType ).anyTimes();
+		EasyMock.expect( domainTypeAdministrationConfiguration.getConfigurationName() ).andReturn( configurationName ).anyTimes();
+		EasyMock.replay( domainTypeAdministrationConfiguration );
+		return domainTypeAdministrationConfiguration;
+	}
 }

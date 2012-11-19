@@ -1,10 +1,7 @@
 package org.lightadmin.core.config;
 
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.rest.DomainTypeToResourceConverter;
-import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
-import org.lightadmin.core.rest.DynamicPagingAndSortingMethodArgumentResolver;
-import org.lightadmin.core.rest.DynamicRepositoryRestController;
+import org.lightadmin.core.rest.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,6 +43,11 @@ public class LightAdminRepositoryRestConfiguration {
 	@Autowired
 	public DomainTypeToResourceConverter domainTypeToResourceConverter( GlobalAdministrationConfiguration configuration ) {
 		return new DomainTypeToResourceConverter( configuration );
+	}
+
+	@Bean
+	public HttpMessageConverterRefresher httpMessageConverterRefresher() {
+		return new HttpMessageConverterRefresher();
 	}
 
 	@Bean
