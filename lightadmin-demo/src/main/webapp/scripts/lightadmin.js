@@ -37,15 +37,14 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 				 } );
 }
 
-/* Formating function for row details */
-function fnFormatDetails( oTable, nTr ) {
-	var aData = oTable.fnGetData( nTr );
-
+function quickLook( aData ) {
 	var detailsHtmlBlock = '<div class="innerDetails"><dl class="dl-horizontal">';
+
 	for (var prop in aData) {
 		if ( prop != 'links' && prop != 'stringRepresentation') {
-			detailsHtmlBlock += '<dt>' + prop + '</dt>';
-			var value = aData[prop];
+			var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;
+			var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];
+			detailsHtmlBlock += '<dt>' + name + '</dt>';
 			if ( value instanceof Array ) {
 				var items = '';
 				for (var arrayIndex in value) {
@@ -58,7 +57,7 @@ function fnFormatDetails( oTable, nTr ) {
 			} else if (typeof value === 'object' && value['stringRepresentation'] !== undefined) {
 				value = value['stringRepresentation'];
 			}
-			detailsHtmlBlock += '<dd>' + value + '</dd>';
+			detailsHtmlBlock += '<dd>' + ( value == '' ? '&nbsp;' : value ) + '</dd>';
 		}
 	}
 	detailsHtmlBlock += '</dl></div>';
@@ -80,11 +79,20 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 				infoImg.attr('src', "../images/details_open.png");
 			});
 		} else {
-			var nDetailsRow = dataTable.fnOpen( nTr, fnFormatDetails( dataTable, nTr ), 'details' );
-			$('div.innerDetails', nDetailsRow).hide();
-			$('div.innerDetails', nDetailsRow).slideDown('slow', function () {
-				infoImg.attr('src', "../images/details_close.png");
-			});
+			var aData = dataTable.fnGetData( nTr );
+			var restEntityUrl = aData.links[0].href;
+			jQuery.ajax( {
+				 "dataType" : 'json',
+				 "type" : "GET",
+				 "url" : restEntityUrl,
+				 "success":function ( data ) {
+					 var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
+					 $('div.innerDetails', nDetailsRow).hide();
+					 $('div.innerDetails', nDetailsRow).slideDown('slow', function () {
+						 infoImg.attr('src', "../images/details_close.png");
+					 });
+				 }
+			} );
 		}
 	} );
 }

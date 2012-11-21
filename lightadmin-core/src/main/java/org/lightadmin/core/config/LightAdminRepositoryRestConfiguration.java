@@ -42,7 +42,7 @@ public class LightAdminRepositoryRestConfiguration {
 	@Bean
 	@Autowired
 	public DomainTypeToResourceConverter domainTypeToResourceConverter( GlobalAdministrationConfiguration configuration ) {
-		return new DomainTypeToResourceConverter( configuration );
+		return new DomainTypeToResourceConverter( configuration, repositoryRestConfiguration() );
 	}
 
 	@Bean

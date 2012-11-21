@@ -33,6 +33,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
@@ -50,6 +51,22 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 	private final SpecificationCreator specificationCreator = new SpecificationCreator();
 
 	private GlobalAdministrationConfiguration configuration;
+
+	@ResponseBody
+	@RequestMapping( value = "/{repositoryName}/{id}", method = RequestMethod.GET )
+	public ResponseEntity<?> entity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repositoryName, @PathVariable String id) throws IOException {
+
+		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
+
+		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+
+		Serializable entityId = _stringToSerializable( id, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
+
+		final Object entity = repository.findOne( entityId );
+
+		return _negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), entity );
+	}
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search", method = RequestMethod.GET )
@@ -123,19 +140,38 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		return specificationCreator.toSpecification( entityMetadata, parameters );
 	}
 
-	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata ) throws IOException {
-		Method negotiateResponseMethod = ReflectionUtils.findMethod( getClass(), "negotiateResponse", ServletServerHttpRequest.class, HttpStatus.class, HttpHeaders.class, Object.class );
+	private <V extends Serializable> V _stringToSerializable(String str, Class<V> targetType) {
+		Method stringToSerializableMethod = ReflectionUtils.findMethod( getClass(), "stringToSerializable", String.class, Class.class );
 
-		ReflectionUtils.makeAccessible( negotiateResponseMethod );
+		ReflectionUtils.makeAccessible( stringToSerializableMethod );
 
 		try {
-			return ( ResponseEntity<?> ) negotiateResponseMethod.invoke( this, request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page ), pageMetadata, Lists.<Link>newArrayList() ) );
+			return ( V ) stringToSerializableMethod.invoke( this, str, targetType);
 		} catch ( InvocationTargetException ex ) {
 			ReflectionUtils.rethrowRuntimeException( ex.getTargetException() );
 			return null; // :)
 		} catch ( IllegalAccessException ex ) {
 			throw new UndeclaredThrowableException( ex );
 		}
+	}
+
+	private ResponseEntity<byte[]> _negotiateResponse(final ServletServerHttpRequest request, final HttpStatus status, final HttpHeaders headers, final Object resource) throws IOException {
+		Method negotiateResponseMethod = ReflectionUtils.findMethod( getClass(), "negotiateResponse", ServletServerHttpRequest.class, HttpStatus.class, HttpHeaders.class, Object.class );
+
+		ReflectionUtils.makeAccessible( negotiateResponseMethod );
+
+		try {
+			return ( ResponseEntity<byte[]> ) negotiateResponseMethod.invoke( this, request, status, headers, resource );
+		} catch ( InvocationTargetException ex ) {
+			ReflectionUtils.rethrowRuntimeException( ex.getTargetException() );
+			return null; // :)
+		} catch ( IllegalAccessException ex ) {
+			throw new UndeclaredThrowableException( ex );
+		}
+	}
+
+	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata ) throws IOException {
+		return _negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page ), pageMetadata, Lists.<Link>newArrayList() ) );
 	}
 
 	private PagedResources.PageMetadata pageMetadata( final Page page ) {

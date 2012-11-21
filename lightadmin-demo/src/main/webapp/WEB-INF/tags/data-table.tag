@@ -52,6 +52,9 @@
 				   "bSortable": ${field.sortable},
 				   "aTargets":[ ${status.index + 1 } ],
 				   "mData" : '${field.uuid}',
+				   "mRender":function ( data, type, full ) {
+					   return full['${field.uuid}']['value'];
+				   },
 				   "sClass": "data-cell"
 			   },
 			   </c:forEach>

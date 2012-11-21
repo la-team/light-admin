@@ -6,24 +6,33 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.rest.webmvc.EntityResource;
+import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
+import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.Serializable;
+import java.net.URI;
+import java.util.Map;
 import java.util.Set;
+
+import static com.google.common.collect.Maps.newLinkedHashMap;
 
 @SuppressWarnings( "unchecked" )
 public class DomainTypeToResourceConverter implements Converter<Object, Resource> {
 
 	private GlobalAdministrationConfiguration configuration;
 
+	private RepositoryRestConfiguration restConfiguration;
+
 	private FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
 
-	public DomainTypeToResourceConverter( GlobalAdministrationConfiguration configuration ) {
+	public DomainTypeToResourceConverter( GlobalAdministrationConfiguration configuration, RepositoryRestConfiguration restConfiguration ) {
 		this.configuration = configuration;
+		this.restConfiguration = restConfiguration;
 	}
 
 	@Override
@@ -39,14 +48,16 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
 
-		final EntityResource entityResource = emptyEntityResource();
+		Serializable id = (Serializable) entityMetadata.getIdAttribute().getValue( source );
 
-		addAttribute( entityResource, entityMetadata.getIdAttribute(), source );
+		final EntityResource entityResource = newEntityResource( domainTypeConfiguration.getDomainTypeName(), id );
+
+		addAttributeValue( entityResource, entityMetadata.getIdAttribute().getName(), id );
 
 		addObjectStringRepresentation( entityResource, domainTypeConfiguration, source );
 
 		for ( FieldMetadata field : fieldsForListView( domainTypeConfiguration ) ) {
-			addAttributeValue( entityResource, field.getUuid(), fieldValueEvaluator.evaluate( field, source ) );
+			addFieldAttributeValue( entityResource, field, source );
 		}
 
 		return entityResource;
@@ -60,17 +71,27 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		resource.getContent().put( "stringRepresentation", configuration.getEntityConfiguration().getNameExtractor().apply( source ) );
 	}
 
+	private void addFieldAttributeValue( EntityResource resource, FieldMetadata field, Object source ) {
+		Map<String, Object> fieldData = newLinkedHashMap();
+		fieldData.put( "name", field.getName() );
+		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
+
+		addAttributeValue( resource, field.getUuid(), fieldData );
+	}
+
 	private void addAttributeValue( EntityResource resource, String attributeName, Object value ) {
 		if ( value != null ) {
 			resource.getContent().put( attributeName, value );
 		}
 	}
 
-	private void addAttribute( EntityResource resource, DomainTypeAttributeMetadata attributeMetadata, Object source ) {
-		addAttributeValue( resource, attributeMetadata.getName(), attributeMetadata.getValue( source ) );
-	}
+	private EntityResource newEntityResource( String domainTypeName, Serializable id ) {
+		final URI selfUri = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() )
+												.pathSegment( "rest" )
+												.pathSegment(domainTypeName)
+												.pathSegment(id.toString())
+												.build().toUri();
 
-	private EntityResource emptyEntityResource() {
-		return new EntityResource( Maps.<String, Object>newHashMap(), Sets.<Link>newHashSet() );
+		return new EntityResource( Maps.<String, Object>newLinkedHashMap(), Sets.<Link>newHashSet( new Link(selfUri.toString(), "self") ) );
 	}
 }
