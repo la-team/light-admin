@@ -51,7 +51,7 @@ public abstract class SeleniumIntegrationTest {
 	}
 
 	protected void assertTableData( final String[][] expectedData, final DataTableComponent dataTable ) {
-        assertTableRowCount( expectedData, dataTable );
+		assertTableRowCount( expectedData, dataTable );
 
 		for ( int row = 0; row < dataTable.getRowCount(); row++ ) {
 			for ( int column = 0; column < dataTable.getColumnCount(); column++ ) {
@@ -63,15 +63,26 @@ public abstract class SeleniumIntegrationTest {
 		}
 	}
 
-    private void assertTableRowCount( final String[][] expectedData, final DataTableComponent dataTable ) {
-        try { new WebDriverWait( webDriver(), 5 ).until( new ExpectedCondition<Boolean>() {
-            @Override
-            public Boolean apply(@Nullable WebDriver input) {
-                return expectedData.length == dataTable.getRowCount();
-            } });
-        } catch ( TimeoutException e ) {
-           fail( String.format( "Wrong row count for the table. Expected: %d, Actual: %d",
-                   expectedData.length,  dataTable.getRowCount() ) );
-        }
-    }
+	protected void assertTableRowData( final String[] expectedRowData, final DataTableComponent dataTable, final int rowId ) {
+		for ( int column = 0; column < dataTable.getColumnCount(); column++ ) {
+			final String expectedCellValue = expectedRowData[ column ];
+			final String actualCellValue = dataTable.getValueAt( rowId - 1, column );
+
+			assertEquals( String.format( "Row: %d, column: %d: ", rowId, column + 1 ), expectedCellValue, actualCellValue );
+		}
+	}
+
+	private void assertTableRowCount( final String[][] expectedData, final DataTableComponent dataTable ) {
+		try {
+			new WebDriverWait( webDriver(), 5 ).until( new ExpectedCondition<Boolean>() {
+				@Override
+				public Boolean apply( @Nullable WebDriver input ) {
+					return expectedData.length == dataTable.getRowCount();
+				}
+			} );
+		} catch ( TimeoutException e ) {
+			fail( String.format( "Wrong row count for the table. Expected: %d, Actual: %d",
+					expectedData.length, dataTable.getRowCount() ) );
+		}
+	}
 }

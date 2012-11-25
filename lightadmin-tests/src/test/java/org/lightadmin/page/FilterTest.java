@@ -20,7 +20,7 @@ public class FilterTest extends SeleniumIntegrationTest {
 	public void setup() {
 		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
 
-		productListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_DOMAIN );
+		productListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.FILTER_TEST_DOMAIN );
 	}
 
 	@After

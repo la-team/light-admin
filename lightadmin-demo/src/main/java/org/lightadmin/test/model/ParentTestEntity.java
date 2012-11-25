@@ -6,9 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 
-import static com.google.common.collect.Sets.newHashSet;
+import static com.google.common.collect.Lists.newArrayList;
 
 @Entity
 public class ParentTestEntity extends AbstractEntity {
@@ -17,7 +17,7 @@ public class ParentTestEntity extends AbstractEntity {
 
 	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
 	@JoinColumn( name = "parent_id" )
-	private Set<ComplexDataTypeEntity> complexTypeEntities = newHashSet();
+	private List<ComplexDataTypeEntity> complexTypeEntities = newArrayList();
 
 	public ParentTestEntity( final String name ) {
 		this.name = name;
@@ -39,7 +39,7 @@ public class ParentTestEntity extends AbstractEntity {
 		this.complexTypeEntities.add( entity );
 	}
 
-	public Set<ComplexDataTypeEntity> getComplexTypeEntities() {
-		return Collections.unmodifiableSet( complexTypeEntities );
+	public List<ComplexDataTypeEntity> getComplexTypeEntities() {
+		return Collections.unmodifiableList( complexTypeEntities );
 	}
 }
