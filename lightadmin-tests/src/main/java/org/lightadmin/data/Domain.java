@@ -7,7 +7,7 @@ public enum Domain {
 	ADDRESSES( "address", "Addresses", 100 ),
 	CUSTOMERS( "customer", "Customers", 100 ),
 	FILTER_TEST_DOMAIN( "filterTestEntity", "FilterTest Domain", 100 ),
-	COMPLEX_ENTITY_TEST_DOMAIN ( "parentTestEntity", "Domain with Complex Data Type", 100 );
+	TEST_ORDERS( "testOrder", "Test Order Domain", 100 );
 
 	private final String domainTypeName;
 	private final String linkText;

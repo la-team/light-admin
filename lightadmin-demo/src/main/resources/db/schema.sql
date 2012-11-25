@@ -51,8 +51,18 @@ CREATE TABLE childtestentity (
   parent_id BIGINT CONSTRAINT child_to_parent_ref REFERENCES parenttestentity (id),
   name VARCHAR (255));
 
-CREATE TABLE complexdatatypeentity (
+CREATE TABLE testorders (
   id BIGINT IDENTITY PRIMARY KEY,
-  parent_id BIGINT CONSTRAINT complextype_to_parent_ref REFERENCES parenttestentity (id),
-  child_id BIGINT CONSTRAINT complextype_to_child_ref REFERENCES childtestentity (id),
   name VARCHAR (255));
+
+CREATE TABLE testproduct (
+  id BIGINT IDENTITY PRIMARY KEY,
+  name VARCHAR(255),
+  price DECIMAL(8,2));
+
+CREATE TABLE testlineitem (
+  id BIGINT IDENTITY PRIMARY KEY,
+  product_id BIGINT CONSTRAINT testlineitem_product_ref REFERENCES testproduct (id),
+  order_id BIGINT CONSTRAINT testlineitem_orders_ref REFERENCES testorders (id),
+  amount BIGINT );
+

@@ -4,7 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
-import org.lightadmin.config.ParentTestEntityConfiguration;
+import org.lightadmin.config.OrderTestEntityConfiguration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.lightadmin.page.ListViewPage;
@@ -16,131 +16,131 @@ public class ComplexDataTypeFieldTest extends SeleniumIntegrationTest {
 	@Autowired
 	private LoginPage loginPage;
 
-	private ListViewPage complexEntityDomainPage;
+	private ListViewPage testOrderListPage;
 
 	@Before
 	public void setup() {
-		registerDomainTypeAdministrationConfiguration( ParentTestEntityConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( OrderTestEntityConfiguration.class );
 
-		complexEntityDomainPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.COMPLEX_ENTITY_TEST_DOMAIN );
+		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
 	}
 
 	@After
 	public void tearDown() {
-		removeDomainTypeAdministrationConfiguration( ParentTestEntityConfiguration.class);
+		removeDomainTypeAdministrationConfiguration( OrderTestEntityConfiguration.class );
 	}
 
 	@Test
 	public void manyComplexDataTypeValuesAssociatedWithItem() {
-		assertTableRowData( expectedResult1, complexEntityDomainPage.getDataTable(), 1 );
+		assertTableRowData( expectedResult1, testOrderListPage.getDataTable(), 1 );
 	}
 
 	//Covers LA-4: https://github.com/max-dev/light-admin/issues/4
 	@Test
 	public void noComplexDataTypeValuesAssociatedWithItem() {
-		assertTableRowData( expectedResult2, complexEntityDomainPage.getDataTable(), 2 );
+		assertTableRowData( expectedResult2, testOrderListPage.getDataTable(), 2 );
 	}
 
-	private String[] expectedResult2 = { "2", "Parent Item2: no complex items", "" };
+	private String[] expectedResult2 = { "2", "Order2: no line items", "" };
 
-	private String[] expectedResult1 = { "1", "Parent Item1: 100 complex items", "Complex Entity name: Parent1.Entity 1; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 2; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 3; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 4; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 5; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 6; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 7; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 8; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 9; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 10; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 11; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 12; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 13; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 14; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 15; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 16; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 17; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 18; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 19; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 20; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 21; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 22; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 23; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 24; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 25; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 26; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 27; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 28; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 29; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 30; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 31; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 32; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 33; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 34; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 35; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 36; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 37; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 38; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 39; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 40; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 41; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 42; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 43; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 44; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 45; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 46; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 47; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 48; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 49; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 50; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 51; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 52; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 53; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 54; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 55; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 56; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 57; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 58; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 59; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 60; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 61; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 62; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 63; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 64; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 65; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 66; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 67; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 68; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 69; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 70; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 71; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 72; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 73; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 74; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 75; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 76; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 77; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 78; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 79; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 80; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 81; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 82; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 83; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 84; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 85; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 86; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 87; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 88; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 89; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 90; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 91; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 92; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 93; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 94; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 95; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 96; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 97; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 98; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 99; Child Entity name: Child Item 3\n" +
-															"Complex Entity name: Parent1.Entity 100; Child Entity name: Child Item 3"};
+	private String[] expectedResult1 = { "1", "Order1: 100 line items", "LineItem Id: 1; Product Name: Product 1\n" +
+																		"LineItem Id: 2; Product Name: Product 1\n" +
+																		"LineItem Id: 3; Product Name: Product 1\n" +
+																		"LineItem Id: 4; Product Name: Product 1\n" +
+																		"LineItem Id: 5; Product Name: Product 1\n" +
+																		"LineItem Id: 6; Product Name: Product 1\n" +
+																		"LineItem Id: 7; Product Name: Product 1\n" +
+																		"LineItem Id: 8; Product Name: Product 1\n" +
+																		"LineItem Id: 9; Product Name: Product 1\n" +
+																		"LineItem Id: 10; Product Name: Product 1\n" +
+																		"LineItem Id: 11; Product Name: Product 1\n" +
+																		"LineItem Id: 12; Product Name: Product 1\n" +
+																		"LineItem Id: 13; Product Name: Product 1\n" +
+																		"LineItem Id: 14; Product Name: Product 1\n" +
+																		"LineItem Id: 15; Product Name: Product 1\n" +
+																		"LineItem Id: 16; Product Name: Product 1\n" +
+																		"LineItem Id: 17; Product Name: Product 2\n" +
+																		"LineItem Id: 18; Product Name: Product 2\n" +
+																		"LineItem Id: 19; Product Name: Product 2\n" +
+																		"LineItem Id: 20; Product Name: Product 2\n" +
+																		"LineItem Id: 21; Product Name: Product 2\n" +
+																		"LineItem Id: 22; Product Name: Product 2\n" +
+																		"LineItem Id: 23; Product Name: Product 2\n" +
+																		"LineItem Id: 24; Product Name: Product 2\n" +
+																		"LineItem Id: 25; Product Name: Product 2\n" +
+																		"LineItem Id: 26; Product Name: Product 2\n" +
+																		"LineItem Id: 27; Product Name: Product 2\n" +
+																		"LineItem Id: 28; Product Name: Product 2\n" +
+																		"LineItem Id: 29; Product Name: Product 2\n" +
+																		"LineItem Id: 30; Product Name: Product 2\n" +
+																		"LineItem Id: 31; Product Name: Product 2\n" +
+																		"LineItem Id: 32; Product Name: Product 2\n" +
+																		"LineItem Id: 33; Product Name: Product 2\n" +
+																		"LineItem Id: 34; Product Name: Product 2\n" +
+																		"LineItem Id: 35; Product Name: Product 2\n" +
+																		"LineItem Id: 36; Product Name: Product 2\n" +
+																		"LineItem Id: 37; Product Name: Product 2\n" +
+																		"LineItem Id: 38; Product Name: Product 2\n" +
+																		"LineItem Id: 39; Product Name: Product 2\n" +
+																		"LineItem Id: 40; Product Name: Product 2\n" +
+																		"LineItem Id: 41; Product Name: Product 2\n" +
+																		"LineItem Id: 42; Product Name: Product 2\n" +
+																		"LineItem Id: 43; Product Name: Product 2\n" +
+																		"LineItem Id: 44; Product Name: Product 2\n" +
+																		"LineItem Id: 45; Product Name: Product 2\n" +
+																		"LineItem Id: 46; Product Name: Product 2\n" +
+																		"LineItem Id: 47; Product Name: Product 2\n" +
+																		"LineItem Id: 48; Product Name: Product 2\n" +
+																		"LineItem Id: 49; Product Name: Product 2\n" +
+																		"LineItem Id: 50; Product Name: Product 2\n" +
+																		"LineItem Id: 51; Product Name: Product 2\n" +
+																		"LineItem Id: 52; Product Name: Product 2\n" +
+																		"LineItem Id: 53; Product Name: Product 2\n" +
+																		"LineItem Id: 54; Product Name: Product 2\n" +
+																		"LineItem Id: 55; Product Name: Product 2\n" +
+																		"LineItem Id: 56; Product Name: Product 2\n" +
+																		"LineItem Id: 57; Product Name: Product 3\n" +
+																		"LineItem Id: 58; Product Name: Product 3\n" +
+																		"LineItem Id: 59; Product Name: Product 3\n" +
+																		"LineItem Id: 60; Product Name: Product 3\n" +
+																		"LineItem Id: 61; Product Name: Product 3\n" +
+																		"LineItem Id: 62; Product Name: Product 3\n" +
+																		"LineItem Id: 63; Product Name: Product 3\n" +
+																		"LineItem Id: 64; Product Name: Product 3\n" +
+																		"LineItem Id: 65; Product Name: Product 3\n" +
+																		"LineItem Id: 66; Product Name: Product 3\n" +
+																		"LineItem Id: 67; Product Name: Product 3\n" +
+																		"LineItem Id: 68; Product Name: Product 3\n" +
+																		"LineItem Id: 69; Product Name: Product 3\n" +
+																		"LineItem Id: 70; Product Name: Product 3\n" +
+																		"LineItem Id: 71; Product Name: Product 3\n" +
+																		"LineItem Id: 72; Product Name: Product 3\n" +
+																		"LineItem Id: 73; Product Name: Product 3\n" +
+																		"LineItem Id: 74; Product Name: Product 3\n" +
+																		"LineItem Id: 75; Product Name: Product 3\n" +
+																		"LineItem Id: 76; Product Name: Product 3\n" +
+																		"LineItem Id: 77; Product Name: Product 3\n" +
+																		"LineItem Id: 78; Product Name: Product 3\n" +
+																		"LineItem Id: 79; Product Name: Product 3\n" +
+																		"LineItem Id: 80; Product Name: Product 3\n" +
+																		"LineItem Id: 81; Product Name: Product 3\n" +
+																		"LineItem Id: 82; Product Name: Product 3\n" +
+																		"LineItem Id: 83; Product Name: Product 3\n" +
+																		"LineItem Id: 84; Product Name: Product 3\n" +
+																		"LineItem Id: 85; Product Name: Product 3\n" +
+																		"LineItem Id: 86; Product Name: Product 3\n" +
+																		"LineItem Id: 87; Product Name: Product 3\n" +
+																		"LineItem Id: 88; Product Name: Product 3\n" +
+																		"LineItem Id: 89; Product Name: Product 3\n" +
+																		"LineItem Id: 90; Product Name: Product 3\n" +
+																		"LineItem Id: 91; Product Name: Product 3\n" +
+																		"LineItem Id: 92; Product Name: Product 3\n" +
+																		"LineItem Id: 93; Product Name: Product 3\n" +
+																		"LineItem Id: 94; Product Name: Product 3\n" +
+																		"LineItem Id: 95; Product Name: Product 3\n" +
+																		"LineItem Id: 96; Product Name: Product 3\n" +
+																		"LineItem Id: 97; Product Name: Product 3\n" +
+																		"LineItem Id: 98; Product Name: Product 3\n" +
+																		"LineItem Id: 99; Product Name: Product 3\n" +
+																		"LineItem Id: 100; Product Name: Product 3"};
 }
