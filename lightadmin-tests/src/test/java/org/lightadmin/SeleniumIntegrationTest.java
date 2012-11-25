@@ -54,12 +54,7 @@ public abstract class SeleniumIntegrationTest {
 		assertTableRowCount( expectedData, dataTable );
 
 		for ( int row = 0; row < dataTable.getRowCount(); row++ ) {
-			for ( int column = 0; column < dataTable.getColumnCount(); column++ ) {
-				final String expectedCellValue = expectedData[row][column];
-				final String actualCellValue = dataTable.getValueAt( row, column );
-
-				assertEquals( String.format( "Row: %d, column: %d: ", row + 1, column + 1 ), expectedCellValue, actualCellValue );
-			}
+			assertTableRowData( expectedData[ row ], dataTable, row + 1 );
 		}
 	}
 
