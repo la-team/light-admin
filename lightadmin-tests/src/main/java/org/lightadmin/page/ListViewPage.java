@@ -10,6 +10,8 @@ import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
+import java.util.List;
+
 import static org.junit.Assert.fail;
 
 public class ListViewPage extends SecuredPage<ListViewPage> {
@@ -22,9 +24,9 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 
     private WebElement scope;
 
-    private FilterFormComponent filterFormComponent;
+	private FilterFormComponent filterFormComponent;
 
-    public ListViewPage( SeleniumContext seleniumContext, Domain domain  ) {
+	public ListViewPage( SeleniumContext seleniumContext, Domain domain  ) {
 		super( seleniumContext );
 
         filterFormComponent = new FilterFormComponent( seleniumContext );
@@ -78,4 +80,12 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
     private WebElement getScope( String scopeLabel ) {
         return webDriver().findElement( By.linkText( scopeLabel ) );
     }
+
+	public List<String> getQuickViewFieldNames() {
+		return getDataTable().getQuickViewFieldNames();
+	}
+
+	public void showQuickViewForItem( int itemId ) {
+		getDataTable().showQuickViewFor( itemId );
+	}
 }

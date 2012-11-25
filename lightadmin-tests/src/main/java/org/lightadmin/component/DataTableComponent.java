@@ -38,6 +38,18 @@ public class DataTableComponent implements Component {
 		return WebElementTransformer.transform( cellElements( dataRowElement( rowIndex ) ) );
 	}
 
+	public void showQuickViewFor( int itemId ) {
+		dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to show Info']" ) ).click();;
+	}
+
+	public List<String> getQuickViewFieldNames() {
+		return WebElementTransformer.transform( getQuickViewComponent().findElements( By.tagName( "dt" ) ) );
+	}
+
+	private WebElement getQuickViewComponent() {
+		return dataTableElement.findElement( By.className( "innerDetails" ) );
+	}
+
 	private WebElement dataRowElement( int rowIndex ) {
 		return dataRowElements().get( rowIndex );
 	}
