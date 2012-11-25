@@ -62,6 +62,7 @@ insert into TestProduct (id, name, price) values (3, 'Product 3', 49.0);
 
 insert into TestOrders (id, name) values (1, 'Order1: 100 line items');
 insert into TestOrders (id, name) values (2, 'Order2: no line items');
+insert into TestOrders (id, name) values (3, 'Order3: 3 line items');
 
 insert into TestLineItem (id, order_id, product_id, amount) values (1, 1, 1, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (2, 1, 1, 1);
@@ -163,3 +164,6 @@ insert into TestLineItem (id, order_id, product_id, amount) values (97, 1, 3, 1)
 insert into TestLineItem (id, order_id, product_id, amount) values (98, 1, 3, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (99, 1, 3, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (100, 1, 3, 1);
+insert into TestLineItem (id, order_id, product_id, amount) values (101, 3, 1, 12);
+insert into TestLineItem (id, order_id, product_id, amount) values (102, 3, 2, 130);
+insert into TestLineItem (id, order_id, product_id, amount) values (103, 3, 3, 1050);
