@@ -85,6 +85,7 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 			$('div.innerDetails', $(nTr).next()[0]).slideUp('slow', function () {
 				dataTable.fnClose( nTr );
 				infoImg.attr('src', "../images/details_open.png");
+				infoImg.attr('title', "Click to show Info");
 			});
 		} else {
 			var aData = dataTable.fnGetData( nTr );
@@ -98,6 +99,7 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 					 $('div.innerDetails', nDetailsRow).hide();
 					 $('div.innerDetails', nDetailsRow).slideDown('slow', function () {
 						 infoImg.attr('src', "../images/details_close.png");
+						 infoImg.attr('title', "Click to hide Info");
 					 });
 				 }
 			} );
