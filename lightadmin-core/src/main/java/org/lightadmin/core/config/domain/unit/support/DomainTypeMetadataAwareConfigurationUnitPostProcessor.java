@@ -6,20 +6,19 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.util.ClassUtils;
 
-public class DomainTypeMetadataAwareConfigurationUnitPostProcessor implements ConfigurationUnitPostProcessor {
-
-	private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+public class DomainTypeMetadataAwareConfigurationUnitPostProcessor extends EntityMetadataResolverAwareConfigurationUnitPostProcessor {
 
 	public DomainTypeMetadataAwareConfigurationUnitPostProcessor( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this.entityMetadataResolver = entityMetadataResolver;
+		super( entityMetadataResolver );
 	}
 
 	@Override
-	public void postProcess( final ConfigurationUnit configurationUnit ) {
+	public ConfigurationUnit postProcess( final ConfigurationUnit configurationUnit ) {
 		if ( ClassUtils.isAssignableValue( DomainTypeEntityMetadataAware.class, configurationUnit ) ) {
-			final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( configurationUnit.getDomainType() );
+			final DomainTypeEntityMetadata domainTypeEntityMetadata = resolveEntityMetadata( configurationUnit );
 
 			( ( DomainTypeEntityMetadataAware ) configurationUnit ).setDomainTypeEntityMetadata( domainTypeEntityMetadata );
 		}
+		return configurationUnit;
 	}
 }

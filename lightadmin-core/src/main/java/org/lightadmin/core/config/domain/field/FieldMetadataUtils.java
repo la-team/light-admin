@@ -4,7 +4,9 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
+import org.apache.commons.lang.StringUtils;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.springframework.util.ClassUtils;
 
 import javax.annotation.Nullable;
@@ -44,6 +46,37 @@ public class FieldMetadataUtils {
 
 	public static Set<FieldMetadata> customFields( Set<FieldMetadata> fieldMetadatas ) {
 		return newLinkedHashSet( Collections2.filter( fieldMetadatas, customFieldMetadataPredicate() ) );
+	}
+
+	public static FieldMetadata primaryKeyPersistentField( Set<FieldMetadata> fields ) {
+		for ( FieldMetadata field : persistentFields( fields ) ) {
+			PersistentFieldMetadata persistentFieldMetadata = ( PersistentFieldMetadata ) field;
+			if ( persistentFieldMetadata.isPrimaryKey() ) {
+				return persistentFieldMetadata;
+			}
+		}
+		return null;
+	}
+
+	public static Set<FieldMetadata> addPrimaryKeyPersistentField( final Set<FieldMetadata> fields, final DomainTypeAttributeMetadata idAttribute ) {
+		final Set<FieldMetadata> fieldsWithPrimaryKey = newLinkedHashSet();
+		fieldsWithPrimaryKey.add( new PersistentFieldMetadata( StringUtils.capitalize( idAttribute.getName() ), idAttribute.getName(), true ) );
+		fieldsWithPrimaryKey.addAll( fields );
+		return fieldsWithPrimaryKey;
+	}
+
+	public static PersistentFieldMetadata getPersistentField( final Set<FieldMetadata> fields, String fieldName ) {
+		for ( FieldMetadata field : persistentFields( fields ) ) {
+			PersistentFieldMetadata persistentFieldMetadata = ( PersistentFieldMetadata ) field;
+			if ( StringUtils.equals( persistentFieldMetadata.getField(), fieldName ) ) {
+				return persistentFieldMetadata;
+			}
+		}
+		return null;
+	}
+
+	public static boolean containsPersistentField( final Set<FieldMetadata> fields, String fieldName ) {
+		return getPersistentField( fields, fieldName ) != null;
 	}
 
 	private static class FieldMetadataExtractor implements Function<FilterMetadata, FieldMetadata> {

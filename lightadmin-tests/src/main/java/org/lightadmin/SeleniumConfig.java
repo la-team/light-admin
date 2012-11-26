@@ -39,7 +39,7 @@ public class SeleniumConfig {
 	@Bean
 	public GlobalConfigurationManagementService globalConfigurationManagementService() {
 		RmiProxyFactoryBean rmiProxyFactoryBean = new RmiProxyFactoryBean();
-		rmiProxyFactoryBean.setServiceUrl( "rmi://localhost:1199/GlobalConfigurationManagementService" );
+		rmiProxyFactoryBean.setServiceUrl( "rmi://127.0.0.1:1199/GlobalConfigurationManagementService" );
 		rmiProxyFactoryBean.setServiceInterface( GlobalConfigurationManagementService.class );
 		rmiProxyFactoryBean.afterPropertiesSet();
 		return ( GlobalConfigurationManagementService ) rmiProxyFactoryBean.getObject();

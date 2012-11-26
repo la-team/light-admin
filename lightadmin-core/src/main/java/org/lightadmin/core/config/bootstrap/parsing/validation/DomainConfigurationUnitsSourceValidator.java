@@ -37,6 +37,8 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 		validateFilters( domainConfigurationSource, problemReporter );
 
 		validateListView( domainConfigurationSource, problemReporter );
+
+		validateShowView( domainConfigurationSource, problemReporter );
 	}
 
 	void validateDomainType( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
@@ -49,6 +51,10 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 		if ( !ClassUtils.hasConstructor( domainType ) ) {
 			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, String.format( "Type %s must have default constructor.", domainType.getSimpleName() ) ) );
 		}
+	}
+
+	void validateShowView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
+		validateFields( domainConfigurationSource.getShowViewFragment().getFields(), domainConfigurationSource, DomainConfigurationUnitType.SHOW_VIEW, problemReporter );
 	}
 
 	void validateListView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {

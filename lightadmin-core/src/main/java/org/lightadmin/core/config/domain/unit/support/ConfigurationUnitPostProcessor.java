@@ -4,6 +4,6 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 
 public interface ConfigurationUnitPostProcessor {
 
-	void postProcess( ConfigurationUnit configurationUnit );
+	ConfigurationUnit postProcess( ConfigurationUnit configurationUnit );
 
 }

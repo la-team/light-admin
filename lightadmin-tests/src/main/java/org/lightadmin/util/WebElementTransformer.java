@@ -15,6 +15,11 @@ public class WebElementTransformer implements Function<WebElement, String> {
 		return newLinkedList( Collections2.transform( collection, new WebElementTransformer() ) );
 	}
 
+	public static String[] transformToArray( Collection<WebElement> collection ) {
+		final Collection<String> elementsText = Collections2.transform( collection, new WebElementTransformer() );
+		return elementsText.toArray( new String[elementsText.size()] );
+	}
+
 	@Override
 	public String apply( final WebElement webElement ) {
 		return webElement.getText();

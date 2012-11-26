@@ -23,7 +23,7 @@ public class DomainConfigurationUnitTypeTest {
 	@Test
 	public void definedUnitTypeNames() throws Exception {
 		final String[] expectedUnitTypeNames = new String[] {
-			"screenContext", "configuration", "listView", "scopes", "filters"
+			"screenContext", "configuration", "listView", "scopes", "filters", "showView"
 		};
 
 		assertArrayEquals( expectedUnitTypeNames, unitTypeNames( DomainConfigurationUnitType.values() ) );

@@ -13,6 +13,10 @@ public final class ApplicationUrlResolver {
 		return "/rest/" + domainTypeName;
 	}
 
+	public static String domainRestEntityBaseUrl( String domainTypeName, int id ) {
+		return "/rest/" + domainTypeName  + "/" + id;
+	}
+
 	public static String domainRestScopeBaseUrl( String domainTypeName ) {
 		return domainRestBaseUrl( domainTypeName ) + "/scope";
 	}

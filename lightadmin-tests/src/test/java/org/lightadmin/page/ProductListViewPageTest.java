@@ -37,8 +37,8 @@ public class ProductListViewPageTest extends SeleniumIntegrationTest {
 	}
 
 	private static final String[][] expectedProducts = {
-		{"Dock", "Dock for iPhone/iPad", "49"},
-		{"MacBook Pro", "Apple notebook", "1299"},
-		{"iPad", "Apple tablet device", "499"}
+		{"1", "iPad", "Apple tablet device", "499"},
+		{"2", "MacBook Pro", "Apple notebook", "1299"},
+		{"3", "Dock", "Dock for iPhone/iPad", "49"}
 	};
 }

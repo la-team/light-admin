@@ -7,4 +7,6 @@ public interface Persistable {
 	DomainTypeAttributeMetadata getAttributeMetadata();
 
 	String getField();
+
+	boolean isPrimaryKey();
 }

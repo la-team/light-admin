@@ -37,6 +37,25 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 				 } );
 }
 
+function extractStrValue( dataValue ) {
+	if ( dataValue instanceof Array ) {
+		var items = '';
+		for (var arrayIndex in dataValue) {
+			var arrayItem = dataValue[arrayIndex];
+			if ( arrayItem['stringRepresentation'] !== undefined) {
+				items += arrayItem['stringRepresentation'] + '<br/>';
+			}
+		}
+		return items;
+	}
+
+	if (typeof dataValue === 'object' && dataValue['stringRepresentation'] !== undefined) {
+		return dataValue['stringRepresentation'];
+	}
+
+	return dataValue;
+}
+
 function quickLook( aData ) {
 	var detailsHtmlBlock = '<div class="innerDetails"><dl class="dl-horizontal">';
 
@@ -45,18 +64,7 @@ function quickLook( aData ) {
 			var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;
 			var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];
 			detailsHtmlBlock += '<dt>' + name + '</dt>';
-			if ( value instanceof Array ) {
-				var items = '';
-				for (var arrayIndex in value) {
-					var arrayItem = value[arrayIndex];
-					if ( arrayItem['stringRepresentation'] !== undefined) {
-						items += arrayItem['stringRepresentation'] + '<br/>';
-					}
-				}
-				value = items;
-			} else if (typeof value === 'object' && value['stringRepresentation'] !== undefined) {
-				value = value['stringRepresentation'];
-			}
+			value = extractStrValue( value );
 			detailsHtmlBlock += '<dd>' + ( value == '' ? '&nbsp;' : value ) + '</dd>';
 		}
 	}

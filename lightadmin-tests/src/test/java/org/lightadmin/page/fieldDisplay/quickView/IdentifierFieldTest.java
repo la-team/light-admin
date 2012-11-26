@@ -4,6 +4,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
+import org.lightadmin.component.QuickViewComponent;
 import org.lightadmin.config.SimpleOrderTestEntityConfiguration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
@@ -11,10 +12,7 @@ import org.lightadmin.page.ListViewPage;
 import org.lightadmin.page.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.List;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertArrayEquals;
 
 public class IdentifierFieldTest extends SeleniumIntegrationTest {
 
@@ -38,19 +36,14 @@ public class IdentifierFieldTest extends SeleniumIntegrationTest {
 	//Covers LA-17: https://github.com/max-dev/light-admin/issues/17#issuecomment-10700503
 	@Test
 	public void defaultIdentifierFieldIsHidden() {
-		testOrderListPage.showQuickViewForItem( 1 );
+		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
 
-		assertQuickViewFields( "Order Id", "Name" );
+		final String[] actualFieldNames = quickViewComponent.getQuickViewFieldNames();
+
+		assertQuickViewFields( new String[] {"Order Id", "Name"}, actualFieldNames );
 	}
 
-	private void assertQuickViewFields( String... expectedFields ) {
-		final List<String> quickViewFieldNames = testOrderListPage.getQuickViewFieldNames();
-
-		assertEquals( "Wrong number of fields:", expectedFields.length, quickViewFieldNames.size() );
-
-		for( String fieldName : expectedFields ){
-			assertTrue( String.format( "Field Name %s is missing on Quick View:", fieldName ),
-					quickViewFieldNames.contains( fieldName ) );
-		}
+	private void assertQuickViewFields( String[] expectedFields, String[] actualFields ) {
+		assertArrayEquals( "Missing fields on Quick View", expectedFields, actualFields );
 	}
 }

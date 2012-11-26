@@ -32,6 +32,10 @@ public class DynamicPagingAndSortingMethodArgumentResolver extends PagingAndSort
 	public Object resolveArgument( final MethodParameter parameter, final ModelAndViewContainer mavContainer, final NativeWebRequest webRequest, final WebDataBinderFactory binderFactory ) throws Exception {
 		final PagingAndSorting pagingAndSorting = ( PagingAndSorting ) super.resolveArgument( parameter, mavContainer, webRequest, binderFactory );
 
+		if ( pagingAndSorting.getSort() == null ) {
+			return pagingAndSorting;
+		}
+
 		final DomainTypeAdministrationConfiguration configuration = resolveDomainTypConfiguration( webRequest );
 
 		final Sort sort = resolveSortFields( pagingAndSorting.getSort(), configuration );

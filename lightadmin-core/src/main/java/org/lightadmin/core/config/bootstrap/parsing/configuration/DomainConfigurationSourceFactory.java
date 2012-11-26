@@ -5,27 +5,30 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareConfigurationUnitPostProcessor;
+import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.util.DomainConfigurationUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newLinkedHashSet;
+
 public class DomainConfigurationSourceFactory {
 
 	private final DomainTypeEntityMetadataResolver entityMetadataResolver;
 
-	private final ConfigurationUnitPostProcessor configurationUnitPostProcessor;
+	private final ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
 
 	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this( entityMetadataResolver, new DomainTypeMetadataAwareConfigurationUnitPostProcessor( entityMetadataResolver ) );
+		this( entityMetadataResolver, new EmptyConfigurationUnitPostProcessor( entityMetadataResolver ), new DomainTypeMetadataAwareConfigurationUnitPostProcessor( entityMetadataResolver ) );
 	}
 
-	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver,
-											 final ConfigurationUnitPostProcessor configurationUnitPostProcessor ) {
-
+	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors ) {
 		this.entityMetadataResolver = entityMetadataResolver;
-		this.configurationUnitPostProcessor = configurationUnitPostProcessor;
+		this.configurationUnitPostProcessors = configurationUnitPostProcessors;
 	}
 
 	public DomainConfigurationSource createConfigurationSource( Object configurationMetadata ) {
@@ -49,12 +52,24 @@ public class DomainConfigurationSourceFactory {
 	}
 
 	DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( configurationUnits.getDomainType() );
+		final Class<?> domainType = configurationUnits.getDomainType();
 
+		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( domainType );
+
+		final ConfigurationUnits processedConfigurationUnits = processConfigurationUnits( configurationUnits );
+
+		return new DomainConfigurationUnitsSource( domainTypeEntityMetadata, processedConfigurationUnits );
+	}
+
+	private ConfigurationUnits processConfigurationUnits( final ConfigurationUnits configurationUnits ) {
+		final Set<ConfigurationUnit> processedConfigurationUnits = newLinkedHashSet();
 		for ( ConfigurationUnit configurationUnit : configurationUnits ) {
-			configurationUnitPostProcessor.postProcess( configurationUnit );
+			ConfigurationUnit processedConfigurationUnit = configurationUnit;
+			for ( ConfigurationUnitPostProcessor configurationUnitPostProcessor : configurationUnitPostProcessors ) {
+				processedConfigurationUnit = configurationUnitPostProcessor.postProcess( processedConfigurationUnit );
+			}
+			processedConfigurationUnits.add( processedConfigurationUnit );
 		}
-
-		return new DomainConfigurationUnitsSource( domainTypeEntityMetadata, configurationUnits );
+		return new ConfigurationUnits( configurationUnits.getDomainType(), processedConfigurationUnits );
 	}
 }

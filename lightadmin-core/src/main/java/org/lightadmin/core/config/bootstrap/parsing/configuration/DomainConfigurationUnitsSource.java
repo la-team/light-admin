@@ -5,6 +5,7 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
+import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.util.Assert;
@@ -51,6 +52,11 @@ public class DomainConfigurationUnitsSource implements DomainConfigurationSource
 	@Override
 	public ListViewConfigurationUnit getListViewFragment() {
 		return configurationUnits.getListViewFragment();
+	}
+
+	@Override
+	public ShowViewConfigurationUnit getShowViewFragment() {
+		return configurationUnits.getShowViewConfigurationUnit();
 	}
 
 	@Override

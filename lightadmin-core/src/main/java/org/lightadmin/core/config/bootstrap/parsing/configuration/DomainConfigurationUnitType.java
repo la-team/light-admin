@@ -6,7 +6,8 @@ public enum DomainConfigurationUnitType {
 	CONFIGURATION( "configuration" ),
 	LIST_VIEW( "listView" ),
 	SCOPES( "scopes" ),
-	FILTERS( "filters" );
+	FILTERS( "filters" ),
+	SHOW_VIEW( "showView" );
 
 	private final String name;
 

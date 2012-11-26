@@ -13,6 +13,10 @@ public class TableFragment implements Fragment {
 	TableFragment() {
 	}
 
+	public TableFragment( final Set<FieldMetadata> fields ) {
+		this.fields = fields;
+	}
+
 	public void addField( FieldMetadata fieldMetadata ) {
 		fields.add( fieldMetadata );
 	}

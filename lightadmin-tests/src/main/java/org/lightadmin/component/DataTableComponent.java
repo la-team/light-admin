@@ -1,16 +1,19 @@
 package org.lightadmin.component;
 
+import org.lightadmin.SeleniumContext;
 import org.lightadmin.util.WebElementTransformer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class DataTableComponent implements Component {
+public class DataTableComponent extends BaseComponent {
 
 	private final WebElement dataTableElement;
 
-	public DataTableComponent( final WebElement dataTableElement ) {
+	public DataTableComponent( final WebElement dataTableElement, final SeleniumContext seleniumContext ) {
+		super( seleniumContext );
+
 		this.dataTableElement = dataTableElement;
 	}
 
@@ -38,16 +41,10 @@ public class DataTableComponent implements Component {
 		return WebElementTransformer.transform( cellElements( dataRowElement( rowIndex ) ) );
 	}
 
-	public void showQuickViewFor( int itemId ) {
-		dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to show Info']" ) ).click();;
-	}
+	public QuickViewComponent showQuickViewFor( int itemId ) {
+		dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to show Info']" ) ).click();
 
-	public List<String> getQuickViewFieldNames() {
-		return WebElementTransformer.transform( getQuickViewComponent().findElements( By.tagName( "dt" ) ) );
-	}
-
-	private WebElement getQuickViewComponent() {
-		return dataTableElement.findElement( By.className( "innerDetails" ) );
+		return new QuickViewComponent( dataTableElement.findElement( By.className( "innerDetails" ) ), seleniumContext );
 	}
 
 	private WebElement dataRowElement( int rowIndex ) {

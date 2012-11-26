@@ -3,8 +3,11 @@ package org.lightadmin.core.config.domain.fragment;
 import org.lightadmin.core.config.domain.field.AbstractFieldMetadata;
 import org.lightadmin.core.config.domain.field.CustomFieldMetadata;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
+import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
+
+import static org.springframework.util.StringUtils.capitalize;
 
 public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<ListViewConfigurationUnit> implements ListViewConfigurationUnitBuilder {
 
@@ -23,7 +26,7 @@ public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurati
 		if ( currentFieldMetadata != null ) {
 			tableFragment.addField( currentFieldMetadata );
 		}
-		currentFieldMetadata = new PersistentFieldMetadata( fieldName, fieldName );
+		currentFieldMetadata = new PersistentFieldMetadata( capitalize( fieldName ), fieldName );
 		return this;
 	}
 
@@ -38,7 +41,10 @@ public class TableListViewConfigurationUnitBuilder extends DomainTypeConfigurati
 
 	@Override
 	public ListViewConfigurationUnitBuilder attribute( final String fieldName ) {
-		// Transient/User runtime attributes
+		if ( currentFieldMetadata != null ) {
+			tableFragment.addField( currentFieldMetadata );
+		}
+		currentFieldMetadata = new TransientFieldMetadata( capitalize( fieldName ), fieldName );
 		return this;
 	}
 

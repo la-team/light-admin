@@ -58,16 +58,21 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 		assertTrue( "Selected scope is not highlighted", customerListViewPage.scopeIsHighlighted( scope ) );
 	}
 
-	private static final String[][] expectedFilteredAndScopedCustomers = {{"Dave", "Matthews1", "dave@dmband1.com"}};
+	private static final String[][] expectedFilteredAndScopedCustomers = {{"1", "Dave", "Matthews1", "dave@dmband1.com"}};
 
 	private static final String[][] expectedFilteredCustomers = {
-		{"Boyd", "Matthews1", "boyd@dmband25.com"}, {"Dave", "Matthews1", "dave@dmband1.com"}
+		{"1", "Dave", "Matthews1", "dave@dmband1.com"},
+		{"25", "Boyd", "Matthews1", "boyd@dmband25.com"}
 	};
 
 	private static final String[][] expectedScopedCustomers = new String[][] {
-		{"Dave", "Matthews1", "dave@dmband1.com"}, {"Dave", "Matthews2", "dave@dmband4.com"},
-		{"Dave", "Matthews3", "dave@dmband7.com"}, {"Dave", "Matthews4", "dave@dmband10.com"},
-		{"Dave", "Matthews5", "dave@dmband13.com"}, {"Dave", "Matthews6", "dave@dmband16.com"},
-		{"Dave", "Matthews7", "dave@dmband19.com"}, {"Dave", "Matthews8", "dave@dmband22.com"}
+		{"1", "Dave", "Matthews1", "dave@dmband1.com"},
+		{"4", "Dave", "Matthews2", "dave@dmband4.com"},
+		{"7", "Dave", "Matthews3", "dave@dmband7.com"},
+		{"10", "Dave", "Matthews4", "dave@dmband10.com"},
+		{"13", "Dave", "Matthews5", "dave@dmband13.com"},
+		{"16", "Dave", "Matthews6", "dave@dmband16.com"},
+		{"19", "Dave", "Matthews7", "dave@dmband19.com"},
+		{"22", "Dave", "Matthews8", "dave@dmband22.com"}
 	};
 }

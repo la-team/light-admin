@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.core.convert.converter.Converter;
@@ -52,8 +53,6 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 
 		final EntityResource entityResource = newEntityResource( domainTypeConfiguration.getDomainTypeName(), id );
 
-		addAttributeValue( entityResource, entityMetadata.getIdAttribute().getName(), id );
-
 		addObjectStringRepresentation( entityResource, domainTypeConfiguration, source );
 
 		for ( FieldMetadata field : fieldsForListView( domainTypeConfiguration ) ) {
@@ -75,6 +74,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		Map<String, Object> fieldData = newLinkedHashMap();
 		fieldData.put( "name", field.getName() );
 		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
+		fieldData.put( "primaryKey", ( field instanceof Persistable ) && ( ( Persistable ) field ).isPrimaryKey() );
 
 		addAttributeValue( resource, field.getUuid(), fieldData );
 	}

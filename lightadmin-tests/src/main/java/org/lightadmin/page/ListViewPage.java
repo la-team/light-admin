@@ -3,14 +3,13 @@ package org.lightadmin.page;
 import org.lightadmin.SeleniumContext;
 import org.lightadmin.component.DataTableComponent;
 import org.lightadmin.component.FilterFormComponent;
+import org.lightadmin.component.QuickViewComponent;
 import org.lightadmin.data.Domain;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-
-import java.util.List;
 
 import static org.junit.Assert.fail;
 
@@ -34,7 +33,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	}
 
 	public DataTableComponent getDataTable() {
-		return new DataTableComponent( listViewTable );
+		return new DataTableComponent( listViewTable, seleniumContext );
 	}
 
 	@Override
@@ -81,11 +80,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
         return webDriver().findElement( By.linkText( scopeLabel ) );
     }
 
-	public List<String> getQuickViewFieldNames() {
-		return getDataTable().getQuickViewFieldNames();
-	}
-
-	public void showQuickViewForItem( int itemId ) {
-		getDataTable().showQuickViewFor( itemId );
+	public QuickViewComponent showQuickViewForItem( int itemId ) {
+		return getDataTable().showQuickViewFor( itemId );
 	}
 }

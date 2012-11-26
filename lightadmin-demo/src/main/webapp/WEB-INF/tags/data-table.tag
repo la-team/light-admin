@@ -7,6 +7,8 @@
 <%@ attribute name="fields" required="true" type="java.util.Set"%>
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
+<c:set var="primaryKeyField" value="${light:primaryKeyPersistentField(fields)}"/>
+
 <spring:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl" />
 
 <table id="listViewTable" class="table table-bordered table-hover">
@@ -52,8 +54,8 @@
 				   "bSortable": ${field.sortable},
 				   "aTargets":[ ${status.index + 1 } ],
 				   "mData" : '${field.uuid}',
-				   "mRender":function ( data, type, full ) {
-					   return full['${field.uuid}']['value'];
+				   "mRender":function ( data ) {
+					   return extractStrValue( data['value'] );
 				   },
 				   "sClass": "data-cell"
 			   },
@@ -63,7 +65,7 @@
 				   "aTargets":[ ${fn:length(fields) + 1 } ],
 				   "mData":null,
 				   "mRender":function ( data, type, full ) {
-					   var entityId = full['${domainTypeEntityMetadata.idAttribute.name}'];
+					   var entityId = full['${primaryKeyField.uuid}']['value'];
 
 					   return '<a href="' + viewEntityUrl( entityId ) + '">View</a>'
 									  + '&nbsp;&nbsp;'

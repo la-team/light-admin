@@ -10,6 +10,8 @@ import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuild
 import org.lightadmin.core.config.domain.fragment.TableListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.scope.DefaultScopesConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.show.DefaultShowViewConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnitBuilder;
 import org.springframework.core.convert.converter.Converter;
 
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
@@ -32,6 +34,7 @@ public final class ConfigurationUnitsConverter implements Converter<Class, Confi
 									   initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class, domainType ),
 									   initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class, domainType ),
 									   initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, ListViewConfigurationUnitBuilder.class, TableListViewConfigurationUnitBuilder.class, domainType ),
+									   initializeConfigurationUnitWithBuilder( configurationClass, SHOW_VIEW, ShowViewConfigurationUnitBuilder.class, DefaultShowViewConfigurationUnitBuilder.class, domainType ),
 									   initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class, domainType ),
 									   initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class, domainType ) );
 	}

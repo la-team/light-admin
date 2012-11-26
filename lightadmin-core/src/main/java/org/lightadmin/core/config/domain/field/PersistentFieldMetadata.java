@@ -7,7 +7,14 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
 	private final String field;
 
+	private boolean primaryKey;
+
 	private DomainTypeAttributeMetadata attributeMetadata;
+
+	public PersistentFieldMetadata( final String name, final String field, boolean primaryKey ) {
+		this( name, field );
+		this.primaryKey = primaryKey;
+	}
 
 	public PersistentFieldMetadata( final String name, final String field ) {
 		super( name );
@@ -17,6 +24,15 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 	@Override
 	public String getField() {
 		return field;
+	}
+
+	@Override
+	public boolean isPrimaryKey() {
+		return primaryKey;
+	}
+
+	public void setPrimaryKey( final boolean primaryKey ) {
+		this.primaryKey = primaryKey;
 	}
 
 	@Override

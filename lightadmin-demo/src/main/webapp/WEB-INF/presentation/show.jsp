@@ -8,6 +8,7 @@
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:useAttribute name="fields"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
 
@@ -25,6 +26,8 @@
 </breadcrumb:breadcrumb>
 
 <c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
+
+<spring:url var="domainRestEntityBaseUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
 
 <div class="page-header">
 	<h2>Show <c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h2>
@@ -51,3 +54,28 @@
 	</c:forEach>
 	</tbody>
 </table>
+
+<%--<script type="text/javascript">--%>
+	<%--function buildShowView( data ) {--%>
+		<%--for (var prop in aData) {--%>
+			<%--if ( prop != 'links' && prop != 'stringRepresentation') {--%>
+				<%--var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;--%>
+				<%--var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];--%>
+				<%--detailsHtmlBlock += '<dt>' + name + '</dt>';--%>
+				<%--value = extractStrValue( value );--%>
+				<%--detailsHtmlBlock += '<dd>' + ( value == '' ? '&nbsp;' : value ) + '</dd>';--%>
+			<%--}--%>
+		<%--}--%>
+	<%--}--%>
+
+	<%--$(function() {--%>
+		<%--jQuery.ajax( {--%>
+			 <%--"dataType" : 'json',--%>
+			 <%--"type" : "GET",--%>
+			 <%--"url" : '${domainRestEntityBaseUrl}',--%>
+			 <%--"success":function ( data ) {--%>
+				 <%--buildShowView( data );--%>
+			 <%--}--%>
+		 <%--} );--%>
+	<%--});--%>
+<%--</script>--%>
