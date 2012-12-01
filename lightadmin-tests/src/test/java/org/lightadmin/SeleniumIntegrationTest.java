@@ -1,5 +1,6 @@
 package org.lightadmin;
 
+import org.apache.commons.lang.StringUtils;
 import org.junit.runner.RunWith;
 import org.lightadmin.component.DataTableComponent;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
@@ -60,8 +61,8 @@ public abstract class SeleniumIntegrationTest {
 
 	protected void assertTableRowData( final String[] expectedRowData, final DataTableComponent dataTable, final int rowId ) {
 		for ( int column = 0; column < dataTable.getColumnCount(); column++ ) {
-			final String expectedCellValue = expectedRowData[ column ];
-			final String actualCellValue = dataTable.getValueAt( rowId - 1, column );
+			final String expectedCellValue = StringUtils.trimToEmpty( expectedRowData[ column ] );
+			final String actualCellValue = StringUtils.trimToEmpty( dataTable.getValueAt( rowId - 1, column ) );
 
 			assertEquals( String.format( "Row: %d, column: %d: ", rowId, column + 1 ), expectedCellValue, actualCellValue );
 		}

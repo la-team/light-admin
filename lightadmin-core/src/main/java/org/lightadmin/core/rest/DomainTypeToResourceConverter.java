@@ -17,6 +17,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.Serializable;
 import java.net.URI;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -86,12 +87,28 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 	}
 
 	private EntityResource newEntityResource( String domainTypeName, Serializable id ) {
-		final URI selfUri = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() )
-												.pathSegment( "rest" )
-												.pathSegment(domainTypeName)
-												.pathSegment(id.toString())
-												.build().toUri();
+		final HashSet<Link> links = Sets.newLinkedHashSet();
+		links.add( selfLink( domainTypeName, id ) );
+		links.add( selfDomainLink( domainTypeName, id ) );
 
-		return new EntityResource( Maps.<String, Object>newLinkedHashMap(), Sets.<Link>newHashSet( new Link(selfUri.toString(), "self") ) );
+		return new EntityResource( Maps.<String, Object>newLinkedHashMap(), links );
+	}
+
+	private Link selfDomainLink( final String domainTypeName, final Serializable id ) {
+		URI selfUri = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() )
+										  .pathSegment( "domain" )
+										  .pathSegment( domainTypeName )
+										  .pathSegment( id.toString() ).build().toUri();
+
+		return new Link(selfUri.toString(), "selfDomainLink");
+	}
+
+	private Link selfLink( final String domainTypeName, final Serializable id ) {
+		URI selfUri = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() )
+										  .pathSegment( "rest" )
+										  .pathSegment( domainTypeName )
+										  .pathSegment( id.toString() ).build().toUri();
+
+		return new Link(selfUri.toString(), "self");
 	}
 }

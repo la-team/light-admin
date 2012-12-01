@@ -41,41 +41,33 @@
 	</tr>
 	</thead>
 
-	<tbody>
-	<tr>
-		<td><c:out value="${domainTypeEntityMetadata.idAttribute.name}"/></td>
-		<td><c:out value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/></td>
-	</tr>
-	<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}">
-		<tr>
-			<td><c:out value="${attributeEntry.name}"/></td>
-			<td><light:attribute attributeMetadata="${attributeEntry}" entity="${entity}"/></td>
-		</tr>
-	</c:forEach>
-	</tbody>
+	<tbody id="data-section"></tbody>
+
 </table>
 
-<%--<script type="text/javascript">--%>
-	<%--function buildShowView( data ) {--%>
-		<%--for (var prop in aData) {--%>
-			<%--if ( prop != 'links' && prop != 'stringRepresentation') {--%>
-				<%--var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;--%>
-				<%--var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];--%>
-				<%--detailsHtmlBlock += '<dt>' + name + '</dt>';--%>
-				<%--value = extractStrValue( value );--%>
-				<%--detailsHtmlBlock += '<dd>' + ( value == '' ? '&nbsp;' : value ) + '</dd>';--%>
-			<%--}--%>
-		<%--}--%>
-	<%--}--%>
+<script type="text/javascript">
 
-	<%--$(function() {--%>
-		<%--jQuery.ajax( {--%>
-			 <%--"dataType" : 'json',--%>
-			 <%--"type" : "GET",--%>
-			 <%--"url" : '${domainRestEntityBaseUrl}',--%>
-			 <%--"success":function ( data ) {--%>
-				 <%--buildShowView( data );--%>
-			 <%--}--%>
-		 <%--} );--%>
-	<%--});--%>
-<%--</script>--%>
+	function buildShowView( data ) {
+		for (var prop in data) {
+			if ( prop != 'links' && prop != 'stringRepresentation') {
+				var name = data[prop]['name'] !== undefined ? data[prop]['name'] : prop;
+				var value = data[prop]['value'] !== undefined ? data[prop]['value'] : data[prop];
+
+				var tr = "<tr><td>" + name + "</td><td>" + renderValue(value) + "</td></tr>";
+
+				$("#data-section" ).append(tr);
+			}
+		}
+	}
+
+	$(function() {
+		jQuery.ajax( {
+			 "dataType" : 'json',
+			 "type" : "GET",
+			 "url" : '${domainRestEntityBaseUrl}',
+			 "success":function ( data ) {
+				 buildShowView( data );
+			 }
+		 } );
+	});
+</script>

@@ -37,6 +37,20 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 				 } );
 }
 
+function renderValue( value ) {
+	var strValue = extractStrValue(value);
+
+	strValue = strValue == '' ? '&nbsp;' : strValue;
+
+	if ( value['links'] !== undefined ) {
+		var restEntityUrl = value.links[1].href;
+
+		return "<a href='" + restEntityUrl + "'>" + strValue + "</a>";
+	}
+
+	return strValue;
+}
+
 function extractStrValue( dataValue ) {
 	if ( dataValue instanceof Array ) {
 		var items = '';
@@ -63,9 +77,8 @@ function quickLook( aData ) {
 		if ( prop != 'links' && prop != 'stringRepresentation') {
 			var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;
 			var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];
-			detailsHtmlBlock += '<dt>' + name + '</dt>';
-			value = extractStrValue( value );
-			detailsHtmlBlock += '<dd>' + ( value == '' ? '&nbsp;' : value ) + '</dd>';
+
+			detailsHtmlBlock += '<dt>' + name + '</dt><dd>' + renderValue(value) + '</dd>';
 		}
 	}
 	detailsHtmlBlock += '</dl></div>';
