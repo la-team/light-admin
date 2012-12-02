@@ -1,7 +1,7 @@
 package org.lightadmin.component;
 
 import org.lightadmin.SeleniumContext;
-import org.openqa.selenium.WebDriver;
+import org.lightadmin.util.ExtendedWebDriver;
 import org.openqa.selenium.support.PageFactory;
 
 public abstract class StaticComponent implements Component {
@@ -14,7 +14,7 @@ public abstract class StaticComponent implements Component {
 		PageFactory.initElements( webDriver(), this );
 	}
 
-	protected WebDriver webDriver() {
+	protected ExtendedWebDriver webDriver() {
 		return seleniumContext.getWebDriver();
 	}
 }

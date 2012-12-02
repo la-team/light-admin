@@ -7,7 +7,6 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
 import static org.junit.Assert.fail;
-import static org.lightadmin.util.WebDriverUtils.waitForElementVisible;
 
 public class QuickViewComponent extends DynamicComponent<QuickViewComponent> {
 
@@ -34,12 +33,12 @@ public class QuickViewComponent extends DynamicComponent<QuickViewComponent> {
 	@Override
 	protected void isLoaded() throws Error {
 		try {
-			waitForElementVisible( getQuickViewContainter(), webDriver(), webDriverTimeout() );
+			webDriver().waitForElementVisible( getQuickViewContainter() );
 		} catch ( NoSuchElementException e ) {
 			fail( "Quick View Component for is not visible" );
 		}
 		try {
-			waitForElementVisible( getHideButton(), webDriver(), webDriverTimeout() );
+			webDriver().waitForElementVisible( getHideButton() );
 		} catch ( NoSuchElementException e ) {
 			fail( "Hide button is not visible" );
 		}

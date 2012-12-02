@@ -5,8 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static org.lightadmin.util.WebDriverUtils.clearAndType;
-
 public class FilterFormComponent extends StaticComponent {
 
 	@FindBy( name = "filter-form" )
@@ -29,7 +27,7 @@ public class FilterFormComponent extends StaticComponent {
 	public void filter( String filterField, String filterValue ) {
 		WebElement field = filterForm.findElement( By.name( filterField ) );
 
-		clearAndType( field, filterValue );
+		webDriver().clearAndType( field, filterValue );
 
 		searchButton.click();
 	}

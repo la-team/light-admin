@@ -6,8 +6,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-import static org.lightadmin.util.WebDriverUtils.isElementPresent;
-
 public class ToolbarComponent extends StaticComponent {
 
 	@FindBy( id = "settings-menu" )
@@ -37,6 +35,6 @@ public class ToolbarComponent extends StaticComponent {
 	}
 
 	public boolean isLoggedIn() {
-		return isElementPresent( userMenu );
+		return webDriver().isElementPresent( userMenu );
 	}
 }

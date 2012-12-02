@@ -10,8 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.junit.Assert.fail;
-import static org.lightadmin.util.WebDriverUtils.clearAndType;
-import static org.lightadmin.util.WebDriverUtils.isElementPresent;
 
 @Component
 public class LoginPage extends BasePage<LoginPage> {
@@ -31,12 +29,12 @@ public class LoginPage extends BasePage<LoginPage> {
 	}
 
 	public LoginPage enterLogin( String login ) {
-		clearAndType( this.login, login );
+		webDriver().clearAndType( this.login, login );
 		return this;
 	}
 
 	public LoginPage enterPassword( String password ) {
-		clearAndType( this.password, password );
+		webDriver().clearAndType( this.password, password );
 		return this;
 	}
 
@@ -45,7 +43,7 @@ public class LoginPage extends BasePage<LoginPage> {
 	}
 
 	public boolean isLoggedOut() {
-		return isElementPresent( submitButton );
+		return webDriver().isElementPresent( submitButton );
 	}
 
 	public DashboardPage loginAs( User user ) {

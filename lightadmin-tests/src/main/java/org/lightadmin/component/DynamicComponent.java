@@ -1,7 +1,7 @@
 package org.lightadmin.component;
 
 import org.lightadmin.SeleniumContext;
-import org.openqa.selenium.WebDriver;
+import org.lightadmin.util.ExtendedWebDriver;
 import org.openqa.selenium.support.ui.LoadableComponent;
 
 public abstract class DynamicComponent<C extends LoadableComponent<C>> extends LoadableComponent<C> implements Component {
@@ -12,11 +12,7 @@ public abstract class DynamicComponent<C extends LoadableComponent<C>> extends L
 		this.seleniumContext = seleniumContext;
 	}
 
-	protected WebDriver webDriver() {
+	protected ExtendedWebDriver webDriver() {
 		return seleniumContext.getWebDriver();
-	}
-
-	protected long webDriverTimeout() {
-		return seleniumContext.getWebDriverWaitTimeout();
 	}
 }
