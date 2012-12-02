@@ -42,9 +42,7 @@ public class DataTableComponent extends BaseComponent {
 	}
 
 	public QuickViewComponent showQuickViewFor( int itemId ) {
-		dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to show Info']" ) ).click();
-
-		return new QuickViewComponent( dataTableElement.findElement( By.className( "innerDetails" ) ), seleniumContext );
+		return new QuickViewComponent( itemId, dataTableElement, seleniumContext ).get();
 	}
 
 	private WebElement dataRowElement( int rowIndex ) {
