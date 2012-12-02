@@ -70,8 +70,19 @@ function extractStrValue( dataValue ) {
 	return dataValue;
 }
 
+function getPrimaryKey( dataValue ) {
+	for (var prop in dataValue) {
+		if ((dataValue[prop]['primaryKey'] !== undefined) && (dataValue[prop]['primaryKey'] == true)) {
+			return dataValue[prop]['value'];
+		}
+	}
+	return null;
+}
+
 function quickLook( aData ) {
-	var detailsHtmlBlock = '<div class="innerDetails"><dl class="dl-horizontal">';
+	var primaryKey = getPrimaryKey( aData );
+
+	var detailsHtmlBlock = '<div id="quickView-' + primaryKey + '" class="innerDetails"><dl class="dl-horizontal">';
 
 	for (var prop in aData) {
 		if ( prop != 'links' && prop != 'stringRepresentation') {
