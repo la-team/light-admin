@@ -7,7 +7,7 @@ import org.openqa.selenium.WebElement;
 
 import java.util.List;
 
-public class DataTableComponent extends BaseComponent {
+public class DataTableComponent extends StaticComponent {
 
 	private final WebElement dataTableElement;
 

@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import static org.junit.Assert.fail;
+import static org.lightadmin.util.WebDriverUtils.clearAndType;
+import static org.lightadmin.util.WebDriverUtils.isElementPresent;
 
 @Component
 public class LoginPage extends BasePage<LoginPage> {

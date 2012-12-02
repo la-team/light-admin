@@ -6,7 +6,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ToolbarComponent extends BaseComponent {
+import static org.lightadmin.util.WebDriverUtils.isElementPresent;
+
+public class ToolbarComponent extends StaticComponent {
 
 	@FindBy( id = "settings-menu" )
 	private WebElement settingsMenu;

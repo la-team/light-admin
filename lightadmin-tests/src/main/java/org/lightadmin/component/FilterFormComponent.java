@@ -5,7 +5,9 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class FilterFormComponent extends BaseComponent {
+import static org.lightadmin.util.WebDriverUtils.clearAndType;
+
+public class FilterFormComponent extends StaticComponent {
 
 	@FindBy( name = "filter-form" )
 	private WebElement filterForm;

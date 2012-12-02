@@ -7,7 +7,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class DashboardStatisticsComponent extends BaseComponent {
+public class DashboardStatisticsComponent extends StaticComponent {
 
 	@FindBy( xpath = "//table[@id='dashboardLinks']" )
 	private WebElement statisticsTable;

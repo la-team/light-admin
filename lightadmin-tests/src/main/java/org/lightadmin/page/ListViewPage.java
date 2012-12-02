@@ -12,6 +12,7 @@ import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
 import static org.junit.Assert.fail;
+import static org.lightadmin.util.WebDriverUtils.waitForElementVisible;
 
 public class ListViewPage extends SecuredPage<ListViewPage> {
 
@@ -44,13 +45,13 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	@Override
 	protected void isLoaded() throws Error {
 		try {
-			waitForElementVisible( listViewTable );
+			waitForElementVisible( listViewTable, webDriver(), webDriverWaitTimeout() );
 		} catch ( TimeoutException e) {
 			fail( "ListViewTable was not found on ListViewPage" );
 		}
 
 		try {
-			waitForElementVisible( getScope( DEFAULT_SCOPE_LABEL ) );
+			waitForElementVisible( getScope( DEFAULT_SCOPE_LABEL ), webDriver(), webDriverWaitTimeout() );
 		} catch ( TimeoutException e) {
 			fail( "Default scope is not displayed" );
 		}

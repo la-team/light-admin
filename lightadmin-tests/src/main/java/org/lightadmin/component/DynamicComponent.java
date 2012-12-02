@@ -1,27 +1,22 @@
 package org.lightadmin.component;
 
 import org.lightadmin.SeleniumContext;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.support.ui.LoadableComponent;
 
-public abstract class DynamicComponent<T extends DynamicComponent> extends BaseComponent {
+public abstract class DynamicComponent<C extends LoadableComponent<C>> extends LoadableComponent<C> implements Component {
+
+	private SeleniumContext seleniumContext;
 
 	protected DynamicComponent( SeleniumContext seleniumContext ) {
-		super( seleniumContext );
+		this.seleniumContext = seleniumContext;
 	}
 
-	public T get() {
-		try {
-			isLoaded();
-			return (T) this;
-		} catch (Error e ) {
-			load();
-		}
-
-		isLoaded();
-
-		return (T) this;
+	protected WebDriver webDriver() {
+		return seleniumContext.getWebDriver();
 	}
 
-	protected abstract void isLoaded() throws Error;
-
-	protected abstract void load();
+	protected long webDriverTimeout() {
+		return seleniumContext.getWebDriverWaitTimeout();
+	}
 }
