@@ -8,10 +8,7 @@ import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Map;
-
-import static com.google.common.collect.Maps.newHashMap;
 
 @Entity
 public class Product extends AbstractEntity {
@@ -27,7 +24,7 @@ public class Product extends AbstractEntity {
 	private BigDecimal price;
 
 	@ElementCollection
-	private Map<String, String> attributes = newHashMap();
+	private Map<String, String> attributes;
 
 	public Product( String name, BigDecimal price ) {
 		this( name, price, null );
@@ -64,7 +61,7 @@ public class Product extends AbstractEntity {
 	}
 
 	public Map<String, String> getAttributes() {
-		return Collections.unmodifiableMap( attributes );
+		return attributes;
 	}
 
 	public BigDecimal getPrice() {

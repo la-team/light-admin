@@ -4,10 +4,7 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.Set;
-
-import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
 @Table( name = "Orders" )
@@ -24,7 +21,7 @@ public class Order extends AbstractEntity {
 
 	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
 	@JoinColumn( name = "order_id" )
-	private Set<LineItem> lineItems = newHashSet();
+	private Set<LineItem> lineItems;
 
 	/**
 	 * Creates a new {@link Order} for the given {@link Customer}.
@@ -98,7 +95,7 @@ public class Order extends AbstractEntity {
 	 * @return
 	 */
 	public Set<LineItem> getLineItems() {
-		return Collections.unmodifiableSet( lineItems );
+		return lineItems;
 	}
 
 	/**

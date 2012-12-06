@@ -4,10 +4,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
-import java.util.Collections;
 import java.util.Set;
-
-import static com.google.common.collect.Sets.newHashSet;
 
 @Entity
 public class Customer extends AbstractEntity {
@@ -25,7 +22,7 @@ public class Customer extends AbstractEntity {
 
 	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
 	@JoinColumn( name = "customer_id" )
-	private Set<Address> addresses = newHashSet();
+	private Set<Address> addresses;
 
 	public Customer( String firstname, String lastname ) {
 		Assert.hasText( firstname );
@@ -64,6 +61,6 @@ public class Customer extends AbstractEntity {
 	}
 
 	public Set<Address> getAddresses() {
-		return Collections.unmodifiableSet( addresses );
+		return addresses;
 	}
 }
