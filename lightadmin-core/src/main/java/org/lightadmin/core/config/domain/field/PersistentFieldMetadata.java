@@ -49,4 +49,10 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 	public boolean isSortable() {
 		return true;
 	}
+
+	@Override
+	public String getUuid() {
+		return attributeMetadata.getName();
+	}
+
 }

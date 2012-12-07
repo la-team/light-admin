@@ -12,12 +12,16 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.search.SpecificationCreator;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Link;
@@ -27,6 +31,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -38,6 +44,8 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -51,6 +59,8 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 	private final SpecificationCreator specificationCreator = new SpecificationCreator();
 
 	private GlobalAdministrationConfiguration configuration;
+
+    private ApplicationContext applicationContext;
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/{id}", method = RequestMethod.GET )
@@ -155,6 +165,34 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		}
 	}
 
+    @ExceptionHandler(RepositoryConstraintViolationException.class)
+    @ResponseBody
+    public ResponseEntity handleValidationFailure(RepositoryConstraintViolationException ex, ServletServerHttpRequest request) throws IOException {
+
+        Map packet = new HashMap();
+        List<Map> errors = new ArrayList<Map>();
+        for (FieldError fe : ex.getErrors().getFieldErrors()) {
+            List<Object> args = new ArrayList<Object>();
+            args.add(fe.getObjectName());
+            args.add(fe.getField());
+            args.add(fe.getRejectedValue());
+            if (null != fe.getArguments()) {
+                for (Object o : fe.getArguments()) {
+                    args.add(o);
+                }
+            }
+            String msg = applicationContext.getMessage(fe.getCode(), args.toArray(), fe.getDefaultMessage(), null);            
+            Map error = new HashMap<String, String>();
+            error.put("field", fe.getField());
+            error.put("message", msg);
+            errors.add(error);
+        }
+        packet.put("errors", errors);
+
+        return _negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+    }
+
+
 	private ResponseEntity<byte[]> _negotiateResponse(final ServletServerHttpRequest request, final HttpStatus status, final HttpHeaders headers, final Object resource) throws IOException {
 		Method negotiateResponseMethod = ReflectionUtils.findMethod( getClass(), "negotiateResponse", ServletServerHttpRequest.class, HttpStatus.class, HttpHeaders.class, Object.class );
 
@@ -195,4 +233,11 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
 		this.configuration = configuration;
 	}
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        super.setApplicationContext(applicationContext);
+        this.applicationContext = applicationContext;
+    }
+	
 }

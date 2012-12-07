@@ -1,3 +1,21 @@
+(function($) {
+$.fn.serializeFormJSON = function() {
+var o = {};
+var a = this.serializeArray();
+$.each(a, function() {
+	   if (o[this.name]) {
+		   if (!o[this.name].push) {
+			   o[this.name] = [o[this.name]];
+		   }
+		   o[this.name].push(this.value || '');
+	   } else {
+		   o[this.name] = this.value || '';
+	   }
+});
+return o;
+};
+})(jQuery);
+
 function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 
 	//extract name/value pairs into a simpler map for use later
@@ -24,17 +42,17 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 	restParams.push( { "name":sortName + ".dir", "value":sortDir } );
 
 	jQuery.ajax( {
-					 "dataType":'json',
-					 "type":"GET",
-					 "url":sSource,
-					 "data":restParams,
-					 "success":function ( data ) {
-						 data.iTotalRecords = data.page.totalElements;
-						 data.iTotalDisplayRecords = data.page.totalElements;
+					"dataType":'json',
+					"type":"GET",
+					"url":sSource,
+					"data":restParams,
+					"success":function ( data ) {
+						data.iTotalRecords = data.page.totalElements;
+						data.iTotalDisplayRecords = data.page.totalElements;
 
-						 fnCallback( data );
-					 }
-				 } );
+						fnCallback( data );
+					}
+				} );
 }
 
 function renderValue( value ) {
@@ -104,18 +122,80 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 			var aData = dataTable.fnGetData( nTr );
 			var restEntityUrl = aData.links[0].href;
 			jQuery.ajax( {
-				 "dataType" : 'json',
-				 "type" : "GET",
-				 "url" : restEntityUrl,
-				 "success":function ( data ) {
-					 var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
-					 $('div.innerDetails', nDetailsRow).hide();
-					 $('div.innerDetails', nDetailsRow).slideDown('slow', function () {
-						 infoImg.attr('src', "../images/details_close.png");
-						 infoImg.attr('title', "Click to hide Info");
-					 });
-				 }
+				"dataType" : 'json',
+				"type" : "GET",
+				"url" : restEntityUrl,
+				"success":function ( data ) {
+					var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
+					$('div.innerDetails', nDetailsRow).hide();
+					$('div.innerDetails', nDetailsRow).slideDown('slow', function () {
+						infoImg.attr('src', "../images/details_close.png");
+						infoImg.attr('title', "Click to hide Info");
+					});
+				}
 			} );
 		}
 	} );
+}
+
+
+var REST_REPO_URL;
+
+function loadDomainObject(form, restRepoUrl) {
+	REST_REPO_URL = restRepoUrl;
+	$.ajax({
+		type: 'GET',
+		url: restRepoUrl,
+		dataType : 'json',
+		success : function(data, textStatus) {
+			for (name in data) {
+				var editor = form.find('[name="' + name + '"]');
+				if (editor.length > 0) {
+					if ($.isPlainObject(data[name].value)) {
+						editor.val(data[name].value.stringRepresentation);
+					} else {
+						editor.val(data[name].value);
+					}
+				}
+			}
+		}
+	});
+}
+
+function updateDomainObject(domForm) {
+
+	var jsonForm = $(domForm).serializeFormJSON();
+	$.ajax({
+		type: 'PUT',
+		url: REST_REPO_URL + '?returnBody=true',
+		contentType: 'application/json',
+		data: JSON.stringify(jsonForm),
+		dataType : 'json',
+		success : function(data, textStatus) {
+			var link = $.grep(data.links, function(link) {
+				return link.rel == 'selfDomainLink';
+			})[0];
+			window.location = link.href;
+		},
+		statusCode : {
+			400 /* BAD_REQUEST */:
+				function(jqXHR) {
+					var data = $.parseJSON(jqXHR.responseText);
+					var errors = data.errors;
+					for (var i=0; i<errors.length; i++) {
+						var error = errors[i];
+						var messageDiv = $('#' + error.field + '-error');
+						if (messageDiv.length > 0) {
+							messageDiv.text(error.message);
+						}
+						var controlGroup = $('#' + error.field + '-control-group');
+						if (controlGroup.length > 0) {
+							controlGroup.addClass('error');
+						}
+					}
+				}
+		}
+	});
+
+	return false;
 }

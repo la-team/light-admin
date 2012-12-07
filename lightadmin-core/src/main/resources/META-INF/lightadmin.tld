@@ -30,6 +30,48 @@
 	</tag>
 
 	<tag>
+		<description>Renders html form element control</description>
+		<name>edit-control-dispatcher</name>
+		<tag-class>org.lightadmin.core.view.tags.form.EditControlDispatcherTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<description>Entity Attribute Metadata</description>
+			<name>attributeMetadata</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>simpleEditControl</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>booleanEditControl</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>dateEditControl</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>n2oneEditControl</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>n2manyEditControl</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
+			<name>mapEditControl</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+	</tag>
+	<tag>
 		<description>Renders dynamic entity attribute</description>
 		<name>attribute</name>
 		<tag-class>org.lightadmin.core.view.tags.AttributeRendererTag</tag-class>
@@ -48,6 +90,11 @@
 		</attribute>
 	</tag>
 
+<!--     <tag-file> -->
+<!--         <name>attribute-editor</name> -->
+<!--         <path>/WEB-INF/tags/edit-control.tag</path> -->
+<!--     </tag-file> -->
+
 	<function>
 		<name>primaryKeyPersistentField</name>
 		<function-class>org.lightadmin.core.config.domain.field.FieldMetadataUtils</function-class>
@@ -63,7 +110,7 @@
 	<function>
 		<name>domainRestEntityBaseUrl</name>
 		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-		<function-signature>java.lang.String domainRestEntityBaseUrl(java.lang.String,int)</function-signature>
+		<function-signature>java.lang.String domainRestEntityBaseUrl(java.lang.String,java.lang.Object)</function-signature>
 	</function>
 
 	<function>

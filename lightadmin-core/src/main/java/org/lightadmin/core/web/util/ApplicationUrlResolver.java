@@ -13,7 +13,7 @@ public final class ApplicationUrlResolver {
 		return "/rest/" + domainTypeName;
 	}
 
-	public static String domainRestEntityBaseUrl( String domainTypeName, int id ) {
+	public static String domainRestEntityBaseUrl( String domainTypeName, Object id ) {
 		return "/rest/" + domainTypeName  + "/" + id;
 	}
 

@@ -11,6 +11,7 @@ import org.springframework.data.rest.webmvc.*;
 import org.springframework.data.rest.webmvc.json.JsonSchemaController;
 import org.springframework.data.rest.webmvc.json.RepositoryAwareJacksonModule;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
@@ -60,7 +61,9 @@ public class LightAdminRepositoryRestConfiguration {
 	 */
 	@Bean
 	public ValidatingRepositoryEventListener validatingRepositoryEventListener() {
-		return new ValidatingRepositoryEventListener();
+		LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+		validator.afterPropertiesSet();
+		return new ValidatingRepositoryEventListener().addValidator("beforeSave", validator);
 	}
 
 	/**

@@ -2,8 +2,10 @@ package org.lightadmin.core.config.domain.show;
 
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
 
@@ -41,12 +43,19 @@ public class DefaultShowViewConfigurationUnit extends DomainTypeConfigurationUni
 
 	@Override
 	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
+
 		if ( containsPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() ) ) {
 			final PersistentFieldMetadata primaryKeyField = getPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() );
 			primaryKeyField.setPrimaryKey( true );
-			return;
+		} else {
+			fields = addPrimaryKeyPersistentField( fields, domainTypeEntityMetadata.getIdAttribute() );
 		}
 
-		fields = addPrimaryKeyPersistentField( fields, domainTypeEntityMetadata.getIdAttribute() );
+		for (FieldMetadata field : fields) {
+			if (field instanceof DomainTypeAttributeMetadataAware && field instanceof Persistable) {
+				((DomainTypeAttributeMetadataAware) field).setAttributeMetadata(domainTypeEntityMetadata.getAttribute(((Persistable) field).getField()));
+			}
+		}
+
 	}
 }
