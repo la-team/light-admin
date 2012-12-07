@@ -3,20 +3,61 @@ package org.lightadmin.component;
 import org.lightadmin.SeleniumContext;
 import org.lightadmin.util.WebElementTransformer;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 
-public class QuickViewComponent extends BaseComponent {
+import static org.junit.Assert.fail;
 
-	private final WebElement quickViewContainerElement;
+public class QuickViewComponent extends DynamicComponent<QuickViewComponent> {
 
-	public QuickViewComponent( final WebElement quickViewContainerElement, SeleniumContext seleniumContext ) {
+	private final WebElement dataTableElement;
+	private final int itemId;
+
+	public QuickViewComponent( int itemId, WebElement dataTableElement, SeleniumContext seleniumContext ) {
 		super( seleniumContext );
-		this.quickViewContainerElement = quickViewContainerElement;
 
-		waitForElementVisible( this.quickViewContainerElement );
+		this.itemId = itemId;
+		this.dataTableElement = dataTableElement;
 	}
 
 	public String[] getQuickViewFieldNames() {
-		return WebElementTransformer.transformToArray( quickViewContainerElement.findElements( By.tagName( "dt" ) ) );
+		return WebElementTransformer.transformToArray( getQuickViewContainter().findElements( By.tagName( "dt" ) ) );
+	}
+
+	public QuickViewComponent hide() {
+		getHideButton().click();
+
+		return this;
+	}
+
+	@Override
+	protected void isLoaded() throws Error {
+		try {
+			webDriver().waitForElementVisible( getQuickViewContainter() );
+		} catch ( NoSuchElementException e ) {
+			fail( "Quick View Component for is not visible" );
+		}
+		try {
+			webDriver().waitForElementVisible( getHideButton() );
+		} catch ( NoSuchElementException e ) {
+			fail( "Hide button is not visible" );
+		}
+	}
+
+	@Override
+	protected void load() {
+		getShowButton().click();
+	}
+
+	private WebElement getShowButton() {
+		return dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to show Info']" ) );
+	}
+
+	private WebElement getHideButton() {
+		return dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to hide Info']" ) );
+	}
+
+	private WebElement getQuickViewContainter() {
+		return dataTableElement.findElement( By.id( "quickView-" + itemId ) );
 	}
 }

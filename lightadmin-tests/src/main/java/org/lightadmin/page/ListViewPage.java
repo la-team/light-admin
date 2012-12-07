@@ -44,13 +44,13 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	@Override
 	protected void isLoaded() throws Error {
 		try {
-			waitForElementVisible( listViewTable );
+			webDriver().waitForElementVisible( listViewTable );
 		} catch ( TimeoutException e) {
 			fail( "ListViewTable was not found on ListViewPage" );
 		}
 
 		try {
-			waitForElementVisible( getScope( DEFAULT_SCOPE_LABEL ) );
+			webDriver().waitForElementVisible( getScope( DEFAULT_SCOPE_LABEL ) );
 		} catch ( TimeoutException e) {
 			fail( "Default scope is not displayed" );
 		}

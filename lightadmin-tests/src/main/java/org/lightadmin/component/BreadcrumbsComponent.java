@@ -7,7 +7,7 @@ import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class BreadcrumbsComponent extends BaseComponent {
+public class BreadcrumbsComponent extends StaticComponent {
 
 	@FindBy( xpath = "//ul[@id='breadcrumb']" )
 	private WebElement breadcrumbsContainer;

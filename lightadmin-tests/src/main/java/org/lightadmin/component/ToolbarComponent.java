@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class ToolbarComponent extends BaseComponent {
+public class ToolbarComponent extends StaticComponent {
 
 	@FindBy( id = "settings-menu" )
 	private WebElement settingsMenu;
@@ -35,6 +35,6 @@ public class ToolbarComponent extends BaseComponent {
 	}
 
 	public boolean isLoggedIn() {
-		return isElementPresent( userMenu );
+		return webDriver().isElementPresent( userMenu );
 	}
 }

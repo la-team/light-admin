@@ -7,7 +7,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class NavigationMenuComponent extends BaseComponent {
+public class NavigationMenuComponent extends StaticComponent {
 
 	@FindBy( className = "menu-sidenav" )
 	private WebElement navigationMenuContainer;

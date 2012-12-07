@@ -5,7 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
-public class FilterFormComponent extends BaseComponent {
+public class FilterFormComponent extends StaticComponent {
 
 	@FindBy( name = "filter-form" )
 	private WebElement filterForm;
@@ -27,7 +27,7 @@ public class FilterFormComponent extends BaseComponent {
 	public void filter( String filterField, String filterValue ) {
 		WebElement field = filterForm.findElement( By.name( filterField ) );
 
-		clearAndType( field, filterValue );
+		webDriver().clearAndType( field, filterValue );
 
 		searchButton.click();
 	}
