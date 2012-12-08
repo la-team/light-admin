@@ -135,7 +135,7 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 			jQuery.ajax( {
 				"dataType" : 'json',
 				"type" : "GET",
-				"url" : restEntityUrl,
+				"url" : restEntityUrl + '/unit/quickView',
 				"success":function ( data ) {
 					var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
 					$('div.innerDetails', nDetailsRow).hide();
@@ -175,7 +175,7 @@ function loadDomainObject(form, restRepoUrl) {
 	REST_REPO_URL = restRepoUrl;
 	$.ajax({
 		type: 'GET',
-		url: restRepoUrl,
+		url: restRepoUrl + '/unit/formView',
 		dataType : 'json',
 		success : function(data, textStatus) {
 			for (name in data) {

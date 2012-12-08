@@ -4,7 +4,6 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
-import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;

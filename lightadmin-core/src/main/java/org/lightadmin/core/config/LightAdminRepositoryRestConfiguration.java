@@ -47,6 +47,12 @@ public class LightAdminRepositoryRestConfiguration {
 	}
 
 	@Bean
+	@Autowired
+	public DomainTypeResourceModule domainTypeResourceModule( DomainTypeToResourceConverter domainTypeToResourceConverter ) {
+		return new DomainTypeResourceModule( domainTypeToResourceConverter );
+	}
+
+	@Bean
 	public HttpMessageConverterRefresher httpMessageConverterRefresher() {
 		return new HttpMessageConverterRefresher();
 	}

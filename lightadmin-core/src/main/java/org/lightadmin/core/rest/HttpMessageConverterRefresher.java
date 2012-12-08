@@ -20,6 +20,9 @@ public class HttpMessageConverterRefresher implements BeanFactoryAware {
 	@Autowired
 	private RepositoryAwareMappingHttpMessageConverter repositoryAwareMappingHttpMessageConverter;
 
+	@Autowired
+	private DomainTypeResourceModule domainTypeResourceModule;
+
 	private AutowireCapableBeanFactory autowireCapableBeanFactory;
 
 	public void refresh() {
@@ -51,6 +54,7 @@ public class HttpMessageConverterRefresher implements BeanFactoryAware {
 	private void setModulesFieldValue( final RepositoryAwareJacksonModule repositoryAwareJacksonModule ) {
 		List<Module> modules = Lists.newArrayList();
 		modules.add( repositoryAwareJacksonModule );
+		modules.add( domainTypeResourceModule );
 
 		final Field modulesField = ReflectionUtils.findField( RepositoryAwareMappingHttpMessageConverter.class, "modules" );
 		ReflectionUtils.makeAccessible( modulesField );

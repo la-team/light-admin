@@ -37,8 +37,7 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		this.restConfiguration = restConfiguration;
 	}
 
-	@Override
-	public Resource convert( final Object source ) {
+	public Resource convert( final Object source, Set<FieldMetadata> fieldMetadatas ) {
 		if ( source == null ) {
 			return new Resource<Object>( source );
 		}
@@ -56,15 +55,29 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 
 		addObjectStringRepresentation( entityResource, domainTypeConfiguration, source );
 
-		for ( FieldMetadata field : fieldsForListView( domainTypeConfiguration ) ) {
+		for ( FieldMetadata field : fieldMetadatas ) {
 			addFieldAttributeValue( entityResource, field, source );
 		}
 
 		return entityResource;
 	}
 
-	private Set<FieldMetadata> fieldsForListView( final DomainTypeAdministrationConfiguration domainTypeConfiguration ) {
-		return domainTypeConfiguration.getListViewFragment().getFields();
+	@Override
+	public Resource convert( final Object source ) {
+		if ( source == null ) {
+			return new Resource<Object>( source );
+		}
+
+		final DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forDomainType( source.getClass() );
+		if ( domainTypeConfiguration == null ) {
+			return new Resource<Object>( source );
+		}
+
+		return convert( source, fieldsForShowView( domainTypeConfiguration ) );
+	}
+
+	private Set<FieldMetadata> fieldsForShowView( final DomainTypeAdministrationConfiguration domainTypeConfiguration ) {
+		return domainTypeConfiguration.getShowViewFragment().getFields();
 	}
 
 	private void addObjectStringRepresentation( final EntityResource resource, final DomainTypeAdministrationConfiguration configuration, final Object source ) {

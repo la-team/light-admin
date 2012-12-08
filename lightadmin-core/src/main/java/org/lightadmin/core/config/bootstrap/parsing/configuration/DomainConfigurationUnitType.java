@@ -7,7 +7,9 @@ public enum DomainConfigurationUnitType {
 	LIST_VIEW( "listView" ),
 	SCOPES( "scopes" ),
 	FILTERS( "filters" ),
-	SHOW_VIEW( "showView" );
+	SHOW_VIEW( "showView" ),
+	FORM_VIEW( "formView" ),
+	QUICK_VIEW( "quickView" );
 
 	private final String name;
 

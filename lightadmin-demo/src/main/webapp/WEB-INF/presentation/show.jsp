@@ -53,5 +53,5 @@
 </table>
 
 <script type="text/javascript">
-	loadDomainObjectForShowView($('#data-section'), '${domainObjectUrl}');
+	loadDomainObjectForShowView($('#data-section'), '${domainObjectUrl}/unit/showView');
 </script>

@@ -57,6 +57,6 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
 	}
 
 	private boolean isEmptyShowViewConfigurationUnit( ConfigurationUnit configurationUnit ) {
-		return ClassUtils.isAssignableValue( ShowViewConfigurationUnit.class, configurationUnit ) && ( ( ShowViewConfigurationUnit ) configurationUnit ).iterator().hasNext();
+		return ClassUtils.isAssignableValue( ShowViewConfigurationUnit.class, configurationUnit ) && ( ( ShowViewConfigurationUnit ) configurationUnit ).getFields().isEmpty();
 	}
 }
