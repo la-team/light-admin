@@ -12,6 +12,8 @@ import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
+import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnitBuilder;
 import org.lightadmin.demo.model.Customer;
 import org.springframework.data.jpa.domain.Specification;
 
@@ -38,6 +40,13 @@ public class CustomerAdministration {
 	}
 
 	public static ListViewConfigurationUnit listView( final ListViewConfigurationUnitBuilder fragmentBuilder ) {
+		return fragmentBuilder
+			.field( "firstname" ).alias( "First Name")
+			.field( "lastname" ).alias("Last Name")
+			.field( "emailAddress" ).alias( "Email Address" ).build();
+	}
+
+	public static ShowViewConfigurationUnit showView( final ShowViewConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 			.field( "firstname" ).alias( "First Name")
 			.field( "lastname" ).alias("Last Name")

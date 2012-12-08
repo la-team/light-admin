@@ -149,6 +149,25 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 	} );
 }
 
+function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
+	$.ajax({
+			   type: 'GET',
+			   url: restRepoUrl,
+			   dataType : 'json',
+			   success : function(data) {
+				   for (name in data) {
+					   var field = showViewSection.find('[name="field-' + name + '"]');
+					   if (field.length > 0) {
+						   if ($.isPlainObject(data[name].value)) {
+							   field.html(renderValue(data[name].value));
+						   } else {
+							   field.html(data[name].value);
+						   }
+					   }
+				   }
+			   }
+		   });
+}
 
 var REST_REPO_URL;
 

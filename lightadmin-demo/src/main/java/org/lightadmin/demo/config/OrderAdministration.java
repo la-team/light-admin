@@ -9,6 +9,8 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitB
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
+import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
+import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnitBuilder;
 import org.lightadmin.demo.model.LineItem;
 import org.lightadmin.demo.model.Order;
 import org.springframework.util.StringUtils;
@@ -32,6 +34,14 @@ public class OrderAdministration {
 	}
 
 	public static ListViewConfigurationUnit listView( ListViewConfigurationUnitBuilder fragmentBuilder ) {
+		return fragmentBuilder
+			.field( "customer" ).alias( "Customer" )
+			.field( "billingAddress" ).alias( "Billing Address" )
+			.field( "shippingAddress" ).alias( "Shipping Address" )
+			.field( "lineItems" ).alias( "Order Items" ).renderer( lineItemsFieldValueRenderer() ).build();
+	}
+
+	public static ShowViewConfigurationUnit showView( final ShowViewConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 			.field( "customer" ).alias( "Customer" )
 			.field( "billingAddress" ).alias( "Billing Address" )

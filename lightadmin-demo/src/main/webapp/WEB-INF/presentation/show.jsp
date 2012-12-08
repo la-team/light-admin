@@ -27,7 +27,7 @@
 
 <c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
 
-<spring:url var="domainRestEntityBaseUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
+<spring:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
 
 <div class="page-header">
 	<h2>Show <c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h2>
@@ -41,33 +41,17 @@
 	</tr>
 	</thead>
 
-	<tbody id="data-section"></tbody>
+	<tbody id="data-section">
+		<c:forEach var="field" items="${fields}">
+			<tr>
+				<td><c:out value="${field.name}"/></td>
+				<td name="field-${field.uuid}">&nbsp;</td>
+			</tr>
+		</c:forEach>
+	</tbody>
 
 </table>
 
 <script type="text/javascript">
-
-	function buildShowView( data ) {
-		for (var prop in data) {
-			if ( prop != 'links' && prop != 'stringRepresentation') {
-				var name = data[prop]['name'] !== undefined ? data[prop]['name'] : prop;
-				var value = data[prop]['value'] !== undefined ? data[prop]['value'] : data[prop];
-
-				var tr = "<tr><td>" + name + "</td><td>" + renderValue(value) + "</td></tr>";
-
-				$("#data-section" ).append(tr);
-			}
-		}
-	}
-
-	$(function() {
-		jQuery.ajax( {
-			 "dataType" : 'json',
-			 "type" : "GET",
-			 "url" : '${domainRestEntityBaseUrl}',
-			 "success":function ( data ) {
-				 buildShowView( data );
-			 }
-		 } );
-	});
+	loadDomainObjectForShowView($('#data-section'), '${domainObjectUrl}');
 </script>
