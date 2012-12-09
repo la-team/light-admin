@@ -63,7 +63,8 @@ public class CustomerAdministration {
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
 		return filterBuilder
 			.filter( "First Name", "firstname" ).renderer( select( new String[] { "Yes", "No" } ))
-			.filter( "Last Name", "lastname" ).build();
+			.filter( "Last Name", "lastname" )
+			.filter( "Email Address", "emailAddress" ).build();
 	}
 
 	public static Specification<Customer> customerNameEqDave() {

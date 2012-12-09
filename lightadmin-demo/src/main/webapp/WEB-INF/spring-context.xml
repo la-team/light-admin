@@ -15,8 +15,8 @@
 	</bean>
 
 	<jdbc:embedded-database id="dataSource" type="HSQL">
-		<jdbc:script location="classpath:db/schema.sql"/>
-		<jdbc:script location="classpath:db/data.sql"/>
+		<jdbc:script location="classpath:db/schema.sql" encoding="UTF-8"/>
+		<jdbc:script location="classpath:db/data.sql" encoding="UTF-8"/>
 	</jdbc:embedded-database>
 
 </beans>

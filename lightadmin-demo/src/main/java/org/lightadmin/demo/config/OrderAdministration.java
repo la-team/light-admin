@@ -6,6 +6,8 @@ import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurati
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
@@ -47,6 +49,13 @@ public class OrderAdministration {
 			.field( "billingAddress" ).alias( "Billing Address" )
 			.field( "shippingAddress" ).alias( "Shipping Address" )
 			.field( "lineItems" ).alias( "Order Items" ).renderer( lineItemsFieldValueRenderer() ).build();
+	}
+
+	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
+		return filterBuilder
+			.filter( "Customer", "customer" )
+			.filter( "Billing Address", "billingAddress" )
+			.filter( "Shipping Address", "shippingAddress" ).build();
 	}
 
 	private static EntityNameExtractor<Order> orderNameExtractor() {

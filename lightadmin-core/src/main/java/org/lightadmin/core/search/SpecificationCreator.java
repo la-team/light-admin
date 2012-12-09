@@ -1,9 +1,11 @@
 package org.lightadmin.core.search;
 
 import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.ClassUtils;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -33,7 +35,12 @@ public class SpecificationCreator {
 							continue;
 						}
 
-						javax.persistence.criteria.Predicate attributePredicate = builder.like( root.<String>get( attributeName ), "%" + parameterValue + "%" );
+						javax.persistence.criteria.Predicate attributePredicate;
+						if ( ClassUtils.isAssignable( Number.class, attribute.getType() ) && NumberUtils.isNumber( parameterValue ) ) {
+							attributePredicate = builder.equal( root.<String>get( attributeName ), org.springframework.util.NumberUtils.parseNumber( parameterValue, ( Class<? extends Number>)attribute.getType() ) );
+						} else {
+							attributePredicate = builder.like( root.<String>get( attributeName ), "%" + parameterValue + "%" );
+						}
 
 						attributesPredicates.add( attributePredicate );
 					}

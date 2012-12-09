@@ -26,7 +26,7 @@
 </breadcrumb:breadcrumb>
 
 <div class="page-header">
-	<h2>Edit <c:out value="${domainTypeName}"/></h2>
+	<h2>Edit <c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h2>
 </div>
 
 <form id="editForm" onsubmit="return updateDomainObject(this)" class="form-horizontal">

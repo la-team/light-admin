@@ -6,6 +6,8 @@ import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurati
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
@@ -35,6 +37,13 @@ public class AddressAdministration {
 		return fragmentBuilder.field( "country" ).alias( "Country" )
 							  .field( "city" ).alias( "City" )
 							  .field( "street" ).alias( "Street" ).build();
+	}
+
+	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
+		return filterBuilder
+			.filter( "Country", "country" )
+			.filter( "City", "city" )
+			.filter( "Street", "street" ).build();
 	}
 
 	private static EntityNameExtractor<Address> addressNameExtractor() {

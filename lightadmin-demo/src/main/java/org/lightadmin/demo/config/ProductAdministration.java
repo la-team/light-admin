@@ -5,6 +5,8 @@ import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurati
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
+import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
@@ -37,5 +39,12 @@ public class ProductAdministration {
 			.field( "name" ).alias( "Name")
 			.field( "description" ).alias("Description")
 			.field( "price" ).alias("Price").build();
+	}
+
+	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
+		return filterBuilder
+			.filter( "Name", "name" )
+			.filter( "Description", "description" )
+			.filter( "Price", "price" ).build();
 	}
 }

@@ -2,9 +2,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="form" tagdir="/WEB-INF/tags" %>
 
 <%@ attribute name="filters" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit"%>
 
@@ -17,14 +17,12 @@
 		<form action="" name="filter-form" class="form-horizontal">
 			<fieldset>
 				<c:forEach var="filter" items="${tag_search_filterList}">
-					<c:if test="${light:isSimpleValueType(filter.type)}">
-						<div class="control-group">
-							<label class="control-label" for="${filter.fieldName}"><c:out value="${filter.name}"/></label>
-							<div class="controls">
-								<input name="${filter.fieldName}" type="text" class="input-xlarge"/>
-							</div>
+					<div class="control-group">
+						<label class="control-label" for="${filter.attributeMetadata.name}"><c:out value="${light:capitalize(filter.name)}"/></label>
+						<div class="controls">
+							<form:edit-control attributeMetadata="${filter.attributeMetadata}" cssClass="input-xlarge" errorCssClass="help-inline"/>
 						</div>
-					</c:if>
+					</div>
 				</c:forEach>
 			</fieldset>
 			<div class="controls">

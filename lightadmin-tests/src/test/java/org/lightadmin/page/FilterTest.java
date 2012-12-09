@@ -30,7 +30,7 @@ public class FilterTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void canFilterByIntegerField() {
-		productListViewPage.filter( "integerField", "12345567" );
+		productListViewPage.filter( "integerField", "1234567" );
 
 		assertTableData( expectedResult1, productListViewPage.getDataTable() );
 	}
@@ -59,14 +59,14 @@ public class FilterTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void canFilterByTextWithSpecialCharacters() {
-		productListViewPage.filter( "textField", "#<,&«$''(*@×¢¤₤€¥ª ™®© Аб/Cd ØøÅåÆæĈę123 ¦_{~>½" );
+		productListViewPage.filter( "textField", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½" );
 
 		assertTableData( expectedResult3, productListViewPage.getDataTable() );
 	}
 
 	private static final String[][] expectedResult1 = {{"1", "integer search test", "1234567", "22.2"}};
 	private static final String[][] expectedResult2 = {{"2", "decimal search test", "456", "1499.99"}};
-	private static final String[][] expectedResult3 = {{"3", "#<,&«$'(*@×¢¤₤€¥ª ™®© Аб/Cd ØøÅåÆæĈę123 ¦_{~>½", "789", "22.2"}};
+	private static final String[][] expectedResult3 = {{"3", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½", "789", "22.2"}};
 	private static final String[][] expectedResult4 = {{"4", "Case Sensitivity Test", "901", "22.2"}};
 	private static final String[][] expectedResult5 = {
 		{"6", "query partial search test", "234", "22.2"},
