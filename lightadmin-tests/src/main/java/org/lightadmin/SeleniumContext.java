@@ -10,10 +10,12 @@ public class SeleniumContext {
 
 	private final ExtendedWebDriver webDriver;
 	private final URL baseUrl;
+	private long webDriverTimeout;
 
 	public SeleniumContext( final WebDriver webDriver, final URL baseUrl, final long webDriverWaitTimeout ) {
 		this.webDriver = new ExtendedWebDriverImpl( webDriver, webDriverWaitTimeout );
 		this.baseUrl = baseUrl;
+		this.webDriverTimeout = webDriverWaitTimeout;
 	}
 
 	public ExtendedWebDriver getWebDriver() {
@@ -26,5 +28,9 @@ public class SeleniumContext {
 
 	public void destroy() {
 		webDriver.quit();
+	}
+
+	public long getWebDriverWaitTimeout() {
+		return webDriverTimeout;
 	}
 }

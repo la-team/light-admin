@@ -17,7 +17,9 @@ import org.springframework.test.context.support.AnnotationConfigContextLoader;
 
 import javax.annotation.Nullable;
 import java.net.URL;
+import java.util.Arrays;
 
+import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -68,9 +70,23 @@ public abstract class SeleniumIntegrationTest {
 		}
 	}
 
+	protected void assertQuickViewFields( String[] expectedFields, String[] actualFields ) {
+		assertArrayEquals(
+				String.format( "Wrong field list on Quick View. Expected fields: %s, actual fields: %s",
+						Arrays.toString( expectedFields ), Arrays.toString( actualFields ) ),
+				expectedFields, actualFields );
+	}
+
+	protected void assertQuickViewFieldValues( String[] expectedValues, String[] actualValues ) {
+		assertArrayEquals(
+				String.format( "Wrong field values on Quick View. Expected field values: %s, actual field values: %s",
+						Arrays.toString( expectedValues ), Arrays.toString( actualValues ) ),
+				expectedValues, actualValues );
+	}
+
 	private void assertTableRowCount( final String[][] expectedData, final DataTableComponent dataTable ) {
 		try {
-			new WebDriverWait( webDriver(), 5 ).until( new ExpectedCondition<Boolean>() {
+			new WebDriverWait( webDriver(), seleniumContext.getWebDriverWaitTimeout() ).until( new ExpectedCondition<Boolean>() {
 				@Override
 				public Boolean apply( @Nullable WebDriver input ) {
 					return expectedData.length == dataTable.getRowCount();

@@ -24,6 +24,8 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 			return webElement.isDisplayed();
 		} catch ( NoSuchElementException ex ) {
 			return false;
+		} catch ( StaleElementReferenceException e ) {
+			return false;
 		}
 	}
 
@@ -38,7 +40,17 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 		new WebDriverWait( webDriver, webDriverTimeout ).until( new Predicate<WebDriver>() {
 			@Override
 			public boolean apply( @Nullable WebDriver input ) {
-				return element.isDisplayed();
+				return isElementPresent( element );
+			}
+		} );
+	}
+
+	@Override
+	public void waitForElementInvisible( final WebElement element ) {
+		new WebDriverWait( webDriver, webDriverTimeout ).until( new Predicate<WebDriver>() {
+			@Override
+			public boolean apply( @Nullable WebDriver input ) {
+				return !isElementPresent( element );
 			}
 		} );
 	}
