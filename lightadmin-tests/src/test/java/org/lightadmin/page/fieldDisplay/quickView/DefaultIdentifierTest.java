@@ -12,6 +12,8 @@ import org.lightadmin.page.ListViewPage;
 import org.lightadmin.page.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.lightadmin.util.DomainAsserts.assertQuickViewFields;
+
 public class DefaultIdentifierTest extends SeleniumIntegrationTest {
 
 	@Autowired

@@ -21,8 +21,6 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	@FindBy( id = "listViewTable" )
 	private WebElement listViewTable;
 
-    private WebElement scope;
-
 	private FilterFormComponent filterFormComponent;
 
 	public ListViewPage( SeleniumContext seleniumContext, Domain domain  ) {

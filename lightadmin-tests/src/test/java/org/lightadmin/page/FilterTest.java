@@ -9,6 +9,8 @@ import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.lightadmin.util.DomainAsserts.assertTableData;
+
 public class FilterTest extends SeleniumIntegrationTest {
 
 	@Autowired
@@ -32,28 +34,28 @@ public class FilterTest extends SeleniumIntegrationTest {
 	public void canFilterByIntegerField() {
 		productListViewPage.filter( "integerField", "1234567" );
 
-		assertTableData( expectedResult1, productListViewPage.getDataTable() );
+		assertTableData( expectedResult1, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void canFilterByDecimalField() {
 		productListViewPage.filter( "decimalField", "1499.99" );
 
-		assertTableData( expectedResult2, productListViewPage.getDataTable() );
+		assertTableData( expectedResult2, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void textFilterIsCaseSensitive() {
 		productListViewPage.filter( "textField", "Case Sensitivity Test" );
 
-		assertTableData( expectedResult4, productListViewPage.getDataTable() );
+		assertTableData( expectedResult4, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void canFilterByPartialTextQuery() {
 		productListViewPage.filter( "textField", "query" );
 
-		assertTableData( expectedResult5, productListViewPage.getDataTable() );
+		assertTableData( expectedResult5, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 
@@ -61,7 +63,7 @@ public class FilterTest extends SeleniumIntegrationTest {
 	public void canFilterByTextWithSpecialCharacters() {
 		productListViewPage.filter( "textField", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½" );
 
-		assertTableData( expectedResult3, productListViewPage.getDataTable() );
+		assertTableData( expectedResult3, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	private static final String[][] expectedResult1 = {{"1", "integer search test", "1234567", "22.2"}};

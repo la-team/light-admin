@@ -8,6 +8,7 @@ import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
+import static org.lightadmin.util.DomainAsserts.assertTableData;
 
 public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
@@ -37,7 +38,7 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 
 		customerListViewPage.filter( "lastname", "Matthews1" );
-		assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable() );
+		assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 
 		customerListViewPage.resetFilter();
 		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
@@ -46,14 +47,14 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 	@Test
 	public void scopeIsAppliedToFilteredCustomers() {
 		customerListViewPage.filter( "lastname", "Matthews1" );
-		assertTableData( expectedFilteredCustomers, customerListViewPage.getDataTable() );
+		assertTableData( expectedFilteredCustomers, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 
 		customerListViewPage.selectScope( SELLERS_SCOPE );
 		assertScopeIsApplied( expectedFilteredAndScopedCustomers, SELLERS_SCOPE );
 	}
 
 	private void assertScopeIsApplied( String[][] expectedData, String scope ) {
-		assertTableData( expectedData, customerListViewPage.getDataTable() );
+		assertTableData( expectedData, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 
 		assertTrue( "Selected scope is not highlighted", customerListViewPage.scopeIsHighlighted( scope ) );
 	}

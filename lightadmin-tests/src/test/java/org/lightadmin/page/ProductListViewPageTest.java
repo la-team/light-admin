@@ -8,6 +8,8 @@ import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.lightadmin.util.DomainAsserts.assertTableData;
+
 public class ProductListViewPageTest extends SeleniumIntegrationTest {
 
 	@Autowired
@@ -33,7 +35,7 @@ public class ProductListViewPageTest extends SeleniumIntegrationTest {
 	}
 
 	private void assertProductsDisplayed( final String[][] expectedProducts ) {
-		assertTableData( expectedProducts, listViewPage.getDataTable() );
+		assertTableData( expectedProducts, listViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	private static final String[][] expectedProducts = {
