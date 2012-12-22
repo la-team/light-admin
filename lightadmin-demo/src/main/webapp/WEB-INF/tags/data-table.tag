@@ -113,6 +113,8 @@
 		searchScope(activeScopeName());
 
 		bindInfoClickHandlers( tableElement, dataTable );
+
+		$("select, input:checkbox, input:radio, input:file").uniform();
 	});
 
 	function renderActions(entityId) {
