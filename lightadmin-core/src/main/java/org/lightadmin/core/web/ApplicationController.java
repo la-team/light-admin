@@ -18,6 +18,7 @@ public class ApplicationController {
 
 	private static final Logger LOG = LoggerFactory.getLogger( ApplicationController.class );
 
+	public static final String ADMINISTRATION_CONFIGURATION_KEY = "administrationConfiguration";
 	public static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = "domainTypeAdministrationConfiguration";
 
 	@Autowired
@@ -64,6 +65,7 @@ public class ApplicationController {
 	}
 
 	private void addDomainTypeConfigurationToModel( String domainTypeName, Model model ) {
+		model.addAttribute( ADMINISTRATION_CONFIGURATION_KEY, configuration );
 		model.addAttribute( DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration.forEntityName( domainTypeName ) );
 	}
 

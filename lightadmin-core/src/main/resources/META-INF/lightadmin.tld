@@ -71,6 +71,29 @@
 			<fragment>true</fragment>
 		</attribute>
 	</tag>
+
+	<tag>
+		<description>Loops over all elements of the specified domain type</description>
+		<name>domain-type-elements</name>
+		<tag-class>org.lightadmin.core.view.tags.form.DomainTypeElementsTag</tag-class>
+		<body-content>scriptless</body-content>
+		<attribute>
+			<name>domainType</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>idVar</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>stringRepresentationVar</name>
+			<required>true</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
 	<tag>
 		<description>Renders dynamic entity attribute</description>
 		<name>attribute</name>

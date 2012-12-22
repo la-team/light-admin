@@ -51,6 +51,11 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 	}
 
 	@Override
+	public boolean isAssociation() {
+		return attribute.isAssociation();
+	}
+
+	@Override
 	public Object getValue( final Object target ) {
 		return attributeMetadata.get( target );
 	}

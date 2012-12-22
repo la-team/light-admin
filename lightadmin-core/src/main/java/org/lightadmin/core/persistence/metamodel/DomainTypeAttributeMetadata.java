@@ -47,6 +47,13 @@ public interface DomainTypeAttributeMetadata {
 	boolean isMapLike();
 
 	/**
+	 * Does this attribute represent association with another domain type ?
+	 *
+	 * @return {@literal true} if it does.
+	 */
+	boolean isAssociation();
+
+	/**
 	 * Get the path of this attribute.
 	 *
 	 * @param target The entity to inspect for this attribute.
