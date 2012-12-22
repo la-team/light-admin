@@ -4,10 +4,9 @@
 <%@ attribute name="attributeMetadata" required="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
-<select name="${attributeMetadata.name}" multiple="multiple" class="${cssClass}">
+<select name="${attributeMetadata.name}" multiple="multiple" class="multiple">
 <light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId" stringRepresentationVar="elementName">
 	<option value="${elementId}"><c:out value="${elementName}" escapeXml="true"/></option>
 </light:domain-type-elements>
 </select>
-<div id="${attributeMetadata.name}-error" class="${errorCssClass}"></div>
-
+<label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>

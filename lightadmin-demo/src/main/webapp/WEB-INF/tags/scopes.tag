@@ -17,10 +17,15 @@
 <c:set var="tag_scopes_scopeList" value="<%= Iterables.toArray( scopes, org.lightadmin.core.config.domain.scope.ScopeMetadata.class ) %>"/>
 
 <c:if test="${not empty tag_scopes_scopeList}">
-	<div class="well well-small" id="scopes">
-		<c:forEach var="scope" items="${tag_scopes_scopeList}">
-			<a scope-name="${scope.name}" class="scope label ${scope.defaultScope ? 'active label-success' : 'label-warning' }" href="#${scope.name}"><c:out value="${scope.name}"/></a>&nbsp;
-		</c:forEach>
+	<div class="scopes" id="scopes">
+		<ul>
+			<c:forEach var="scope" items="${tag_scopes_scopeList}">
+				<li>
+					<a scope-name="${scope.name}" class="scope ${scope.defaultScope ? 'active green' : 'blue' }" href="#${scope.name}"><c:out value="${scope.name}"/></a>
+				</li>
+			</c:forEach>
+		</ul>
+		<div class="fix"></div>
 	</div>
 </c:if>
 
@@ -34,9 +39,9 @@
 	}
 
 	function activateScope( scope ) {
-		$("a.scope.active").removeClass("active label-success").addClass("label-warning");
+		$("a.scope.active").removeClass("active green").addClass("blue");
 
-		$(scope).addClass("active label-success" ).removeClass("label-warning");
+		$(scope).addClass("active green" ).removeClass("blue");
 	}
 
 	function searchScope( scopeName, search_criteria ) {

@@ -29,6 +29,11 @@ public class ApplicationController {
 		return "redirect:/";
 	}
 
+	@RequestMapping( value = "/login", method = RequestMethod.GET )
+	public String login() {
+		return "login";
+	}
+
 	@RequestMapping( value = "/", method = RequestMethod.GET )
 	public String root() {
 		return "redirect:/dashboard";
@@ -36,14 +41,14 @@ public class ApplicationController {
 
 	@RequestMapping( value = "/dashboard", method = RequestMethod.GET )
 	public String dashboard() {
-		return "dashboardView";
+		return "dashboard-view";
 	}
 
 	@RequestMapping( value = "/domain/{domainType}", method = RequestMethod.GET )
 	public String list( @PathVariable String domainType, Model model ) {
 		addDomainTypeConfigurationToModel( domainType, model );
 
-		return "listView";
+		return "list-view";
 	}
 
 	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET )
@@ -52,7 +57,7 @@ public class ApplicationController {
 
 		model.addAttribute( "entity", repositoryForEntity( domainTypeName ).findOne( entityId ) );
 
-		return "showView";
+		return "show-view";
 	}
 
 	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET )
@@ -61,7 +66,7 @@ public class ApplicationController {
 
 		model.addAttribute( "entity", repositoryForEntity( domainTypeName ).findOne( entityId ) );
 
-		return "editView";
+		return "edit-view";
 	}
 
 	private void addDomainTypeConfigurationToModel( String domainTypeName, Model model ) {

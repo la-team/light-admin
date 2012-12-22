@@ -38,11 +38,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Override
-	public void addViewControllers( final ViewControllerRegistry registry ) {
-		registry.addViewController( "/login" ).setViewName( "login" );
-	}
-
-	@Override
 	public void addResourceHandlers( ResourceHandlerRegistry registry ) {
 		registry.addResourceHandler( "/styles/**" ).addResourceLocations( "/styles/" ).setCachePeriod( 31556926 );
 		registry.addResourceHandler( "/scripts/**" ).addResourceLocations( "/scripts/" );

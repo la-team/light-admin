@@ -2,27 +2,36 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
+<%@ taglib prefix="light-tag" tagdir="/WEB-INF/tags" %>
 
 <%@ attribute name="domainTypeName" required="true" type="java.lang.String"%>
 <%@ attribute name="fields" required="true" type="java.util.Set"%>
+<%@ attribute name="scopes" required="true" type="org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit"%>
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
 <c:set var="primaryKeyField" value="${light:primaryKeyPersistentField(fields)}"/>
 
 <spring:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl" />
+<spring:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeName)}" scope="page"/>
 
-<table id="listViewTable" class="table table-bordered table-hover">
-	<thead>
-	<tr>
-		<th class="info"></th>
-		<c:forEach var="field" items="${fields}">
-			<th class="header"><c:out value="${field.name}"/></th>
-		</c:forEach>
-		<th>Actions</th>
-	</tr>
-	</thead>
-	<tbody/>
-</table>
+<div class="table">
+	<div class="head">
+		<light-tag:scopes scopes="${scopes}"/>
+	</div>
+
+	<table cellpadding="0" cellspacing="0" border="0" class="display" id="listViewTable">
+		<thead>
+		<tr>
+			<th class="info"></th>
+			<c:forEach var="field" items="${fields}">
+				<th class="header"><c:out value="${field.name}"/></th>
+			</c:forEach>
+			<th>Actions</th>
+		</tr>
+		</thead>
+		<tbody/>
+	</table>
+</div>
 
 <script type="text/javascript">
 	function viewEntityUrl( entityId ) {
@@ -37,6 +46,7 @@
 		var tableElement = $('#listViewTable');
 
 		var dataTable = tableElement.dataTable({
+			"bJQueryUI": true,
 			"bStateSave": true,
 		   "sAjaxDataProp" : 'content',
 		   "aoColumnDefs":[
@@ -46,7 +56,7 @@
 				   "mData": null,
 				   "sClass": "center",
 				   "mRender": function ( data, type, full ) {
-					   return '<img src="<spring:url value='/images/details_open.png'/>" style="cursor:pointer;" title="Click to show Info"/>';
+					   return '<img class="quickView" src="<spring:url value='/images/aNormal.png'/>" style="cursor:pointer;" title="Click for Quick View"/>';
 				   }
 			   },
 			   <c:forEach var="field" items="${fields}" varStatus="status">
@@ -64,12 +74,10 @@
 				   "bSortable":false,
 				   "aTargets":[ ${fn:length(fields) + 1 } ],
 				   "mData":null,
+				   "sClass": "center",
 				   "mRender":function ( data, type, full ) {
 					   var entityId = full['${primaryKeyField.uuid}']['value'];
-
-					   return '<a href="' + viewEntityUrl( entityId ) + '">View</a>'
-									  + '&nbsp;&nbsp;'
-									  + '<a href="' + editEntityUrl( entityId ) + '">Edit</a>';
+					   return renderActions(entityId);
 				   }
 			   }
 		   ],
@@ -78,13 +86,26 @@
 		   ],
 		   "bServerSide" : true,
 		   "fnServerData" : dataTableRESTAdapter,
-		   "sPaginationType": "bootstrap",
+		   "sPaginationType": "full_numbers",
 		   "oLanguage": {
 			   "sLengthMenu": "_MENU_ records per page"
 		   },
 		   "bLengthChange": false,
 		   "bFilter": false,
-		   "bInfo": false
+		   "bInfo": false,
+		   "sDom": '<""f>t<"F"lp>',
+		   "fnDrawCallback": function( oSettings ) {
+			   $("a.removeBtn").click( function() {
+				   var entityId = $(this ).attr('data-entity-id');
+				   jConfirm('Are you sure?', 'Confirmation Dialog', function(r) {
+					   if ( r ) {
+						   removeDomainObject(entityId, '${domainRestUrl}', function() {
+							   searchScope(activeScopeName());
+						   });
+					   }
+				   });
+			   });
+		   }
 	   });
 
 		$( document ).data('lightadmin.dataTable', dataTable );
@@ -93,4 +114,16 @@
 
 		bindInfoClickHandlers( tableElement, dataTable );
 	});
+
+	function renderActions(entityId) {
+		var viewImg = '<spring:url value='/images/icons/dark/info.png'/>';
+		var editImg = '<spring:url value='/images/icons/dark/pencil.png'/>';
+		var removeImg = '<spring:url value='/images/icons/dark/basket.png'/>';
+
+		var html = "<a href='" + viewEntityUrl(entityId )+ "' title='View' class='btn14 mr5'><img src='" + viewImg +"' alt='View'></a>";
+		html += "<a href='" + editEntityUrl(entityId )+ "' title='Edit' class='btn14 mr5'><img src='" + editImg +"' alt='Edit'></a>";
+		html += "<a href='#' title='Remove' class='btn14 mr5 removeBtn' data-entity-id='" + entityId + "'><img src='" + removeImg +"' alt='Remove'></a>";
+
+		return html;
+	}
 </script>

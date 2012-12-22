@@ -1,3 +1,4 @@
+
 (function($) {
 $.fn.serializeFormJSON = function() {
 var o = {};
@@ -100,17 +101,40 @@ function getPrimaryKey( dataValue ) {
 function quickLook( aData ) {
 	var primaryKey = getPrimaryKey( aData );
 
-	var detailsHtmlBlock = '<div id="quickView-' + primaryKey + '" class="innerDetails"><dl class="dl-horizontal">';
+	var fieldsCount = Object.keys(aData).length - 2;
 
-	for (var prop in aData) {
-		if ( prop != 'links' && prop != 'stringRepresentation') {
-			var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;
-			var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];
+	var detailsHtmlBlock = '<div id="quickView-' + primaryKey + '" class="innerDetails">';
 
-			detailsHtmlBlock += '<dt>' + name + '</dt><dd>' + renderValue(value) + '</dd>';
+	if (fieldsCount > 0) {
+		detailsHtmlBlock += '<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic mono">';
+		detailsHtmlBlock += '<tbody class="quick-view-data-section">';
+
+		var currentFieldIdx = 1;
+		for (var prop in aData) {
+			if ( prop != 'links' && prop != 'stringRepresentation') {
+				var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;
+				var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];
+
+				var rowClass = '';
+				if ( currentFieldIdx == 1) {
+					rowClass = 'noborder';
+				}
+				if ( currentFieldIdx == fieldsCount ) {
+					rowClass = 'last';
+				}
+
+				detailsHtmlBlock += '<tr class="' + rowClass +'">';
+				detailsHtmlBlock += '<td width="20%" align="right"><strong>' + name +':</strong></td>';
+				detailsHtmlBlock += '<td>' + renderValue(value) +'</td>';
+				detailsHtmlBlock += '</tr">';
+
+				currentFieldIdx++;
+			}
 		}
+
+		detailsHtmlBlock += '</tbody></table>';
 	}
-	detailsHtmlBlock += '</dl></div>';
+	detailsHtmlBlock += '</div>';
 
 	return detailsHtmlBlock;
 }
@@ -120,14 +144,14 @@ function quickLook( aData ) {
  * rather it is done here
  */
 function bindInfoClickHandlers( tableElement, dataTable ) {
-	$( 'tbody td img', $(tableElement) ).live( 'click', function () {
+	$( 'tbody td img.quickView', $(tableElement) ).live( 'click', function () {
 		var infoImg = $( this );
 		var nTr = infoImg.parents( 'tr' )[0];
 		if ( dataTable.fnIsOpen( nTr ) ) {
 			$('div.innerDetails', $(nTr).next()[0]).slideUp('slow', function () {
 				dataTable.fnClose( nTr );
-				infoImg.attr('src', "../images/details_open.png");
-				infoImg.attr('title', "Click to show Info");
+				infoImg.attr('src', "../images/aNormal.png");
+				infoImg.attr('title', "Click for Quick View");
 			});
 		} else {
 			var aData = dataTable.fnGetData( nTr );
@@ -138,9 +162,10 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 				"url" : restEntityUrl + '/unit/quickView',
 				"success":function ( data ) {
 					var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
+					$(nDetailsRow).addClass($(nDetailsRow).prev().attr('class'));
 					$('div.innerDetails', nDetailsRow).hide();
 					$('div.innerDetails', nDetailsRow).slideDown('slow', function () {
-						infoImg.attr('src', "../images/details_close.png");
+						infoImg.attr('src', "../images/aInactive.png");
 						infoImg.attr('title', "Click to hide Info");
 					});
 				}
@@ -190,6 +215,26 @@ function loadDomainObject(form, restRepoUrl) {
 			}
 		}
 	});
+}
+
+function removeDomainObject(entityId, restUrl, callback) {
+	$.ajax({
+	   type: 'DELETE',
+	   url: restUrl + '/' + entityId,
+	   contentType: 'application/json',
+	   dataType : 'json',
+	   success : function() {
+		   callback();
+	   },
+	   statusCode : {
+		   409:
+		   function() {
+			   jAlert('Something bad happened!', 'Alert');
+		   }
+	   }
+	});
+
+	return false;
 }
 
 function updateDomainObject(domForm) {

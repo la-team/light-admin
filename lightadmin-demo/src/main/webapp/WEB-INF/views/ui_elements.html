@@ -1,0 +1,568 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<title>It's Brain - premium admin HTML template by Eugene Kopyov</title>
+
+<link href="css/main.css" rel="stylesheet" type="text/css" />
+<link href='http://fonts.googleapis.com/css?family=Cuprum' rel='stylesheet' type='text/css' />
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7/jquery.min.js"></script>
+
+<script type="text/javascript" src="js/plugins/spinner/jquery.mousewheel.js"></script>
+<script type="text/javascript" src="js/plugins/spinner/ui.spinner.js"></script>
+
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8/jquery-ui.min.js"></script> 
+
+<script type="text/javascript" src="js/plugins/wysiwyg/jquery.wysiwyg.js"></script>
+<script type="text/javascript" src="js/plugins/wysiwyg/wysiwyg.image.js"></script>
+<script type="text/javascript" src="js/plugins/wysiwyg/wysiwyg.link.js"></script>
+<script type="text/javascript" src="js/plugins/wysiwyg/wysiwyg.table.js"></script>
+
+<script type="text/javascript" src="js/plugins/flot/jquery.flot.js"></script>
+<script type="text/javascript" src="js/plugins/flot/jquery.flot.orderBars.js"></script>
+<script type="text/javascript" src="js/plugins/flot/jquery.flot.pie.js"></script>
+<script type="text/javascript" src="js/plugins/flot/excanvas.min.js"></script>
+<script type="text/javascript" src="js/plugins/flot/jquery.flot.resize.js"></script>
+
+<script type="text/javascript" src="js/plugins/tables/jquery.dataTables.js"></script>
+<script type="text/javascript" src="js/plugins/tables/colResizable.min.js"></script>
+
+<script type="text/javascript" src="js/plugins/forms/forms.js"></script>
+<script type="text/javascript" src="js/plugins/forms/autogrowtextarea.js"></script>
+<script type="text/javascript" src="js/plugins/forms/autotab.js"></script>
+<script type="text/javascript" src="js/plugins/forms/jquery.validationEngine-en.js"></script>
+<script type="text/javascript" src="js/plugins/forms/jquery.validationEngine.js"></script>
+<script type="text/javascript" src="js/plugins/forms/jquery.dualListBox.js"></script>
+<script type="text/javascript" src="js/plugins/forms/chosen.jquery.min.js"></script>
+<script type="text/javascript" src="js/plugins/forms/jquery.maskedinput.min.js"></script>
+<script type="text/javascript" src="js/plugins/forms/jquery.inputlimiter.min.js"></script>
+<script type="text/javascript" src="js/plugins/forms/jquery.tagsinput.min.js"></script>
+
+<script type="text/javascript" src="js/plugins/other/calendar.min.js"></script>
+<script type="text/javascript" src="js/plugins/other/elfinder.min.js"></script>
+
+<script type="text/javascript" src="js/plugins/uploader/plupload.js"></script>
+<script type="text/javascript" src="js/plugins/uploader/plupload.html5.js"></script>
+<script type="text/javascript" src="js/plugins/uploader/plupload.html4.js"></script>
+<script type="text/javascript" src="js/plugins/uploader/jquery.plupload.queue.js"></script>
+
+<script type="text/javascript" src="js/plugins/ui/jquery.progress.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.jgrowl.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.tipsy.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.alerts.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.colorpicker.js"></script>
+
+<script type="text/javascript" src="js/plugins/wizards/jquery.form.wizard.js"></script>
+<script type="text/javascript" src="js/plugins/wizards/jquery.validate.js"></script>
+
+<script type="text/javascript" src="js/plugins/ui/jquery.breadcrumbs.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.collapsible.min.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.ToTop.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.listnav.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.sourcerer.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.timeentry.min.js"></script>
+<script type="text/javascript" src="js/plugins/ui/jquery.prettyPhoto.js"></script>
+
+<script type="text/javascript" src="js/custom.js"></script>
+
+</head>
+
+<body>
+
+<!-- Top navigation bar -->
+<div id="topNav">
+    <div class="fixed">
+        <div class="wrapper">
+            <div class="welcome"><a href="#" title=""><img src="images/userPic.png" alt="" /></a><span>Howdy, Eugene!</span></div>
+            <div class="userNav">
+                <ul>
+                    <li><a href="#" title=""><img src="images/icons/topnav/profile.png" alt="" /><span>Profile</span></a></li>
+                    <li><a href="#" title=""><img src="images/icons/topnav/tasks.png" alt="" /><span>Tasks</span></a></li>
+                    <li class="dd"><a title=""><img src="images/icons/topnav/messages.png" alt="" /><span>Messages</span><span class="numberTop">8</span></a>
+                        <ul class="menu_body">
+                            <li><a href="#" title="" class="sAdd">new message</a></li>
+                            <li><a href="#" title="" class="sInbox">inbox</a></li>
+                            <li><a href="#" title="" class="sOutbox">outbox</a></li>
+                            <li><a href="#" title="" class="sTrash">trash</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#" title=""><img src="images/icons/topnav/settings.png" alt="" /><span>Settings</span></a></li>
+                    <li><a href="login.html" title=""><img src="images/icons/topnav/logout.png" alt="" /><span>Logout</span></a></li>
+                </ul>
+            </div>
+            <div class="fix"></div>
+        </div>
+    </div>
+</div>
+
+<!-- Header -->
+<div id="header" class="wrapper">
+    <div class="logo"><a href="/" title=""><img src="images/loginLogo.png" alt="" /></a></div>
+    <div class="middleNav">
+    	<ul>
+        	<li class="iMes"><a href="#" title=""><span>Support tickets</span></a><span class="numberMiddle">9</span></li>
+            <li class="iStat"><a href="#" title=""><span>Statistics</span></a></li>
+            <li class="iUser"><a href="#" title=""><span>User list</span></a></li>
+            <li class="iOrders"><a href="#" title=""><span>Billing panel</span></a></li>
+        </ul>
+    </div>
+    <div class="fix"></div>
+</div>
+
+<!-- Main wrapper -->
+<div class="wrapper">
+
+	<!-- Left navigation -->
+    <div class="leftNav">
+    	<ul id="menu">
+        	<li class="dash"><a href="index.html" title=""><span>Dashboard</span></a></li>
+            <li class="graphs"><a href="charts.html" title=""><span>Graphs and charts</span></a></li>
+            <li class="forms"><a href="form_elements.html" title=""><span>Form elements</span></a></li>
+            <li class="login"><a href="ui_elements.html" title="" class="active"><span>Interface elements</span></a></li>
+            <li class="typo"><a href="typo.html" title=""><span>Typography</span></a></li>
+            <li class="tables"><a href="tables.html" title=""><span>Tables</span></a></li>
+            <li class="cal"><a href="calendar.html" title=""><span>Calendar</span></a></li>
+            <li class="gallery"><a href="gallery.html" title=""><span>Gallery</span></a></li>
+            <li class="widgets"><a href="widgets.html" title=""><span>Widgets</span></a></li>
+            <li class="files"><a href="file_manager.html" title=""><span>File manager</span></a></li>
+            <li class="errors"><a href="#" title="" class="exp"><span>Error pages</span><span class="numberLeft">6</span></a>
+            	<ul class="sub">
+                    <li><a href="403.html" title="">403 page</a></li>
+                    <li><a href="404.html" title="">404 page</a></li>
+                    <li><a href="405.html" title="">405 page</a></li>
+                    <li><a href="500.html" title="">500 page</a></li>
+                    <li><a href="503.html" title="">503 page</a></li>
+                    <li class="last"><a href="offline.html" title="">Website is offline</a></li>
+                </ul>
+            </li>
+            <li class="pic"><a href="icons.html" title=""><span>Buttons and icons</span></a></li>
+            <li class="contacts"><a href="contacts.html" title=""><span>Contact list</span></a></li>
+        </ul>
+    </div>
+
+	<!-- Content -->
+    <div class="content" id="container">
+    	<div class="title"><h5>Interface elements</h5></div>
+        
+        <!-- Statistics -->
+        <div class="stats">
+        	<ul>
+            	<li><a href="#" class="count grey" title="">52</a><span>new pending tasks</span></li>
+                
+                <li><a href="#" class="count blue" title="">520</a><span>pending orders</span></li>
+                <li><a href="#" class="count green" title="">14</a><span>new opened tickets</span></li>
+                <li class="last"><a href="#" class="count red" title="">48</a><span>new user registrations</span></li>
+            </ul>
+            <div class="fix"></div>
+        </div>
+        
+        <!-- Form -->
+        <form action="" class="mainForm">
+        
+        	<!-- Sliders -->
+            <fieldset>
+                <div class="widget first">    
+                    <div class="head"><h5 class="iSettings2">Sliders</h5></div>
+                    
+                    <div class="rowElem noborder">
+                        <label>Usual slider: </label>
+                        <div class="formRight">
+                            <div class="uiSliderInc"></div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>Slider with increments: </label>
+                        <div class="formRight">
+                            <div class="sliderSpecs">
+                                <label for="amount">$50 increments:</label><input type="text" id="amount" />
+                                <div class="fix"></div>
+                            </div>
+                            <div class="uiSliderInc"></div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>Range slider: </label>
+                        <div class="formRight">
+                            <div class="sliderSpecs">
+                                <label for="rangeAmount">Price range:</label><input type="text" id="rangeAmount" />
+                                <div class="fix"></div>
+                            </div>
+                            <div class="uiRangeSlider"></div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>With fixed minimum: </label>
+                        <div class="formRight">
+                            <div class="sliderSpecs">
+                                <label for="minRangeAmount">Minimum:</label><input type="text" id="minRangeAmount" />
+                                <div class="fix"></div>
+                            </div>
+                            <div class="uiMinRange"></div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>With fixed maximum: </label>
+                        <div class="formRight">
+                            <div class="sliderSpecs">
+                                <label for="maxRangeAmount">Maximum:</label><input type="text" id="maxRangeAmount" />
+                                <div class="fix"></div>
+                            </div>
+                            <div class="uiMaxRange"></div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                                    
+                    <div class="rowElem">
+                        <label>Vertical multiple sliders: </label>
+                        <div class="formRight sliderSpecs">
+                            <div id="eq">
+                                <span>88</span>
+                                <span>77</span>
+                                <span>55</span>
+                                <span>33</span>
+                                <span>40</span>
+                                <span>45</span>
+                                <span>70</span>
+                                <span>82</span>
+                            </div>                    
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="fix"></div>
+                </div>
+            </fieldset>
+            
+            <!-- Pickers -->
+            <fieldset>
+                <div class="widget">    
+                    <div class="head"><h5 class="iDropper">Pickers</h5></div>
+                    <div class="rowElem noborder">
+                        <label>Date picker:</label>
+                        <div class="formRight">
+                            <input type="text" class="datepicker" />
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>Time picker:</label>
+                        <div class="formRight">
+                            <input type="text" class="timepicker" size="10"><span class="ml10">use your mousewheel and keyboard</span>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>Color picker:</label>
+                        <div class="formRight">
+                            <input type="text" class="colorpick" id="colorpickerField" value="00ff00" />
+                            <label for="colorpickerField" class="pick"></label>
+                            <div class="fix"></div> 
+                        </div>
+                        <div class="fix"></div> 
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>Inline date picker:</label>
+                        <div class="formRight">
+                            <div class="datepickerInline"></div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>            
+                </div>
+            </fieldset>
+            
+            <!-- Ajax loaders -->
+            <fieldset>
+                <div class="widget aligncenter">    
+                    <div class="head"><h5 class="iRefresh">Ajax loaders</h5></div>
+                    <img src="images/loaders/loader.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader2.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader3.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader4.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader5.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader6.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader7.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader8.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader9.gif" alt="" class="p12" />
+                    <img src="images/loaders/loader10.gif" alt="" class="p12" />
+                </div>
+            </fieldset>
+            
+            <!-- Progress bars -->
+            <fieldset>
+                <div class="widget">    
+                    <div class="head"><h5 class="iLoading">Progress bars</h5></div>
+                    
+                    <div class="rowElem noborder">
+                        <label>Progress bar with timer and % counting:</label>
+                        <div class="formRight">
+                            <div id="progress1">
+                                <div class="percent"></div>
+                                <div class="pbar"></div>
+                                <div class="elapsed"></div>
+                            </div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>  
+                    
+                    <div class="rowElem">
+                        <label>Progress bar with delay on start:</label>
+                        <div class="formRight">
+                            <div id="progress2">
+                                <div class="percent"></div>
+                                <div class="pbar"></div>
+                                <div class="elapsed"></div>
+                            </div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>   
+                    
+                    <div class="rowElem">
+                        <label>Usual progress bar:</label>
+                        <div class="formRight">
+                            <div id="progressbar"></div>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                             
+                </div>
+            </fieldset>
+            
+            <!-- Buttons -->
+            <fieldset>
+                <div class="widget">    
+                    <div class="head"><h5 class="iPin">Buttons</h5></div>
+                    
+                    <div class="rowElem noborder">
+                        <label>Submit button:</label>
+                        <div class="formRight">
+                            <input type="submit" value="submit button" class="basicBtn" />
+                            <input type="reset" value="reset button" class="basicBtn" />
+                            <input type="button" value="usual button" class="basicBtn" />
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                    <div class="rowElem">
+                        <label>Button styles:</label>
+                        <div class="formRight">
+                            <input type="button" value="button" class="basicBtn" />
+                            <input type="button" value="button" class="blueBtn" />
+                            <input type="button" value="button" class="redBtn" />
+                            <input type="button" value="button" class="seaBtn" />
+                            <input type="button" value="button" class="blackBtn" />
+                            <input type="button" value="button" class="greyishBtn" />
+                            <input type="button" value="button" class="greenBtn" />
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    
+                </div>
+            </fieldset>
+        </form>
+        
+        <!--Wizard with validation -->
+        
+        <form action="" method="" id="wizForm" class="mainForm">
+            <div class="widget">
+                <div class="head"></div>
+                <fieldset class="step" id="first">
+                    <h5>Wizard with validation - First</h5>
+                    <div class="rowElem noborder"><label>Required field:</label><div class="formRight"><input type="text" name="req"/></div><div class="fix"></div></div>
+                    <div class="rowElem"><label>Input password:</label><div class="formRight"><input type="password" /></div><div class="fix"></div></div>
+                    <div class="rowElem"><label>Autogrowing textarea:</label><div class="formRight"><textarea rows="8" cols="" class="auto" name="textarea"></textarea></div><div class="fix"></div></div>
+                </fieldset>
+                <fieldset class="step" id="second">
+                    <h5>Wizard with validation - Second</h5>
+                    <div class="rowElem noborder"><label>Email:</label><div class="formRight"><input type="text" name="email"/></div><div class="fix"></div></div>
+                    <div class="rowElem">
+                        <label>Select :</label>
+                        <div class="formRight">
+                        <select name="sel" >
+                            <option value="">Usual select box</option>
+                            <option value="opt2">Option 2</option>
+                            <option value="opt3">Option 3</option>
+                            <option value="opt4">Option 4</option>
+                            <option value="opt5">Option 5</option>
+                            <option value="opt6">Option 6</option>
+                            <option value="opt7">Option 7</option>
+                            <option value="opt8">Option 8</option>
+                        </select>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                    <div class="rowElem">
+                        <label>Checkbox: </label>
+                        <div class="formRight">
+                            <input type="checkbox" name="chb" id="chb" /><label for="chb">Checkbox checked</label>
+                        </div>
+                        <div class="fix"></div>
+                    </div>
+                </fieldset>
+				<div class="wizNav"> 							
+					<input class="basicBtn" id="back" value="Back" type="reset" />
+					<input class="blueBtn" id="next" value="Next" type="submit" />
+				</div>
+            </div>
+        </form>
+        
+        <!-- Growl notifications -->
+        <div class="widget">    
+            <div class="head"><h5 class="iAlert">Growl notifications</h5></div>
+            <div class="body aligncenter">
+                <input type="button" value="Basic notification" class="basicBtn mr10 ml10" onclick="$.jGrowl('Hello world!');" />
+                <input type="button" value="Sticky notification" class="basicBtn mr10 ml10" onclick="$.jGrowl('Stick this!', { sticky: true });"  />
+                <input type="button" value="Message with header" class="basicBtn mr10 ml10" onclick="$.jGrowl('A message with a header', { header: 'Important' });" />
+                <input type="button" value="Long live message" class="basicBtn mr10 ml10" onclick="$.jGrowl('A message that will live a little longer.', { life: 10000 });"  />
+            </div>
+        </div>
+        
+        <!-- Tabs -->
+        <div class="widget">       
+            <ul class="tabs">
+                <li><a href="#tab3">Tab active</a></li>
+                <li><a href="#tab4">Tab inactive</a></li>
+            </ul>
+            
+            <div class="tab_container">
+                <div id="tab3" class="tab_content">Widget1</div>
+                <div id="tab4" class="tab_content">Widget2</div>
+            </div>	
+            <div class="fix"></div>	 
+        </div>
+        
+        <!-- Breadcrumbs -->
+        <div class="pt20">
+            <div class="breadCrumbHolder module">
+                <div class="breadCrumb module">
+                    <ul>
+                        <li class="firstB"><a href="#">Home</a> </li>
+                        <li><a href="#">Breadcrumb sample</a></li>
+                        <li><a href="#">Second level</a></li>
+                        <li><a href="#">Third level</a></li>
+                        <li class="lastB">Current page</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="breadCrumbHolder module">
+                <div id="breadCrumb" class="breadCrumb module">
+                    <ul>
+                        <li><a href="#">Home</a> </li>
+                        <li><a href="#">Breadcrumb sample</a></li>
+                        <li><a href="#">Second level</a></li>
+                        <li><a href="#">Third level</a></li>
+                        <li><a href="#">Fourth level</a></li>
+                        <li><a href="#">Fifth level</a></li>
+                        <li>Current page</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal alert boxes -->
+        <div class="widget">    
+            <div class="head"><h5 class="iAlert">Modal alert boxes</h5></div>
+            <div class="body aligncenter">
+                <input type="button" value="Usual alert" class="basicBtn mr10 ml10 bAlert" />
+                <input type="button" value="Confirmation dialog" class="basicBtn mr10 ml10 bConfirm" />
+                <input type="button" value="Prompt dialog" class="basicBtn mr10 ml10 bPromt" />
+                <input type="button" value="Dialog with HTML support" class="basicBtn mr10 ml10 bHtml" />
+            </div>
+        </div>
+        
+        <!-- jQuery UI dialogs -->
+        <div class="widget">    
+            <div class="head"><h5 class="iAlert">jQuery UI dialogs</h5></div>
+            <div class="body aligncenter">
+            
+                <div class="uDialog">
+                    <div id="dialog-message" title="Download complete">
+                        <p><img src="images/icons/color/tick.png" alt="" class="icon" />Your files have downloaded successfully into the My Downloads folder.</p>
+                        <p>Currently using <strong>36% of your storage space</strong></p>
+                        
+                        <div class="uiForm">
+                            <form action=""  class="mainForm">
+                                <input type="text" value="http://" name="inputtext"/>
+                                <input type="radio" name="question1" checked="checked" /><label>Selected radio</label>
+                                <input type="radio" name="question1" /><label>Normal state</label>
+                            </form>
+                        </div>
+                    </div>
+                    <!-- Sample page content to illustrate the layering of the dialog -->
+                    <input type="button" value="Usual jQuery UI dialog" class="blueBtn" id="opener" />
+                </div>
+
+            </div>
+        </div>
+        
+        <!-- Notification messages -->
+        <div class="pt20">
+            <div class="nNote nWarning hideit">
+                <p><strong>WARNING: </strong>This is a warning message. You can use this to warn users on any events</p>
+            </div>
+            <div class="nNote nInformation hideit">
+                <p><strong>INFORMATION: </strong>This is a message for information, can be any general information.</p>
+            </div>   
+            <div class="nNote nSuccess hideit">
+                <p><strong>SUCCESS: </strong>Success message! hoooraaay!!!!</p>
+            </div>  
+            <div class="nNote nFailure hideit">
+                <p><strong>FAILURE: </strong>Oops sorry. That action is not valid, or our servers have gone bonkers</p>
+            </div>
+        </div>
+        
+		<!-- Pagination -->
+		<div class="pagination">
+			<ul class="pages">
+				<li class="prev"><a href="#">&lt;</a></li>
+				<li><a href="#" class="active">1</a></li>
+				<li><a href="#">2</a></li>
+				<li><a href="#">3</a></li>
+				<li><a href="#">4</a></li>
+				<li><a href="#">5</a></li>
+				<li><a href="#">6</a></li>
+				<li><a href="#">7</a></li>
+				<li><a href="#">8</a></li>
+				<li>...</li>
+				<li><a href="#">30</a></li>
+				<li class="next"><a href="#">&gt;</a></li>
+			</ul>
+		</div>
+        
+        <!-- Tooltip directions -->
+        <div class="widget">    
+            <div class="head"><h5 class="iFull2">Tooltip directions</h5></div>
+            <div class="body aligncenter">
+                <input type="button" value="left direction" class="basicBtn leftDir mr20 ml20" title="West tooltip direction" />
+                <input type="button" value="top direction" class="basicBtn topDir mr20 ml20" title="North tooltip direction" />
+                <input type="button" value="bottom direction" class="basicBtn botDir mr20 ml20" title="South tooltip direction" />
+                <input type="button" value="right direction" class="basicBtn rightDir mr20 ml20" title="East tooltip direction" />
+            </div>
+        </div>
+
+    </div>
+<div class="fix"></div>
+</div>
+
+<!-- Footer -->
+<div id="footer">
+	<div class="wrapper">
+    	<span>&copy; Copyright 2011. All rights reserved. It's Brain admin theme by <a href="#" title="">Eugene Kopyov</a></span>
+    </div>
+</div>
+
+</body>
+</html>

@@ -6,26 +6,20 @@
 
 <jsp:doBody/>
 
-<ul class="breadcrumb" id="breadcrumb">
+<div class="breadCrumbHolder module">
+	<div class="breadCrumb module">
+		<ul>
+			<li class="firstB"><a href="<spring:url value="/dashboard"/>"><spring:message code="application.menu.dashboard"/></a></li>
 
-	<spring:message var="dashboardLabel" code="application.menu.dashboard" />
-
-	<c:if test="${empty tag_breadcrumb_breadcrumbItems}">
-		<li><i class="icon-home"></i><c:out value="${dashboardLabel}"/></li>
-	</c:if>
-
-	<c:if test="${not empty tag_breadcrumb_breadcrumbItems}">
-		<li><a href="<spring:url value="/"/>" title="${dashboardLabel}"><i class="icon-home"></i><c:out value="${dashboardLabel}"/></a></li>
-	</c:if>
-
-	<c:forEach var="breadcrumbItem" items="${tag_breadcrumb_breadcrumbItems}" varStatus="status">
-		<jsp:useBean id="breadcrumbItem" type="org.apache.tiles.beans.MenuItem"/>
-		<span class="divider">/</span>
-		<c:if test="${status.last}">
-			<li><c:out value="${breadcrumbItem.value}"/></li>
-		</c:if>
-		<c:if test="${not status.last}">
-			<li><a href="${breadcrumbItem.link}" title="${breadcrumbItem.tooltip}"><c:out value="${breadcrumbItem.value}"/></a></li>
-		</c:if>
-	</c:forEach>
-</ul>
+			<c:forEach var="breadcrumbItem" items="${tag_breadcrumb_breadcrumbItems}" varStatus="status">
+				<jsp:useBean id="breadcrumbItem" type="org.apache.tiles.beans.MenuItem"/>
+				<c:if test="${status.last}">
+					<li class="lastB"><c:out value="${breadcrumbItem.value}"/></li>
+				</c:if>
+				<c:if test="${not status.last}">
+					<li><a href="${breadcrumbItem.link}" title="${breadcrumbItem.tooltip}"><c:out value="${breadcrumbItem.value}"/></a></li>
+				</c:if>
+			</c:forEach>
+		</ul>
+	</div>
+</div>

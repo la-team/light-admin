@@ -137,6 +137,12 @@
 	</function>
 
 	<function>
+		<name>domainRestBaseUrl</name>
+		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+		<function-signature>java.lang.String domainRestBaseUrl(java.lang.String)</function-signature>
+	</function>
+
+	<function>
 		<name>domainRestFilterBaseUrl</name>
 		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
 		<function-signature>java.lang.String domainRestFilterBaseUrl(java.lang.String)</function-signature>

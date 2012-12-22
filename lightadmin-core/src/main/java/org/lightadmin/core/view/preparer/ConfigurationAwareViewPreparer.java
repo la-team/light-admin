@@ -35,7 +35,7 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, Gl
 		addAttribute( attributeContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration, true );
 	}
 
-	private DomainTypeAdministrationConfiguration domainTypeConfiguration( final TilesRequestContext tilesContext ) {
+	protected DomainTypeAdministrationConfiguration domainTypeConfiguration( final TilesRequestContext tilesContext ) {
 		return ( DomainTypeAdministrationConfiguration ) attributeFromRequest( tilesContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY );
 	}
 

@@ -2,6 +2,7 @@ package org.lightadmin.core.view.tags.form;
 
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
+import javax.persistence.metamodel.Attribute;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
@@ -27,7 +28,7 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 		JspContext context = getJspContext();
 		Class<?> attrType = attributeMetadata.getType();
 		JspFragment worker;
-		if (attributeMetadata.isAssociation()) {
+		if (attributeMetadata.isAssociation() || attributeMetadata.getAttribute().getPersistentAttributeType() == Attribute.PersistentAttributeType.MANY_TO_ONE ) {
 			if (attributeMetadata.isCollectionLike() || attributeMetadata.isSetLike()) {
 				worker = n2manyEditControl;
 			} else {
@@ -35,9 +36,9 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 			}
 		} else if (attributeMetadata.isMapLike()) {
 			worker = mapEditControl;
-		} else if (Boolean.class.equals(booleanEditControl)) {
+		} else if (Boolean.class.equals( booleanEditControl )) {
 			worker = booleanEditControl;
-		} else if (Date.class.isAssignableFrom(attrType)) {
+		} else if (Date.class.isAssignableFrom( attrType )) {
 			worker = dateEditControl;
 		} else if (String.class.equals(attrType) || Number.class.isAssignableFrom(attrType)) {
 			worker = simpleEditControl;

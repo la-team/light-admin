@@ -1,0 +1,179 @@
+
+/* ===== Calendar styles ===== */
+
+.fc { direction: ltr; text-align: left; }
+.fc table { border-collapse: collapse; border-spacing: 0; }	
+html .fc, .fc table { font-size: 1em; }	
+.fc td, .fc th { padding: 0; vertical-align: top; }
+
+.fc-header { position: relative; }
+.fc-header td { white-space: nowrap; position: relative; }
+.fc-header-left { text-align: left; }	
+.fc-header-center { text-align: center; position: absolute; top: 0; width: 80%; left: 10%; }	
+.fc-button-inner { 	border-left: 1px solid #d5d5d5; }
+.fc-header-left .fc-button-inner { border: none; }
+.fc-header-right { text-align: right; position: absolute; top: -39px; right: 0; } 
+.fc-header-title { display: inline-block; vertical-align: top; }	
+.fc-header-title h5 { margin-top: 0; white-space: nowrap; padding: 8px 12px!important; }	
+.fc .fc-header-space { padding-left: 10px; } 	
+
+.fc-header .fc-corner-right { margin-right: 1px; float: right; } 	
+.fc-header .ui-corner-right { margin-right: 0; }
+	
+.fc-header .fc-state-hover, .fc-header .ui-state-hover { z-index: 2; }	
+.fc-header .fc-state-down { z-index: 3; }
+.fc-header .fc-state-active, .fc-header .ui-state-active { z-index: 4; }
+	
+	
+.fc-content { clear: both; }	
+.fc-view { width: 100%; overflow: hidden; }
+	
+	
+.fc-widget-header, .fc-widget-content { border: 1px solid #d5d5d5; }
+.fc-state-highlight { background: #f5f5f5 url(../images/calActiveBg.png) repeat-x 0 0; }	
+.fc-cell-overlay { background: #9cf; opacity: .2; filter: alpha(opacity=20); /* for IE */ }
+	
+
+.fc-button { position: relative; display: inline-block; cursor: pointer; }
+.fc-state-default {}
+.fc-button-inner { position: relative; float: left; overflow: hidden; }
+.fc-state-default .fc-button-inner {}
+.fc-button-content { position: relative; float: left; height: 36px; line-height: 39px; padding: 0 14px; white-space: nowrap; }
+.fc-header-right  .fc-button-content { height: 39px; }
+	
+/* icon (for jquery ui) */
+.fc-button-content .fc-icon-wrap { position: relative; float: left; top: 50%; }	
+.fc-button-content .ui-icon { position: relative; float: left; margin-top: -50%; *margin-top: 0; *top: -50%; }
+	
+/* gloss effect */	
+.fc-state-default .fc-button-effect { position: absolute; top: 50%; left: 0; } 	
+.fc-state-default .fc-button-effect span {}
+	
+/* button states (determines colors)  */
+.fc-state-default, .fc-state-default .fc-button-inner {}
+.fc-state-hover, .fc-state-hover .fc-button-inner {}
+.fc-state-down, .fc-state-down .fc-button-inner {}
+	
+.fc-state-active, .fc-state-active .fc-button-inner { color: #797979; background: #fafafa; }	
+.fc-first th { padding-top: 1px; background: url(../images/leftNavBg.png) repeat-x; }	
+.fc-state-disabled, .fc-state-disabled .fc-button-inner { color: #999; border-color: #ddd; }	
+.fc-state-disabled { cursor: default; }	
+.fc-state-disabled .fc-button-effect { display: none; }
+	
+	
+/* Global Event Styles */	 
+.fc-event { border-style: solid; border-width: 0; font-size: .85em; cursor: default; }
+a.fc-event, .fc-event-draggable { cursor: pointer; }	
+a.fc-event { text-decoration: none; }	
+.fc-rtl .fc-event { text-align: right; }
+	
+.fc-event-skin {
+	border-color: #454a53;     /* default BORDER color */
+	background-color: #454a53; /* default BACKGROUND color */
+	color: #fff;            /* default TEXT color */
+	display: block;
+	padding: 1px 0px;
+	font-size: 11px;
+	-moz-border-radius: 2px; -webkit-border-radius: 2px; -khtml-border-radius: 2px; border-radius: 2px;
+	margin-top: 1px;
+	}
+	
+.fc-event-inner { position: relative; width: 100%; height: 100%; border-style: solid; border-width: 0; overflow: hidden; }
+.fc-event-time, .fc-event-title { padding: 0 2px 1px 5px; display: block; float: left; line-height: 16px; }	
+.fc .ui-resizable-handle { display: block; position: absolute; z-index: 99999; overflow: hidden; font-size: 300%; line-height: 50%; }
+	
+	
+/* Horizontal Events */
+.fc-event-hori { margin-bottom: 1px; }
+	
+/* resizable */
+.fc-event-hori .ui-resizable-e { top: 0 !important; right: -3px !important; width: 7px !important; height: 100% !important; cursor: e-resize; }
+.fc-event-hori .ui-resizable-w { top: 0 !important; left: -3px !important; width: 7px !important; height: 100% !important; cursor: w-resize; }
+	
+.fc-event-hori .ui-resizable-handle {}
+	
+		
+/* Fake Rounded Corners (for buttons and events) */	
+.fc-corner-left { margin-left: 1px; }	
+.fc-corner-left .fc-button-inner, .fc-corner-left .fc-event-inner {}	
+.fc-corner-right { margin-right: 1px; }	
+.fc-corner-right .fc-button-inner, .fc-corner-right .fc-event-inner { margin-right: -1px; }	
+.fc-corner-top { margin-top: 1px; }	
+.fc-corner-top .fc-event-inner { margin-top: -1px; }	
+.fc-corner-bottom { margin-bottom: 1px; }	
+.fc-corner-bottom .fc-event-inner { margin-bottom: -1px; }
+	
+		
+/* Fake Rounded Corners SPECIFICALLY FOR EVENTS */
+.fc-corner-left .fc-event-inner {}
+.fc-corner-right .fc-event-inner {}
+.fc-corner-top .fc-event-inner { border-top-width: 1px; }	
+.fc-corner-bottom .fc-event-inner { border-bottom-width: 1px; }
+	
+	
+/* Reusable Separate-border Table */
+table.fc-border-separate { border-collapse: separate; }	
+.fc-border-separate th, .fc-border-separate td { border-width: 1px 0 0 1px; }	
+.fc-border-separate td:first-child, .fc-border-separate th:first-child { border-left: none; }	
+.fc-border-separate th.fc-last, .fc-border-separate td.fc-last {}
+.fc-border-separate tr.fc-last th, .fc-border-separate tr.fc-last td { border-top-width: 1px; }
+.fc-border-separate tbody tr.fc-first td, .fc-border-separate tbody tr.fc-first th { border-top-width: 1px; }
+	
+	
+/* Month View, Basic Week View, Basic Day View */
+.fc-grid th { text-align: center; }	
+.fc-grid .fc-day-number { float: right; padding: 3px 5px; }	
+.fc-grid .fc-other-month .fc-day-number { opacity: 0.3;	filter: alpha(opacity=30); }	
+.fc-grid .fc-day-content { clear: both; padding: 5px 2px 3px; }
+	
+/* event styles */	
+.fc-grid .fc-event-time { font-weight: bold; }
+	
+/* right-to-left */	
+.fc-rtl .fc-grid .fc-day-number { float: left; }	
+.fc-rtl .fc-grid .fc-event-time { float: right; }
+	
+
+/* Agenda Week View, Agenda Day View */
+.fc-agenda table { 	border-collapse: separate; }	
+.fc-agenda-days th { text-align: center; }	
+.fc-agenda .fc-agenda-axis { width: 50px; padding: 0 4px; vertical-align: middle; text-align: right; white-space: nowrap; font-weight: normal; }	
+.fc-agenda .fc-day-content { padding: 2px 2px 1px; }
+.fc-agenda-days .fc-agenda-axis { border-right-width: 1px; }
+.fc-agenda-days .fc-col0 { border-left-width: 0; }
+.fc-agenda-allday th { border-width: 0 1px; }	
+.fc-agenda-allday .fc-day-content { min-height: 34px; _height: 34px; }
+.fc-agenda-divider-inner { height: 2px; overflow: hidden; }	
+.fc-widget-header .fc-agenda-divider-inner { background: #eee; }
+	
+/* slot rows */	
+.fc-agenda-slots th { border-width: 1px 1px 0; }	
+.fc-agenda-slots td { border-width: 1px 0 0; background: none; }	
+.fc-agenda-slots td div { height: 20px; }	
+.fc-agenda-slots tr.fc-slot0 th, .fc-agenda-slots tr.fc-slot0 td { border-top-width: 0; }
+.fc-agenda-slots tr.fc-minor th, .fc-agenda-slots tr.fc-minor td { border-top-style: dotted; }	
+.fc-agenda-slots tr.fc-minor th.ui-widget-header { *border-top-style: solid; }
+	
+
+
+/* Vertical Events */
+.fc-event-vert { border-width: 0 1px; }	
+.fc-event-vert .fc-event-head, .fc-event-vert .fc-event-content { position: relative; z-index: 2; width: 100%; overflow: hidden; }	
+.fc-event-vert .fc-event-time { white-space: nowrap; font-size: 10px; } 	
+.fc-event-vert .fc-event-bg { position: absolute; z-index: 1; top: 0; left: 0; width: 100%; height: 100%; background: #fff; opacity: .3; filter: alpha(opacity=30); }	
+.fc .ui-draggable-dragging .fc-event-bg, .fc-select-helper .fc-event-bg { display: none\9; }
+	
+/* resizable */	
+.fc-event-vert .ui-resizable-s {
+	bottom: 0        !important; /* importants override pre jquery ui 1.7 styles */
+	width: 100%      !important;
+	height: 8px      !important;
+	overflow: hidden !important;
+	line-height: 8px !important;
+	font-size: 11px  !important;
+	font-family: monospace;
+	text-align: center;
+	cursor: s-resize;
+	}
+	
+.fc-agenda .ui-resizable-resizing { _overflow: hidden; }
