@@ -42,7 +42,9 @@ td.details { background-color: transparent; border: 0; }
 .tableStatic tbody tr.last { border-bottom: none; }
 .tableStatic.mono tbody tr:nth-child(even) {background-color: transparent;}
 
-.middleNav ul li.iCreate a span { background: url(../images/icons/middlenav/add.png) no-repeat 50% 10px; }
+.middleNav ul li.iCreate a span { background: url(../images/icons/middlenav/create.png) no-repeat 50% 10px; }
+.middleNav ul li.iArchive a span { background: url(../images/icons/middlenav/archive.png) no-repeat 50% 10px; }
+.middleNav ul li.iZipFiles a span { background: url(../images/icons/middlenav/zipFiles.png) no-repeat 50% 10px; }
 
 .loginLogo { position: absolute; width: 190px; height: 44px; display: block; top: -60px; left: 50%; margin-left: -95px; }
 
