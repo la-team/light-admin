@@ -9,7 +9,7 @@ import org.openqa.selenium.support.FindBy;
 
 public class NavigationMenuComponent extends StaticComponent {
 
-	@FindBy( className = "menu-sidenav" )
+	@FindBy( id = "menu" )
 	private WebElement navigationMenuContainer;
 
 	public NavigationMenuComponent( SeleniumContext seleniumContext ) {

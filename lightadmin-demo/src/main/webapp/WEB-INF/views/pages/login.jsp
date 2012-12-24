@@ -7,7 +7,7 @@
 
 	<c:if test="${not empty param.login_error}">
 		<div class="nNote nWarning hideit">
-			<p>
+			<p id="alert-message">
 				<spring:message code="message.security.bad-credentials"/><br/>
 				<strong><spring:message code="message.security.reason"/></strong>&nbsp;<c:out value="${SPRING_SECURITY_LAST_EXCEPTION.message}"/>.
 			</p>
@@ -38,7 +38,7 @@
 
 				<div class="loginRow">
 					<div class="rememberMe"><input type="checkbox" id="check2" name="chbox" /><label for="check2">Remember me</label></div>
-					<input type="submit" value="Log me in" class="greyishBtn submitForm" />
+					<input id="signIn" type="submit" value="Log me in" class="greyishBtn submitForm" />
 					<div class="fix"></div>
 				</div>
 			</fieldset>

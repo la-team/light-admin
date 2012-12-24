@@ -36,11 +36,6 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 	}
 
 	@Test
-	public void dashboardBreadcrumbPresent() throws Exception {
-		assertTrue( dashboardPage.dashboardBreadcrumbItemPresent() );
-	}
-
-	@Test
 	public void allDomainLinksLoaded() throws Exception {
 		for ( Domain domain : expectedDomains ) {
 			assertTrue( String.format( "Link for \'%s\' is not displayed", domain.getLinkText() ), dashboardPage.domainLinkDisplayed( domain ) );
@@ -53,11 +48,9 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 	public void domainRecordStatisticsIsDisplayed() {
 
 		for ( Domain domain : expectedDomains ) {
-			assertTrue( String.format( "Progress bar is not displayed for domain \'%s\':", domain.getLinkText() ), dashboardPage.isProgressBarDisplayed( domain ) );
-
 			assertEquals( String.format( "Incorrect record count for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsCount(), dashboardPage.getDomainRecordsCount( domain ) );
-
-			assertEquals( String.format( "Incorrect progress bar percentage for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsPercentage(), dashboardPage.getDomainRecordsPercentage( domain ) );
+// TODO: I'm not sure we need this 'records count change'
+//			assertEquals( String.format( "Incorrect progress bar percentage for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsPercentage(), dashboardPage.getDomainRecordsChange( domain ) );
 		}
 	}
 

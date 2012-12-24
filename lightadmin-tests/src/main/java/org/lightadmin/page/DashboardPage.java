@@ -44,15 +44,11 @@ public class DashboardPage extends SecuredPage<DashboardPage> {
 		assertTrue( "Not on the Dashboard page: " + url, isDashboardPageLoaded() );
 	}
 
-    public boolean isProgressBarDisplayed( Domain domain ) {
-        return dashboardStatisticsComponent.isProgressBarDisplayed( domain );
-    }
-
     public int getDomainRecordsCount( Domain domain ) {
         return dashboardStatisticsComponent.getDomainRecordsCount( domain );
     }
 
-    public int getDomainRecordsPercentage(Domain domain) {
-        return dashboardStatisticsComponent.getDomainRecordsPercentage( domain );
+    public int getDomainRecordsChange( Domain domain ) {
+        return dashboardStatisticsComponent.getDomainRecordsChange( domain );
     }
 }

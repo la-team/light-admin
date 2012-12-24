@@ -124,8 +124,8 @@ function quickLook( aData ) {
 				}
 
 				detailsHtmlBlock += '<tr class="' + rowClass +'">';
-				detailsHtmlBlock += '<td width="20%" align="right"><strong>' + name +':</strong></td>';
-				detailsHtmlBlock += '<td>' + renderValue(value) +'</td>';
+				detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + name +':</strong></td>';
+				detailsHtmlBlock += '<td class="qv-field-value">' + renderValue(value) +'</td>';
 				detailsHtmlBlock += '</tr">';
 
 				currentFieldIdx++;
@@ -166,7 +166,7 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 					$('div.innerDetails', nDetailsRow).hide();
 					$('div.innerDetails', nDetailsRow).slideDown('slow', function () {
 						infoImg.attr('src', "../images/aInactive.png");
-						infoImg.attr('title', "Click to hide Info");
+						infoImg.attr('title', "Click to close Quick View");
 					});
 				}
 			} );

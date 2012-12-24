@@ -8,7 +8,7 @@
 
 <div class="breadCrumbHolder module">
 	<div class="breadCrumb module">
-		<ul>
+		<ul id="breadcrumb">
 			<li class="firstB"><a href="<spring:url value="/dashboard"/>"><spring:message code="application.menu.dashboard"/></a></li>
 
 			<c:forEach var="breadcrumbItem" items="${tag_breadcrumb_breadcrumbItems}" varStatus="status">

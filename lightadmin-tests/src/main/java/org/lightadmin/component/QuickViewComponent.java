@@ -22,11 +22,11 @@ public class QuickViewComponent extends DynamicComponent<QuickViewComponent> {
 	}
 
 	public String[] getQuickViewFieldNames() {
-		return WebElementTransformer.transformToArray( getQuickViewContainer().findElements( By.tagName( "dt" ) ) );
+		return WebElementTransformer.transformToArray( getQuickViewContainer().findElements( By.className( "qv-field-name" ) ) );
 	}
 
 	public String[] getQuickViewFieldValues() {
-		return WebElementTransformer.transformToArray( getQuickViewContainer().findElements( By.tagName( "dd" ) ) );
+		return WebElementTransformer.transformToArray( getQuickViewContainer().findElements( By.className( "qv-field-value" ) ) );
 	}
 
 	public QuickViewComponent hide() {
@@ -55,11 +55,11 @@ public class QuickViewComponent extends DynamicComponent<QuickViewComponent> {
 	}
 
 	private WebElement getShowButton() {
-		return dataTableElement.findElement( By.xpath( "//tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to show Info']" ) );
+		return dataTableElement.findElement( By.xpath( "//tbody/tr[td[text()=" + itemId + "]]//img[@title='Click for Quick View']" ) );
 	}
 
 	private WebElement getHideButton() {
-		return dataTableElement.findElement( By.xpath( "//tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to hide Info']" ) );
+		return dataTableElement.findElement( By.xpath( "//tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to close Quick View']" ) );
 	}
 
 	private WebElement getQuickViewContainer() {

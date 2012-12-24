@@ -24,7 +24,7 @@ public class DataTableComponent extends StaticComponent {
 	}
 
 	private Map<String, Column> setColumnHeaders() {
-		List<String> columnNames = WebElementTransformer.transform( dataTableElement.findElements( By.xpath( "thead//th[contains(@class,'header')]" ) ) );
+		List<String> columnNames = WebElementTransformer.transform( dataTableElement.findElements( By.xpath( "thead//th[contains(@class,'header')]/div" ) ) );
 
 		for ( String columnName : columnNames ) {
 			columns.put( columnName, new Column( columnName ) );
@@ -83,7 +83,7 @@ public class DataTableComponent extends StaticComponent {
 		private String currentSorting;
 
 		public Column( String fieldLabel ) {
-			this.headerElement = dataTableElement.findElement( By.xpath( "thead//th[text()=\'" + fieldLabel + "\']" ) );
+			this.headerElement = dataTableElement.findElement( By.xpath( "thead//th/div[text()=\'" + fieldLabel + "\']" ) );
 		}
 
 		public void sortDescending() {
