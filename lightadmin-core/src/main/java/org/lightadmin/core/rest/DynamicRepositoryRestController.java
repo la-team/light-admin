@@ -49,6 +49,8 @@ import java.util.Set;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
+import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
+import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
 
 @SuppressWarnings( "unchecked" )
 @RequestMapping( "/rest" )
@@ -169,14 +171,6 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		final List<Object> itemsOnPage = items.subList( pageSort.getOffset(), Math.min( items.size(), pageSort.getOffset() + pageSort.getPageSize() ) );
 
 		return new PageImpl<Object>( itemsOnPage, pageSort, items.size() );
-	}
-
-	private boolean isSpecificationScope( final ScopeMetadata scope ) {
-		return scope instanceof ScopeMetadataUtils.SpecificationScopeMetadata;
-	}
-
-	private boolean isPredicateScope( final ScopeMetadata scope ) {
-		return scope instanceof ScopeMetadataUtils.PredicateScopeMetadata;
 	}
 
 	private Specification and( Specification specification, Specification otherSpecification ) {

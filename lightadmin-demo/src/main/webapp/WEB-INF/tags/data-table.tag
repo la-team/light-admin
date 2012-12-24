@@ -6,7 +6,7 @@
 
 <%@ attribute name="domainTypeName" required="true" type="java.lang.String"%>
 <%@ attribute name="fields" required="true" type="java.util.Set"%>
-<%@ attribute name="scopes" required="true" type="org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit"%>
+<%@ attribute name="scopes" required="true" type="java.util.List"%>
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"%>
 
 <c:set var="primaryKeyField" value="${light:primaryKeyPersistentField(fields)}"/>

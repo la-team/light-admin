@@ -79,7 +79,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
     }
 
     private WebElement getScope( String scopeLabel ) {
-        return webDriver().findElement( By.linkText( scopeLabel ) );
+        return webDriver().findElement( By.partialLinkText( scopeLabel ) );
     }
 
 	public QuickViewComponent showQuickViewForItem( int itemId ) {

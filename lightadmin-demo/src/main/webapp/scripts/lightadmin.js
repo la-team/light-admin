@@ -51,6 +51,8 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 						data.iTotalRecords = data.page.totalElements;
 						data.iTotalDisplayRecords = data.page.totalElements;
 
+						activeScope().html(activeScopeName() + ' (' + data.iTotalRecords + ')');
+
 						fnCallback( data );
 					}
 				} );

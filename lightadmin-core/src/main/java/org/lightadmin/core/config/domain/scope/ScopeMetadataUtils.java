@@ -34,6 +34,14 @@ public final class ScopeMetadataUtils {
 		return new SpecificationScopeMetadata<T>( specification ).name( specification.getClass().getSimpleName() );
 	}
 
+	public static boolean isSpecificationScope( final ScopeMetadata scope ) {
+		return scope instanceof ScopeMetadataUtils.SpecificationScopeMetadata;
+	}
+
+	public static boolean isPredicateScope( final ScopeMetadata scope ) {
+		return scope instanceof ScopeMetadataUtils.PredicateScopeMetadata;
+	}
+
 	public static class SpecificationScopeMetadata<T> extends AbstractScope {
 
 		private transient final Specification<T> specification;
