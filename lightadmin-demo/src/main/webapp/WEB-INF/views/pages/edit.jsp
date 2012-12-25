@@ -19,7 +19,7 @@
 <c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
 <spring:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
 
-<div class="title"><h5>Edit <c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h5></div>
+<div class="title"><h5>Edit <c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5></div>
 
 <breadcrumb:breadcrumb>
 	<breadcrumb:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}"/>
@@ -28,7 +28,7 @@
 
 <form id="editForm" onsubmit="return updateDomainObject(this)" class="mainForm">
 	<div class="widget">
-		<div class="head"><h5 class="iCreate"><c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h5></div>
+		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5></div>
 		<fieldset>
 			<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}" varStatus="status">
 				<div id="${attributeEntry.name}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">

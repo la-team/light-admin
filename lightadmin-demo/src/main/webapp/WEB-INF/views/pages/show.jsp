@@ -23,7 +23,7 @@
 <spring:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
 <spring:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
 
-<div class="title"><h5>Show <c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h5></div>
+<div class="title"><h5>Show <c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5></div>
 
 <breadcrumb:breadcrumb>
 	<breadcrumb:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}"/>
@@ -32,7 +32,7 @@
 
 <div class="widget">
 	<div class="head">
-		<h5 class="iList"><c:out value="${domainTypeName}"/> #<c:out value="${entityId}"/></h5>
+		<h5 class="iList"><c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5>
 	</div>
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<tbody id="data-section">
