@@ -1,12 +1,10 @@
-<%@ tag import="com.google.common.collect.Iterables" %>
-
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
-<%@ attribute name="scopes" required="true" rtexprvalue="true" type="org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit"%>
+<%@ attribute name="scopes" required="true" rtexprvalue="true" type="java.util.List"%>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
@@ -14,14 +12,12 @@
 
 <spring:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeName)}" scope="page"/>
 
-<c:set var="tag_scopes_scopeList" value="<%= Iterables.toArray( scopes, org.lightadmin.core.config.domain.scope.ScopeMetadata.class ) %>"/>
-
-<c:if test="${not empty tag_scopes_scopeList}">
+<c:if test="${not empty scopes}">
 	<div class="scopes" id="scopes">
 		<ul>
-			<c:forEach var="scope" items="${tag_scopes_scopeList}">
+			<c:forEach var="scope" items="${scopes}">
 				<li>
-					<a scope-name="${scope.name}" class="scope ${scope.defaultScope ? 'active green' : 'blue' }" href="#${scope.name}"><c:out value="${scope.name}"/></a>
+					<a scope-name="${scope.first.name}" class="scope ${scope.first.defaultScope ? 'active green' : 'blue' }" href="#${scope.first.name}"><c:out value="${scope.first.name}"/>&nbsp;(<c:out value="${scope.second}"/>)</a>
 				</li>
 			</c:forEach>
 		</ul>
@@ -34,8 +30,12 @@
 		return '${domainRestScopeBaseUrl}' + '/' + scopeName + '/search';
 	}
 
+	function activeScope() {
+		return $("a.scope.active" );
+	}
+
 	function activeScopeName() {
-		return $("a.scope.active" ).attr('scope-name');
+		return activeScope().attr('scope-name');
 	}
 
 	function activateScope( scope ) {

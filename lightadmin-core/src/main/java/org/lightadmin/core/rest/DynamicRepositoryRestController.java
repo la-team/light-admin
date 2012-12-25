@@ -22,34 +22,20 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.data.repository.CrudRepository;
-import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
-import org.springframework.data.rest.repository.RepositoryMetadata;
-import org.springframework.data.rest.repository.context.AfterSaveEvent;
-import org.springframework.data.rest.repository.context.BeforeSaveEvent;
-import org.springframework.data.rest.repository.invoke.CrudMethod;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
-import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.lang.reflect.UndeclaredThrowableException;
 import java.net.URI;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -58,7 +44,8 @@ import java.util.Set;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
-import static org.springframework.data.rest.core.util.UriUtils.buildUri;
+import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
+import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
 
 @SuppressWarnings( "unchecked" )
 @RequestMapping( "/rest" )
@@ -122,6 +109,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		return negotiateResponse( request, page, pageMetadata( page ), listViewFields );
 	}
 
+	@Override
 	@ExceptionHandler(RepositoryConstraintViolationException.class)
 	@ResponseBody
 	public ResponseEntity handleValidationFailure(RepositoryConstraintViolationException ex, ServletServerHttpRequest request) throws IOException {
@@ -179,14 +167,6 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		final List<Object> itemsOnPage = items.subList( pageSort.getOffset(), Math.min( items.size(), pageSort.getOffset() + pageSort.getPageSize() ) );
 
 		return new PageImpl<Object>( itemsOnPage, pageSort, items.size() );
-	}
-
-	private boolean isSpecificationScope( final ScopeMetadata scope ) {
-		return scope instanceof ScopeMetadataUtils.SpecificationScopeMetadata;
-	}
-
-	private boolean isPredicateScope( final ScopeMetadata scope ) {
-		return scope instanceof ScopeMetadataUtils.PredicateScopeMetadata;
 	}
 
 	private Specification and( Specification specification, Specification otherSpecification ) {

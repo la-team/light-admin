@@ -41,3 +41,9 @@ nbproject
 .CVS
 .idea
 node_modules
+
+target/
+.settings/
+.classpath
+.project
+/.gitignore

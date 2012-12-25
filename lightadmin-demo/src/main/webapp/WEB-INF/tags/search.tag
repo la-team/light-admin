@@ -14,7 +14,7 @@
 
 <c:if test="${not empty tag_search_filterList}">
 	<div class="widget">
-		<div class="head closed normal"><h5>Advanced Search</h5></div>
+		<div id="filter-header" class="head closed normal"><h5>Advanced Search</h5></div>
 		<div class="body" style="display: none; ">
 
 			<form name="filter-form" class="mainForm">

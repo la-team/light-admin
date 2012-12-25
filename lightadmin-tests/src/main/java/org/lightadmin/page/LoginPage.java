@@ -14,10 +14,10 @@ import static org.junit.Assert.fail;
 @Component
 public class LoginPage extends BasePage<LoginPage> {
 
-	@FindBy( id = "j_username" )
+	@FindBy( name = "j_username" )
 	private WebElement login;
 
-	@FindBy( id = "j_password" )
+	@FindBy( name = "j_password" )
 	private WebElement password;
 
 	@FindBy( id = "signIn" )
@@ -67,7 +67,7 @@ public class LoginPage extends BasePage<LoginPage> {
 	}
 
 	public String errorMessage() {
-		return webDriver().findElement( By.className( "alert-message" ) ).getText();
+		return webDriver().findElement( By.id( "alert-message" ) ).getText();
 	}
 
 	@Override
@@ -78,7 +78,7 @@ public class LoginPage extends BasePage<LoginPage> {
 	@Override
 	protected void isLoaded() throws Error {
 		try {
-			webDriver().findElement( By.xpath( "//div[@id='login']" ) );
+			webDriver().findElement( By.xpath( "//form[@id='login-form']" ) );
 		} catch ( NoSuchElementException e ) {
 			fail();
 		}

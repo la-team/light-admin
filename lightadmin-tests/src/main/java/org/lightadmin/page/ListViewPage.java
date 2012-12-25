@@ -54,13 +54,17 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 		}
 	}
 
+	public void openAdvancedSearch() {
+		filterFormComponent.openAdvancedSearch();
+	}
+
     public void selectScope( String scopeLabel ) {
         getScope( scopeLabel ).click();
     }
 
     public boolean scopeIsHighlighted( String scopeLabel ) {
         try {
-            return getScope( scopeLabel ).getAttribute( "class" ).contains( "label-success" );
+            return getScope( scopeLabel ).getAttribute( "class" ).contains( "active" );
         } catch ( NoSuchElementException e ) {
             return false;
         }
@@ -75,7 +79,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
     }
 
     private WebElement getScope( String scopeLabel ) {
-        return webDriver().findElement( By.linkText( scopeLabel ) );
+        return webDriver().findElement( By.partialLinkText( scopeLabel ) );
     }
 
 	public QuickViewComponent showQuickViewForItem( int itemId ) {

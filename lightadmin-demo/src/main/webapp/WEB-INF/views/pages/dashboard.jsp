@@ -13,8 +13,8 @@
 
 <c:if test="${not empty dashboardDomainTypes}">
 	<div class="widget">
-		<div class="head"><h5 class="iChart8">Domains statistic</h5><div class="num"><a href="#" class="blueNum">+100500</a></div></div>
-		<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+		<div class="head"><h5 class="iChart8">Domains statistics</h5><div class="num"><a id="total-count-change" href="#" class="blueNum">+100500</a></div></div>
+		<table id="dashboard-statistics" cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 			<thead>
 			<tr>
 				<td>Domain Type</td>
@@ -24,14 +24,14 @@
 			</thead>
 			<tbody>
 			<c:forEach var="dashboardDomainType" items="${dashboardDomainTypes}">
-			<tr id="stat-row-${dashboardDomainType.first.value}">
-				<td><a href="<spring:url value='${dashboardDomainType.first.link}'/>" title="" class="domain-link"><c:out value="${dashboardDomainType.first.value}"/></a></td>
+			<tr id="stat-row-${dashboardDomainType.first.value}" class="stat-row">
+				<td><a class="domain-link" href="<spring:url value='${dashboardDomainType.first.link}'/>" title=""><c:out value="${dashboardDomainType.first.value}"/></a></td>
 				<td align="center">
 					<a href="<spring:url value='${dashboardDomainType.first.link}'/>" title="" class="webStatsLink">
-						<span class="row-count"><c:out value="${dashboardDomainType.second}"/></span>
+						<span class="record-count"><c:out value="${dashboardDomainType.second}"/></span>
 					</a>
 				</td>
-				<td><span class="statPlus">0.<c:out value="${dashboardDomainType.second}"/>%</span></td>
+				<td><span class="statPlus record-count-change">0.<c:out value="${dashboardDomainType.second}"/>%</span></td>
 			</tr>
 			</c:forEach>
 			</tbody>

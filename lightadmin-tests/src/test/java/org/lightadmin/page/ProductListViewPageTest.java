@@ -8,6 +8,7 @@ import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.junit.Assert.assertTrue;
 import static org.lightadmin.util.DomainAsserts.assertTableData;
 
 public class ProductListViewPageTest extends SeleniumIntegrationTest {
@@ -15,11 +16,13 @@ public class ProductListViewPageTest extends SeleniumIntegrationTest {
 	@Autowired
 	private LoginPage loginPage;
 
+	private DashboardPage dashboardPage;
+
 	private ListViewPage listViewPage;
 
 	@Before
 	public void setup() throws Exception {
-		final DashboardPage dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
+		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
 
 		listViewPage = dashboardPage.navigateToDomain( Domain.PRODUCTS );
 	}
@@ -27,6 +30,11 @@ public class ProductListViewPageTest extends SeleniumIntegrationTest {
 	@After
 	public void tearDown() throws Exception {
 		listViewPage.logout();
+	}
+
+	@Test
+	public void dashboardBreadcrumbPresent() throws Exception {
+		assertTrue( dashboardPage.dashboardBreadcrumbItemLinkPresent() );
 	}
 
 	@Test

@@ -3,7 +3,7 @@ package org.lightadmin.page;
 import org.lightadmin.SeleniumContext;
 import org.lightadmin.component.BreadcrumbsComponent;
 import org.lightadmin.component.NavigationMenuComponent;
-import org.lightadmin.component.ToolbarComponent;
+import org.lightadmin.component.TopNavigationComponent;
 import org.lightadmin.data.Domain;
 
 public abstract class SecuredPage<P extends BasePage<P>> extends BasePage<P> {
@@ -12,18 +12,18 @@ public abstract class SecuredPage<P extends BasePage<P>> extends BasePage<P> {
 
 	private final BreadcrumbsComponent breadcrumbsComponent;
 
-	private final ToolbarComponent toolbarComponent;
+	private final TopNavigationComponent topNavigationComponent;
 
 	protected SecuredPage( SeleniumContext seleniumContext ) {
 		super( seleniumContext );
 
 		navigationMenuComponent = new NavigationMenuComponent( seleniumContext );
 		breadcrumbsComponent = new BreadcrumbsComponent( seleniumContext );
-		toolbarComponent = new ToolbarComponent( seleniumContext );
+		topNavigationComponent = new TopNavigationComponent( seleniumContext );
 	}
 
-	public boolean dashboardBreadcrumbItemPresent() {
-		return breadcrumbsComponent.dashboardBreadcrumbItemPresent();
+	public boolean dashboardBreadcrumbItemLinkPresent() {
+		return breadcrumbsComponent.dashboardBreadcrumbLinkPresent();
 	}
 
 	public ListViewPage navigateToDomain( Domain domain ) {
@@ -31,10 +31,10 @@ public abstract class SecuredPage<P extends BasePage<P>> extends BasePage<P> {
 	}
 
 	public boolean isLoggedIn() {
-		return toolbarComponent.isLoggedIn();
+		return topNavigationComponent.isLoggedIn();
 	}
 
 	public LoginPage logout() {
-		return toolbarComponent.logout();
+		return topNavigationComponent.logout();
 	}
 }

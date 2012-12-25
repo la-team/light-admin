@@ -37,6 +37,7 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 		customerListViewPage.selectScope( SELLERS_SCOPE );
 		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 
+		customerListViewPage.openAdvancedSearch();
 		customerListViewPage.filter( "lastname", "Matthews1" );
 		assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 
@@ -46,6 +47,7 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void scopeIsAppliedToFilteredCustomers() {
+		customerListViewPage.openAdvancedSearch();
 		customerListViewPage.filter( "lastname", "Matthews1" );
 		assertTableData( expectedFilteredCustomers, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 
