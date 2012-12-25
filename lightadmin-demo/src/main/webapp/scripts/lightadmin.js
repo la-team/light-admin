@@ -232,6 +232,7 @@ function loadDomainObject(form, restRepoUrl) {
 					}
 				}
 			}
+			$.uniform.update();
 		}
 	});
 }
