@@ -51,13 +51,14 @@ public class LightAdminDomainConfiguration {
 
 	@Bean
 	@Autowired
-	public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory ) {
-		return new DomainTypeAdministrationConfigurationFactory( dynamicJpaRepositoryFactory );
+	public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory, DomainTypeEntityMetadataResolver entityMetadataResolver) {
+		return new DomainTypeAdministrationConfigurationFactory( dynamicJpaRepositoryFactory, entityMetadataResolver);
 	}
 
 	@Bean
-	public GlobalAdministrationConfiguration globalAdministrationConfiguration() {
-		return new GlobalAdministrationConfiguration();
+	@Autowired
+	public GlobalAdministrationConfiguration globalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
+		return new GlobalAdministrationConfiguration(domainTypeConfigurationFactory);
 	}
 
 	@Bean

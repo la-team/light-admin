@@ -5,6 +5,9 @@ import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,11 +21,15 @@ public class ApplicationController {
 
 	private static final Logger LOG = LoggerFactory.getLogger( ApplicationController.class );
 
+	public static final String BEAN_FACTORY_KEY = "beanFactory";
 	public static final String ADMINISTRATION_CONFIGURATION_KEY = "administrationConfiguration";
 	public static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = "domainTypeAdministrationConfiguration";
 
 	@Autowired
 	private GlobalAdministrationConfiguration configuration;
+
+	@Autowired
+	private ConfigurableApplicationContext appContext;
 
 	@ExceptionHandler( Exception.class )
 	public String handleException() {
@@ -70,8 +77,8 @@ public class ApplicationController {
 	}
 
 	private void addDomainTypeConfigurationToModel( String domainTypeName, Model model ) {
-		model.addAttribute( ADMINISTRATION_CONFIGURATION_KEY, configuration );
 		model.addAttribute( DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration.forEntityName( domainTypeName ) );
+		model.addAttribute( BEAN_FACTORY_KEY, appContext.getAutowireCapableBeanFactory() );
 	}
 
 	private DynamicJpaRepository repositoryForEntity( final String domainType ) {

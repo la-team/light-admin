@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
-public class DomainTypeAdministrationConfiguration {
+public class DomainTypeAdministrationConfiguration implements DomainTypeBasicConfiguration {
 
 	private final DynamicJpaRepository<?, ? extends Serializable> repository;
 
@@ -28,18 +28,22 @@ public class DomainTypeAdministrationConfiguration {
 		this.repository = repository;
 	}
 
+	@Override
 	public DomainTypeEntityMetadata getDomainTypeEntityMetadata() {
 		return domainConfigurationSource.getDomainTypeEntityMetadata();
 	}
 
+	@Override
 	public Class<?> getDomainType() {
 		return domainConfigurationSource.getDomainType();
 	}
 
+	@Override
 	public DynamicJpaRepository<?, ?> getRepository() {
 		return repository;
 	}
 
+	@Override
 	public String getDomainTypeName() {
 		return StringUtils.uncapitalize( getDomainTypeEntityMetadata().getEntityName() );
 	}
@@ -64,10 +68,12 @@ public class DomainTypeAdministrationConfiguration {
 		return domainConfigurationSource.getFilters();
 	}
 
+	@Override
 	public EntityMetadataConfigurationUnit getEntityConfiguration() {
 		return domainConfigurationSource.getEntityConfiguration();
 	}
 
+	@Override
 	public String getConfigurationName() {
 		return domainConfigurationSource.getConfigurationName();
 	}

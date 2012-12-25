@@ -13,10 +13,7 @@ import org.springframework.data.rest.webmvc.EntityResource;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
-import org.springframework.web.util.UriComponentsBuilder;
-
 import java.io.Serializable;
-import java.net.URI;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -24,17 +21,15 @@ import java.util.Set;
 import static com.google.common.collect.Maps.newLinkedHashMap;
 
 @SuppressWarnings( "unchecked" )
-public class DomainTypeToResourceConverter implements Converter<Object, Resource> {
+public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
 
 	private GlobalAdministrationConfiguration configuration;
-
-	private RepositoryRestConfiguration restConfiguration;
 
 	private FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
 
 	public DomainTypeToResourceConverter( GlobalAdministrationConfiguration configuration, RepositoryRestConfiguration restConfiguration ) {
+		super(restConfiguration);
 		this.configuration = configuration;
-		this.restConfiguration = restConfiguration;
 	}
 
 	public Resource convert( final Object source, Set<FieldMetadata> fieldMetadatas ) {
@@ -107,21 +102,4 @@ public class DomainTypeToResourceConverter implements Converter<Object, Resource
 		return new EntityResource( Maps.<String, Object>newLinkedHashMap(), links );
 	}
 
-	private Link selfDomainLink( final String domainTypeName, final Serializable id ) {
-		URI selfUri = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() )
-										  .pathSegment( "domain" )
-										  .pathSegment( domainTypeName )
-										  .pathSegment( id.toString() ).build().toUri();
-
-		return new Link(selfUri.toString(), "selfDomainLink");
-	}
-
-	private Link selfLink( final String domainTypeName, final Serializable id ) {
-		URI selfUri = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() )
-										  .pathSegment( "rest" )
-										  .pathSegment( domainTypeName )
-										  .pathSegment( id.toString() ).build().toUri();
-
-		return new Link(selfUri.toString(), "self");
-	}
 }

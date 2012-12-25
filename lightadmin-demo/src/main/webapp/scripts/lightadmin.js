@@ -1,21 +1,37 @@
 
 (function($) {
 $.fn.serializeFormJSON = function() {
+var form = this;
 var o = {};
 var a = this.serializeArray();
 $.each(a, function() {
-	   if (o[this.name]) {
-		   if (!o[this.name].push) {
-			   o[this.name] = [o[this.name]];
-		   }
-		   o[this.name].push(this.value || '');
-	   } else {
-		   o[this.name] = this.value || '';
-	   }
+	if (o[this.name]) {
+		if (!o[this.name].push) {
+			o[this.name] = [o[this.name]];
+		}
+		o[this.name].push(resolveFiledData(this, form));
+	} else {
+		o[this.name] = resolveFiledData(this, form);
+	}
 });
 return o;
 };
 })(jQuery);
+
+function resolveFiledData(field, form) {
+	var fieldVal = field.value || '';
+	var findRes = $(form).find('select[name=' + field.name + ']');
+	if (findRes.length == 0) {
+		return fieldVal;
+	}
+	var hrefTemplate = $(findRes[0]).attr('hrefTemplate');
+	if (hrefTemplate) {
+		var href = decodeURIComponent(hrefTemplate).replace('{0}', fieldVal);
+		return {href : href};
+	} else {
+		return fieldVal;
+	}
+}
 
 function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 
@@ -176,22 +192,22 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 
 function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
 	$.ajax({
-			   type: 'GET',
-			   url: restRepoUrl,
-			   dataType : 'json',
-			   success : function(data) {
-				   for (name in data) {
-					   var field = showViewSection.find('[name="field-' + name + '"]');
-					   if (field.length > 0) {
-						   if ($.isPlainObject(data[name].value)) {
-							   field.html(renderValue(data[name].value));
-						   } else {
-							   field.html(data[name].value);
-						   }
-					   }
-				   }
-			   }
-		   });
+			type: 'GET',
+			url: restRepoUrl,
+			dataType : 'json',
+			success : function(data) {
+				for (name in data) {
+					var field = showViewSection.find('[name="field-' + name + '"]');
+					if (field.length > 0) {
+						if ($.isPlainObject(data[name].value)) {
+							field.html(renderValue(data[name].value));
+						} else {
+							field.html(data[name].value);
+						}
+					}
+				}
+			}
+		});
 }
 
 var REST_REPO_URL;
@@ -203,13 +219,14 @@ function loadDomainObject(form, restRepoUrl) {
 		url: restRepoUrl + '/unit/formView',
 		dataType : 'json',
 		success : function(data, textStatus) {
-			for (name in data) {
-				var editor = form.find('[name="' + name + '"]');
+			for (var attr in data) {
+				var editor = form.find('[name="' + attr + '"]');
 				if (editor.length > 0) {
-					if ($.isPlainObject(data[name].value)) {
-						editor.val(data[name].value.stringRepresentation);
+					var attrVal = data[attr].value;
+					if ($.isPlainObject(attrVal)) {
+						selectOptions(editor, data[attr].value);
 					} else {
-						editor.val(data[name].value);
+						editor.val(data[attr].value);
 					}
 				}
 			}
@@ -217,21 +234,44 @@ function loadDomainObject(form, restRepoUrl) {
 	});
 }
 
+
+//function extractEntityId(data, association) {
+//	for (var attr in data) {
+//		if (data[attr].primaryKey) {
+//			ASSOCIATION_TO_ID_FIELD[association] = data;
+//			return data[attr].value;
+//		}
+//	}
+//	return '';
+//}
+
+function selectOptions(editor, data) {
+	var entityId = getPrimaryKey(data);
+	if (entityId == null) {
+		entityId = '';
+	}
+	editor.find('option').each(function(index, option) {
+		if (option.value == entityId) {
+			option.selected = true;
+		}
+	});
+}
+
 function removeDomainObject(entityId, restUrl, callback) {
 	$.ajax({
-	   type: 'DELETE',
-	   url: restUrl + '/' + entityId,
-	   contentType: 'application/json',
-	   dataType : 'json',
-	   success : function() {
-		   callback();
-	   },
-	   statusCode : {
-		   409:
-		   function() {
-			   jAlert('Something bad happened!', 'Alert');
-		   }
-	   }
+	type: 'DELETE',
+	url: restUrl + '/' + entityId,
+	contentType: 'application/json',
+	dataType : 'json',
+	success : function() {
+		callback();
+	},
+	statusCode : {
+		409:
+		function() {
+			jAlert('Something bad happened!', 'Alert');
+		}
+	}
 	});
 
 	return false;
@@ -274,3 +314,5 @@ function updateDomainObject(domForm) {
 
 	return false;
 }
+
+

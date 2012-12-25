@@ -22,14 +22,22 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
+import org.springframework.data.rest.repository.RepositoryMetadata;
+import org.springframework.data.rest.repository.context.AfterSaveEvent;
+import org.springframework.data.rest.repository.context.BeforeSaveEvent;
+import org.springframework.data.rest.repository.invoke.CrudMethod;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.validation.FieldError;
@@ -41,6 +49,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.UndeclaredThrowableException;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -49,16 +58,17 @@ import java.util.Set;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
+import static org.springframework.data.rest.core.util.UriUtils.buildUri;
 
 @SuppressWarnings( "unchecked" )
 @RequestMapping( "/rest" )
-public class DynamicRepositoryRestController extends RepositoryRestController implements GlobalAdministrationConfigurationAware {
+public class DynamicRepositoryRestController extends FlexibleRepositoryRestController implements GlobalAdministrationConfigurationAware {
 
 	private final SpecificationCreator specificationCreator = new SpecificationCreator();
 
 	private GlobalAdministrationConfiguration configuration;
 
-    private ApplicationContext applicationContext;
+	private ApplicationContext applicationContext;
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET )
@@ -69,11 +79,11 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
 
-		Serializable entityId = _stringToSerializable( id, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
+		Serializable entityId = stringToSerializable( id, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
 
 		final Object entity = repository.findOne( entityId );
 
-		return _negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new DomainTypeResource( entity, fields( configurationUnit, domainTypeAdministrationConfiguration ) ) );
+		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new DomainTypeResource( entity, fields( configurationUnit, domainTypeAdministrationConfiguration ) ) );
 	}
 
 	@ResponseBody
@@ -133,7 +143,7 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		}
 		packet.put("errors", errors);
 
-		return _negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+		return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
 	}
 
 	private Set<FieldMetadata> fields( String configurationUnit, DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
@@ -189,38 +199,8 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		return specificationCreator.toSpecification( entityMetadata, parameters );
 	}
 
-	private <V extends Serializable> V _stringToSerializable(String str, Class<V> targetType) {
-		Method stringToSerializableMethod = ReflectionUtils.findMethod( getClass(), "stringToSerializable", String.class, Class.class );
-
-		ReflectionUtils.makeAccessible( stringToSerializableMethod );
-
-		try {
-			return ( V ) stringToSerializableMethod.invoke( this, str, targetType);
-		} catch ( InvocationTargetException ex ) {
-			ReflectionUtils.rethrowRuntimeException( ex.getTargetException() );
-			return null; // :)
-		} catch ( IllegalAccessException ex ) {
-			throw new UndeclaredThrowableException( ex );
-		}
-	}
-
-	private ResponseEntity<byte[]> _negotiateResponse(final ServletServerHttpRequest request, final HttpStatus status, final HttpHeaders headers, final Object resource) throws IOException {
-		Method negotiateResponseMethod = ReflectionUtils.findMethod( getClass(), "negotiateResponse", ServletServerHttpRequest.class, HttpStatus.class, HttpHeaders.class, Object.class );
-
-		ReflectionUtils.makeAccessible( negotiateResponseMethod );
-
-		try {
-			return ( ResponseEntity<byte[]> ) negotiateResponseMethod.invoke( this, request, status, headers, resource );
-		} catch ( InvocationTargetException ex ) {
-			ReflectionUtils.rethrowRuntimeException( ex.getTargetException() );
-			return null; // :)
-		} catch ( IllegalAccessException ex ) {
-			throw new UndeclaredThrowableException( ex );
-		}
-	}
-
 	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata, Set<FieldMetadata> fieldMetadatas ) throws IOException {
-		return _negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page, fieldMetadatas ), pageMetadata, Lists.<Link>newArrayList() ) );
+		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page, fieldMetadatas ), pageMetadata, Lists.<Link>newArrayList() ) );
 	}
 
 	private PagedResources.PageMetadata pageMetadata( final Page page ) {
@@ -245,9 +225,9 @@ public class DynamicRepositoryRestController extends RepositoryRestController im
 		this.configuration = configuration;
 	}
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        super.setApplicationContext(applicationContext);
-        this.applicationContext = applicationContext;
-    }
+	@Override
+	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+		super.setApplicationContext(applicationContext);
+		this.applicationContext = applicationContext;
+	}
 }

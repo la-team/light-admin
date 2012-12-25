@@ -9,17 +9,19 @@ import java.util.List;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
-import javax.servlet.jsp.tagext.SimpleTagSupport;
-
-import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.util.Pair;
-import org.lightadmin.core.web.ApplicationController;
+import org.lightadmin.core.view.tags.AbstractAutowiredTag;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.Assert;
 
-public class DomainTypeElementsTag extends SimpleTagSupport {
+public class DomainTypeElementsTag extends AbstractAutowiredTag {
+
+	@Autowired(required = true)
+	private GlobalAdministrationConfiguration configuration;
 
 	private Class<?> domainType;
 
@@ -29,30 +31,17 @@ public class DomainTypeElementsTag extends SimpleTagSupport {
 	@Override
 	public void doTag() throws JspException, IOException {
 
-		JspContext jspContext = getJspContext();
-		JspFragment tagBody = getJspBody();
-
-		GlobalAdministrationConfiguration configuration =
-				(GlobalAdministrationConfiguration) jspContext.findAttribute(ApplicationController.ADMINISTRATION_CONFIGURATION_KEY);
-
-		Assert.notNull(configuration, "<domainTypeAdministrationConfiguration> is not found in the JspContext");
-
-		DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forDomainType(domainType);
-
-		if (domainTypeConfiguration == null) {
-			jspContext.setAttribute(idVar, "");
-			jspContext.setAttribute(stringRepresentationVar, "Not Implemented");
-			tagBody.invoke(null);
-			return;
-		}
+		DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forAssociation(domainType);
+		Assert.notNull(domainTypeConfiguration, "<domainTypeConfiguration> not found for association");
 
 		// TODO: Implement configurable ordering
 		List allElements = domainTypeConfiguration.getRepository().findAll();
 		allElements = sortByNaturalOrder(allElements, domainTypeConfiguration);
 
-
 		DomainTypeAttributeMetadata idAttribute = domainTypeConfiguration.getDomainTypeEntityMetadata().getIdAttribute();
 		EntityNameExtractor<Object> nameExtractor = domainTypeConfiguration.getEntityConfiguration().getNameExtractor();
+		JspContext jspContext = getJspContext();
+		JspFragment tagBody = getJspBody();
 		for (Object element : allElements) {
 			jspContext.setAttribute(idVar, idAttribute.getValue(element));
 			jspContext.setAttribute(stringRepresentationVar, nameExtractor.apply(element));
@@ -60,7 +49,7 @@ public class DomainTypeElementsTag extends SimpleTagSupport {
 		}
 	}
 
-	private List sortByNaturalOrder(List elements, DomainTypeAdministrationConfiguration elementTypeConfiguration) {
+	private List sortByNaturalOrder(List elements, DomainTypeBasicConfiguration elementTypeConfiguration) {
 
 		EntityNameExtractor<Object> nameExtractor = elementTypeConfiguration.getEntityConfiguration().getNameExtractor();
 

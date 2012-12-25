@@ -13,6 +13,7 @@ import org.springframework.data.rest.webmvc.json.RepositoryAwareJacksonModule;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 
 import java.util.Arrays;
@@ -23,6 +24,12 @@ public class LightAdminRepositoryRestConfiguration {
 	@Bean
 	public RepositoryRestConfiguration repositoryRestConfiguration() {
 		return RepositoryRestConfiguration.DEFAULT.setDefaultPageSize( 10 );
+	}
+
+	@Bean
+	@Autowired
+	public RestConfigurationInitInterceptor restConfigurationInitInterceptor(RepositoryRestConfiguration config) {
+		return new RestConfigurationInitInterceptor(config);
 	}
 
 	@Bean

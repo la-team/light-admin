@@ -95,6 +95,23 @@
 	</tag>
 
 	<tag>
+		<description>Writes REST href template for the specified domain type</description>
+		<name>domain-type-href-template</name>
+		<tag-class>org.lightadmin.core.view.tags.form.DomainTypeHrefTemplateTag</tag-class>
+		<body-content>empty</body-content>
+		<attribute>
+			<name>domainType</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>idPlaceholder</name>
+			<required>false</required>
+			<rtexprvalue>false</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
 		<description>Renders dynamic entity attribute</description>
 		<name>attribute</name>
 		<tag-class>org.lightadmin.core.view.tags.AttributeRendererTag</tag-class>

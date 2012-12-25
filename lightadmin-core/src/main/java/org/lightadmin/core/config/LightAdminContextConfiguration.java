@@ -1,6 +1,7 @@
 package org.lightadmin.core.config;
 
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
+import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
 import org.lightadmin.core.web.ApplicationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -22,19 +23,23 @@ import javax.persistence.EntityManagerFactory;
 
 @Configuration
 @Import( {
-			 LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class,
-			 LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class,
-			 LightAdminSecurityConfiguration.class, LightAdminViewConfiguration.class
-		 } )
+			LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class,
+			LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class,
+			LightAdminSecurityConfiguration.class, LightAdminViewConfiguration.class
+		} )
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
 
+	@Autowired
+	private RestConfigurationInitInterceptor restConfigurationInitInterceptor;
+
 	@Override
 	public void addInterceptors( InterceptorRegistry registry ) {
 		registry.addWebRequestInterceptor( openEntityManagerInViewInterceptor() );
+		registry.addWebRequestInterceptor( restConfigurationInitInterceptor );
 	}
 
 	@Override
