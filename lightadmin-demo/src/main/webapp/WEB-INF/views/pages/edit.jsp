@@ -30,14 +30,16 @@
 	<div class="widget">
 		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5></div>
 		<fieldset>
-			<c:forEach var="attributeEntry" items="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata.attributes}" varStatus="status">
-				<div id="${attributeEntry.name}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
-					<label><c:out value="${light:capitalize(attributeEntry.name)}"/>:</label>
+			<c:forEach var="fieldEntry" items="${domainTypeAdministrationConfiguration.formViewFragment.fields}" varStatus="status">
+				<c:if test="${!fieldEntry.primaryKey}">
+				<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
+					<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
 					<div class="formRight">
-						<form:edit-control attributeMetadata="${attributeEntry}" cssClass="input-xlarge" errorCssClass="error"/>
+						<form:edit-control attributeMetadata="${fieldEntry.attributeMetadata}" cssClass="input-xlarge" errorCssClass="error"/>
 					</div>
 					<div class="fix"></div>
 				</div>
+				</c:if>
 			</c:forEach>
 		</fieldset>
 		<div class="wizNav">

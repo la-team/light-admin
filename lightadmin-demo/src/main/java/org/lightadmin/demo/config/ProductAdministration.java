@@ -7,10 +7,12 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.form.FormViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
 import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.Product;
 
 @SuppressWarnings( "unused" )
@@ -39,6 +41,13 @@ public class ProductAdministration {
 			.field( "name" ).alias( "Name")
 			.field( "description" ).alias("Description")
 			.field( "price" ).alias("Price").build();
+	}
+
+	public static FieldSetConfigurationUnit formView( final FormViewConfigurationUnitBuilder fragmentBuilder ) {
+		return fragmentBuilder
+				.field( "name" ).alias( "Name")
+				.field( "description" ).alias("Description")
+				.field( "price" ).alias("Price").build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {

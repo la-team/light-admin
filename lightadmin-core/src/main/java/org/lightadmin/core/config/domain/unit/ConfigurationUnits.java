@@ -75,4 +75,9 @@ public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializ
 	public ShowViewConfigurationUnit getShowViewConfigurationUnit() {
 		return ( ShowViewConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.SHOW_VIEW );
 	}
+
+	public FieldSetConfigurationUnit getFormViewConfigurationUnit() {
+		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.FORM_VIEW );
+	}
+
 }

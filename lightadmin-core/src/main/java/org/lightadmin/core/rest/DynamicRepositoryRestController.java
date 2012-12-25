@@ -141,7 +141,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			case SHOW_VIEW:
 				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
 			case FORM_VIEW:
-				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
+				return domainTypeAdministrationConfiguration.getFormViewFragment().getFields();
 			case QUICK_VIEW:
 				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
 			default:

@@ -1,0 +1,67 @@
+package org.lightadmin.core.config.domain.unit;
+
+import java.util.Iterator;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.containsPersistentField;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.getPersistentField;
+
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.field.Persistable;
+import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
+
+public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUnit implements FieldSetConfigurationUnit, DomainTypeEntityMetadataAware {
+
+	private static final long serialVersionUID = 1L;
+
+	private final DomainConfigurationUnitType configurationUnitType;
+	private Set<FieldMetadata> fields = newLinkedHashSet();
+
+	public DefaultFieldSetConfigurationUnit( Class<?> domainType, DomainConfigurationUnitType configurationUnitType ) {
+		super( domainType );
+		this.configurationUnitType = configurationUnitType;
+	}
+
+	public void addField( FieldMetadata fieldMetadata ) {
+		fields.add( fieldMetadata );
+	}
+
+	public Set<FieldMetadata> getFields() {
+		return newLinkedHashSet( fields );
+	}
+
+	@Override
+	public Iterator<FieldMetadata> iterator() {
+		return getFields().iterator();
+	}
+
+	@Override
+	public DomainConfigurationUnitType getDomainConfigurationUnitType() {
+		return configurationUnitType;
+	}
+
+	@Override
+	public void setDomainTypeEntityMetadata( DomainTypeEntityMetadata domainTypeEntityMetadata ) {
+
+		if ( containsPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() ) ) {
+			final PersistentFieldMetadata primaryKeyField = getPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() );
+			primaryKeyField.setPrimaryKey( true );
+		} else {
+			fields = addPrimaryKeyPersistentField( fields, domainTypeEntityMetadata.getIdAttribute() );
+		}
+
+		for (FieldMetadata field : fields) {
+			if (field instanceof DomainTypeAttributeMetadataAware && field instanceof Persistable) {
+				((DomainTypeAttributeMetadataAware) field).setAttributeMetadata(domainTypeEntityMetadata.getAttribute(((Persistable) field).getField()));
+			}
+		}
+
+	}
+
+}

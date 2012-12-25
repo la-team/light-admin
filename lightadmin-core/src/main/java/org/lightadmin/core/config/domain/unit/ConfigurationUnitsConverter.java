@@ -6,6 +6,8 @@ import org.lightadmin.core.config.domain.context.DefaultScreenContextConfigurati
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.DefaultFiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.form.DefaultFormViewConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.form.FormViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.fragment.TableListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.scope.DefaultScopesConfigurationUnitBuilder;
@@ -31,11 +33,12 @@ public final class ConfigurationUnitsConverter implements Converter<Class, Confi
 		final Class<?> domainType = configurationDomainType( configurationClass );
 
 		return new ConfigurationUnits( domainType,
-									   initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class, domainType ),
-									   initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class, domainType ),
-									   initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, ListViewConfigurationUnitBuilder.class, TableListViewConfigurationUnitBuilder.class, domainType ),
-									   initializeConfigurationUnitWithBuilder( configurationClass, SHOW_VIEW, ShowViewConfigurationUnitBuilder.class, DefaultShowViewConfigurationUnitBuilder.class, domainType ),
-									   initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class, domainType ),
-									   initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class, domainType ) );
+									initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, ListViewConfigurationUnitBuilder.class, TableListViewConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, SHOW_VIEW, ShowViewConfigurationUnitBuilder.class, DefaultShowViewConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, FORM_VIEW, FormViewConfigurationUnitBuilder.class, DefaultFormViewConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class, domainType ));
 	}
 }
