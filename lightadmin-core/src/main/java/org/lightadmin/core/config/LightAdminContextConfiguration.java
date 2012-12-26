@@ -1,5 +1,7 @@
 package org.lightadmin.core.config;
 
+import java.util.List;
+
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
 import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
 import org.lightadmin.core.web.ApplicationController;
@@ -12,8 +14,10 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.core.convert.ConversionService;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
@@ -35,6 +39,9 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private RestConfigurationInitInterceptor restConfigurationInitInterceptor;
+
+	@Autowired
+	ExceptionHandlerExceptionResolver exceptionHandlerResolver;
 
 	@Override
 	public void addInterceptors( InterceptorRegistry registry ) {
@@ -67,6 +74,11 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 		DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
 		bean.addConverter( domainTypeToResourceConverter );
 		return bean;
+	}
+
+	@Override
+	public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
+		exceptionResolvers.add(exceptionHandlerResolver);
 	}
 
 	@Bean

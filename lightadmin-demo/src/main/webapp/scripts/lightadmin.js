@@ -281,7 +281,9 @@ function removeDomainObject(entityId, restUrl, callback) {
 }
 
 function updateDomainObject(domForm) {
-
+	$.each($(domForm).find('[id$=-error]'), function(index, element) {
+		$(element).text('');
+	});
 	var jsonForm = $(domForm).serializeFormJSON();
 	$.ajax({
 		type: 'PUT',
@@ -300,16 +302,24 @@ function updateDomainObject(domForm) {
 				function(jqXHR) {
 					var data = $.parseJSON(jqXHR.responseText);
 					var errors = data.errors;
+					var errorMessages = '';
 					for (var i=0; i<errors.length; i++) {
 						var error = errors[i];
+						var errorMessage = $('<div/>').text(error.message).html();
+						if (!error.field) {
+							errorMessages = errorMessages + errorMessage + '<br>';
+						}
 						var messageDiv = $('#' + error.field + '-error');
 						if (messageDiv.length > 0) {
-							messageDiv.text(error.message);
+							messageDiv.text(errorMessage);
 						}
 						var controlGroup = $('#' + error.field + '-control-group');
 						if (controlGroup.length > 0) {
 							controlGroup.addClass('error');
 						}
+					}
+					if (errorMessages.length > 0) {
+						jAlert(errorMessages);
 					}
 				}
 		}

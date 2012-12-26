@@ -29,6 +29,8 @@ import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
@@ -41,9 +43,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
+import static java.util.Arrays.asList;
+import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
 
@@ -119,7 +125,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		for (FieldError fe : ex.getErrors().getFieldErrors()) {
 			List<Object> args = newArrayList(fe.getObjectName(), fe.getField(), fe.getRejectedValue());
 
-			if (null != fe.getArguments()) {
+			if (fe.getArguments() != null) {
 				Collections.addAll( args, fe.getArguments() );
 			}
 
@@ -132,6 +138,23 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		packet.put("errors", errors);
 
 		return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+	}
+
+	@Override
+	@ExceptionHandler(Exception.class)
+	@ResponseBody
+	public ResponseEntity handleMiscFailures(Throwable t, ServletServerHttpRequest request) throws IOException {
+		Map<String, String> error = singletonMap("message", t.getLocalizedMessage());
+		Map packet = newHashMap();
+		packet.put("errors", asList(error));
+		return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+	}
+
+	@Override
+	@ExceptionHandler({ HttpMessageNotReadableException.class, HttpMessageNotWritableException.class })
+	@ResponseBody
+	public ResponseEntity handleMessageConversionFailure(Exception ex, HttpServletRequest request) throws IOException {
+		return handleMiscFailures(ex.getCause(), new ServletServerHttpRequest(request));
 	}
 
 	private Set<FieldMetadata> fields( String configurationUnit, DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
