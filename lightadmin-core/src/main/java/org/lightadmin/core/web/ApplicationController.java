@@ -5,15 +5,12 @@ import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 @SuppressWarnings( {"unused", "unchecked"} )
 @Controller
@@ -31,9 +28,22 @@ public class ApplicationController {
 	@Autowired
 	private ConfigurableApplicationContext appContext;
 
+	@ResponseStatus( HttpStatus.BAD_REQUEST)
 	@ExceptionHandler( Exception.class )
-	public String handleException() {
-		return "redirect:/";
+	public ModelAndView handleException( Exception ex ) {
+		return new ModelAndView( "error-page" ).addObject( "exception", ex );
+	}
+
+	@ResponseStatus( HttpStatus.NOT_FOUND)
+	@RequestMapping( value = "/page-not-found", method = RequestMethod.GET )
+	public String handlePageNotFound() {
+		return "page-not-found";
+	}
+
+	@ResponseStatus( HttpStatus.FORBIDDEN)
+	@RequestMapping( value = "/access-denied", method = RequestMethod.GET )
+	public String handleAccessDenied() {
+		return "access-denied";
 	}
 
 	@RequestMapping( value = "/login", method = RequestMethod.GET )

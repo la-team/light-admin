@@ -14,8 +14,16 @@
 		<put-attribute name="main-section" value="/WEB-INF/views/pages/login.jsp"/>
 	</definition>
 
-	<definition name="page-404" extends="external-layout">
-		<put-attribute name="main-section" value="/WEB-INF/views/pages/page-404.jsp"/>
+	<definition name="error-page" extends="external-layout">
+		<put-attribute name="main-section" value="/WEB-INF/views/pages/error-page.jsp"/>
+	</definition>
+
+	<definition name="page-not-found" extends="external-layout">
+		<put-attribute name="main-section" value="/WEB-INF/views/pages/page-not-found.jsp"/>
+	</definition>
+
+	<definition name="access-denied" extends="external-layout">
+		<put-attribute name="main-section" value="/WEB-INF/views/pages/access-denied.jsp"/>
 	</definition>
 
 	<definition name="internal-layout" template="/WEB-INF/views/layout/internal-layout.jsp" preparer="screenViewPreparer">

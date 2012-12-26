@@ -12,6 +12,8 @@
 	<http pattern="/rest/**" security="none"/>
 
 	<http pattern="/login" security="none" disable-url-rewriting="true"/>
+	<http pattern="/page-not-found" security="none" disable-url-rewriting="true"/>
+	<http pattern="/access-denied" security="none" disable-url-rewriting="true"/>
 
 	<http use-expressions="true" disable-url-rewriting="true">
 		<!--<intercept-url pattern="/**" access="permitAll" />-->
