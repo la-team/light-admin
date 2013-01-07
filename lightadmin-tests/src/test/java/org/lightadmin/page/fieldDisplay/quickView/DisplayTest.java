@@ -26,6 +26,8 @@ public class DisplayTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
+		removeDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
+
 		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
 
 		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
@@ -52,7 +54,7 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
 		final String[] actualFieldValues = quickViewComponent.getQuickViewFieldValues();
 
-		assertQuickViewFields( new String[]{ "1", "Order1: 100 line items" }, actualFieldValues );
+		assertQuickViewFields( new String[]{ "1", "62100.00" }, actualFieldValues );
 	}
 
 	@Test
@@ -63,7 +65,7 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		final QuickViewComponent quickViewComponent2 = testOrderListPage.showQuickViewForItem( 3 );
 		final String[] actualFieldValues2 = quickViewComponent2.getQuickViewFieldValues();
 
-		assertQuickViewFieldValues( new String[]{ "1", "Order1: 100 line items" }, actualFieldValues1 );
-		assertQuickViewFieldValues( new String[]{ "3", "Order3: 3 line items" }, actualFieldValues2 );
+		assertQuickViewFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues1 );
+		assertQuickViewFieldValues( new String[]{ "3", "226308.00" }, actualFieldValues2 );
 	}
 }

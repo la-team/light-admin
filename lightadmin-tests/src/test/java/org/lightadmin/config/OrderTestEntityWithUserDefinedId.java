@@ -6,6 +6,7 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.TestOrder;
+import org.lightadmin.test.renderer.OrderTotalRenderer;
 
 @SuppressWarnings( "unused" )
 @Administration( TestOrder.class )
@@ -25,6 +26,6 @@ public class OrderTestEntityWithUserDefinedId {
 	public static FieldSetConfigurationUnit quickView( FieldSetConfigurationUnitBuilder quickViewBuilder ) {
 		return quickViewBuilder
 				.field( "id" ).caption( "Order Id" )
-				.field( "name" ).caption( "Order Total" ).build();
+				.renderable( new OrderTotalRenderer() ).caption( "Order Total" ).build();
 	}
 }
