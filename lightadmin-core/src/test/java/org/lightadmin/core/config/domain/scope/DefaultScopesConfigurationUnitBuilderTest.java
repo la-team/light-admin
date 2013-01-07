@@ -24,7 +24,7 @@ public class DefaultScopesConfigurationUnitBuilderTest {
 	public void allScopesDefined() throws Exception {
 		ScopesConfigurationUnit configurationUnit = defaultScopesBuilder()
 			.scope( "Scope #1", all() )
-			.scope( "Scope #2", filter( Predicates.alwaysTrue() ) )
+			.scope( "Scope #2", filter( DomainTypePredicates.alwaysTrue() ) )
 			.build();
 
 		assertScopesDefined( configurationUnit, "Scope #1", "Scope #2" );
@@ -34,7 +34,7 @@ public class DefaultScopesConfigurationUnitBuilderTest {
 	public void defaultScopeSetByDefault() throws Exception {
 		ScopesConfigurationUnit configurationUnit = defaultScopesBuilder()
 			.scope( "Scope #1", all() )
-			.scope( "Scope #2", filter( Predicates.alwaysTrue() ) )
+			.scope( "Scope #2", filter( DomainTypePredicates.alwaysTrue() ) )
 			.build();
 
 		assertTrue( configurationUnit.getScope( "Scope #1" ).isDefaultScope() );
@@ -44,7 +44,7 @@ public class DefaultScopesConfigurationUnitBuilderTest {
 	public void customSetDefaultScope() throws Exception {
 		ScopesConfigurationUnit configurationUnit = defaultScopesBuilder()
 			.scope( "Scope #1", all() )
-			.scope( "Scope #2", filter( Predicates.alwaysTrue() ).defaultScope( true ) )
+			.scope( "Scope #2", filter( DomainTypePredicates.alwaysTrue() ).defaultScope( true ) )
 			.build();
 
 		assertTrue( configurationUnit.getScope( "Scope #2" ).isDefaultScope() );

@@ -1,9 +1,5 @@
 package org.lightadmin.core.config.domain.scope;
 
-import com.google.common.base.Predicate;
-import com.google.common.base.Predicates;
-import org.springframework.data.jpa.domain.Specification;
-
 public final class ScopeMetadataUtils {
 
 	private ScopeMetadataUtils() {
@@ -26,11 +22,11 @@ public final class ScopeMetadataUtils {
 		return new DefaultScopeMetadata().name( "All" );
 	}
 
-	public static <T> ScopeMetadata filter( Predicate<T> filter ) {
+	public static <T> ScopeMetadata filter( DomainTypePredicate<T> filter ) {
 		return new PredicateScopeMetadata<T>( filter ).name( filter.getClass().getSimpleName() );
 	}
 
-	public static <T> ScopeMetadata specification( Specification<T> specification ) {
+	public static <T> ScopeMetadata specification( DomainTypeSpecification<T> specification ) {
 		return new SpecificationScopeMetadata<T>( specification ).name( specification.getClass().getSimpleName() );
 	}
 
@@ -44,9 +40,9 @@ public final class ScopeMetadataUtils {
 
 	public static class SpecificationScopeMetadata<T> extends AbstractScope {
 
-		private transient final Specification<T> specification;
+		private final DomainTypeSpecification<T> specification;
 
-		private SpecificationScopeMetadata( final Specification<T> specification ) {
+		private SpecificationScopeMetadata( final DomainTypeSpecification<T> specification ) {
 			this.specification = specification;
 		}
 
@@ -55,16 +51,16 @@ public final class ScopeMetadataUtils {
 			this.specification = scope.specification();
 		}
 
-		public Specification<T> specification() {
+		public DomainTypeSpecification<T> specification() {
 			return specification;
 		}
 	}
 
 	public static class PredicateScopeMetadata<T> extends AbstractScope {
 
-		private transient Predicate<T> predicate = Predicates.alwaysTrue();
+		private DomainTypePredicate<T> predicate = DomainTypePredicates.alwaysTrue();
 
-		private PredicateScopeMetadata( final Predicate<T> predicate ) {
+		private PredicateScopeMetadata( final DomainTypePredicate<T> predicate ) {
 			this.predicate = predicate;
 		}
 
@@ -73,7 +69,7 @@ public final class ScopeMetadataUtils {
 			this.predicate = scope.predicate();
 		}
 
-		public Predicate<T> predicate() {
+		public DomainTypePredicate<T> predicate() {
 			return predicate;
 		}
 	}
