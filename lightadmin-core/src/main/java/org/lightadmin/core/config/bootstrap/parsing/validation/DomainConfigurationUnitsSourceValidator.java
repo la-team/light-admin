@@ -80,14 +80,14 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 	private void validateSpecificationScope( final ScopeMetadata scope, final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
 		ScopeMetadataUtils.SpecificationScopeMetadata specificationScopeMetadata = ( ScopeMetadataUtils.SpecificationScopeMetadata ) scope;
 		if ( specificationScopeMetadata.specification() == null ) {
-			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, SCOPES, "Filtering specification not defined for scope %s" + scope.getName() ) );
+			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, SCOPES, "Filtering specification not defined for scope " + scope.getName() ) );
 		}
 	}
 
 	private void validatePredicateScope( final ScopeMetadata scope, final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
 		ScopeMetadataUtils.PredicateScopeMetadata predicateScopeMetadata = ( ScopeMetadataUtils.PredicateScopeMetadata ) scope;
 		if ( predicateScopeMetadata.predicate() == null ) {
-			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, SCOPES, "Filtering predicate not defined for scope %s" + scope.getName() ) );
+			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, SCOPES, "Filtering predicate not defined for scope " + scope.getName() ) );
 		}
 	}
 
