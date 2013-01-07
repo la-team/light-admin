@@ -13,7 +13,7 @@ public class TestLineItem extends AbstractEntity {
 	@JoinColumn( name = "product_id" )
 	private TestProduct product;
 
-	private int amount;
+	private Integer amount;
 
 	public TestLineItem() { }
 
@@ -21,7 +21,7 @@ public class TestLineItem extends AbstractEntity {
 		return product;
 	}
 
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 

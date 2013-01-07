@@ -10,7 +10,7 @@ public class FilterTestEntity extends AbstractEntity {
 
 	private String textField;
 
-	private int integerField;
+	private Integer integerField;
 
 	private BigDecimal decimalField;
 
@@ -33,11 +33,11 @@ public class FilterTestEntity extends AbstractEntity {
 		this.textField = textField;
 	}
 
-	public int getIntegerField() {
+	public Integer getIntegerField() {
 		return integerField;
 	}
 
-	public void setIntegerField( final int integerField ) {
+	public void setIntegerField( final Integer integerField ) {
 		this.integerField = integerField;
 	}
 

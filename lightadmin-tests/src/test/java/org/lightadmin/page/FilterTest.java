@@ -28,6 +28,7 @@ public class FilterTest extends SeleniumIntegrationTest {
 	}
 
 	//Covers LA-6: https://github.com/max-dev/light-admin/issues/6
+	//TODO: max: LA-25: Filtering sucks when primitive data types are used in configured Entity!
 	@Test
 	public void canFilterByIntegerField() {
 		productListViewPage.openAdvancedSearch();

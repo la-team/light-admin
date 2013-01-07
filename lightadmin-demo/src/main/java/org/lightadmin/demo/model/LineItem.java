@@ -18,7 +18,7 @@ public class LineItem extends AbstractEntity {
 	@NumberFormat(style = NumberFormat.Style.CURRENCY)
 	private BigDecimal price;
 
-	private int amount;
+	private Integer amount;
 
 	/**
 	 * Creates a new {@link LineItem} for the given {@link Product}.
@@ -63,7 +63,7 @@ public class LineItem extends AbstractEntity {
 	 *
 	 * @return
 	 */
-	public int getAmount() {
+	public Integer getAmount() {
 		return amount;
 	}
 
