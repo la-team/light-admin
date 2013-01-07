@@ -37,7 +37,7 @@
 				</div>
 
 				<div class="loginRow">
-					<div class="rememberMe"><input type="checkbox" id="check2" name="chbox" /><label for="check2">Remember me</label></div>
+					<div class="rememberMe"><input type="checkbox" id="_spring_security_remember_me" name="_spring_security_remember_me" /><label for="_spring_security_remember_me">Remember me</label></div>
 					<input id="signIn" type="submit" value="Log me in" class="greyishBtn submitForm" />
 					<div class="fix"></div>
 				</div>

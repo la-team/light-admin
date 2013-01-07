@@ -17,6 +17,7 @@
 
 	<http use-expressions="true" disable-url-rewriting="true">
 		<!--<intercept-url pattern="/**" access="permitAll" />-->
+		<remember-me/>
 		<intercept-url pattern="/**" access="isAuthenticated()"/>
 		<form-login login-page="/login" authentication-failure-url="/login?login_error=1"/>
 		<http-basic/>
