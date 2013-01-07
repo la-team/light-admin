@@ -4,6 +4,7 @@ import org.lightadmin.core.config.domain.field.CustomFieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 
 import java.util.Map;
 
@@ -13,8 +14,8 @@ public class DomainTypeFieldMetadataValidator implements FieldMetadataValidator<
 
 	private final Map<Class<? extends FieldMetadata>, FieldMetadataValidator<? extends FieldMetadata>> fieldMetadataValidators = newHashMap();
 
-	{
-		fieldMetadataValidators.put( PersistentFieldMetadata.class, new PersistentFieldMetadataValidator() );
+	public DomainTypeFieldMetadataValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
+		fieldMetadataValidators.put( PersistentFieldMetadata.class, new PersistentFieldMetadataValidator( entityMetadataResolver ) );
 		fieldMetadataValidators.put( TransientFieldMetadata.class, new TransientFieldMetadataValidator() );
 		fieldMetadataValidators.put( CustomFieldMetadata.class, new CustomFieldMetadataValidator() );
 	}

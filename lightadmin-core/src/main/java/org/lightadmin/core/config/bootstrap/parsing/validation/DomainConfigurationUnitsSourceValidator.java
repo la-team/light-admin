@@ -20,7 +20,7 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 	private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
 
 	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this( entityMetadataResolver, new DomainTypeFieldMetadataValidator() );
+		this( entityMetadataResolver, new DomainTypeFieldMetadataValidator(entityMetadataResolver) );
 	}
 
 	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver,

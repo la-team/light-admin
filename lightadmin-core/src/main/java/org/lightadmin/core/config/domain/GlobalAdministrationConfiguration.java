@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+@SuppressWarnings( "unchecked" )
 public class GlobalAdministrationConfiguration {
 
 	private final DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory;
