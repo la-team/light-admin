@@ -37,4 +37,6 @@ public class LoginPageTest extends SeleniumIntegrationTest {
 
 		assertEquals( "Your login attempt was not successful, try again.\n" + "Reason: Bad credentials.", returnedLoginPage.errorMessage() );
 	}
+
+	//TODO: iko: add test for remembering user login/pwd
 }

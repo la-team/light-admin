@@ -23,14 +23,11 @@ public class DefaultIdentifierTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
+		removeAllDomainTypeAdministrationConfigurations();
+
 		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
 
 		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
-	}
-
-	@After
-	public void tearDown() {
-		removeDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
 	}
 
 	@Test

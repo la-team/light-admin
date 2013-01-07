@@ -1,6 +1,5 @@
 package org.lightadmin.page;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
@@ -21,16 +20,14 @@ public class FilterTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
+		removeAllDomainTypeAdministrationConfigurations();
+
 		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
 
 		productListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.FILTER_TEST_DOMAIN );
 	}
 
-	@After
-	public void tearDown() throws Exception {
-		removeDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
-	}
-
+	//Covers LA-6: https://github.com/max-dev/light-admin/issues/6
 	@Test
 	public void canFilterByIntegerField() {
 		productListViewPage.openAdvancedSearch();

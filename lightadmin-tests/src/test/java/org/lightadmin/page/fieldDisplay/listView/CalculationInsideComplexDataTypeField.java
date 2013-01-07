@@ -22,14 +22,11 @@ public class CalculationInsideComplexDataTypeField extends SeleniumIntegrationTe
 
 	@Before
 	public void setup() {
+		removeAllDomainTypeAdministrationConfigurations();
+
 		registerDomainTypeAdministrationConfiguration( OrderLineItemCalculationConfiguration.class );
 
 		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
-	}
-
-	@After
-	public void tearDown() {
-		removeDomainTypeAdministrationConfiguration( OrderLineItemCalculationConfiguration.class );
 	}
 
 	@Test

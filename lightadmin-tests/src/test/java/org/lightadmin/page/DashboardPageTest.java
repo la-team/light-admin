@@ -4,6 +4,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
+import org.lightadmin.config.CustomerTestEntityConfiguration;
+import org.lightadmin.config.FilterTestEntityConfiguration;
+import org.lightadmin.config.OrderTestEntityConfiguration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +29,12 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() throws Exception {
+		removeAllDomainTypeAdministrationConfigurations();
+
+		registerDomainTypeAdministrationConfiguration( OrderTestEntityConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( CustomerTestEntityConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
+
 		setExpectedDomains();
 		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
 	}
@@ -49,15 +58,12 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 
 		for ( Domain domain : expectedDomains ) {
 			assertEquals( String.format( "Incorrect record count for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsCount(), dashboardPage.getDomainRecordsCount( domain ) );
-// TODO: I'm not sure we need this 'records count change'
-//			assertEquals( String.format( "Incorrect progress bar percentage for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsPercentage(), dashboardPage.getDomainRecordsChange( domain ) );
 		}
 	}
 
 	private void setExpectedDomains() {
-		expectedDomains.add( PRODUCTS.setExpectedRecordCount( 3 ) );
-		expectedDomains.add( ORDERS.setExpectedRecordCount( 2 ) );
-		expectedDomains.add( ADDRESSES.setExpectedRecordCount( 2 ) );
-		expectedDomains.add( CUSTOMERS.setExpectedRecordCount( 25 ) );
+		expectedDomains.add( TEST_ORDERS.setExpectedRecordCount( 3 ) );
+		expectedDomains.add( TEST_CUSTOMERS.setExpectedRecordCount( 25 ) );
+		expectedDomains.add( FILTER_TEST_DOMAIN.setExpectedRecordCount( 8 ) );
 	}
 }

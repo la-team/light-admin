@@ -66,3 +66,9 @@ CREATE TABLE testlineitem (
   order_id BIGINT CONSTRAINT testlineitem_orders_ref REFERENCES testorders (id),
   amount BIGINT );
 
+CREATE TABLE testcustomer (
+  id BIGINT IDENTITY PRIMARY KEY,
+  firstname VARCHAR(255),
+  lastname VARCHAR(255),
+  email VARCHAR(255));
+CREATE UNIQUE INDEX ix_testcustomer_email ON TESTCUSTOMER (email ASC);

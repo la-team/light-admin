@@ -26,8 +26,6 @@ public class DisplayTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
-		removeDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
-
 		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
 
 		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
@@ -68,4 +66,6 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		assertQuickViewFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues1 );
 		assertQuickViewFieldValues( new String[]{ "3", "226308.00" }, actualFieldValues2 );
 	}
+
+	//TODO: iko: add test covering default and dynamic fields
 }

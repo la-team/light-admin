@@ -22,14 +22,11 @@ public class ComplexDataTypeFieldTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
+		removeAllDomainTypeAdministrationConfigurations();
+
 		registerDomainTypeAdministrationConfiguration( OrderTestEntityConfiguration.class );
 
 		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
-	}
-
-	@After
-	public void tearDown() {
-		removeDomainTypeAdministrationConfiguration( OrderTestEntityConfiguration.class );
 	}
 
 	@Test

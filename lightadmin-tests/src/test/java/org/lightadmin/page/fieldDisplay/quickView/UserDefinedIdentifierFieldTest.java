@@ -1,6 +1,5 @@
 package org.lightadmin.page.fieldDisplay.quickView;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
@@ -23,14 +22,11 @@ public class UserDefinedIdentifierFieldTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
+		removeAllDomainTypeAdministrationConfigurations();
+
 		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithUserDefinedId.class );
 
 		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
-	}
-
-	@After
-	public void tearDown() {
-		removeDomainTypeAdministrationConfiguration( OrderTestEntityWithUserDefinedId.class );
 	}
 
 	@Test

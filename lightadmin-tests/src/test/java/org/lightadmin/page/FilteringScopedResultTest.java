@@ -1,8 +1,10 @@
 package org.lightadmin.page;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
+import org.lightadmin.config.CustomerTestEntityConfiguration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,10 +23,19 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
-		customerListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.CUSTOMERS );
+		removeAllDomainTypeAdministrationConfigurations();
+
+		registerDomainTypeAdministrationConfiguration( CustomerTestEntityConfiguration.class );
+
+		customerListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_CUSTOMERS );
 	}
 
-	//todo: make tests run in fixed order
+	@Test
+	@Ignore
+	public void allResultsAreDisplayedByDefault() {
+		//todo: iko: refactor test data
+	}
+
 	@Test
 	public void customersAreFilteredByScope() {
 		customerListViewPage.selectScope( SELLERS_SCOPE );

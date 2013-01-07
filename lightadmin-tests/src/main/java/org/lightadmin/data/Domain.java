@@ -2,10 +2,7 @@ package org.lightadmin.data;
 
 public enum Domain {
 
-	PRODUCTS( "product", "Products", 100 ),
-	ORDERS( "order", "Orders", 100 ),
-	ADDRESSES( "address", "Addresses", 100 ),
-	CUSTOMERS( "customer", "Customers", 100 ),
+	TEST_CUSTOMERS( "testCustomer", "Test Customers Domain", 100 ),
 	FILTER_TEST_DOMAIN( "filterTestEntity", "FilterTest Domain", 100 ),
 	TEST_ORDERS( "testOrder", "Test Order Domain", 100 );
 
@@ -37,7 +34,4 @@ public enum Domain {
         return expectedRecordsCount;
     }
 
-    public int getExpectedRecordsPercentage() {
-        return 100 * expectedRecordsCount / domainRecordsCapacity;
-    }
 }
