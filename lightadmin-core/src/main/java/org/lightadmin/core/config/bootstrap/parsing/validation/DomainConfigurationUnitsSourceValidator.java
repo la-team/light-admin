@@ -6,7 +6,7 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
-import org.lightadmin.core.config.domain.fragment.Fragment;
+import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.util.ClassUtils;
@@ -54,13 +54,15 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 	}
 
 	void validateShowView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
-		validateFields( domainConfigurationSource.getShowViewFragment().getFields(), domainConfigurationSource, DomainConfigurationUnitType.SHOW_VIEW, problemReporter );
+		final FieldSetConfigurationUnit showViewFieldSet = domainConfigurationSource.getShowViewFragment();
+
+		validateFields( showViewFieldSet.getFields(), domainConfigurationSource, showViewFieldSet.getDomainConfigurationUnitType(), problemReporter );
 	}
 
 	void validateListView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
-		final Fragment listViewFragment = domainConfigurationSource.getListViewFragment().getFragment();
+		final FieldSetConfigurationUnit listViewFieldSet = domainConfigurationSource.getListViewFragment();
 
-		validateFields( listViewFragment.getFields(), domainConfigurationSource, DomainConfigurationUnitType.LIST_VIEW, problemReporter );
+		validateFields( listViewFieldSet.getFields(), domainConfigurationSource, listViewFieldSet.getDomainConfigurationUnitType(), problemReporter );
 	}
 
 	void validateFilters( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
@@ -77,6 +79,7 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 		}
 	}
 
+	@SuppressWarnings( "unchecked" )
 	private boolean isPersistentEntityType( final Class<?> domainType ) {
 		return entityMetadataResolver.resolveEntityMetadata( domainType ) != null;
 	}

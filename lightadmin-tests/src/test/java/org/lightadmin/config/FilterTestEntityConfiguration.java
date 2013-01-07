@@ -1,12 +1,12 @@
 package org.lightadmin.config;
 
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.FilterTestEntity;
 
 @SuppressWarnings( "unused" )
@@ -19,11 +19,11 @@ public class FilterTestEntityConfiguration {
 				.menuName( "FilterTest Domain" ).build();
 	}
 
-	public static ListViewConfigurationUnit listView( final ListViewConfigurationUnitBuilder listViewBuilder ) {
+	public static FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder listViewBuilder ) {
 		return listViewBuilder
-				.field( "textField" ).alias( "Text Field" )
-				.field( "integerField" ).alias( "Integer Field" )
-				.field( "decimalField" ).alias( "Decimal Field" ).build();
+				.field( "textField" ).caption( "Text Field" )
+				.field( "integerField" ).caption( "Integer Field" )
+				.field( "decimalField" ).caption( "Decimal Field" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {

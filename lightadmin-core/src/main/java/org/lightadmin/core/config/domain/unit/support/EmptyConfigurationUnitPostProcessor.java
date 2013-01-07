@@ -1,10 +1,10 @@
 package org.lightadmin.core.config.domain.unit.support;
 
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
-import org.lightadmin.core.config.domain.fragment.TableListViewConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.show.DefaultShowViewConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.common.GenericFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.util.ClassUtils;
@@ -19,44 +19,25 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
 
 	@Override
 	public ConfigurationUnit postProcess( final ConfigurationUnit configurationUnit ) {
-		if ( isEmptyListViewConfigurationUnit( configurationUnit ) ) {
-			return listViewWithPersistentFields( configurationUnit.getDomainType() );
-		}
-
-		if ( isEmptyShowViewConfigurationUnit( configurationUnit ) ) {
-			return showViewWithPersistentFields( configurationUnit.getDomainType() );
+		if ( isEmptyFieldSetConfigurationUnit( configurationUnit ) ) {
+			return fieldSetUnitWithPersistentFields( configurationUnit.getDomainType(), configurationUnit.getDomainConfigurationUnitType() );
 		}
 
 		return configurationUnit;
 	}
 
-	private ConfigurationUnit showViewWithPersistentFields( final Class<?> domainType ) {
-		final DefaultShowViewConfigurationUnitBuilder showViewConfigurationUnitBuilder = new DefaultShowViewConfigurationUnitBuilder( domainType );
+	private FieldSetConfigurationUnit fieldSetUnitWithPersistentFields( final Class<?> domainType, DomainConfigurationUnitType configurationUnitType ) {
+		FieldSetConfigurationUnitBuilder fieldSetConfigurationUnitBuilder = new GenericFieldSetConfigurationUnitBuilder( domainType, configurationUnitType );
 
 		final Collection<DomainTypeAttributeMetadata> attributes = resolveEntityMetadata( domainType ).getAttributes();
 		for ( DomainTypeAttributeMetadata attribute : attributes ) {
-			showViewConfigurationUnitBuilder.field( attribute.getName() );
+			fieldSetConfigurationUnitBuilder.field( attribute.getName() );
 		}
 
-		return showViewConfigurationUnitBuilder.build();
+		return fieldSetConfigurationUnitBuilder.build();
 	}
 
-	private ListViewConfigurationUnit listViewWithPersistentFields( Class<?> domainType ) {
-		final TableListViewConfigurationUnitBuilder listViewConfigurationUnitBuilder = new TableListViewConfigurationUnitBuilder( domainType );
-
-		final Collection<DomainTypeAttributeMetadata> attributes = resolveEntityMetadata( domainType ).getAttributes();
-		for ( DomainTypeAttributeMetadata attribute : attributes ) {
-			listViewConfigurationUnitBuilder.field( attribute.getName() );
-		}
-
-		return listViewConfigurationUnitBuilder.build();
-	}
-
-	private boolean isEmptyListViewConfigurationUnit( ConfigurationUnit configurationUnit ) {
-		return ClassUtils.isAssignableValue( ListViewConfigurationUnit.class, configurationUnit ) && ( ( ListViewConfigurationUnit ) configurationUnit ).getFragment().getFields().isEmpty();
-	}
-
-	private boolean isEmptyShowViewConfigurationUnit( ConfigurationUnit configurationUnit ) {
-		return ClassUtils.isAssignableValue( ShowViewConfigurationUnit.class, configurationUnit ) && ( ( ShowViewConfigurationUnit ) configurationUnit ).getFields().isEmpty();
+	private boolean isEmptyFieldSetConfigurationUnit( ConfigurationUnit configurationUnit ) {
+		return ClassUtils.isAssignableValue( FieldSetConfigurationUnit.class, configurationUnit ) && ( ( FieldSetConfigurationUnit ) configurationUnit ).isEmpty();
 	}
 }

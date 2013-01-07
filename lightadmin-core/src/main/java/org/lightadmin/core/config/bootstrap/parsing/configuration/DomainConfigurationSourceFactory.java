@@ -51,6 +51,7 @@ public class DomainConfigurationSourceFactory {
 		throw new IllegalArgumentException( String.format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
 		final Class<?> domainType = configurationUnits.getDomainType();
 

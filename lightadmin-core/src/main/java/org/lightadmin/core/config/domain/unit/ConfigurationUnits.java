@@ -5,9 +5,7 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
-import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnit;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -60,8 +58,8 @@ public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializ
 		return ( ScopesConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.SCOPES );
 	}
 
-	public ListViewConfigurationUnit getListViewFragment() {
-		return ( ListViewConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.LIST_VIEW );
+	public FieldSetConfigurationUnit getListViewConfigurationUnit() {
+		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.LIST_VIEW );
 	}
 
 	public ScreenContextConfigurationUnit getScreenContext() {
@@ -72,12 +70,15 @@ public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializ
 		return ( EntityMetadataConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.CONFIGURATION );
 	}
 
-	public ShowViewConfigurationUnit getShowViewConfigurationUnit() {
-		return ( ShowViewConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.SHOW_VIEW );
+	public FieldSetConfigurationUnit getShowViewConfigurationUnit() {
+		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.SHOW_VIEW );
 	}
 
 	public FieldSetConfigurationUnit getFormViewConfigurationUnit() {
 		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.FORM_VIEW );
 	}
 
+	public FieldSetConfigurationUnit getQuickViewConfigurationUnit() {
+		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.QUICK_VIEW );
+	}
 }

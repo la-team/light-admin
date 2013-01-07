@@ -32,6 +32,11 @@ public final class FilterMetadataUtils {
 		}
 
 		@Override
+		public void setName( final String name ) {
+			fieldMetadata.setName( name );
+		}
+
+		@Override
 		public String getFieldName() {
 			return fieldMetadata.getField();
 		}

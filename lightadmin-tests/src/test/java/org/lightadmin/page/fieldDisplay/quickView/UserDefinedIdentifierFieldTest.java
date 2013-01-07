@@ -33,13 +33,12 @@ public class UserDefinedIdentifierFieldTest extends SeleniumIntegrationTest {
 		removeDomainTypeAdministrationConfiguration( OrderTestEntityWithUserDefinedId.class );
 	}
 
-	// TODO: max: test should pass when LA-20 is implemented
 	@Test
 	public void defaultIdentifierFieldIsDisplayed() {
 		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
 
 		final String[] actualFieldNames = quickViewComponent.getQuickViewFieldNames();
 
-		assertQuickViewFields( new String[]{ "Order Id", "Order Total" }, actualFieldNames );
+		assertQuickViewFields( new String[]{ "Order Id:", "Order Total:" }, actualFieldNames );
 	}
 }

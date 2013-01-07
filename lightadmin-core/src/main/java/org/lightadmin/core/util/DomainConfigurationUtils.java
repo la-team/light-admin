@@ -29,27 +29,34 @@ public abstract class DomainConfigurationUtils {
 		return ClassUtils.isAssignableValue( Class.class, candidate ) && isConfigurationCandidate( ( Class ) candidate );
 	}
 
-	@SuppressWarnings( {"unchecked"} )
+	@SuppressWarnings({"unchecked"})
 	public static <T extends ConfigurationUnit> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder<T>> builderInterface, Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass, final Class domainType ) {
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, configurationUnitType.getName(), builderInterface );
 
-		ConfigurationUnitBuilder<T> builder = instantiateBuilder( concreteBuilderClass, domainType );
+		ConfigurationUnitBuilder<T> builder = instantiateBuilder( concreteBuilderClass, domainType, configurationUnitType );
 		if ( method != null ) {
 			try {
 				return ( T ) invokeMethod( method, null, builder );
 			} catch ( Exception ex ) {
-				return instantiateBuilder( concreteBuilderClass, domainType ).build();
+				return instantiateBuilder( concreteBuilderClass, domainType, configurationUnitType ).build();
 			}
 		}
 
 		return builder.build();
 	}
 
-	private static <T extends ConfigurationUnit> ConfigurationUnitBuilder<T> instantiateBuilder( final Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass, final Class domainType ) {
+	private static <T extends ConfigurationUnit> ConfigurationUnitBuilder<T> instantiateBuilder( final Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass, final Class domainType, DomainConfigurationUnitType configurationUnitType ) {
+		Constructor<? extends ConfigurationUnitBuilder<T>> extendedConstructor = ClassUtils.getConstructorIfAvailable( concreteBuilderClass, Class.class, DomainConfigurationUnitType.class );
+
+		if ( extendedConstructor != null ) {
+			return BeanUtils.instantiateClass( extendedConstructor, domainType, configurationUnitType );
+		}
+
 		Constructor<? extends ConfigurationUnitBuilder<T>> constructor = ClassUtils.getConstructorIfAvailable( concreteBuilderClass, Class.class );
 		if ( constructor != null ) {
 			return BeanUtils.instantiateClass( constructor, domainType );
 		}
+
 		return BeanUtils.instantiateClass( concreteBuilderClass );
 	}
 }

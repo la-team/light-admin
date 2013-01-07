@@ -1,10 +1,10 @@
 package org.lightadmin.config;
 
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.ChildTestEntity;
 
 @SuppressWarnings( "unused" )
@@ -17,10 +17,10 @@ public class ChildEntityConfiguration {
 				.menuName( "Test Child Domain" ).build();
 	}
 
-	public static ListViewConfigurationUnit listView( ListViewConfigurationUnitBuilder listViewBuilder ) {
+	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder listViewBuilder ) {
 		return listViewBuilder
-				.field( "name" ).alias( "Name" )
-				.field( "parent_id" ).alias( "Parent_ID" )
-				.field( "parent.name" ).alias( "Parent Name" ).build();
+				.field( "name" ).caption( "Name" )
+				.field( "parent_id" ).caption( "Parent_ID" )
+				.field( "parent.name" ).caption( "Parent Name" ).build();
 	}
 }

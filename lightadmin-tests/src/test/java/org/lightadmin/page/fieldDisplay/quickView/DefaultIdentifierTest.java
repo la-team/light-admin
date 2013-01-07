@@ -33,13 +33,12 @@ public class DefaultIdentifierTest extends SeleniumIntegrationTest {
 		removeDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
 	}
 
-	// TODO: max: test should pass when LA-20 is implemented
 	@Test
 	public void defaultIdentifierFieldIsHidden() {
 		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
 
 		final String[] actualFieldNames = quickViewComponent.getQuickViewFieldNames();
 
-		assertQuickViewFields( new String[]{ "Id", "Order Total" }, actualFieldNames );
+		assertQuickViewFields( new String[]{ "Id:", "Order Total:" }, actualFieldNames );
 	}
 }

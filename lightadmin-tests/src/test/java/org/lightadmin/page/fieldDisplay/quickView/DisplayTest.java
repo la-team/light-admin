@@ -45,7 +45,6 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		assertTrue( quickViewComponent.isHidden() );
 	}
 
-	// TODO: max: test should pass when LA-20 is implemented
 	@Test
 	public void correctInfoIsDisplayedAfterSorting() {
 		testOrderListPage.getDataTable().getColumn( "Name" ).sortDescending();
@@ -56,7 +55,6 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		assertQuickViewFields( new String[]{ "1", "Order1: 100 line items" }, actualFieldValues );
 	}
 
-	// TODO: max: test should pass when LA-20 is implemented
 	@Test
 	public void infoCanBeDisplayedForMultipleItems() {
 		final QuickViewComponent quickViewComponent1 = testOrderListPage.showQuickViewForItem( 1 );
@@ -65,8 +63,7 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		final QuickViewComponent quickViewComponent2 = testOrderListPage.showQuickViewForItem( 3 );
 		final String[] actualFieldValues2 = quickViewComponent2.getQuickViewFieldValues();
 
-		assertQuickViewFieldValues( new String[]{ "1", "62100" }, actualFieldValues1 );
-		assertQuickViewFieldValues( new String[]{ "3", "226308" }, actualFieldValues2 );
+		assertQuickViewFieldValues( new String[]{ "1", "Order1: 100 line items" }, actualFieldValues1 );
+		assertQuickViewFieldValues( new String[]{ "3", "Order3: 3 line items" }, actualFieldValues2 );
 	}
-
 }

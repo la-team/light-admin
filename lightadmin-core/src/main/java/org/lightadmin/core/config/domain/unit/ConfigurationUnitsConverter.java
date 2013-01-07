@@ -1,19 +1,16 @@
 package org.lightadmin.core.config.domain.unit;
 
+import org.lightadmin.core.config.domain.common.*;
+import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilderAdapter;
+import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.configuration.DefaultEntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.DefaultScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.DefaultFiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.form.DefaultFormViewConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.form.FormViewConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.fragment.TableListViewConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.scope.DefaultScopesConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.show.DefaultShowViewConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.show.ShowViewConfigurationUnitBuilder;
 import org.springframework.core.convert.converter.Converter;
 
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
@@ -35,9 +32,10 @@ public final class ConfigurationUnitsConverter implements Converter<Class, Confi
 		return new ConfigurationUnits( domainType,
 									initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class, domainType ),
 									initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, ListViewConfigurationUnitBuilder.class, TableListViewConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, SHOW_VIEW, ShowViewConfigurationUnitBuilder.class, DefaultShowViewConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, FORM_VIEW, FormViewConfigurationUnitBuilder.class, DefaultFormViewConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, QUICK_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, SHOW_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class, domainType ),
+									initializeConfigurationUnitWithBuilder( configurationClass, FORM_VIEW, PersistentFieldSetConfigurationUnitBuilder.class, PersistentFieldSetConfigurationUnitBuilderAdapter.class, domainType ),
 									initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class, domainType ),
 									initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class, domainType ));
 	}

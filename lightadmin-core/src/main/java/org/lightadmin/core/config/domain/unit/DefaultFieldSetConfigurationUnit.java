@@ -1,13 +1,5 @@
 package org.lightadmin.core.config.domain.unit;
 
-import java.util.Iterator;
-import java.util.Set;
-
-import static com.google.common.collect.Sets.newLinkedHashSet;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.containsPersistentField;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.getPersistentField;
-
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.Persistable;
@@ -16,11 +8,19 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAwar
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
 
+import java.util.Iterator;
+import java.util.Set;
+
+import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.getPersistentField;
+
 public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUnit implements FieldSetConfigurationUnit, DomainTypeEntityMetadataAware {
 
 	private static final long serialVersionUID = 1L;
 
 	private final DomainConfigurationUnitType configurationUnitType;
+
 	private Set<FieldMetadata> fields = newLinkedHashSet();
 
 	public DefaultFieldSetConfigurationUnit( Class<?> domainType, DomainConfigurationUnitType configurationUnitType ) {
@@ -42,26 +42,29 @@ public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUni
 	}
 
 	@Override
+	public boolean isEmpty() {
+		return fields.isEmpty();
+	}
+
+	@Override
 	public DomainConfigurationUnitType getDomainConfigurationUnitType() {
 		return configurationUnitType;
 	}
 
 	@Override
 	public void setDomainTypeEntityMetadata( DomainTypeEntityMetadata domainTypeEntityMetadata ) {
+		final PersistentFieldMetadata primaryKeyField = getPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() );
 
-		if ( containsPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() ) ) {
-			final PersistentFieldMetadata primaryKeyField = getPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() );
+		if ( primaryKeyField != null ) {
 			primaryKeyField.setPrimaryKey( true );
 		} else {
 			fields = addPrimaryKeyPersistentField( fields, domainTypeEntityMetadata.getIdAttribute() );
 		}
 
-		for (FieldMetadata field : fields) {
-			if (field instanceof DomainTypeAttributeMetadataAware && field instanceof Persistable) {
-				((DomainTypeAttributeMetadataAware) field).setAttributeMetadata(domainTypeEntityMetadata.getAttribute(((Persistable) field).getField()));
+		for ( FieldMetadata field : fields ) {
+			if ( field instanceof DomainTypeAttributeMetadataAware ) {
+				( ( DomainTypeAttributeMetadataAware ) field ).setAttributeMetadata( domainTypeEntityMetadata.getAttribute( ( ( Persistable ) field ).getField() ) );
 			}
 		}
-
 	}
-
 }

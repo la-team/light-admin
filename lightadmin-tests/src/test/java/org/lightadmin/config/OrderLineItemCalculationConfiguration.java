@@ -2,13 +2,12 @@ package org.lightadmin.config;
 
 
 import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnit;
-import org.lightadmin.core.config.domain.fragment.ListViewConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.TestOrder;
 import org.lightadmin.test.renderer.LineItemCalculationRenderer;
-import org.lightadmin.test.renderer.OrderTotalRenderer;
 
 @SuppressWarnings( "unused" )
 @Administration( TestOrder.class )
@@ -20,10 +19,10 @@ public class OrderLineItemCalculationConfiguration {
 				.menuName( "Test Order Domain" ).build();
 	}
 
-	public static ListViewConfigurationUnit listView( ListViewConfigurationUnitBuilder listViewBuilder ) {
+	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder listViewBuilder ) {
 		return listViewBuilder
-				.field( "id" ).alias( "ID" )
-				.field( "name" ).alias( "Name" )
-				.field( "lineItems" ).alias( "Line Items" ).renderer( new LineItemCalculationRenderer() ).build();
+				.field( "id" ).caption( "ID" )
+				.field( "name" ).caption( "Name" )
+				.renderable( new LineItemCalculationRenderer() ).caption( "Line Items" ).build();
 	}
 }

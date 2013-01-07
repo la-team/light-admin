@@ -35,6 +35,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -42,8 +43,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-
-import javax.servlet.http.HttpServletRequest;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
@@ -166,7 +165,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			case FORM_VIEW:
 				return domainTypeAdministrationConfiguration.getFormViewFragment().getFields();
 			case QUICK_VIEW:
-				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
+				return domainTypeAdministrationConfiguration.getQuickViewFragment().getFields();
 			default:
 				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
 		}

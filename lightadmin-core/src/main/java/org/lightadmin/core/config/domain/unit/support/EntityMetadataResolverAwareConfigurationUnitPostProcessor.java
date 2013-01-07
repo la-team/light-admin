@@ -18,6 +18,7 @@ public abstract class EntityMetadataResolverAwareConfigurationUnitPostProcessor 
 		return resolveEntityMetadata( configurationUnit.getDomainType() );
 	}
 
+	@SuppressWarnings( "unchecked" )
 	DomainTypeEntityMetadata<DomainTypeAttributeMetadata> resolveEntityMetadata( Class<?> domainType ) {
 		return entityMetadataResolver.resolveEntityMetadata( domainType );
 	}
