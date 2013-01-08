@@ -13,7 +13,6 @@ import org.lightadmin.page.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
-
 import static org.lightadmin.util.DomainAsserts.assertQuickViewFieldValues;
 import static org.lightadmin.util.DomainAsserts.assertQuickViewFields;
 

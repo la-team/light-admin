@@ -1,10 +1,10 @@
 package org.lightadmin.core.config.domain;
 
-import java.io.Serializable;
-
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+
+import java.io.Serializable;
 
 public class NonmanagedDomainTypeConfiguration implements DomainTypeBasicConfiguration {
 

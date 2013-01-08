@@ -10,7 +10,6 @@ import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
-import static org.lightadmin.util.DomainAsserts.assertTableData;
 
 public class BreadcrumbsTest extends SeleniumIntegrationTest {
 

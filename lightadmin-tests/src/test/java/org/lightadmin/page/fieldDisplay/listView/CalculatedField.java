@@ -1,6 +1,5 @@
 package org.lightadmin.page.fieldDisplay.listView;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;

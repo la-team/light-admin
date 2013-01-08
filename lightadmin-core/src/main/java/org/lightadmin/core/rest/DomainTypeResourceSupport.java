@@ -1,13 +1,13 @@
 package org.lightadmin.core.rest;
 
-import java.io.Serializable;
-import java.net.URI;
-
 import org.apache.commons.lang.StringUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.io.Serializable;
+import java.net.URI;
 
 public class DomainTypeResourceSupport {
 

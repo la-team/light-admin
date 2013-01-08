@@ -4,7 +4,8 @@ import org.hibernate.validator.constraints.NotEmpty;
 import org.lightadmin.demo.model.AbstractEntity;
 import org.lightadmin.demo.model.EmailAddress;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
 
 @Entity
 public class TestCustomer extends AbstractEntity {

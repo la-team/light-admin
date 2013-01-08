@@ -1,6 +1,5 @@
 package org.lightadmin.page.fieldDisplay.quickView;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;

@@ -1,15 +1,14 @@
 package org.lightadmin.core.view.tags.form;
 
-import java.io.IOException;
-
-import javax.servlet.jsp.JspException;
-
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.rest.DomainTypeResourceSupport;
 import org.lightadmin.core.view.tags.AbstractAutowiredTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
+
+import javax.servlet.jsp.JspException;
+import java.io.IOException;
 
 public class DomainTypeHrefTemplateTag extends AbstractAutowiredTag {
 

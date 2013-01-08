@@ -1,7 +1,5 @@
 package org.lightadmin.core.config;
 
-import java.util.List;
-
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
 import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
 import org.lightadmin.core.web.ApplicationController;
@@ -24,6 +22,7 @@ import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import org.springframework.web.servlet.view.tiles2.TilesView;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.List;
 
 @Configuration
 @Import( {

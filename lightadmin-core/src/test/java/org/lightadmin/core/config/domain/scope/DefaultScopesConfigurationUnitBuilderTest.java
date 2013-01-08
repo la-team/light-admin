@@ -1,6 +1,5 @@
 package org.lightadmin.core.config.domain.scope;
 
-import com.google.common.base.Predicates;
 import org.junit.Test;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 

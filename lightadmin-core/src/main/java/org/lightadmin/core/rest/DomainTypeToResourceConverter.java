@@ -13,6 +13,7 @@ import org.springframework.data.rest.webmvc.EntityResource;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Map;

@@ -7,6 +7,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryFactory;
+
 import java.io.Serializable;
 
 public class DomainTypeAdministrationConfigurationFactory {

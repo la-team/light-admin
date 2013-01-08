@@ -1,8 +1,9 @@
 package org.lightadmin.core.config.domain.unit;
 
-import org.lightadmin.core.config.domain.common.*;
-import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilderAdapter;
+import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.common.GenericFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilderAdapter;
 import org.lightadmin.core.config.domain.configuration.DefaultEntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.DefaultScreenContextConfigurationUnitBuilder;

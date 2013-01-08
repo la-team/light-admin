@@ -1,14 +1,14 @@
 package org.lightadmin.core.rest;
 
-import java.net.URI;
-
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.context.request.WebRequestInterceptor;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import javax.servlet.http.HttpServletRequest;
+import java.net.URI;
 
 public class RestConfigurationInitInterceptor implements WebRequestInterceptor {
 
