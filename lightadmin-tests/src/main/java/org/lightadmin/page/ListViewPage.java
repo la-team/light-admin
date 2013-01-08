@@ -23,10 +23,10 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 
 	private FilterFormComponent filterFormComponent;
 
-	public ListViewPage( SeleniumContext seleniumContext, Domain domain  ) {
+	public ListViewPage( SeleniumContext seleniumContext, Domain domain ) {
 		super( seleniumContext );
 
-        filterFormComponent = new FilterFormComponent( seleniumContext );
+		filterFormComponent = new FilterFormComponent( seleniumContext );
 		this.domain = domain;
 	}
 
@@ -43,13 +43,13 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	protected void isLoaded() throws Error {
 		try {
 			webDriver().waitForElementVisible( listViewTable );
-		} catch ( TimeoutException e) {
+		} catch ( TimeoutException e ) {
 			fail( "ListViewTable was not found on ListViewPage" );
 		}
 
 		try {
 			webDriver().waitForElementVisible( getScope( DEFAULT_SCOPE_LABEL ) );
-		} catch ( TimeoutException e) {
+		} catch ( TimeoutException e ) {
 			fail( "Default scope is not displayed" );
 		}
 	}
@@ -58,31 +58,36 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 		filterFormComponent.openAdvancedSearch();
 	}
 
-    public void selectScope( String scopeLabel ) {
-        getScope( scopeLabel ).click();
-    }
+	public void selectScope( String scopeLabel ) {
+		getScope( scopeLabel ).click();
+	}
 
-    public boolean scopeIsHighlighted( String scopeLabel ) {
-        try {
-            return getScope( scopeLabel ).getAttribute( "class" ).contains( "active" );
-        } catch ( NoSuchElementException e ) {
-            return false;
-        }
-    }
+	public boolean scopeIsHighlighted( String scopeLabel ) {
+		try {
+			return getScope( scopeLabel ).getAttribute( "class" ).contains( "active" );
+		} catch ( NoSuchElementException e ) {
+			return false;
+		}
+	}
 
-    public void resetFilter() {
-        filterFormComponent.resetFilter();
-    }
+	public void resetFilter() {
+		filterFormComponent.resetFilter();
+	}
 
-    public void filter(String filterField, String filterValue) {
-        filterFormComponent.filter( filterField, filterValue );
-    }
+	public void filter( String filterField, String filterValue ) {
+		filterFormComponent.filter( filterField, filterValue );
+	}
 
-    private WebElement getScope( String scopeLabel ) {
-        return webDriver().findElement( By.partialLinkText( scopeLabel ) );
-    }
+	private WebElement getScope( String scopeLabel ) {
+		return webDriver().findElement( By.partialLinkText( scopeLabel ) );
+	}
 
 	public QuickViewComponent showQuickViewForItem( int itemId ) {
 		return getDataTable().showQuickViewFor( itemId );
+	}
+
+	public int getScopeCount( String scope ) {
+		String fullScopeLabel = getScope( scope ).getText();
+		return Integer.parseInt( fullScopeLabel.substring( fullScopeLabel.indexOf( "(" ) + 1, fullScopeLabel.indexOf( ")" ) ) );
 	}
 }
