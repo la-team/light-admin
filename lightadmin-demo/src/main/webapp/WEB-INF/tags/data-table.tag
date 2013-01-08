@@ -88,9 +88,26 @@
 		   "fnServerData" : dataTableRESTAdapter,
 		   "sPaginationType": "full_numbers",
 		   "oLanguage": {
-			   "sLengthMenu": "_MENU_ records per page"
+			   "sProcessing": "Processing...",
+			   "sLengthMenu": "<span class='itemsPerPage'>Items per page:</span> <span style='font-size: 11px;'>_MENU_</span>",
+			   "sZeroRecords": "No matching records found",
+			   "sEmptyTable": "No data available in table",
+			   "sLoadingRecords": "Loading...",
+			   "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
+			   "sInfoEmpty": "Showing 0 to 0 of 0 entries",
+			   "sInfoFiltered": "(_MAX_ in total)",
+			   "sInfoPostFix": "",
+			   "sInfoThousands": ",",
+			   "sSearch": "Search:",
+			   "sUrl": "",
+			   "oPaginate": {
+				   "sFirst":    "First",
+				   "sPrevious": "Prev",
+				   "sNext":     "Next",
+				   "sLast":     "Last"
+			   }
 		   },
-		   "bLengthChange": false,
+		   "bLengthChange": true,
 		   "bFilter": false,
 		   "bInfo": false,
 		   "sDom": '<""f>t<"F"lp>',
