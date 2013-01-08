@@ -22,7 +22,7 @@ public final class ConfigurationUnitsConverter implements Converter<Class, Confi
 
 	private static final ConfigurationUnitsConverter INSTANCE = new ConfigurationUnitsConverter();
 
-	public static ConfigurationUnits fromConfiguration( Class configurationClass ) {
+	public static ConfigurationUnits unitsFromConfiguration( Class configurationClass ) {
 		return INSTANCE.convert( configurationClass );
 	}
 

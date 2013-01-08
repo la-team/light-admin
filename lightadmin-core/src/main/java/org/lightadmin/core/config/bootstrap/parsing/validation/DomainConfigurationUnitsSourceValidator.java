@@ -7,16 +7,16 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
-import org.lightadmin.core.config.domain.scope.ScopeMetadataUtils;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
-import org.springframework.util.ClassUtils;
 
 import java.util.Set;
 
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.SCOPES;
+import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
+import static org.springframework.util.ClassUtils.hasConstructor;
 
 class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSourceValidator<DomainConfigurationSource> {
 
@@ -25,12 +25,10 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 	private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
 
 	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this( entityMetadataResolver, new DomainTypeFieldMetadataValidator(entityMetadataResolver) );
+		this( entityMetadataResolver, new DomainTypeFieldMetadataValidator( entityMetadataResolver ) );
 	}
 
-	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver,
-													final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator ) {
-
+	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver, final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator ) {
 		this.entityMetadataResolver = entityMetadataResolver;
 		this.fieldMetadataValidator = fieldMetadataValidator;
 	}
@@ -59,45 +57,46 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, String.format( "Non-persistent type %s is not supported.", domainType.getSimpleName() ) ) );
 		}
 
-		if ( !ClassUtils.hasConstructor( domainType ) ) {
+		if ( !hasConstructor( domainType ) ) {
 			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, String.format( "Type %s must have default constructor.", domainType.getSimpleName() ) ) );
 		}
 	}
 
-	private void validateScopes( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
+	void validateScopes( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
 		final ScopesConfigurationUnit scopes = domainConfigurationSource.getScopes();
 
 		for ( ScopeMetadata scope : scopes ) {
-			if ( ScopeMetadataUtils.isPredicateScope( scope ) ) {
+			if ( isPredicateScope( scope ) ) {
 				validatePredicateScope( scope, domainConfigurationSource, problemReporter );
 			}
-			if ( ScopeMetadataUtils.isSpecificationScope( scope ) ) {
+
+			if ( isSpecificationScope( scope ) ) {
 				validateSpecificationScope( scope, domainConfigurationSource, problemReporter );
 			}
 		}
 	}
 
-	private void validateSpecificationScope( final ScopeMetadata scope, final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
-		ScopeMetadataUtils.SpecificationScopeMetadata specificationScopeMetadata = ( ScopeMetadataUtils.SpecificationScopeMetadata ) scope;
+	void validateSpecificationScope( final ScopeMetadata scope, final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
+		SpecificationScopeMetadata specificationScopeMetadata = ( SpecificationScopeMetadata ) scope;
 		if ( specificationScopeMetadata.specification() == null ) {
 			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, SCOPES, "Filtering specification not defined for scope " + scope.getName() ) );
 		}
 	}
 
-	private void validatePredicateScope( final ScopeMetadata scope, final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
-		ScopeMetadataUtils.PredicateScopeMetadata predicateScopeMetadata = ( ScopeMetadataUtils.PredicateScopeMetadata ) scope;
+	void validatePredicateScope( final ScopeMetadata scope, final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
+		PredicateScopeMetadata predicateScopeMetadata = ( PredicateScopeMetadata ) scope;
 		if ( predicateScopeMetadata.predicate() == null ) {
 			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, SCOPES, "Filtering predicate not defined for scope " + scope.getName() ) );
 		}
 	}
 
-	private void validateFormView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
+	void validateFormView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
 		final FieldSetConfigurationUnit formViewFieldSet = domainConfigurationSource.getFormViewFragment();
 
 		validateFields( formViewFieldSet.getFields(), domainConfigurationSource, formViewFieldSet.getDomainConfigurationUnitType(), problemReporter );
 	}
 
-	private void validateQuickView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
+	void validateQuickView( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
 		final FieldSetConfigurationUnit quickViewFieldSet = domainConfigurationSource.getQuickViewFragment();
 
 		validateFields( quickViewFieldSet.getFields(), domainConfigurationSource, quickViewFieldSet.getDomainConfigurationUnitType(), problemReporter );
@@ -129,7 +128,7 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 		}
 	}
 
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	private boolean isPersistentEntityType( final Class<?> domainType ) {
 		return entityMetadataResolver.resolveEntityMetadata( domainType ) != null;
 	}

@@ -4,7 +4,7 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.reporting.Problem;
 
-@SuppressWarnings( "unused" )
+@SuppressWarnings("unused")
 public class DomainConfigurationProblem extends Problem {
 
 	private final DomainConfigurationSource domainConfiguration;
@@ -23,8 +23,7 @@ public class DomainConfigurationProblem extends Problem {
 
 	@Override
 	public String getMessage() {
-		StringBuilder stringBuilder = new StringBuilder();
-		stringBuilder.append( "Domain Configuration " );
+		final StringBuilder stringBuilder = new StringBuilder( "Domain Configuration " );
 		stringBuilder.append( "\"" ).append( domainConfiguration.getConfigurationName() ).append( "\"" ).append( ": " );
 		if ( configurationUnitType != null ) {
 			stringBuilder.append( "Unit " ).append( "\"" ).append( configurationUnitType.getName() ).append( "\"" ).append( ": " );

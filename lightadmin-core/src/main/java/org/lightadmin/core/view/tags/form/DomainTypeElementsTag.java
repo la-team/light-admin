@@ -18,6 +18,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
+
+@SuppressWarnings( "unchecked" )
 public class DomainTypeElementsTag extends AbstractAutowiredTag {
 
 	@Autowired(required = true)
@@ -53,7 +56,7 @@ public class DomainTypeElementsTag extends AbstractAutowiredTag {
 
 		EntityNameExtractor<Object> nameExtractor = elementTypeConfiguration.getEntityConfiguration().getNameExtractor();
 
-		List<Pair<Object, String>> elementNamePairs = new ArrayList<Pair<Object,String>>(elements.size());
+		List<Pair<Object, String>> elementNamePairs = newArrayList(elements.size());
 		for (Object element : elements) {
 			String name = nameExtractor.apply(element);
 			elementNamePairs.add(new Pair<Object, String>(element, name));

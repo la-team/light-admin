@@ -13,5 +13,4 @@ public class DomainConfigurationSourceValidatorFactory {
 	public DomainConfigurationSourceValidator getValidator() {
 		return new DomainConfigurationUnitsSourceValidator( entityMetadataResolver );
 	}
-
 }

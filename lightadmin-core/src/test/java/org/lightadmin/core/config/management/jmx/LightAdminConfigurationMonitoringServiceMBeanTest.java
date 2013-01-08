@@ -38,7 +38,7 @@ public class LightAdminConfigurationMonitoringServiceMBeanTest {
 	public void setUp() throws Exception {
 		testee = new LightAdminConfigurationMonitoringServiceMBean( globalConfigurationManagementService );
 
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( AddressConfiguration.class ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
 	}
 
 	@After

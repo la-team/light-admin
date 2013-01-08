@@ -23,7 +23,7 @@ public abstract class SeleniumIntegrationTest {
 	private GlobalConfigurationManagementService globalConfigurationManagementService;
 
 	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( configurationClass ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( configurationClass ) );
 	}
 
 	protected void removeDomainTypeAdministrationConfiguration( Class configurationClass ) {

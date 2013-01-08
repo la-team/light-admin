@@ -34,7 +34,7 @@ public class GlobalAdministrationConfiguration {
 				continue;
 			}
 			Class<?> associationDomainType = associationDomainType(attrMetadata);
-			DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeConfigurationFactory.createNonmanagedDomainTypeConfiguration(associationDomainType);
+			DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeConfigurationFactory.createNonManagedDomainTypeConfiguration( associationDomainType );
 			associationDomainTypeConfigurations.putIfAbsent(associationDomainType, associationTypeConfiguration);
 		}
 	}

@@ -5,12 +5,13 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
+import org.springframework.util.Assert;
 
 import java.util.Map;
 
 import static com.google.common.collect.Maps.newHashMap;
 
-public class DomainTypeFieldMetadataValidator implements FieldMetadataValidator<FieldMetadata> {
+class DomainTypeFieldMetadataValidator implements FieldMetadataValidator<FieldMetadata> {
 
 	private final Map<Class<? extends FieldMetadata>, FieldMetadataValidator<? extends FieldMetadata>> fieldMetadataValidators = newHashMap();
 
@@ -21,11 +22,11 @@ public class DomainTypeFieldMetadataValidator implements FieldMetadataValidator<
 	}
 
 	@Override
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	public boolean isValidFieldMetadata( final FieldMetadata fieldMetadata, final Class<?> domainType ) {
-		final Class<? extends FieldMetadata> fieldMetadataClass = fieldMetadata.getClass();
+		final FieldMetadataValidator fieldMetadataValidator = fieldMetadataValidators.get( fieldMetadata.getClass() );
 
-		final FieldMetadataValidator fieldMetadataValidator = fieldMetadataValidators.get( fieldMetadataClass );
+		Assert.notNull( fieldMetadataValidator );
 
 		return fieldMetadataValidator.isValidFieldMetadata( fieldMetadata, domainType );
 	}

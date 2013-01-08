@@ -2,19 +2,19 @@ package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
-import org.lightadmin.core.util.DomainConfigurationUtils;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromConfiguration;
+import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationCandidate;
 
 public class DomainConfigurationSourceFactory {
 
@@ -34,12 +34,10 @@ public class DomainConfigurationSourceFactory {
 	public DomainConfigurationSource createConfigurationSource( Object configurationMetadata ) {
 		Assert.notNull( configurationMetadata );
 
-		if ( DomainConfigurationUtils.isConfigurationCandidate( configurationMetadata ) ) {
+		if ( isConfigurationCandidate( configurationMetadata ) ) {
 			final Class configurationMetadataClass = ( Class ) configurationMetadata;
 
-			final ConfigurationUnits configurationUnits = ConfigurationUnitsConverter.fromConfiguration( configurationMetadataClass );
-
-			return domainConfigurationUnitsSource( configurationUnits );
+			return domainConfigurationUnitsSource( unitsFromConfiguration( configurationMetadataClass ) );
 		}
 
 		if ( configurationMetadata instanceof ConfigurationUnits ) {
@@ -51,7 +49,7 @@ public class DomainConfigurationSourceFactory {
 		throw new IllegalArgumentException( String.format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
 	}
 
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
 		final Class<?> domainType = configurationUnits.getDomainType();
 

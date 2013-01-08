@@ -34,14 +34,14 @@ public class GlobalConfigurationManagementServiceImplTest {
 
 	@Test
 	public void runtimeConfigurationRegistration() {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( AddressConfiguration.class ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
 
 		assertNotNull( globalConfigurationManagementService.getRegisteredDomainTypeConfiguration( Address.class ) );
 	}
 
 	@Test
 	public void runtimeConfigurationRemoval() {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( AddressConfiguration.class ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
 
 		globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration( Address.class );
 
@@ -52,8 +52,8 @@ public class GlobalConfigurationManagementServiceImplTest {
 	public void runtimeMultipleConfigurationsRegistration() {
 		assertTrue( globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().isEmpty() );
 
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( AddressConfiguration.class ) );
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( CustomerConfiguration.class ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( CustomerConfiguration.class ) );
 
 		assertEquals( 2, globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().size() );
 
@@ -63,8 +63,8 @@ public class GlobalConfigurationManagementServiceImplTest {
 
 	@Test
 	public void runtimeConfigurationsCleanup() {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( AddressConfiguration.class ) );
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.fromConfiguration( CustomerConfiguration.class ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
+		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( CustomerConfiguration.class ) );
 
 		globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
 

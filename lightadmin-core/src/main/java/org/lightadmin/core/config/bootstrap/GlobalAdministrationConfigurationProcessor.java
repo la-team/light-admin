@@ -9,17 +9,17 @@ import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.reporting.ProblemReporter;
-import org.lightadmin.core.reporting.ProblemReporterFactory;
-import org.lightadmin.core.util.LightAdminConfigurationUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.env.Environment;
-import org.springframework.util.ClassUtils;
-import org.springframework.util.StringUtils;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.lightadmin.core.reporting.ProblemReporterFactory.failFastReporter;
+import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE;
+import static org.springframework.util.ClassUtils.isAssignableValue;
+import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 public class GlobalAdministrationConfigurationProcessor implements BeanPostProcessor {
 
@@ -45,9 +45,9 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 	}
 
 	@Override
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	public Object postProcessAfterInitialization( final Object bean, final String beanName ) throws BeansException {
-		if ( !ClassUtils.isAssignableValue( GlobalAdministrationConfiguration.class, bean ) ) {
+		if ( !isAssignableValue( GlobalAdministrationConfiguration.class, bean ) ) {
 			return bean;
 		}
 
@@ -57,14 +57,16 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 
 		final DomainConfigurationSourceValidator validator = configurationSourceValidatorFactory.getValidator();
 
-		final ProblemReporter problemReporter = ProblemReporterFactory.failFastReporter();
+		final ProblemReporter problemReporter = failFastReporter();
 
 		for ( Class metadataClass : metadataClasses ) {
 			final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource( metadataClass );
 
 			validator.validate( configurationSource, problemReporter );
 
-			globalAdministrationConfiguration.registerDomainTypeConfiguration( domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration( configurationSource ) );
+			globalAdministrationConfiguration.registerDomainTypeConfiguration(
+				domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration( configurationSource )
+			);
 		}
 
 		return globalAdministrationConfiguration;
@@ -82,9 +84,9 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 	}
 
 	private String[] configurationsBasePackages() {
-		final String basePackageLocations = environment.getProperty( LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE );
+		final String basePackageLocations = environment.getProperty( LIGHT_ADMINISTRATION_BASE_PACKAGE );
 
-		return StringUtils.tokenizeToStringArray( basePackageLocations, CONFIG_LOCATION_DELIMITERS );
+		return tokenizeToStringArray( basePackageLocations, CONFIG_LOCATION_DELIMITERS );
 	}
 
 	@Override

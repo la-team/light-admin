@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
+import static java.lang.String.format;
 public enum DomainConfigurationUnitType {
 
 	SCREEN_CONTEXT( "screenContext" ),
@@ -27,11 +28,11 @@ public enum DomainConfigurationUnitType {
 				return domainConfigurationUnitType;
 			}
 		}
-		throw new IllegalArgumentException( String.format( "Configuration Unit for name %s not defined!", name ) );
+		throw new IllegalArgumentException( format( "Configuration Unit for name %s not defined!", name ) );
 	}
 
 	@Override
 	public String toString() {
-		return String.format( "Domain Configuration Unit: %s", getName() );
+		return format( "Domain Configuration Unit: %s", getName() );
 	}
 }

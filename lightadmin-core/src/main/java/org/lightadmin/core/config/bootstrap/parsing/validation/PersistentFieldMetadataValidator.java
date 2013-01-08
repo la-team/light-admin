@@ -13,7 +13,7 @@ class PersistentFieldMetadataValidator implements FieldMetadataValidator<Persist
 	}
 
 	@Override
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	public boolean isValidFieldMetadata( final PersistentFieldMetadata fieldMetadata, final Class<?> domainType ) {
 		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( domainType );
 

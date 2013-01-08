@@ -6,14 +6,13 @@ import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 
 import java.io.Serializable;
 
-public class NonmanagedDomainTypeConfiguration implements DomainTypeBasicConfiguration {
+public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfiguration {
 
 	private final EntityMetadataConfigurationUnit entityConfiguration;
 	private final DomainTypeEntityMetadata entityMetadata;
 	private final DynamicJpaRepository<?, ? extends Serializable> repository;
 
-	public NonmanagedDomainTypeConfiguration(EntityMetadataConfigurationUnit entityConfiguration, DomainTypeEntityMetadata entityMetadata,
-			DynamicJpaRepository<?, ? extends Serializable> repository) {
+	public NonManagedDomainTypeConfiguration( EntityMetadataConfigurationUnit entityConfiguration, DomainTypeEntityMetadata entityMetadata, DynamicJpaRepository<?, ? extends Serializable> repository ) {
 		this.entityConfiguration = entityConfiguration;
 		this.entityMetadata = entityMetadata;
 		this.repository = repository;

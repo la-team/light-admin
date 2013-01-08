@@ -9,19 +9,14 @@ import java.io.Serializable;
 
 public class DynamicJpaRepositoryFactory {
 
-	private EntityManager entityManager;
+	private final EntityManager entityManager;
 
-	private TransactionInterceptor transactionInterceptor;
+	private final TransactionInterceptor transactionInterceptor;
 
-	public DynamicJpaRepositoryFactory( final EntityManager entityManager ) {
+	public DynamicJpaRepositoryFactory( EntityManager entityManager, TransactionInterceptor transactionInterceptor ) {
 		Assert.notNull( entityManager );
 
 		this.entityManager = entityManager;
-	}
-
-	public DynamicJpaRepositoryFactory( EntityManager entityManager, TransactionInterceptor transactionInterceptor ) {
-		this( entityManager );
-
 		this.transactionInterceptor = transactionInterceptor;
 	}
 
@@ -35,7 +30,7 @@ public class DynamicJpaRepositoryFactory {
 		return decorateTransactional( dynamicJpaRepository, transactionInterceptor );
 	}
 
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	private <T> DynamicJpaRepository<T, Serializable> decorateTransactional( DynamicJpaRepository<T, Serializable> dynamicJpaRepository, final TransactionInterceptor transactionInterceptor ) {
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.setTarget( dynamicJpaRepository );
