@@ -1,6 +1,6 @@
 package org.lightadmin.demo.config;
 
-import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;

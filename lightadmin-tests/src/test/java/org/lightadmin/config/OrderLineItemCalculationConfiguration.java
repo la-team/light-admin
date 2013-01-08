@@ -1,7 +1,7 @@
 package org.lightadmin.config;
 
 
-import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;

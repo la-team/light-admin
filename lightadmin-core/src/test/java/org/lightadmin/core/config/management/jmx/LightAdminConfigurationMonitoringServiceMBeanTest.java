@@ -6,7 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.LightAdminRepositoryRestConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;

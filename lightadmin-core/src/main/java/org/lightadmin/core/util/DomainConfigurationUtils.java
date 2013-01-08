@@ -1,6 +1,6 @@
 package org.lightadmin.core.util;
 
-import org.lightadmin.core.annotation.Administration;
+import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
