@@ -47,6 +47,7 @@
 			});
 
 			$("#reset-filter" ).click(function() {
+				$.uniform.update();
 				searchScope(activeScopeName());
 			});
 
