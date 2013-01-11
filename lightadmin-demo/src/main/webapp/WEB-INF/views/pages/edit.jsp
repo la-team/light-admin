@@ -53,6 +53,8 @@
 	$(function() {
 		$("select, input:checkbox, input:radio, input:file").uniform();
 
-		loadDomainObject($('#editForm'), '${domainObjectUrl}');
+		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
+
+		loadDomainObjectForFormView($('#editForm'), '${domainObjectUrl}');
 	});
 </script>

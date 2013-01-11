@@ -1,37 +1,33 @@
+DOMAIN_TYPE_METADATA = {};
 
 (function($) {
 $.fn.serializeFormJSON = function() {
-var form = this;
+	function resolveObjectHref(attrVal, attrMetadata) {
+		var href = decodeURIComponent(attrMetadata.hrefTemplate).replace('{'+attrMetadata.idAttribute+'}', attrVal);
+		return {href : href};
+	}
 var o = {};
 var a = this.serializeArray();
 $.each(a, function() {
-	if (o[this.name]) {
-		if (!o[this.name].push) {
-			o[this.name] = [o[this.name]];
+	var attrVal = this.value || '';
+	var attrMetadata = DOMAIN_TYPE_METADATA[this.name];
+	if (attrMetadata && attrMetadata.isAssociation) {
+		var href = resolveObjectHref(attrVal, attrMetadata);
+		if (attrMetadata.isMulti) {
+			if (!o[this.name]){
+				o[this.name] = [];
+			}
+			o[this.name].push(href);
+		} else {
+			o[this.name]= href;
 		}
-		o[this.name].push(resolveFiledData(this, form));
 	} else {
-		o[this.name] = resolveFiledData(this, form);
+		o[this.name] = attrVal;
 	}
 });
 return o;
 };
 })(jQuery);
-
-function resolveFiledData(field, form) {
-	var fieldVal = field.value || '';
-	var findRes = $(form).find('select[name=' + field.name + ']');
-	if (findRes.length == 0) {
-		return fieldVal;
-	}
-	var hrefTemplate = $(findRes[0]).attr('hrefTemplate');
-	if (hrefTemplate) {
-		var href = decodeURIComponent(hrefTemplate).replace('{0}', fieldVal);
-		return {href : href};
-	} else {
-		return fieldVal;
-	}
-}
 
 function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 
@@ -214,7 +210,27 @@ function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
 
 var REST_REPO_URL;
 
-function loadDomainObject(form, restRepoUrl) {
+function loadDomainObjectForFormView(form, restRepoUrl) {
+
+	function selectOptions(editor, attrMetadata, data) {
+		$.each(data, function() {
+			selectOption(editor, attrMetadata, this);
+		});
+	}
+
+	function selectOption(editor, attrMetadata, data) {
+		var objectIdData = data[attrMetadata.idAttribute];
+		var objectId = $.isPlainObject(objectIdData) ? objectIdData.value : objectIdData;
+		if (objectId == null) {
+			objectId = '';
+		}
+		editor.find('option').each(function(index, option) {
+			if (option.value == objectId) {
+				option.selected = true;
+			}
+		});
+	}
+
 	REST_REPO_URL = restRepoUrl;
 	$.ajax({
 		type: 'GET',
@@ -225,37 +241,19 @@ function loadDomainObject(form, restRepoUrl) {
 				var editor = form.find('[name="' + attr + '"]');
 				if (editor.length > 0) {
 					var attrVal = data[attr].value;
-					if ($.isPlainObject(attrVal)) {
-						selectOptions(editor, data[attr].value);
+					var attrMetadata = DOMAIN_TYPE_METADATA[attr];
+					if (attrMetadata && attrMetadata.isAssociation) {
+						if (attrMetadata.isMulti) {
+							selectOptions(editor, attrMetadata, attrVal);
+						} else {
+							selectOption(editor, attrMetadata, attrVal);
+						}
 					} else {
-						editor.val(data[attr].value);
+						editor.val(attrVal);
 					}
 				}
 			}
 			$.uniform.update();
-		}
-	});
-}
-
-
-//function extractEntityId(data, association) {
-//	for (var attr in data) {
-//		if (data[attr].primaryKey) {
-//			ASSOCIATION_TO_ID_FIELD[association] = data;
-//			return data[attr].value;
-//		}
-//	}
-//	return '';
-//}
-
-function selectOptions(editor, data) {
-	var entityId = getPrimaryKey(data);
-	if (entityId == null) {
-		entityId = '';
-	}
-	editor.find('option').each(function(index, option) {
-		if (option.value == entityId) {
-			option.selected = true;
 		}
 	});
 }

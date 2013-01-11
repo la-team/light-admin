@@ -95,19 +95,15 @@
 	</tag>
 
 	<tag>
-		<description>Writes REST href template for the specified domain type</description>
-		<name>domain-type-href-template</name>
-		<tag-class>org.lightadmin.core.view.tags.form.DomainTypeHrefTemplateTag</tag-class>
+		<description>Writes domain type metadata in JSON format</description>
+		<name>domain-type-metadata-json</name>
+		<tag-class>org.lightadmin.core.view.tags.form.DomainTypeMetadataJsonTag</tag-class>
 		<body-content>empty</body-content>
 		<attribute>
-			<name>domainType</name>
+			<name>domainTypeMetadata</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>idPlaceholder</name>
-			<required>false</required>
-			<rtexprvalue>false</rtexprvalue>
+			<type>org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata</type>
 		</attribute>
 	</tag>
 

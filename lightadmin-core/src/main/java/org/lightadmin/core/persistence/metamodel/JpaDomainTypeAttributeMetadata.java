@@ -37,7 +37,7 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
 	@Override
 	public boolean isCollectionLike() {
-		return attributeMetadata.isCollectionLike();
+		return attributeMetadata.isCollectionLike() || attributeMetadata.isSetLike();
 	}
 
 	@Override
