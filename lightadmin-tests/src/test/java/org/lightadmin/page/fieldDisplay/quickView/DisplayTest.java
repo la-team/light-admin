@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
 import static org.lightadmin.util.DomainAsserts.assertQuickViewFieldValues;
-import static org.lightadmin.util.DomainAsserts.assertQuickViewFields;
 
 public class DisplayTest extends SeleniumIntegrationTest {
 
@@ -25,14 +24,11 @@ public class DisplayTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
+		removeAllDomainTypeAdministrationConfigurations();
+
 		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
 
 		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
-	}
-
-	@After
-	public void tearDown() {
-		removeDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
 	}
 
 	@Test
@@ -51,7 +47,7 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
 		final String[] actualFieldValues = quickViewComponent.getQuickViewFieldValues();
 
-		assertQuickViewFields( new String[]{ "1", "62100.00" }, actualFieldValues );
+		assertQuickViewFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues );
 	}
 
 	@Test
@@ -66,5 +62,5 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		assertQuickViewFieldValues( new String[]{ "3", "226308.00" }, actualFieldValues2 );
 	}
 
-	//TODO: iko: add test covering default and dynamic fields
+	//TODO: iko: add test covering dynamic fields
 }

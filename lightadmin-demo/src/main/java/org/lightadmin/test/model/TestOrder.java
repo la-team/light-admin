@@ -20,14 +20,6 @@ public class TestOrder extends AbstractEntity {
 
 	private BigDecimal orderTotal;
 
-	public TestOrder( final String name ) {
-		this.name = name;
-	}
-
-	public TestOrder() {
-
-	}
-
 	public String getName() {
 		return name;
 	}
@@ -48,7 +40,7 @@ public class TestOrder extends AbstractEntity {
 		BigDecimal orderTotal = new BigDecimal( 0 );
 
 		for ( TestLineItem lineItem : lineItems ) {
-			orderTotal = orderTotal.add(lineItem.getTotal() );
+			orderTotal = orderTotal.add( lineItem.getTotal() );
 		}
 
 		return orderTotal;
