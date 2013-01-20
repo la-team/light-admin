@@ -90,4 +90,8 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 		String fullScopeLabel = getScope( scope ).getText();
 		return Integer.parseInt( fullScopeLabel.substring( fullScopeLabel.indexOf( "(" ) + 1, fullScopeLabel.indexOf( ")" ) ) );
 	}
+
+	public EditPage editItem( int i ) {
+		return getDataTable().editItem( i, domain.getDomainTypeName() );
+	}
 }

@@ -43,8 +43,8 @@
 			</c:forEach>
 		</fieldset>
 		<div class="wizNav">
-			<input class="basicBtn" value="Cancel" type="button" onclick="history.back();">
-			<input class="blueBtn" value="Save changes" type="submit">
+			<input id="cancel-changes" class="basicBtn" value="Cancel" type="button" onclick="history.back();">
+			<input id="save-changes" class="blueBtn" value="Save changes" type="submit">
 		</div>
 	</div>
 </form>
