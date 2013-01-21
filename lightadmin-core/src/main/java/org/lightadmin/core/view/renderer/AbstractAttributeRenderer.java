@@ -29,7 +29,7 @@ public abstract class AbstractAttributeRenderer implements AttributeRenderer, Gl
 	}
 
 	protected DomainTypeAdministrationConfiguration domainTypeConfiguration( Class domainType ) {
-		return configuration.forDomainType( domainType );
+		return configuration.forManagedDomainType( domainType );
 	}
 
 	@Override

@@ -12,21 +12,21 @@ import java.util.concurrent.ConcurrentHashMap;
 public class GlobalAdministrationConfiguration {
 
 	private final DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory;
-	private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
-	private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> associationDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
+	private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
+	private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
 
 	public GlobalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
 		this.domainTypeConfigurationFactory = domainTypeConfigurationFactory;
 	}
 
 	public void registerDomainTypeConfiguration( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
-		domainTypeConfigurations.put( domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration );
+		managedDomainTypeConfigurations.put( domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration );
 		registerAssociationDomainTypeConfigurations(domainTypeAdministrationConfiguration);
 	}
 
 	private void registerAssociationDomainTypeConfigurations(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
 
-		associationDomainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
+		domainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
 
 		DomainTypeEntityMetadata<DomainTypeAttributeMetadata> entityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 		for (DomainTypeAttributeMetadata attrMetadata : entityMetadata.getAttributes()) {
@@ -35,47 +35,46 @@ public class GlobalAdministrationConfiguration {
 			}
 			Class<?> associationDomainType = associationDomainType(attrMetadata);
 			DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeConfigurationFactory.createNonManagedDomainTypeConfiguration( associationDomainType );
-			associationDomainTypeConfigurations.putIfAbsent(associationDomainType, associationTypeConfiguration);
+			domainTypeConfigurations.putIfAbsent(associationDomainType, associationTypeConfiguration);
 		}
 	}
 
 	public void removeDomainTypeConfiguration( final Class<?> domainType ) {
-		domainTypeConfigurations.remove( domainType );
+		managedDomainTypeConfigurations.remove( domainType );
 
 	}
 
 	public void removeAllDomainTypeAdministrationConfigurations() {
-		domainTypeConfigurations.clear();
+		managedDomainTypeConfigurations.clear();
 	}
 
-	public Map<Class<?>, DomainTypeAdministrationConfiguration> getDomainTypeConfigurations() {
+	public Map<Class<?>, DomainTypeAdministrationConfiguration> getManagedDomainTypeConfigurations() {
+		return managedDomainTypeConfigurations;
+	}
+
+	public Map<Class<?>, DomainTypeBasicConfiguration> getDomainTypeConfigurations() {
 		return domainTypeConfigurations;
 	}
 
 	public Collection<DomainTypeAdministrationConfiguration> getDomainTypeConfigurationsValues() {
-		return domainTypeConfigurations.values();
+		return managedDomainTypeConfigurations.values();
 	}
 
-	public DomainTypeAdministrationConfiguration forDomainType( Class<?> domainType ) {
+	public DomainTypeAdministrationConfiguration forManagedDomainType( Class<?> domainType ) {
+		return managedDomainTypeConfigurations.get( domainType );
+	}
+
+	public DomainTypeBasicConfiguration forDomainType( Class<?> domainType ) {
 		return domainTypeConfigurations.get( domainType );
 	}
 
 	public DomainTypeAdministrationConfiguration forEntityName( String entityName ) {
-		for ( DomainTypeAdministrationConfiguration configuration : domainTypeConfigurations.values() ) {
+		for ( DomainTypeAdministrationConfiguration configuration : managedDomainTypeConfigurations.values() ) {
 			if ( StringUtils.equalsIgnoreCase( entityName, configuration.getDomainTypeName() ) ) {
 				return configuration;
 			}
 		}
 		throw new RuntimeException( "Undefined entity name. Please check your configuration." );
-	}
-
-	public DomainTypeBasicConfiguration forAssociation( DomainTypeAttributeMetadata attrMetadata ) {
-		Class<?> associationDomainType = associationDomainType(attrMetadata);
-		return associationDomainTypeConfigurations.get(associationDomainType);
-	}
-
-	public DomainTypeBasicConfiguration forAssociation( Class<?> associationDomainType ) {
-		return associationDomainTypeConfigurations.get(associationDomainType);
 	}
 
 	private Class<?> associationDomainType(DomainTypeAttributeMetadata attrMetadata) {

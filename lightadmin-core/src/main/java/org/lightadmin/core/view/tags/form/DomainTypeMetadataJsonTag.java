@@ -51,7 +51,7 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 			json.writeBooleanField("isAssociation", true);
 			json.writeBooleanField("isMulti", attribMetadata.isCollectionLike());
 			Class<?> attribDomainType = attribMetadata.isCollectionLike() ? attribMetadata.getElementType() : attribMetadata.getType();
-			DomainTypeBasicConfiguration attribDomainTypeConfig = globalConfiguration.forAssociation(attribDomainType);
+			DomainTypeBasicConfiguration attribDomainTypeConfig = globalConfiguration.forDomainType(attribDomainType);
 			if (attribDomainTypeConfig != null) {
 				DomainTypeAttributeMetadata idAttribMetadata = attribDomainTypeConfig.getDomainTypeEntityMetadata().getIdAttribute();
 				json.writeStringField("idAttribute", idAttribMetadata.getName());

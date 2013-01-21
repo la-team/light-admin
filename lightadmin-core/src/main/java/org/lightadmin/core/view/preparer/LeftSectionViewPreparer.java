@@ -13,7 +13,7 @@ public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
 
 	@Override
 	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration ) {
-		addAttribute( attributeContext, "menuItems", menuItems( configuration.getDomainTypeConfigurations().values() ) );
+		addAttribute( attributeContext, "menuItems", menuItems( configuration.getManagedDomainTypeConfigurations().values() ) );
 	}
 
 	@Override

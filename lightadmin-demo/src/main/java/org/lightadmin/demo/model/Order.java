@@ -19,7 +19,7 @@ public class Order extends AbstractEntity {
 	@ManyToOne( optional = false, cascade = CascadeType.ALL )
 	private Address shippingAddress;
 
-	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
+	@OneToMany( cascade = CascadeType.ALL )
 	@JoinColumn( name = "order_id" )
 	private Set<LineItem> lineItems;
 

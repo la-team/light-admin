@@ -34,7 +34,7 @@ public class DomainTypeElementsTag extends AbstractAutowiredTag {
 	@Override
 	public void doTag() throws JspException, IOException {
 
-		DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forAssociation(domainType);
+		DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forDomainType(domainType);
 		Assert.notNull(domainTypeConfiguration, "<domainTypeConfiguration> not found for association");
 
 		// TODO: Implement configurable ordering

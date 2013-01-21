@@ -143,6 +143,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public ResponseEntity handleMiscFailures(Throwable t, ServletServerHttpRequest request) throws IOException {
+		LOG.debug("Handled exception", t);
 		Map<String, String> error = singletonMap("message", t.getLocalizedMessage());
 		Map packet = newHashMap();
 		packet.put("errors", asList(error));
@@ -153,6 +154,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	@ExceptionHandler({ HttpMessageNotReadableException.class, HttpMessageNotWritableException.class })
 	@ResponseBody
 	public ResponseEntity handleMessageConversionFailure(Exception ex, HttpServletRequest request) throws IOException {
+		LOG.error("Handled exception", ex);
 		return handleMiscFailures(ex.getCause(), new ServletServerHttpRequest(request));
 	}
 

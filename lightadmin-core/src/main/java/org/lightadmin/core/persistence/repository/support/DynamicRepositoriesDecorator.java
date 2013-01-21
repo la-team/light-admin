@@ -1,6 +1,6 @@
 package org.lightadmin.core.persistence.repository.support;
 
-import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
@@ -24,7 +24,7 @@ import static com.google.common.collect.Maps.newLinkedHashMap;
 @SuppressWarnings( {"rawtypes", "unchecked"} )
 public class DynamicRepositoriesDecorator extends Repositories {
 
-	private final Map<Class<?>, DomainTypeAdministrationConfiguration> domainTypeAdministrationConfigurations;
+	private final Map<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations;
 
 	private final DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver;
 
@@ -32,18 +32,19 @@ public class DynamicRepositoriesDecorator extends Repositories {
 		super( emptyBeanFactory() );
 
 		this.domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver;
-		this.domainTypeAdministrationConfigurations = newLinkedHashMap( globalAdministrationConfiguration.getDomainTypeConfigurations() );
+		this.domainTypeConfigurations = newLinkedHashMap( globalAdministrationConfiguration.getDomainTypeConfigurations() );
+
 	}
 
 	@Override
 	public boolean hasRepositoryFor( Class<?> domainClass ) {
-		return domainTypeAdministrationConfigurations.containsKey( domainClass );
+		return domainTypeConfigurations.containsKey( domainClass );
 	}
 
 	@Override
 	public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor( Class<?> domainClass ) {
 		if ( hasRepositoryFor( domainClass ) ) {
-			return ( CrudRepository<T, S> ) domainTypeAdministrationConfigurations.get( domainClass ).getRepository();
+			return ( CrudRepository<T, S> ) domainTypeConfigurations.get( domainClass ).getRepository();
 		}
 		return null;
 	}
@@ -67,7 +68,7 @@ public class DynamicRepositoriesDecorator extends Repositories {
 
 	@Override
 	public Iterator<Class<?>> iterator() {
-		return domainTypeAdministrationConfigurations.keySet().iterator();
+		return domainTypeConfigurations.keySet().iterator();
 	}
 
 	private static StaticListableBeanFactory emptyBeanFactory() {
@@ -77,7 +78,7 @@ public class DynamicRepositoriesDecorator extends Repositories {
 	private RepositoryFactoryInformation<Object, Serializable> getRepoInfoFor( Class<?> domainClass ) {
 		Assert.notNull( domainClass );
 		if ( hasRepositoryFor( domainClass ) ) {
-			return new ConfigurationRepositoryFactoryInformationAdapter( domainTypeAdministrationConfigurations.get( domainClass ) );
+			return new ConfigurationRepositoryFactoryInformationAdapter( domainTypeConfigurations.get( domainClass ) );
 
 		}
 		return null;
@@ -85,16 +86,16 @@ public class DynamicRepositoriesDecorator extends Repositories {
 
 	private class ConfigurationRepositoryFactoryInformationAdapter<T, ID extends Serializable> implements RepositoryFactoryInformation<T, ID> {
 
-		private final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration;
+		private final DomainTypeBasicConfiguration domainTypeConfiguration;
 
-		public ConfigurationRepositoryFactoryInformationAdapter( final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
-			this.domainTypeAdministrationConfiguration = domainTypeAdministrationConfiguration;
+		public ConfigurationRepositoryFactoryInformationAdapter( final DomainTypeBasicConfiguration domainTypeAdministrationConfiguration ) {
+			this.domainTypeConfiguration = domainTypeAdministrationConfiguration;
 		}
 
 		@Override
 		@SuppressWarnings( "unchecked" )
 		public EntityInformation<T, ID> getEntityInformation() {
-			return domainTypeEntityMetadataResolver.getEntityInformation( domainTypeAdministrationConfiguration.getDomainType() );
+			return domainTypeEntityMetadataResolver.getEntityInformation( domainTypeConfiguration.getDomainType() );
 		}
 
 		@Override

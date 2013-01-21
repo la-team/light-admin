@@ -17,7 +17,7 @@ public class DashboardViewPreparer extends ConfigurationAwareViewPreparer {
 	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration ) {
 		super.execute( tilesContext, attributeContext, configuration );
 
-		addAttribute( attributeContext, "dashboardDomainTypes", dashboardDomainTypes( configuration.getDomainTypeConfigurations().values() ) );
+		addAttribute( attributeContext, "dashboardDomainTypes", dashboardDomainTypes( configuration.getManagedDomainTypeConfigurations().values() ) );
 	}
 
 	private Collection<Pair<MenuItem, Long>> dashboardDomainTypes( Collection<DomainTypeAdministrationConfiguration> configurations ) {

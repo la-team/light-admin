@@ -50,7 +50,7 @@ public class DynamicPagingAndSortingMethodArgumentResolver extends PagingAndSort
 	private DomainTypeAdministrationConfiguration resolveDomainTypConfiguration( NativeWebRequest webRequest ) {
 		final String requestURI = ( ( HttpServletRequest ) webRequest.getNativeRequest() ).getRequestURI();
 
-		for ( DomainTypeAdministrationConfiguration configuration : globalAdministrationConfiguration.getDomainTypeConfigurations().values() ) {
+		for ( DomainTypeAdministrationConfiguration configuration : globalAdministrationConfiguration.getManagedDomainTypeConfigurations().values() ) {
 			if ( requestURI.contains( "/rest/" + configuration.getDomainTypeName() ) ) {
 				return configuration;
 			}

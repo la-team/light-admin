@@ -60,7 +60,9 @@ public class FieldMetadataUtils {
 
 	public static Set<FieldMetadata> addPrimaryKeyPersistentField( final Set<FieldMetadata> fields, final DomainTypeAttributeMetadata idAttribute ) {
 		final Set<FieldMetadata> fieldsWithPrimaryKey = newLinkedHashSet();
-		fieldsWithPrimaryKey.add( new PersistentFieldMetadata( StringUtils.capitalize( idAttribute.getName() ), idAttribute.getName(), true ) );
+		PersistentFieldMetadata idField = new PersistentFieldMetadata( StringUtils.capitalize( idAttribute.getName() ), idAttribute.getName(), true );
+		idField.setAttributeMetadata(idAttribute);
+		fieldsWithPrimaryKey.add( idField );
 		fieldsWithPrimaryKey.addAll( fields );
 		return fieldsWithPrimaryKey;
 	}

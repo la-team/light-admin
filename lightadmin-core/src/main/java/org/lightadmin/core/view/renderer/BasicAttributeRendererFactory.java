@@ -74,7 +74,7 @@ public class BasicAttributeRendererFactory implements AttributeRendererFactory, 
 	}
 
 	private DomainTypeEntityMetadata domainTypeEntityMetadata( final Class<?> type ) {
-		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forDomainType( type );
+		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forManagedDomainType( type );
 		return domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 	}
 

@@ -254,6 +254,20 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
 				}
 			}
 			$.uniform.update();
+		},
+		statusCode : {
+			400 /* BAD_REQUEST */:
+				function(jqXHR) {
+					var data = $.parseJSON(jqXHR.responseText);
+					var errors = data.errors;
+					var errorMessages = '';
+					for (var i=0; i<errors.length; i++) {
+						errorMessages += $('<div/>').text(errors[i].message).html();
+					}
+					if (errorMessages.length > 0) {
+						jAlert(errorMessages);
+					}
+				}
 		}
 	});
 }
@@ -305,7 +319,7 @@ function updateDomainObject(domForm) {
 						var error = errors[i];
 						var errorMessage = $('<div/>').text(error.message).html();
 						if (!error.field) {
-							errorMessages = errorMessages + errorMessage + '<br>';
+							errorMessages += errorMessage + '<br>';
 						}
 						var messageDiv = $('#' + error.field + '-error');
 						if (messageDiv.length > 0) {

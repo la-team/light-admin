@@ -3,6 +3,7 @@ package org.lightadmin.core.config.domain;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
@@ -30,7 +31,7 @@ public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfigu
 
 	@Override
 	public String getDomainTypeName() {
-		return entityMetadata.getEntityName();
+		return StringUtils.uncapitalize( entityMetadata.getEntityName() );
 	}
 
 	@Override

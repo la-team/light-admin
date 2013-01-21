@@ -68,6 +68,6 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
 
 	@Override
 	public DomainTypeAdministrationConfiguration getRegisteredDomainTypeConfiguration( final Class<?> domainType ) {
-		return globalAdministrationConfiguration.forDomainType( domainType );
+		return globalAdministrationConfiguration.forManagedDomainType( domainType );
 	}
 }
