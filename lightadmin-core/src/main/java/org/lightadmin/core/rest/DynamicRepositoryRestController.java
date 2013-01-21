@@ -62,6 +62,13 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 	private ApplicationContext applicationContext;
 
+	@RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
+	@ResponseBody
+	public ResponseEntity<?> createOrUpdate(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository)
+			throws IOException, IllegalAccessException, InstantiationException {
+		return super.createOrUpdate(request, baseUri, repository, "");
+	}
+
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET )
 	public ResponseEntity<?> entity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repositoryName, @PathVariable String id, @PathVariable String configurationUnit) throws IOException {

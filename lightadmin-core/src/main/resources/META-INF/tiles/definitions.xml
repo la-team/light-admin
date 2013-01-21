@@ -56,6 +56,12 @@
 		</put-attribute>
 	</definition>
 
+	<definition name="create-view" extends="internal-layout">
+		<put-attribute name="main-section">
+			<definition template="/WEB-INF/views/pages/create.jsp" preparer="editViewPreparer"/>
+		</put-attribute>
+	</definition>
+
 	<definition name="show-view" extends="internal-layout">
 		<put-attribute name="main-section">
 			<definition template="/WEB-INF/views/pages/show.jsp" preparer="showViewPreparer"/>

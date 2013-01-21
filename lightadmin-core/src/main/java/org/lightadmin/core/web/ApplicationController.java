@@ -86,6 +86,13 @@ public class ApplicationController {
 		return "edit-view";
 	}
 
+	@RequestMapping( value = "/domain/{domainTypeName}/create", method = RequestMethod.GET )
+	public String create( @PathVariable String domainTypeName, Model model ) {
+		addDomainTypeConfigurationToModel( domainTypeName, model );
+
+		return "create-view";
+	}
+
 	private void addDomainTypeConfigurationToModel( String domainTypeName, Model model ) {
 		model.addAttribute( DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration.forEntityName( domainTypeName ) );
 		model.addAttribute( BEAN_FACTORY_KEY, appContext.getAutowireCapableBeanFactory() );

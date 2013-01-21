@@ -12,7 +12,7 @@
 		<c:if test="${not empty domainTypeAdministrationConfiguration}">
 			<spring:url value="${light:domainBaseUrl(domainTypeAdministrationConfiguration.domainTypeName)}" var="domainBaseUrl" />
 			<ul>
-				<li class="iCreate"><a href="#" title=""><span>Create New</span></a></li>
+				<li class="iCreate"><a href="${domainBaseUrl}/create" title=""><span>Create New</span></a></li>
 				<li class="iArchive"><a href="#" title=""><span>Templates</span></a></li>
 				<li class="iZipFiles"><a href="#" title=""><span>Export Data</span></a></li>
 			</ul>
