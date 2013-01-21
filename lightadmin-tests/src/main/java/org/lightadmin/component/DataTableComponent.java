@@ -2,6 +2,7 @@ package org.lightadmin.component;
 
 import com.google.common.collect.Lists;
 import org.lightadmin.SeleniumContext;
+import org.lightadmin.page.EditPage;
 import org.lightadmin.util.WebElementTransformer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -75,6 +76,12 @@ public class DataTableComponent extends StaticComponent {
 
 	private List<WebElement> cellElements( WebElement rowElement ) {
 		return rowElement.findElements( By.xpath( "td[contains(@class,'data-cell')]" ) );
+	}
+
+	public EditPage editItem( int itemId, String domainName ) {
+		getRowForItem( itemId ).findElement( By.xpath( "//a[@title='Edit']" ) ).click();
+
+		return new EditPage( seleniumContext, domainName, itemId ).get();
 	}
 
 	public class Column {
