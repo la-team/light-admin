@@ -6,26 +6,30 @@ $.fn.serializeFormJSON = function() {
 		var href = decodeURIComponent(attrMetadata.hrefTemplate).replace('{'+attrMetadata.idAttribute+'}', attrVal);
 		return {href : href};
 	}
-var o = {};
-var a = this.serializeArray();
-$.each(a, function() {
-	var attrVal = this.value || '';
-	var attrMetadata = DOMAIN_TYPE_METADATA[this.name];
-	if (attrMetadata && attrMetadata.isAssociation) {
-		var href = resolveObjectHref(attrVal, attrMetadata);
-		if (attrMetadata.isMulti) {
-			if (!o[this.name]){
-				o[this.name] = [];
+	var json = {};
+	$.each(this.serializeArray(), function() {
+		var attrVal = this.value || '';
+		var attrMetadata = DOMAIN_TYPE_METADATA[this.name];
+		if (attrMetadata && attrMetadata.isAssociation) {
+			var href = resolveObjectHref(attrVal, attrMetadata);
+			if (attrMetadata.isMulti) {
+				if (!json[this.name]){
+					json[this.name] = [];
+				}
+				json[this.name].push(href);
+			} else {
+				json[this.name]= href;
 			}
-			o[this.name].push(href);
 		} else {
-			o[this.name]= href;
+			json[this.name] = attrVal;
 		}
-	} else {
-		o[this.name] = attrVal;
-	}
-});
-return o;
+	});
+	$.each(DOMAIN_TYPE_METADATA, function(attrName, attrMetadata) {
+		if (attrMetadata.isAssociation && attrMetadata.isMulti && json[attrName] == undefined) {
+			json[attrName] = [];
+		}
+	});
+	return json;
 };
 })(jQuery);
 
