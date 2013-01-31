@@ -4,7 +4,7 @@ import org.junit.runner.RunWith;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.util.DomainConfigurationUtils;
-import org.openqa.selenium.WebDriver;
+import org.lightadmin.util.ExtendedWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -34,7 +34,7 @@ public abstract class SeleniumIntegrationTest {
 		globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
 	}
 
-	protected WebDriver webDriver() {
+	protected ExtendedWebDriver webDriver() {
 		return seleniumContext.getWebDriver();
 	}
 
