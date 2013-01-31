@@ -8,6 +8,7 @@ import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.lightadmin.page.EditPage;
 import org.lightadmin.page.LoginPage;
+import org.openqa.selenium.By;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertFalse;
@@ -28,9 +29,9 @@ public class CalculatedField extends SeleniumIntegrationTest {
 		editPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS ).editItem( 1 );
 	}
 
-	//LA-2: https://github.com/max-dev/light-admin/issues/2#issuecomment-12477966
+	//Covers LA-2 comment: https://github.com/max-dev/light-admin/issues/2#issuecomment-12477966
 	@Test
-	public void shouldBeReadOnly() {
-		assertFalse( editPage.isFieldEditable( "orderTotal" ) );
+	public void shouldNotBeVisible() {
+		assertFalse( webDriver().findElement( By.name( "orderTotal" ) ).isDisplayed() );
 	}
 }
