@@ -34,6 +34,9 @@ $.fn.serializeFormJSON = function() {
 })(jQuery);
 
 function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
+	if ( sSource == null || typeof sSource === 'undefined') {
+		return;
+	}
 
 	//extract name/value pairs into a simpler map for use later
 	var paramMap = {};
@@ -52,7 +55,7 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 	var sortName = paramMap['mDataProp_' + sortCol];
 
 	//create new json structure for parameters for REST request
-	var restParams = new Array();
+	var restParams = [];
 	restParams.push( {"name":"limit", "value":pageSize} );
 	restParams.push( {"name":"page", "value":pageNum } );
 	restParams.push( { "name":"sort", "value":sortName } );
@@ -67,7 +70,7 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 						data.iTotalRecords = data.page.totalElements;
 						data.iTotalDisplayRecords = data.page.totalElements;
 
-						activeScope().html(activeScopeName() + ' (' + data.iTotalRecords + ')');
+						getSearcher().onSearchCompleted(data.iTotalRecords);
 
 						fnCallback( data );
 					}

@@ -6,12 +6,6 @@
 
 <%@ attribute name="scopes" required="true" rtexprvalue="true" type="java.util.List"%>
 
-<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-
-<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
-
-<spring:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeName)}" scope="page"/>
-
 <c:if test="${not empty scopes}">
 	<div class="scopes" id="scopes">
 		<ul>
@@ -23,53 +17,8 @@
 		</ul>
 		<div class="fix"></div>
 	</div>
+
+	<script type="text/javascript">
+		var SCOPES_COMPONENT = new ScopesComponent('#scopes', getSearcher());
+	</script>
 </c:if>
-
-<script type="text/javascript">
-	function domainRestScopeSearchBaseUrl( scopeName ) {
-		return '${domainRestScopeBaseUrl}' + '/' + scopeName + '/search';
-	}
-
-	function activeScope() {
-		return $("a.scope.active" );
-	}
-
-	function activeScopeName() {
-		return activeScope().attr('scope-name');
-	}
-
-	function activateScope( scope ) {
-		$("a.scope.active").removeClass("active green").addClass("blue");
-
-		$(scope).addClass("active green" ).removeClass("blue");
-	}
-
-	function searchScope( scopeName, search_criteria ) {
-		var dataTable = $(document ).data('lightadmin.dataTable');
-
-		var restScopeSearchUrl = domainRestScopeSearchBaseUrl( scopeName );
-		if ( typeof(search_criteria) != 'undefined' ) {
-			restScopeSearchUrl += '?' + search_criteria;
-		}
-
-		dataTable.fnReloadAjax( restScopeSearchUrl );
-	}
-
-	$(function() {
-		$("a.scope" ).click(function(event) {
-			event.preventDefault();
-
-			var dataTable = $(document ).data('lightadmin.dataTable');
-			var scopeName = $( this ).attr('scope-name');
-
-			activateScope($( this ));
-
-			if ( $("form[name='filter-form']" ).size() > 0) {
-				var filter_criteria = $("form[name='filter-form']" ).serialize();
-				searchScope( scopeName, filter_criteria );
-			} else {
-				searchScope( scopeName );
-			}
-		});
-	});
-</script>

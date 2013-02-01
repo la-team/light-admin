@@ -13,6 +13,7 @@
 <c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.config.domain.filter.FilterMetadata.class ) %>"/>
 
 <c:if test="${not empty tag_search_filterList}">
+
 	<div class="widget">
 		<div id="filter-header" class="head closed normal"><h5>Advanced Search</h5></div>
 		<div class="body" style="display: none; ">
@@ -30,7 +31,7 @@
 						</c:forEach>
 					</fieldset>
 					<div class="wizNav">
-						<input id="reset-filter" class="basicBtn" type="reset" value="Reset"/>
+						<input id="reset-filter" class="basicBtn" type="button" value="Reset"/>
 						<input id="apply-filter" class="blueBtn" type="submit" value="Search"/>
 					</div>
 			</form>
@@ -38,23 +39,14 @@
 	</div>
 
 	<script type="text/javascript">
+		var FILTER_COMPONENT = new FilterComponent('filter-form', getSearcher() );
+
 		$(function() {
 			$('.closed').collapsible({
 				 defaultOpen: '',
 				 cssOpen: 'inactive',
 				 cssClose: 'normal',
 				 speed: 200
-			});
-
-			$("#reset-filter" ).click(function() {
-				$.uniform.update();
-				searchScope(activeScopeName());
-			});
-
-			$("form[name='filter-form']").submit(function(event) {
-				event.preventDefault();
-				var filter_criteria = $("form[name='filter-form']" ).serialize();
-				searchScope(activeScopeName(), filter_criteria );
 			});
 		});
 	</script>

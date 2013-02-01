@@ -58,6 +58,7 @@
 <script type="text/javascript" src="<spring:url value="/scripts/plugins/ui/jquery.timeentry.min.js"/>"></script>
 <script type="text/javascript" src="<spring:url value="/scripts/plugins/ui/jquery.prettyPhoto.js"/>"></script>
 
+<script type="text/javascript" src="<spring:url value="/scripts/lightadmin-search.js"/>"></script>
 <script type="text/javascript" src="<spring:url value="/scripts/lightadmin.js"/>"></script>
 
 <script type="text/javascript" src="<spring:url value="/scripts/charts/chart.js"/>"></script>

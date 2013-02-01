@@ -117,7 +117,7 @@
 				   jConfirm('Are you sure?', 'Confirmation Dialog', function(r) {
 					   if ( r ) {
 						   removeDomainObject(entityId, '${domainRestUrl}', function() {
-							   searchScope(activeScopeName());
+							   getSearcher().search();
 						   });
 					   }
 				   });
@@ -125,9 +125,9 @@
 		   }
 	   });
 
-		$( document ).data('lightadmin.dataTable', dataTable );
+		getSearcher().addDataTable(dataTable);
 
-		searchScope(activeScopeName());
+		getSearcher().search();
 
 		bindInfoClickHandlers( tableElement, dataTable );
 

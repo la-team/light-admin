@@ -5,6 +5,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
 <%@ taglib prefix="light" tagdir="/WEB-INF/tags" %>
+<%@ taglib prefix="lightfn" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="breadcrumb" tagdir="/WEB-INF/tags/breadcrumb" %>
 
 <tiles:useAttribute name="fields"/>
@@ -15,11 +16,17 @@
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
 <c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
 
+<spring:url var="domainRestScopeBaseUrl" value="${lightfn:domainRestScopeBaseUrl(domainTypeName)}" scope="page"/>
+
 <div class="title"><h5>List <c:out value="${domainTypeName}"/></h5></div>
 
 <breadcrumb:breadcrumb>
 	<breadcrumb:breadcrumb-item name="List ${domainTypeName}"/>
 </breadcrumb:breadcrumb>
+
+<script type="text/javascript">
+	var SEARCHER = createSearcher('${domainRestScopeBaseUrl}');
+</script>
 
 <light:search filters="${filters}" />
 
