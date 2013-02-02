@@ -5,8 +5,9 @@
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <select name="${attributeMetadata.name}" multiple="multiple" class="multiple">
-<light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId" stringRepresentationVar="elementName">
-	<option value="${elementId}"><c:out value="${elementName}" escapeXml="true"/></option>
-</light:domain-type-elements>
+	<option value="">Select ${attributeMetadata.name}</option>
+	<light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId" stringRepresentationVar="elementName">
+		<option value="${elementId}"><c:out value="${elementName}" escapeXml="true"/></option>
+	</light:domain-type-elements>
 </select>
 <label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>
