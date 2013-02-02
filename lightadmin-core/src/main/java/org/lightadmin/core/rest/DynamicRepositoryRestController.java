@@ -35,6 +35,7 @@ import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
@@ -56,11 +57,16 @@ import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpeci
 @RequestMapping( "/rest" )
 public class DynamicRepositoryRestController extends FlexibleRepositoryRestController implements GlobalAdministrationConfigurationAware {
 
-	private final SpecificationCreator specificationCreator = new SpecificationCreator();
+	private SpecificationCreator specificationCreator;
 
 	private GlobalAdministrationConfiguration configuration;
 
 	private ApplicationContext applicationContext;
+
+	@PostConstruct
+	public void init() {
+		specificationCreator = new SpecificationCreator( configuration );
+	}
 
 	@RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
 	@ResponseBody

@@ -33,7 +33,7 @@ public class GlobalAdministrationConfiguration {
 			if (!attrMetadata.isAssociation()) {
 				continue;
 			}
-			Class<?> associationDomainType = associationDomainType(attrMetadata);
+			Class<?> associationDomainType = attrMetadata.getAssociationDomainType();
 			DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeConfigurationFactory.createNonManagedDomainTypeConfiguration( associationDomainType );
 			domainTypeConfigurations.putIfAbsent(associationDomainType, associationTypeConfiguration);
 		}
@@ -75,13 +75,5 @@ public class GlobalAdministrationConfiguration {
 			}
 		}
 		throw new RuntimeException( "Undefined entity name. Please check your configuration." );
-	}
-
-	private Class<?> associationDomainType(DomainTypeAttributeMetadata attrMetadata) {
-		if (attrMetadata.getAttribute().isCollection()) {
-			return attrMetadata.getElementType();
-		} else {
-			return attrMetadata.getType();
-		}
 	}
 }

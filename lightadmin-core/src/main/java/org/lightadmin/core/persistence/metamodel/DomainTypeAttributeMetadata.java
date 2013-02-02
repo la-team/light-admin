@@ -62,4 +62,6 @@ public interface DomainTypeAttributeMetadata {
 	Object getValue( Object target );
 
 	Attribute getAttribute();
+
+	Class<?> getAssociationDomainType();
 }

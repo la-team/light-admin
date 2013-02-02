@@ -52,14 +52,14 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
 	@Override
 	public boolean isAssociation() {
-		switch (attribute.getPersistentAttributeType()) {
-		case ONE_TO_ONE:
-		case ONE_TO_MANY:
-		case MANY_TO_ONE:
-		case MANY_TO_MANY:
-			return true;
-		default:
-			return false;
+		switch ( attribute.getPersistentAttributeType() ) {
+			case ONE_TO_ONE:
+			case ONE_TO_MANY:
+			case MANY_TO_ONE:
+			case MANY_TO_MANY:
+				return true;
+			default:
+				return false;
 		}
 	}
 
@@ -70,5 +70,13 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
 	public Attribute getAttribute() {
 		return attribute;
+	}
+
+	@Override
+	public Class<?> getAssociationDomainType() {
+		if ( getAttribute().isCollection() ) {
+			return getElementType();
+		}
+		return getType();
 	}
 }
