@@ -5,7 +5,6 @@
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <select name="${attributeMetadata.name}" multiple="multiple" class="multiple">
-	<option value="">Select ${attributeMetadata.name}</option>
 	<light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId" stringRepresentationVar="elementName">
 		<option value="${elementId}"><c:out value="${elementName}" escapeXml="true"/></option>
 	</light:domain-type-elements>
