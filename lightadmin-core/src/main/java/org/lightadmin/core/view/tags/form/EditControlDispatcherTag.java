@@ -1,14 +1,11 @@
 package org.lightadmin.core.view.tags.form;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-
-import javax.persistence.metamodel.Attribute;
+import java.io.IOException;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
-import java.io.IOException;
-import java.util.Date;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
 public class EditControlDispatcherTag extends SimpleTagSupport {
 
@@ -26,25 +23,26 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 	@Override
 	public void doTag() throws JspException, IOException {
 		JspContext context = getJspContext();
-		Class<?> attrType = attributeMetadata.getType();
 		JspFragment worker;
-		if (attributeMetadata.isAssociation() || attributeMetadata.getAttribute().getPersistentAttributeType() == Attribute.PersistentAttributeType.MANY_TO_ONE ) {
-			if (attributeMetadata.isCollectionLike() || attributeMetadata.isSetLike()) {
-				worker = n2manyEditControl;
-			} else {
-				worker = n2oneEditControl;
-			}
-		} else if (attributeMetadata.isMapLike()) {
+		switch (DomainTypeAttributeType.by(attributeMetadata)) {
+		case ASSOC_MULTI:
+			worker = n2manyEditControl;
+			break;
+		case ASSOC:
+			worker = n2oneEditControl;
+			break;
+		case MAP:
 			worker = mapEditControl;
-		} else if (Boolean.class.equals( booleanEditControl )) {
+			break;
+		case BOOL:
 			worker = booleanEditControl;
-		} else if (Date.class.isAssignableFrom( attrType )) {
+			break;
+		case DATE:
 			worker = dateEditControl;
-		} else if (String.class.equals(attrType) || Number.class.isAssignableFrom(attrType)) {
+			break;
+		default:
 			worker = simpleEditControl;
-		} else {
-			// An embedded attribute ?
-			worker = simpleEditControl;
+			break;
 		}
 		try {
 			worker.invoke(null);

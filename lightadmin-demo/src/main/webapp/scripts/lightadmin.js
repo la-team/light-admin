@@ -10,9 +10,10 @@ $.fn.serializeFormJSON = function() {
 	$.each(this.serializeArray(), function() {
 		var attrVal = this.value || '';
 		var attrMetadata = DOMAIN_TYPE_METADATA[this.name];
-		if (attrMetadata && attrMetadata.isAssociation) {
+		var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
+		if (attrType.indexOf('ASSOC') ==0 ) {
 			var href = resolveObjectHref(attrVal, attrMetadata);
-			if (attrMetadata.isMulti) {
+			if (attrType == 'ASSOC_MULTI') {
 				if (!json[this.name]){
 					json[this.name] = [];
 				}
@@ -25,8 +26,15 @@ $.fn.serializeFormJSON = function() {
 		}
 	});
 	$.each(DOMAIN_TYPE_METADATA, function(attrName, attrMetadata) {
-		if (attrMetadata.isAssociation && attrMetadata.isMulti && json[attrName] == undefined) {
+		if (json[attrName] != undefined) {
+			return;
+		}
+		switch (attrMetadata.type) {
+		case 'ASSOC_MULTI':
 			json[attrName] = [];
+			break;
+		case 'BOOL':
+			json[attrName] = false;
 		}
 	});
 	return json;
@@ -249,14 +257,20 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
 				if (editor.length > 0) {
 					var attrVal = data[attr].value;
 					var attrMetadata = DOMAIN_TYPE_METADATA[attr];
-					if (attrMetadata && attrMetadata.isAssociation) {
-						if (attrMetadata.isMulti) {
-							selectOptions(editor, attrMetadata, attrVal);
-						} else {
-							selectOption(editor, attrMetadata, attrVal);
-						}
-					} else {
-						editor.val(attrVal);
+					var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
+					switch (attrType) {
+					case 'ASSOC':
+						selectOption(editor, attrMetadata, attrVal);
+						break;
+					case 'ASSOC_MULTI':
+						selectOptions(editor, attrMetadata, attrVal);
+						break;
+					case 'BOOL':
+						editor.prop('checked', attrVal);
+						break;
+					default:
+						editor.val(attrVal.toString());
+						break;
 					}
 				}
 			}
@@ -346,5 +360,3 @@ function updateDomainObject(domForm) {
 
 	return false;
 }
-
-

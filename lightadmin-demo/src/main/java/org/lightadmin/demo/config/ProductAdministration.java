@@ -44,7 +44,8 @@ public class ProductAdministration {
 		return fragmentBuilder
 				.field( "name" ).caption( "Name" )
 				.field( "description" ).caption( "Description" )
-				.field( "price" ).caption( "Price" ).build();
+				.field( "price" ).caption( "Price" )
+				.field( "retired" ).caption("Out of production").build();
 	}
 
 	public static FieldSetConfigurationUnit quickView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {

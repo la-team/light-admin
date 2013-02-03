@@ -35,8 +35,14 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 		json.writeStartObject();
 		try {
 			for (DomainTypeAttributeMetadata attribMetadata : domainTypeMetadata.getAttributes()) {
-				if (attribMetadata.isAssociation()) {
-					writeAssociationMetadata(attribMetadata, json);
+				try {
+					json.writeObjectFieldStart(attribMetadata.getName());
+					json.writeStringField("type", DomainTypeAttributeType.by(attribMetadata).name());
+					if (attribMetadata.isAssociation()) {
+						writeAssociationMetadata(attribMetadata, json);
+					}
+				} finally {
+					json.writeEndObject();
 				}
 			}
 		} finally {
@@ -46,20 +52,15 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 	}
 
 	private void writeAssociationMetadata(DomainTypeAttributeMetadata attribMetadata, JsonGenerator json) throws IOException {
-		json.writeObjectFieldStart(attribMetadata.getName());
-		try {
-			json.writeBooleanField("isAssociation", true);
-			json.writeBooleanField("isMulti", attribMetadata.isCollectionLike());
-			Class<?> attribDomainType = attribMetadata.isCollectionLike() ? attribMetadata.getElementType() : attribMetadata.getType();
-			DomainTypeBasicConfiguration attribDomainTypeConfig = globalConfiguration.forDomainType(attribDomainType);
-			if (attribDomainTypeConfig != null) {
-				DomainTypeAttributeMetadata idAttribMetadata = attribDomainTypeConfig.getDomainTypeEntityMetadata().getIdAttribute();
-				json.writeStringField("idAttribute", idAttribMetadata.getName());
-				String idPlaceholder = "{" + idAttribMetadata.getName() + "}";
-				json.writeStringField("hrefTemplate", support.selfLink(attribDomainTypeConfig, idPlaceholder).getHref());
-			}
-		} finally {
-			json.writeEndObject();
+		json.writeBooleanField("isAssociation", true);
+		json.writeBooleanField("isMulti", attribMetadata.isCollectionLike());
+		Class<?> attribDomainType = attribMetadata.isCollectionLike() ? attribMetadata.getElementType() : attribMetadata.getType();
+		DomainTypeBasicConfiguration attribDomainTypeConfig = globalConfiguration.forDomainType(attribDomainType);
+		if (attribDomainTypeConfig != null) {
+			DomainTypeAttributeMetadata idAttribMetadata = attribDomainTypeConfig.getDomainTypeEntityMetadata().getIdAttribute();
+			json.writeStringField("idAttribute", idAttribMetadata.getName());
+			String idPlaceholder = "{" + idAttribMetadata.getName() + "}";
+			json.writeStringField("hrefTemplate", support.selfLink(attribDomainTypeConfig, idPlaceholder).getHref());
 		}
 	}
 

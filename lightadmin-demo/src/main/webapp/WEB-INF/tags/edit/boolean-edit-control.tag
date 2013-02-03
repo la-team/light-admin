@@ -4,7 +4,7 @@
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <div class="checker">
 	<span>
-		<input type="checkbox" id="${attributeMetadata.name}" name="${attributeMetadata.name}" style="opacity: 0; " disabled="disabled"/>
+		<input type="checkbox" id="${attributeMetadata.name}" name="${attributeMetadata.name}" style="opacity: 0; " value="true" />
 		<label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>
 	</span>
 </div>

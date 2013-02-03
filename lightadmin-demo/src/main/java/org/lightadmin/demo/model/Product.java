@@ -3,6 +3,7 @@ package org.lightadmin.demo.model;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
+import javax.persistence.Basic;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.validation.constraints.NotNull;
@@ -25,6 +26,9 @@ public class Product extends AbstractEntity {
 
 	@ElementCollection
 	private Map<String, String> attributes;
+
+	@Basic
+	private Boolean retired;
 
 	public Product( String name, BigDecimal price ) {
 		this( name, price, null );
@@ -67,4 +71,9 @@ public class Product extends AbstractEntity {
 	public BigDecimal getPrice() {
 		return price;
 	}
+
+	public Boolean getRetired() {
+		return retired;
+	}
+
 }
