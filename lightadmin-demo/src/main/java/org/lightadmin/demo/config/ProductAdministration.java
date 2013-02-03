@@ -58,6 +58,7 @@ public class ProductAdministration {
 		return filterBuilder
 			.filter( "Name", "name" )
 			.filter( "Description", "description" )
-			.filter( "Price", "price" ).build();
+			.filter( "Price", "price" )
+			.filter( "Retired", "retired" ).build();
 	}
 }

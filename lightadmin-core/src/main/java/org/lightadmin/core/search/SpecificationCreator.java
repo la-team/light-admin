@@ -1,5 +1,6 @@
 package org.lightadmin.core.search;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang.math.NumberUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
@@ -48,6 +49,10 @@ public class SpecificationCreator {
 						javax.persistence.criteria.Predicate attributePredicate;
 						if ( isAssignable( Number.class, attribute.getType() ) && NumberUtils.isNumber( parameterValue ) ) {
 							attributePredicate = builder.equal( root.<String>get( attributeName ), org.springframework.util.NumberUtils.parseNumber( parameterValue, ( Class<? extends Number> ) attribute.getType() ) );
+						} else if (Boolean.class.equals( attribute.getType() ) || boolean.class.equals( attribute.getType() )) {
+							final Boolean boolValue = BooleanUtils.toBoolean( parameterValue );
+
+							attributePredicate = builder.equal( root.<String>get( attributeName ), boolValue );
 						} else if ( attribute.isAssociation() ) {
 							final Class<?> domainType = attribute.getAssociationDomainType();
 

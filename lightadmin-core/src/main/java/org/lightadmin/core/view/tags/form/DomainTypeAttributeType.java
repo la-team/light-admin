@@ -1,11 +1,11 @@
 package org.lightadmin.core.view.tags.form;
 
-import java.util.Date;
-
-import javax.persistence.metamodel.Attribute;
-
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
+import javax.persistence.metamodel.Attribute;
+import java.util.Date;
+
+// max: Looks like we could use it in few other places, i.e. SpecificationCreator,...
 enum DomainTypeAttributeType {
 
 	BASIC,
