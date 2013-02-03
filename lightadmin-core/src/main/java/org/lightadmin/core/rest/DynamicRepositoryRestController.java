@@ -65,7 +65,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 	@PostConstruct
 	public void init() {
-		specificationCreator = new SpecificationCreator( configuration );
+		specificationCreator = new SpecificationCreator( conversionService, configuration );
 	}
 
 	@RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
