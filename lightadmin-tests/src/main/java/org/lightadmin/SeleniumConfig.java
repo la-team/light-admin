@@ -1,5 +1,6 @@
 package org.lightadmin;
 
+import org.lightadmin.core.config.management.rmi.DataManipulationService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -43,6 +44,15 @@ public class SeleniumConfig {
 		rmiProxyFactoryBean.setServiceInterface( GlobalConfigurationManagementService.class );
 		rmiProxyFactoryBean.afterPropertiesSet();
 		return ( GlobalConfigurationManagementService ) rmiProxyFactoryBean.getObject();
+	}
+
+	@Bean
+	public DataManipulationService dataManipulationService() {
+		RmiProxyFactoryBean rmiProxyFactoryBean = new RmiProxyFactoryBean();
+		rmiProxyFactoryBean.setServiceUrl( "rmi://127.0.0.1:1199/DataManipulationService" );
+		rmiProxyFactoryBean.setServiceInterface( DataManipulationService.class );
+		rmiProxyFactoryBean.afterPropertiesSet();
+		return ( DataManipulationService ) rmiProxyFactoryBean.getObject();
 	}
 
 	private URL baseUrl() {

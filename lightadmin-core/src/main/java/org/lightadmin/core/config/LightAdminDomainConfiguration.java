@@ -5,6 +5,8 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.management.rmi.DataManipulationService;
+import org.lightadmin.core.config.management.rmi.DataManipulationServiceImpl;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementServiceImpl;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
@@ -64,6 +66,11 @@ public class LightAdminDomainConfiguration {
 	@Bean
 	public GlobalConfigurationManagementService globalConfigurationManagementService() {
 		return new GlobalConfigurationManagementServiceImpl();
+	}
+
+	@Bean
+	public DataManipulationService dataManipulationService() {
+		return new DataManipulationServiceImpl();
 	}
 
 	@Bean

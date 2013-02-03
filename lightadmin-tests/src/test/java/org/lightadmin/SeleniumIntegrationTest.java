@@ -2,6 +2,7 @@ package org.lightadmin;
 
 import org.junit.runner.RunWith;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
+import org.lightadmin.core.config.management.rmi.DataManipulationService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.util.DomainConfigurationUtils;
 import org.lightadmin.util.ExtendedWebDriver;
@@ -22,6 +23,9 @@ public abstract class SeleniumIntegrationTest {
 	@Autowired
 	private GlobalConfigurationManagementService globalConfigurationManagementService;
 
+	@Autowired
+	private DataManipulationService dataManipulationService;
+
 	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
 		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( configurationClass ) );
 	}
@@ -32,6 +36,19 @@ public abstract class SeleniumIntegrationTest {
 
 	protected void removeAllDomainTypeAdministrationConfigurations() {
 		globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
+	}
+
+	protected void repopulateDatabase() {
+		truncateDatabase();
+		populateDatabase();
+	}
+
+	protected void truncateDatabase() {
+		dataManipulationService.truncateDatabase();
+	}
+
+	protected void populateDatabase() {
+		dataManipulationService.populateDatabase();
 	}
 
 	protected ExtendedWebDriver webDriver() {

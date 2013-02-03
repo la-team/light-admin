@@ -20,6 +20,8 @@ public class FilterTest extends SeleniumIntegrationTest {
 
 	@Before
 	public void setup() {
+		repopulateDatabase();
+
 		removeAllDomainTypeAdministrationConfigurations();
 
 		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
