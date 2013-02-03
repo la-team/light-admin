@@ -3,6 +3,7 @@ package org.lightadmin.core.view.tags.form;
 import java.io.IOException;
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import static org.codehaus.jackson.JsonGenerator.Feature.*;
 
@@ -37,7 +38,7 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 			for (DomainTypeAttributeMetadata attribMetadata : domainTypeMetadata.getAttributes()) {
 				try {
 					json.writeObjectFieldStart(attribMetadata.getName());
-					json.writeStringField("type", DomainTypeAttributeType.by(attribMetadata).name());
+					json.writeStringField("type", DomainTypeAttributeType.by( attribMetadata ).name());
 					if (attribMetadata.isAssociation()) {
 						writeAssociationMetadata(attribMetadata, json);
 					}

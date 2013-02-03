@@ -26,6 +26,7 @@ import static org.springframework.util.ClassUtils.isAssignable;
 import static org.springframework.util.NumberUtils.parseNumber;
 
 @SuppressWarnings( "unchecked" )
+// max: Looks like we could use DomainTypeAttributeType here
 public class SpecificationCreator {
 
 	private final ConversionService conversionService;

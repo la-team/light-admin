@@ -6,6 +6,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 
 public class EditControlDispatcherTag extends SimpleTagSupport {
 
@@ -24,7 +25,7 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 	public void doTag() throws JspException, IOException {
 		JspContext context = getJspContext();
 		JspFragment worker;
-		switch (DomainTypeAttributeType.by(attributeMetadata)) {
+		switch ( DomainTypeAttributeType.by( attributeMetadata )) {
 		case ASSOC_MULTI:
 			worker = n2manyEditControl;
 			break;
