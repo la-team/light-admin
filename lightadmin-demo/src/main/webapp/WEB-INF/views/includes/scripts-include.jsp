@@ -59,6 +59,7 @@
 <script type="text/javascript" src="<spring:url value="/scripts/plugins/ui/jquery.prettyPhoto.js"/>"></script>
 
 <script type="text/javascript" src="<spring:url value="/scripts/lightadmin-search.js"/>"></script>
+<script type="text/javascript" src="<spring:url value="/scripts/lightadmin-renderer.js"/>"></script>
 <script type="text/javascript" src="<spring:url value="/scripts/lightadmin.js"/>"></script>
 
 <script type="text/javascript" src="<spring:url value="/scripts/charts/chart.js"/>"></script>

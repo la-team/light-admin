@@ -30,14 +30,16 @@ public class ProductAdministration {
 		return fragmentBuilder
 			.field( "name" ).caption( "Name" )
 			.field( "description" ).caption( "Description" )
-			.field( "price" ).caption( "Price" ).build();
+			.field( "price" ).caption( "Price" )
+			.field( "retired" ).caption("Out of production").build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 			.field( "name" ).caption( "Name" )
 			.field( "description" ).caption( "Description" )
-			.field( "price" ).caption( "Price" ).build();
+			.field( "price" ).caption( "Price" )
+			.field( "retired" ).caption("Out of production").build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder ) {
@@ -51,7 +53,8 @@ public class ProductAdministration {
 	public static FieldSetConfigurationUnit quickView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 			.field( "name" ).caption( "Name" )
-			.field( "description" ).caption( "Description" ).build();
+			.field( "description" ).caption( "Description" )
+			.field( "retired" ).caption("Out of production").build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {

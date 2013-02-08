@@ -85,39 +85,6 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 				} );
 }
 
-function renderValue( value ) {
-	var strValue = extractStrValue(value);
-
-	strValue = strValue == '' ? '&nbsp;' : strValue;
-
-	if ( value['links'] !== undefined ) {
-		var restEntityUrl = value.links[1].href;
-
-		return "<a href='" + restEntityUrl + "'>" + strValue + "</a>";
-	}
-
-	return strValue;
-}
-
-function extractStrValue( dataValue ) {
-	if ( dataValue instanceof Array ) {
-		var items = '';
-		for (var arrayIndex in dataValue) {
-			var arrayItem = dataValue[arrayIndex];
-			if ( arrayItem['stringRepresentation'] !== undefined) {
-				items += arrayItem['stringRepresentation'] + '<br/>';
-			}
-		}
-		return items;
-	}
-
-	if (typeof dataValue === 'object' && dataValue['stringRepresentation'] !== undefined) {
-		return dataValue['stringRepresentation'];
-	}
-
-	return dataValue;
-}
-
 function getPrimaryKey( dataValue ) {
 	for (var prop in dataValue) {
 		if ((dataValue[prop]['primaryKey'] !== undefined) && (dataValue[prop]['primaryKey'] == true)) {
@@ -154,7 +121,7 @@ function quickLook( aData ) {
 
 				detailsHtmlBlock += '<tr class="' + rowClass +'">';
 				detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + name +':</strong></td>';
-				detailsHtmlBlock += '<td class="qv-field-value">' + renderValue(value) +'</td>';
+				detailsHtmlBlock += '<td class="qv-field-value">' + FieldValueRenderer.render(value) +'</td>';
 				detailsHtmlBlock += '</tr">';
 
 				currentFieldIdx++;
@@ -212,11 +179,7 @@ function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
 				for (name in data) {
 					var field = showViewSection.find('[name="field-' + name + '"]');
 					if (field.length > 0) {
-						if ($.isPlainObject(data[name].value)) {
-							field.html(renderValue(data[name].value));
-						} else {
-							field.html(data[name].value);
-						}
+						field.html(FieldValueRenderer.render(data[name].value));
 					}
 				}
 			}

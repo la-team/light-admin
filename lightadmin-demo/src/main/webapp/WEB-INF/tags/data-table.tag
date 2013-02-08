@@ -65,7 +65,7 @@
 				   "aTargets":[ ${status.index + 1 } ],
 				   "mData" : '${field.uuid}',
 				   "mRender":function ( data ) {
-					   return renderValue(data['value']);
+					   return FieldValueRenderer.render(data['value']);
 				   },
 				   "sClass": "data-cell"
 			   },
