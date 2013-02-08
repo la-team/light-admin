@@ -1,4 +1,6 @@
-function ScopesComponent( scopesContainerId, searcher ) {
+function ScopesComponent( scopesContainerId, searcher, domainRestScopeBaseUrl ) {
+
+	this.domainRestScopeBaseUrl = domainRestScopeBaseUrl;
 
 	this.searcher = searcher;
 	this.searcher.addScopesComponent(this);
@@ -6,6 +8,10 @@ function ScopesComponent( scopesContainerId, searcher ) {
 	this.scopesContainer = $( scopesContainerId );
 
 	var instance = this;
+
+	this.domainRestScopeSearchCountBaseUrl = function( scopeName, searchCriteria ) {
+		return this.domainRestScopeBaseUrl + '/' + scopeName + '/search/count' + (searchCriteria != null ? '?' + searchCriteria : '') ;
+	};
 
 	this.onScopeActivated = function( event ) {
 		event.preventDefault();
@@ -25,8 +31,20 @@ function ScopesComponent( scopesContainerId, searcher ) {
 		return $("a.scope.active", this.scopesContainer ).attr('scope-name');
 	};
 
-	this.setActiveScopeTotalRecords = function(totalRecordsReturned) {
-		$("a.scope.active", this.scopesContainer ).html(this.getActiveScopeName() + ' (' + totalRecordsReturned + ')');
+	this.refreshScopesTotalRecords = function( searchCriteria ) {
+		$("a.scope", this.scopesContainer ).each(function() {
+			var scope = $(this);
+			var scopeName = scope.attr('scope-name');
+
+			$.ajax({
+			   type: 'GET',
+			   url: instance.domainRestScopeSearchCountBaseUrl(scopeName, searchCriteria),
+			   dataType : 'json',
+			   success : function(totalRecords) {
+				   scope.html(scopeName + ' (' + totalRecords + ')');
+			   }
+		   });
+		});
 	};
 
 	$("a.scope", this.scopesContainer ).click(this.onScopeActivated);
@@ -105,8 +123,12 @@ function Searcher( domainRestScopeBaseUrl ) {
 		this.dataTable.fnReloadAjax( this.domainRestScopeSearchBaseUrl(activeScopeName) + '?' + searchCriteria );
 	};
 
-	this.onSearchCompleted = function( totalRecordsReturned ) {
-		this.scopesComponent.setActiveScopeTotalRecords(totalRecordsReturned);
+	this.onSearchCompleted = function() {
+		if ( this.filterComponent != null ) {
+			this.scopesComponent.refreshScopesTotalRecords( this.filterComponent.getSearchCriteria() );
+		} else {
+			this.scopesComponent.refreshScopesTotalRecords(null);
+		}
 	}
 }
 

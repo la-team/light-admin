@@ -72,7 +72,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	@ResponseBody
 	public ResponseEntity<?> createOrUpdate(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository)
 			throws IOException, IllegalAccessException, InstantiationException {
-		return super.createOrUpdate(request, baseUri, repository, "");
+		return super.createOrUpdate( request, baseUri, repository, "" );
 	}
 
 	@ResponseBody
@@ -89,6 +89,34 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		final Object entity = repository.findOne( entityId );
 
 		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new DomainTypeResource( entity, fields( configurationUnit, domainTypeAdministrationConfiguration ) ) );
+	}
+
+	// TODO: Draft impl.
+	@ResponseBody
+	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search/count", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> countItems( ServletServerHttpRequest request, @SuppressWarnings( "unused" ) URI baseUri, @PathVariable String repositoryName, @PathVariable String scopeName ) {
+		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
+
+		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+
+		final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope( scopeName );
+
+		final Specification filterSpecification = specificationFromRequest( request, domainTypeEntityMetadata );
+
+		if ( isPredicateScope( scope ) ) {
+			final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = ( ScopeMetadataUtils.PredicateScopeMetadata ) scope;
+
+			return responseEntity( countItemsBySpecificationAndPredicate( repository, filterSpecification, predicateScope.predicate() ) );
+		}
+
+		if ( isSpecificationScope( scope ) ) {
+			final Specification scopeSpecification = ( ( ScopeMetadataUtils.SpecificationScopeMetadata ) scope ).specification();
+
+			return responseEntity( countItemsBySpecification( repository, and( scopeSpecification, filterSpecification )) );
+		}
+
+		return responseEntity( countItemsBySpecification( repository, filterSpecification ) );
 	}
 
 	@ResponseBody
@@ -159,8 +187,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		LOG.debug("Handled exception", t);
 		Map<String, String> error = singletonMap("message", t.getLocalizedMessage());
 		Map packet = newHashMap();
-		packet.put("errors", asList(error));
-		return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+		packet.put( "errors", asList( error ) );
+		return negotiateResponse( request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet );
 	}
 
 	@Override
@@ -186,6 +214,16 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		}
 	}
 
+	private long countItemsBySpecificationAndPredicate( DynamicJpaRepository repository, final Specification specification, Predicate predicate ) {
+		final List<?> items = findItemsBySpecification( repository, specification );
+
+		return Collections2.filter( items, predicate ).size();
+	}
+
+	private long countItemsBySpecification( final DynamicJpaRepository repository, final Specification specification ) {
+		return repository.count( specification );
+	}
+
 	private Page findBySpecificationAndPredicate( DynamicJpaRepository repository, final Specification specification, Predicate predicate, final PagingAndSorting pageSort ) {
 		final List<?> items = findItemsBySpecification( repository, specification, pageSort.getSort() );
 
@@ -198,6 +236,10 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 	private List<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification, final Sort sort ) {
 		return repository.findAll( specification, sort );
+	}
+
+	private List<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification ) {
+		return repository.findAll( specification );
 	}
 
 	private Page<?> selectPage( List<Object> items, PagingAndSorting pageSort ) {
@@ -234,6 +276,10 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			allResources.add( new DomainTypeResource( item, fieldMetadatas ) );
 		}
 		return allResources;
+	}
+
+	private ResponseEntity<String> responseEntity( Object value ) {
+		return new ResponseEntity<String>(String.valueOf( value ), new HttpHeaders(), HttpStatus.OK);
 	}
 
 	@Override

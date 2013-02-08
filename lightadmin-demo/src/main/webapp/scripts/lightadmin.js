@@ -78,7 +78,7 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 						data.iTotalRecords = data.page.totalElements;
 						data.iTotalDisplayRecords = data.page.totalElements;
 
-						getSearcher().onSearchCompleted(data.iTotalRecords);
+						getSearcher().onSearchCompleted();
 
 						fnCallback( data );
 					}
