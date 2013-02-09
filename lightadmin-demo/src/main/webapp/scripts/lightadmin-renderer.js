@@ -63,15 +63,12 @@ var FieldValueRenderer = function () {
 	}
 
 	function createRenderer( fieldValue ) {
-		if ( $.isPlainObject( fieldValue ) ) {
-			if ( fieldValue instanceof Array ) {
-				return new ArrayValueRenderer();
-			}
-			if ( isDomainObject( fieldValue ) ) {
-				return new DomainObjectValueRenderer();
-			}
+		if ( fieldValue instanceof Array ) {
+			return new ArrayValueRenderer();
+		}
 
-			return new UnknownTypeValueRenderer();
+		if ( $.isPlainObject( fieldValue ) && isDomainObject( fieldValue ) ) {
+			return new DomainObjectValueRenderer();
 		}
 
 		if ( typeof fieldValue == 'string' ) {
