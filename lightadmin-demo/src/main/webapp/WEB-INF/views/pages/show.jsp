@@ -33,6 +33,9 @@
 <div class="widget">
 	<div class="head">
 		<h5 class="iList"><c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5>
+		<div style="float: right;margin-top: 5px;display: inline-block;">
+			<a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img src="<spring:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
+		</div>
 	</div>
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 		<tbody id="data-section">

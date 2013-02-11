@@ -76,7 +76,8 @@ public class CustomerAdministration {
 		return filterBuilder
 			.filter( "First Name", "firstname" ).renderer( select( new String[] { "Yes", "No" } ))
 			.filter( "Last Name", "lastname" )
-			.filter( "Email Address", "emailAddress" ).build();
+			.filter( "Email Address", "emailAddress" )
+			.filter( "ID", "id" ).build();
 	}
 
 	public static DomainTypeSpecification<Customer> customerNameEqDave() {
