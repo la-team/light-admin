@@ -250,7 +250,6 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
 						errorMessages += $('<div/>').text(errors[i].message).html();
 					}
 					if (errorMessages.length > 0) {
-//						jAlert(errorMessages);
 						showFailureMessageNote(errorMessages);
 					}
 				}
@@ -318,7 +317,6 @@ function updateDomainObject(domForm) {
 					}
 					if (errorMessages.length > 0) {
 						showFailureMessageNote(errorMessages);
-//						jAlert(errorMessages);
 					}
 				}
 		}
