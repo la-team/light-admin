@@ -68,7 +68,8 @@ public class OrderAdministration {
 		return filterBuilder
 			.filter( "Customer", "customer" )
 			.filter( "Billing Address", "billingAddress" )
-			.filter( "Shipping Address", "shippingAddress" ).build();
+			.filter( "Shipping Address", "shippingAddress" )
+			.filter( "Order items", "lineItems" ).build();
 	}
 
 	private static EntityNameExtractor<Order> orderNameExtractor() {

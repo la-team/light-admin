@@ -131,6 +131,8 @@
 
 		bindInfoClickHandlers( tableElement, dataTable );
 
+		$(".chzn-select").chosen();
+
 		$("select, input:checkbox, input:radio, input:file").uniform();
 	});
 
