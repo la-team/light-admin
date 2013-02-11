@@ -10,10 +10,7 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.util.ClassUtils;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
@@ -38,23 +35,26 @@ public class SpecificationCreator {
 	}
 
 	public Specification toSpecification( final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata, final Map<String, String[]> parameters ) {
-		final Collection<? extends DomainTypeAttributeMetadata> attributes = domainTypeEntityMetadata.getAttributes();
-
 		return new Specification<Object>() {
 			@Override
 			public javax.persistence.criteria.Predicate toPredicate( final Root<Object> root, final CriteriaQuery<?> query, final CriteriaBuilder builder ) {
 				final List<Predicate> attributesPredicates = newLinkedList();
-				for ( DomainTypeAttributeMetadata attribute : attributes ) {
-					final String attributeName = attribute.getName();
+				for ( String parameterName : parameters.keySet() ) {
+					if ( domainTypeEntityMetadata.containsAttribute( parameterName )) {
+						final DomainTypeAttributeMetadata attribute = domainTypeEntityMetadata.getAttribute( parameterName );
+						final String attributeName = attribute.getName();
 
-					if ( parameters.containsKey( attributeName ) ) {
 						final String[] parameterValues = parameters.get( attributeName );
-						final String parameterValue = parameterValues[0];
-						if ( isBlank( parameterValue ) ) {
-							continue;
-						}
 
-						attributesPredicates.add( attributePredicate( root, builder, attribute, attributeName, parameterValue, domainTypeEntityMetadata ) );
+						for ( String parameterValue : parameterValues ) {
+							if ( isBlank( parameterValue ) ) {
+								continue;
+							}
+
+							final Predicate attributePredicate = attributePredicate( root, builder, attribute, attributeName, parameterValue, domainTypeEntityMetadata );
+
+							attributesPredicates.add( attributePredicate );
+						}
 					}
 				}
 
@@ -90,7 +90,14 @@ public class SpecificationCreator {
 
 		Serializable id = stringToSerializable( parameterValue, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
 
-		return builder.equal( root.<String>get( attributeName ), repository.findOne( id ) );
+		final Object entity = repository.findOne( id );
+
+		if ( attribute.isCollectionLike()) {
+			final Expression<Collection> objectPath = root.get( attributeName );
+			return builder.isMember( entity, objectPath );
+		} else {
+			return builder.equal( root.<String>get( attributeName ), entity );
+		}
 	}
 
 	private Predicate booleanAttributePredicate( final Root<Object> root, final CriteriaBuilder builder, final String attributeName, final String parameterValue ) {

@@ -72,6 +72,8 @@ function FilterComponent( filterFormContainerName, searcher ) {
 	this.resetSearchCriteria = function() {
 		instance.filterFormContainer[0].reset();
 
+		$(".chzn-select").trigger("liszt:updated");
+
 		$.uniform.update();
 
 		instance.searcher.search();

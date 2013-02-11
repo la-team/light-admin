@@ -326,14 +326,16 @@ function updateDomainObject(domForm) {
 }
 
 function showSuccessMessageNote( message ) {
-	showMessageNote(message, 'nSuccess')
+	showMessageNote(message, 'nSuccess');
 }
 
 function showFailureMessageNote( message ) {
-	showMessageNote(message, 'nFailure')
+	showMessageNote(message, 'nFailure');
 }
 
 function showMessageNote( message, messageTypeClass ) {
+	$('.nNote' ).remove();
+
 	var noteHtml = "<div class='nNote " + messageTypeClass + "'><p>" + message + "</p></div>";
 
 	$( '.breadCrumbHolder' ).after( noteHtml );
