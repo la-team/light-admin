@@ -1072,7 +1072,6 @@ li.plupload_droptext { background: transparent; text-align: center; vertical-ali
 .chzn-container { position: relative; display: inline-block; zoom: 1; *display: inline; }
 
 .noSearch .chzn-search, .searchDrop .selector, .noSearch .selector { display: none; }
-.formRight .chzn-container-multi { width: 100%!important; }
 
 .noSearch .chzn-results { margin: 0!important; padding: 2px!important; }
 

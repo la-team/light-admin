@@ -238,6 +238,7 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
 				}
 			}
 			$.uniform.update();
+			$(".chzn-select").trigger("liszt:updated");
 		},
 		statusCode : {
 			400 /* BAD_REQUEST */:
@@ -249,7 +250,8 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
 						errorMessages += $('<div/>').text(errors[i].message).html();
 					}
 					if (errorMessages.length > 0) {
-						jAlert(errorMessages);
+//						jAlert(errorMessages);
+						showFailureMessageNote(errorMessages);
 					}
 				}
 		}
@@ -268,7 +270,7 @@ function removeDomainObject(entityId, restUrl, callback) {
 	statusCode : {
 		409:
 		function() {
-			jAlert('Something bad happened!', 'Alert');
+			jAlert('Something bad happened!', 'Remove operation failure');
 		}
 	}
 	});
@@ -291,7 +293,7 @@ function updateDomainObject(domForm) {
 			var link = $.grep(data.links, function(link) {
 				return link.rel == 'selfDomainLink';
 			})[0];
-			window.location = link.href;
+			window.location = link.href + '?updateSuccess=true';
 		},
 		statusCode : {
 			400 /* BAD_REQUEST */:
@@ -315,11 +317,34 @@ function updateDomainObject(domForm) {
 						}
 					}
 					if (errorMessages.length > 0) {
-						jAlert(errorMessages);
+						showFailureMessageNote(errorMessages);
+//						jAlert(errorMessages);
 					}
 				}
 		}
 	});
 
 	return false;
+}
+
+function showSuccessMessageNote( message ) {
+	showMessageNote(message, 'nSuccess')
+}
+
+function showFailureMessageNote( message ) {
+	showMessageNote(message, 'nFailure')
+}
+
+function showMessageNote( message, messageTypeClass ) {
+	var noteHtml = "<div class='nNote " + messageTypeClass + "'><p>" + message + "</p></div>";
+
+	$( '.breadCrumbHolder' ).after( noteHtml );
+
+	$( '.nNote' ).click( function () {
+		$( this ).fadeTo( 200, 0.00, function () {
+			$( this ).slideUp( 300, function () {
+				$( this ).remove();
+			} );
+		} );
+	} );
 }

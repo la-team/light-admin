@@ -48,4 +48,8 @@
 
 <script type="text/javascript">
 	loadDomainObjectForShowView($('#data-section'), '${domainObjectUrl}/unit/showView');
+
+	<c:if test="${param.updateSuccess}">
+		showSuccessMessageNote('<c:out value="${light:capitalize(domainTypeName)}"/> update operation has been performed successfully!');
+	</c:if>
 </script>

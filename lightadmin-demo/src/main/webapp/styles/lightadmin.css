@@ -54,4 +54,8 @@ div.selector { position: relative; height: 26px; background: url(../images/chose
 div.selector span { width: 290px; cursor: pointer; position: absolute; right: -1px; height: 26px; background: url(../images/forms/select_right.png) no-repeat center right; top: 0px; line-height: 27px; font-size: 11px; }
 div.selector select { width: 302px; cursor: pointer; font-size: 12px; position: absolute; height: 26px; top: 2px; left: -1px; }
 
-.multiple { width: 300px; }
+.multiple { width: 302px; }
+
+.formRight .chzn-container-multi { width: 302px!important; }
+
+.nNote { margin: 10px 0 10px 0; }

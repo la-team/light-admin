@@ -51,6 +51,8 @@
 
 <script type="text/javascript">
 	$(function() {
+		$(".chzn-select").chosen();
+
 		$("select, input:checkbox, input:radio, input:file").uniform();
 
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
