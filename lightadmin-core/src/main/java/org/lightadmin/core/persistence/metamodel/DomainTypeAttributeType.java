@@ -6,6 +6,7 @@ import java.util.Date;
 public enum DomainTypeAttributeType {
 
 	BASIC,
+	NUMBER,
 	BOOL,
 	DATE,
 	ASSOC,
@@ -27,7 +28,9 @@ public enum DomainTypeAttributeType {
 			return BOOL;
 		} else if ( Date.class.isAssignableFrom( attrType ) ) {
 			return DATE;
-		} else if ( String.class.equals( attrType ) || Number.class.isAssignableFrom( attrType ) ) {
+		} else if ( Number.class.isAssignableFrom( attrType ) ) {
+			return NUMBER;
+		} else if ( String.class.equals( attrType ) ) {
 			return BASIC;
 		} else {
 			return UNKNOWN;

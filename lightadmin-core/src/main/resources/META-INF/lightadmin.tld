@@ -46,6 +46,11 @@
 			<fragment>true</fragment>
 		</attribute>
 		<attribute>
+			<name>numberEditControl</name>
+			<required>true</required>
+			<fragment>true</fragment>
+		</attribute>
+		<attribute>
 			<name>booleanEditControl</name>
 			<required>true</required>
 			<fragment>true</fragment>
@@ -126,15 +131,14 @@
 		</attribute>
 	</tag>
 
-<!--     <tag-file> -->
-<!--         <name>attribute-editor</name> -->
-<!--         <path>/WEB-INF/tags/edit-control.tag</path> -->
-<!--     </tag-file> -->
+	<!--     <tag-file> --><!--         <name>attribute-editor</name> --><!--         <path>/WEB-INF/tags/edit-control.tag</path> --><!--     </tag-file> -->
 
 	<function>
 		<name>primaryKeyPersistentField</name>
 		<function-class>org.lightadmin.core.config.domain.field.FieldMetadataUtils</function-class>
-		<function-signature>org.lightadmin.core.config.domain.field.FieldMetadata primaryKeyPersistentField(java.util.Set)</function-signature>
+		<function-signature>org.lightadmin.core.config.domain.field.FieldMetadata
+			primaryKeyPersistentField(java.util.Set)
+		</function-signature>
 	</function>
 
 	<function>
@@ -146,7 +150,8 @@
 	<function>
 		<name>domainRestEntityBaseUrl</name>
 		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-		<function-signature>java.lang.String domainRestEntityBaseUrl(java.lang.String,java.lang.Object)</function-signature>
+		<function-signature>java.lang.String domainRestEntityBaseUrl(java.lang.String,java.lang.Object)
+		</function-signature>
 	</function>
 
 	<function>

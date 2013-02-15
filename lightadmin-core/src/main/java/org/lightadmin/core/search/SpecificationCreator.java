@@ -1,9 +1,9 @@
 package org.lightadmin.core.search;
 
-import org.apache.commons.lang.math.NumberUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.core.convert.ConversionService;
@@ -19,11 +19,11 @@ import java.util.Map;
 import static com.google.common.collect.Lists.newLinkedList;
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.springframework.util.ClassUtils.isAssignable;
+import static org.apache.commons.lang.math.NumberUtils.isNumber;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
 import static org.springframework.util.NumberUtils.parseNumber;
 
 @SuppressWarnings( "unchecked" )
-// max: Looks like we could use DomainTypeAttributeType here
 public class SpecificationCreator {
 
 	private final ConversionService conversionService;
@@ -40,14 +40,16 @@ public class SpecificationCreator {
 			public javax.persistence.criteria.Predicate toPredicate( final Root<Object> root, final CriteriaQuery<?> query, final CriteriaBuilder builder ) {
 				final List<Predicate> attributesPredicates = newLinkedList();
 				for ( String parameterName : parameters.keySet() ) {
-					if ( domainTypeEntityMetadata.containsAttribute( parameterName )) {
+					if ( domainTypeEntityMetadata.containsAttribute( parameterName ) ) {
 						final DomainTypeAttributeMetadata attribute = domainTypeEntityMetadata.getAttribute( parameterName );
 						final String attributeName = attribute.getName();
 
 						final String[] parameterValues = parameters.get( attributeName );
 
 						for ( String parameterValue : parameterValues ) {
-							if ( isBlank( parameterValue ) ) {
+							final boolean numericHack = "0.00".equals( parameterValue ); //TODO: max: hack for skipping numeric filters initialized by default
+
+							if ( isBlank( parameterValue ) || numericHack ) {
 								continue;
 							}
 
@@ -64,8 +66,10 @@ public class SpecificationCreator {
 	}
 
 	private Predicate attributePredicate( final Root<Object> root, final CriteriaBuilder builder, final DomainTypeAttributeMetadata attribute, final String attributeName, final String parameterValue, final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata ) {
-		if ( isNumericType( parameterValue, attribute ) ) {
-			return numericAttributePredicate( root, builder, attribute, attributeName, parameterValue );
+		if ( isNumericType( attribute ) && isNumber( parameterValue ) ) {
+			final Number attributeValue = parseNumber( parameterValue, ( Class<? extends Number> ) attribute.getType() );
+
+			return numericAttributePredicate( root, builder, attributeName, attributeValue );
 		}
 
 		if ( isBooleanType( attribute ) ) {
@@ -92,7 +96,7 @@ public class SpecificationCreator {
 
 		final Object entity = repository.findOne( id );
 
-		if ( attribute.isCollectionLike()) {
+		if ( attribute.isCollectionLike() ) {
 			final Expression<Collection> objectPath = root.get( attributeName );
 			return builder.isMember( entity, objectPath );
 		} else {
@@ -106,20 +110,22 @@ public class SpecificationCreator {
 		return builder.equal( root.<String>get( attributeName ), boolValue );
 	}
 
-	private Predicate numericAttributePredicate( final Root<Object> root, final CriteriaBuilder builder, final DomainTypeAttributeMetadata attribute, final String attributeName, final String parameterValue ) {
-		return builder.equal( root.<String>get( attributeName ), parseNumber( parameterValue, ( Class<? extends Number> ) attribute.getType() ) );
+	private Predicate numericAttributePredicate( final Root<Object> root, final CriteriaBuilder builder, final String attributeName, final Number attributeValue ) {
+		return builder.equal( root.<String>get( attributeName ), attributeValue );
 	}
 
 	private boolean isAssociation( final DomainTypeAttributeMetadata attribute ) {
-		return attribute.isAssociation();
+		final DomainTypeAttributeType domainTypeAttributeType = DomainTypeAttributeType.by( attribute );
+
+		return domainTypeAttributeType == ASSOC || domainTypeAttributeType == ASSOC_MULTI;
 	}
 
 	private boolean isBooleanType( final DomainTypeAttributeMetadata attribute ) {
-		return Boolean.class.equals( attribute.getType() ) || boolean.class.equals( attribute.getType() );
+		return DomainTypeAttributeType.by( attribute ) == BOOL;
 	}
 
-	private boolean isNumericType( final String parameterValue, final DomainTypeAttributeMetadata attribute ) {
-		return isAssignable( Number.class, attribute.getType() ) && NumberUtils.isNumber( parameterValue );
+	private boolean isNumericType( final DomainTypeAttributeMetadata attribute ) {
+		return DomainTypeAttributeType.by( attribute ) == NUMBER;
 	}
 
 	private DomainTypeBasicConfiguration domainTypeConfigurationFor( final Class<?> domainType ) {
