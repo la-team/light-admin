@@ -30,6 +30,14 @@ customer_id BIGINT CONSTRAINT orders_customer_ref REFERENCES customer (id),
 billingaddress_id BIGINT CONSTRAINT orders_billingaddress_ref REFERENCES address (id),
 shippingaddress_id BIGINT CONSTRAINT orders_shippingaddress_ref REFERENCES address (id));
 
+CREATE TABLE discountprogram (
+  id BIGINT IDENTITY PRIMARY KEY,
+  name VARCHAR(255));
+
+CREATE TABLE customer_discount (
+customer_id BIGINT CONSTRAINT customer_discount_customer_ref REFERENCES customer (id),
+discount_program_id BIGINT CONSTRAINT customer_discount_discountprogram_ref REFERENCES discountprogram (id));
+
 CREATE TABLE lineitem (
 id BIGINT IDENTITY PRIMARY KEY,
 product_id BIGINT CONSTRAINT lineitem_product_ref REFERENCES product (id),

@@ -219,8 +219,14 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
 				var editor = form.find('[name="' + attr + '"]');
 				if (editor.length > 0) {
 					var attrVal = data[attr].value;
+
+					if ( attrVal == null ) {
+						continue;
+					}
+
 					var attrMetadata = DOMAIN_TYPE_METADATA[attr];
 					var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
+
 					switch (attrType) {
 					case 'ASSOC':
 						selectOption(editor, attrMetadata, attrVal);

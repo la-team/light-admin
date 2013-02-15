@@ -58,4 +58,6 @@ div.selector select { width: 302px; cursor: pointer; font-size: 12px; position: 
 
 .formRight .chzn-container-multi { width: 302px!important; }
 
+.mainForm .chzn-container-multi { width: 100%!important; }
+
 .nNote { margin: 10px 0 10px 0; }

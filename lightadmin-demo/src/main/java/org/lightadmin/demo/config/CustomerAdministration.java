@@ -42,27 +42,35 @@ public class CustomerAdministration {
 		return fragmentBuilder
 			.field( "firstname" ).caption( "First Name" )
 			.field( "lastname" ).caption( "Last Name" )
-			.field( "emailAddress" ).caption( "Email Address" ).build();
+			.field( "emailAddress" ).caption( "Email Address" )
+			.field( "addresses" ).caption( "Addresses" )
+			.field( "discountPrograms" ).caption( "Discount Programs" ).build();
 	}
 
 	public static FieldSetConfigurationUnit quickView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 			.field( "firstname" ).caption( "First Name" )
-			.field( "lastname" ).caption( "Last Name" ).build();
+			.field( "lastname" ).caption( "Last Name" )
+			.field( "discountPrograms" ).caption( "Discount Programs" )
+			.field( "addresses" ).caption( "Addresses" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 			.field( "firstname" ).caption( "First Name" )
 			.field( "lastname" ).caption( "Last Name" )
-			.field( "emailAddress" ).caption( "Email Address" ).build();
+			.field( "emailAddress" ).caption( "Email Address" )
+			.field( "discountPrograms" ).caption( "Discount Programs" )
+			.field( "addresses" ).caption( "Addresses" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder ) {
 		return fragmentBuilder
 				.field( "firstname" ).caption( "First Name" )
 				.field( "lastname" ).caption( "Last Name" )
-				.field( "emailAddress" ).caption( "Email Address" ).build();
+				.field( "emailAddress" ).caption( "Email Address" )
+				.field( "discountPrograms" ).caption( "Discount Programs" )
+				.field( "addresses" ).caption( "Addresses" ).build();
 	}
 
 	public static ScopesConfigurationUnit scopes( final ScopesConfigurationUnitBuilder scopeBuilder ) {
@@ -74,10 +82,12 @@ public class CustomerAdministration {
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
 		return filterBuilder
+			.filter( "ID", "id" )
 			.filter( "First Name", "firstname" ).renderer( select( new String[] { "Yes", "No" } ))
 			.filter( "Last Name", "lastname" )
 			.filter( "Email Address", "emailAddress" )
-			.filter( "ID", "id" ).build();
+			.filter( "Addresses", "addresses" )
+			.filter( "Discount Programs", "discountPrograms" ).build();
 	}
 
 	public static DomainTypeSpecification<Customer> customerNameEqDave() {

@@ -10,5 +10,6 @@
 		<class>org.lightadmin.demo.model.Product</class>
 		<class>org.lightadmin.demo.model.Order</class>
 		<class>org.lightadmin.demo.model.LineItem</class>
+		<class>org.lightadmin.demo.model.DiscountProgram</class>
 	</persistence-unit>
 </persistence>

@@ -1,31 +1,23 @@
-insert into Customer (id, email, firstname, lastname) values (1, 'dave@dmband1.com', 'Dave', 'Matthews1')
-insert into Customer (id, email, firstname, lastname) values (2, 'carter@dmband2.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (3, 'boyd@dmband3.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (4, 'dave@dmband4.com', 'Dave', 'Matthews2')
-insert into Customer (id, email, firstname, lastname) values (5, 'carter@dmband5.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (6, 'boyd@dmband6.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (7, 'dave@dmband7.com', 'Dave', 'Matthews3')
-insert into Customer (id, email, firstname, lastname) values (8, 'carter@dmband8.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (9, 'boyd@dmband9.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (10, 'dave@dmband10.com', 'Dave', 'Matthews4')
-insert into Customer (id, email, firstname, lastname) values (11, 'carter@dmband11.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (12, 'boyd@dmband12.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (13, 'dave@dmband13.com', 'Dave', 'Matthews5')
-insert into Customer (id, email, firstname, lastname) values (14, 'carter@dmband14.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (15, 'boyd@dmband15.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (16, 'dave@dmband16.com', 'Dave', 'Matthews6')
-insert into Customer (id, email, firstname, lastname) values (17, 'carter@dmband17.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (18, 'boyd@dmband18.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (19, 'dave@dmband19.com', 'Dave', 'Matthews7')
-insert into Customer (id, email, firstname, lastname) values (20, 'carter@dmband20.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (21, 'boyd@dmband21.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (22, 'dave@dmband22.com', 'Dave', 'Matthews8')
-insert into Customer (id, email, firstname, lastname) values (23, 'carter@dmband23.com', 'Carter', 'Beauford');
-insert into Customer (id, email, firstname, lastname) values (24, 'boyd@dmband24.com', 'Boyd', 'Tinsley');
-insert into Customer (id, email, firstname, lastname) values (25, 'boyd@dmband25.com', 'Boyd', 'Matthews1');
+insert into Customer (id, email, firstname, lastname) values (1, 'dave@dmband1.com', 'Dave', 'One')
+insert into Customer (id, email, firstname, lastname) values (2, 'carter@dmband2.com', 'Carter', 'Two');
+insert into Customer (id, email, firstname, lastname) values (3, 'martin@dmband3.com', 'Martin', 'Three');
+insert into Customer (id, email, firstname, lastname) values (4, 'caroline@dmband4.com', 'Caroline', 'Four')
+insert into Customer (id, email, firstname, lastname) values (5, 'gavin@dmband5.com', 'Gavin', 'Five');
+insert into Customer (id, email, firstname, lastname) values (6, 'luzek@dmband6.com', 'Luzek', 'Six');
+insert into Customer (id, email, firstname, lastname) values (7, 'karmak@dmband7.com', 'Karmak', 'Seven')
+insert into Customer (id, email, firstname, lastname) values (8, 'maxim@dmband8.com', 'Maxim', 'Eight');
+insert into Customer (id, email, firstname, lastname) values (9, 'irina@dmband9.com', 'Irina', 'Nine');
+insert into Customer (id, email, firstname, lastname) values (10, 'tolik@dmband10.com', 'Tolik', 'Ten')
+insert into Customer (id, email, firstname, lastname) values (11, 'sasha@dmband11.com', 'Sasha', 'Eleven');
+insert into Customer (id, email, firstname, lastname) values (12, 'pasha@dmband12.com', 'Pasha', 'Twelve');
 
-insert into Address (id, street, city, country, customer_id) values (1, '27 Broadway', 'New York', 'United States', 1);
-insert into Address (id, street, city, country, customer_id) values (2, '27 Broadway', 'New York', 'United States', 1);
+insert into Address (id, street, city, country, customer_id) values (1, 'New York', 'New York', 'United States', 1);
+insert into Address (id, street, city, country, customer_id) values (2, 'London', 'London', 'England', 1);
+insert into Address (id, street, city, country, customer_id) values (3, 'Kiev', 'Kiev', 'Ukraine', 2);
+insert into Address (id, street, city, country, customer_id) values (4, 'Moscow', 'Moscow', 'Russia', 3);
+insert into Address (id, street, city, country, customer_id) values (5, 'Copenhagen', 'Copenhagen', 'Denmark', 3);
+insert into Address (id, street, city, country, customer_id) values (6, 'Zurich', 'Zurich', 'Switzerland', 3);
+insert into Address (id, street, city, country, customer_id) values (7, 'Roma', 'Roma', 'Italia', 3);
 
 insert into Product (id, name, description, price, retired) values (1, 'iPad', 'Apple tablet device', 499.1, null);
 insert into Product (id, name, description, price, retired) values (2, 'MacBook Pro', 'Apple notebook', 1299.5, 0);
@@ -38,6 +30,14 @@ insert into Orders (id, customer_id, billingaddress_id, shippingaddress_id) valu
 insert into Orders (id, customer_id, billingaddress_id, shippingaddress_id) values (2, 3, 2, 1);
 insert into LineItem (id, product_id, amount, order_id, price) values (1, 1, 2, 1, 499.0);
 insert into LineItem (id, product_id, amount, order_id, price) values (2, 2, 1, 1, 1299.0);
+
+insert into DiscountProgram (id, name) values (1, 'Silver Discount Program');
+insert into DiscountProgram (id, name) values (2, 'Gold Discount Program');
+insert into DiscountProgram (id, name) values (3, 'Platinum Discount Program');
+
+insert into customer_discount (customer_id, discount_program_id) values (1, 3);
+insert into customer_discount (customer_id, discount_program_id) values (2, 1);
+insert into customer_discount (customer_id, discount_program_id) values (3, 2);
 
 insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (1, 'integer search test', 1234567, 22.2);
 insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (2, 'decimal search test', 456, 1499.99);

@@ -3,6 +3,8 @@ TRUNCATE TABLE Address;
 TRUNCATE TABLE Product;
 TRUNCATE TABLE Product_Attributes;
 TRUNCATE TABLE Orders;
+TRUNCATE TABLE DiscountProgram;
+TRUNCATE TABLE customer_discount;
 TRUNCATE TABLE LineItem;
 TRUNCATE TABLE FilterTestEntity;
 TRUNCATE TABLE ParentTestEntity;
