@@ -3,6 +3,9 @@ DOMAIN_TYPE_METADATA = {};
 (function ( $ ) {
 	$.fn.serializeFormJSON = function () {
 		function resolveObjectHref( attrVal, attrMetadata ) {
+			if (attrVal == '') {
+				attrVal = 'NULL';
+			}
 			var href = decodeURIComponent( attrMetadata.hrefTemplate ).replace( '{' + attrMetadata.idAttribute + '}', attrVal );
 			return {href: href};
 		}

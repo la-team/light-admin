@@ -3,6 +3,8 @@ package org.lightadmin.demo.model;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+
 import java.math.BigDecimal;
 import java.util.Set;
 
@@ -16,7 +18,7 @@ public class Order extends AbstractEntity {
 	@ManyToOne
 	private Address billingAddress;
 
-	@ManyToOne( optional = false, cascade = CascadeType.ALL )
+	@ManyToOne( optional = false, cascade = CascadeType.ALL ) @NotNull
 	private Address shippingAddress;
 
 	@OneToMany( cascade = CascadeType.ALL )
@@ -77,7 +79,7 @@ public class Order extends AbstractEntity {
 	 * @return
 	 */
 	public Address getBillingAddress() {
-		return billingAddress != null ? billingAddress : shippingAddress;
+		return billingAddress;
 	}
 
 	/**

@@ -101,7 +101,7 @@ public class LightAdminRepositoryRestConfiguration {
 	 */
 	@Bean
 	public UriToDomainObjectUriResolver domainObjectResolver() {
-		return new UriToDomainObjectUriResolver();
+		return new UriToDomainTypeResolver();
 	}
 
 	@Bean

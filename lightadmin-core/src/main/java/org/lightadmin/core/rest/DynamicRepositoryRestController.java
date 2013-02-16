@@ -5,6 +5,7 @@ import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
@@ -80,6 +81,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	@Override
 	@SuppressWarnings("rawtypes")
 	protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) {
+		DomainTypeBasicConfiguration repo;
 		if (attrMeta.isCollectionLike() || attrMeta.isSetLike()) {
 			// Trying to avoid collection-was-no-longer-referenced issue
 			// if the collection is modifiable
@@ -90,6 +92,9 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			} catch (UnsupportedOperationException e) {
 				attrMeta.set(incomingVal, entity);
 			}
+		} else if ((repo = configuration.forDomainType(attrMeta.type())) != null &&
+				(repo.getRepository().isNullPlaceholder(incomingVal))) {
+			attrMeta.set(null, entity);
 		} else {
 			attrMeta.set(incomingVal, entity);
 		}

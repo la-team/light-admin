@@ -71,18 +71,22 @@ public class ApplicationController {
 	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET )
 	public String show( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
-
-		model.addAttribute( "entity", repositoryForEntity( domainTypeName ).findOne( entityId ) );
-
+		Object entity = repositoryForEntity( domainTypeName ).findOne( entityId );
+		if ( entity == null ) {
+			return "page-not-found";
+		}
+		model.addAttribute( "entity", entity );
 		return "show-view";
 	}
 
 	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET )
 	public String edit( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
-
-		model.addAttribute( "entity", repositoryForEntity( domainTypeName ).findOne( entityId ) );
-
+		Object entity = repositoryForEntity( domainTypeName ).findOne( entityId );
+		if ( entity == null ) {
+			return "page-not-found";
+		}
+		model.addAttribute( "entity", entity );
 		return "edit-view";
 	}
 
