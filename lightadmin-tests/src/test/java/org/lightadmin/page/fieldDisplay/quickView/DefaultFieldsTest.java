@@ -31,7 +31,7 @@ public class DefaultFieldsTest extends SeleniumIntegrationTest {
 	}
 
 	@Test
-	public void allEntityFieldsAreDisplayedWhenQuickViewIsNotConfigured() {
+	public void allPersistentFieldsAreDisplayedWhenQuickViewIsNotConfigured() {
 		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 3 );
 
 		String[] quickViewFieldNames = quickViewComponent.getQuickViewFieldNames();
