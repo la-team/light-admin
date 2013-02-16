@@ -28,6 +28,7 @@ public class FilterTestEntityConfiguration {
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
 		return filterBuilder
+				.filter( "Id", "id" )
 				.filter( "Text Field", "textField" )
 				.filter( "Integer Field", "integerField" )
 				.filter( "Decimal Field", "decimalField" ).build();
