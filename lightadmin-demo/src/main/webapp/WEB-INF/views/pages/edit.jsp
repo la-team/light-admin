@@ -14,6 +14,7 @@
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
 <spring:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
 <c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
+<c:set var="formViewFields" value="${domainTypeAdministrationConfiguration.formViewFragment.fields}"/>
 <jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 <c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
@@ -30,7 +31,7 @@
 	<div class="widget">
 		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5></div>
 		<fieldset>
-			<c:forEach var="fieldEntry" items="${domainTypeAdministrationConfiguration.formViewFragment.fields}" varStatus="status">
+			<c:forEach var="fieldEntry" items="${formViewFields}" varStatus="status">
 				<c:if test="${!fieldEntry.primaryKey}">
 				<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
 					<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
@@ -55,7 +56,7 @@
 
 		$("select, input:checkbox, input:radio, input:file").uniform();
 
-		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
+		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}" includeFields="${formViewFields}"/>;
 
 		loadDomainObjectForFormView($('#editForm'), '${domainObjectUrl}');
 	});

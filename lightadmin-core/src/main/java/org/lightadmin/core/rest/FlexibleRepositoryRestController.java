@@ -829,7 +829,7 @@ public class FlexibleRepositoryRestController
                                                                               .values()) {
         Object incomingVal;
         if(null != (incomingVal = attrMeta.get(incoming))) {
-          attrMeta.set(incomingVal, entity);
+          attrMetaSet(attrMeta, incomingVal, entity);
         }
       }
 
@@ -838,7 +838,7 @@ public class FlexibleRepositoryRestController
                                                                               .values()) {
         Object incomingVal;
         if(null != (incomingVal = attrMeta.get(incoming))) {
-          attrMeta.set(incomingVal, entity);
+          attrMetaSet(attrMeta, incomingVal, entity);
         }
       }
     } else {
@@ -871,6 +871,10 @@ public class FlexibleRepositoryRestController
                                body);
     }
 
+  }
+
+  protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) {
+    attrMeta.set(incomingVal, entity);
   }
 
   /**

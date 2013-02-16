@@ -1,6 +1,10 @@
 package org.lightadmin.core.view.tags.form;
 
 import java.io.IOException;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import org.codehaus.jackson.JsonFactory;
 import org.codehaus.jackson.JsonGenerator;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
@@ -9,6 +13,7 @@ import static org.codehaus.jackson.JsonGenerator.Feature.*;
 
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.rest.DomainTypeResourceSupport;
@@ -30,12 +35,17 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 
 	private DomainTypeEntityMetadata<DomainTypeAttributeMetadata> domainTypeMetadata;
 
+	private Set<String> includedAttributes;
+
 	@Override
 	public void doTag() throws IOException {
 		JsonGenerator json = JSON_FACTORY.createJsonGenerator(getJspContext().getOut());
 		json.writeStartObject();
 		try {
 			for (DomainTypeAttributeMetadata attribMetadata : domainTypeMetadata.getAttributes()) {
+				if (includedAttributes != null && !includedAttributes.contains(attribMetadata.getName())) {
+					continue;
+				}
 				try {
 					json.writeObjectFieldStart(attribMetadata.getName());
 					json.writeStringField("type", DomainTypeAttributeType.by( attribMetadata ).name());
@@ -65,6 +75,13 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 
 	public void setDomainTypeMetadata(DomainTypeEntityMetadata<DomainTypeAttributeMetadata> domainTypeMetadata) {
 		this.domainTypeMetadata = domainTypeMetadata;
+	}
+
+	public void setIncludeFields(Collection<FieldMetadata> fields) {
+		includedAttributes = new HashSet<String>();
+		for (FieldMetadata field : fields) {
+			includedAttributes.add(field.getUuid());
+		}
 	}
 
 }

@@ -22,6 +22,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
 import org.springframework.hateoas.Link;
@@ -40,6 +41,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +75,24 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	public ResponseEntity<?> createOrUpdate(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository)
 			throws IOException, IllegalAccessException, InstantiationException {
 		return super.createOrUpdate( request, baseUri, repository, "" );
+	}
+
+	@Override
+	@SuppressWarnings("rawtypes")
+	protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) {
+		if (attrMeta.isCollectionLike() || attrMeta.isSetLike()) {
+			// Trying to avoid collection-was-no-longer-referenced issue
+			// if the collection is modifiable
+			try {
+				Collection col = (Collection) attrMeta.get(entity);
+				col.clear();
+				col.addAll((Collection) incomingVal);
+			} catch (UnsupportedOperationException e) {
+				attrMeta.set(incomingVal, entity);
+			}
+		} else {
+			attrMeta.set(incomingVal, entity);
+		}
 	}
 
 	@ResponseBody

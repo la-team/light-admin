@@ -110,6 +110,12 @@
 			<rtexprvalue>true</rtexprvalue>
 			<type>org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata</type>
 		</attribute>
+		<attribute>
+			<name>includeFields</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.util.Collection</type>
+		</attribute>
 	</tag>
 
 	<tag>

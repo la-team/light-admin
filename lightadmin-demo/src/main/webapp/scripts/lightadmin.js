@@ -71,19 +71,19 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 	restParams.push( { "name": sortName + ".dir", "value": sortDir } );
 
 	jQuery.ajax( {
-					 "dataType": 'json',
-					 "type": "GET",
-					 "url": sSource,
-					 "data": restParams,
-					 "success": function ( data ) {
-						 data.iTotalRecords = data.page.totalElements;
-						 data.iTotalDisplayRecords = data.page.totalElements;
+					"dataType": 'json',
+					"type": "GET",
+					"url": sSource,
+					"data": restParams,
+					"success": function ( data ) {
+						data.iTotalRecords = data.page.totalElements;
+						data.iTotalDisplayRecords = data.page.totalElements;
 
-						 getSearcher().onSearchCompleted();
+						getSearcher().onSearchCompleted();
 
-						 fnCallback( data );
-					 }
-				 } );
+						fnCallback( data );
+					}
+				} );
 }
 
 function getPrimaryKey( dataValue ) {
@@ -154,19 +154,19 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 			var aData = dataTable.fnGetData( nTr );
 			var restEntityUrl = aData.links[0].href;
 			jQuery.ajax( {
-							 "dataType": 'json',
-							 "type": "GET",
-							 "url": restEntityUrl + '/unit/quickView',
-							 "success": function ( data ) {
-								 var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
-								 $( nDetailsRow ).addClass( $( nDetailsRow ).prev().attr( 'class' ) );
-								 $( 'div.innerDetails', nDetailsRow ).hide();
-								 $( 'div.innerDetails', nDetailsRow ).slideDown( 'slow', function () {
-									 infoImg.attr( 'src', "../images/aInactive.png" );
-									 infoImg.attr( 'title', "Click to close Quick View" );
-								 } );
-							 }
-						 } );
+							"dataType": 'json',
+							"type": "GET",
+							"url": restEntityUrl + '/unit/quickView',
+							"success": function ( data ) {
+								var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
+								$( nDetailsRow ).addClass( $( nDetailsRow ).prev().attr( 'class' ) );
+								$( 'div.innerDetails', nDetailsRow ).hide();
+								$( 'div.innerDetails', nDetailsRow ).slideDown( 'slow', function () {
+									infoImg.attr( 'src', "../images/aInactive.png" );
+									infoImg.attr( 'title', "Click to close Quick View" );
+								} );
+							}
+						} );
 		}
 	} );
 }
@@ -323,6 +323,10 @@ function updateDomainObject( domForm ) {
 						if ( errorMessages.length > 0 ) {
 							showFailureMessageNote( errorMessages );
 						}
+					},
+					409: function ( jqXHR ) {
+						var data = $.parseJSON( jqXHR.responseText );
+						showFailureMessageNote( data.message );
 					}
 				}
 			} );
