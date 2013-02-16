@@ -17,7 +17,6 @@ public class FilterTest extends SeleniumIntegrationTest {
 	private LoginPage loginPage;
 
 	private ListViewPage productListViewPage;
-
 	@Before
 	public void setup() {
 		repopulateDatabase();
@@ -37,6 +36,14 @@ public class FilterTest extends SeleniumIntegrationTest {
 		productListViewPage.filter( "integerField", "1234567" );
 
 		assertTableData( expectedResult1, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+	}
+
+	@Test
+	public void canFilterByIdField() {
+		productListViewPage.openAdvancedSearch();
+		productListViewPage.filter( "id", "5" );
+
+		assertTableData( expectedResult6, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
@@ -63,7 +70,6 @@ public class FilterTest extends SeleniumIntegrationTest {
 		assertTableData( expectedResult5, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
-
 	@Test
 	@Ignore // TODO: max: Will be fixed later
 	public void canFilterByTextWithSpecialCharacters() {
@@ -82,4 +88,5 @@ public class FilterTest extends SeleniumIntegrationTest {
 		{"7", "partial querysearch test", "345", "22.2"},
 		{"8", "search test by partial query", "567", "22.2"}
 	};
+	private String[][] expectedResult6 = {{"5", "Case sensitivity test", "901", "22.2"}};
 }
