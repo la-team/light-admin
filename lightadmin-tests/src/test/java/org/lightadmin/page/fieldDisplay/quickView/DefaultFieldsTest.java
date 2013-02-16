@@ -35,11 +35,13 @@ public class DefaultFieldsTest extends SeleniumIntegrationTest {
 		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 3 );
 
 		String[] quickViewFieldNames = quickViewComponent.getQuickViewFieldNames();
-		String[] quickViewFieldValues= quickViewComponent.getQuickViewFieldValues();
+		String[] quickViewFieldValues = quickViewComponent.getQuickViewFieldValues();
 
-		assertQuickViewFields( new String[]{ "Id:", "OrderTotal:", "Name:", "LineItems:" }, quickViewFieldNames );
-		assertQuickViewFieldValues( new String[]{ "3", "226308", "Order3: 3 line items", "TestLineItem #101\n" +
-				"TestLineItem #102\n" +
-				"TestLineItem #103" }, quickViewFieldValues );
+		assertQuickViewFields( new String[] {"Id:", "Name:", "LineItems:"}, quickViewFieldNames );
+		assertQuickViewFieldValues( new String[] {
+			"3", "Order3: 3 line items", "TestLineItem #101\n" +
+										 "TestLineItem #102\n" +
+										 "TestLineItem #103"
+		}, quickViewFieldValues );
 	}
 }
