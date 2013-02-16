@@ -1,4 +1,5 @@
 package org.lightadmin.test.model;
+
 import org.lightadmin.demo.model.AbstractEntity;
 
 import javax.persistence.*;
@@ -9,15 +10,16 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 
 @Entity
-@Table( name = "TestOrders" )
+@Table(name = "TestOrders")
 public class TestOrder extends AbstractEntity {
 
 	private String name;
 
-	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
-	@JoinColumn( name = "order_id" )
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "order_id")
 	private List<TestLineItem> lineItems = newArrayList();
 
+	@Transient
 	private BigDecimal orderTotal;
 
 	public String getName() {
