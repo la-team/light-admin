@@ -2,10 +2,11 @@ package org.lightadmin.test.model;
 
 import org.hibernate.validator.constraints.NotEmpty;
 import org.lightadmin.demo.model.AbstractEntity;
+import org.lightadmin.demo.model.DiscountProgram;
 import org.lightadmin.demo.model.EmailAddress;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 public class TestCustomer extends AbstractEntity {
@@ -20,6 +21,15 @@ public class TestCustomer extends AbstractEntity {
 
 	@Column( unique = true )
 	private EmailAddress emailAddress;
+
+	@ManyToMany
+	@JoinTable(name="testcustomer_discount",
+			joinColumns=
+			@JoinColumn(name="customer_id", referencedColumnName="ID"),
+			inverseJoinColumns=
+			@JoinColumn(name="discount_program_id", referencedColumnName="ID")
+	)
+	private Set<TestDiscountProgram> discountPrograms;
 
 	public TestCustomer() {
 	}
@@ -44,4 +54,11 @@ public class TestCustomer extends AbstractEntity {
 		this.emailAddress = emailAddress;
 	}
 
+	public Set<TestDiscountProgram> getDiscountPrograms() {
+		return discountPrograms;
+	}
+
+	public void setDiscountPrograms( Set<TestDiscountProgram> discountPrograms ) {
+		this.discountPrograms = discountPrograms;
+	}
 }

@@ -95,6 +95,14 @@ insert into TestCustomer (id, email, firstname, lastname) values (25, 'boyd@dmba
 insert into TestCustomer (id, email, firstname, lastname) values (26, 'to@delete.com', 'Test', 'To delete' );
 insert into TestCustomer (id, email, firstname, lastname) values (27, 'notTo@delete.com', 'Test', 'Not to delete' );
 
+insert into TestDiscountProgram (id, name) values (1, 'Silver Discount Program');
+insert into TestDiscountProgram (id, name) values (2, 'Gold Discount Program');
+insert into TestDiscountProgram (id, name) values (3, 'Platinum Discount Program');
+
+insert into testcustomer_discount (customer_id, discount_program_id) values (1, 3);
+insert into testcustomer_discount (customer_id, discount_program_id) values (2, 1);
+insert into testcustomer_discount (customer_id, discount_program_id) values (3, 2);
+
 insert into TestLineItem (id, order_id, product_id, amount) values (1, 1, 1, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (2, 1, 1, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (3, 1, 1, 1);

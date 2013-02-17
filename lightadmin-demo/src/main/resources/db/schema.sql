@@ -82,3 +82,11 @@ firstname VARCHAR(255),
 lastname VARCHAR(255),
 email VARCHAR(255));
 CREATE UNIQUE INDEX ix_testcustomer_email ON TESTCUSTOMER (email ASC);
+
+CREATE TABLE testdiscountprogram (
+  id BIGINT IDENTITY PRIMARY KEY,
+  name VARCHAR(255));
+
+CREATE TABLE testcustomer_discount (
+customer_id BIGINT CONSTRAINT testcustomer_discount_customer_ref REFERENCES testcustomer (id),
+discount_program_id BIGINT CONSTRAINT testcustomer_discount_discountprogram_ref REFERENCES testdiscountprogram (id));
