@@ -39,14 +39,14 @@ insert into customer_discount (customer_id, discount_program_id) values (1, 3);
 insert into customer_discount (customer_id, discount_program_id) values (2, 1);
 insert into customer_discount (customer_id, discount_program_id) values (3, 2);
 
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (1, 'integer search test', 1234567, 22.2);
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (2, 'decimal search test', 456, 1499.99);
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (3, '#<,&«$''(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½', 789, 22.2);
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (4, 'Case Sensitivity Test', 901, 22.2);
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (5, 'Case sensitivity test', 901, 22.2);
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (6, 'query partial search test', 234, 22.2);
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (7, 'partial querysearch test', 345, 22.2);
-insert into FilterTestEntity (id, textfield, integerfield, decimalfield) values (8, 'search test by partial query', 567, 22.2);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (1, 'integer search test', 1234567, 521, 22.2);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (2, 'decimal search test', 456, 31264, 1499.99);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (3, '#<,&«$''(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½', 789, 62342,  22.2);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (4, 'Case Sensitivity Test', 901, 823, 22.2);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (5, 'Case sensitivity test', 901, 9521, 22.2);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (6, 'query partial search test', 234, 9164, 22.2);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (7, 'partial querysearch test', 345, 612325, 22.2);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield) values (8, 'search test by partial query', 567, 623412, 22.2);
 
 insert into ParentTestEntity (id, name) values (1, 'Parent Item1');
 insert into ParentTestEntity (id, name) values (2, 'Parent Item2');
@@ -89,6 +89,8 @@ insert into TestCustomer (id, email, firstname, lastname) values (22, 'dave@dmba
 insert into TestCustomer (id, email, firstname, lastname) values (23, 'carter@dmband23.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (24, 'boyd@dmband24.com', 'Boyd', 'Tinsley');
 insert into TestCustomer (id, email, firstname, lastname) values (25, 'boyd@dmband25.com', 'Boyd', 'Matthews1');
+insert into TestCustomer (id, email, firstname, lastname) values (26, 'to@delete.com', 'Test', 'To delete' );
+insert into TestCustomer (id, email, firstname, lastname) values (27, 'notTo@delete.com', 'Test', 'Not to delete' );
 
 insert into TestLineItem (id, order_id, product_id, amount) values (1, 1, 1, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (2, 1, 1, 1);

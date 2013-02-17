@@ -24,15 +24,16 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 			return webElement.isDisplayed();
 		} catch ( NoSuchElementException ex ) {
 			return false;
-		} catch ( StaleElementReferenceException e ) {
+		}
+		//todo: iko: handle stale element properly by trying to find it on a page again
+		catch ( StaleElementReferenceException e ) {
 			return false;
 		}
 	}
 
 	@Override
-	public void clearAndType( WebElement field, String text ) {
-		field.clear();
-		field.sendKeys( text );
+	public boolean isElementValuePresent( String elementName, String expectedValue ) {
+		return webDriver.findElement( By.name( elementName ) ).getAttribute( "value" ).equals( expectedValue );
 	}
 
 	@Override
@@ -53,6 +54,12 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 				return !isElementPresent( element );
 			}
 		} );
+	}
+
+	@Override
+	public void clearAndType( WebElement field, String text ) {
+		field.clear();
+		field.sendKeys( text );
 	}
 
 	@Override

@@ -49,6 +49,7 @@ CREATE TABLE filtertestentity (
 id BIGINT IDENTITY PRIMARY KEY,
 textfield VARCHAR (255),
 integerfield BIGINT,
+primitiveintegerfield INTEGER,
 decimalfield DECIMAL (8,2));
 
 CREATE TABLE parenttestentity (

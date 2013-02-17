@@ -11,5 +11,7 @@ public interface ExtendedWebDriver extends WebDriver {
 
 	public boolean isElementPresent( WebElement element );
 
+	boolean isElementValuePresent( String elementName, String expectedValue );
+
 	public void clearAndType( WebElement element, String text );
 }

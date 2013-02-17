@@ -79,9 +79,15 @@ public class DataTableComponent extends StaticComponent {
 	}
 
 	public EditPage editItem( int itemId, String domainName ) {
-		getRowForItem( itemId ).findElement( By.xpath( "//a[@title='Edit']" ) ).click();
+		getRowForItem( itemId ).findElement( By.xpath( ".//a[@title='Edit']" ) ).click();
 
 		return new EditPage( seleniumContext, domainName, itemId ).get();
+	}
+
+	public void deleteItemByName( String itemName ) {
+		int rowId = Integer.parseInt( dataTableElement.findElement( By.xpath( "tbody/tr[td[contains(text(), '" + itemName + "')]]/td[2]" ) ).getText() );
+
+		new DeletionDialog( getRowForItem( rowId ), seleniumContext ).confirm();
 	}
 
 	public class Column {

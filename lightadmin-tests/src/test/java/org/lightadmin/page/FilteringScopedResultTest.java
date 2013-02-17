@@ -9,8 +9,8 @@ import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.lightadmin.util.DomainAsserts.assertScopeCount;
 import static org.lightadmin.util.DomainAsserts.assertTableData;
 
 public class FilteringScopedResultTest extends SeleniumIntegrationTest {
@@ -70,9 +70,9 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
     @Test
 	public void defaultScopeCountIsCorrect() {
-		assertScopeCount( "All", 25 );
-		assertScopeCount( "Buyers", 25 );
-		assertScopeCount( "Sellers", 8 );
+		assertScopeCount( "All", 27, customerListViewPage );
+		assertScopeCount( "Buyers", 27, customerListViewPage );
+		assertScopeCount( "Sellers", 8, customerListViewPage );
 	}
 
 	//Covers LA-22 comment: https://github.com/max-dev/light-admin/issues/22#issuecomment-12013074
@@ -81,17 +81,12 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 		customerListViewPage.openAdvancedSearch();
 		customerListViewPage.filter( "lastname", "Matthews1" );
 
-		assertScopeCount( "All", 2 );
-		assertScopeCount( "Buyers", 2 );
-		assertScopeCount( "Sellers", 1 );
+		assertScopeCount( "All", 2, customerListViewPage );
+		assertScopeCount( "Buyers", 2, customerListViewPage );
+		assertScopeCount( "Sellers", 1, customerListViewPage );
 	}
 
 	//TODO: iko: add test for scope count update for CRUD operations, filter resetting
-
-	private void assertScopeCount( String scope, int expectedCount ) {
-		assertEquals( String.format( "Wrong count for scope '%s': ", scope ),
-				expectedCount, customerListViewPage.getScopeCount( scope ) );
-	}
 
 	private void assertScopeIsApplied( String[][] expectedData, String scope ) {
 		assertTableData( expectedData, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );

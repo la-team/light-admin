@@ -2,6 +2,7 @@ package org.lightadmin.util;
 
 import org.apache.commons.lang.StringUtils;
 import org.lightadmin.component.DataTableComponent;
+import org.lightadmin.page.ListViewPage;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -11,6 +12,7 @@ import javax.annotation.Nullable;
 import java.util.Arrays;
 
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class DomainAsserts {
@@ -58,6 +60,11 @@ public class DomainAsserts {
 				String.format( "Wrong field values on Quick View. Expected field values: %s, actual field values: %s",
 						Arrays.toString( expectedValues ), Arrays.toString( actualValues ) ),
 				expectedValues, actualValues );
+	}
+
+	public static void assertScopeCount( String scope, int expectedCount, ListViewPage thePage ) {
+		assertEquals( String.format( "Wrong count for scope '%s': ", scope ),
+				expectedCount, thePage.getScopeCount( scope ) );
 	}
 
 }

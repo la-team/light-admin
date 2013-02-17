@@ -11,6 +11,7 @@ import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.TestCustomer;
+import org.lightadmin.test.scope.DeleteTestSpecification;
 import org.lightadmin.test.scope.DummySpecification;
 
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
@@ -36,7 +37,8 @@ public class CustomerTestEntityConfiguration {
 		return scopeBuilder
 				.scope( "All", all() ).defaultScope()
 				.scope( "Buyers", filter( DomainTypePredicates.alwaysTrue() ) )
-				.scope( "Sellers", specification( new DummySpecification() ) ).build();
+				.scope( "Sellers", specification( new DummySpecification() ) )
+				.scope( "Deletion Test", specification( new DeleteTestSpecification() ) ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {

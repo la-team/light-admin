@@ -1,6 +1,5 @@
 package org.lightadmin.test.model;
 import org.lightadmin.demo.model.AbstractEntity;
-import org.lightadmin.demo.model.EmailAddress;
 
 import javax.persistence.Entity;
 import java.math.BigDecimal;
@@ -12,9 +11,11 @@ public class FilterTestEntity extends AbstractEntity {
 
 	private Integer integerField;
 
+	private int primitiveIntegerField;
+
 	private BigDecimal decimalField;
 
-	private EmailAddress emailAddress;
+	private BigDecimal calculatedField;
 
 	public FilterTestEntity( final String textField, final int integerField, final BigDecimal decimalField ) {
 		this.textField = textField;
@@ -47,5 +48,18 @@ public class FilterTestEntity extends AbstractEntity {
 
 	public void setDecimalField( final BigDecimal decimalField ) {
 		this.decimalField = decimalField;
+	}
+
+	public int getPrimitiveIntegerField() {
+		return primitiveIntegerField;
+	}
+
+	public void setPrimitiveIntegerField( int primitiveIntegerField ) {
+		this.primitiveIntegerField = primitiveIntegerField;
+	}
+
+	public BigDecimal getCalculatedField() {
+		BigDecimal theResult = new BigDecimal( 0 );
+		return theResult.add( decimalField ).add( new BigDecimal( integerField ) ).add( new BigDecimal( primitiveIntegerField ) );
 	}
 }

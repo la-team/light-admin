@@ -94,4 +94,14 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	public EditPage editItem( int i ) {
 		return getDataTable().editItem( i, domain.getDomainTypeName() );
 	}
+
+	public CreatePage navigateToCreatePage() {
+		webDriver().findElement( By.linkText( "Create New" ) );
+
+		return new CreatePage( seleniumContext, domain.getDomainTypeName() ).get();
+	}
+
+	public void deleteItemByName( String itemName ) {
+		getDataTable().deleteItemByName( itemName );
+	}
 }

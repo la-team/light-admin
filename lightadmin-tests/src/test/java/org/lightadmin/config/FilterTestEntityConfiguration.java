@@ -2,6 +2,7 @@ package org.lightadmin.config;
 
 import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
@@ -23,7 +24,17 @@ public class FilterTestEntityConfiguration {
 		return listViewBuilder
 				.field( "textField" ).caption( "Text Field" )
 				.field( "integerField" ).caption( "Integer Field" )
+				.field( "primitiveIntegerField" ).caption( "Primitive Integer Field" )
 				.field( "decimalField" ).caption( "Decimal Field" ).build();
+	}
+
+	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
+		return fragmentBuilder
+				.field( "textField" ).caption( "Text Field" )
+				.field( "integerField" ).caption( "Integer Field" )
+				.field( "primitiveIntegerField" ).caption( "Primitive Integer Field" )
+				.field( "decimalField" ).caption( "Decimal Field" )
+				.field( "calculatedField" ).caption( "Calculated Field" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
@@ -31,6 +42,15 @@ public class FilterTestEntityConfiguration {
 				.filter( "Id", "id" )
 				.filter( "Text Field", "textField" )
 				.filter( "Integer Field", "integerField" )
+				.filter( "Primitive Integer Field", "primitiveIntegerField" )
 				.filter( "Decimal Field", "decimalField" ).build();
+	}
+
+	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder formViewBuilder ) {
+		return formViewBuilder
+				.field( "textField" ).caption( "Text Field" )
+				.field( "integerField" ).caption( "Integer Field" )
+				.field( "primitiveIntegerField" ).caption( "Primitive Integer Field" )
+				.field( "decimalField" ).caption( "Decimal Field" ).build();
 	}
 }
