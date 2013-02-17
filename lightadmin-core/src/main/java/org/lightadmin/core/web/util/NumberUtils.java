@@ -1,5 +1,7 @@
 package org.lightadmin.core.web.util;
 
+import org.springframework.util.Assert;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
@@ -13,7 +15,7 @@ public abstract class NumberUtils {
 		final Number number = org.apache.commons.lang.math.NumberUtils.createNumber( text );
 
 		try {
-			return org.springframework.util.NumberUtils.convertNumberToTargetClass( number, targetType );
+			return convertNumberToTargetClass( number, targetType );
 		} catch ( IllegalArgumentException ex ) {
 			return number;
 		}
@@ -46,5 +48,46 @@ public abstract class NumberUtils {
 			return true;
 		}
 		return false;
+	}
+
+	@SuppressWarnings( "unchecked" )
+	public static <T extends Number> T convertNumberToTargetClass( Number number, Class<T> targetClass ) throws IllegalArgumentException {
+		Assert.notNull( number, "Number must not be null" );
+		Assert.notNull( targetClass, "Target class must not be null" );
+
+		if ( targetClass.isInstance( number ) ) {
+			return ( T ) number;
+		} else if ( targetClass.equals( byte.class ) ) {
+			long value = number.longValue();
+			if ( value < Byte.MIN_VALUE || value > Byte.MAX_VALUE ) {
+				raiseOverflowException( number, targetClass );
+			}
+			return ( T ) new Byte( number.byteValue() );
+		} else if ( targetClass.equals( short.class ) ) {
+			long value = number.longValue();
+			if ( value < Short.MIN_VALUE || value > Short.MAX_VALUE ) {
+				raiseOverflowException( number, targetClass );
+			}
+			return ( T ) new Short( number.shortValue() );
+		} else if ( targetClass.equals( int.class ) ) {
+			long value = number.longValue();
+			if ( value < Integer.MIN_VALUE || value > Integer.MAX_VALUE ) {
+				raiseOverflowException( number, targetClass );
+			}
+			return ( T ) new Integer( number.intValue() );
+		} else if ( targetClass.equals( long.class ) ) {
+			return ( T ) new Long( number.longValue() );
+		} else if ( targetClass.equals( float.class ) ) {
+			return ( T ) Float.valueOf( number.toString() );
+		} else if ( targetClass.equals( double.class ) ) {
+			return ( T ) Double.valueOf( number.toString() );
+		} else {
+			return org.springframework.util.NumberUtils.convertNumberToTargetClass( number, targetClass );
+		}
+	}
+
+	private static void raiseOverflowException( Number number, Class targetClass ) {
+		throw new IllegalArgumentException( "Could not convert number [" + number + "] of type [" +
+											number.getClass().getName() + "] to target class [" + targetClass.getName() + "]: overflow" );
 	}
 }
