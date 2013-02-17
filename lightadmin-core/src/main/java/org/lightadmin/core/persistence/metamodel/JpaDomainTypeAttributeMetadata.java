@@ -1,9 +1,11 @@
 package org.lightadmin.core.persistence.metamodel;
 
+import org.lightadmin.core.web.util.NumberUtils;
 import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
 
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
+import java.util.Date;
 
 public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetadata {
 
@@ -78,5 +80,43 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 			return getElementType();
 		}
 		return getType();
+	}
+
+	@Override
+	public DomainTypeAttributeType getAttributeType() {
+		final Class<?> attrType = getType();
+
+		if ( isAssociation() || getAttribute().getPersistentAttributeType() == Attribute.PersistentAttributeType.MANY_TO_ONE ) {
+			if ( isCollectionLike() || isSetLike() ) {
+				return DomainTypeAttributeType.ASSOC_MULTI;
+			}
+			return DomainTypeAttributeType.ASSOC;
+		}
+
+		if ( isMapLike() ) {
+			return DomainTypeAttributeType.MAP;
+		}
+
+		if ( Boolean.class.equals( attrType ) || boolean.class.equals( attrType ) ) {
+			return DomainTypeAttributeType.BOOL;
+		}
+
+		if ( Date.class.isAssignableFrom( attrType ) ) {
+			return DomainTypeAttributeType.DATE;
+		}
+
+		if ( NumberUtils.isNumberInteger( attrType ) ) {
+			return DomainTypeAttributeType.NUMBER_INTEGER;
+		}
+
+		if ( NumberUtils.isNumberFloat( attrType ) ) {
+			return DomainTypeAttributeType.NUMBER_FLOAT;
+		}
+
+		if ( String.class.equals( attrType ) ) {
+			return DomainTypeAttributeType.STRING;
+		}
+
+		return DomainTypeAttributeType.UNKNOWN;
 	}
 }

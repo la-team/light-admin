@@ -1,7 +1,6 @@
 package org.lightadmin.core.view.tags.form;
 
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -27,7 +26,7 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 	public void doTag() throws JspException, IOException {
 		JspContext context = getJspContext();
 		JspFragment worker;
-		switch ( DomainTypeAttributeType.by( attributeMetadata ) ) {
+		switch ( attributeMetadata.getAttributeType() ) {
 			case ASSOC_MULTI:
 				worker = n2manyEditControl;
 				break;
@@ -43,8 +42,14 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 			case DATE:
 				worker = dateEditControl;
 				break;
-			case NUMBER:
+			case NUMBER_INTEGER:
 				worker = numberEditControl;
+				break;
+			case NUMBER_FLOAT:
+				worker = numberEditControl;
+				break;
+			case STRING:
+				worker = simpleEditControl;
 				break;
 			default:
 				worker = simpleEditControl;
@@ -88,5 +93,4 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 	public void setMapEditControl( JspFragment control ) {
 		this.mapEditControl = control;
 	}
-
 }
