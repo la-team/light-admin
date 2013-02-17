@@ -17,6 +17,7 @@ public class FilterTest extends SeleniumIntegrationTest {
 	private LoginPage loginPage;
 
 	private ListViewPage productListViewPage;
+
 	@Before
 	public void setup() {
 		repopulateDatabase();
@@ -29,7 +30,6 @@ public class FilterTest extends SeleniumIntegrationTest {
 	}
 
 	//Covers LA-6: https://github.com/max-dev/light-admin/issues/6
-	//TODO: max: LA-25: Filtering sucks when primitive data types are used in configured Entity!
 	@Test
 	public void canFilterByIntegerField() {
 		productListViewPage.openAdvancedSearch();
@@ -38,10 +38,19 @@ public class FilterTest extends SeleniumIntegrationTest {
 		assertTableData( expectedResult1, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
+	//Covers LA-25: https://github.com/max-dev/light-admin/issues/25
+	@Test
+	public void canFilterByPrimitiveIntegerField() {
+		productListViewPage.openAdvancedSearch();
+		productListViewPage.filter( "primitiveIntegerField", "15235" );
+
+		assertTableData( expectedResult7, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+	}
+
 	@Test
 	public void canFilterByIdField() {
 		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "id", "5" );
+		productListViewPage.filter( "id", "9" );
 
 		assertTableData( expectedResult6, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
@@ -71,6 +80,16 @@ public class FilterTest extends SeleniumIntegrationTest {
 	}
 
 	@Test
+	public void canFilterByCombinedCriteria() {
+		productListViewPage.openAdvancedSearch();
+		productListViewPage.filter( "primitiveIntegerField", "31264" );
+		productListViewPage.filter( "decimalField", "61.12" );
+
+		assertTableData( expectedResult8, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+	}
+
+	//Covers LA-46: https://github.com/max-dev/light-admin/issues/46
+	@Test
 	@Ignore // TODO: max: Will be fixed later
 	public void canFilterByTextWithSpecialCharacters() {
 		productListViewPage.openAdvancedSearch();
@@ -88,5 +107,7 @@ public class FilterTest extends SeleniumIntegrationTest {
 		{"7", "partial querysearch test", "345", "612325", "22.2"},
 		{"8", "search test by partial query", "567", "623412", "22.2"}
 	};
-	private String[][] expectedResult6 = {{"5", "Case sensitivity test", "901", "9521", "22.2"}};
+	private String[][] expectedResult6 = {{"9", "Id search test", "234", "2932", "21.2"}};
+	private String[][] expectedResult7 = {{"10", "primitive integer search test", "345", "15235", "22.2"}};
+	private String[][] expectedResult8 = {{"11", "combined criteria search test", "345", "31264", "61.12"}};
 }
