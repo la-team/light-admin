@@ -142,9 +142,7 @@
 	<function>
 		<name>primaryKeyPersistentField</name>
 		<function-class>org.lightadmin.core.config.domain.field.FieldMetadataUtils</function-class>
-		<function-signature>org.lightadmin.core.config.domain.field.FieldMetadata
-			primaryKeyPersistentField(java.util.Set)
-		</function-signature>
+		<function-signature>org.lightadmin.core.config.domain.field.FieldMetadata primaryKeyPersistentField(java.util.Set)</function-signature>
 	</function>
 
 	<function>
