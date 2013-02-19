@@ -29,13 +29,6 @@
 		<dynamic-attributes>true</dynamic-attributes>
 	</tag>
 
-
-	<tag-file>
-		<name>copyright</name>
-		<path>/META-INF/tags/breadcrumb/breadcrumb-item.tag</path>
-	</tag-file>
-
-
 	<tag>
 		<description>Renders html form element control</description>
 		<name>edit-control-dispatcher</name>

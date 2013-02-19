@@ -3,6 +3,7 @@ package org.lightadmin.page;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.CustomerTestEntityConfiguration;
 import org.lightadmin.config.FilterTestEntityConfiguration;
@@ -13,29 +14,26 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-import static com.google.common.collect.Lists.newLinkedList;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.lightadmin.data.Domain.*;
 
+@RunWithConfiguration( {
+						   OrderTestEntityConfiguration.class, CustomerTestEntityConfiguration.class,
+						   FilterTestEntityConfiguration.class
+					   } )
 public class DashboardPageTest extends SeleniumIntegrationTest {
+
+	private final List<Domain> expectedDomains = newArrayList( TEST_ORDERS.setExpectedRecordCount( 3 ), TEST_CUSTOMERS.setExpectedRecordCount( 27 ), FILTER_TEST_DOMAIN.setExpectedRecordCount( 11 ) );
 
 	@Autowired
 	private LoginPage loginPage;
 
 	private DashboardPage dashboardPage;
 
-	private List<Domain> expectedDomains = newLinkedList();
-
 	@Before
 	public void setup() throws Exception {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( OrderTestEntityConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( CustomerTestEntityConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
-
-		setExpectedDomains();
 		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
 	}
 
@@ -55,15 +53,8 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void domainRecordStatisticsIsDisplayed() {
-
 		for ( Domain domain : expectedDomains ) {
 			assertEquals( String.format( "Incorrect record count for domain \'%s\':", domain.getLinkText() ), domain.getExpectedRecordsCount(), dashboardPage.getDomainRecordsCount( domain ) );
 		}
-	}
-
-	private void setExpectedDomains() {
-		expectedDomains.add( TEST_ORDERS.setExpectedRecordCount( 3 ) );
-		expectedDomains.add( TEST_CUSTOMERS.setExpectedRecordCount( 27 ) );
-		expectedDomains.add( FILTER_TEST_DOMAIN.setExpectedRecordCount( 11 ) );
 	}
 }
