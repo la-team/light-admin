@@ -4,16 +4,22 @@ import org.junit.runner.RunWith;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.DataManipulationService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
-import org.lightadmin.core.util.DomainConfigurationUtils;
 import org.lightadmin.util.ExtendedWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.test.context.support.AnnotationConfigContextLoader;
+import org.springframework.test.context.support.DependencyInjectionTestExecutionListener;
+import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
 import java.net.URL;
 
-@RunWith( SpringJUnit4ClassRunner.class )
+@RunWith(SpringJUnit4ClassRunner.class)
+@TestExecutionListeners( listeners = {
+	DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+	AdministrationConfigurationListener.class
+} )
 @ContextConfiguration( loader = AnnotationConfigContextLoader.class, classes = SeleniumConfig.class )
 public abstract class SeleniumIntegrationTest {
 
@@ -28,10 +34,6 @@ public abstract class SeleniumIntegrationTest {
 
 	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
 		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( configurationClass ) );
-	}
-
-	protected void removeDomainTypeAdministrationConfiguration( Class configurationClass ) {
-		globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration( DomainConfigurationUtils.configurationDomainType( configurationClass ) );
 	}
 
 	protected void removeAllDomainTypeAdministrationConfigurations() {
@@ -59,7 +61,7 @@ public abstract class SeleniumIntegrationTest {
 		return seleniumContext.getBaseUrl();
 	}
 
-	protected long webDriverTimeout(){
+	protected long webDriverTimeout() {
 		return seleniumContext.getWebDriverWaitTimeout();
 	}
 }

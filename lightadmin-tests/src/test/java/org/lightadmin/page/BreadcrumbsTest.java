@@ -3,6 +3,7 @@ package org.lightadmin.page;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.FilterTestEntityConfiguration;
 import org.lightadmin.data.Domain;
@@ -11,23 +12,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
 
+@RunWithConfiguration( FilterTestEntityConfiguration.class )
 public class BreadcrumbsTest extends SeleniumIntegrationTest {
 
 	@Autowired
 	private LoginPage loginPage;
 
-	private DashboardPage dashboardPage;
-
 	private ListViewPage listViewPage;
 
 	@Before
 	public void setup() throws Exception {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
-
-		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
-		listViewPage = dashboardPage.navigateToDomain( Domain.FILTER_TEST_DOMAIN );
+		listViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.FILTER_TEST_DOMAIN );
 	}
 
 	@After
