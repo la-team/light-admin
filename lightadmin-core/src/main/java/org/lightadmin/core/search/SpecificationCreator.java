@@ -20,10 +20,10 @@ import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.isNotBlank;
 import static org.apache.commons.lang.StringUtils.trim;
 import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
-import static org.lightadmin.core.web.util.NumberUtils.isNumber;
-import static org.lightadmin.core.web.util.NumberUtils.parseNumber;
+import static org.lightadmin.core.util.NumberUtils.isNumber;
+import static org.lightadmin.core.util.NumberUtils.parseNumber;
 
-@SuppressWarnings( "unchecked" )
+@SuppressWarnings("unchecked")
 public class SpecificationCreator {
 
 	private final ConversionService conversionService;

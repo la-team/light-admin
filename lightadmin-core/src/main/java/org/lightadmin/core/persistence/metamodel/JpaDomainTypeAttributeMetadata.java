@@ -1,11 +1,13 @@
 package org.lightadmin.core.persistence.metamodel;
 
-import org.lightadmin.core.web.util.NumberUtils;
 import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
 
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 import java.util.Date;
+
+import static org.lightadmin.core.util.NumberUtils.isNumberFloat;
+import static org.lightadmin.core.util.NumberUtils.isNumberInteger;
 
 public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetadata {
 
@@ -105,11 +107,11 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 			return DomainTypeAttributeType.DATE;
 		}
 
-		if ( NumberUtils.isNumberInteger( attrType ) ) {
+		if ( isNumberInteger( attrType ) ) {
 			return DomainTypeAttributeType.NUMBER_INTEGER;
 		}
 
-		if ( NumberUtils.isNumberFloat( attrType ) ) {
+		if ( isNumberFloat( attrType ) ) {
 			return DomainTypeAttributeType.NUMBER_FLOAT;
 		}
 

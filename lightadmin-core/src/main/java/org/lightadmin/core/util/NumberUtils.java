@@ -1,4 +1,4 @@
-package org.lightadmin.core.web.util;
+package org.lightadmin.core.util;
 
 import org.springframework.util.Assert;
 
@@ -50,7 +50,7 @@ public abstract class NumberUtils {
 		return false;
 	}
 
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	public static <T extends Number> T convertNumberToTargetClass( Number number, Class<T> targetClass ) throws IllegalArgumentException {
 		Assert.notNull( number, "Number must not be null" );
 		Assert.notNull( targetClass, "Target class must not be null" );
