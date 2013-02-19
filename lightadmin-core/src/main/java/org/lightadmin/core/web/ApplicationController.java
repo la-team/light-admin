@@ -11,9 +11,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
-@SuppressWarnings( {"unused", "unchecked"} )
 @Controller
+@SuppressWarnings( {"unused", "unchecked"} )
 public class ApplicationController {
 
 	private static final Logger LOG = LoggerFactory.getLogger( ApplicationController.class );
@@ -28,69 +29,70 @@ public class ApplicationController {
 	@Autowired
 	private ConfigurableApplicationContext appContext;
 
-	@ResponseStatus( HttpStatus.BAD_REQUEST)
-	@ExceptionHandler( Exception.class )
+	@ResponseStatus(HttpStatus.BAD_REQUEST)
+	@ExceptionHandler(Exception.class)
 	public ModelAndView handleException( Exception ex ) {
 		return new ModelAndView( "error-page" ).addObject( "exception", ex );
 	}
 
-	@ResponseStatus( HttpStatus.NOT_FOUND)
-	@RequestMapping( value = "/page-not-found", method = RequestMethod.GET )
+	@ExceptionHandler( NoSuchRequestHandlingMethodException.class )
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	@RequestMapping(value = "/page-not-found", method = RequestMethod.GET)
 	public String handlePageNotFound() {
 		return "page-not-found";
 	}
 
-	@ResponseStatus( HttpStatus.FORBIDDEN)
-	@RequestMapping( value = "/access-denied", method = RequestMethod.GET )
+	@ResponseStatus(HttpStatus.FORBIDDEN)
+	@RequestMapping(value = "/access-denied", method = RequestMethod.GET)
 	public String handleAccessDenied() {
 		return "access-denied";
 	}
 
-	@RequestMapping( value = "/login", method = RequestMethod.GET )
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String login() {
 		return "login";
 	}
 
-	@RequestMapping( value = "/", method = RequestMethod.GET )
+	@RequestMapping(value = "/", method = RequestMethod.GET)
 	public String root() {
 		return "redirect:/dashboard";
 	}
 
-	@RequestMapping( value = "/dashboard", method = RequestMethod.GET )
+	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
 	public String dashboard() {
 		return "dashboard-view";
 	}
 
-	@RequestMapping( value = "/domain/{domainType}", method = RequestMethod.GET )
+	@RequestMapping(value = "/domain/{domainType}", method = RequestMethod.GET)
 	public String list( @PathVariable String domainType, Model model ) {
 		addDomainTypeConfigurationToModel( domainType, model );
 
 		return "list-view";
 	}
 
-	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET )
+	@RequestMapping(value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET)
 	public String show( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
 		Object entity = repositoryForEntity( domainTypeName ).findOne( entityId );
 		if ( entity == null ) {
-			return "page-not-found";
+			return "redirect:/page-not-found";
 		}
 		model.addAttribute( "entity", entity );
 		return "show-view";
 	}
 
-	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET )
+	@RequestMapping(value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET)
 	public String edit( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
 		Object entity = repositoryForEntity( domainTypeName ).findOne( entityId );
 		if ( entity == null ) {
-			return "page-not-found";
+			return "redirect:/page-not-found";
 		}
 		model.addAttribute( "entity", entity );
 		return "edit-view";
 	}
 
-	@RequestMapping( value = "/domain/{domainTypeName}/create", method = RequestMethod.GET )
+	@RequestMapping(value = "/domain/{domainTypeName}/create", method = RequestMethod.GET)
 	public String create( @PathVariable String domainTypeName, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
 

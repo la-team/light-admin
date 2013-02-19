@@ -38,14 +38,4 @@
 		<session-timeout>60</session-timeout>
 	</session-config>
 
-	<error-page>
-		<error-code>404</error-code>
-		<location>/page-not-found</location>
-	</error-page>
-
-	<error-page>
-		<error-code>403</error-code>
-		<location>/access-denied</location>
-	</error-page>
-
 </web-app>

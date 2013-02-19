@@ -1,14 +1,20 @@
 package org.lightadmin.demo.model;
 
+import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 
 @Entity
 public class Address extends AbstractEntity {
 
 	private String street, city, country;
+
+	@JsonBackReference
+	@ManyToOne
+	private Customer customer;
 
 	public Address( String street, String city, String country ) {
 		Assert.hasText( street, "Street must not be null or empty!" );

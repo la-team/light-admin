@@ -19,6 +19,7 @@
 		<!--<intercept-url pattern="/**" access="permitAll" />-->
 		<remember-me/>
 		<intercept-url pattern="/**" access="isAuthenticated()"/>
+		<access-denied-handler error-page="/access-denied"/>
 		<form-login login-page="/login" authentication-failure-url="/login?login_error=1"/>
 		<http-basic/>
 		<logout logout-url="/logout" logout-success-url="/login"/>

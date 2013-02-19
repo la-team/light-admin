@@ -1,5 +1,6 @@
 package org.lightadmin.demo.model;
 
+import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
 
@@ -9,27 +10,26 @@ import java.util.Set;
 @Entity
 public class Customer extends AbstractEntity {
 
-	@Column( length = 64 )
+	@Column(length = 64)
 	@NotEmpty
 	private String firstname;
 
-	@Column( length = 64 )
+	@Column(length = 64)
 	@NotEmpty
 	private String lastname;
 
-	@Column( unique = true )
+	@Column(unique = true)
 	private EmailAddress emailAddress;
 
-	@OneToMany( cascade = CascadeType.ALL, orphanRemoval = true )
-	@JoinColumn( name = "customer_id" )
+	@JsonManagedReference
+	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn(name = "customer_id")
 	private Set<Address> addresses;
 
 	@ManyToMany
-	@JoinTable(name="customer_discount",
-			   joinColumns=
-			   @JoinColumn(name="customer_id", referencedColumnName="ID"),
-			   inverseJoinColumns=
-			   @JoinColumn(name="discount_program_id", referencedColumnName="ID")
+	@JoinTable(name = "customer_discount",
+			   joinColumns = @JoinColumn(name = "customer_id", referencedColumnName = "ID"),
+			   inverseJoinColumns = @JoinColumn(name = "discount_program_id", referencedColumnName = "ID")
 	)
 	private Set<DiscountProgram> discountPrograms;
 
