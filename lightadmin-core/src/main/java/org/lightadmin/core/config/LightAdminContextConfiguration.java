@@ -25,11 +25,11 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 @Configuration
-@Import( {
-			LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class,
-			LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class,
-			LightAdminSecurityConfiguration.class, LightAdminViewConfiguration.class
-		} )
+@Import({
+			LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class,
+			LightAdminRepositoryRestConfiguration.class, LightAdminSecurityConfiguration.class,
+			LightAdminViewConfiguration.class
+		})
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
@@ -50,9 +50,9 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void addResourceHandlers( ResourceHandlerRegistry registry ) {
-		registry.addResourceHandler( "/styles/**" ).addResourceLocations( "/styles/" ).setCachePeriod( 31556926 );
-		registry.addResourceHandler( "/scripts/**" ).addResourceLocations( "/scripts/" );
-		registry.addResourceHandler( "/images/**" ).addResourceLocations( "/images/" ).setCachePeriod( 31556926 );
+		registry.addResourceHandler( "/styles/**" ).addResourceLocations( "classpath:/META-INF/resources/styles/" ).setCachePeriod( 31556926 );
+		registry.addResourceHandler( "/scripts/**" ).addResourceLocations( "classpath:/META-INF/resources/scripts/" );
+		registry.addResourceHandler( "/images/**" ).addResourceLocations( "classpath:/META-INF/resources/images/" ).setCachePeriod( 31556926 );
 	}
 
 	@Bean
@@ -76,8 +76,8 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 	}
 
 	@Override
-	public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
-		exceptionResolvers.add(exceptionHandlerResolver);
+	public void configureHandlerExceptionResolvers( List<HandlerExceptionResolver> exceptionResolvers ) {
+		exceptionResolvers.add( exceptionHandlerResolver );
 	}
 
 	@Bean

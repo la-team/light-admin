@@ -4,67 +4,67 @@
 
 <tiles-definitions>
 
-	<definition name="external-layout" template="/WEB-INF/views/layout/external-layout.jsp">
-		<put-attribute name="scripts-include" value="/WEB-INF/views/includes/scripts-include.jsp"/>
-		<put-attribute name="top-navigation-section" value="/WEB-INF/views/sections/top-navigation-section.jsp"/>
-		<put-attribute name="footer-section" value="/WEB-INF/views/sections/footer-section.jsp"/>
+	<definition name="external-layout" template="/views/layout/external-layout.jsp">
+		<put-attribute name="scripts-include" value="/views/includes/scripts-include.jsp"/>
+		<put-attribute name="top-navigation-section" value="/views/sections/top-navigation-section.jsp"/>
+		<put-attribute name="footer-section" value="/views/sections/footer-section.jsp"/>
 	</definition>
 
 	<definition name="login" extends="external-layout">
-		<put-attribute name="main-section" value="/WEB-INF/views/pages/login.jsp"/>
+		<put-attribute name="main-section" value="/views/pages/login.jsp"/>
 	</definition>
 
 	<definition name="error-page" extends="external-layout">
-		<put-attribute name="main-section" value="/WEB-INF/views/pages/error-page.jsp"/>
+		<put-attribute name="main-section" value="/views/pages/error-page.jsp"/>
 	</definition>
 
 	<definition name="page-not-found" extends="external-layout">
-		<put-attribute name="main-section" value="/WEB-INF/views/pages/page-not-found.jsp"/>
+		<put-attribute name="main-section" value="/views/pages/page-not-found.jsp"/>
 	</definition>
 
 	<definition name="access-denied" extends="external-layout">
-		<put-attribute name="main-section" value="/WEB-INF/views/pages/access-denied.jsp"/>
+		<put-attribute name="main-section" value="/views/pages/access-denied.jsp"/>
 	</definition>
 
-	<definition name="internal-layout" template="/WEB-INF/views/layout/internal-layout.jsp" preparer="screenViewPreparer">
-		<put-attribute name="scripts-include" value="/WEB-INF/views/includes/scripts-include.jsp"/>
-		<put-attribute name="top-navigation-section" value="/WEB-INF/views/sections/top-navigation-section.jsp"/>
+	<definition name="internal-layout" template="/views/layout/internal-layout.jsp" preparer="screenViewPreparer">
+		<put-attribute name="scripts-include" value="/views/includes/scripts-include.jsp"/>
+		<put-attribute name="top-navigation-section" value="/views/sections/top-navigation-section.jsp"/>
 		<put-attribute name="header-section">
-			<definition template="/WEB-INF/views/sections/header-section.jsp" preparer="headerSectionViewPreparer"/>
+			<definition template="/views/sections/header-section.jsp" preparer="headerSectionViewPreparer"/>
 		</put-attribute>
 		<put-attribute name="left-section">
-			<definition template="/WEB-INF/views/sections/left-section.jsp" preparer="leftSectionViewPreparer"/>
+			<definition template="/views/sections/left-section.jsp" preparer="leftSectionViewPreparer"/>
 		</put-attribute>
-		<put-attribute name="footer-section" value="/WEB-INF/views/sections/footer-section.jsp"/>
+		<put-attribute name="footer-section" value="/views/sections/footer-section.jsp"/>
 	</definition>
 
 	<definition name="dashboard-view" extends="internal-layout">
 		<put-attribute name="main-section">
-			<definition template="/WEB-INF/views/pages/dashboard.jsp" preparer="dashboardViewPreparer"/>
+			<definition template="/views/pages/dashboard.jsp" preparer="dashboardViewPreparer"/>
 		</put-attribute>
 	</definition>
 
 	<definition name="list-view" extends="internal-layout">
 		<put-attribute name="main-section">
-			<definition template="/WEB-INF/views/pages/list.jsp" preparer="listViewPreparer"/>
+			<definition template="/views/pages/list.jsp" preparer="listViewPreparer"/>
 		</put-attribute>
 	</definition>
 
 	<definition name="edit-view" extends="internal-layout">
 		<put-attribute name="main-section">
-			<definition template="/WEB-INF/views/pages/edit.jsp" preparer="editViewPreparer"/>
+			<definition template="/views/pages/edit.jsp" preparer="editViewPreparer"/>
 		</put-attribute>
 	</definition>
 
 	<definition name="create-view" extends="internal-layout">
 		<put-attribute name="main-section">
-			<definition template="/WEB-INF/views/pages/create.jsp" preparer="editViewPreparer"/>
+			<definition template="/views/pages/create.jsp" preparer="editViewPreparer"/>
 		</put-attribute>
 	</definition>
 
 	<definition name="show-view" extends="internal-layout">
 		<put-attribute name="main-section">
-			<definition template="/WEB-INF/views/pages/show.jsp" preparer="showViewPreparer"/>
+			<definition template="/views/pages/show.jsp" preparer="showViewPreparer"/>
 		</put-attribute>
 	</definition>
 

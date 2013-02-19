@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<taglib xmlns="http://java.sun.com/xml/ns/j2ee"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+		version="2.0">
+
+	<description>LightAdmin JSP Tag Library</description>
+	<tlib-version>0.1</tlib-version>
+	<short-name>lightadmin-jsp</short-name>
+	<uri>http://www.lightadmin.org/jsp</uri>
+
+	<tag-file>
+		<name>data-table</name>
+		<path>/META-INF/tags/data-table.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>edit-control</name>
+		<path>/META-INF/tags/edit-control.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>filter-control</name>
+		<path>/META-INF/tags/filter-control.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>scopes</name>
+		<path>/META-INF/tags/scopes.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>search</name>
+		<path>/META-INF/tags/search.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>breadcrumb</name>
+		<path>/META-INF/tags/breadcrumb/breadcrumb.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>breadcrumb-item</name>
+		<path>/META-INF/tags/breadcrumb/breadcrumb-item.tag</path>
+	</tag-file>
+
+	<tag-file>
+		<name>boolean-edit-control</name>
+		<path>/META-INF/tags/edit/boolean-edit-control.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>date-edit-control</name>
+		<path>/META-INF/tags/edit/date-edit-control.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>n2many-edit-control</name>
+		<path>/META-INF/tags/edit/n2many-edit-control.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>n2one-edit-control</name>
+		<path>/META-INF/tags/edit/n2one-edit-control.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>number-edit-control</name>
+		<path>/META-INF/tags/edit/number-edit-control.tag</path>
+	</tag-file>
+	<tag-file>
+		<name>simple-edit-control</name>
+		<path>/META-INF/tags/edit/simple-edit-control.tag</path>
+	</tag-file>
+
+	<tag-file>
+		<name>boolean-filter-control</name>
+		<path>/META-INF/tags/filter/boolean-filter-control.tag</path>
+	</tag-file>
+</taglib>
