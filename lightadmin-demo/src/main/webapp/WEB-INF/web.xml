@@ -13,6 +13,11 @@
 	</context-param>
 
 	<context-param>
+		<param-name>light:administration:security</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
 		<param-name>light:administration:base-package</param-name>
 		<param-value>org.lightadmin.demo.config</param-value>
 	</context-param>

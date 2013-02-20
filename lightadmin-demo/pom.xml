@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 
@@ -16,12 +16,12 @@
 	<name>LightAdmin Demo</name>
 
 	<dependencies>
-	   
-	   <dependency>
-	       <groupId>${project.groupId}</groupId>
-	       <artifactId>lightadmin-core</artifactId>
-	       <version>${project.version}</version>
-	   </dependency>   
+
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>lightadmin-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
@@ -53,15 +53,15 @@
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-core</artifactId>
-		 </dependency> 
-		 <dependency>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-web</artifactId>
-		  </dependency> 
-		  <dependency>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-config</artifactId>
-		  </dependency>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.security</groupId>
 			<artifactId>spring-security-taglibs</artifactId>
@@ -96,11 +96,11 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.tiles</groupId>
-		    <artifactId>tiles-extras</artifactId>
-		</dependency>					
+			<artifactId>tiles-extras</artifactId>
+		</dependency>
 		<dependency>
-		    <groupId>com.google.guava</groupId>
-		    <artifactId>guava</artifactId>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hsqldb</groupId>
@@ -149,6 +149,13 @@
 
 	<build>
 		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+					<skipTests>true</skipTests>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -202,7 +209,9 @@
 								<container>
 									<containerId>tomcat7x</containerId>
 									<zipUrlInstaller>
-										<url>http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.zip</url>
+										<url>
+											http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.zip
+										</url>
 									</zipUrlInstaller>
 								</container>
 							</configuration>
@@ -222,11 +231,11 @@
 							<configuration>
 								<container>
 									<containerId>jetty8x</containerId>
-                                    <artifactInstaller>
-                                        <groupId>org.eclipse.jetty</groupId>
-                                        <artifactId>jetty-distribution</artifactId>
-                                        <version>8.1.8.v20121106</version>
-                                    </artifactInstaller>
+									<artifactInstaller>
+										<groupId>org.eclipse.jetty</groupId>
+										<artifactId>jetty-distribution</artifactId>
+										<version>8.1.8.v20121106</version>
+									</artifactInstaller>
 								</container>
 							</configuration>
 						</plugin>

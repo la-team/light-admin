@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+		 xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.lightadmin</groupId>
 	<artifactId>lightadmin-tests</artifactId>
@@ -9,7 +9,7 @@
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<selenium-version>2.29.1</selenium-version>
-		<spring.version>3.1.3.RELEASE</spring.version>
+		<spring.version>3.2.1.RELEASE</spring.version>
 		<slf4j.version>1.7.1</slf4j.version>
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
@@ -171,7 +171,8 @@
 									<groupId>${project.groupId}</groupId>
 									<artifactId>lightadmin-demo</artifactId>
 									<type>war</type>
-									<location>${basedir}/../lightadmin-demo/target/lightadmin-demo-${project.version}</location>
+									<location>${basedir}/../lightadmin-demo/target/lightadmin-demo-${project.version}
+									</location>
 									<properties>
 										<context>lightadmin</context>
 									</properties>

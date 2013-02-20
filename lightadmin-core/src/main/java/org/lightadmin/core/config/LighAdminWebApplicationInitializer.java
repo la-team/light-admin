@@ -1,5 +1,6 @@
 package org.lightadmin.core.config;
 
+import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -14,7 +15,7 @@ import javax.servlet.ServletRegistration;
 
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 
-@SuppressWarnings( "unused" )
+@SuppressWarnings("unused")
 public class LighAdminWebApplicationInitializer implements WebApplicationInitializer {
 
 	@Override
@@ -28,13 +29,15 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 
 		registerHiddenHttpMethodFilter( servletContext );
 
-		registerSpringSecurityFilter( servletContext );
+		if ( lightAdminSecurityEnabled( servletContext ) ) {
+			registerSpringSecurityFilter( servletContext );
+		}
 
 		registerCharsetFilter( servletContext );
 	}
 
 	private void registerLightAdminDispatcher( final ServletContext servletContext ) {
-		final AnnotationConfigWebApplicationContext webApplicationContext = lightAdminApplicationContext();
+		final AnnotationConfigWebApplicationContext webApplicationContext = lightAdminApplicationContext( servletContext );
 
 		final DispatcherServlet lightAdminDispatcher = new DispatcherServlet( webApplicationContext );
 
@@ -61,13 +64,21 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 		servletContext.addFilter( "charsetFilter", characterEncodingFilter() ).addMappingForServletNames( null, false, urlMapping );
 	}
 
-	private AnnotationConfigWebApplicationContext lightAdminApplicationContext() {
+	private AnnotationConfigWebApplicationContext lightAdminApplicationContext( final ServletContext servletContext ) {
 		AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
-		webApplicationContext.register( LightAdminContextConfiguration.class );
+
+		webApplicationContext.register( configurations( servletContext ) );
 
 		webApplicationContext.setDisplayName( "LightAdmin WebApplicationContext" );
 		webApplicationContext.setNamespace( "lightadmin" );
 		return webApplicationContext;
+	}
+
+	private Class[] configurations( final ServletContext servletContext ) {
+		if ( lightAdminSecurityEnabled( servletContext ) ) {
+			return new Class[] {LightAdminContextConfiguration.class, LightAdminSecurityConfiguration.class};
+		}
+		return new Class[] {LightAdminContextConfiguration.class};
 	}
 
 	private DelegatingFilterProxy springSecurityFilterChain() {
@@ -98,6 +109,10 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 
 	private String lightAdminBaseUrl( final ServletContext servletContext ) {
 		return servletContext.getInitParameter( LIGHT_ADMINISTRATION_BASE_URL );
+	}
+
+	private boolean lightAdminSecurityEnabled( final ServletContext servletContext ) {
+		return BooleanUtils.toBoolean( servletContext.getInitParameter( LIGHT_ADMINISTRATION_SECURITY ) );
 	}
 
 	private boolean lightAdminConfigurationNotEnabled( final ServletContext servletContext ) {

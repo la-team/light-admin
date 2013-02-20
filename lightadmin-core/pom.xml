@@ -157,6 +157,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
+					<skipTests>true</skipTests>
 					<includes>
 						<include>**/*.class</include>
 					</includes>
@@ -174,6 +175,7 @@
 					</dependency>
 				</dependencies>
 				<configuration>
+					<skipTests>true</skipTests>
 					<groups>org.lightadmin.core.test.IntegrationTest</groups>
 				</configuration>
 				<executions>

@@ -27,8 +27,7 @@ import java.util.List;
 @Configuration
 @Import({
 			LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class,
-			LightAdminRepositoryRestConfiguration.class, LightAdminSecurityConfiguration.class,
-			LightAdminViewConfiguration.class
+			LightAdminRepositoryRestConfiguration.class, LightAdminViewConfiguration.class
 		})
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
