@@ -1,6 +1,7 @@
 package org.lightadmin.page.fieldDisplay.listView;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.ListViewWithManyToManyField;
@@ -13,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertTableData;
 
+@Ignore
+//Displaying a field from a related entity for both inter-dependent entities will be handled in M2:
+//https://github.com/max-dev/light-admin/issues/43#issuecomment-13802275
 public class ManyToManyField extends SeleniumIntegrationTest {
 
 	@Autowired
