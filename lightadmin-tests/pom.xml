@@ -8,7 +8,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<selenium-version>2.29.1</selenium-version>
+		<selenium-version>2.30.0</selenium-version>
 		<spring.version>3.2.1.RELEASE</spring.version>
 		<slf4j.version>1.7.1</slf4j.version>
 		<maven.compiler.source>1.6</maven.compiler.source>
