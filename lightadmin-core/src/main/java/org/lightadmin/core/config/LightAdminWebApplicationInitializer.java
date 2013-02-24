@@ -1,6 +1,6 @@
 package org.lightadmin.core.config;
 
-import org.apache.commons.lang.StringUtils;
+import org.lightadmin.core.web.DispatcherRedirectorServlet;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -11,13 +11,16 @@ import org.springframework.web.servlet.DispatcherServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import java.util.regex.Pattern;
 
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 
 @SuppressWarnings("unused")
-public class LighAdminWebApplicationInitializer implements WebApplicationInitializer {
+public class LightAdminWebApplicationInitializer implements WebApplicationInitializer {
+
+	private static final Pattern BASE_URL_PATTERN = Pattern.compile( "(/)|(/[\\w-]+)+" );
 
 	@Override
 	public void onStartup( final ServletContext servletContext ) throws ServletException {
@@ -26,7 +29,16 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 			return;
 		}
 
+		if ( notValidBaseUrl( lightAdminBaseUrl( servletContext ) ) ) {
+			servletContext.log( "LightAdmin Web Administration Module's 'baseUrl' property must match " + BASE_URL_PATTERN.pattern() + " pattern. Skipping." );
+			return;
+		}
+
 		registerLightAdminDispatcher( servletContext );
+
+		if ( notRootUrl( lightAdminBaseUrl( servletContext ) ) ) {
+			registerLightAdminDispatcherRedirector( servletContext );
+		}
 
 		registerHiddenHttpMethodFilter( servletContext );
 
@@ -45,6 +57,14 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 		ServletRegistration.Dynamic lightAdminDispatcherRegistration = servletContext.addServlet( LIGHT_ADMIN_DISPATCHER_NAME, lightAdminDispatcher );
 		lightAdminDispatcherRegistration.setLoadOnStartup( 2 );
 		lightAdminDispatcherRegistration.addMapping( dispatcherUrlMapping( lightAdminBaseUrl( servletContext ) ) );
+	}
+
+	private void registerLightAdminDispatcherRedirector( final ServletContext servletContext ) {
+		final DispatcherRedirectorServlet handlerServlet = new DispatcherRedirectorServlet();
+
+		ServletRegistration.Dynamic lightAdminDispatcherRedirectorRegistration = servletContext.addServlet( LIGHT_ADMIN_DISPATCHER_REDIRECTOR_NAME, handlerServlet );
+		lightAdminDispatcherRedirectorRegistration.setLoadOnStartup( 3 );
+		lightAdminDispatcherRedirectorRegistration.addMapping( lightAdminBaseUrl( servletContext ) );
 	}
 
 	private void registerHiddenHttpMethodFilter( final ServletContext servletContext ) {
@@ -97,18 +117,30 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 		return characterEncodingFilter;
 	}
 
+	private boolean notValidBaseUrl( String url ) {
+		return !BASE_URL_PATTERN.matcher( url ).matches();
+	}
+
 	private String urlMapping( String baseUrl ) {
-		if ( StringUtils.endsWith( baseUrl, "/" ) ) {
-			return baseUrl + "*";
+		if ( rootUrl( baseUrl ) ) {
+			return "/*";
 		}
 		return baseUrl + "/*";
 	}
 
 	private String dispatcherUrlMapping( String url ) {
-		if ( "/".equals( url ) ) {
+		if ( rootUrl( url ) ) {
 			return "/";
 		}
 		return urlMapping( url );
+	}
+
+	private boolean rootUrl( final String url ) {
+		return "/".equals( url );
+	}
+
+	private boolean notRootUrl( final String url ) {
+		return !rootUrl( url );
 	}
 
 	private String configurationsBasePackage( final ServletContext servletContext ) {
