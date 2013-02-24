@@ -11,13 +11,16 @@
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
-<spring:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
 <c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
-<c:set var="formViewFields" value="${domainTypeAdministrationConfiguration.formViewFragment.fields}"/>
+
 <jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
+
+<c:set var="formViewFields" value="${domainTypeAdministrationConfiguration.formViewFragment.fields}"/>
 <c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
-<spring:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
+
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
+<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
 
 <div class="title"><h5>Edit <c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5>
 </div>

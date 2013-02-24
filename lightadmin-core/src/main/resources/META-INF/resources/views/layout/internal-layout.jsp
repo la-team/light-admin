@@ -3,6 +3,7 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
@@ -17,8 +18,8 @@
 	<title><spring:message code="application.name"/> <c:out
 			value="${ not empty(screenContext) ? screenContext.screenName : ''}"/></title>
 
-	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/main.css"/>">
-	<link rel="stylesheet" type="text/css" href="<spring:url value="/styles/lightadmin.css"/>">
+	<link rel="stylesheet" type="text/css" href="<light:url value="/styles/main.css"/>">
+	<link rel="stylesheet" type="text/css" href="<light:url value="/styles/lightadmin.css"/>">
 	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Cuprum">
 
 	<tiles:insertAttribute name="scripts-include"/>

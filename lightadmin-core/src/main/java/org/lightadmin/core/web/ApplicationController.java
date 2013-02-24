@@ -1,17 +1,23 @@
 package org.lightadmin.core.web;
 
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.context.WebContext;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
+
+import java.io.Serializable;
 
 @Controller
 @SuppressWarnings( {"unused", "unchecked"} )
@@ -29,21 +35,27 @@ public class ApplicationController {
 	@Autowired
 	private ConfigurableApplicationContext appContext;
 
-	@ResponseStatus(HttpStatus.BAD_REQUEST)
-	@ExceptionHandler(Exception.class)
+	@Autowired
+	private ConversionService conversionService;
+
+	@Autowired
+	private WebContext lightAdminContext;
+
+	@ResponseStatus( HttpStatus.BAD_REQUEST )
+	@ExceptionHandler( Exception.class )
 	public ModelAndView handleException( Exception ex ) {
 		return new ModelAndView( "error-page" ).addObject( "exception", ex );
 	}
 
 	@ExceptionHandler( NoSuchRequestHandlingMethodException.class )
-	@ResponseStatus(HttpStatus.NOT_FOUND)
-	@RequestMapping(value = "/page-not-found", method = RequestMethod.GET)
+	@ResponseStatus( HttpStatus.NOT_FOUND )
+	@RequestMapping( value = "/page-not-found", method = RequestMethod.GET )
 	public String handlePageNotFound() {
 		return "page-not-found";
 	}
 
-	@ResponseStatus(HttpStatus.FORBIDDEN)
-	@RequestMapping(value = "/access-denied", method = RequestMethod.GET)
+	@ResponseStatus( HttpStatus.FORBIDDEN )
+	@RequestMapping( value = "/access-denied", method = RequestMethod.GET )
 	public String handleAccessDenied() {
 		return "access-denied";
 	}
@@ -53,9 +65,9 @@ public class ApplicationController {
 		return "login";
 	}
 
-	@RequestMapping(value = "/", method = RequestMethod.GET)
+	@RequestMapping( value = "/", method = RequestMethod.GET )
 	public String root() {
-		return "redirect:/dashboard";
+		return redirectTo( "/dashboard" );
 	}
 
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
@@ -71,22 +83,28 @@ public class ApplicationController {
 	}
 
 	@RequestMapping(value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET)
-	public String show( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
+	public String show( @PathVariable String domainTypeName, @PathVariable String entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
-		Object entity = repositoryForEntity( domainTypeName ).findOne( entityId );
+
+		final Serializable resolvedEntityId = resolveEntityId( entityId, configuration.forEntityName( domainTypeName ).getDomainTypeEntityMetadata() );
+
+		Object entity = repositoryForEntity( domainTypeName ).findOne( resolvedEntityId );
 		if ( entity == null ) {
-			return "redirect:/page-not-found";
+			return redirectTo( "/page-not-found" );
 		}
 		model.addAttribute( "entity", entity );
 		return "show-view";
 	}
 
-	@RequestMapping(value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET)
-	public String edit( @PathVariable String domainTypeName, @PathVariable long entityId, Model model ) {
+	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET )
+	public String edit( @PathVariable String domainTypeName, @PathVariable String entityId, Model model ) {
 		addDomainTypeConfigurationToModel( domainTypeName, model );
-		Object entity = repositoryForEntity( domainTypeName ).findOne( entityId );
+
+		final Serializable resolvedEntityId = resolveEntityId( entityId, configuration.forEntityName( domainTypeName ).getDomainTypeEntityMetadata() );
+
+		Object entity = repositoryForEntity( domainTypeName ).findOne( resolvedEntityId );
 		if ( entity == null ) {
-			return "redirect:/page-not-found";
+			return redirectTo( "/page-not-found" );
 		}
 		model.addAttribute( "entity", entity );
 		return "edit-view";
@@ -106,5 +124,24 @@ public class ApplicationController {
 
 	private DynamicJpaRepository repositoryForEntity( final String domainType ) {
 		return configuration.forEntityName( domainType ).getRepository();
+	}
+
+	private String redirectTo( final String url ) {
+		if ( "/".equals( lightAdminContext.getApplicationBaseUrl() ) ) {
+			return "redirect:" + url;
+		}
+
+		return String.format( "redirect:%s%s", lightAdminContext.getApplicationBaseUrl(), url );
+	}
+
+	private Serializable resolveEntityId( String entityId, DomainTypeEntityMetadata domainTypeEntityMetadata ) {
+		return stringToSerializable( entityId, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
+	}
+
+	private <V extends Serializable> V stringToSerializable( String s, Class<V> targetType ) {
+		if ( ClassUtils.isAssignable( targetType, String.class ) ) {
+			return ( V ) s;
+		}
+		return conversionService.convert( s, targetType );
 	}
 }

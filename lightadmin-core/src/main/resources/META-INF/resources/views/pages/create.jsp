@@ -11,10 +11,12 @@
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
-<spring:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
 <c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
+
 <jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
-<spring:url var="createObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, '')}" scope="page"/>
+
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
+<light:url var="createObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, '')}" scope="page"/>
 
 <div class="title"><h5>Create <c:out value="${light:capitalize(domainTypeName)}"/></h5></div>
 

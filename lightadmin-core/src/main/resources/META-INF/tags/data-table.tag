@@ -12,8 +12,8 @@
 
 <c:set var="primaryKeyField" value="${light:primaryKeyPersistentField(fields)}"/>
 
-<spring:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl"/>
-<spring:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeName)}" scope="page"/>
+<light:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl"/>
+<light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeName)}" scope="page"/>
 
 <div class="table">
 	<div class="head">
@@ -57,7 +57,7 @@
 															"mData": null,
 															"sClass": "center",
 															"mRender": function ( data, type, full ) {
-																return '<img class="quickView" src="<spring:url value='/images/aNormal.png'/>" style="cursor:pointer;" title="Click for Quick View"/>';
+																return '<img class="quickView" src="<light:url value='/images/aNormal.png'/>" style="cursor:pointer;" title="Click for Quick View"/>';
 															}
 														},
 														<c:forEach var="field" items="${fields}" varStatus="status">
@@ -138,9 +138,9 @@
 	} );
 
 	function renderActions( entityId ) {
-		var viewImg = '<spring:url value='/images/icons/dark/info.png'/>';
-		var editImg = '<spring:url value='/images/icons/dark/pencil.png'/>';
-		var removeImg = '<spring:url value='/images/icons/dark/basket.png'/>';
+		var viewImg = '<light:url value='/images/icons/dark/info.png'/>';
+		var editImg = '<light:url value='/images/icons/dark/pencil.png'/>';
+		var removeImg = '<light:url value='/images/icons/dark/basket.png'/>';
 
 		var html = "<a href='" + viewEntityUrl( entityId ) + "' title='View' class='btn14 mr5'><img src='" + viewImg + "' alt='View'></a>";
 		html += "<a href='" + editEntityUrl( entityId ) + "' title='Edit' class='btn14 mr5'><img src='" + editImg + "' alt='Edit'></a>";

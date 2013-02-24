@@ -20,16 +20,13 @@ import static org.springframework.util.ClassUtils.hasConstructor;
 
 class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSourceValidator<DomainConfigurationSource> {
 
-	private final DomainTypeEntityMetadataResolver entityMetadataResolver;
-
 	private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
 
 	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this( entityMetadataResolver, new DomainTypeFieldMetadataValidator( entityMetadataResolver ) );
+		this( new DomainTypeFieldMetadataValidator( entityMetadataResolver ) );
 	}
 
-	public DomainConfigurationUnitsSourceValidator( final DomainTypeEntityMetadataResolver entityMetadataResolver, final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator ) {
-		this.entityMetadataResolver = entityMetadataResolver;
+	public DomainConfigurationUnitsSourceValidator( final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator ) {
 		this.fieldMetadataValidator = fieldMetadataValidator;
 	}
 
@@ -52,10 +49,6 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 
 	void validateDomainType( final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter ) {
 		final Class<?> domainType = domainConfigurationSource.getDomainType();
-
-		if ( !isPersistentEntityType( domainType ) ) {
-			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, String.format( "Non-persistent type %s is not supported.", domainType.getSimpleName() ) ) );
-		}
 
 		if ( !hasConstructor( domainType ) ) {
 			problemReporter.error( new DomainConfigurationProblem( domainConfigurationSource, String.format( "Type %s must have default constructor.", domainType.getSimpleName() ) ) );
@@ -126,10 +119,5 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 				problemReporter.error( new InvalidPropertyConfigurationProblem( field.getName(), domainConfigurationSource, configurationUnitType ) );
 			}
 		}
-	}
-
-	@SuppressWarnings("unchecked")
-	private boolean isPersistentEntityType( final Class<?> domainType ) {
-		return entityMetadataResolver.resolveEntityMetadata( domainType ) != null;
 	}
 }

@@ -10,6 +10,57 @@
 	<uri>http://www.lightadmin.org/tags</uri>
 
 	<tag>
+		<name>url</name>
+		<tag-class>org.lightadmin.core.view.tags.LightAdminUrlTag</tag-class>
+		<body-content>JSP</body-content>
+		<attribute>
+			<description>The URL to build. This value can include template place holders that are replaced with the URL
+				encoded value of the named parameter. Parameters must be defined using the param tag inside the body of
+				this tag.
+			</description>
+			<name>value</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Specifies a remote application context path. The default is the current application context
+				path.
+			</description>
+			<name>context</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>The name of the variable to export the URL value to.</description>
+			<name>var</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>The scope for the var. 'application', 'session', 'request' and 'page' scopes are supported.
+				Defaults to page scope. This attribute has no effect unless the var attribute is also defined.
+			</description>
+			<name>scope</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Set HTML escaping for this tag, as a boolean value. Overrides the default HTML escaping setting
+				for the current page.
+			</description>
+			<name>htmlEscape</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<description>Set JavaScript escaping for this tag, as a boolean value. Default is false.</description>
+			<name>javaScriptEscape</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+	</tag>
+
+	<tag>
 		<description>Renders dynamic html element using the bound value.</description>
 		<name>dynamic-element</name>
 		<tag-class>org.lightadmin.core.view.tags.form.DynamicHtmlElementTag</tag-class>
@@ -137,12 +188,12 @@
 		</attribute>
 	</tag>
 
-	<!--     <tag-file> --><!--         <name>attribute-editor</name> --><!--         <path>/WEB-INF/tags/edit-control.tag</path> --><!--     </tag-file> -->
-
 	<function>
 		<name>primaryKeyPersistentField</name>
 		<function-class>org.lightadmin.core.config.domain.field.FieldMetadataUtils</function-class>
-		<function-signature>org.lightadmin.core.config.domain.field.FieldMetadata primaryKeyPersistentField(java.util.Set)</function-signature>
+		<function-signature>org.lightadmin.core.config.domain.field.FieldMetadata
+			primaryKeyPersistentField(java.util.Set)
+		</function-signature>
 	</function>
 
 	<function>

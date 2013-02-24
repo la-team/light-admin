@@ -12,7 +12,6 @@ import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
-import org.lightadmin.core.test.util.DomainTypeEntityMetadataUtils;
 
 import java.util.Iterator;
 import java.util.List;
@@ -20,13 +19,14 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.fail;
 
+@SuppressWarnings( "unchecked" )
 public class DomainConfigurationUnitsSourceValidatorTest {
 
 	private DomainConfigurationUnitsSourceValidator testee;
 
 	@Test
 	public void domainTypeWithoutConstructorFailure() {
-		testee = new DomainConfigurationUnitsSourceValidator( DomainTypeEntityMetadataUtils.entityMetadataResolver( DomainType.class ), alwaysValidFieldMetadataValidatorMock() );
+		testee = new DomainConfigurationUnitsSourceValidator( alwaysValidFieldMetadataValidatorMock() );
 
 		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 
@@ -43,7 +43,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 		EasyMock.expect( entityMetadataResolver.resolveEntityMetadata( DomainType.class ) ).andReturn( null ).once();
 		EasyMock.replay( entityMetadataResolver );
 
-		testee = new DomainConfigurationUnitsSourceValidator( entityMetadataResolver, alwaysValidFieldMetadataValidatorMock() );
+		testee = new DomainConfigurationUnitsSourceValidator( alwaysValidFieldMetadataValidatorMock() );
 
 		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 
@@ -56,7 +56,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 
 	@Test
 	public void invalidFieldDefinedForFiltersProblemReported() throws Exception {
-		testee = new DomainConfigurationUnitsSourceValidator( DomainTypeEntityMetadataUtils.entityMetadataResolver( DomainType.class ), alwaysInvalidFieldMetadataValidator() );
+		testee = new DomainConfigurationUnitsSourceValidator( alwaysInvalidFieldMetadataValidator() );
 
 		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 

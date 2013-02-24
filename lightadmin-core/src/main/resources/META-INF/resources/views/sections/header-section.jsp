@@ -7,14 +7,14 @@
 <tiles:useAttribute name="domainTypeAdministrationConfiguration" ignore="true"/>
 
 <div id="header" class="wrapper">
-	<div class="logo"><a href="<spring:url value='/'/>" title=""><img
-			src="<spring:url value='/images/loginLogo_2-1.png'/>" alt=""/></a></div>
+	<div class="logo"><a href="<light:url value='/'/>" title=""><img
+			src="<light:url value='/images/loginLogo_2-1.png'/>" alt=""/></a></div>
 	<div class="middleNav">
 		<c:if test="${not empty domainTypeAdministrationConfiguration}">
-			<spring:url value="${light:domainBaseUrl(domainTypeAdministrationConfiguration.domainTypeName)}"
-						var="domainBaseUrl"/>
 			<ul>
-				<li class="iCreate"><a href="${domainBaseUrl}/create" title=""><span>Create New</span></a></li>
+				<li class="iCreate"><a
+						href="<light:url value='${light:domainBaseUrl(domainTypeAdministrationConfiguration.domainTypeName)}'/>/create"
+						title=""><span>Create New</span></a></li>
 				<li class="iArchive"><a href="#" title=""><span>Templates</span></a></li>
 				<li class="iZipFiles"><a href="#" title=""><span>Export Data</span></a></li>
 			</ul>

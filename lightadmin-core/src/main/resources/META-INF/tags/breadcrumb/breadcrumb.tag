@@ -1,6 +1,7 @@
 <%@ tag import="static com.google.common.collect.Lists.newArrayList" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <c:set var="tag_breadcrumb_breadcrumbItems" value="<%= newArrayList() %>" scope="request"/>
 
@@ -9,7 +10,7 @@
 <div class="breadCrumbHolder module">
 	<div class="breadCrumb module">
 		<ul id="breadcrumb">
-			<li class="firstB"><a href="<spring:url value="/dashboard"/>"><spring:message
+			<li class="firstB"><a href="<light:url value="/dashboard"/>"><spring:message
 					code="application.menu.dashboard"/></a></li>
 
 			<c:forEach var="breadcrumbItem" items="${tag_breadcrumb_breadcrumbItems}" varStatus="status">

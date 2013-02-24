@@ -20,8 +20,8 @@
 
 <c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
 
-<spring:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
-<spring:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
+<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
 
 <div class="title"><h5>Show <c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5>
 </div>
@@ -37,7 +37,7 @@
 
 		<div style="float: right;margin-top: 5px;display: inline-block;">
 			<a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img
-					src="<spring:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
+					src="<light:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
 		</div>
 	</div>
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">

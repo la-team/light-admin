@@ -1,5 +1,7 @@
 package org.lightadmin.core.config;
 
+import org.lightadmin.core.context.StandardWebContext;
+import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
 import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
 import org.lightadmin.core.web.ApplicationController;
@@ -10,6 +12,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.env.Environment;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -24,6 +27,10 @@ import org.springframework.web.servlet.view.tiles2.TilesView;
 import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
+import static org.apache.commons.lang.BooleanUtils.toBoolean;
+import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_URL;
+import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_SECURITY;
+
 @Configuration
 @Import({
 			LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class,
@@ -31,6 +38,9 @@ import java.util.List;
 		})
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
+
+	@Autowired
+	private Environment environment;
 
 	@Autowired
 	private EntityManagerFactory entityManagerFactory;
@@ -52,6 +62,14 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 		registry.addResourceHandler( "/styles/**" ).addResourceLocations( "classpath:/META-INF/resources/styles/" ).setCachePeriod( 31556926 );
 		registry.addResourceHandler( "/scripts/**" ).addResourceLocations( "classpath:/META-INF/resources/scripts/" );
 		registry.addResourceHandler( "/images/**" ).addResourceLocations( "classpath:/META-INF/resources/images/" ).setCachePeriod( 31556926 );
+	}
+
+	@Bean
+	public WebContext lightAdminContext() {
+		final String lightAdminBaseUrl = environment.getProperty( LIGHT_ADMINISTRATION_BASE_URL );
+		final boolean securityEnabled = toBoolean( environment.getProperty( LIGHT_ADMINISTRATION_SECURITY ) );
+
+		return new StandardWebContext( lightAdminBaseUrl, securityEnabled );
 	}
 
 	@Bean

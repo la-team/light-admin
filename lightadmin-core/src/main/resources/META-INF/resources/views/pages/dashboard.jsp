@@ -3,6 +3,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <div class="title"><h5><spring:message code="application.menu.dashboard"/></h5></div>
 
@@ -25,10 +26,10 @@
 			<tbody>
 			<c:forEach var="dashboardDomainType" items="${dashboardDomainTypes}">
 				<tr id="stat-row-${dashboardDomainType.first.value}" class="stat-row">
-					<td><a class="domain-link" href="<spring:url value='${dashboardDomainType.first.link}'/>"
+					<td><a class="domain-link" href="<light:url value='${dashboardDomainType.first.link}'/>"
 						   title=""><c:out value="${dashboardDomainType.first.value}"/></a></td>
 					<td align="center">
-						<a href="<spring:url value='${dashboardDomainType.first.link}'/>" title="" class="webStatsLink">
+						<a href="<light:url value='${dashboardDomainType.first.link}'/>" title="" class="webStatsLink">
 							<span class="record-count"><c:out value="${dashboardDomainType.second}"/></span>
 						</a>
 					</td>

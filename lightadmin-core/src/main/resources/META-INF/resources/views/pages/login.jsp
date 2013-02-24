@@ -1,9 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <div class="loginWrapper" style="width: 320px;">
-	<div class="loginLogo"><img src="<spring:url value='/images/loginLogo_2-1.png'/>" alt=""/></div>
+	<div class="loginLogo"><img src="<light:url value='/images/loginLogo_2-1.png'/>" alt=""/></div>
 
 	<c:if test="${not empty param.login_error}">
 		<div class="nNote nWarning hideit">
@@ -17,7 +18,7 @@
 
 	<div class="loginPanel">
 		<div class="head"><h5 class="iUser">Login</h5></div>
-		<form action="<spring:url value='j_spring_security_check'/>" id="login-form" class="mainForm" method="POST">
+		<form action="<light:url value='j_spring_security_check'/>" id="login-form" class="mainForm" method="POST">
 			<fieldset>
 				<div class="loginRow noborder">
 					<label for="req1"><spring:message code="label.username"/>:</label>

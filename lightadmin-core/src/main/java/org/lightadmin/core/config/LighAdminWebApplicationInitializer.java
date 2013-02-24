@@ -1,6 +1,5 @@
 package org.lightadmin.core.config;
 
-import org.apache.commons.lang.BooleanUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -13,6 +12,8 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 
+import static org.apache.commons.lang.BooleanUtils.toBoolean;
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 
 @SuppressWarnings("unused")
@@ -43,7 +44,7 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 
 		ServletRegistration.Dynamic lightAdminDispatcherRegistration = servletContext.addServlet( LIGHT_ADMIN_DISPATCHER_NAME, lightAdminDispatcher );
 		lightAdminDispatcherRegistration.setLoadOnStartup( 2 );
-		lightAdminDispatcherRegistration.addMapping( lightAdminBaseUrl( servletContext ) );
+		lightAdminDispatcherRegistration.addMapping( dispatcherUrlMapping( lightAdminBaseUrl( servletContext ) ) );
 	}
 
 	private void registerHiddenHttpMethodFilter( final ServletContext servletContext ) {
@@ -103,6 +104,13 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 		return baseUrl + "/*";
 	}
 
+	private String dispatcherUrlMapping( String url ) {
+		if ( "/".equals( url ) ) {
+			return "/";
+		}
+		return urlMapping( url );
+	}
+
 	private String configurationsBasePackage( final ServletContext servletContext ) {
 		return servletContext.getInitParameter( LIGHT_ADMINISTRATION_BASE_PACKAGE );
 	}
@@ -112,10 +120,10 @@ public class LighAdminWebApplicationInitializer implements WebApplicationInitial
 	}
 
 	private boolean lightAdminSecurityEnabled( final ServletContext servletContext ) {
-		return BooleanUtils.toBoolean( servletContext.getInitParameter( LIGHT_ADMINISTRATION_SECURITY ) );
+		return toBoolean( servletContext.getInitParameter( LIGHT_ADMINISTRATION_SECURITY ) );
 	}
 
 	private boolean lightAdminConfigurationNotEnabled( final ServletContext servletContext ) {
-		return StringUtils.isBlank( lightAdminBaseUrl( servletContext ) ) || StringUtils.isBlank( configurationsBasePackage( servletContext ) );
+		return isBlank( lightAdminBaseUrl( servletContext ) ) || isBlank( configurationsBasePackage( servletContext ) );
 	}
 }

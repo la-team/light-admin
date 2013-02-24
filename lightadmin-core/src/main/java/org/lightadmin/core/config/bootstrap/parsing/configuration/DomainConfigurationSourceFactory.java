@@ -13,6 +13,7 @@ import org.springframework.util.ClassUtils;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static java.lang.String.format;
 import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromConfiguration;
 import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationCandidate;
 
@@ -46,12 +47,16 @@ public class DomainConfigurationSourceFactory {
 			return domainConfigurationUnitsSource( configurationUnits );
 		}
 
-		throw new IllegalArgumentException( String.format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
+		throw new IllegalArgumentException( format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings( "unchecked" )
 	DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
 		final Class<?> domainType = configurationUnits.getDomainType();
+
+		if ( !isPersistentEntityType( domainType ) ) {
+			throw new IllegalArgumentException( format( "Non-persistent type %s is not supported.", domainType.getSimpleName() ) );
+		}
 
 		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( domainType );
 
@@ -70,5 +75,10 @@ public class DomainConfigurationSourceFactory {
 			processedConfigurationUnits.add( processedConfigurationUnit );
 		}
 		return new ConfigurationUnits( configurationUnits.getDomainType(), processedConfigurationUnits );
+	}
+
+	@SuppressWarnings( "unchecked" )
+	private boolean isPersistentEntityType( final Class<?> domainType ) {
+		return entityMetadataResolver.resolveEntityMetadata( domainType ) != null;
 	}
 }
