@@ -1,3 +1,5 @@
+<%@ tag import="org.lightadmin.core.config.domain.field.FieldMetadataUtils" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -10,7 +12,7 @@
 <%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true"
 			  type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata" %>
 
-<c:set var="primaryKeyField" value="${light:primaryKeyPersistentField(fields)}"/>
+<c:set var="primaryKeyField" value="<%= FieldMetadataUtils.primaryKeyPersistentField( fields ) %>"/>
 
 <light:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl"/>
 <light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeName)}" scope="page"/>

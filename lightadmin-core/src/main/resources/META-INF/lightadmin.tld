@@ -189,14 +189,6 @@
 	</tag>
 
 	<function>
-		<name>primaryKeyPersistentField</name>
-		<function-class>org.lightadmin.core.config.domain.field.FieldMetadataUtils</function-class>
-		<function-signature>org.lightadmin.core.config.domain.field.FieldMetadata
-			primaryKeyPersistentField(java.util.Set)
-		</function-signature>
-	</function>
-
-	<function>
 		<name>domainBaseUrl</name>
 		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
 		<function-signature>java.lang.String domainBaseUrl(java.lang.String)</function-signature>
