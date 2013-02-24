@@ -219,3 +219,7 @@ div.selector select {
 .nNote {
 	margin: 10px 0 10px 0;
 }
+
+.mainForm input.input-date {
+	width: 116px;
+}
