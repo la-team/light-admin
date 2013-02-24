@@ -50,7 +50,8 @@ id BIGINT IDENTITY PRIMARY KEY,
 textfield VARCHAR (255),
 integerfield BIGINT,
 primitiveintegerfield INTEGER,
-decimalfield DECIMAL (8,2));
+decimalfield DECIMAL (8,2),
+booleanField INTEGER);
 
 CREATE TABLE parenttestentity (
 id BIGINT IDENTITY PRIMARY KEY,

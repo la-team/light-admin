@@ -25,7 +25,8 @@ public class FilterTestEntityConfiguration {
 				.field( "textField" ).caption( "Text Field" )
 				.field( "integerField" ).caption( "Integer Field" )
 				.field( "primitiveIntegerField" ).caption( "Primitive Integer Field" )
-				.field( "decimalField" ).caption( "Decimal Field" ).build();
+				.field( "decimalField" ).caption( "Decimal Field" )
+				.field( "booleanField" ).caption( "Boolean Field" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
@@ -34,7 +35,8 @@ public class FilterTestEntityConfiguration {
 				.field( "integerField" ).caption( "Integer Field" )
 				.field( "primitiveIntegerField" ).caption( "Primitive Integer Field" )
 				.field( "decimalField" ).caption( "Decimal Field" )
-				.field( "calculatedField" ).caption( "Calculated Field" ).build();
+				.field( "calculatedField" ).caption( "Calculated Field" )
+				.field( "booleanField" ).caption( "Boolean Field" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
@@ -43,7 +45,8 @@ public class FilterTestEntityConfiguration {
 				.filter( "Text Field", "textField" )
 				.filter( "Integer Field", "integerField" )
 				.filter( "Primitive Integer Field", "primitiveIntegerField" )
-				.filter( "Decimal Field", "decimalField" ).build();
+				.filter( "Decimal Field", "decimalField" )
+				.filter( "Boolean Field", "booleanField" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder formViewBuilder ) {
@@ -51,6 +54,7 @@ public class FilterTestEntityConfiguration {
 				.field( "textField" ).caption( "Text Field" )
 				.field( "integerField" ).caption( "Integer Field" )
 				.field( "primitiveIntegerField" ).caption( "Primitive Integer Field" )
-				.field( "decimalField" ).caption( "Decimal Field" ).build();
+				.field( "decimalField" ).caption( "Decimal Field" )
+				.field( "booleanField" ).caption( "Boolean Field" ).build();
 	}
 }

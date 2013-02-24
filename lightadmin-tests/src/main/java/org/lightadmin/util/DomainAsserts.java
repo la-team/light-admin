@@ -3,6 +3,8 @@ package org.lightadmin.util;
 import org.apache.commons.lang.StringUtils;
 import org.lightadmin.component.DataTableComponent;
 import org.lightadmin.page.ListViewPage;
+import org.lightadmin.page.ShowViewPage;
+import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
@@ -10,6 +12,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
+import java.util.Map;
 
 import static org.junit.Assert.*;
 import static org.junit.Assert.assertEquals;
@@ -48,23 +51,35 @@ public class DomainAsserts {
 		}
 	}
 
-	public static void assertQuickViewFields( String[] expectedFields, String[] actualFields ) {
+	public static void assertQuickViewFields( final String[] expectedFields, final String[] actualFields ) {
 		assertArrayEquals(
 				String.format( "Wrong fields on Quick View. Expected fields: %s, actual fields: %s",
 						Arrays.toString( expectedFields ), Arrays.toString( actualFields ) ),
 				expectedFields, actualFields );
 	}
 
-	public static void assertQuickViewFieldValues( String[] expectedValues, String[] actualValues ) {
+	public static void assertQuickViewFieldValues( final String[] expectedValues, final String[] actualValues ) {
 		assertArrayEquals(
 				String.format( "Wrong field values on Quick View. Expected field values: %s, actual field values: %s",
 						Arrays.toString( expectedValues ), Arrays.toString( actualValues ) ),
 				expectedValues, actualValues );
 	}
 
-	public static void assertScopeCount( String scope, int expectedCount, ListViewPage thePage ) {
+	public static void assertScopeCount( final String scope, final int expectedCount, final ListViewPage thePage ) {
 		assertEquals( String.format( "Wrong count for scope '%s': ", scope ),
 				expectedCount, thePage.getScopeCount( scope ) );
+	}
+
+	public static void assertShowViewFieldValues( final Map<String, String> expectedFieldValueMap, final ShowViewPage showView ) {
+		for ( String fieldName : expectedFieldValueMap.keySet() ) {
+			assertEquals( String.format( "Wrong value for field '%s'", fieldName ),
+					expectedFieldValueMap.get( fieldName ), showView.getFieldValue( fieldName ) );
+		}
+	}
+
+	public static void assertFieldValue( final String fieldName, final String expectedValue, final WebDriver webDriver ) {
+		assertEquals( String.format( "Wrong value for field '%s'", fieldName ),
+				expectedValue, webDriver.findElement( By.xpath( "//*[contains(@name,'" + fieldName + "')]" ) ).getText() );
 	}
 
 }

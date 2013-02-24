@@ -98,16 +98,16 @@ public class FilterTest extends SeleniumIntegrationTest {
 		assertTableData( expectedResult3, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
-	private static final String[][] expectedResult1 = {{"1", "integer search test", "1234567", "521", "22.2"}};
-	private static final String[][] expectedResult2 = {{"2", "decimal search test", "456", "31264", "1499.99"}};
-	private static final String[][] expectedResult3 = {{"3", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½", "789", "62342", "22.2"}};
-	private static final String[][] expectedResult4 = {{"4", "Case Sensitivity Test", "901", "823", "22.2"}};
+	private static final String[][] expectedResult1 = {{"1", "integer search test", "1234567", "521", "22.2", ""}};
+	private static final String[][] expectedResult2 = {{"2", "decimal search test", "456", "31264", "1499.99", ""}};
+	private static final String[][] expectedResult3 = {{"3", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½", "789", "62342", "22.2", ""}};
+	private static final String[][] expectedResult4 = {{"4", "Case Sensitivity Test", "901", "823", "22.2", "Yes"}};
 	private static final String[][] expectedResult5 = {
-		{"6", "query partial search test", "234", "9164", "22.2"},
-		{"7", "partial querysearch test", "345", "612325", "22.2"},
-		{"8", "search test by partial query", "567", "623412", "22.2"}
+		{"6", "query partial search test", "234", "9164", "22.2", "Yes"},
+		{"7", "partial querysearch test", "345", "612325", "22.2", "Yes"},
+		{"8", "search test by partial query", "567", "623412", "22.2", "Yes"}
 	};
-	private String[][] expectedResult6 = {{"9", "Id search test", "234", "2932", "21.2"}};
-	private String[][] expectedResult7 = {{"10", "primitive integer search test", "345", "15235", "22.2"}};
-	private String[][] expectedResult8 = {{"11", "combined criteria search test", "345", "31264", "61.12"}};
+	private String[][] expectedResult6 = {{"9", "Id search test", "234", "2932", "21.2", "No"}};
+	private String[][] expectedResult7 = {{"10", "primitive integer search test", "345", "15235", "22.2", "Yes"}};
+	private String[][] expectedResult8 = {{"11", "combined criteria search test", "345", "31264", "61.12", "Yes"}};
 }
