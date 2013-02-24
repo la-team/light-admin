@@ -13,13 +13,13 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 	private WebDriver webDriver;
 	private long webDriverTimeout;
 
-	public ExtendedWebDriverImpl( WebDriver webDriver, long webDriverTimeout ) {
+	public ExtendedWebDriverImpl( final WebDriver webDriver, final long webDriverTimeout ) {
 		this.webDriver = webDriver;
 		this.webDriverTimeout = webDriverTimeout;
 	}
 
 	@Override
-	public boolean isElementPresent( WebElement webElement ) {
+	public boolean isElementPresent( final WebElement webElement ) {
 		try {
 			return webElement.isDisplayed();
 		} catch ( NoSuchElementException ex ) {
@@ -32,7 +32,7 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 	}
 
 	@Override
-	public boolean isElementValuePresent( String elementName, String expectedValue ) {
+	public boolean isElementValuePresent( final String elementName, final String expectedValue ) {
 		return webDriver.findElement( By.name( elementName ) ).getAttribute( "value" ).equals( expectedValue );
 	}
 
@@ -57,13 +57,20 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 	}
 
 	@Override
-	public void clearAndType( WebElement field, String text ) {
+	public void clearAndType( final WebElement field, final String text ) {
 		field.clear();
 		field.sendKeys( text );
+		field.sendKeys( Keys.TAB );
 	}
 
 	@Override
-	public void get( String url ) {
+	public void clear(final WebElement field ) {
+		field.clear();
+		field.sendKeys( Keys.TAB );
+	}
+
+	@Override
+	public void get( final String url ) {
 		webDriver.get( url );
 	}
 
@@ -78,7 +85,7 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 	}
 
 	@Override
-	public List<WebElement> findElements( By by ) {
+	public List<WebElement> findElements( final By by ) {
 		return webDriver.findElements( by );
 	}
 

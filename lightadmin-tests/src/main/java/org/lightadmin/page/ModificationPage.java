@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.LoadableComponent;
 
 import static org.junit.Assert.fail;
 
@@ -47,7 +46,7 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 	}
 
 	public void type( String fieldName, String fielValue ) {
-		webDriver().clearAndType( webDriver().findElement( By.name( fieldName ) ), fielValue );
+		webDriver().clearAndType( editForm.findElement( By.name( fieldName ) ), fielValue );
 	}
 
 	public ShowViewPage submit() {
@@ -57,4 +56,12 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 	}
 
 	protected abstract int getItemId();
+
+	public void clear( String fieldName ) {
+		webDriver().clear( editForm.findElement( By.name( fieldName ) ) );
+	}
+
+	public void check( String booleanField ) {
+		editForm.findElement( By.name( booleanField ) ).click();
+	}
 }

@@ -17,10 +17,13 @@ public class FilterTestEntity extends AbstractEntity {
 
 	private BigDecimal calculatedField;
 
-	public FilterTestEntity( final String textField, final int integerField, final BigDecimal decimalField ) {
+	private Boolean booleanField;
+
+	public FilterTestEntity( final String textField, final int integerField, final BigDecimal decimalField, boolean booleanField ) {
 		this.textField = textField;
 		this.integerField = integerField;
 		this.decimalField = decimalField;
+		this.booleanField = booleanField;
 	}
 
 	public FilterTestEntity() {
@@ -61,5 +64,13 @@ public class FilterTestEntity extends AbstractEntity {
 	public BigDecimal getCalculatedField() {
 		BigDecimal theResult = new BigDecimal( 0 );
 		return theResult.add( decimalField ).add( new BigDecimal( integerField ) ).add( new BigDecimal( primitiveIntegerField ) );
+	}
+
+	public boolean isBooleanField() {
+		return booleanField;
+	}
+
+	public void setBooleanField( boolean booleanField ) {
+		this.booleanField = booleanField;
 	}
 }
