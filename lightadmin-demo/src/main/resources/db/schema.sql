@@ -17,7 +17,8 @@ id BIGINT IDENTITY PRIMARY KEY,
 name VARCHAR(255),
 description VARCHAR(255),
 price DECIMAL(8,2),
-retired INTEGER);
+retired INTEGER,
+rel_date DATE);
 
 CREATE TABLE product_attributes (
 attributes_key VARCHAR(255),
@@ -31,8 +32,8 @@ billingaddress_id BIGINT CONSTRAINT orders_billingaddress_ref REFERENCES address
 shippingaddress_id BIGINT CONSTRAINT orders_shippingaddress_ref REFERENCES address (id));
 
 CREATE TABLE discountprogram (
-  id BIGINT IDENTITY PRIMARY KEY,
-  name VARCHAR(255));
+id BIGINT IDENTITY PRIMARY KEY,
+name VARCHAR(255));
 
 CREATE TABLE customer_discount (
 customer_id BIGINT CONSTRAINT customer_discount_customer_ref REFERENCES customer (id),
@@ -84,8 +85,8 @@ email VARCHAR(255));
 CREATE UNIQUE INDEX ix_testcustomer_email ON TESTCUSTOMER (email ASC);
 
 CREATE TABLE testdiscountprogram (
-  id BIGINT IDENTITY PRIMARY KEY,
-  name VARCHAR(255));
+id BIGINT IDENTITY PRIMARY KEY,
+name VARCHAR(255));
 
 CREATE TABLE testcustomer_discount (
 customer_id BIGINT CONSTRAINT testcustomer_discount_customer_ref REFERENCES testcustomer (id),

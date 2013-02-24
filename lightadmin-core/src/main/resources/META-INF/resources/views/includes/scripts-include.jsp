@@ -53,6 +53,8 @@
 <script type="text/javascript" src="<light:url value="/scripts/plugins/wizards/jquery.form.wizard.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/plugins/wizards/jquery.validate.js"/>"></script>
 
+<script type="text/javascript" src="<light:url value="/scripts/plugins/ui/jquery.core.min.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/plugins/ui/jquery.datepicker.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/plugins/ui/jquery.breadcrumbs.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/plugins/ui/jquery.collapsible.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/plugins/ui/jquery.ToTop.js"/>"></script>

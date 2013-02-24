@@ -47,6 +47,7 @@ public class ProductAdministration {
 				.field( "name" ).caption( "Name" )
 				.field( "description" ).caption( "Description" )
 				.field( "price" ).caption( "Price" )
+				.field( "releaseDate" ).caption( "Released on" )
 				.field( "retired" ).caption("Out of production").build();
 	}
 

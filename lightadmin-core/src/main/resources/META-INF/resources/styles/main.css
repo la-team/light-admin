@@ -28,8 +28,8 @@ body {
 }
 
 /* =================================
-   =====  New styles for v2.0  =====
-   ================================= */
+=====  New styles for v2.0  =====
+================================= */
 
 /* ===== Required fields error and field notes styling  ===== */
 
@@ -154,8 +154,8 @@ div.tagsinput div {
 }
 
 /* =================================
-   =====  General styles =====
-   ================================= */
+=====  General styles =====
+================================= */
 
 .wrapper {
 	margin: 0 5%;
@@ -1855,6 +1855,10 @@ html ul.tabs li.activeTab a {
 	-moz-box-sizing: border-box;
 	-ms-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.mainForm input.input-date {
+	width: auto;
 }
 
 .mainForm input[type=text]:hover, .mainForm input[type=password]:hover, .mainForm textarea:hover {

@@ -4,11 +4,15 @@ import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
 import javax.persistence.Basic;
+import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.Map;
 
 @Entity
@@ -29,6 +33,9 @@ public class Product extends AbstractEntity {
 
 	@Basic
 	private Boolean retired;
+
+	@Temporal(TemporalType.DATE) @Column(name = "REL_DATE")
+	private Date releaseDate;
 
 	public Product( String name, BigDecimal price ) {
 		this( name, price, null );
@@ -74,6 +81,14 @@ public class Product extends AbstractEntity {
 
 	public Boolean getRetired() {
 		return retired;
+	}
+
+	public Date getReleaseDate() {
+		return releaseDate;
+	}
+
+	public void setReleaseDate(Date releaseDate) {
+		this.releaseDate = releaseDate;
 	}
 
 }

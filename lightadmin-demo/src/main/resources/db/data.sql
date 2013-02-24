@@ -19,9 +19,9 @@ insert into Address (id, street, city, country, customer_id) values (5, 'Copenha
 insert into Address (id, street, city, country, customer_id) values (6, 'Zurich', 'Zurich', 'Switzerland', 3);
 insert into Address (id, street, city, country, customer_id) values (7, 'Roma', 'Roma', 'Italia', 3);
 
-insert into Product (id, name, description, price, retired) values (1, 'iPad', 'Apple tablet device', 499.1, null);
-insert into Product (id, name, description, price, retired) values (2, 'MacBook Pro', 'Apple notebook', 1299.5, 0);
-insert into Product (id, name, description, price, retired) values (3, 'Dock', 'Dock for iPhone/iPad', 49.4, 1);
+insert into Product (id, name, description, price, rel_date, retired) values (1, 'iPad', 'Apple tablet device', 499.1, DATE '2010-04-03', null);
+insert into Product (id, name, description, price, rel_date, retired) values (2, 'MacBook Pro', 'Apple notebook', 1299.5, DATE '2006-01-10', 0);
+insert into Product (id, name, description, price, rel_date, retired) values (3, 'Dock', 'Dock for iPhone/iPad', 49.4, null, 1);
 
 insert into Product_Attributes (attributes_key, product_id, attributes) values ('connector', 1, 'socket');
 insert into Product_Attributes (attributes_key, product_id, attributes) values ('connector', 3, 'plug');
