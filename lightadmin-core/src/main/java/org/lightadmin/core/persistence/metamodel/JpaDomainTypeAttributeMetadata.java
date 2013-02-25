@@ -6,6 +6,7 @@ import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
 import java.util.Date;
 
+import static javax.persistence.metamodel.Attribute.PersistentAttributeType.EMBEDDED;
 import static org.lightadmin.core.util.NumberUtils.isNumberFloat;
 import static org.lightadmin.core.util.NumberUtils.isNumberInteger;
 
@@ -117,6 +118,10 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
 		if ( String.class.equals( attrType ) ) {
 			return DomainTypeAttributeType.STRING;
+		}
+
+		if ( EMBEDDED == attribute.getPersistentAttributeType() ) {
+			return DomainTypeAttributeType.EMBEDDED;
 		}
 
 		return DomainTypeAttributeType.UNKNOWN;

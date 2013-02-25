@@ -9,6 +9,7 @@ public enum DomainTypeAttributeType {
 	DATE,
 	ASSOC,
 	ASSOC_MULTI,
+	EMBEDDED,
 	MAP,
 	UNKNOWN
 }
