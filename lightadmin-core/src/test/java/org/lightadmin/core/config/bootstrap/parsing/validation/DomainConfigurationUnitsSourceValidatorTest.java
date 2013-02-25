@@ -10,7 +10,6 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 
 import java.util.Iterator;
@@ -19,7 +18,7 @@ import java.util.List;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.junit.Assert.fail;
 
-@SuppressWarnings( "unchecked" )
+@SuppressWarnings("unchecked")
 public class DomainConfigurationUnitsSourceValidatorTest {
 
 	private DomainConfigurationUnitsSourceValidator testee;
@@ -35,23 +34,6 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 		final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
 
 		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Type DomainType must have default constructor.", domainConfigurationProblems );
-	}
-
-	@Test
-	public void domainTypeIsNotPersistentFailure() {
-		final DomainTypeEntityMetadataResolver entityMetadataResolver = EasyMock.createMock( DomainTypeEntityMetadataResolver.class );
-		EasyMock.expect( entityMetadataResolver.resolveEntityMetadata( DomainType.class ) ).andReturn( null ).once();
-		EasyMock.replay( entityMetadataResolver );
-
-		testee = new DomainConfigurationUnitsSourceValidator( alwaysValidFieldMetadataValidatorMock() );
-
-		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
-
-		testee.validateDomainType( domainConfigurationSourceMock( DomainType.class ), problemReporter( problemCapture ) );
-
-		final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
-
-		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Non-persistent type DomainType is not supported.", domainConfigurationProblems );
 	}
 
 	@Test
@@ -97,7 +79,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 		return problemReporter;
 	}
 
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	private FieldMetadataValidator<FieldMetadata> alwaysValidFieldMetadataValidatorMock() {
 		final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator = EasyMock.createMock( FieldMetadataValidator.class );
 		EasyMock.expect( fieldMetadataValidator.isValidFieldMetadata( EasyMock.<FieldMetadata>anyObject(), EasyMock.<Class>anyObject() ) ).andReturn( true ).anyTimes();
@@ -105,7 +87,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 		return fieldMetadataValidator;
 	}
 
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	private DomainConfigurationSource domainConfigurationSourceMock( Class domainType ) {
 		DomainConfigurationSource domainConfigurationSource = EasyMock.createMock( DomainConfigurationSource.class );
 		EasyMock.expect( domainConfigurationSource.getDomainType() ).andReturn( domainType ).anyTimes();
