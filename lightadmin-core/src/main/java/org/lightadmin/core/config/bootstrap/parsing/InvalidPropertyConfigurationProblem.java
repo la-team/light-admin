@@ -11,7 +11,7 @@ public class InvalidPropertyConfigurationProblem extends DomainConfigurationProb
 	private final String propertyName;
 
 	public InvalidPropertyConfigurationProblem( String propertyName, final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType ) {
-		super( domainConfiguration, configurationUnitType, format( "Unexisting property/path '%s' defined!", propertyName ) );
+		super( domainConfiguration, configurationUnitType, format( "Invalid property/path '%s' defined!", propertyName ) );
 		this.propertyName = propertyName;
 	}
 
