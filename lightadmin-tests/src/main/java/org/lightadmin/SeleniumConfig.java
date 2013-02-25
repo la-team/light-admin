@@ -5,6 +5,7 @@ import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementSe
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.firefox.FirefoxProfile;
 import org.openqa.selenium.safari.SafariDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -86,6 +87,8 @@ public class SeleniumConfig {
 			return new SafariDriver();
 		}
 
-		return new FirefoxDriver();
+		FirefoxProfile profile = new FirefoxProfile();
+		profile.setPreference( "focusmanager.testmode", true );
+		return new FirefoxDriver( profile );
 	}
 }
