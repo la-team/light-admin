@@ -137,6 +137,12 @@
 		$( ".chzn-select" ).chosen();
 
 		$( "select, input:checkbox, input:radio, input:file" ).uniform();
+
+		$( ".input-date" ).datepicker( {
+										   autoSize: true,
+										   appendText: '(YYYY-MM-DD)',
+										   dateFormat: 'yy-mm-dd'
+									   } );
 	} );
 
 	function renderActions( entityId ) {

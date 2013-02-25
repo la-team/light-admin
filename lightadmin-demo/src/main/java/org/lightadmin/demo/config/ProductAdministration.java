@@ -41,6 +41,6 @@ public class ProductAdministration {
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder.filter( "Name", "name" ).filter( "Description", "description" ).filter( "Price", "price" ).filter( "Retired", "retired" ).build();
+		return filterBuilder.filter( "Name", "name" ).filter( "Description", "description" ).filter( "Price", "price" ).filter( "Released on", "releaseDate" ).filter( "Retired", "retired" ).build();
 	}
 }

@@ -57,6 +57,12 @@
 
 		$( "select, input:checkbox, input:radio, input:file" ).uniform();
 
+		$( ".input-date" ).datepicker( {
+										   autoSize: true,
+										   appendText: '(YYYY-MM-DD)',
+										   dateFormat: 'yy-mm-dd'
+									   } );
+
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
 		REST_REPO_URL = "${createObjectUrl}";
 	} );
