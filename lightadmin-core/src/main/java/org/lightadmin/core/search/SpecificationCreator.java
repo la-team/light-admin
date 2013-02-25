@@ -11,8 +11,8 @@ import org.springframework.util.ClassUtils;
 
 import javax.persistence.criteria.*;
 import java.io.Serializable;
+import java.sql.Date;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +97,7 @@ public class SpecificationCreator {
 
 		private Predicate dateAttributePredicate( final String attributeName, final String parameterValue ) {
 			try {
-				final Date date = java.sql.Date.valueOf( parameterValue );
+				final Date date = Date.valueOf( parameterValue );
 
 				return builder.equal( root.<String>get( attributeName ), date );
 			} catch ( IllegalArgumentException e ) {
