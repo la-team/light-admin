@@ -46,7 +46,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 
 		final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
 
-		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Unit \"filters\": Unexisting property/path 'Field' defined!", domainConfigurationProblems );
+		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Unit \"filters\": Invalid property/path 'Field' defined!", domainConfigurationProblems );
 	}
 
 	private FieldMetadataValidator<FieldMetadata> alwaysInvalidFieldMetadataValidator() {
