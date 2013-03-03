@@ -25,12 +25,12 @@
 	<light-jsp:breadcrumb-item name="Create ${domainTypeName}"/>
 </light-jsp:breadcrumb>
 
-<form id="editForm" onsubmit="return updateDomainObject(this)" class="mainForm">
+<form id="editForm" onsubmit="return saveDomainObject(this)" class="mainForm">
 	<div class="widget">
 		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(domainTypeName)}"/></h5></div>
 		<fieldset>
 			<c:forEach var="fieldEntry" items="${domainTypeAdministrationConfiguration.formViewFragment.fields}"
-					   varStatus="status">
+					varStatus="status">
 				<c:if test="${!fieldEntry.primaryKey}">
 					<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
 						<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
@@ -58,10 +58,10 @@
 		$( "select, input:checkbox, input:radio, input:file" ).uniform();
 
 		$( ".input-date" ).datepicker( {
-										   autoSize: true,
-										   appendText: '(YYYY-MM-DD)',
-										   dateFormat: 'yy-mm-dd'
-									   } );
+										autoSize: true,
+										appendText: '(YYYY-MM-DD)',
+										dateFormat: 'yy-mm-dd'
+									} );
 
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
 		REST_REPO_URL = "${createObjectUrl}";

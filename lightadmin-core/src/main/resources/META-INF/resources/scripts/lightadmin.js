@@ -1,10 +1,14 @@
 DOMAIN_TYPE_METADATA = {};
 
 (function ( $ ) {
-	$.fn.serializeFormJSON = function () {
+	$.fn.serializeFormJSON = function (usePlaceholders) {
 		function resolveObjectHref( attrVal, attrMetadata ) {
 			if ( attrVal == '' ) {
-				attrVal = 'NULL';
+				if (usePlaceholders) {
+					attrVal = 'NULL';
+				} else {
+					return null;
+				}
 			}
 			var href = decodeURIComponent( attrMetadata.hrefTemplate ).replace( '{' + attrMetadata.idAttribute + '}', attrVal );
 			return {href: href};
@@ -74,19 +78,19 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 	restParams.push( { "name": sortName + ".dir", "value": sortDir } );
 
 	jQuery.ajax( {
-					 "dataType": 'json',
-					 "type": "GET",
-					 "url": sSource,
-					 "data": restParams,
-					 "success": function ( data ) {
-						 data.iTotalRecords = data.page.totalElements;
-						 data.iTotalDisplayRecords = data.page.totalElements;
+					"dataType": 'json',
+					"type": "GET",
+					"url": sSource,
+					"data": restParams,
+					"success": function ( data ) {
+						data.iTotalRecords = data.page.totalElements;
+						data.iTotalDisplayRecords = data.page.totalElements;
 
-						 getSearcher().onSearchCompleted();
+						getSearcher().onSearchCompleted();
 
-						 fnCallback( data );
-					 }
-				 } );
+						fnCallback( data );
+					}
+				} );
 }
 
 function getPrimaryKey( dataValue ) {
@@ -157,19 +161,19 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 			var aData = dataTable.fnGetData( nTr );
 			var restEntityUrl = aData.links[0].href;
 			jQuery.ajax( {
-							 "dataType": 'json',
-							 "type": "GET",
-							 "url": restEntityUrl + '/unit/quickView',
-							 "success": function ( data ) {
-								 var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
-								 $( nDetailsRow ).addClass( $( nDetailsRow ).prev().attr( 'class' ) );
-								 $( 'div.innerDetails', nDetailsRow ).hide();
-								 $( 'div.innerDetails', nDetailsRow ).slideDown( 'slow', function () {
-									 infoImg.attr( 'src', "../images/aInactive.png" );
-									 infoImg.attr( 'title', "Click to close Quick View" );
-								 } );
-							 }
-						 } );
+							"dataType": 'json',
+							"type": "GET",
+							"url": restEntityUrl + '/unit/quickView',
+							"success": function ( data ) {
+								var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
+								$( nDetailsRow ).addClass( $( nDetailsRow ).prev().attr( 'class' ) );
+								$( 'div.innerDetails', nDetailsRow ).hide();
+								$( 'div.innerDetails', nDetailsRow ).slideDown( 'slow', function () {
+									infoImg.attr( 'src', "../images/aInactive.png" );
+									infoImg.attr( 'title', "Click to close Quick View" );
+								} );
+							}
+						} );
 		}
 	} );
 }
@@ -286,11 +290,19 @@ function removeDomainObject( entityId, restUrl, callback ) {
 	return false;
 }
 
+function saveDomainObject( domForm ) {
+	return saveOrUpdateDomainObject( domForm, false );
+}
+
 function updateDomainObject( domForm ) {
+	return saveOrUpdateDomainObject( domForm, true );
+}
+
+function saveOrUpdateDomainObject( domForm, usePlaceholders ) {
 	$.each( $( domForm ).find( '[id$=-error]' ), function ( index, element ) {
 		$( element ).text( '' );
 	} );
-	var jsonForm = $( domForm ).serializeFormJSON();
+	var jsonForm = $( domForm ).serializeFormJSON( usePlaceholders );
 	$.ajax( {
 				type: 'PUT',
 				url: REST_REPO_URL + '?returnBody=true',
