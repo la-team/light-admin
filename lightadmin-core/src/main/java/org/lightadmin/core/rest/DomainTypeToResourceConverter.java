@@ -1,20 +1,7 @@
 package org.lightadmin.core.rest;
 
-import java.util.Map;
-import java.util.Set;
-import java.util.HashSet;
-import java.io.Serializable;
-import static java.util.Collections.EMPTY_SET;
-
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
-import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.rest.webmvc.EntityResource;
-import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
-import static com.google.common.collect.Maps.newLinkedHashMap;
-
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -22,6 +9,19 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.springframework.core.convert.converter.Converter;
+import org.springframework.data.rest.webmvc.EntityResource;
+import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
+import org.springframework.hateoas.Link;
+import org.springframework.hateoas.Resource;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Maps.newLinkedHashMap;
+import static java.util.Collections.EMPTY_SET;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
 
 @SuppressWarnings( "unchecked" )
@@ -32,7 +32,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 	private FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
 
 	public DomainTypeToResourceConverter( GlobalAdministrationConfiguration configuration, RepositoryRestConfiguration restConfiguration ) {
-		super(restConfiguration);
+		super( restConfiguration );
 		this.configuration = configuration;
 	}
 
@@ -48,7 +48,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
 		final DomainTypeEntityMetadata entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
 
-		Serializable id = (Serializable) entityMetadata.getIdAttribute().getValue( source );
+		Serializable id = ( Serializable ) entityMetadata.getIdAttribute().getValue( source );
 
 		final EntityResource entityResource = newEntityResource( domainTypeConfiguration.getDomainTypeName(), id );
 
@@ -67,25 +67,22 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 			return new Resource<Object>( source );
 		}
 
-		DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forManagedDomainType( source.getClass() );
+		final DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forManagedDomainType( source.getClass() );
+		final DomainTypeBasicConfiguration domainTypeBasicConfig = configuration.forDomainType( source.getClass() );
+
 		if ( domainTypeConfiguration != null ) {
-			return convert( source, fieldsForShowView( domainTypeConfiguration ) );
+			return convert( source, primaryKeyFieldOnly( domainTypeConfiguration ) );
 		}
 
-		DomainTypeBasicConfiguration domainTypeBasicConfig = configuration.forDomainType( source.getClass() );
 		if ( domainTypeBasicConfig != null ) {
-			return convert( source, fieldsForGenericDomainType( domainTypeBasicConfig ) );
+			return convert( source, primaryKeyFieldOnly( domainTypeBasicConfig ) );
 		}
 
 		return new Resource<Object>( source );
 	}
 
-	private Set<FieldMetadata> fieldsForGenericDomainType(DomainTypeBasicConfiguration domainTypeBasicConfig) {
-		return addPrimaryKeyPersistentField(EMPTY_SET, domainTypeBasicConfig.getDomainTypeEntityMetadata().getIdAttribute());
-	}
-
-	private Set<FieldMetadata> fieldsForShowView( DomainTypeAdministrationConfiguration domainTypeConfiguration ) {
-		return domainTypeConfiguration.getShowViewFragment().getFields();
+	private Set<FieldMetadata> primaryKeyFieldOnly( DomainTypeBasicConfiguration domainTypeBasicConfig ) {
+		return addPrimaryKeyPersistentField( EMPTY_SET, domainTypeBasicConfig.getDomainTypeEntityMetadata().getIdAttribute() );
 	}
 
 	private void addObjectStringRepresentation( final EntityResource resource, final DomainTypeBasicConfiguration configuration, final Object source ) {
@@ -114,5 +111,4 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
 		return new EntityResource( Maps.<String, Object>newLinkedHashMap(), links );
 	}
-
 }
