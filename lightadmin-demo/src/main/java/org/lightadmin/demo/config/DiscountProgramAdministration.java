@@ -12,9 +12,9 @@ import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.DiscountProgram;
 
-@SuppressWarnings( "unused" )
+@SuppressWarnings("unused")
 
-@Administration( DiscountProgram.class )
+@Administration(DiscountProgram.class)
 public class DiscountProgramAdministration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
@@ -26,22 +26,22 @@ public class DiscountProgramAdministration {
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "customers" ).caption( "Customers" ).build();
 	}
 
 	public static FieldSetConfigurationUnit quickView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "customers" ).caption( "Customers" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "customers" ).caption( "Customers" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "customers" ).caption( "Customers" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder.filter( "Name", "name" ).build();
+		return filterBuilder.filter( "Name", "name" ).filter( "Customers", "customers" ).build();
 	}
 }
