@@ -46,4 +46,8 @@ public class Address extends AbstractEntity {
 	public String getCountry() {
 		return country;
 	}
+
+	public Customer getCustomer() {
+		return customer;
+	}
 }

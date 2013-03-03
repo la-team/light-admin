@@ -13,8 +13,8 @@ import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.Address;
 
-@SuppressWarnings( "unused" )
-@Administration( Address.class )
+@SuppressWarnings("unused")
+@Administration(Address.class)
 public class AddressAdministration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
@@ -22,38 +22,27 @@ public class AddressAdministration {
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Addresses Administration" )
-								.menuName( "Addresses" ).build();
+		return screenContextBuilder.screenName( "Addresses Administration" ).menuName( "Addresses" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "country" ).caption( "Country" )
-							.field( "city" ).caption( "City" )
-							.field( "street" ).caption( "Street" ).build();
+		return fragmentBuilder.field( "country" ).caption( "Country" ).field( "city" ).caption( "City" ).field( "street" ).caption( "Street" ).build();
 	}
 
 	public static FieldSetConfigurationUnit quickView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "country" ).caption( "Country" )
-							  .field( "city" ).caption( "City" ).build();
+		return fragmentBuilder.field( "country" ).caption( "Country" ).field( "city" ).caption( "City" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "country" ).caption( "Country" )
-							.field( "city" ).caption( "City" )
-							.field( "street" ).caption( "Street" ).build();
+		return fragmentBuilder.field( "country" ).caption( "Country" ).field( "city" ).caption( "City" ).field( "street" ).caption( "Street" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "country" ).caption( "Country" )
-							.field( "city" ).caption( "City" )
-							.field( "street" ).caption( "Street" ).build();
+		return fragmentBuilder.field( "country" ).caption( "Country" ).field( "city" ).caption( "City" ).field( "street" ).caption( "Street" ).field( "customer" ).caption( "Customer" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder
-			.filter( "Country", "country" )
-			.filter( "City", "city" )
-			.filter( "Street", "street" ).build();
+		return filterBuilder.filter( "Country", "country" ).filter( "City", "city" ).filter( "Street", "street" ).filter( "Customer", "customer" ).build();
 	}
 
 	private static EntityNameExtractor<Address> addressNameExtractor() {
