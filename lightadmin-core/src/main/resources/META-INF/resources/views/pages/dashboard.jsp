@@ -11,7 +11,7 @@
 
 <c:if test="${not empty dashboardDomainTypes}">
 	<div class="widget">
-		<div class="head"><h5 class="iChart8">Domains statistics</h5>
+		<div class="head"><h5 class="iChart8">Domain type statistics</h5>
 
 			<div class="num"><a id="total-count-change" href="#" class="blueNum">+100500</a></div>
 		</div>

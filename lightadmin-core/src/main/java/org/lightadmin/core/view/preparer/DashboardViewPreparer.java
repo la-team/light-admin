@@ -8,8 +8,11 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.util.Pair;
 
 import java.util.Collection;
+import java.util.Comparator;
+import java.util.List;
 
 import static com.google.common.collect.Lists.newLinkedList;
+import static java.util.Collections.sort;
 
 public class DashboardViewPreparer extends ConfigurationAwareViewPreparer {
 
@@ -21,11 +24,19 @@ public class DashboardViewPreparer extends ConfigurationAwareViewPreparer {
 	}
 
 	private Collection<Pair<MenuItem, Long>> dashboardDomainTypes( Collection<DomainTypeAdministrationConfiguration> configurations ) {
-		final Collection<Pair<MenuItem, Long>> result = newLinkedList();
+		final List<Pair<MenuItem, Long>> domainTypeItems = newLinkedList();
 		for ( DomainTypeAdministrationConfiguration configuration : configurations ) {
-			result.add( Pair.create( menuItem( configuration ), configuration.getRepository().count() ) );
+			domainTypeItems.add( Pair.create( menuItem( configuration ), configuration.getRepository().count() ) );
 		}
-		return result;
+
+		sort( domainTypeItems, new Comparator<Pair<MenuItem, Long>>() {
+			@Override
+			public int compare( final Pair<MenuItem, Long> menuItemPair1, final Pair<MenuItem, Long> menuItemPair2 ) {
+				return MenuItemComparator.INSTANCE.compare( menuItemPair1.first, menuItemPair2.first );
+			}
+		} );
+
+		return domainTypeItems;
 	}
 
 	private MenuItem menuItem( final DomainTypeAdministrationConfiguration configuration ) {

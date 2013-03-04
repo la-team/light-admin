@@ -1,6 +1,5 @@
 package org.lightadmin.core.view.preparer;
 
-import com.google.common.collect.Collections2;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.context.TilesRequestContext;
@@ -8,6 +7,11 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 
 import java.util.Collection;
+import java.util.List;
+
+import static com.google.common.collect.Collections2.transform;
+import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.sort;
 
 public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
 
@@ -23,6 +27,10 @@ public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
 	}
 
 	private Collection<MenuItem> menuItems( Collection<DomainTypeAdministrationConfiguration> configurations ) {
-		return Collections2.transform( configurations, DomainConfigToMenuItemTransformer.INSTANCE );
+		final List<MenuItem> menuItems = newArrayList( transform( configurations, DomainConfigToMenuItemTransformer.INSTANCE ) );
+
+		sort( menuItems, MenuItemComparator.INSTANCE );
+
+		return menuItems;
 	}
 }
