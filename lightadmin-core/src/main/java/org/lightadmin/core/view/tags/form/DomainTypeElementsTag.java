@@ -19,8 +19,9 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
+import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorExceptionAware.exceptionAwareNameExtractor;
 
-@SuppressWarnings( "unchecked" )
+@SuppressWarnings("unchecked")
 public class DomainTypeElementsTag extends AbstractAutowiredTag {
 
 	@Autowired(required = true)
@@ -34,57 +35,57 @@ public class DomainTypeElementsTag extends AbstractAutowiredTag {
 	@Override
 	public void doTag() throws JspException, IOException {
 
-		DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forDomainType(domainType);
-		Assert.notNull(domainTypeConfiguration, "<domainTypeConfiguration> not found for association");
+		DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forDomainType( domainType );
+		Assert.notNull( domainTypeConfiguration, "<domainTypeConfiguration> not found for association" );
 
 		// TODO: Implement configurable ordering
 		List allElements = domainTypeConfiguration.getRepository().findAll();
-		allElements = sortByNaturalOrder(allElements, domainTypeConfiguration);
+		allElements = sortByNaturalOrder( allElements, domainTypeConfiguration );
 
 		DomainTypeAttributeMetadata idAttribute = domainTypeConfiguration.getDomainTypeEntityMetadata().getIdAttribute();
 		EntityNameExtractor<Object> nameExtractor = domainTypeConfiguration.getEntityConfiguration().getNameExtractor();
 		JspContext jspContext = getJspContext();
 		JspFragment tagBody = getJspBody();
-		for (Object element : allElements) {
-			jspContext.setAttribute(idVar, idAttribute.getValue(element));
-			jspContext.setAttribute(stringRepresentationVar, nameExtractor.apply(element));
-			tagBody.invoke(null);
+		for ( Object element : allElements ) {
+			jspContext.setAttribute( idVar, idAttribute.getValue( element ) );
+			jspContext.setAttribute( stringRepresentationVar, exceptionAwareNameExtractor( nameExtractor ).apply( element ) );
+			tagBody.invoke( null );
 		}
 	}
 
-	private List sortByNaturalOrder(List elements, DomainTypeBasicConfiguration elementTypeConfiguration) {
+	private List sortByNaturalOrder( List elements, DomainTypeBasicConfiguration elementTypeConfiguration ) {
 
 		EntityNameExtractor<Object> nameExtractor = elementTypeConfiguration.getEntityConfiguration().getNameExtractor();
 
-		List<Pair<Object, String>> elementNamePairs = newArrayList(elements.size());
-		for (Object element : elements) {
-			String name = nameExtractor.apply(element);
-			elementNamePairs.add(new Pair<Object, String>(element, name));
+		List<Pair<Object, String>> elementNamePairs = newArrayList( elements.size() );
+		for ( Object element : elements ) {
+			final String name = exceptionAwareNameExtractor( nameExtractor ).apply( element );
+			elementNamePairs.add( new Pair<Object, String>( element, name ) );
 		}
 
-		Collections.sort(elementNamePairs, new Comparator<Pair<Object, String>>() {
+		Collections.sort( elementNamePairs, new Comparator<Pair<Object, String>>() {
 			@Override
-			public int compare(Pair<Object, String> pair1, Pair<Object, String> pair2) {
-				return pair1.getSecond().compareToIgnoreCase(pair2.getSecond());
+			public int compare( Pair<Object, String> pair1, Pair<Object, String> pair2 ) {
+				return pair1.getSecond().compareToIgnoreCase( pair2.getSecond() );
 			}
-		});
+		} );
 
-		List sortedElements = new ArrayList<Object>(elementNamePairs.size());
-		for (Pair<Object, String> elementNamePair : elementNamePairs) {
-			sortedElements.add(elementNamePair.getFirst());
+		List sortedElements = new ArrayList<Object>( elementNamePairs.size() );
+		for ( Pair<Object, String> elementNamePair : elementNamePairs ) {
+			sortedElements.add( elementNamePair.getFirst() );
 		}
 		return sortedElements;
 	}
 
-	public void setDomainType(Class<?> type) {
+	public void setDomainType( Class<?> type ) {
 		this.domainType = type;
 	}
 
-	public void setIdVar(String idVar) {
+	public void setIdVar( String idVar ) {
 		this.idVar = idVar;
 	}
 
-	public void setStringRepresentationVar(String stringRepresentationVar) {
+	public void setStringRepresentationVar( String stringRepresentationVar ) {
 		this.stringRepresentationVar = stringRepresentationVar;
 	}
 

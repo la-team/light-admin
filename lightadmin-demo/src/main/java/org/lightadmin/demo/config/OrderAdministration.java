@@ -20,8 +20,8 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
-@SuppressWarnings( "unused" )
-@Administration( Order.class )
+@SuppressWarnings("unused")
+@Administration(Order.class)
 public class OrderAdministration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
@@ -29,47 +29,27 @@ public class OrderAdministration {
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder
-			.screenName( "Orders Administration" )
-			.menuName( "Orders" ).build();
+		return screenContextBuilder.screenName( "Orders Administration" ).menuName( "Orders" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder
-			.field( "customer" ).caption( "Customer" )
-			.field( "billingAddress" ).caption( "Billing Address" )
-			.field( "shippingAddress" ).caption( "Shipping Address" )
-			.renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
+		return fragmentBuilder.field( "customer" ).caption( "Customer" ).field( "billingAddress" ).caption( "Billing Address" ).field( "shippingAddress" ).caption( "Shipping Address" ).renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder
-			.field( "customer" ).caption( "Customer" )
-			.field( "billingAddress" ).caption( "Billing Address" )
-			.field( "shippingAddress" ).caption( "Shipping Address" )
-			.renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
+		return fragmentBuilder.field( "customer" ).caption( "Customer" ).field( "billingAddress" ).caption( "Billing Address" ).field( "shippingAddress" ).caption( "Shipping Address" ).renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
 	}
 
 	public static FieldSetConfigurationUnit quickView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder
-			.field( "shippingAddress" ).caption( "Shipping Address" )
-			.renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
+		return fragmentBuilder.field( "customer" ).caption( "Customer" ).field( "shippingAddress" ).caption( "Shipping Address" ).renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder
-				.field( "customer" ).caption( "Customer" )
-				.field( "billingAddress" ).caption( "Billing Address" )
-				.field( "shippingAddress" ).caption( "Shipping Address" )
-				.field( "lineItems" ).caption( "Order Items" ).build();
+		return fragmentBuilder.field( "customer" ).caption( "Customer" ).field( "billingAddress" ).caption( "Billing Address" ).field( "shippingAddress" ).caption( "Shipping Address" ).field( "lineItems" ).caption( "Order Items" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder
-			.filter( "Customer", "customer" )
-			.filter( "Billing Address", "billingAddress" )
-			.filter( "Shipping Address", "shippingAddress" )
-			.filter( "Order items", "lineItems" ).build();
+		return filterBuilder.filter( "Customer", "customer" ).filter( "Billing Address", "billingAddress" ).filter( "Shipping Address", "shippingAddress" ).filter( "Order items", "lineItems" ).build();
 	}
 
 	private static EntityNameExtractor<Order> orderNameExtractor() {

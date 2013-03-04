@@ -5,6 +5,7 @@ import com.google.common.collect.Sets;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
@@ -22,14 +23,15 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.Collections.EMPTY_SET;
+import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorExceptionAware.exceptionAwareNameExtractor;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
 
 @SuppressWarnings( "unchecked" )
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
 
-	private GlobalAdministrationConfiguration configuration;
+	private final FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
 
-	private FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
+	private GlobalAdministrationConfiguration configuration;
 
 	public DomainTypeToResourceConverter( GlobalAdministrationConfiguration configuration, RepositoryRestConfiguration restConfiguration ) {
 		super( restConfiguration );
@@ -38,7 +40,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
 	public Resource convert( final Object source, Set<FieldMetadata> fieldMetadatas ) {
 		if ( source == null ) {
-			return new Resource<Object>( source );
+			return null;
 		}
 
 		final DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forDomainType( source.getClass() );
@@ -64,7 +66,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 	@Override
 	public Resource convert( Object source ) {
 		if ( source == null ) {
-			return new Resource<Object>( source );
+			return null;
 		}
 
 		final DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forManagedDomainType( source.getClass() );
@@ -86,7 +88,9 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 	}
 
 	private void addObjectStringRepresentation( final EntityResource resource, final DomainTypeBasicConfiguration configuration, final Object source ) {
-		resource.getContent().put( "stringRepresentation", configuration.getEntityConfiguration().getNameExtractor().apply( source ) );
+		final EntityNameExtractor nameExtractor = configuration.getEntityConfiguration().getNameExtractor();
+
+		resource.getContent().put( "stringRepresentation", exceptionAwareNameExtractor( nameExtractor ).apply( source ) );
 	}
 
 	private void addFieldAttributeValue( EntityResource resource, FieldMetadata field, Object source ) {

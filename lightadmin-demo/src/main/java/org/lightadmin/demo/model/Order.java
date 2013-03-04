@@ -4,25 +4,26 @@ import org.springframework.util.Assert;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-
 import java.math.BigDecimal;
 import java.util.Set;
 
 @Entity
-@Table( name = "Orders" )
+@Table(name = "Orders")
 public class Order extends AbstractEntity {
 
-	@ManyToOne( optional = false )
+	@ManyToOne
+	@NotNull
 	private Customer customer;
 
 	@ManyToOne
 	private Address billingAddress;
 
-	@ManyToOne( optional = false, cascade = CascadeType.ALL ) @NotNull
+	@ManyToOne(optional = false, cascade = CascadeType.ALL)
+	@NotNull
 	private Address shippingAddress;
 
-	@OneToMany( cascade = CascadeType.ALL )
-	@JoinColumn( name = "order_id" )
+	@OneToMany(cascade = CascadeType.ALL)
+	@JoinColumn(name = "order_id")
 	private Set<LineItem> lineItems;
 
 	/**

@@ -9,6 +9,8 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.io.IOException;
 import java.io.Writer;
 
+import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorExceptionAware.exceptionAwareNameExtractor;
+
 public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer {
 
 	private final DomainTypeEntityMetadata domainTypeEntityMetadata;
@@ -18,6 +20,7 @@ public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer
 	}
 
 	@Override
+	@SuppressWarnings( "unchecked" )
 	protected void write( final Object value, final Writer writer ) throws IOException {
 		final DomainTypeAdministrationConfiguration domainTypeConfiguration = domainTypeConfiguration( domainTypeEntityMetadata.getDomainType() );
 
@@ -25,7 +28,7 @@ public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer
 
 		final EntityNameExtractor<Object> nameExtractor = domainTypeConfiguration.getEntityConfiguration().getNameExtractor();
 
-		final String stringValue = nameExtractor.apply( value );
+		final String stringValue = exceptionAwareNameExtractor( nameExtractor ).apply( value );
 
 		writer.write( String.format( "<a href=\"%s\">%s</a>", entityViewUrl, stringValue ) );
 	}
