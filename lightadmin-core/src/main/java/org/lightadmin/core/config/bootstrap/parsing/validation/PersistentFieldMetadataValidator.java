@@ -5,7 +5,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.UNKNOWN;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isSupportedAttributeType;
 
 class PersistentFieldMetadataValidator implements FieldMetadataValidator<PersistentFieldMetadata> {
 
@@ -22,6 +22,6 @@ class PersistentFieldMetadataValidator implements FieldMetadataValidator<Persist
 
 		final DomainTypeAttributeMetadata attributeMetadata = domainTypeEntityMetadata.getAttribute( fieldMetadata.getField() );
 
-		return attributeMetadata != null && attributeMetadata.getAttributeType() != UNKNOWN;
+		return attributeMetadata != null && isSupportedAttributeType( attributeMetadata.getAttributeType() );
 	}
 }

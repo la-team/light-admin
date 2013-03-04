@@ -11,5 +11,9 @@ public enum DomainTypeAttributeType {
 	ASSOC_MULTI,
 	EMBEDDED,
 	MAP,
-	UNKNOWN
+	UNKNOWN;
+
+	public static boolean isSupportedAttributeType( DomainTypeAttributeType attributeType ) {
+		return attributeType != UNKNOWN;
+	}
 }

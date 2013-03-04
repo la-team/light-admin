@@ -11,6 +11,8 @@ import org.springframework.util.ClassUtils;
 
 import java.util.Collection;
 
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isSupportedAttributeType;
+
 public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverAwareConfigurationUnitPostProcessor {
 
 	public EmptyConfigurationUnitPostProcessor( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
@@ -31,7 +33,9 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
 
 		final Collection<DomainTypeAttributeMetadata> attributes = resolveEntityMetadata( domainType ).getAttributes();
 		for ( DomainTypeAttributeMetadata attribute : attributes ) {
-			fieldSetConfigurationUnitBuilder.field( attribute.getName() );
+			if ( isSupportedAttributeType( attribute.getAttributeType() ) ) {
+				fieldSetConfigurationUnitBuilder.field( attribute.getName() );
+			}
 		}
 
 		return fieldSetConfigurationUnitBuilder.build();
