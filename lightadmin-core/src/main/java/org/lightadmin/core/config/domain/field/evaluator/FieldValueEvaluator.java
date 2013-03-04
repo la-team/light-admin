@@ -6,14 +6,16 @@ import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
 import org.springframework.beans.PropertyAccessorFactory;
 
-@SuppressWarnings( "unchecked" )
+import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareFieldValueRenderer;
+
+@SuppressWarnings("unchecked")
 public class FieldValueEvaluator {
 
 	public Object evaluate( FieldMetadata fieldMetadata, Object source ) {
 		if ( fieldMetadata instanceof CustomFieldMetadata ) {
 			CustomFieldMetadata customFieldMetadata = ( CustomFieldMetadata ) fieldMetadata;
 
-			return customFieldMetadata.getRenderer().apply( source );
+			return exceptionAwareFieldValueRenderer( customFieldMetadata.getRenderer() ).apply( source );
 		}
 
 		if ( fieldMetadata instanceof PersistentFieldMetadata ) {

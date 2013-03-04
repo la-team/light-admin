@@ -19,7 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 
 import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
-import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorExceptionAware.exceptionAwareNameExtractor;
+import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 
 @SuppressWarnings("unchecked")
 public class DomainTypeElementsTag extends AbstractAutowiredTag {
