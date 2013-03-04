@@ -14,10 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertTableData;
 
-@Ignore
-//Displaying a field from a related entity for both inter-dependent entities will be handled in M2:
-//https://github.com/max-dev/light-admin/issues/43#issuecomment-13802275
-public class ManyToManyField extends SeleniumIntegrationTest {
+public class ManyToManyFieldDisplayedForBothEntities extends SeleniumIntegrationTest {
 
 	@Autowired
 	private LoginPage loginPage;
