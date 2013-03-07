@@ -4,7 +4,7 @@ import org.lightadmin.core.config.domain.field.CustomFieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
-import org.springframework.beans.PropertyAccessorFactory;
+import org.lightadmin.core.util.DirectFieldAccessFallbackBeanWrapper;
 
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareFieldValueRenderer;
 
@@ -31,7 +31,7 @@ public class FieldValueEvaluator {
 
 	private Object getPropertyValue( String property, Object source ) {
 		try {
-			return PropertyAccessorFactory.forBeanPropertyAccess( source ).getPropertyValue( property );
+			return new DirectFieldAccessFallbackBeanWrapper( source ).getPropertyValue( property );
 		} catch ( Exception ex ) {
 			return null;
 		}

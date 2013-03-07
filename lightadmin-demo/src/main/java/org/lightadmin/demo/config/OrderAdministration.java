@@ -14,11 +14,12 @@ import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.LineItem;
 import org.lightadmin.demo.model.Order;
-import org.springframework.util.StringUtils;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static java.lang.String.format;
+import static org.springframework.util.StringUtils.collectionToDelimitedString;
 
 @SuppressWarnings("unused")
 @Administration(Order.class)
@@ -33,7 +34,7 @@ public class OrderAdministration {
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "customer" ).caption( "Customer" ).field( "billingAddress" ).caption( "Billing Address" ).field( "shippingAddress" ).caption( "Shipping Address" ).renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
+		return fragmentBuilder.dynamic( "customer.firstname" ).caption( "Customer First Name" ).dynamic( "customer.lastname" ).caption( "Customer Last Name" ).field( "billingAddress" ).caption( "Billing Address" ).field( "shippingAddress" ).caption( "Shipping Address" ).renderable( lineItemsFieldValueRenderer() ).caption( "Order Items" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
@@ -56,7 +57,7 @@ public class OrderAdministration {
 		return new EntityNameExtractor<Order>() {
 			@Override
 			public String apply( final Order order ) {
-				return String.format( "Order %s for $%d", order.getCustomer().getFirstname(), order.getTotal().intValue() );
+				return format( "Order %s for $%d", order.getCustomer().getFirstname(), order.getTotal().intValue() );
 			}
 		};
 	}
@@ -67,9 +68,9 @@ public class OrderAdministration {
 			public String apply( final Order order ) {
 				Set<String> lineItems = newLinkedHashSet();
 				for ( LineItem lineItem : order.getLineItems() ) {
-					lineItems.add( String.format( "Product %s in amount of %d", lineItem.getProduct().getName(), lineItem.getAmount() ) );
+					lineItems.add( format( "Product %s in amount of %d", lineItem.getProduct().getName(), lineItem.getAmount() ) );
 				}
-				return StringUtils.collectionToDelimitedString( lineItems, ", " );
+				return collectionToDelimitedString( lineItems, ", " );
 			}
 		};
 	}
