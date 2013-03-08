@@ -132,31 +132,32 @@ public class UserAdministration {
 
 ```
 
-## Screenshots
-1. Login to LightAdmin:
+## Screenshots from [LightAdmin DEMO application](http://demo.lightadmin.org/admin)
+
+<b>Login to LightAdmin:</b>
 
 ![Login view](https://github.com/max-dev/light-admin/raw/master/screenshots/login.png "login view")
 
-2. Dashboard:
+<b>Dashboard:</b>
 
 ![Dashboard view](https://github.com/max-dev/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
 
-3. List of persistent entities configured:
+<b>List of persistent entities configured:</b>
 
 ![List view](https://github.com/max-dev/light-admin/raw/master/screenshots/list-view.png "list view")
 
-4. Search entities by criteria:
+<b>Search entities by criteria:</b>
 
 ![List view & Filtering](https://github.com/max-dev/light-admin/raw/master/screenshots/search.png "list view & filtering")
 
-5. Quick view for particular entity:
+<b>Quick view for particular entity:</b>
 
 ![Quick view](https://github.com/max-dev/light-admin/raw/master/screenshots/quick-view.png "quick view")
 
-6. Editing entity:
+<b>Editing entity:</b>
 
 ![Form view](https://github.com/max-dev/light-admin/raw/master/screenshots/form-view-validation.png "form view")
 
-7. Show entity with all fields:
+<b>Show entity with all fields:</b>
 
 ![Show view](https://github.com/max-dev/light-admin/raw/master/screenshots/show-view.png "show view")
