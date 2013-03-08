@@ -9,8 +9,6 @@ by bringing pluggable fully operational data management back-end for JPA based a
 
 ## Features ##
 
-This module deals with enhanced support for JPA based data access layers
-
 * <b>DSL configurations</b>: Allows developers to easily configure their administration user interface.
 * <b>Displaying persistent entities</b>: Customizable Listing & Quick Views with paging & sorting capabilities.
 * <b>CRUD operations</b>: Full support for entities manipulation together with their associations.
