@@ -138,7 +138,7 @@ Voila! You have a brand new Light Admin back-end configured.
 
 1. Clone the repository from GitHub:
 
-  	$ git clone git://github.com/max-dev/light-admin.git
+		$ git clone git://github.com/max-dev/light-admin.git
 
 2. Navigate into the cloned repository directory:
 
