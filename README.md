@@ -134,6 +134,33 @@ public class UserAdministration {
 
 Voila! You have a brand new Light Admin back-end configured.
 
+## Check Out and Build from Source
+
+1. Clone the repository from GitHub:
+
+  	$ git clone git://github.com/max-dev/light-admin.git
+
+2. Navigate into the cloned repository directory:
+
+		$ cd light-admin
+
+3. The project uses [Maven](http://maven.apache.org/) to build:
+
+		$ mvn clean install
+
+## Running from the Command Line
+
+Deploy the .war to any Servlet 2.5 or Servlet 3.0 container, such as Tomcat. By default, the app will run in 'embedded' mode which does not require any external setup. The Cargo Tomcat 7 Maven plugin is configured for you in the POM file.
+
+1. Launch Tomcat from the command line:
+
+		$ mvn cargo:run
+
+2. Access the deployed webapp at 
+
+		http://localhost:8080/light-admin
+
+
 ## Screenshots from [LightAdmin DEMO application](http://demo.lightadmin.org/admin)
 
 <b>Login to LightAdmin:</b>
