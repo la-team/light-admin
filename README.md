@@ -106,7 +106,7 @@ public class User {
   // Getters and setters
 }
 ```
-Create an @Administration configuration in the package defined in web.xml previously:
+Create an @Administration configuration in the package defined in <b>web.xml</b> previously:
 
 ```java
 @Administration( User.class )
@@ -114,12 +114,13 @@ public class UserAdministration {
 
   public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
 		return configurationBuilder.nameField( "firstname" ).build();
-	}
+  }
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
 		return screenContextBuilder
 			.screenName( "Users Administration" )
-			.menuName( "Users" ).build();
+			.menuName( "Users" )
+      .build();
 	}
 
 	public static FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
