@@ -1,4 +1,4 @@
-# Light Admin #
+# Light Admin for Rapid Application Development#
 
 [Light Admin](http://lightadmin.org) is an elegant solution for building administration style interfaces for Java web applications.
 
