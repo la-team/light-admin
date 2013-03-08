@@ -60,7 +60,7 @@ public class LightAdminSecurityConfiguration {
 	private Resource usersResource;
 
 	@Autowired
-	private WebContext lightAdminContext;
+	private WebContext webContext;
 
 	@Bean
 	@Autowired
@@ -68,7 +68,7 @@ public class LightAdminSecurityConfiguration {
 
 		List<SecurityFilterChain> filterChains = new ArrayList<SecurityFilterChain>();
 		for ( String pattern : PUBLIC_RESOURCES ) {
-			filterChains.add( new DefaultSecurityFilterChain( new AntPathRequestMatcher( pattern ) ) );
+			filterChains.add( new DefaultSecurityFilterChain( new AntPathRequestMatcher( applicationUrl(pattern) ) ) );
 		}
 
 		filterChains.add( new DefaultSecurityFilterChain( new AnyRequestMatcher(), securityContextPersistenceFilter, exceptionTranslationFilter, logoutFilter, authenticationFilter, rememberMeAuthenticationFilter, filterSecurityInterceptor ) );
@@ -97,16 +97,17 @@ public class LightAdminSecurityConfiguration {
 	@Autowired
 	public Filter authenticationFilter( AuthenticationManager authenticationManager ) {
 		UsernamePasswordAuthenticationFilter authenticationFilter = new UsernamePasswordAuthenticationFilter();
+		authenticationFilter.setFilterProcessesUrl( applicationUrl("/j_spring_security_check") );
 		authenticationFilter.setAuthenticationManager( authenticationManager );
-		authenticationFilter.setAuthenticationFailureHandler( new SimpleUrlAuthenticationFailureHandler( "/login?login_error=1" ) );
+		authenticationFilter.setAuthenticationFailureHandler( new SimpleUrlAuthenticationFailureHandler( applicationUrl("/login?login_error=1") ) );
 		return authenticationFilter;
 	}
 
 	@Bean
 	public Filter exceptionTranslationFilter() {
 		AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
-		accessDeniedHandler.setErrorPage( "/access-denied" );
-		LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint( "/login" );
+		accessDeniedHandler.setErrorPage( applicationUrl("/access-denied") );
+		LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint( applicationUrl("/login") );
 		ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter( authenticationEntryPoint );
 		exceptionTranslationFilter.setAccessDeniedHandler( accessDeniedHandler );
 		return exceptionTranslationFilter;
@@ -114,8 +115,8 @@ public class LightAdminSecurityConfiguration {
 
 	@Bean
 	public Filter logoutFilter() {
-		LogoutFilter logoutFilter = new LogoutFilter( "/", new SecurityContextLogoutHandler() );
-		logoutFilter.setFilterProcessesUrl( "/logout" );
+		LogoutFilter logoutFilter = new LogoutFilter( applicationUrl("/"), new SecurityContextLogoutHandler() );
+		logoutFilter.setFilterProcessesUrl( applicationUrl("/logout") );
 		return logoutFilter;
 	}
 
@@ -155,6 +156,10 @@ public class LightAdminSecurityConfiguration {
 	@Bean
 	public AuthenticationProvider rememberMeAuthenticationProvider() {
 		return new RememberMeAuthenticationProvider( REMEMBER_ME_DIGEST_KEY );
+	}
+
+	private String applicationUrl( String path ) {
+		return webContext.getApplicationUrl( path );
 	}
 
 }
