@@ -133,14 +133,30 @@ public class UserAdministration {
 ```
 
 ## Screenshots
-1. Clone the repository from GitHub
+1. Login to LightAdmin:
+
 ![Login view](https://github.com/max-dev/light-admin/raw/master/screenshots/login.png "login view")
 
-2. Clone the repository from GitHub
+2. Dashboard:
+
 ![Dashboard view](https://github.com/max-dev/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
 
+3. List of persistent entities configured:
+
 ![List view](https://github.com/max-dev/light-admin/raw/master/screenshots/list-view.png "list view")
+
+4. Search entities by criteria:
+
 ![List view & Filtering](https://github.com/max-dev/light-admin/raw/master/screenshots/search.png "list view & filtering")
+
+5. Quick view for particular entity:
+
 ![Quick view](https://github.com/max-dev/light-admin/raw/master/screenshots/quick-view.png "quick view")
+
+6. Editing entity:
+
 ![Form view](https://github.com/max-dev/light-admin/raw/master/screenshots/form-view-validation.png "form view")
+
+7. Show entity with all fields:
+
 ![Show view](https://github.com/max-dev/light-admin/raw/master/screenshots/show-view.png "show view")
