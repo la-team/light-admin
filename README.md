@@ -46,20 +46,20 @@ Download the jar though Maven:
 Enable LightAdmin web-module in you web.xml:
 
 ```xml
-  <context-param>
-		<param-name>light:administration:base-url</param-name>
-		<param-value>/admin</param-value>
-	</context-param>
+<context-param>
+  <param-name>light:administration:base-url</param-name>
+  <param-value>/admin</param-value>
+</context-param>
 
-	<context-param>
-		<param-name>light:administration:security</param-name>
-		<param-value>true</param-value>
-	</context-param>
+<context-param>
+  <param-name>light:administration:security</param-name>
+  <param-value>true</param-value>
+</context-param>
 
-	<context-param>
-		<param-name>light:administration:base-package</param-name>
-		<param-value>[package with @Administration configurations, ex.: org.lightadmin.demo.config]</param-value>
-	</context-param>
+<context-param>
+  <param-name>light:administration:base-package</param-name>
+  <param-value>[package with @Administration configurations, ex.: org.lightadmin.demo.config]</param-value>
+</context-param>
 ```
 
 Also include your JPA persistence provider of choice (Hibernate, EclipseLink, OpenJpa) and setup basic Spring JPA configuration.
