@@ -25,7 +25,7 @@ import static org.lightadmin.data.Domain.*;
 					   } )
 public class DashboardPageTest extends SeleniumIntegrationTest {
 
-	private final List<Domain> expectedDomains = newArrayList( TEST_ORDERS.setExpectedRecordCount( 3 ), TEST_CUSTOMERS.setExpectedRecordCount( 28 ), FILTER_TEST_DOMAIN.setExpectedRecordCount( 11 ) );
+	private final List<Domain> expectedDomains = newArrayList( TEST_ORDERS.setExpectedRecordCount( 6 ), TEST_CUSTOMERS.setExpectedRecordCount( 29 ), FILTER_TEST_DOMAIN.setExpectedRecordCount( 11 ) );
 
 	@Autowired
 	private LoginPage loginPage;

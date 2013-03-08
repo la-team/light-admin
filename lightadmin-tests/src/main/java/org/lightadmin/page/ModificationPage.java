@@ -12,13 +12,13 @@ import static org.junit.Assert.fail;
 
 public abstract class ModificationPage<P extends SecuredPage<P>> extends SecuredPage<P> {
 
-	@FindBy( id = "editForm" )
+	@FindBy(id = "editForm")
 	private WebElement editForm;
 
-	@FindBy( id = "save-changes" )
+	@FindBy(id = "save-changes")
 	private WebElement saveButton;
 
-	@FindBy( id = "cancel-changes" )
+	@FindBy(id = "cancel-changes")
 	private WebElement cancelButton;
 
 	private String domainName;
@@ -77,8 +77,24 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 
 	public void multiSelect( String fieldName, String[] values ) {
 		new MultiSelect(
-				webDriver().findElement(
-						By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" )), webDriver() )
-						.multiSelect( values );
+				getMultiSelectElement( fieldName ), webDriver() )
+				.multiSelect( values );
+	}
+
+	public void deselect( String fieldName ) {
+		new Select( getFieldByName( fieldName ) ).selectByIndex( 0 );
+	}
+
+	public void clearAllSelections( String fieldName ) {
+		new MultiSelect( getMultiSelectElement( fieldName ), webDriver() ).clear();
+	}
+
+	private WebElement getMultiSelectElement( String fieldName ) {
+		return webDriver().findElement(
+				By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" ) );
+	}
+
+	public void replaceFieldSelections( String fieldName, String[] optionsToRemove, String[] optionsToAdd ) {
+		new MultiSelect( getMultiSelectElement( fieldName ), webDriver() ).replaceSelections( optionsToRemove, optionsToAdd );
 	}
 }

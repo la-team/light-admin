@@ -91,10 +91,14 @@ insert into TestCustomer (id, email, firstname, lastname) values (25, 'boyd@dmba
 insert into TestCustomer (id, email, firstname, lastname) values (26, 'to@delete.com', 'Test', 'To delete' );
 insert into TestCustomer (id, email, firstname, lastname) values (27, 'notTo@delete.com', 'Test', 'Not to delete' );
 insert into TestCustomer (id, email, firstname, lastname) values (28, 'orderTest@test.com', 'Order Holder', 'Test Customer' );
+insert into TestCustomer (id, email, firstname, lastname) values (29, 'newCustomer@test.com', 'New Customer', 'Test Customer' );
 
 insert into TestOrders (id, name, customer_id) values (1, 'Order1: 100 line items', 10);
 insert into TestOrders (id, name, customer_id) values (2, 'Order2: no line items', 10);
 insert into TestOrders (id, name, customer_id) values (3, 'Order3: 3 line items', 17);
+insert into TestOrders (id, name, customer_id) values (4, 'Order4: data clearing test', 3);
+insert into TestOrders (id, name, customer_id) values (5, 'Order5: option adding test', 2);
+insert into TestOrders (id, name, customer_id) values (6, 'Order6: option replacing test', 7);
 
 insert into TestAddress (id, street, city, country) values (1, 'Lafayette', 'New York', 'United States');
 insert into TestAddress (id, street, city, country) values (2, 'Baker', 'London', 'United Kingdom');
@@ -116,6 +120,12 @@ insert into testorders_addresses (order_id, address_id) values (1, 1);
 insert into testorders_addresses (order_id, address_id) values (1, 2);
 insert into testorders_addresses (order_id, address_id) values (2, 3);
 insert into testorders_addresses (order_id, address_id) values (3, null);
+insert into testorders_addresses (order_id, address_id) values (4, 5);
+insert into testorders_addresses (order_id, address_id) values (4, 6);
+insert into testorders_addresses (order_id, address_id) values (5, 6);
+insert into testorders_addresses (order_id, address_id) values (5, 7);
+insert into testorders_addresses (order_id, address_id) values (6, 3);
+insert into testorders_addresses (order_id, address_id) values (6, 4);
 
 insert into TestLineItem (id, order_id, product_id, amount) values (1, 1, 1, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (2, 1, 1, 1);
@@ -221,3 +231,13 @@ insert into TestLineItem (id, order_id, product_id, amount) values (101, 3, 1, 1
 insert into TestLineItem (id, order_id, product_id, amount) values (102, 3, 2, 130);
 insert into TestLineItem (id, order_id, product_id, amount) values (103, 3, 3, 1050);
 insert into TestLineItem (id, order_id, product_id, amount) values (104, null, 2, 333);
+insert into TestLineItem (id, order_id, product_id, amount) values (105, 4, 1, 39);
+insert into TestLineItem (id, order_id, product_id, amount) values (106, 4, 2, 12);
+insert into TestLineItem (id, order_id, product_id, amount) values (107, 4, 3, 1);
+insert into TestLineItem (id, order_id, product_id, amount) values (108, 5, 1, 8);
+insert into TestLineItem (id, order_id, product_id, amount) values (109, 5, 2, 10);
+insert into TestLineItem (id, order_id, product_id, amount) values (110, null, 3, 4);
+insert into TestLineItem (id, order_id, product_id, amount) values (111, 6, 3, 6);
+insert into TestLineItem (id, order_id, product_id, amount) values (112, 6, 2, 12);
+insert into TestLineItem (id, order_id, product_id, amount) values (113, 6, 1, 32);
+insert into TestLineItem (id, order_id, product_id, amount) values (114, null, 1, 7);
