@@ -13,7 +13,7 @@ public abstract class WebContextUtils {
 		return WebApplicationContextUtils.getWebApplicationContext( servletContext, servletContextAttributeName() );
 	}
 
-	private static String servletContextAttributeName() {
+	public static String servletContextAttributeName() {
 		return FrameworkServlet.SERVLET_CONTEXT_PREFIX + LightAdminConfigurationUtils.LIGHT_ADMIN_DISPATCHER_NAME;
 	}
 }

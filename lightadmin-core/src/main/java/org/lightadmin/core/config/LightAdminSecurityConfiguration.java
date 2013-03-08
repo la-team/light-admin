@@ -1,15 +1,6 @@
 package org.lightadmin.core.config;
 
-import java.util.List;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Properties;
-import java.util.LinkedHashMap;
-import static java.util.Arrays.asList;
-
-import javax.servlet.Filter;
-
+import org.lightadmin.core.context.WebContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -49,6 +40,12 @@ import org.springframework.security.web.util.AntPathRequestMatcher;
 import org.springframework.security.web.util.AnyRequestMatcher;
 import org.springframework.security.web.util.RequestMatcher;
 
+import javax.servlet.Filter;
+import java.io.IOException;
+import java.util.*;
+
+import static java.util.Arrays.asList;
+
 @Configuration
 public class LightAdminSecurityConfiguration {
 
@@ -56,80 +53,69 @@ public class LightAdminSecurityConfiguration {
 	private static final String REMEMBER_ME_DIGEST_KEY = "LightAdmin";
 
 	private static final String[] PUBLIC_RESOURCES = {
-		"/images/**",
-		"/scripts/**",
-		"/styles/**",
-		"/login",
-		"/page-not-found",
-		"/access-denied"
+		"/images/**", "/scripts/**", "/styles/**", "/login", "/page-not-found", "/access-denied"
 	};
 
 	@Value("classpath:users.properties")
 	private Resource usersResource;
 
-	@Bean @Autowired
-	public FilterChainProxy springSecurityFilterChain(
-			Filter filterSecurityInterceptor,
-			Filter authenticationFilter,
-			Filter rememberMeAuthenticationFilter,
-			Filter logoutFilter,
-			Filter exceptionTranslationFilter,
-			Filter securityContextPersistenceFilter) {
+	@Autowired
+	private WebContext lightAdminContext;
+
+	@Bean
+	@Autowired
+	public FilterChainProxy springSecurityFilterChain( Filter filterSecurityInterceptor, Filter authenticationFilter, Filter rememberMeAuthenticationFilter, Filter logoutFilter, Filter exceptionTranslationFilter, Filter securityContextPersistenceFilter ) {
 
 		List<SecurityFilterChain> filterChains = new ArrayList<SecurityFilterChain>();
-		for (String pattern : PUBLIC_RESOURCES) {
-			filterChains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(pattern)));
+		for ( String pattern : PUBLIC_RESOURCES ) {
+			filterChains.add( new DefaultSecurityFilterChain( new AntPathRequestMatcher( pattern ) ) );
 		}
 
-		filterChains.add(new DefaultSecurityFilterChain(new AnyRequestMatcher(),
-				securityContextPersistenceFilter,
-				exceptionTranslationFilter,
-				logoutFilter,
-				authenticationFilter,
-				rememberMeAuthenticationFilter,
-				filterSecurityInterceptor));
+		filterChains.add( new DefaultSecurityFilterChain( new AnyRequestMatcher(), securityContextPersistenceFilter, exceptionTranslationFilter, logoutFilter, authenticationFilter, rememberMeAuthenticationFilter, filterSecurityInterceptor ) );
 
-		return new FilterChainProxy(filterChains);
+		return new FilterChainProxy( filterChains );
 	}
 
-	@Bean @Autowired
-	public Filter filterSecurityInterceptor(AuthenticationManager authenticationManager) throws Exception {
+	@Bean
+	@Autowired
+	public Filter filterSecurityInterceptor( AuthenticationManager authenticationManager ) throws Exception {
 		FilterSecurityInterceptor filter = new FilterSecurityInterceptor();
-		filter.setAuthenticationManager(authenticationManager);
-		filter.setAccessDecisionManager(new AffirmativeBased(asList((AccessDecisionVoter) new RoleVoter())));
-		filter.setSecurityMetadataSource(securityMetadataSource());
+		filter.setAuthenticationManager( authenticationManager );
+		filter.setAccessDecisionManager( new AffirmativeBased( asList( ( AccessDecisionVoter ) new RoleVoter() ) ) );
+		filter.setSecurityMetadataSource( securityMetadataSource() );
 		filter.afterPropertiesSet();
 		return filter;
 	}
 
 	private FilterInvocationSecurityMetadataSource securityMetadataSource() {
 		LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> map = new LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>();
-		map.put(new AnyRequestMatcher(), asList((ConfigAttribute) new SecurityConfig(ROLE_ADMIN)));
-		return new DefaultFilterInvocationSecurityMetadataSource(map);
+		map.put( new AnyRequestMatcher(), asList( ( ConfigAttribute ) new SecurityConfig( ROLE_ADMIN ) ) );
+		return new DefaultFilterInvocationSecurityMetadataSource( map );
 	}
 
-	@Bean @Autowired
-	public Filter authenticationFilter(AuthenticationManager authenticationManager) {
+	@Bean
+	@Autowired
+	public Filter authenticationFilter( AuthenticationManager authenticationManager ) {
 		UsernamePasswordAuthenticationFilter authenticationFilter = new UsernamePasswordAuthenticationFilter();
-		authenticationFilter.setAuthenticationManager(authenticationManager);
-		authenticationFilter.setAuthenticationFailureHandler(new SimpleUrlAuthenticationFailureHandler("/login?login_error=1"));
+		authenticationFilter.setAuthenticationManager( authenticationManager );
+		authenticationFilter.setAuthenticationFailureHandler( new SimpleUrlAuthenticationFailureHandler( "/login?login_error=1" ) );
 		return authenticationFilter;
 	}
 
 	@Bean
 	public Filter exceptionTranslationFilter() {
 		AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
-		accessDeniedHandler.setErrorPage("/access-denied");
-		LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint("/login");
-		ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter(authenticationEntryPoint);
-		exceptionTranslationFilter.setAccessDeniedHandler(accessDeniedHandler);
+		accessDeniedHandler.setErrorPage( "/access-denied" );
+		LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint( "/login" );
+		ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter( authenticationEntryPoint );
+		exceptionTranslationFilter.setAccessDeniedHandler( accessDeniedHandler );
 		return exceptionTranslationFilter;
 	}
 
 	@Bean
 	public Filter logoutFilter() {
-		LogoutFilter logoutFilter = new LogoutFilter("/", new SecurityContextLogoutHandler());
-		logoutFilter.setFilterProcessesUrl("/logout");
+		LogoutFilter logoutFilter = new LogoutFilter( "/", new SecurityContextLogoutHandler() );
+		logoutFilter.setFilterProcessesUrl( "/logout" );
 		return logoutFilter;
 	}
 
@@ -139,35 +125,36 @@ public class LightAdminSecurityConfiguration {
 	}
 
 	@Bean
-	public Filter rememberMeAuthenticationFilter(AuthenticationManager authenticationManager, UserDetailsService userDetailsService) {
-		return new RememberMeAuthenticationFilter(authenticationManager, new TokenBasedRememberMeServices(REMEMBER_ME_DIGEST_KEY, userDetailsService));
+	public Filter rememberMeAuthenticationFilter( AuthenticationManager authenticationManager, UserDetailsService userDetailsService ) {
+		return new RememberMeAuthenticationFilter( authenticationManager, new TokenBasedRememberMeServices( REMEMBER_ME_DIGEST_KEY, userDetailsService ) );
 	}
 
-	@Bean @Autowired
-	public AuthenticationManager authenticationManager(
-			AuthenticationProvider authenticationProvider, AuthenticationProvider rememberMeAuthenticationProvider) {
+	@Bean
+	@Autowired
+	public AuthenticationManager authenticationManager( AuthenticationProvider authenticationProvider, AuthenticationProvider rememberMeAuthenticationProvider ) {
 
-		return new ProviderManager(asList(authenticationProvider, rememberMeAuthenticationProvider));
+		return new ProviderManager( asList( authenticationProvider, rememberMeAuthenticationProvider ) );
 	}
 
-	@Bean @Autowired
-	public AuthenticationProvider authenticationProvider(UserDetailsService usersService) throws Exception {
+	@Bean
+	@Autowired
+	public AuthenticationProvider authenticationProvider( UserDetailsService usersService ) throws Exception {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setPasswordEncoder(NoOpPasswordEncoder.getInstance());
-		provider.setUserDetailsService(usersService);
+		provider.setPasswordEncoder( NoOpPasswordEncoder.getInstance() );
+		provider.setUserDetailsService( usersService );
 		provider.afterPropertiesSet();
 		return provider;
 	}
 
 	@Bean
 	public UserDetailsService userDetailsService() throws IOException {
-		Properties usersPproperties = PropertiesLoaderUtils.loadProperties(usersResource);
-		return new InMemoryUserDetailsManager(usersPproperties);
+		Properties usersPproperties = PropertiesLoaderUtils.loadProperties( usersResource );
+		return new InMemoryUserDetailsManager( usersPproperties );
 	}
 
 	@Bean
 	public AuthenticationProvider rememberMeAuthenticationProvider() {
-		return new RememberMeAuthenticationProvider(REMEMBER_ME_DIGEST_KEY);
+		return new RememberMeAuthenticationProvider( REMEMBER_ME_DIGEST_KEY );
 	}
 
 }

@@ -16,6 +16,7 @@ import java.util.regex.Pattern;
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
+import static org.lightadmin.core.web.util.WebContextUtils.servletContextAttributeName;
 
 @SuppressWarnings("unused")
 public class LightAdminWebApplicationInitializer implements WebApplicationInitializer {
@@ -103,11 +104,9 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 	}
 
 	private DelegatingFilterProxy springSecurityFilterChain() {
-		AnnotationConfigWebApplicationContext securityWebApplicationContext = new AnnotationConfigWebApplicationContext();
-		securityWebApplicationContext.register( LightAdminSecurityConfiguration.class );
-		securityWebApplicationContext.setNamespace( "lightadmin-security" );
-
-		return new DelegatingFilterProxy( "springSecurityFilterChain", securityWebApplicationContext );
+		final DelegatingFilterProxy securityFilterChain = new DelegatingFilterProxy( "springSecurityFilterChain" );
+		securityFilterChain.setContextAttribute( servletContextAttributeName() );
+		return securityFilterChain;
 	}
 
 	private CharacterEncodingFilter characterEncodingFilter() {
