@@ -62,7 +62,7 @@ Enable LightAdmin web-module in you web.xml:
 </context-param>
 ```
 
-Also include your JPA persistence provider of choice (Hibernate, EclipseLink, OpenJpa) and setup basic Spring JPA configuration.
+Also include your JPA persistence provider of choice (Hibernate, EclipseLink, OpenJpa) and setup basic <b>Spring JPA</b> configuration.
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -106,7 +106,7 @@ public class User {
   // Getters and setters
 }
 ```
-Create an @Administration configuration in the package defined in <b>web.xml</b> previously:
+Create an <b>@Administration configuration</b> in the package defined in <b>web.xml</b> previously:
 
 ```java
 @Administration( User.class )
