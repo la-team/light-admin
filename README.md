@@ -26,7 +26,7 @@ This module deals with enhanced support for JPA based data access layers
 * Web site: [lightadmin.org](http://lightadmin.org)
 * For more detailed questions: [groups.google.com/group/lightadmin](http://groups.google.com/group/lightadmin)
 
-## Bug Reports & Contributing:
+## Bug Reports & Contribution:
 
 * Bug Reports: [github.com/max-dev/light-admin/issues](http://github.com/max-dev/light-admin/issues)
 * <b>Want to Contribute?</b>: Read the Guide ;)
