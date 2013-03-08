@@ -9,35 +9,34 @@
 
 <tiles:useAttribute name="dashboardDomainTypes"/>
 
-<c:if test="${not empty dashboardDomainTypes}">
-	<div class="widget">
-		<div class="head"><h5 class="iChart8">Domain type statistics</h5>
-
-			<div class="num"><a id="total-count-change" href="#" class="blueNum">+100500</a></div>
-		</div>
+<div class="widget">
+	<div class="head"><h5 class="iChart8">Domain type statistics</h5></div>
+	<c:if test="${not empty dashboardDomainTypes}">
 		<table id="dashboard-statistics" cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
 			<thead>
 			<tr>
 				<td>Domain Type</td>
 				<td width="21%">Amount</td>
-				<td width="21%">Changes</td>
 			</tr>
 			</thead>
 			<tbody>
 			<c:forEach var="dashboardDomainType" items="${dashboardDomainTypes}">
 				<tr id="stat-row-${dashboardDomainType.first.value}" class="stat-row">
-					<td><a class="domain-link" href="<light:url value='${dashboardDomainType.first.link}'/>"
-						   title=""><c:out value="${dashboardDomainType.first.value}"/></a></td>
+					<td style="padding-left: 35px;"><a class="domain-link" href="<light:url value='${dashboardDomainType.first.link}'/>"
+													   title=""><c:out value="${dashboardDomainType.first.value}"/></a></td>
 					<td align="center">
 						<a href="<light:url value='${dashboardDomainType.first.link}'/>" title="" class="webStatsLink">
 							<span class="record-count"><c:out value="${dashboardDomainType.second}"/></span>
 						</a>
 					</td>
-					<td><span class="statPlus record-count-change">0.<c:out
-							value="${dashboardDomainType.second}"/>%</span></td>
 				</tr>
 			</c:forEach>
 			</tbody>
 		</table>
-	</div>
-</c:if>
+	</c:if>
+	<c:if test="${empty dashboardDomainTypes}">
+		<div class="body aligncenter">
+			No Domain type <strong>@Administration</strong> configuration registered.
+		</div>
+	</c:if>
+</div>
