@@ -1,6 +1,7 @@
 # Light Admin #
 
 [Light Admin](http://lightadmin.org) is an elegant solution for building administration style interfaces for Java web applications.
+
 The primary goal of the project is to speed up application development 
 by bringing pluggable easy-to-use data management back-end for JPA based applications.
 
