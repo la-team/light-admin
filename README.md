@@ -135,8 +135,10 @@ public class UserAdministration {
 ## Screenshots
 1. Clone the repository from GitHub
 ![Login view](https://github.com/max-dev/light-admin/raw/master/screenshots/login.png "login view")
+
 2. Clone the repository from GitHub
 ![Dashboard view](https://github.com/max-dev/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
+
 ![List view](https://github.com/max-dev/light-admin/raw/master/screenshots/list-view.png "list view")
 ![List view & Filtering](https://github.com/max-dev/light-admin/raw/master/screenshots/search.png "list view & filtering")
 ![Quick view](https://github.com/max-dev/light-admin/raw/master/screenshots/quick-view.png "quick view")
