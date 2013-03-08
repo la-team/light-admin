@@ -131,3 +131,12 @@ public class UserAdministration {
   }
 
 ```
+
+## Screenshots
+![Login view](https://github.com/max-dev/light-admin/raw/master/screenshots/login.png "login view")
+![Dashboard view](https://github.com/max-dev/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
+![List view](https://github.com/max-dev/light-admin/raw/master/screenshots/list-view.png "list view")
+![List view & Filtering](https://github.com/max-dev/light-admin/raw/master/screenshots/search.png "list view & filtering")
+![Quick view](https://github.com/max-dev/light-admin/raw/master/screenshots/quick-view.png "quick view")
+![Form view](https://github.com/max-dev/light-admin/raw/master/screenshots/form-view-validation.png "form view")
+![Show view](https://github.com/max-dev/light-admin/raw/master/screenshots/show-view.png "show view")
