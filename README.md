@@ -44,7 +44,7 @@ Download the jar though Maven:
 </dependency> 
 ```
 
-Enable LightAdmin web-module in you web.xml:
+Enable LightAdmin web-module in you <b>web.xml</b>:
 
 ```xml
 <context-param>
