@@ -11,7 +11,7 @@ import org.lightadmin.page.ListViewPage;
 import org.lightadmin.page.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import static org.lightadmin.util.DomainAsserts.assertQuickViewFieldValues;
+import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 import static org.lightadmin.util.DomainAsserts.assertQuickViewFields;
 
 public class DefaultFieldsTest extends SeleniumIntegrationTest {
@@ -37,11 +37,15 @@ public class DefaultFieldsTest extends SeleniumIntegrationTest {
 		String[] quickViewFieldNames = quickViewComponent.getQuickViewFieldNames();
 		String[] quickViewFieldValues = quickViewComponent.getQuickViewFieldValues();
 
-		assertQuickViewFields( new String[] {"Id:", "Name:", "LineItems:"}, quickViewFieldNames );
-		assertQuickViewFieldValues( new String[] {
-			"3", "Order3: 3 line items", "TestLineItem #101\n" +
-										 "TestLineItem #102\n" +
-										 "TestLineItem #103"
+		assertQuickViewFields( new String[] {"Id:", "ShippingAddresses:", "Name:", "Customer:", "LineItems:"}, quickViewFieldNames );
+		assertFieldValues( new String[]{
+				"3",
+				" ",
+				"Order3: 3 line items",
+				"TestCustomer #17",
+				"TestLineItem #101\n" +
+				"TestLineItem #102\n" +
+				"TestLineItem #103"
 		}, quickViewFieldValues );
 	}
 }

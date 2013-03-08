@@ -63,10 +63,6 @@ insert into TestProduct (id, name, price) values (1, 'Product 1', 499.0);
 insert into TestProduct (id, name, price) values (2, 'Product 2', 1299.0);
 insert into TestProduct (id, name, price) values (3, 'Product 3', 49.0);
 
-insert into TestOrders (id, name) values (1, 'Order1: 100 line items');
-insert into TestOrders (id, name) values (2, 'Order2: no line items');
-insert into TestOrders (id, name) values (3, 'Order3: 3 line items');
-
 insert into TestCustomer (id, email, firstname, lastname) values (1, 'dave@dmband1.com', 'Dave', 'Matthews1')
 insert into TestCustomer (id, email, firstname, lastname) values (2, 'carter@dmband2.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (3, 'boyd@dmband3.com', 'Boyd', 'Tinsley');
@@ -94,6 +90,19 @@ insert into TestCustomer (id, email, firstname, lastname) values (24, 'boyd@dmba
 insert into TestCustomer (id, email, firstname, lastname) values (25, 'boyd@dmband25.com', 'Boyd', 'Matthews1');
 insert into TestCustomer (id, email, firstname, lastname) values (26, 'to@delete.com', 'Test', 'To delete' );
 insert into TestCustomer (id, email, firstname, lastname) values (27, 'notTo@delete.com', 'Test', 'Not to delete' );
+insert into TestCustomer (id, email, firstname, lastname) values (28, 'orderTest@test.com', 'Order Holder', 'Test Customer' );
+
+insert into TestOrders (id, name, customer_id) values (1, 'Order1: 100 line items', 10);
+insert into TestOrders (id, name, customer_id) values (2, 'Order2: no line items', 10);
+insert into TestOrders (id, name, customer_id) values (3, 'Order3: 3 line items', 17);
+
+insert into TestAddress (id, street, city, country) values (1, 'Lafayette', 'New York', 'United States');
+insert into TestAddress (id, street, city, country) values (2, 'Baker', 'London', 'United Kingdom');
+insert into TestAddress (id, street, city, country) values (3, 'Kreschatik', 'Kiev', 'Ukraine');
+insert into TestAddress (id, street, city, country) values (4, 'Marksistskaya', 'Moscow', 'Russia');
+insert into TestAddress (id, street, city, country) values (5, 'Vesterbrogade', 'Copenhagen', 'Denmark');
+insert into TestAddress (id, street, city, country) values (6, 'Usteristrasse', 'Zurich', 'Switzerland');
+insert into TestAddress (id, street, city, country) values (7, 'Via Aurelia', 'Rome', 'Italy');
 
 insert into TestDiscountProgram (id, name) values (1, 'Silver Discount Program');
 insert into TestDiscountProgram (id, name) values (2, 'Gold Discount Program');
@@ -102,6 +111,11 @@ insert into TestDiscountProgram (id, name) values (3, 'Platinum Discount Program
 insert into testcustomer_discount (customer_id, discount_program_id) values (1, 3);
 insert into testcustomer_discount (customer_id, discount_program_id) values (2, 1);
 insert into testcustomer_discount (customer_id, discount_program_id) values (3, 2);
+
+insert into testorders_addresses (order_id, address_id) values (1, 1);
+insert into testorders_addresses (order_id, address_id) values (1, 2);
+insert into testorders_addresses (order_id, address_id) values (2, 3);
+insert into testorders_addresses (order_id, address_id) values (3, null);
 
 insert into TestLineItem (id, order_id, product_id, amount) values (1, 1, 1, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (2, 1, 1, 1);
@@ -206,3 +220,4 @@ insert into TestLineItem (id, order_id, product_id, amount) values (100, 1, 3, 1
 insert into TestLineItem (id, order_id, product_id, amount) values (101, 3, 1, 12);
 insert into TestLineItem (id, order_id, product_id, amount) values (102, 3, 2, 130);
 insert into TestLineItem (id, order_id, product_id, amount) values (103, 3, 3, 1050);
+insert into TestLineItem (id, order_id, product_id, amount) values (104, null, 2, 333);

@@ -6,7 +6,6 @@ import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.FilterTestEntityConfiguration;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.FieldValueBuilder;
 import org.lightadmin.data.User;
 import org.lightadmin.page.EditPage;
 import org.lightadmin.page.ListViewPage;
@@ -14,10 +13,7 @@ import org.lightadmin.page.LoginPage;
 import org.lightadmin.page.ShowViewPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.Map;
-
-import static org.lightadmin.util.DomainAsserts.assertFieldValue;
-import static org.lightadmin.util.DomainAsserts.assertShowViewFieldValues;
+import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 
 public class PrimitiveFields extends SeleniumIntegrationTest {
 
@@ -47,26 +43,32 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 	public void canBeCleared() {
 		clearAllFieldValuesAndSave();
 
-		assertShowViewFieldValues( clearedFields, showView );
-		assertFieldValue( "calculatedField", "0", webDriver() );
-		assertFieldValue( "booleanField", "No", webDriver() );
+		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
+
+		assertFieldValues(
+				new String[]{ " ", "0", "0", "0", "0", "No" },
+				showViewFieldValues );
 	}
 
 	@Test
 	public void canBeModified() {
 		modifyFieldValuesAndSave();
 
-		assertShowViewFieldValues( modifiedFields, showView );
-		assertFieldValue( "calculatedField", "5789.52", webDriver() );
-		assertFieldValue( "booleanField", "Yes", webDriver() );
+		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
+
+		assertFieldValues(
+				new String[]{ "new text value", "1234", "4321", "234.52", "5789.52", "Yes" },
+				showViewFieldValues );
 	}
 
 	private void clearAllFieldValuesAndSave() {
 		editPage = listViewPage.editItem( 4 );
 
-		for ( String fieldName : clearedFields.keySet() ) {
-			editPage.clear( fieldName );
-		}
+		editPage.clear( "textField" );
+		editPage.clear( "integerField" );
+		editPage.clear( "primitiveIntegerField" );
+		editPage.clear( "decimalField" );
+
 		editPage.check( "booleanField" );
 
 		showView = editPage.submit();
@@ -75,25 +77,14 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 	private void modifyFieldValuesAndSave() {
 		editPage = listViewPage.editItem( 3 );
 
-		for ( String fieldName : modifiedFields.keySet() ) {
-			editPage.type( fieldName, modifiedFields.get( fieldName ) );
-		}
+		editPage.type( "textField", "new text value" );
+		editPage.type( "integerField", "1234" );
+		editPage.type( "primitiveIntegerField", "4321" );
+		editPage.type( "decimalField", "234.52" );
+
 		editPage.check( "booleanField" );
 
 		showView = editPage.submit();
 	}
-
-	private Map<String, String> clearedFields = new FieldValueBuilder()
-			.add( "textField", "" )
-			.add( "integerField", "0" )
-			.add( "primitiveIntegerField", "0" )
-			.add( "decimalField", "0" ).build();
-
-	private Map<String, String> modifiedFields = new FieldValueBuilder()
-			.add( "textField", "new text value" )
-			.add( "integerField", "1234" )
-			.add( "primitiveIntegerField", "4321" )
-			.add( "decimalField", "234.52" ).build();
-
 }
 

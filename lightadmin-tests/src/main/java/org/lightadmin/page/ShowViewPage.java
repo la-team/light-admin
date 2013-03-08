@@ -2,7 +2,6 @@ package org.lightadmin.page;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.lightadmin.SeleniumContext;
-import org.lightadmin.data.Domain;
 import org.lightadmin.util.WebElementTransformer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -49,7 +48,10 @@ public class ShowViewPage extends SecuredPage<ShowViewPage> {
 		}
 	}
 
-	public String getFieldValue( String fieldName ) {
-		return webDriver().findElement( By.name( "field-" + fieldName ) ).getText().trim();
+	public String[] getFieldValuesExcludingId() {
+		String[] allFieldValues = WebElementTransformer.transformToArray(
+				dataContainer.findElements( By.xpath( "//td[contains(@name, 'field-')]" ) ) );
+
+		return ArrayUtils.remove( allFieldValues, 0 );
 	}
 }

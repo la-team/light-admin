@@ -1,6 +1,5 @@
 package org.lightadmin.page.fieldDisplay.quickView;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
@@ -13,7 +12,7 @@ import org.lightadmin.page.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
-import static org.lightadmin.util.DomainAsserts.assertQuickViewFieldValues;
+import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 
 public class DisplayTest extends SeleniumIntegrationTest {
 
@@ -47,7 +46,7 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
 		final String[] actualFieldValues = quickViewComponent.getQuickViewFieldValues();
 
-		assertQuickViewFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues );
+		assertFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues );
 	}
 
 	@Test
@@ -58,8 +57,8 @@ public class DisplayTest extends SeleniumIntegrationTest {
 		final QuickViewComponent quickViewComponent2 = testOrderListPage.showQuickViewForItem( 3 );
 		final String[] actualFieldValues2 = quickViewComponent2.getQuickViewFieldValues();
 
-		assertQuickViewFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues1 );
-		assertQuickViewFieldValues( new String[]{ "3", "226308.00" }, actualFieldValues2 );
+		assertFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues1 );
+		assertFieldValues( new String[]{ "3", "226308.00" }, actualFieldValues2 );
 	}
 
 	//TODO: iko: add test covering dynamic fields

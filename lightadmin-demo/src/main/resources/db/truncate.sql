@@ -13,5 +13,7 @@ TRUNCATE TABLE TestProduct;
 TRUNCATE TABLE TestOrders;
 TRUNCATE TABLE TestCustomer;
 TRUNCATE TABLE TestLineItem;
+TRUNCATE TABLE TestAddress;
 TRUNCATE TABLE TestDiscountProgram;
 TRUNCATE TABLE testcustomer_discount;
+TRUNCATE TABLE testorders_addresses;

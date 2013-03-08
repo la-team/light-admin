@@ -4,8 +4,8 @@ import org.lightadmin.demo.model.AbstractEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 
@@ -14,6 +14,16 @@ import static com.google.common.collect.Lists.newArrayList;
 public class TestOrder extends AbstractEntity {
 
 	private String name;
+
+	@ManyToOne(cascade = CascadeType.ALL)
+	private TestCustomer customer;
+
+	@ManyToMany
+	@JoinTable(name = "testorders_addresses",
+			joinColumns = @JoinColumn(name = "order_id", referencedColumnName = "ID"),
+			inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "ID")
+	)
+	private Set<TestAddress> shippingAddresses;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "order_id")
@@ -35,7 +45,7 @@ public class TestOrder extends AbstractEntity {
 	}
 
 	public List<TestLineItem> getLineItems() {
-		return Collections.unmodifiableList( lineItems );
+		return lineItems;
 	}
 
 	public BigDecimal getOrderTotal() {
@@ -46,5 +56,22 @@ public class TestOrder extends AbstractEntity {
 		}
 
 		return orderTotal;
+	}
+
+	public TestCustomer getCustomer() {
+		return customer;
+	}
+
+	public void setCustomer( TestCustomer customer ) {
+		this.customer = customer;
+	}
+
+
+	public Set<TestAddress> getShippingAddresses() {
+		return shippingAddresses;
+	}
+
+	public void setShippingAddresses( final Set<TestAddress> shippingAddresses ) {
+		this.shippingAddresses = shippingAddresses;
 	}
 }

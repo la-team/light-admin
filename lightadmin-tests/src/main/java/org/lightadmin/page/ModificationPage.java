@@ -1,10 +1,12 @@
 package org.lightadmin.page;
 
 import org.lightadmin.SeleniumContext;
+import org.lightadmin.field.MultiSelect;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
+import org.openqa.selenium.support.ui.Select;
 
 import static org.junit.Assert.fail;
 
@@ -46,7 +48,7 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 	}
 
 	public void type( String fieldName, String fielValue ) {
-		webDriver().clearAndType( editForm.findElement( By.name( fieldName ) ), fielValue );
+		webDriver().clearAndType( getFieldByName( fieldName ), fielValue );
 	}
 
 	public ShowViewPage submit() {
@@ -58,10 +60,25 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 	protected abstract int getItemId();
 
 	public void clear( String fieldName ) {
-		webDriver().clear( editForm.findElement( By.name( fieldName ) ) );
+		webDriver().clear( getFieldByName( fieldName ) );
 	}
 
 	public void check( String booleanField ) {
-		editForm.findElement( By.name( booleanField ) ).click();
+		getFieldByName( booleanField ).click();
+	}
+
+	private WebElement getFieldByName( String booleanField ) {
+		return editForm.findElement( By.name( booleanField ) );
+	}
+
+	public void select( String fieldName, String value ) {
+		new Select( getFieldByName( fieldName ) ).selectByVisibleText( value );
+	}
+
+	public void multiSelect( String fieldName, String[] values ) {
+		new MultiSelect(
+				webDriver().findElement(
+						By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" )), webDriver() )
+						.multiSelect( values );
 	}
 }

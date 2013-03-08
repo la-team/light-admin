@@ -63,20 +63,10 @@ id BIGINT IDENTITY PRIMARY KEY,
 parent_id BIGINT CONSTRAINT child_to_parent_ref REFERENCES parenttestentity (id),
 name VARCHAR (255));
 
-CREATE TABLE testorders (
-id BIGINT IDENTITY PRIMARY KEY,
-name VARCHAR (255));
-
 CREATE TABLE testproduct (
 id BIGINT IDENTITY PRIMARY KEY,
 name VARCHAR(255),
 price DECIMAL(8,2));
-
-CREATE TABLE testlineitem (
-id BIGINT IDENTITY PRIMARY KEY,
-product_id BIGINT CONSTRAINT testlineitem_product_ref REFERENCES testproduct (id),
-order_id BIGINT CONSTRAINT testlineitem_orders_ref REFERENCES testorders (id),
-amount BIGINT );
 
 CREATE TABLE testcustomer (
 id BIGINT IDENTITY PRIMARY KEY,
@@ -85,10 +75,31 @@ lastname VARCHAR(255),
 email VARCHAR(255));
 CREATE UNIQUE INDEX ix_testcustomer_email ON TESTCUSTOMER (email ASC);
 
+CREATE TABLE testorders (
+id BIGINT IDENTITY PRIMARY KEY,
+name VARCHAR (255),
+customer_id BIGINT CONSTRAINT testorders_customer_ref REFERENCES testcustomer (id));
+
+CREATE TABLE testlineitem (
+id BIGINT IDENTITY PRIMARY KEY,
+product_id BIGINT CONSTRAINT testlineitem_product_ref REFERENCES testproduct (id),
+order_id BIGINT CONSTRAINT testlineitem_orders_ref REFERENCES testorders (id),
+amount BIGINT );
+
 CREATE TABLE testdiscountprogram (
 id BIGINT IDENTITY PRIMARY KEY,
 name VARCHAR(255));
 
 CREATE TABLE testcustomer_discount (
-customer_id BIGINT CONSTRAINT testcustomer_discount_customer_ref REFERENCES testcustomer (id),
-discount_program_id BIGINT CONSTRAINT testcustomer_discount_discountprogram_ref REFERENCES testdiscountprogram (id));
+customer_id BIGINT CONSTRAINT testcustomer_testdiscount_customer_ref REFERENCES testcustomer (id),
+discount_program_id BIGINT CONSTRAINT testcustomer_testdiscount_discountprogram_ref REFERENCES testdiscountprogram (id));
+
+CREATE TABLE testaddress (
+id BIGINT IDENTITY PRIMARY KEY,
+street VARCHAR(255),
+city VARCHAR(255),
+country VARCHAR(255));
+
+CREATE TABLE testorders_addresses (
+order_id BIGINT CONSTRAINT testorder_testaddress_order_ref REFERENCES testorders (id),
+address_id BIGINT CONSTRAINT testorder_testaddress_address_ref REFERENCES testaddress (id));

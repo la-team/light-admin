@@ -58,9 +58,9 @@ public class DomainAsserts {
 				expectedFields, actualFields );
 	}
 
-	public static void assertQuickViewFieldValues( final String[] expectedValues, final String[] actualValues ) {
+	public static void assertFieldValues( final String[] expectedValues, final String[] actualValues ) {
 		assertArrayEquals(
-				String.format( "Wrong field values on Quick View. Expected field values: %s, actual field values: %s",
+				String.format( "Wrong field values. Expected field values: %s, actual field values: %s",
 						Arrays.toString( expectedValues ), Arrays.toString( actualValues ) ),
 				expectedValues, actualValues );
 	}
@@ -68,13 +68,6 @@ public class DomainAsserts {
 	public static void assertScopeCount( final String scope, final int expectedCount, final ListViewPage thePage ) {
 		assertEquals( String.format( "Wrong count for scope '%s': ", scope ),
 				expectedCount, thePage.getScopeCount( scope ) );
-	}
-
-	public static void assertShowViewFieldValues( final Map<String, String> expectedFieldValueMap, final ShowViewPage showView ) {
-		for ( String fieldName : expectedFieldValueMap.keySet() ) {
-			assertEquals( String.format( "Wrong value for field '%s'", fieldName ),
-					expectedFieldValueMap.get( fieldName ), showView.getFieldValue( fieldName ) );
-		}
 	}
 
 	public static void assertFieldValue( final String fieldName, final String expectedValue, final WebDriver webDriver ) {

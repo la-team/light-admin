@@ -70,8 +70,8 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
     @Test
 	public void defaultScopeCountIsCorrect() {
-		assertScopeCount( "All", 27, customerListViewPage );
-		assertScopeCount( "Buyers", 27, customerListViewPage );
+		assertScopeCount( "All", 28, customerListViewPage );
+		assertScopeCount( "Buyers", 28, customerListViewPage );
 		assertScopeCount( "Sellers", 8, customerListViewPage );
 	}
 

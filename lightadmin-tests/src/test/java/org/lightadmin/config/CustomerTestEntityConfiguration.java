@@ -2,6 +2,8 @@ package org.lightadmin.config;
 
 import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
+import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
@@ -19,6 +21,10 @@ import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
 @SuppressWarnings( "unused" )
 @Administration( TestCustomer.class )
 public class CustomerTestEntityConfiguration {
+
+	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
+		return configurationBuilder.nameField( "firstname" ).build();
+	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
 		return screenContextBuilder

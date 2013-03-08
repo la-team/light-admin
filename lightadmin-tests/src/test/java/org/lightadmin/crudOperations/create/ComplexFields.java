@@ -4,7 +4,10 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
-import org.lightadmin.config.FilterTestEntityConfiguration;
+import org.lightadmin.config.CustomerTestEntityConfiguration;
+import org.lightadmin.config.OrderTestEntityWithComplexFields;
+import org.lightadmin.config.TestAddressConfiguration;
+import org.lightadmin.config.TestLineItemConfiguration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.data.User;
 import org.lightadmin.page.CreatePage;
@@ -14,7 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 
-public class PrimitiveFields extends SeleniumIntegrationTest {
+public class ComplexFields extends SeleniumIntegrationTest {
 
 	@Autowired
 	private LoginPage loginPage;
@@ -26,10 +29,13 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 	public void setup() {
 		removeAllDomainTypeAdministrationConfigurations();
 
-		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( TestLineItemConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( TestAddressConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( CustomerTestEntityConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithComplexFields.class );
 
 		createPage = loginPage.get().loginAs( User.ADMINISTRATOR )
-				.navigateToDomain( Domain.FILTER_TEST_DOMAIN )
+				.navigateToDomain( Domain.TEST_ORDERS )
 				.navigateToCreatePage();
 	}
 
@@ -44,8 +50,12 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 
 		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
 
-		assertFieldValues(
-				new String[]{ "new item", "8765", "52522", "29572.98", "90859.98", "Yes"},
+		assertFieldValues( new String[]{
+				"Order Holder",
+				"Marksistskaya, Moscow, Russia\n" +
+						"Via Aurelia, Rome, Italy",
+				"LineItem Id: 104; Product Name: Product 2",
+				"432567.00" },
 				showViewFieldValues );
 	}
 
@@ -55,17 +65,13 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 
 		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
 
-		assertFieldValues(
-				new String[]{ " ", "0", "0", "0", "0", "No"},
-				showViewFieldValues );
+		assertFieldValues( new String[]{ " ", " ", " ", "0" }, showViewFieldValues );
 	}
 
 	private void fillInFieldsAndSave() {
-		createPage.type( "textField", "new item" );
-		createPage.type( "integerField", "8765" );
-		createPage.type( "primitiveIntegerField", "52522" );
-		createPage.type( "decimalField", "29572.98" );
-		createPage.check( "booleanField" );
+		createPage.select( "customer", "Order Holder" );
+		createPage.multiSelect( "shippingAddresses", new String[]{"Marksistskaya, Moscow, Russia", "Via Aurelia, Rome, Italy"} );
+		createPage.multiSelect( "lineItems", new String[]{ "104. Product: Product 2; Amount: 333; Total: 432567.00" } );
 
 		showView = createPage.submit();
 	}
@@ -73,6 +79,4 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 	private void leaveFieldsEmptyAndSave() {
 		showView = createPage.submit();
 	}
-
 }
-
