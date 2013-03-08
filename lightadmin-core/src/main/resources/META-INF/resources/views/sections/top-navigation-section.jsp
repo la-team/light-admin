@@ -9,14 +9,14 @@
 <div id="topNav">
 	<div class="fixed">
 		<div class="wrapper">
-			<sec:authorize ifAllGranted="admin">
+			<sec:authorize ifAllGranted="ROLE_ADMIN">
 				<div class="welcome"><a href="#" title=""><img src="<light:url value='/images/userPic.png'/>"
-															   alt=""/></a><span>Hello, <sec:authentication
+															alt=""/></a><span>Hello, <sec:authentication
 						property="principal.username"/>!</span></div>
 				<div class="userNav">
 					<ul>
 						<li><a href="#" title=""><img src="<light:url value='/images/icons/topnav/profile.png'/>"
-													  alt=""/><span>Profile</span></a></li>
+													alt=""/><span>Profile</span></a></li>
 						<li><a href="<light:url value='/logout'/>" title=""><img
 								src="<light:url value='/images/icons/topnav/logout.png'/>"
 								alt=""/><span>Logout</span></a>
@@ -25,15 +25,15 @@
 				</div>
 			</sec:authorize>
 
-			<sec:authorize ifNotGranted="admin">
+			<sec:authorize ifNotGranted="ROLE_ADMIN">
 				<div class="userNav">
 					<ul>
 						<li><a href="#" title=""><img src="<light:url value='/images/icons/topnav/register.png'/>"
-													  alt=""><span>Register</span></a></li>
+													alt=""><span>Register</span></a></li>
 						<li><a href="#" title=""><img src="<light:url value='/images/icons/topnav/contactAdmin.png'/>"
-													  alt=""><span>Contact admin</span></a></li>
+													alt=""><span>Contact admin</span></a></li>
 						<li><a href="#" title=""><img src="<light:url value='/images/icons/topnav/help.png'/>"
-													  alt=""><span>Help</span></a></li>
+													alt=""><span>Help</span></a></li>
 					</ul>
 				</div>
 			</sec:authorize>
