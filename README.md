@@ -4,6 +4,9 @@
 
 The primary goal of the project is to speed up application development 
 by bringing pluggable easy-to-use data management back-end for JPA based applications.
+LightAdmin makes it possible to focus on the stuff that matters instead of spending time on auxiliary functionality.
+And the most important thing is that LightAdmin is complete end-to-end solution which is distributed as a maven artifact
+and can be used in all of your projects in order to relieve your codebase for more important stuff.
 
 ## Features ##
 
