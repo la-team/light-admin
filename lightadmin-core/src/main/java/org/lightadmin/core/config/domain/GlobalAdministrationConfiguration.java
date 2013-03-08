@@ -8,44 +8,45 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-@SuppressWarnings( "unchecked" )
+@SuppressWarnings("unchecked")
 public class GlobalAdministrationConfiguration {
 
 	private final DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory;
 	private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
 	private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
 
-	public GlobalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
+	public GlobalAdministrationConfiguration( DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory ) {
 		this.domainTypeConfigurationFactory = domainTypeConfigurationFactory;
 	}
 
 	public void registerDomainTypeConfiguration( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
 		managedDomainTypeConfigurations.put( domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration );
-		registerAssociationDomainTypeConfigurations(domainTypeAdministrationConfiguration);
+		registerAssociationDomainTypeConfigurations( domainTypeAdministrationConfiguration );
 	}
 
-	private void registerAssociationDomainTypeConfigurations(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
+	private void registerAssociationDomainTypeConfigurations( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
 
-		domainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
+		domainTypeConfigurations.put( domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration );
 
 		DomainTypeEntityMetadata<DomainTypeAttributeMetadata> entityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
-		for (DomainTypeAttributeMetadata attrMetadata : entityMetadata.getAttributes()) {
-			if (!attrMetadata.isAssociation()) {
+		for ( DomainTypeAttributeMetadata attrMetadata : entityMetadata.getAttributes() ) {
+			if ( !attrMetadata.isAssociation() ) {
 				continue;
 			}
 			Class<?> associationDomainType = attrMetadata.getAssociationDomainType();
 			DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeConfigurationFactory.createNonManagedDomainTypeConfiguration( associationDomainType );
-			domainTypeConfigurations.putIfAbsent(associationDomainType, associationTypeConfiguration);
+			domainTypeConfigurations.putIfAbsent( associationDomainType, associationTypeConfiguration );
 		}
 	}
 
 	public void removeDomainTypeConfiguration( final Class<?> domainType ) {
 		managedDomainTypeConfigurations.remove( domainType );
-
 	}
 
 	public void removeAllDomainTypeAdministrationConfigurations() {
 		managedDomainTypeConfigurations.clear();
+
+		domainTypeConfigurations.clear();
 	}
 
 	public Map<Class<?>, DomainTypeAdministrationConfiguration> getManagedDomainTypeConfigurations() {
