@@ -5,7 +5,7 @@
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
 
-[Light Admin](http://lightadmin.org) makes it possible to focus on the stuff that matters instead of spending time on auxiliary functionality.
+[Light Admin](http://lightadmin.org) makes it possible to <b>focus on the stuff that matters</b> instead of spending time on auxiliary functionality.
 
 ## Features ##
 
