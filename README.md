@@ -32,3 +32,101 @@ This module deals with enhanced support for JPA based data access layers
 * <b>Want to Contribute?</b>: Read the Guide ;)
 
 ## Getting started ##
+
+Download the jar though Maven:
+
+```xml
+<dependency>
+  <groupId>org.lightadmin</groupId>
+  <artifactId>lightadmin</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+</dependency> 
+```
+
+Enable LightAdmin web-module in you web.xml:
+
+```xml
+  <context-param>
+		<param-name>light:administration:base-url</param-name>
+		<param-value>/admin</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>light:administration:security</param-name>
+		<param-value>true</param-value>
+	</context-param>
+
+	<context-param>
+		<param-name>light:administration:base-package</param-name>
+		<param-value>[package with @Administration configurations, ex.: org.lightadmin.demo.config]</param-value>
+	</context-param>
+```
+
+Also include your JPA persistence provider of choice (Hibernate, EclipseLink, OpenJpa) and setup basic Spring JPA configuration.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+       xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xsi:schemaLocation="http://www.springframework.org/schema/jdbc 
+                           http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+                           http://www.springframework.org/schema/beans
+                           http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/data/jpa
+                           http://www.springframework.org/schema/data/jpa/spring-jpa.xsd">
+  
+  <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+    <property name="dataSource" ref="dataSource" />
+    <property name="jpaVendorAdapter">
+      <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
+    </property>
+  </bean>
+
+  <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+    <property name="entityManagerFactory" ref="entityManagerFactory" />
+  </bean>
+
+</beans>
+```
+
+Create an entity:
+
+```java
+@Entity
+public class User {
+
+  @Id
+  @GeneratedValue(strategy = GenerationType.AUTO)
+  private Integer id;
+  private String firstname;
+  private String lastname;
+       
+  // Getters and setters
+}
+```
+Create an @Administration configuration in the package defined in web.xml previously:
+
+```java
+@Administration( User.class )
+public class UserAdministration {
+
+  public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
+		return configurationBuilder.nameField( "firstname" ).build();
+	}
+
+	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
+		return screenContextBuilder
+			.screenName( "Users Administration" )
+			.menuName( "Users" ).build();
+	}
+
+	public static FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
+		return fragmentBuilder
+			.field( "firstname" ).caption( "First Name" )
+			.field( "lastname" ).caption( "Last Name" )
+      .build();
+	}
+
+```
