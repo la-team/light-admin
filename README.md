@@ -1,6 +1,4 @@
-# Light Admin #
-
-[Light Admin](http://lightadmin.org) is an elegant solution for building administration style interfaces for Java web applications.
+# Light Admin for Rapid Application Development#
 
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
@@ -11,7 +9,7 @@ by bringing pluggable fully operational data management back-end for JPA based a
 
 * <b>DSL configurations</b>: Allows developers to easily configure their administration user interface
 * <b>Displaying persistent entities</b>: Customizable Listing & Quick Views with paging & sorting capabilities
-* <b>CRUD operations</b>: Full support for entities manipulation together with their associations
+* <b>CRUD operations</b>: Complete entities manipulation support (including their associations)
 * <b>Automatic Validation</b>: JSR-303 annotation-based validation rules support
 * <b>Search</b>: Allows users to search entities by text fields, dates, numeric values & associations
 * <b>Filtering Scopes</b>: Use scopes to create sections of mutually exlusive entities for quick navigation
