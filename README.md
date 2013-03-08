@@ -1,9 +1,12 @@
 # Light Admin #
 
 [Light Admin](http://lightadmin.org) is an elegant solution for building administration style interfaces for Java web applications.
-The primary goal of the project is to speed up application development by bringing pluggable easy-to-use DSL-based data management back-end.
+The primary goal of the project is to speed up application development 
+by bringing pluggable easy-to-use data management back-end for JPA based applications.
 
 ## Features ##
+
+This module deals with enhanced support for JPA based data access layers
 
 * <b>DSL configurations</b>: Allows developers to easily configure their administration domain.
 * <b>Displaying persistent entities</b>: Customizable Listing & Quick Views with paging & sorting capabilities.
@@ -26,6 +29,6 @@ The primary goal of the project is to speed up application development by bringi
 ## Bug Reports & Contributing:
 
 * Bug Reports: [github.com/max-dev/light-admin/issues](http://github.com/max-dev/light-admin/issues)
-* <b>Want to Contribute?<b>: Read the Guide ;)
+* <b>Want to Contribute?</b>: Read the Guide ;)
 
 ## Getting started ##
