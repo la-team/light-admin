@@ -132,6 +132,8 @@ public class UserAdministration {
 
 ```
 
+Voila! You have a brand new Light Admin back-end configured.
+
 ## Screenshots from [LightAdmin DEMO application](http://demo.lightadmin.org/admin)
 
 <b>Login to LightAdmin:</b>
