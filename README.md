@@ -113,21 +113,21 @@ Create an @Administration configuration in the package defined in <b>web.xml</b>
 public class UserAdministration {
 
   public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameField( "firstname" ).build();
+    return configurationBuilder.nameField( "firstname" ).build();
   }
 
-	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder
-			.screenName( "Users Administration" )
-			.menuName( "Users" )
+  public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
+    return screenContextBuilder
+      .screenName( "Users Administration" )
+      .menuName( "Users" )
       .build();
-	}
+  }
 
-	public static FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder
-			.field( "firstname" ).caption( "First Name" )
-			.field( "lastname" ).caption( "Last Name" )
+  public static FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
+    return fragmentBuilder
+      .field( "firstname" ).caption( "First Name" )
+      .field( "lastname" ).caption( "Last Name" )
       .build();
-	}
+  }
 
 ```
