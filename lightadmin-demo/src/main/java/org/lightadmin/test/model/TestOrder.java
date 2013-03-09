@@ -4,6 +4,7 @@ import org.lightadmin.demo.model.AbstractEntity;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -24,6 +25,9 @@ public class TestOrder extends AbstractEntity {
 			inverseJoinColumns = @JoinColumn(name = "address_id", referencedColumnName = "ID")
 	)
 	private Set<TestAddress> shippingAddresses;
+
+	@Temporal(TemporalType.DATE)
+	private Date dueDate;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "order_id")
@@ -73,5 +77,13 @@ public class TestOrder extends AbstractEntity {
 
 	public void setShippingAddresses( final Set<TestAddress> shippingAddresses ) {
 		this.shippingAddresses = shippingAddresses;
+	}
+
+	public Date getDueDate() {
+		return dueDate;
+	}
+
+	public void setDueDate( Date dueDate ) {
+		this.dueDate = dueDate;
 	}
 }

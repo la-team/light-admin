@@ -78,7 +78,8 @@ CREATE UNIQUE INDEX ix_testcustomer_email ON TESTCUSTOMER (email ASC);
 CREATE TABLE testorders (
 id BIGINT IDENTITY PRIMARY KEY,
 name VARCHAR (255),
-customer_id BIGINT CONSTRAINT testorders_customer_ref REFERENCES testcustomer (id));
+customer_id BIGINT CONSTRAINT testorders_customer_ref REFERENCES testcustomer (id),
+duedate DATE);
 
 CREATE TABLE testlineitem (
 id BIGINT IDENTITY PRIMARY KEY,

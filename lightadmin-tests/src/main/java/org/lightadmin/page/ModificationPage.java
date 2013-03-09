@@ -1,6 +1,7 @@
 package org.lightadmin.page;
 
 import org.lightadmin.SeleniumContext;
+import org.lightadmin.field.DateField;
 import org.lightadmin.field.MultiSelect;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
@@ -89,12 +90,16 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		new MultiSelect( getMultiSelectElement( fieldName ), webDriver() ).clear();
 	}
 
-	private WebElement getMultiSelectElement( String fieldName ) {
-		return webDriver().findElement(
-				By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" ) );
-	}
-
 	public void replaceFieldSelections( String fieldName, String[] optionsToRemove, String[] optionsToAdd ) {
 		new MultiSelect( getMultiSelectElement( fieldName ), webDriver() ).replaceSelections( optionsToRemove, optionsToAdd );
+	}
+
+	public String selectDateOfCurrentMonth( String fieldName, String date ) {
+		return new DateField( editForm.findElement( By.name( fieldName ) ), webDriver() ).selectDateOfCurrentMonth( date );
+	}
+
+	private WebElement getMultiSelectElement( String fieldName ) {
+		return editForm.findElement(
+				By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" ) );
 	}
 }

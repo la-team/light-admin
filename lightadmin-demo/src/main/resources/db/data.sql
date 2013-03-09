@@ -93,12 +93,14 @@ insert into TestCustomer (id, email, firstname, lastname) values (27, 'notTo@del
 insert into TestCustomer (id, email, firstname, lastname) values (28, 'orderTest@test.com', 'Order Holder', 'Test Customer' );
 insert into TestCustomer (id, email, firstname, lastname) values (29, 'newCustomer@test.com', 'New Customer', 'Test Customer' );
 
-insert into TestOrders (id, name, customer_id) values (1, 'Order1: 100 line items', 10);
-insert into TestOrders (id, name, customer_id) values (2, 'Order2: no line items', 10);
-insert into TestOrders (id, name, customer_id) values (3, 'Order3: 3 line items', 17);
-insert into TestOrders (id, name, customer_id) values (4, 'Order4: data clearing test', 3);
-insert into TestOrders (id, name, customer_id) values (5, 'Order5: option adding test', 2);
-insert into TestOrders (id, name, customer_id) values (6, 'Order6: option replacing test', 7);
+insert into TestOrders (id, name, customer_id, duedate) values (1, 'Order1: 100 line items', 10, DATE '2012-04-12');
+insert into TestOrders (id, name, customer_id, duedate) values (2, 'Order2: no line items', 10, DATE '2013-01-01');
+insert into TestOrders (id, name, customer_id, duedate) values (3, 'Order3: 3 line items', 17, DATE '2010-01-01');
+insert into TestOrders (id, name, customer_id, duedate) values (4, 'Order4: data clearing test', 3, DATE '2014-01-15');
+insert into TestOrders (id, name, customer_id, duedate) values (5, 'Order5: option adding test', 2, null);
+insert into TestOrders (id, name, customer_id, duedate) values (6, 'Order6: option replacing test', 7, DATE '2013-10-08');
+insert into TestOrders (id, name, customer_id, duedate) values (7, 'Order7: date editing via date picker', 10, DATE '2011-10-08');
+insert into TestOrders (id, name, customer_id, duedate) values (8, 'Order8: manual date editing', 10, DATE '2010-05-14');
 
 insert into TestAddress (id, street, city, country) values (1, 'Lafayette', 'New York', 'United States');
 insert into TestAddress (id, street, city, country) values (2, 'Baker', 'London', 'United Kingdom');
@@ -126,6 +128,8 @@ insert into testorders_addresses (order_id, address_id) values (5, 6);
 insert into testorders_addresses (order_id, address_id) values (5, 7);
 insert into testorders_addresses (order_id, address_id) values (6, 3);
 insert into testorders_addresses (order_id, address_id) values (6, 4);
+insert into testorders_addresses (order_id, address_id) values (7, 3);
+insert into testorders_addresses (order_id, address_id) values (8, 3);
 
 insert into TestLineItem (id, order_id, product_id, amount) values (1, 1, 1, 1);
 insert into TestLineItem (id, order_id, product_id, amount) values (2, 1, 1, 1);
@@ -241,3 +245,5 @@ insert into TestLineItem (id, order_id, product_id, amount) values (111, 6, 3, 6
 insert into TestLineItem (id, order_id, product_id, amount) values (112, 6, 2, 12);
 insert into TestLineItem (id, order_id, product_id, amount) values (113, 6, 1, 32);
 insert into TestLineItem (id, order_id, product_id, amount) values (114, null, 1, 7);
+insert into TestLineItem (id, order_id, product_id, amount) values (115, 7, 3, 12);
+insert into TestLineItem (id, order_id, product_id, amount) values (116, 8, 2, 31);

@@ -27,7 +27,8 @@ public class OrderTestEntityWithComplexFields {
 				.field( "customer" ).caption( "Customer" )
 				.field( "shippingAddresses" ).caption( "Shipping Addresses" )
 				.renderable( new LineItemRenderer() ).caption( "Line Items" )
-				.renderable( new OrderTotalRenderer() ).caption( "Order Total" ).build();
+				.renderable( new OrderTotalRenderer() ).caption( "Order Total" )
+				.field( "dueDate").caption( "Order Due Date" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
@@ -35,7 +36,8 @@ public class OrderTestEntityWithComplexFields {
 				.field( "customer" ).caption( "Customer" )
 				.field( "shippingAddresses" ).caption( "Shipping Addresses" )
 				.renderable( new LineItemRenderer() ).caption( "Line Items" )
-				.renderable( new OrderTotalRenderer() ).caption( "Order Total" ).build();
+				.renderable( new OrderTotalRenderer() ).caption( "Order Total" )
+				.field( "dueDate").caption( "Order Due Date" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
@@ -43,13 +45,15 @@ public class OrderTestEntityWithComplexFields {
 				.filter( "Id", "id" )
 				.filter( "Customer", "customer" )
 				.filter( "Shipping Addresses", "shippingAddresses" )
-				.filter( "Line Items", "lineItems" ).build();
+				.filter( "Line Items", "lineItems" )
+				.filter( "Order Due Date", "dueDate" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder formViewBuilder ) {
 		return formViewBuilder
 				.field( "customer" ).caption( "Customer" )
 				.field( "shippingAddresses" ).caption( "Shipping Addresses" )
-				.field( "lineItems" ).caption( "Line Items" ).build();
+				.field( "lineItems" ).caption( "Line Items" )
+				.field( "dueDate").caption( "Order Due Date" ).build();
 	}
 }

@@ -55,7 +55,8 @@ public class ComplexFields extends SeleniumIntegrationTest {
 				"Marksistskaya, Moscow, Russia\n" +
 						"Via Aurelia, Rome, Italy",
 				"LineItem Id: 104; Product Name: Product 2",
-				"432567.00" },
+				"432567.00",
+				selectedDate },
 				showViewFieldValues );
 	}
 
@@ -65,13 +66,14 @@ public class ComplexFields extends SeleniumIntegrationTest {
 
 		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
 
-		assertFieldValues( new String[]{ " ", " ", " ", "0" }, showViewFieldValues );
+		assertFieldValues( new String[]{" ", " ", " ", "0", " "}, showViewFieldValues );
 	}
 
 	private void fillInFieldsAndSave() {
 		createPage.select( "customer", "Order Holder" );
 		createPage.multiSelect( "shippingAddresses", new String[]{"Marksistskaya, Moscow, Russia", "Via Aurelia, Rome, Italy"} );
 		createPage.multiSelect( "lineItems", new String[]{ "104. Product: Product 2; Amount: 333; Total: 432567.00" } );
+		selectedDate = createPage.selectDateOfCurrentMonth( "dueDate", "8" );
 
 		showView = createPage.submit();
 	}
@@ -79,4 +81,6 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	private void leaveFieldsEmptyAndSave() {
 		showView = createPage.submit();
 	}
+
+	private String selectedDate;
 }

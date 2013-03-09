@@ -45,7 +45,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	public void canBeCleared() {
 		clearAllFieldsAndSave();
 
-		assertFieldValues( new String[]{ " ", " ", " ", "0" }, showView.getFieldValuesExcludingId() );
+		assertFieldValues( new String[]{" ", " ", " ", "0", " "}, showView.getFieldValuesExcludingId() );
 	}
 
 	@Test
@@ -62,7 +62,8 @@ public class ComplexFields extends SeleniumIntegrationTest {
 						"LineItem Id: 110; Product Name: Product 3\n" +
 						"LineItem Id: 114; Product Name: Product 1",
 
-				"19657.00" },
+				"19657.00",
+				"2013-10-08"},
 				showView.getFieldValuesExcludingId() );
 
 	}
@@ -82,8 +83,53 @@ public class ComplexFields extends SeleniumIntegrationTest {
 						"LineItem Id: 110; Product Name: Product 3\n" +
 						"LineItem Id: 114; Product Name: Product 1",
 
-				"20671.00" },
+				"20671.00",
+				" "},
 				showView.getFieldValuesExcludingId() );
+	}
+
+	@Test
+	public void dateFieldCanModifiedViaDatePicker() {
+		modifyDateViaDatePickerAndSave();
+
+		assertFieldValues( new String[]{"Dave",
+				"Kreschatik, Kiev, Ukraine",
+				"LineItem Id: 115; Product Name: Product 3",
+				"588.00",
+				selectedDate},
+				showView.getFieldValuesExcludingId() );
+	}
+
+	@Test
+	public void dateFieldCanBeModifiedManually() {
+		modifyDateManuallyAndSave();
+
+		assertFieldValues( new String[]{"Dave",
+				"Kreschatik, Kiev, Ukraine",
+				"LineItem Id: 116; Product Name: Product 2",
+				"40269.00",
+				"2014-12-14"},
+				showView.getFieldValuesExcludingId() );
+	}
+
+	private void clearAllFieldsAndSave() {
+		editPage = listViewPage.editItem( 4 );
+
+		editPage.deselect( "customer" );
+		editPage.clearAllSelections( "shippingAddresses" );
+		editPage.clearAllSelections( "lineItems" );
+		editPage.clear( "dueDate" );
+
+		showView = editPage.submit();
+	}
+
+	private void addSelectionsAndSave() {
+		editPage = listViewPage.editItem( 5 );
+
+		editPage.multiSelect( "shippingAddresses", new String[]{ "Kreschatik, Kiev, Ukraine" } );
+		editPage.multiSelect( "lineItems", new String[]{ "110. Product: Product 3; Amount: 4; Total: 196.00", "114. Product: Product 1; Amount: 7; Total: 3493.00" } );
+
+		showView = editPage.submit();
 	}
 
 	private void replaceSelectionsAndSave() {
@@ -103,23 +149,22 @@ public class ComplexFields extends SeleniumIntegrationTest {
 		showView = editPage.submit();
 	}
 
+	private void modifyDateViaDatePickerAndSave() {
+		editPage = listViewPage.editItem( 7 );
 
-	private void addSelectionsAndSave() {
-		editPage = listViewPage.editItem( 5 );
-
-		editPage.multiSelect( "shippingAddresses", new String[]{ "Kreschatik, Kiev, Ukraine" } );
-		editPage.multiSelect( "lineItems", new String[]{ "110. Product: Product 3; Amount: 4; Total: 196.00", "114. Product: Product 1; Amount: 7; Total: 3493.00" } );
+		selectedDate = editPage.selectDateOfCurrentMonth( "dueDate", "13" );
 
 		showView = editPage.submit();
 	}
 
-	private void clearAllFieldsAndSave() {
-		editPage = listViewPage.editItem( 5 );
 
-		editPage.deselect( "customer" );
-		editPage.clearAllSelections( "shippingAddresses" );
-		editPage.clearAllSelections( "lineItems" );
+	private void modifyDateManuallyAndSave() {
+		editPage = listViewPage.editItem( 8 );
+
+		editPage.type( "dueDate", "2014-12-14" );
 
 		showView = editPage.submit();
 	}
+
+	private String selectedDate;
 }
