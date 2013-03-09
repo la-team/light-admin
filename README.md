@@ -42,7 +42,7 @@ Download the jar though Maven:
 </dependency> 
 ```
 
-Enable Light Admin web-module in you <b>web.xml</b>:
+### Enable Light Admin web-module in you <b>web.xml</b>: ###
 
 ```xml
 <context-param>
@@ -61,7 +61,7 @@ Enable Light Admin web-module in you <b>web.xml</b>:
 </context-param>
 ```
 
-Also include your JPA persistence provider of choice (Hibernate, EclipseLink, OpenJpa) and setup basic <b>Spring JPA</b> configuration.
+### Include your JPA persistence provider of choice (Hibernate, EclipseLink, OpenJpa) and setup basic <b>Spring JPA</b> configuration. ###
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -90,7 +90,7 @@ Also include your JPA persistence provider of choice (Hibernate, EclipseLink, Op
 </beans>
 ```
 
-Create an entity:
+### Create an entity: ###
 
 ```java
 @Entity
@@ -105,7 +105,7 @@ public class User {
   // Getters and setters
 }
 ```
-Create an <b>@Administration configuration</b> in the package defined in <b>web.xml</b> previously:
+### Create an <b>@Administration configuration</b> in the package defined in <b>web.xml</b> previously: ###
 
 ```java
 @Administration( User.class )
