@@ -10,19 +10,23 @@ public class LoginListener extends AbstractTestExecutionListener {
 
 	@Override
 	public void beforeTestClass( TestContext testContext ) throws Exception {
-		getStartPageAwareTestContext( testContext ).loginAndNavigateToDomain( getTestDomain( testContext ) );
+		if ( null != ( getTestDomain( testContext ) ) ) {
+			getLoginService( testContext ).loginAndNavigateToDomain( getTestDomain( testContext ) );
+		}
 	}
 
 	@Override
 	public void afterTestClass( TestContext testContext ) throws Exception {
-		getStartPageAwareTestContext( testContext ).logout();
+		if ( null != ( getTestDomain( testContext ) ) ) {
+			getLoginService( testContext ).logout();
+		}
 	}
 
-	private LoginService getStartPageAwareTestContext( TestContext testContext ) {
+	private LoginService getLoginService( TestContext testContext ) {
 		return testContext.getApplicationContext().getBean( LoginService.class );
 	}
 
-	private Domain getTestDomain( TestContext testContext ) {
+	private static Domain getTestDomain( TestContext testContext ) {
 		final LoginOnce annotation = findAnnotation( testContext.getTestClass(), LoginOnce.class );
 
 		return annotation == null ? null : annotation.domain();

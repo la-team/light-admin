@@ -37,16 +37,16 @@ public class DefaultFieldsTest extends SeleniumIntegrationTest {
 		String[] quickViewFieldNames = quickViewComponent.getQuickViewFieldNames();
 		String[] quickViewFieldValues = quickViewComponent.getQuickViewFieldValues();
 
-		assertQuickViewFields( new String[] {"Id:", "ShippingAddresses:", "Name:", "Customer:", "LineItems:", "DueDate:"}, quickViewFieldNames );
+		assertQuickViewFields( new String[] {"Id:", "ShippingAddresses:", "Name:", "Customer:", "DueDate:", "LineItems:" }, quickViewFieldNames );
 		assertFieldValues( new String[]{
 				"3",
 				" ",
 				"Order3: 3 line items",
 				"TestCustomer #17",
+				"2010-01-01",
 				"TestLineItem #101\n" +
 				"TestLineItem #102\n" +
-				"TestLineItem #103",
-				"2010-01-01"
+				"TestLineItem #103"
 		}, quickViewFieldValues );
 	}
 }
