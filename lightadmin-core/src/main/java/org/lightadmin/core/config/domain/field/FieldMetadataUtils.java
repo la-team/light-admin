@@ -10,6 +10,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.springframework.util.ClassUtils;
 
 import javax.annotation.Nullable;
+import java.util.Comparator;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
@@ -17,7 +18,7 @@ import static com.google.common.collect.Sets.newLinkedHashSet;
 public class FieldMetadataUtils {
 
 	public static Set<FieldMetadata> extractFields( Iterable<FilterMetadata> filterMetadatas ) {
-		return newLinkedHashSet( Collections2.transform( newLinkedHashSet(filterMetadatas), new FieldMetadataExtractor() ) );
+		return newLinkedHashSet( Collections2.transform( newLinkedHashSet( filterMetadatas ), new FieldMetadataExtractor() ) );
 	}
 
 	public static Predicate<FieldMetadata> persistentFieldMetadataPredicate() {
@@ -61,7 +62,7 @@ public class FieldMetadataUtils {
 	public static Set<FieldMetadata> addPrimaryKeyPersistentField( final Set<FieldMetadata> fields, final DomainTypeAttributeMetadata idAttribute ) {
 		final Set<FieldMetadata> fieldsWithPrimaryKey = newLinkedHashSet();
 		PersistentFieldMetadata idField = new PersistentFieldMetadata( StringUtils.capitalize( idAttribute.getName() ), idAttribute.getName(), true );
-		idField.setAttributeMetadata(idAttribute);
+		idField.setAttributeMetadata( idAttribute );
 		fieldsWithPrimaryKey.add( idField );
 		fieldsWithPrimaryKey.addAll( fields );
 		return fieldsWithPrimaryKey;
@@ -79,6 +80,36 @@ public class FieldMetadataUtils {
 
 	public static boolean containsPersistentField( final Set<FieldMetadata> fields, String fieldName ) {
 		return getPersistentField( fields, fieldName ) != null;
+	}
+
+	public static class FieldMetadataComparator implements Comparator<FieldMetadata> {
+
+		@Override
+		public int compare( final FieldMetadata fieldMetadata, final FieldMetadata fieldMetadata2 ) {
+			if ( fieldMetadata.getSortOrder() < fieldMetadata2.getSortOrder() ) {
+				return -1;
+			}
+			if ( fieldMetadata.getSortOrder() > fieldMetadata2.getSortOrder() ) {
+				return 1;
+			}
+			return 0;
+		}
+	}
+
+	public static class NameableComparator implements Comparator<Nameable> {
+
+		@Override
+		public int compare( final Nameable nameable, final Nameable nameable2 ) {
+			return nameable.getName().compareTo( nameable2.getName() );
+		}
+	}
+
+	public static class DomainTypeAttributeMetadataComparator implements Comparator<DomainTypeAttributeMetadata> {
+
+		@Override
+		public int compare( final DomainTypeAttributeMetadata domainTypeAttributeMetadata, final DomainTypeAttributeMetadata domainTypeAttributeMetadata2 ) {
+			return domainTypeAttributeMetadata.getName().compareTo( domainTypeAttributeMetadata2.getName() );
+		}
 	}
 
 	private static class FieldMetadataExtractor implements Function<FilterMetadata, FieldMetadata> {

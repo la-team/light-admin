@@ -9,8 +9,11 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.util.ClassUtils;
 
-import java.util.Collection;
+import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.sort;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.DomainTypeAttributeMetadataComparator;
 import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isSupportedAttributeType;
 
 public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverAwareConfigurationUnitPostProcessor {
@@ -31,7 +34,10 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
 	private FieldSetConfigurationUnit fieldSetUnitWithPersistentFields( final Class<?> domainType, DomainConfigurationUnitType configurationUnitType ) {
 		FieldSetConfigurationUnitBuilder fieldSetConfigurationUnitBuilder = new GenericFieldSetConfigurationUnitBuilder( domainType, configurationUnitType );
 
-		final Collection<DomainTypeAttributeMetadata> attributes = resolveEntityMetadata( domainType ).getAttributes();
+		final List<DomainTypeAttributeMetadata> attributes = newArrayList( resolveEntityMetadata( domainType ).getAttributes() );
+
+		sort( attributes, new DomainTypeAttributeMetadataComparator() );
+
 		for ( DomainTypeAttributeMetadata attribute : attributes ) {
 			if ( isSupportedAttributeType( attribute.getAttributeType() ) ) {
 				fieldSetConfigurationUnitBuilder.field( attribute.getName() );
