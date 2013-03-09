@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.DataManipulationService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
+import org.lightadmin.page.ListViewPage;
 import org.lightadmin.util.ExtendedWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -18,7 +19,7 @@ import java.net.URL;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners( listeners = {
 	DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-	AdministrationConfigurationListener.class
+	AdministrationConfigurationListener.class, LoginListener.class
 } )
 @ContextConfiguration( loader = AnnotationConfigContextLoader.class, classes = SeleniumConfig.class )
 public abstract class SeleniumIntegrationTest {
@@ -31,6 +32,9 @@ public abstract class SeleniumIntegrationTest {
 
 	@Autowired
 	private DataManipulationService dataManipulationService;
+
+	@Autowired
+	private LoginService testContext;
 
 	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
 		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( configurationClass ) );
@@ -63,5 +67,9 @@ public abstract class SeleniumIntegrationTest {
 
 	protected long webDriverTimeout() {
 		return seleniumContext.getWebDriverWaitTimeout();
+	}
+
+	protected ListViewPage getStartPage() {
+		return testContext.getStartPage();
 	}
 }

@@ -1,101 +1,92 @@
 package org.lightadmin.page;
 
-import org.junit.Before;
+import org.junit.After;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.FilterTestEntityConfiguration;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertTableData;
 
+@RunWithConfiguration( {FilterTestEntityConfiguration.class })
+@LoginOnce( domain = Domain.FILTER_TEST_DOMAIN )
 public class FilterTest extends SeleniumIntegrationTest {
 
-	@Autowired
-	private LoginPage loginPage;
-
-	private ListViewPage productListViewPage;
-
-	@Before
-	public void setup() {
-		repopulateDatabase();
-
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
-
-		productListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.FILTER_TEST_DOMAIN );
+	@After
+	public void resetFilter() {
+		getStartPage().resetFilter();
 	}
 
 	//Covers LA-6: https://github.com/max-dev/light-admin/issues/6
 	@Test
 	public void canFilterByIntegerField() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "integerField", "1234567" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "integerField", "1234567" );
 
-		assertTableData( expectedResult1, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult1, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	//Covers LA-25: https://github.com/max-dev/light-admin/issues/25
 	@Test
 	public void canFilterByPrimitiveIntegerField() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "primitiveIntegerField", "15235" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "primitiveIntegerField", "15235" );
 
-		assertTableData( expectedResult7, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult7, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void canFilterByIdField() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "id", "9" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "id", "9" );
 
-		assertTableData( expectedResult6, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult6, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void canFilterByDecimalField() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "decimalField", "1499.99" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "decimalField", "1499.99" );
 
-		assertTableData( expectedResult2, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult2, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void textFilterIsCaseSensitive() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "textField", "Case Sensitivity Test" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "textField", "Case Sensitivity Test" );
 
-		assertTableData( expectedResult4, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult4, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void canFilterByPartialTextQuery() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "textField", "query" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "textField", "query" );
 
-		assertTableData( expectedResult5, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult5, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	@Test
 	public void canFilterByCombinedCriteria() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "primitiveIntegerField", "31264" );
-		productListViewPage.filter( "decimalField", "61.12" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "primitiveIntegerField", "31264" );
+		getStartPage().filter( "decimalField", "61.12" );
 
-		assertTableData( expectedResult8, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult8, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	//Covers LA-46: https://github.com/max-dev/light-admin/issues/46
 	@Test
 	@Ignore // TODO: max: Will be fixed later
 	public void canFilterByTextWithSpecialCharacters() {
-		productListViewPage.openAdvancedSearch();
-		productListViewPage.filter( "textField", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "textField", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½" );
 
-		assertTableData( expectedResult3, productListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedResult3, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	private static final String[][] expectedResult1 = {{"1", "integer search test", "1234567", "521", "22.2", ""}};

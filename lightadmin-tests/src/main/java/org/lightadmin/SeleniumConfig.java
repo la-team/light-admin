@@ -56,6 +56,11 @@ public class SeleniumConfig {
 		return ( DataManipulationService ) rmiProxyFactoryBean.getObject();
 	}
 
+	@Bean
+	public LoginService theTestContext() {
+		return new LoginService();
+	}
+
 	private URL baseUrl() {
 		try {
 			return new URL( environment.getProperty( "baseUrl" ) );
