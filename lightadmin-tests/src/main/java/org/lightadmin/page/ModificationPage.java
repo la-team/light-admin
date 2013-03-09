@@ -78,7 +78,7 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 
 	public void multiSelect( String fieldName, String[] values ) {
 		new MultiSelect(
-				getMultiSelectElement( fieldName ), webDriver() )
+				getMultiSelectElement( fieldName ), seleniumContext )
 				.multiSelect( values );
 	}
 
@@ -87,15 +87,15 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 	}
 
 	public void clearAllSelections( String fieldName ) {
-		new MultiSelect( getMultiSelectElement( fieldName ), webDriver() ).clear();
+		new MultiSelect( getMultiSelectElement( fieldName ), seleniumContext ).clear();
 	}
 
 	public void replaceFieldSelections( String fieldName, String[] optionsToRemove, String[] optionsToAdd ) {
-		new MultiSelect( getMultiSelectElement( fieldName ), webDriver() ).replaceSelections( optionsToRemove, optionsToAdd );
+		new MultiSelect( getMultiSelectElement( fieldName ), seleniumContext ).replaceSelections( optionsToRemove, optionsToAdd );
 	}
 
 	public String selectDateOfCurrentMonth( String fieldName, String date ) {
-		return new DateField( editForm.findElement( By.name( fieldName ) ), webDriver() ).selectDateOfCurrentMonth( date );
+		return new DateField( editForm.findElement( By.name( fieldName ) ), seleniumContext ).selectDateOfCurrentMonth( date );
 	}
 
 	private WebElement getMultiSelectElement( String fieldName ) {

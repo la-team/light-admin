@@ -48,8 +48,6 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	public void itemCanBeCreatedWithAllFieldsFilledIn() {
 		fillInFieldsAndSave();
 
-		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
-
 		assertFieldValues( new String[]{
 				"Order Holder",
 				"Marksistskaya, Moscow, Russia\n" +
@@ -57,7 +55,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 				"LineItem Id: 104; Product Name: Product 2",
 				"432567.00",
 				selectedDate },
-				showViewFieldValues );
+				showView.getFieldValuesExcludingId() );
 	}
 
 	@Test

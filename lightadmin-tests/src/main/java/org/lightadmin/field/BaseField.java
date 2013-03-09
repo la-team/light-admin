@@ -1,23 +1,20 @@
 package org.lightadmin.field;
 
+import org.lightadmin.SeleniumContext;
 import org.lightadmin.util.ExtendedWebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.PageFactory;
 
 public abstract class BaseField {
 
-	private final WebElement webElement;
-	private final ExtendedWebDriver webDriver;
+	private final SeleniumContext seleniumContext;
 
-	public BaseField( WebElement webElement, ExtendedWebDriver webDriver ) {
-		this.webElement = webElement;
-		this.webDriver = webDriver;
-	}
+	public BaseField(SeleniumContext seleniumContext ) {
+		this.seleniumContext = seleniumContext;
 
-	public WebElement webElement() {
-		return webElement;
+		PageFactory.initElements( webDriver(), this );
 	}
 
 	public ExtendedWebDriver webDriver() {
-		return webDriver;
+		return seleniumContext.getWebDriver();
 	}
 }

@@ -43,22 +43,18 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 	public void canBeCleared() {
 		clearAllFieldValuesAndSave();
 
-		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
-
 		assertFieldValues(
 				new String[]{ " ", "0", "0", "0", "0", "No" },
-				showViewFieldValues );
+				showView.getFieldValuesExcludingId() );
 	}
 
 	@Test
 	public void canBeModified() {
 		modifyFieldValuesAndSave();
 
-		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
-
 		assertFieldValues(
 				new String[]{ "new text value", "1234", "4321", "234.52", "5789.52", "Yes" },
-				showViewFieldValues );
+				showView.getFieldValuesExcludingId() );
 	}
 
 	private void clearAllFieldValuesAndSave() {

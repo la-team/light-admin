@@ -42,22 +42,18 @@ public class PrimitiveFields extends SeleniumIntegrationTest {
 	public void itemCanBeCreatedWithAllFieldsFilledIn() {
 		fillInFieldsAndSave();
 
-		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
-
 		assertFieldValues(
 				new String[]{ "new item", "8765", "52522", "29572.98", "90859.98", "Yes"},
-				showViewFieldValues );
+				showView.getFieldValuesExcludingId() );
 	}
 
 	@Test
 	public void itemCanBeCreatedWithAllFieldsEmpty() {
 		leaveFieldsEmptyAndSave();
 
-		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
-
 		assertFieldValues(
 				new String[]{ " ", "0", "0", "0", "0", "No"},
-				showViewFieldValues );
+				showView.getFieldValuesExcludingId() );
 	}
 
 	private void fillInFieldsAndSave() {
