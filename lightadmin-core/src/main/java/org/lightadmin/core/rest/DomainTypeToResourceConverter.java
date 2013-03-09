@@ -56,6 +56,8 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
 		addObjectStringRepresentation( entityResource, domainTypeConfiguration, source );
 
+		addManagedTypeProperty( entityResource, source );
+
 		for ( FieldMetadata field : fieldMetadatas ) {
 			addFieldAttributeValue( entityResource, field, source );
 		}
@@ -91,6 +93,10 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		final EntityNameExtractor nameExtractor = configuration.getEntityConfiguration().getNameExtractor();
 
 		resource.getContent().put( "stringRepresentation", exceptionAwareNameExtractor( nameExtractor ).apply( source ) );
+	}
+
+	private Object addManagedTypeProperty( final EntityResource entityResource, final Object source ) {
+		return entityResource.getContent().put( "managedDomainType", configuration.forManagedDomainType( source.getClass() ) != null );
 	}
 
 	private void addFieldAttributeValue( EntityResource resource, FieldMetadata field, Object source ) {

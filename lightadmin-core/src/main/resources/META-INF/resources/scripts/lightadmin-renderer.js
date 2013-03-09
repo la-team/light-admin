@@ -34,13 +34,18 @@ var FieldValueRenderer = function () {
 	}
 
 	function ArrayValueRenderer() {
+
+		function renderItem( arrayItem ) {
+			if ( isDomainObject( arrayItem ) ) {
+				return new DomainObjectValueRenderer().render( arrayItem );
+			}
+			return arrayItem.toString();
+		}
+
 		this.render = function ( fieldValue ) {
 			var items = '';
 			for ( var arrayIndex in fieldValue ) {
-				var arrayItem = fieldValue[arrayIndex];
-				if ( arrayItem['stringRepresentation'] !== undefined ) {
-					items += arrayItem['stringRepresentation'] + '<br/>';
-				}
+				items += renderItem( fieldValue[arrayIndex] ) + '<br/>';
 			}
 			return items.length != 0 ? items : '&nbsp;';
 		}
@@ -49,12 +54,10 @@ var FieldValueRenderer = function () {
 	function DomainObjectValueRenderer() {
 		this.render = function ( dataValue ) {
 			var stringRepresentation = dataValue['stringRepresentation'];
-
-			if ( dataValue['links'] === undefined ) {
-				return stringRepresentation;
+			if ( dataValue['managedDomainType'] ) {
+				return "<a href='" + dataValue.links[1].href + "'>" + stringRepresentation + "</a>";
 			}
-
-			return "<a href='" + dataValue.links[1].href + "'>" + stringRepresentation + "</a>";
+			return stringRepresentation;
 		}
 	}
 
