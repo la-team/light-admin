@@ -12,7 +12,7 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * <b>CRUD operations</b>: Complete entities manipulation support (including their associations)
 * <b>Automatic Validation</b>: JSR-303 annotation-based validation rules support
 * <b>Search</b>: Allows users to search entities by text fields, dates, numeric values & associations
-* <b>Filtering Scopes</b>: Use scopes to create sections of mutually exlusive entities for quick navigation
+* <b>Filtering Scopes</b>: Use scopes to filter data by predefined criteria
 * <b>Pluggable Security</b>: Authentication based on [Spring Security](http://www.springsource.org/spring-security)
 * <b>REST API</b>: Enriching your application with REST API based on [Spring Data REST](http://www.springsource.org/spring-data/rest)
 * <b>Easy integration</b>: Servlet 2.5 and 3.0 based web applications supported
