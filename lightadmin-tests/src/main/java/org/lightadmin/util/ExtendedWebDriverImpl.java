@@ -32,6 +32,16 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 	}
 
 	@Override
+	public boolean isElementPresent( By by ) {
+		try {
+			webDriver.findElement( by );
+		} catch ( NoSuchElementException e ) {
+			return false;
+		}
+		return true;
+	}
+
+	@Override
 	public boolean isElementValuePresent( final String elementName, final String expectedValue ) {
 		return webDriver.findElement( By.name( elementName ) ).getAttribute( "value" ).equals( expectedValue );
 	}
@@ -64,7 +74,8 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 	}
 
 	@Override
-	public void clear(final WebElement field ) {
+	public void clear( final WebElement field ) {
+		field.click();
 		field.clear();
 		field.sendKeys( Keys.TAB );
 	}

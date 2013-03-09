@@ -2,6 +2,7 @@ package org.lightadmin.field;
 
 import org.lightadmin.SeleniumContext;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -47,7 +48,12 @@ public class MultiSelect extends BaseField {
 	private void addSelection( String option ) {
 		webElement.click();
 
-		webDriver().waitForElementVisible( valueList );
+		try {
+			webDriver().waitForElementVisible( valueList );
+		} catch ( TimeoutException e ) {
+			webElement.click();
+			webDriver().waitForElementVisible( valueList );
+		}
 
 		valueList.findElement( By.xpath( "//li[contains(text(), '" + option + "')]" ) ).click();
 

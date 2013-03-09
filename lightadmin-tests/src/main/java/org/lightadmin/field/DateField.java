@@ -2,6 +2,7 @@ package org.lightadmin.field;
 
 import org.lightadmin.SeleniumContext;
 import org.openqa.selenium.By;
+import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 
@@ -21,7 +22,12 @@ public class DateField extends BaseField {
 	public String selectDateOfCurrentMonth( String date ) {
 		webElement.click();
 
-		webDriver().waitForElementVisible( datePicker );
+		try {
+			webDriver().waitForElementVisible( datePicker );
+		} catch ( TimeoutException e ) {
+			webElement.click();
+			webDriver().waitForElementVisible( datePicker );
+		}
 
 		datePicker.findElement( By.linkText( date ) ).click();
 		webDriver().waitForElementInvisible( datePicker );

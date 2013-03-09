@@ -23,6 +23,7 @@ public class OrderTestEntityConfiguration {
 				.field( "id" ).caption( "ID" )
 				.field( "name" ).caption( "Name" )
 				.field( "customer" ).caption( "Customer" )
+				.field( "shippingAddresses" ).caption( "Shipping Addresses" )
 				.renderable( new LineItemRenderer() ).caption( "Line Items" ).build();
 	}
 }

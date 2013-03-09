@@ -1,5 +1,6 @@
 package org.lightadmin.util;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
@@ -10,6 +11,8 @@ public interface ExtendedWebDriver extends WebDriver {
 	public void waitForElementInvisible( WebElement element );
 
 	public boolean isElementPresent( WebElement element );
+
+	public boolean isElementPresent( By by );
 
 	boolean isElementValuePresent( String elementName, String expectedValue );
 
