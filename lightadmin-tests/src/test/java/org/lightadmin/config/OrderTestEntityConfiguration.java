@@ -22,6 +22,7 @@ public class OrderTestEntityConfiguration {
 		return listViewBuilder
 				.field( "id" ).caption( "ID" )
 				.field( "name" ).caption( "Name" )
+				.field( "customer" ).caption( "Customer" )
 				.renderable( new LineItemRenderer() ).caption( "Line Items" ).build();
 	}
 }

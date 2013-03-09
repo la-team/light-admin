@@ -45,7 +45,7 @@ public class DashboardPageTest extends SeleniumIntegrationTest {
 	@Test
 	public void allDomainLinksLoaded() throws Exception {
 		for ( Domain domain : expectedDomains ) {
-			assertTrue( String.format( "Link for \'%s\' is not displayed", domain.getLinkText() ), dashboardPage.domainLinkDisplayed( domain ) );
+			assertTrue( String.format( "Link to domain \'%s\' is not displayed", domain.getLinkText() ), dashboardPage.domainLinkDisplayed( domain ) );
 		}
 
 		assertEquals( String.format( "Unexpected domain links are displayed:" ), expectedDomains.size(), dashboardPage.getDomainLinksCount() );
