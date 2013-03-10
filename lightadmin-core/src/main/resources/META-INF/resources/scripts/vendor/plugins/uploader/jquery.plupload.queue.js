@@ -107,14 +107,14 @@
 							q.next().val( n ).focus().blur(function () {
 								q.show().next().remove()
 							} ).keydown( function ( u ) {
-								var t = c( this );
-								if ( u.keyCode == 13 ) {
-									u.preventDefault();
-									o.name = t.val() + p;
-									q.text( o.name );
-									t.blur()
-								}
-							} )
+											 var t = c( this );
+											 if ( u.keyCode == 13 ) {
+												 u.preventDefault();
+												 o.name = t.val() + p;
+												 q.text( o.name );
+												 t.blur()
+											 }
+										 } )
 						} )
 					}
 					c( "a.plupload_add", i ).attr( "id", k + "_browse" );

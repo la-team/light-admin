@@ -8,7 +8,7 @@ $( function () {
 							 } );
 
 
-	//===== Tags =====//	
+	//===== Tags =====//
 
 	$( '#tags' ).tagsInput( {width: '100%'} );
 
@@ -211,7 +211,7 @@ $( function () {
 									} );
 
 
-	//===== File manager =====//	
+	//===== File manager =====//
 
 	$( '#fileManager' ).elfinder( {
 									  url: 'php/connector.php'
@@ -243,7 +243,7 @@ $( function () {
 	} );
 
 
-	//===== Accordion =====//		
+	//===== Accordion =====//
 
 	$( 'div.menu_body:eq(0)' ).show();
 	$( '.acc .head:eq(0)' ).show().css( {color: "#2B6893"} );
@@ -576,7 +576,7 @@ $( function () {
 									 onResize: onSampleResized} );
 
 
-	//===== Left navigation submenu animation =====//	
+	//===== Left navigation submenu animation =====//
 
 	$( "ul.sub li a" ).hover( function () {
 		$( this ).stop().animate( { color: "#3a6fa5" }, 400 );
@@ -588,10 +588,10 @@ $( function () {
 	//===== Image gallery control buttons =====//
 
 	$( ".pics ul li" ).hover( function () {
-								  $( this ).children( ".actions" ).show( "fade", 200 );
-							  }, function () {
-								  $( this ).children( ".actions" ).hide( "fade", 200 );
-							  } );
+		$( this ).children( ".actions" ).show( "fade", 200 );
+	}, function () {
+		$( this ).children( ".actions" ).hide( "fade", 200 );
+	} );
 
 
 	//===== Color picker =====//
@@ -623,7 +623,7 @@ $( function () {
 	$( '.allUpper input' ).autotab_magic().autotab_filter( { format: 'alphanumeric', uppercase: true } );
 
 
-	//===== jQuery UI sliders =====//	
+	//===== jQuery UI sliders =====//
 
 	$( ".uiSlider" ).slider();
 
@@ -684,12 +684,12 @@ $( function () {
 	} );
 
 
-	//===== Breadcrumbs =====//	
+	//===== Breadcrumbs =====//
 
 	$( "#breadCrumb" ).jBreadCrumb();
 
 
-	//===== Autofocus =====//	
+	//===== Autofocus =====//
 
 	$( '.autoF' ).focus();
 
@@ -718,7 +718,7 @@ $( function () {
 	$( "div[class^='widget']" ).simpleTabs(); //Run function on any div with class name of "Simple Tabs"
 
 
-	//===== User nav dropdown =====//		
+	//===== User nav dropdown =====//
 
 	$( '.dd' ).click( function () {
 		$( 'ul.menu_body' ).slideToggle( 200 );

@@ -8,9 +8,9 @@
 // for convenience
 
 /* Plugin for jQuery for working with colors.
- * 
+ *
  * Version 1.1.
- * 
+ *
  * Inspiration from jQuery color animation plugin by John Resig.
  *
  * Released under the MIT license by Ole Laursen, October 2009.
@@ -182,7 +182,7 @@
 						},
 						lines: {
 							// we don't put in show: false so we can see
-							// whether lines were actively disabled 
+							// whether lines were actively disabled
 							lineWidth: 2, // in pixels
 							fill: false,
 							fillColor: null,
@@ -197,7 +197,7 @@
 								{ opacity: 0.7 },
 								{ opacity: 1 }
 							] },
-							align: "left", // or "center" 
+							align: "left", // or "center"
 							horizontal: false
 						},
 						shadowSize: 0
@@ -467,7 +467,7 @@
 		}
 
 		function canvasToAxisCoords( pos ) {
-			// return an object with x/y corresponding to all used axes 
+			// return an object with x/y corresponding to all used axes
 			var res = {}, i, axis;
 			for ( i = 0; i < xaxes.length; ++i ) {
 				axis = xaxes[i];
@@ -2560,8 +2560,8 @@
 
 		function onClick( e ) {
 			triggerClickHoverEvent( "plotclick", e, function ( s ) {
-										return s["clickable"] != false;
-									} );
+				return s["clickable"] != false;
+			} );
 		}
 
 		// trigger click or hover event (they send the same parameters
@@ -2706,8 +2706,8 @@
 			var fillStyle = $.color.parse( series.color ).scale( 'a', 0.5 ).toString();
 			var barLeft = series.bars.align == "left" ? 0 : -series.bars.barWidth / 2;
 			drawBar( point[0], point[1], point[2] || 0, barLeft, barLeft + series.bars.barWidth, 0, function () {
-						 return fillStyle;
-					 }, series.xaxis, series.yaxis, octx, series.bars.horizontal, series.bars.lineWidth );
+				return fillStyle;
+			}, series.xaxis, series.yaxis, octx, series.bars.horizontal, series.bars.lineWidth );
 		}
 
 		function getColorOrGradient( spec, bottom, top, defaultColor ) {

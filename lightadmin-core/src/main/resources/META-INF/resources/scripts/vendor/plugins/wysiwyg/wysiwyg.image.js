@@ -27,11 +27,11 @@
 		tooltip: "Insert image",
 		init: function ( Wysiwyg ) {
 			var self = this, elements, adialog, dialog, formImageHtml, regexp, dialogReplacements, key, translation, img = {
-						alt: "",
-						self: Wysiwyg.dom ? Wysiwyg.dom.getElement( "img" ) : null, // link to element node
-						src: "http://",
-						title: ""
-					};
+				alt: "",
+				self: Wysiwyg.dom ? Wysiwyg.dom.getElement( "img" ) : null, // link to element node
+				src: "http://",
+				title: ""
+			};
 
 			dialogReplacements = {
 				legend: "Insert Image",

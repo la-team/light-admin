@@ -210,13 +210,13 @@
 
 		renderPalette: function ( jqObj, type ) {
 			var palette = jqObj.find( ".palette" ), bind = function () {
-						var color = $( this ).text();
-						jqObj.find( "input[name=color]" ).val( color );
-						// farbtastic binds on keyup
-						if ( $.farbtastic ) {
-							jqObj.find( "input[name=color]" ).trigger( "keyup" );
-						}
-					}, colorExample, colorSelect, i;
+				var color = $( this ).text();
+				jqObj.find( "input[name=color]" ).val( color );
+				// farbtastic binds on keyup
+				if ( $.farbtastic ) {
+					jqObj.find( "input[name=color]" ).trigger( "keyup" );
+				}
+			}, colorExample, colorSelect, i;
 
 			for ( i = this.color[type].palette.length - 1; i > -1; i -= 1 ) {
 				colorExample = $( "<div/>" ).css( {

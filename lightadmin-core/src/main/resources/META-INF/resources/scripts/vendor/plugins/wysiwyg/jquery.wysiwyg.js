@@ -740,30 +740,30 @@
 		this.ui.appendItem = function ( name, control ) {
 			var self = this.self, className = control.className || control.command || name || "empty", tooltip = control.tooltip || control.command || name || "";
 
-			return $( '<li role="menuitem" unselectable="on">' + (className) + "</li>" ).addClass( className ).attr( "title", tooltip ).hover( this.addHoverClass, this.removeHoverClass ).click( function ( event ) {
-																																																	  if ( $( this ).hasClass( "disabled" ) ) {
-																																																		  return false;
-																																																	  }
+			return $( '<li role="menuitem" unselectable="on">' + (className) + "</li>" ).addClass( className ).attr( "title", tooltip ).hover( this.addHoverClass, this.removeHoverClass ).click(function ( event ) {
+				if ( $( this ).hasClass( "disabled" ) ) {
+					return false;
+				}
 
-																																																	  self.triggerControl.apply( self, [name, control] );
+				self.triggerControl.apply( self, [name, control] );
 
-																																																	  /**
-																																																	   * @link https://github.com/akzhan/jwysiwyg/issues/219
-																																																	   */
-																																																	  var $target = $( event.target );
-																																																	  for ( var controlName in self.controls ) {
-																																																		  if ( $target.hasClass( controlName ) ) {
-																																																			  self.ui.toolbar.find( "." + controlName ).toggleClass( "active" );
-																																																			  self.editorDoc.rememberCommand = true;
-																																																			  break;
-																																																		  }
-																																																	  }
+				/**
+				 * @link https://github.com/akzhan/jwysiwyg/issues/219
+				 */
+				var $target = $( event.target );
+				for ( var controlName in self.controls ) {
+					if ( $target.hasClass( controlName ) ) {
+						self.ui.toolbar.find( "." + controlName ).toggleClass( "active" );
+						self.editorDoc.rememberCommand = true;
+						break;
+					}
+				}
 
-																																																	  this.blur();
-																																																	  self.ui.returnRange();
-																																																	  self.ui.focus();
-																																																	  return true;
-																																																  } ).appendTo( self.ui.toolbar );
+				this.blur();
+				self.ui.returnRange();
+				self.ui.focus();
+				return true;
+			} ).appendTo( self.ui.toolbar );
 		};
 
 		this.ui.appendItemCustom = function ( name, control ) {
@@ -773,20 +773,20 @@
 				$( window ).bind( "trigger-" + name + ".wysiwyg", control.callback );
 			}
 
-			return $( '<li role="menuitem" unselectable="on" style="background: url(\'' + control.icon + '\') no-repeat;"></li>' ).addClass( "custom-command-" + name ).addClass( "wysiwyg-custom-command" ).addClass( name ).attr( "title", tooltip ).hover( this.addHoverClass, this.removeHoverClass ).click( function () {
-																																																																													 if ( $( this ).hasClass( "disabled" ) ) {
-																																																																														 return false;
-																																																																													 }
+			return $( '<li role="menuitem" unselectable="on" style="background: url(\'' + control.icon + '\') no-repeat;"></li>' ).addClass( "custom-command-" + name ).addClass( "wysiwyg-custom-command" ).addClass( name ).attr( "title", tooltip ).hover( this.addHoverClass, this.removeHoverClass ).click(function () {
+				if ( $( this ).hasClass( "disabled" ) ) {
+					return false;
+				}
 
-																																																																													 self.triggerControl.apply( self, [name, control] );
+				self.triggerControl.apply( self, [name, control] );
 
-																																																																													 this.blur();
-																																																																													 self.ui.returnRange();
-																																																																													 self.ui.focus();
+				this.blur();
+				self.ui.returnRange();
+				self.ui.focus();
 
-																																																																													 self.triggerControlCallback( name );
-																																																																													 return true;
-																																																																												 } ).appendTo( self.ui.toolbar );
+				self.triggerControlCallback( name );
+				return true;
+			} ).appendTo( self.ui.toolbar );
 		};
 
 		this.ui.appendItemSeparator = function () {
@@ -805,19 +805,19 @@
 			//activate controls
 			$.each( self.options.controls, function ( name, control ) {
 				var className = control.className || control.command || name || "empty", tags, elm, css, el, checkActiveStatus = function ( cssProperty, cssValue ) {
-							var handler;
+					var handler;
 
-							if ( "function" === typeof (cssValue) ) {
-								handler = cssValue;
-								if ( handler( el.css( cssProperty ).toString().toLowerCase(), self ) ) {
-									self.ui.toolbar.find( "." + className ).addClass( "active" );
-								}
-							} else {
-								if ( el.css( cssProperty ).toString().toLowerCase() === cssValue ) {
-									self.ui.toolbar.find( "." + className ).addClass( "active" );
-								}
-							}
-						};
+					if ( "function" === typeof (cssValue) ) {
+						handler = cssValue;
+						if ( handler( el.css( cssProperty ).toString().toLowerCase(), self ) ) {
+							self.ui.toolbar.find( "." + className ).addClass( "active" );
+						}
+					} else {
+						if ( el.css( cssProperty ).toString().toLowerCase() === cssValue ) {
+							self.ui.toolbar.find( "." + className ).addClass( "active" );
+						}
+					}
+				};
 
 				if ( "fullscreen" !== className ) {
 					self.ui.toolbar.find( "." + className ).removeClass( "active" );
@@ -1402,15 +1402,15 @@
 			}
 
 			if ( self.options.autoSave ) {
-				$( self.editorDoc ).keydown( function () {
+				$( self.editorDoc ).keydown(function () {
 					self.autoSaveFunction();
-				} ).keyup( function () {
-							   self.autoSaveFunction();
-						   } ).mousedown( function () {
-											  self.autoSaveFunction();
-										  } ).bind( $.support.noCloneEvent ? "input.wysiwyg" : "paste.wysiwyg", function () {
-														self.autoSaveFunction();
-													} );
+				} ).keyup(function () {
+							  self.autoSaveFunction();
+						  } ).mousedown(function () {
+											self.autoSaveFunction();
+										} ).bind( $.support.noCloneEvent ? "input.wysiwyg" : "paste.wysiwyg", function () {
+													  self.autoSaveFunction();
+												  } );
 			}
 
 			if ( self.options.autoGrow ) {
@@ -1475,7 +1475,7 @@
 			// Support event callbacks
 			$.each( self.options.events, function ( key, handler ) {
 				$( self.editorDoc ).bind( key + ".wysiwyg", function ( event ) {
-					// Trigger event handler, providing the event and api to 
+					// Trigger event handler, providing the event and api to
 					// support additional functionality.
 					handler.apply( self.editorDoc, [event, self] );
 				} );
@@ -2260,7 +2260,7 @@
 				var $link = $( '<a href="#" class="wysiwyg-dialog-close-button">X</a>' );
 
 				$link.click( function () {
-					abstractDialog.close(); // this is important it makes sure that is close from the abstract $.wysiwyg.dialog instace, not just locally 
+					abstractDialog.close(); // this is important it makes sure that is close from the abstract $.wysiwyg.dialog instace, not just locally
 				} );
 
 				$topbar.find( '.wysiwyg-dialog-close-wrapper' ).prepend( $link );

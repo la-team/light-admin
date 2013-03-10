@@ -42,51 +42,51 @@
 		var message = notification.message;
 		var o = notification.options;
 		var notification = $( '<div class="jGrowl-notification ' + o.themeState + ' ui-corner-all' + ((o.group != undefined && o.group != '') ? ' ' + o.group : '') + '">' + '<div class="jGrowl-close">' + o.closeTemplate + '</div>' + '<div class="jGrowl-header">' + o.header + '</div>' + '<div class="jGrowl-message">' + message + '</div></div>' ).data( "jGrowl", o ).addClass( o.theme ).children( 'div.jGrowl-close' ).bind( "click.jGrowl",function () {
-																																																																																																											$( this ).parent().trigger( 'jGrowl.close' );
-																																																																																																										} ).parent();
+			$( this ).parent().trigger( 'jGrowl.close' );
+		} ).parent();
 		$( notification ).bind( "mouseover.jGrowl",function () {
 			$( 'div.jGrowl-notification', self.element ).data( "jGrowl.pause", true );
 		} ).bind( "mouseout.jGrowl",function () {
-			$( 'div.jGrowl-notification', self.element ).data( "jGrowl.pause", false );
-		} ).bind( 'jGrowl.beforeOpen',function () {
-			if ( o.beforeOpen.apply( notification, [notification, message, o, self.element] ) != false ) {
-				$( this ).trigger( 'jGrowl.open' );
-			}
-		} ).bind( 'jGrowl.open',function () {
-			if ( o.open.apply( notification, [notification, message, o, self.element] ) != false ) {
-				if ( o.glue == 'after' ) {
-					$( 'div.jGrowl-notification:last', self.element ).after( notification );
-				} else {
-					$( 'div.jGrowl-notification:first', self.element ).before( notification );
-				}
-				$( this ).animate( o.animateOpen, o.openDuration, o.easing, function () {
-					if ( $.browser.msie && (parseInt( $( this ).css( 'opacity' ), 10 ) === 1 || parseInt( $( this ).css( 'opacity' ), 10 ) === 0) ) {
-						this.style.removeAttribute( 'filter' );
-					}
-					if ( $( this ).data( "jGrowl" ) != null ) {
-						$( this ).data( "jGrowl" ).created = new Date();
-					}
-					$( this ).trigger( 'jGrowl.afterOpen' );
-				} );
-			}
-		} ).bind( 'jGrowl.afterOpen',function () {
-					  o.afterOpen.apply( notification, [notification, message, o, self.element] );
-				  } ).bind( 'jGrowl.beforeClose',function () {
-										if ( o.beforeClose.apply( notification, [notification, message, o, self.element] ) != false ) {
-											$( this ).trigger( 'jGrowl.close' );
-										}
-							} ).bind( 'jGrowl.close',function () {
-										  $( this ).data( 'jGrowl.pause', true );
-										  $( this ).animate( o.animateClose, o.closeDuration, o.easing, function () {
-											  if ( $.isFunction( o.close ) ) {
-												  if ( o.close.apply( notification, [notification, message, o, self.element] ) !== false ) {
-													  $( this ).remove();
-												  }
+					  $( 'div.jGrowl-notification', self.element ).data( "jGrowl.pause", false );
+				  } ).bind( 'jGrowl.beforeOpen',function () {
+								if ( o.beforeOpen.apply( notification, [notification, message, o, self.element] ) != false ) {
+									$( this ).trigger( 'jGrowl.open' );
+								}
+							} ).bind( 'jGrowl.open',function () {
+										  if ( o.open.apply( notification, [notification, message, o, self.element] ) != false ) {
+											  if ( o.glue == 'after' ) {
+												  $( 'div.jGrowl-notification:last', self.element ).after( notification );
 											  } else {
-												  $( this ).remove();
+												  $( 'div.jGrowl-notification:first', self.element ).before( notification );
 											  }
-										  } );
-									  } ).trigger( 'jGrowl.beforeOpen' );
+											  $( this ).animate( o.animateOpen, o.openDuration, o.easing, function () {
+												  if ( $.browser.msie && (parseInt( $( this ).css( 'opacity' ), 10 ) === 1 || parseInt( $( this ).css( 'opacity' ), 10 ) === 0) ) {
+													  this.style.removeAttribute( 'filter' );
+												  }
+												  if ( $( this ).data( "jGrowl" ) != null ) {
+													  $( this ).data( "jGrowl" ).created = new Date();
+												  }
+												  $( this ).trigger( 'jGrowl.afterOpen' );
+											  } );
+										  }
+									  } ).bind( 'jGrowl.afterOpen',function () {
+													o.afterOpen.apply( notification, [notification, message, o, self.element] );
+												} ).bind( 'jGrowl.beforeClose',function () {
+															  if ( o.beforeClose.apply( notification, [notification, message, o, self.element] ) != false ) {
+																  $( this ).trigger( 'jGrowl.close' );
+															  }
+														  } ).bind( 'jGrowl.close',function () {
+																		$( this ).data( 'jGrowl.pause', true );
+																		$( this ).animate( o.animateClose, o.closeDuration, o.easing, function () {
+																			if ( $.isFunction( o.close ) ) {
+																				if ( o.close.apply( notification, [notification, message, o, self.element] ) !== false ) {
+																					$( this ).remove();
+																				}
+																			} else {
+																				$( this ).remove();
+																			}
+																		} );
+																	} ).trigger( 'jGrowl.beforeOpen' );
 		if ( o.corners != '' && $.fn.corner != undefined ) {
 			$( notification ).corner( o.corners );
 		}

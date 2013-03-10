@@ -29,14 +29,14 @@
 	$.wysiwyg.controls.cssWrap = {
 		init: function ( Wysiwyg ) {
 			var self = this, formWrapHtml, key, translation, dialogReplacements = {
-						legend: "Wrap Element",
-						wrapperType: "Wrapper Type",
-						ID: "ID",
-						"class": "Class",
-						wrap: "Wrap",
-						unwrap: "Unwrap",
-						cancel: "Cancel"
-					};
+				legend: "Wrap Element",
+				wrapperType: "Wrapper Type",
+				ID: "ID",
+				"class": "Class",
+				wrap: "Wrap",
+				unwrap: "Unwrap",
+				cancel: "Cancel"
+			};
 
 			formWrapHtml = '<form class="wysiwyg"><fieldset><legend>{legend}</legend>' + '<div class="wysiwyg-dialogRow"><label>{wrapperType}: &nbsp;<select name="type"><option value="span">Span</option><option value="div">Div</option></select></label></div>' + '<div class="wysiwyg-dialogRow"><label>{ID}: &nbsp;<input name="id" type="text" /></label></div>' + '<div class="wysiwyg-dialogRow"><label>{class}: &nbsp;<input name="class" type="text" /></label></div>' + '<div class="wysiwyg-dialogRow"><input type="button" class="button cssWrap-unwrap" style="display:none;" value="{unwrap}"/></label>' + '<input type="submit"  class="button cssWrap-submit" value="{wrap}"/></label>' + '<input type="reset" class="button cssWrap-cancel" value="{cancel}"/></div></fieldset></form>';
 
