@@ -3,34 +3,27 @@ package org.lightadmin.crudOperations.edit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.FilterTestEntityConfiguration;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
 import org.lightadmin.page.EditPage;
 import org.lightadmin.page.ListViewPage;
-import org.lightadmin.page.LoginPage;
 import org.lightadmin.page.ShowViewPage;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertFieldValues;
-
+@RunWithConfiguration( {FilterTestEntityConfiguration.class})
+@LoginOnce( domain = Domain.FILTER_TEST_DOMAIN )
 public class PrimitiveFields extends SeleniumIntegrationTest {
 
-	@Autowired
-	private LoginPage loginPage;
 	private ListViewPage listViewPage;
 	private EditPage editPage;
-
 	private ShowViewPage showView;
 
 	@Before
-	public void setup() {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( FilterTestEntityConfiguration.class );
-
-		listViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.FILTER_TEST_DOMAIN );
+	public void refreshListView() {
+		listViewPage = getStartPage().navigateToDomain( Domain.FILTER_TEST_DOMAIN );
 	}
 
 	@After

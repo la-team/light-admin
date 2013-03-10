@@ -2,37 +2,28 @@ package org.lightadmin.page.fieldDisplay.quickView;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.component.QuickViewComponent;
 import org.lightadmin.config.OrderTestEntityWithDefaultId;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
-import org.lightadmin.page.ListViewPage;
-import org.lightadmin.page.LoginPage;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
 import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 
+@RunWithConfiguration( {OrderTestEntityWithDefaultId.class})
+@LoginOnce( domain = Domain.TEST_ORDERS )
 public class DisplayTest extends SeleniumIntegrationTest {
 
-	@Autowired
-	private LoginPage loginPage;
-
-	private ListViewPage testOrderListPage;
-
 	@Before
-	public void setup() {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithDefaultId.class );
-
-		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
+	public void refreshListView() {
+		getStartPage().navigateToDomain( Domain.TEST_ORDERS );
 	}
 
 	@Test
 	public void canBeHidden() {
-		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
+		final QuickViewComponent quickViewComponent = getStartPage().showQuickViewForItem( 1 );
 
 		quickViewComponent.hide();
 
@@ -41,9 +32,9 @@ public class DisplayTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void correctInfoIsDisplayedAfterSorting() {
-		testOrderListPage.getDataTable().getColumn( "Name" ).sortDescending();
+		getStartPage().getDataTable().getColumn( "Name" ).sortDescending();
 
-		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 1 );
+		final QuickViewComponent quickViewComponent = getStartPage().showQuickViewForItem( 1 );
 		final String[] actualFieldValues = quickViewComponent.getQuickViewFieldValues();
 
 		assertFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues );
@@ -51,10 +42,10 @@ public class DisplayTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void infoCanBeDisplayedForMultipleItems() {
-		final QuickViewComponent quickViewComponent1 = testOrderListPage.showQuickViewForItem( 1 );
+		final QuickViewComponent quickViewComponent1 = getStartPage().showQuickViewForItem( 1 );
 		final String[] actualFieldValues1 = quickViewComponent1.getQuickViewFieldValues();
 
-		final QuickViewComponent quickViewComponent2 = testOrderListPage.showQuickViewForItem( 3 );
+		final QuickViewComponent quickViewComponent2 = getStartPage().showQuickViewForItem( 3 );
 		final String[] actualFieldValues2 = quickViewComponent2.getQuickViewFieldValues();
 
 		assertFieldValues( new String[]{ "1", "62100.00" }, actualFieldValues1 );

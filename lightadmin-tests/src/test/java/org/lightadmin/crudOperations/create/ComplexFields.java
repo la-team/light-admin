@@ -3,40 +3,33 @@ package org.lightadmin.crudOperations.create;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.CustomerTestEntityConfiguration;
 import org.lightadmin.config.OrderTestEntityWithComplexFields;
 import org.lightadmin.config.TestAddressConfiguration;
 import org.lightadmin.config.TestLineItemConfiguration;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
 import org.lightadmin.page.CreatePage;
-import org.lightadmin.page.LoginPage;
 import org.lightadmin.page.ShowViewPage;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 
+@RunWithConfiguration( {TestLineItemConfiguration.class,
+		TestAddressConfiguration.class,
+		CustomerTestEntityConfiguration.class,
+		OrderTestEntityWithComplexFields.class})
+@LoginOnce( domain = Domain.TEST_ORDERS )
 public class ComplexFields extends SeleniumIntegrationTest {
 
-	@Autowired
-	private LoginPage loginPage;
 	private CreatePage createPage;
 
 	private ShowViewPage showView;
 
 	@Before
 	public void setup() {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( TestLineItemConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( TestAddressConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( CustomerTestEntityConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithComplexFields.class );
-
-		createPage = loginPage.get().loginAs( User.ADMINISTRATOR )
-				.navigateToDomain( Domain.TEST_ORDERS )
-				.navigateToCreatePage();
+		createPage = getStartPage().navigateToCreatePage();
 	}
 
 	@After

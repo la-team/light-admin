@@ -3,37 +3,29 @@ package org.lightadmin.crudOperations.edit;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.*;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
 import org.lightadmin.page.EditPage;
-import org.lightadmin.page.ListViewPage;
-import org.lightadmin.page.LoginPage;
 import org.lightadmin.page.ShowViewPage;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 
+@RunWithConfiguration( {TestLineItemConfiguration.class,
+		TestAddressConfiguration.class,
+		CustomerTestEntityConfiguration.class,
+		OrderTestEntityWithComplexFields.class})
+@LoginOnce( domain = Domain.TEST_ORDERS )
 public class ComplexFields extends SeleniumIntegrationTest {
 
-	@Autowired
-	private LoginPage loginPage;
-	private ListViewPage listViewPage;
 	private EditPage editPage;
-
 	private ShowViewPage showView;
 
 	@Before
-	public void setup() {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( TestLineItemConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( TestAddressConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( CustomerTestEntityConfiguration.class );
-		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithComplexFields.class );
-
-		listViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
+	public void refreshListView(){
+		getStartPage().navigateToDomain( Domain.TEST_ORDERS );
 	}
 
 	@After
@@ -113,7 +105,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	}
 
 	private void clearAllFieldsAndSave() {
-		editPage = listViewPage.editItem( 4 );
+		editPage = getStartPage().editItem( 4 );
 
 		editPage.deselect( "customer" );
 		editPage.clearAllSelections( "shippingAddresses" );
@@ -124,7 +116,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	}
 
 	private void addSelectionsAndSave() {
-		editPage = listViewPage.editItem( 5 );
+		editPage = getStartPage().editItem( 5 );
 
 		editPage.multiSelect( "shippingAddresses", new String[]{ "Kreschatik, Kiev, Ukraine" } );
 		editPage.multiSelect( "lineItems", new String[]{ "110. Product: Product 3; Amount: 4; Total: 196.00", "114. Product: Product 1; Amount: 7; Total: 3493.00" } );
@@ -133,7 +125,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	}
 
 	private void replaceSelectionsAndSave() {
-		editPage = listViewPage.editItem( 6 );
+		editPage = getStartPage().editItem( 6 );
 		editPage.select( "customer", "New Customer" );
 
 		editPage.replaceFieldSelections( "shippingAddresses",
@@ -150,7 +142,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	}
 
 	private void modifyDateViaDatePickerAndSave() {
-		editPage = listViewPage.editItem( 7 );
+		editPage = getStartPage().editItem( 7 );
 
 		selectedDate = editPage.selectDateOfCurrentMonth( "dueDate", "13" );
 
@@ -159,7 +151,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 
 
 	private void modifyDateManuallyAndSave() {
-		editPage = listViewPage.editItem( 8 );
+		editPage = getStartPage().editItem( 8 );
 
 		editPage.type( "dueDate", "2014-12-14" );
 

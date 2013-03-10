@@ -3,32 +3,25 @@ package org.lightadmin.page;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.CustomerTestEntityConfiguration;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.junit.Assert.assertTrue;
 import static org.lightadmin.util.DomainAsserts.assertScopeCount;
 import static org.lightadmin.util.DomainAsserts.assertTableData;
 
+@RunWithConfiguration( {CustomerTestEntityConfiguration.class })
+@LoginOnce( domain = Domain.TEST_CUSTOMERS )
 public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
 	public static final String SELLERS_SCOPE = "Sellers";
 
-	@Autowired
-	private LoginPage loginPage;
-
-	private ListViewPage customerListViewPage;
-
 	@Before
-	public void setup() {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( CustomerTestEntityConfiguration.class );
-
-		customerListViewPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_CUSTOMERS );
+	public void refreshListView() {
+		getStartPage().navigateToDomain( Domain.TEST_CUSTOMERS );
 	}
 
 	@Test
@@ -39,59 +32,59 @@ public class FilteringScopedResultTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void customersAreFilteredByScope() {
-		customerListViewPage.selectScope( SELLERS_SCOPE );
+		getStartPage().selectScope( SELLERS_SCOPE );
 
 		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 	}
 
 	@Test
 	public void resettingFilterDoesNotResetScope() {
-		customerListViewPage.selectScope( SELLERS_SCOPE );
+		getStartPage().selectScope( SELLERS_SCOPE );
 		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 
-		customerListViewPage.openAdvancedSearch();
-		customerListViewPage.filter( "lastname", "Matthews1" );
-		assertTableData( expectedFilteredAndScopedCustomers, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "lastname", "Matthews1" );
+		assertTableData( expectedFilteredAndScopedCustomers, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 
-		customerListViewPage.resetFilter();
+		getStartPage().resetFilter();
 		assertScopeIsApplied( expectedScopedCustomers, SELLERS_SCOPE );
 	}
 
 
 	@Test
 	public void scopeIsAppliedToFilteredCustomers() {
-		customerListViewPage.openAdvancedSearch();
-		customerListViewPage.filter( "lastname", "Matthews1" );
-		assertTableData( expectedFilteredCustomers, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "lastname", "Matthews1" );
+		assertTableData( expectedFilteredCustomers, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 
-		customerListViewPage.selectScope( SELLERS_SCOPE );
+		getStartPage().selectScope( SELLERS_SCOPE );
 		assertScopeIsApplied( expectedFilteredAndScopedCustomers, SELLERS_SCOPE );
 	}
 
     @Test
 	public void defaultScopeCountIsCorrect() {
-		assertScopeCount( "All", 29, customerListViewPage );
-		assertScopeCount( "Buyers", 29, customerListViewPage );
-		assertScopeCount( "Sellers", 8, customerListViewPage );
+		assertScopeCount( "All", 29, getStartPage() );
+		assertScopeCount( "Buyers", 29, getStartPage() );
+		assertScopeCount( "Sellers", 8, getStartPage() );
 	}
 
 	//Covers LA-22 comment: https://github.com/max-dev/light-admin/issues/22#issuecomment-12013074
 	@Test
 	public void scopeCountIsUpdatedAfterFiltering() {
-		customerListViewPage.openAdvancedSearch();
-		customerListViewPage.filter( "lastname", "Matthews1" );
+		getStartPage().openAdvancedSearch();
+		getStartPage().filter( "lastname", "Matthews1" );
 
-		assertScopeCount( "All", 2, customerListViewPage );
-		assertScopeCount( "Buyers", 2, customerListViewPage );
-		assertScopeCount( "Sellers", 1, customerListViewPage );
+		assertScopeCount( "All", 2, getStartPage() );
+		assertScopeCount( "Buyers", 2, getStartPage() );
+		assertScopeCount( "Sellers", 1, getStartPage() );
 	}
 
 	//TODO: iko: add test for scope count update for CRUD operations, filter resetting
 
 	private void assertScopeIsApplied( String[][] expectedData, String scope ) {
-		assertTableData( expectedData, customerListViewPage.getDataTable(), webDriver(), webDriverTimeout() );
+		assertTableData( expectedData, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 
-		assertTrue( "Selected scope is not highlighted", customerListViewPage.scopeIsHighlighted( scope ) );
+		assertTrue( "Selected scope is not highlighted", getStartPage().scopeIsHighlighted( scope ) );
 	}
 
 	private static final String[][] expectedFilteredAndScopedCustomers = { { "1", "Dave", "Matthews1", "dave@dmband1.com" } };
