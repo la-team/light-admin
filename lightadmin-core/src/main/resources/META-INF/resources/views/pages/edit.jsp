@@ -67,6 +67,7 @@
 			appendText: '(YYYY-MM-DD)',
 			dateFormat: 'yy-mm-dd'
 		} );
+		$( ".input-date" ).mask( "9999-99-99" );
 
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}" includeFields="${formViewFields}"/>;
 

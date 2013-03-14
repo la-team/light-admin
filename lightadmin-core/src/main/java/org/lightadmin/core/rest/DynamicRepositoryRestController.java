@@ -44,6 +44,7 @@ import java.io.Serializable;
 import java.net.URI;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -67,7 +68,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	private ApplicationContext applicationContext;
 
 	@PostConstruct
-	public void init() {
+	public void init() throws Exception {
 		specificationCreator = new SpecificationCreator( conversionService, configuration );
 	}
 
@@ -77,6 +78,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			throws IOException, IllegalAccessException, InstantiationException {
 		return super.createOrUpdate( request, baseUri, repository, "" );
 	}
+
+	private static final Date NULL_PLACEHOLDER_MAGIC_DATE = new Date(-377743392000001L);
 
 	@Override
 	@SuppressWarnings("rawtypes")
@@ -94,6 +97,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			}
 		} else if ((repo = configuration.forDomainType(attrMeta.type())) != null &&
 				(repo.getRepository().isNullPlaceholder(incomingVal))) {
+			attrMeta.set(null, entity);
+		} else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
 			attrMeta.set(null, entity);
 		} else {
 			attrMeta.set(incomingVal, entity);
