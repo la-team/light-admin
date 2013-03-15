@@ -46,7 +46,9 @@ DOMAIN_TYPE_METADATA = {};
 					json[attrName] = false;
 					break;
 				case 'DATE':
-					json[attrName] = -377743392000001;
+					if (usePlaceholders) {
+						json[attrName] = -377743392000001;
+					}
 					break;
 			}
 		} );
