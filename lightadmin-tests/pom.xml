@@ -18,6 +18,7 @@
 		<cargo.servlet.port>8080</cargo.servlet.port>
 	</properties>
 
+
 	<dependencies>
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
