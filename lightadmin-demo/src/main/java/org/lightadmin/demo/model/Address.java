@@ -1,6 +1,5 @@
 package org.lightadmin.demo.model;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.util.Assert;
 
@@ -12,7 +11,6 @@ public class Address extends AbstractEntity {
 
 	private String street, city, country;
 
-	@JsonBackReference
 	@ManyToOne
 	private Customer customer;
 

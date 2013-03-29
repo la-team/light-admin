@@ -3,12 +3,7 @@ package org.lightadmin.demo.model;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -19,7 +14,7 @@ import java.util.Map;
 public class Product extends AbstractEntity {
 
 	@NotNull
-	@Size( min = 10, max = 100 )
+	@Size(min = 10, max = 100)
 	private String name;
 
 	private String description;
@@ -34,7 +29,8 @@ public class Product extends AbstractEntity {
 	@Basic
 	private Boolean retired;
 
-	@Temporal(TemporalType.DATE) @Column(name = "REL_DATE")
+	@Temporal(TemporalType.DATE)
+	@Column(name = "REL_DATE")
 	private Date releaseDate;
 
 	public Product( String name, BigDecimal price ) {
@@ -87,7 +83,7 @@ public class Product extends AbstractEntity {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(Date releaseDate) {
+	public void setReleaseDate( Date releaseDate ) {
 		this.releaseDate = releaseDate;
 	}
 

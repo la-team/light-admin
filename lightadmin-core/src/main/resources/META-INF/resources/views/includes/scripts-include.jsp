@@ -68,3 +68,11 @@
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin.js"/>"></script>
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/charts/chart.js"/>"></script>
+
+<script type="text/javascript">
+	$( function () {
+		$( "a.not-implemented" ).click( function () {
+			jAlert( 'Sorry mate, but this function is currently in development.', 'Coming soon...' );
+		} );
+	} );
+</script>

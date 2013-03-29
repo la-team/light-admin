@@ -1,6 +1,5 @@
 package org.lightadmin.demo.model;
 
-import org.codehaus.jackson.annotate.JsonManagedReference;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.springframework.util.Assert;
 
@@ -21,7 +20,6 @@ public class Customer extends AbstractEntity {
 	@Column(unique = true)
 	private EmailAddress emailAddress;
 
-	@JsonManagedReference
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "customer_id")
 	private Set<Address> addresses;
