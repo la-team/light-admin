@@ -72,7 +72,7 @@
 <script type="text/javascript">
 	$( function () {
 		$( "a.not-implemented" ).click( function () {
-			jAlert( 'Sorry mate, but this function is currently in development.', 'Coming soon...' );
+			jAlert( 'Sorry mate, but this feature is currently in development.', 'Coming soon...' );
 		} );
 	} );
 </script>
