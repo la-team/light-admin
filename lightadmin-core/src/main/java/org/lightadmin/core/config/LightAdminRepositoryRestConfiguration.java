@@ -12,10 +12,6 @@ import org.springframework.data.rest.webmvc.json.JsonSchemaController;
 import org.springframework.data.rest.webmvc.json.RepositoryAwareJacksonModule;
 import org.springframework.orm.jpa.support.PersistenceAnnotationBeanPostProcessor;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.method.support.HandlerMethodArgumentResolver;
-import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
-
-import java.util.Arrays;
 
 @Configuration
 public class LightAdminRepositoryRestConfiguration {
@@ -27,8 +23,8 @@ public class LightAdminRepositoryRestConfiguration {
 
 	@Bean
 	@Autowired
-	public RestConfigurationInitInterceptor restConfigurationInitInterceptor(RepositoryRestConfiguration config) {
-		return new RestConfigurationInitInterceptor(config);
+	public RestConfigurationInitInterceptor restConfigurationInitInterceptor( RepositoryRestConfiguration config ) {
+		return new RestConfigurationInitInterceptor( config );
 	}
 
 	@Bean
@@ -75,7 +71,7 @@ public class LightAdminRepositoryRestConfiguration {
 	public ValidatingRepositoryEventListener validatingRepositoryEventListener() {
 		LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
 		validator.afterPropertiesSet();
-		return new ValidatingRepositoryEventListener().addValidator("beforeSave", validator);
+		return new ValidatingRepositoryEventListener().addValidator( "beforeSave", validator );
 	}
 
 	/**
@@ -135,15 +131,5 @@ public class LightAdminRepositoryRestConfiguration {
 	@Bean
 	public RepositoryRestHandlerMapping repositoryExporterHandlerMapping() {
 		return new RepositoryRestHandlerMapping();
-	}
-
-	/**
-	 * Bean for looking up methods annotated with {@link org.springframework.web.bind.annotation.ExceptionHandler}.
-	 */
-	@Bean
-	public ExceptionHandlerExceptionResolver exceptionHandlerExceptionResolver() {
-		ExceptionHandlerExceptionResolver er = new ExceptionHandlerExceptionResolver();
-		er.setCustomArgumentResolvers( Arrays.<HandlerMethodArgumentResolver>asList( new ServerHttpRequestMethodArgumentResolver() ) );
-		return er;
 	}
 }
