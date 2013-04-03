@@ -95,6 +95,7 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 	public void configureHandlerExceptionResolvers( List<HandlerExceptionResolver> exceptionResolvers ) {
 		ExceptionHandlerExceptionResolver exceptionHandlerResolver = new ExceptionHandlerExceptionResolver();
 		exceptionHandlerResolver.setCustomArgumentResolvers( Arrays.<HandlerMethodArgumentResolver>asList( new ServerHttpRequestMethodArgumentResolver() ) );
+		exceptionHandlerResolver.afterPropertiesSet();
 
 		exceptionResolvers.add( exceptionHandlerResolver );
 	}

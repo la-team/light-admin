@@ -4,6 +4,7 @@ import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
 
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
+import java.lang.annotation.Annotation;
 import java.util.Date;
 
 import static javax.persistence.metamodel.Attribute.PersistentAttributeType.EMBEDDED;
@@ -23,6 +24,16 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 	public JpaDomainTypeAttributeMetadata( EntityType<?> entityType, Attribute attribute ) {
 		this( new JpaAttributeMetadata( entityType, attribute ) );
 		this.attribute = attribute;
+	}
+
+	@Override
+	public boolean hasAnnotation( final Class<? extends Annotation> annoType ) {
+		return attributeMetadata.hasAnnotation( annoType );
+	}
+
+	@Override
+	public <A extends Annotation> A annotation( final Class<A> annoType ) {
+		return attributeMetadata.annotation( annoType );
 	}
 
 	@Override

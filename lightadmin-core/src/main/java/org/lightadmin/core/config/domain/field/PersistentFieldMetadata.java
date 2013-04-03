@@ -3,6 +3,8 @@ package org.lightadmin.core.config.domain.field;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 
+import javax.persistence.GeneratedValue;
+
 public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
 
 	private final String field;
@@ -29,6 +31,11 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 	@Override
 	public boolean isPrimaryKey() {
 		return primaryKey;
+	}
+
+	@Override
+	public boolean isGeneratedValue() {
+		return attributeMetadata.hasAnnotation( GeneratedValue.class );
 	}
 
 	public void setPrimaryKey( final boolean primaryKey ) {

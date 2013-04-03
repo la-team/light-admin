@@ -9,4 +9,6 @@ public interface Persistable {
 	String getField();
 
 	boolean isPrimaryKey();
+
+	boolean isGeneratedValue();
 }
