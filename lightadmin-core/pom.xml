@@ -8,14 +8,33 @@
 	<artifactId>lightadmin</artifactId>
 	<packaging>jar</packaging>
 	<version>1.0.0.M1</version>
+
 	<url>http://lightadmin.org</url>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
 
 	<name>LightAdmin</name>
 
+	<description>Pluggable data management solution for Java web applications developed in a "Rapid" manner</description>
+
 	<scm>
-		<connection>https://github.com/max-dev/light-admin.git</connection>
-		<url>https://github.com/max-dev/light-admin</url>
+		<connection>scm:git:git@github.com:max-dev/light-admin.git</connection>
+		<developerConnection>scm:git:git@github.com:max-dev/light-admin.git</developerConnection>
+		<url>scm:git:git@github.com:max-dev/light-admin.git</url>
 	</scm>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/max-dev/light-admin/issues</url>
+	</issueManagement>
+
+	<inceptionYear>2013</inceptionYear>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
