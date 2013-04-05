@@ -128,9 +128,11 @@ public class SpecificationCreator {
 		private Predicate associationAttributePredicate( final DomainTypeAttributeMetadata attribute, final String attributeName, final String parameterValue ) {
 			final Class<?> domainType = attribute.getAssociationDomainType();
 
-			final DynamicJpaRepository repository = domainTypeConfigurationFor( domainType ).getRepository();
+			final DomainTypeBasicConfiguration domainTypeBasicConfiguration = domainTypeConfigurationFor( domainType );
 
-			Serializable id = stringToSerializable( parameterValue, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
+			final DynamicJpaRepository repository = domainTypeBasicConfiguration.getRepository();
+
+			final Serializable id = stringToSerializable( parameterValue, ( Class<? extends Serializable> ) domainTypeBasicConfiguration.getDomainTypeEntityMetadata().getIdAttribute().getType() );
 
 			final Object entity = repository.findOne( id );
 
@@ -138,7 +140,7 @@ public class SpecificationCreator {
 				final Expression<Collection> objectPath = root.get( attributeName );
 				return builder.isMember( entity, objectPath );
 			} else {
-				return builder.equal( root.<String>get( attributeName ), entity );
+				return builder.equal( root.get( attributeName ), entity );
 			}
 		}
 
