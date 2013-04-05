@@ -36,17 +36,15 @@
 				value="${entityId}"/></h5></div>
 		<fieldset>
 			<c:forEach var="fieldEntry" items="${formViewFields}" varStatus="status">
-				<c:if test="${!fieldEntry.generatedValue}">
-					<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
-						<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
+				<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
+					<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
 
-						<div class="formRight">
-							<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}"
-													cssClass="input-xlarge" errorCssClass="error"/>
-						</div>
-						<div class="fix"></div>
+					<div class="formRight">
+						<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}"
+												cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
 					</div>
-				</c:if>
+					<div class="fix"></div>
+				</div>
 			</c:forEach>
 		</fieldset>
 		<div class="wizNav">
