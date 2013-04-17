@@ -46,7 +46,7 @@ DOMAIN_TYPE_METADATA = {};
 					json[attrName] = false;
 					break;
 				case 'DATE':
-					if (usePlaceholders) {
+					if ( usePlaceholders ) {
 						json[attrName] = -377743392000001;
 					}
 					break;
@@ -85,19 +85,19 @@ function dataTableRESTAdapter( sSource, aoData, fnCallback ) {
 	restParams.push( { "name": sortName + ".dir", "value": sortDir } );
 
 	jQuery.ajax( {
-					"dataType": 'json',
-					"type": "GET",
-					"url": sSource,
-					"data": restParams,
-					"success": function ( data ) {
-						data.iTotalRecords = data.page.totalElements;
-						data.iTotalDisplayRecords = data.page.totalElements;
+					 "dataType": 'json',
+					 "type": "GET",
+					 "url": sSource,
+					 "data": restParams,
+					 "success": function ( data ) {
+						 data.iTotalRecords = data.page.totalElements;
+						 data.iTotalDisplayRecords = data.page.totalElements;
 
-						getSearcher().onSearchCompleted();
+						 getSearcher().onSearchCompleted();
 
-						fnCallback( data );
-					}
-				} );
+						 fnCallback( data );
+					 }
+				 } );
 }
 
 function getPrimaryKey( dataValue ) {
@@ -123,9 +123,6 @@ function quickLook( aData ) {
 		var currentFieldIdx = 1;
 		for ( var prop in aData ) {
 			if ( prop != 'links' && prop != 'stringRepresentation' && prop != 'managedDomainType' ) {
-				var name = aData[prop]['name'] !== undefined ? aData[prop]['name'] : prop;
-				var value = aData[prop]['value'] !== undefined ? aData[prop]['value'] : aData[prop];
-
 				var rowClass = '';
 				if ( currentFieldIdx == 1 ) {
 					rowClass = 'noborder';
@@ -135,8 +132,8 @@ function quickLook( aData ) {
 				}
 
 				detailsHtmlBlock += '<tr class="' + rowClass + '">';
-				detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + name + ':</strong></td>';
-				detailsHtmlBlock += '<td class="qv-field-value">' + FieldValueRenderer.render( value ) + '</td>';
+				detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + aData[prop]['name'] + ':</strong></td>';
+				detailsHtmlBlock += '<td class="qv-field-value">' + FieldValueRenderer.render( aData[prop], 'quickView' ) + '</td>';
 				detailsHtmlBlock += '</tr">';
 
 				currentFieldIdx++;
@@ -168,19 +165,19 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 			var aData = dataTable.fnGetData( nTr );
 			var restEntityUrl = aData.links[0].href;
 			jQuery.ajax( {
-							"dataType": 'json',
-							"type": "GET",
-							"url": restEntityUrl + '/unit/quickView',
-							"success": function ( data ) {
-								var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
-								$( nDetailsRow ).addClass( $( nDetailsRow ).prev().attr( 'class' ) );
-								$( 'div.innerDetails', nDetailsRow ).hide();
-								$( 'div.innerDetails', nDetailsRow ).slideDown( 'slow', function () {
-									infoImg.attr( 'src', "../images/aInactive.png" );
-									infoImg.attr( 'title', "Click to close Quick View" );
-								} );
-							}
-						} );
+							 "dataType": 'json',
+							 "type": "GET",
+							 "url": restEntityUrl + '/unit/quickView',
+							 "success": function ( data ) {
+								 var nDetailsRow = dataTable.fnOpen( nTr, quickLook( data ), 'details' );
+								 $( nDetailsRow ).addClass( $( nDetailsRow ).prev().attr( 'class' ) );
+								 $( 'div.innerDetails', nDetailsRow ).hide();
+								 $( 'div.innerDetails', nDetailsRow ).slideDown( 'slow', function () {
+									 infoImg.attr( 'src', "../images/aInactive.png" );
+									 infoImg.attr( 'title', "Click to close Quick View" );
+								 } );
+							 }
+						 } );
 		}
 	} );
 }
@@ -194,7 +191,7 @@ function loadDomainObjectForShowView( showViewSection, restRepoUrl ) {
 					for ( name in data ) {
 						var field = showViewSection.find( '[name="field-' + name + '"]' );
 						if ( field.length > 0 ) {
-							field.html( FieldValueRenderer.render( data[name].value ) );
+							field.html( FieldValueRenderer.render( data[name], 'showView' ) );
 						}
 					}
 				}
@@ -251,6 +248,9 @@ function loadDomainObjectForFormView( form, restRepoUrl ) {
 									break;
 								case 'BOOL':
 									editor.prop( 'checked', attrVal );
+									break;
+								case 'FILE':
+									$( editor ).parent( 'div' ).parent( 'div' ).prepend( FieldValueRenderer.render( data[attr], 'formView' ) );
 									break;
 								default:
 									editor.val( attrVal.toString() );
@@ -320,7 +320,21 @@ function saveOrUpdateDomainObject( domForm, usePlaceholders ) {
 					var link = $.grep( data.links, function ( link ) {
 						return link.rel == 'selfDomainLink';
 					} )[0];
-					window.location = link.href + '?updateSuccess=true';
+
+					var fileContainers = $( "div.filesAdded[id$='-file-container']", $( domForm ) );
+
+					if ( fileContainers.size() == 0 ) {
+						window.location = link.href + '?updateSuccess=true';
+					} else {
+						fileContainers.last().data( 'uploader' ).bind( 'FileUploaded', function ( up, file ) {
+							window.location = link.href + '?updateSuccess=true';
+						} );
+
+						$.each( fileContainers, function ( i, fileContainer ) {
+							var uploader = $( fileContainer ).data( 'uploader' );
+							uploader.start();
+						} );
+					}
 				},
 				statusCode: {
 					400 /* BAD_REQUEST */: function ( jqXHR ) {

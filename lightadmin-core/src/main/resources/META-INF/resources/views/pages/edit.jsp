@@ -17,7 +17,7 @@
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 
 <c:set var="formViewFields" value="${domainTypeAdministrationConfiguration.formViewFragment.fields}"/>
-<c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
+<c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>" scope="request"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>

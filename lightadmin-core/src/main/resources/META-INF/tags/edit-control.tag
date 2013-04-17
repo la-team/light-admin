@@ -19,6 +19,10 @@
 			<editor:boolean-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
 										 errorCssClass="${errorCssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
+		<jsp:attribute name="fileEditControl">
+			<editor:file-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
+									  errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+		</jsp:attribute>
 		<jsp:attribute name="dateEditControl">
 			<editor:date-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
 									  errorCssClass="${errorCssClass}" disabled="${disabled}"/>
