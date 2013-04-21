@@ -17,6 +17,7 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 	private JspFragment simpleEditControl;
 	private JspFragment numberEditControl;
 	private JspFragment booleanEditControl;
+	private JspFragment fileEditControl;
 	private JspFragment dateEditControl;
 	private JspFragment n2oneEditControl;
 	private JspFragment n2manyEditControl;
@@ -50,6 +51,9 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 				break;
 			case STRING:
 				worker = simpleEditControl;
+				break;
+			case FILE:
+				worker = fileEditControl;
 				break;
 			default:
 				worker = simpleEditControl;
@@ -92,5 +96,9 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 
 	public void setMapEditControl( JspFragment control ) {
 		this.mapEditControl = control;
+	}
+
+	public void setFileEditControl( final JspFragment fileEditControl ) {
+		this.fileEditControl = fileEditControl;
 	}
 }

@@ -14,13 +14,13 @@ import java.util.Map;
 public class Product extends AbstractEntity {
 
 	@NotNull
-	@Size(min = 10, max = 100)
+	@Size( min = 10, max = 100 )
 	private String name;
 
 	private String description;
 
 	@NotNull
-	@NumberFormat(style = NumberFormat.Style.CURRENCY)
+	@NumberFormat( style = NumberFormat.Style.CURRENCY )
 	private BigDecimal price;
 
 	@ElementCollection
@@ -29,9 +29,13 @@ public class Product extends AbstractEntity {
 	@Basic
 	private Boolean retired;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "REL_DATE")
+	@Temporal( TemporalType.DATE )
+	@Column( name = "REL_DATE" )
 	private Date releaseDate;
+
+	@Lob
+	@Column( name = "FILE_DATA" )
+	private byte[] fileData;
 
 	public Product( String name, BigDecimal price ) {
 		this( name, price, null );
@@ -87,4 +91,11 @@ public class Product extends AbstractEntity {
 		this.releaseDate = releaseDate;
 	}
 
+	public byte[] getFileData() {
+		return fileData;
+	}
+
+	public void setFileData( final byte[] fileData ) {
+		this.fileData = fileData;
+	}
 }

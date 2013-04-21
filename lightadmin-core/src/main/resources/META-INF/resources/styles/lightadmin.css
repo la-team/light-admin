@@ -222,3 +222,7 @@ div.selector select {
 .mainForm input.input-date {
 	width: 116px;
 }
+
+.data-cell {
+	text-align: center;
+}

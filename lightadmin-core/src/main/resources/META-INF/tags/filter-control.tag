@@ -22,6 +22,9 @@
 			<editor:date-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
 									  errorCssClass="${errorCssClass}"/>
 		</jsp:attribute>
+		<jsp:attribute name="fileEditControl">
+			<jsp:text>File is not supported</jsp:text>
+		</jsp:attribute>
 		<jsp:attribute name="n2oneEditControl">
 			<editor:n2one-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
 									   errorCssClass="${errorCssClass}"/>

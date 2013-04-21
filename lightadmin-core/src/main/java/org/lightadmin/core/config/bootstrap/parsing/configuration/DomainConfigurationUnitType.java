@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
 import static java.lang.String.format;
+
 public enum DomainConfigurationUnitType {
 
 	SCREEN_CONTEXT( "screenContext" ),

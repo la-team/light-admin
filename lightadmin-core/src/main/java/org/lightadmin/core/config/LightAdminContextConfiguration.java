@@ -18,6 +18,7 @@ import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResol
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -76,6 +77,11 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 		OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor = new OpenEntityManagerInViewInterceptor();
 		openEntityManagerInViewInterceptor.setEntityManagerFactory( entityManagerFactory );
 		return openEntityManagerInViewInterceptor;
+	}
+
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		return new CommonsMultipartResolver();
 	}
 
 	@Override
