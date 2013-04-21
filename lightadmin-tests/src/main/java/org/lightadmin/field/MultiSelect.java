@@ -4,6 +4,7 @@ import org.lightadmin.SeleniumContext;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.FindBy;
 
 import java.util.List;
@@ -55,7 +56,10 @@ public class MultiSelect extends BaseField {
 			webDriver().waitForElementVisible( valueList );
 		}
 
-		valueList.findElement( By.xpath( "//li[contains(text(), '" + option + "')]" ) ).click();
+		final WebElement optionToSelect = valueList.findElement( By.xpath( "//li[contains(text(), '" + option + "')]" ) );
+
+		((Locatable ) optionToSelect ).getCoordinates().inViewPort();
+		optionToSelect.click();
 
 		webDriver().waitForElementVisible( getSelectedOption( option ) );
 	}
