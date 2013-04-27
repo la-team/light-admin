@@ -5,48 +5,59 @@
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
+<light:url var="fileUploadUrl" value="/rest/upload" scope="page"/>
 
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
+<c:set var="filePropertyUrl" value="${domainObjectUrl}/${attributeMetadata.name}/file" scope="page"/>
 
 <div id="${attributeMetadata.name}-file-container">
-	<%--<input id="${attributeMetadata.name}" name="${attributeMetadata.name}" ${disabled} type="file" class="fileInput"/>--%>
-	<%--<label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>--%>
+	<div class="files"></div>
+	<input id="${attributeMetadata.name}" name="${attributeMetadata.name}" type="hidden"/>
+	<label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>
 
-	<a id="${attributeMetadata.name}-pickfiles" name="${attributeMetadata.name}" href="#">[Select files]</a>
+	<a id="${attributeMetadata.name}-pickfiles" href="#">[Select file]</a>
 </div>
 <script type="text/javascript">
 	$( function () {
-		var uploader = new plupload.Uploader( {
-												  runtimes: 'html5,html4',
-												  url: '${domainObjectUrl}/${attributeMetadata.name}',
-												  container: '${attributeMetadata.name}-file-container',
-												  max_file_size: '10mb',
-												  unique_names: true,
-												  filters: [
-													  {title: "Image files", extensions: "jpg,jpeg,gif,png"}
-												  ],
-												  browse_button: '${attributeMetadata.name}-pickfiles'
-											  } );
+		var ${attributeMetadata.name}Uploader = new plupload.Uploader( {
+																		   runtimes: 'html5,html4',
+																		   url: '${fileUploadUrl}',
+																		   container: '${attributeMetadata.name}-file-container',
+																		   max_file_size: '10mb',
+																		   file_data_name: '${attributeMetadata.name}',
+																		   unique_names: true,
+																		   filters: [
+																			   {title: "Image files", extensions: "jpg,jpeg,gif,png"}
+																		   ],
+																		   browse_button: '${attributeMetadata.name}-pickfiles'
+																	   } );
 
-		uploader.init();
+		${attributeMetadata.name}Uploader.init();
 
-		uploader.bind( 'FilesAdded', function ( up, files ) {
+		${attributeMetadata.name}Uploader.bind( 'FilesAdded', function ( up, files ) {
 			$.each( files, function ( i, file ) {
-				$( '#${attributeMetadata.name}-file-container' ).prepend( $( '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize( file.size ) + ') <b></b>' + '</div>' ) );
+				var filesContainer = $( 'div.files', '#${attributeMetadata.name}-file-container' );
+				filesContainer.empty();
+				filesContainer.prepend( $( '<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize( file.size ) + ') <b></b>' + '</div>' ) );
 			} );
 			up.refresh();
 
-			$( '#${attributeMetadata.name}-file-container' ).addClass( 'filesAdded' );
+			${attributeMetadata.name}Uploader.start();
 		} );
 
-		uploader.bind( 'UploadProgress', function ( up, file ) {
+		${attributeMetadata.name}Uploader.bind( 'UploadProgress', function ( up, file ) {
 			$( '#' + file.id + " b" ).html( file.percent + "%" );
 		} );
 
-		uploader.bind( 'FileUploaded', function ( up, file ) {
+		${attributeMetadata.name}Uploader.bind( 'FileUploaded', function ( up, file, response ) {
 			$( '#' + file.id + " b" ).html( "100%" );
+
+			var result = $.parseJSON( response.response );
+
+			$( '#${attributeMetadata.name}' ).val( result['fileContent'] );
 		} );
 
-		$( '#${attributeMetadata.name}-file-container' ).data( 'uploader', uploader );
 	} );
 </script>

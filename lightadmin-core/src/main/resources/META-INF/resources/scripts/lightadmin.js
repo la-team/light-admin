@@ -251,6 +251,11 @@ function loadDomainObjectForFormView( form, restRepoUrl ) {
 									break;
 								case 'FILE':
 									$( editor ).parent( 'div' ).parent( 'div' ).prepend( FieldValueRenderer.render( data[attr], 'formView' ) );
+									if ( attrVal.length > 0 ) {
+										$( editor ).parent( 'div' ).prepend( removeFileLink( editor, restRepoUrl + '/' + attr + '/file' ) );
+									}
+
+									editor.val( attrVal.toString() );
 									break;
 								default:
 									editor.val( attrVal.toString() );
@@ -275,6 +280,33 @@ function loadDomainObjectForFormView( form, restRepoUrl ) {
 					}
 				}
 			} );
+}
+
+function removeFileLink( editor, filePropertyUrl ) {
+	var fieldName = $( editor ).attr( 'name' );
+
+	var link = "<a href='#" + fieldName + "'>[Remove File]</a>";
+	var jLink = $( link );
+	jLink.click( function () {
+		$.ajax( {
+					type: 'DELETE',
+					url: filePropertyUrl,
+					contentType: 'application/json',
+					dataType: 'json',
+					success: function () {
+						$( editor ).val( '' );
+						$( "img[name='" + fieldName + "']" ).remove();
+						jLink.remove();
+					},
+					statusCode: {
+						409: function ( jqXHR, textStatus, errorThrown ) {
+							var errorMessage = $.parseJSON( jqXHR.responseText )['message'];
+							jAlert( errorMessage, 'Remove operation failure' );
+						}
+					}
+				} );
+	} );
+	return jLink;
 }
 
 function removeDomainObject( entityId, restUrl, callback ) {
@@ -320,21 +352,7 @@ function saveOrUpdateDomainObject( domForm, usePlaceholders ) {
 					var link = $.grep( data.links, function ( link ) {
 						return link.rel == 'selfDomainLink';
 					} )[0];
-
-					var fileContainers = $( "div.filesAdded[id$='-file-container']", $( domForm ) );
-
-					if ( fileContainers.size() == 0 ) {
-						window.location = link.href + '?updateSuccess=true';
-					} else {
-						fileContainers.last().data( 'uploader' ).bind( 'FileUploaded', function ( up, file ) {
-							window.location = link.href + '?updateSuccess=true';
-						} );
-
-						$.each( fileContainers, function ( i, fileContainer ) {
-							var uploader = $( fileContainer ).data( 'uploader' );
-							uploader.start();
-						} );
-					}
+					window.location = link.href + '?updateSuccess=true';
 				},
 				statusCode: {
 					400 /* BAD_REQUEST */: function ( jqXHR ) {

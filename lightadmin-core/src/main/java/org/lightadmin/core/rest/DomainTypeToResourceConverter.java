@@ -7,7 +7,9 @@ import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.field.Persistable;
+import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
@@ -28,7 +30,7 @@ import static java.util.Collections.EMPTY_SET;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings( "unchecked" )
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
 
 	private final FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
@@ -102,43 +104,64 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 	}
 
 	private void addFieldAttributeValue( EntityResource resource, FieldMetadata field, Object source, final DomainTypeBasicConfiguration domainTypeConfiguration, final Serializable id ) {
-		Map<String, Object> fieldData = newLinkedHashMap();
-		final String fieldName = field.getName();
+		if ( FieldMetadataUtils.persistentFieldMetadataPredicate().apply( field ) ) {
+			addAttributeValue( resource, field.getUuid(), persistentFieldData( ( PersistentFieldMetadata ) field, source, domainTypeConfiguration, id ) );
+		} else {
+			addAttributeValue( resource, field.getUuid(), transientFieldData( field, source ) );
+		}
+	}
+
+	private Map<String, Object> transientFieldData( FieldMetadata field, Object source ) {
+		final Map<String, Object> fieldData = newLinkedHashMap();
+
 		final Object fieldValue = fieldValueEvaluator.evaluate( field, source );
-		final DomainTypeAttributeType attributeType = domainTypeAttributeType( field, fieldValue );
+		final DomainTypeAttributeType type = fieldValue != null ? DomainTypeAttributeType.forType( fieldValue.getClass() ) : DomainTypeAttributeType.UNKNOWN;
 
-		fieldData.put( "name", fieldName );
+		fieldData.put( "name", field.getName() );
 		fieldData.put( "value", fieldValue );
-		fieldData.put( "type", attributeType.name() );
+		fieldData.put( "type", type.name() );
+		fieldData.put( "persistable", false );
 
-		fieldData.put( "primaryKey", ( field instanceof Persistable ) && ( ( Persistable ) field ).isPrimaryKey() );
-
-		fieldData.put( "propertyLink", propertyLink( field, domainTypeConfiguration.getDomainTypeName(), id ) );
-
-		addAttributeValue( resource, field.getUuid(), fieldData );
+		return fieldData;
 	}
 
-	private String propertyLink( final FieldMetadata field, final String domainTypeName, final Serializable id ) {
-		if ( !( field instanceof Persistable ) ) {
-			return null;
+	private Map<String, Object> persistentFieldData( final PersistentFieldMetadata field, final Object source, final DomainTypeBasicConfiguration domainTypeConfiguration, final Serializable id ) {
+		if ( field.getAttributeMetadata().getAttributeType() == DomainTypeAttributeType.FILE ) {
+			return persistentFileFieldData( field, source, domainTypeConfiguration, id );
 		}
 
-		final Persistable persistableField = ( Persistable ) field;
-		final DomainTypeAttributeType attributeType = persistableField.getAttributeMetadata().getAttributeType();
-
-		UriComponentsBuilder propertyUriBuilder = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() ).pathSegment( domainTypeName ).pathSegment( id.toString() ).pathSegment( persistableField.getField() );
-		if ( DomainTypeAttributeType.FILE == attributeType ) {
-			propertyUriBuilder.pathSegment( "file" );
-		}
-
-		return propertyUriBuilder.build().toUri().toString();
+		return persistentSimpleFieldData( field, source );
 	}
 
-	private DomainTypeAttributeType domainTypeAttributeType( final FieldMetadata field, final Object fieldValue ) {
-		if ( field instanceof Persistable ) {
-			return ( ( Persistable ) field ).getAttributeMetadata().getAttributeType();
-		}
-		return fieldValue != null ? DomainTypeAttributeType.forType( fieldValue.getClass() ) : DomainTypeAttributeType.UNKNOWN;
+	private Map<String, Object> persistentSimpleFieldData( PersistentFieldMetadata field, Object source ) {
+		final Map<String, Object> fieldData = newLinkedHashMap();
+
+		fieldData.put( "name", field.getField() );
+		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
+		fieldData.put( "type", field.getAttributeMetadata().getAttributeType().name() );
+		fieldData.put( "persistable", true );
+		fieldData.put( "primaryKey", field.isPrimaryKey() );
+
+		return fieldData;
+	}
+
+	private Map<String, Object> persistentFileFieldData( PersistentFieldMetadata field, Object source, final DomainTypeBasicConfiguration domainTypeConfiguration, final Serializable id ) {
+		final Map<String, Object> fieldData = newLinkedHashMap();
+
+		final byte[] fileContent = ( byte[] ) fieldValueEvaluator.evaluate( field, source );
+
+		fieldData.put( "name", field.getField() );
+		fieldData.put( "type", DomainTypeAttributeType.FILE.name() );
+		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
+		fieldData.put( "persistable", true );
+		fieldData.put( "fileExists", fileContent != null && fileContent.length > 0 );
+		fieldData.put( "fileUrl", filePropertyLink( field, domainTypeConfiguration.getDomainTypeName(), id ) );
+
+		return fieldData;
+	}
+
+	private String filePropertyLink( final Persistable persistable, final String domainTypeName, final Serializable id ) {
+		return UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() ).pathSegment( domainTypeName ).pathSegment( id.toString() ).pathSegment( persistable.getField() ).pathSegment( "file" ).build().toUri().toString();
 	}
 
 	private void addAttributeValue( EntityResource resource, String attributeName, Object value ) {

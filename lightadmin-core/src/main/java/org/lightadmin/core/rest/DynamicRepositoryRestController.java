@@ -27,7 +27,6 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
 import org.springframework.data.rest.repository.RepositoryMetadata;
-import org.springframework.data.rest.repository.invoke.CrudMethod;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
@@ -57,6 +56,7 @@ import java.util.*;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
+import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
@@ -108,18 +108,35 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		}
 	}
 
-	@RequestMapping(
-		value = "/{repository}/{id}/{property}/file",
-		method = RequestMethod.GET )
+	@RequestMapping( value = "/{repository}/{id}/{property}/file", method = RequestMethod.DELETE )
 	@ResponseBody
-	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property ) throws IOException {
+	public ResponseEntity<?> deleteFileOfPropertyOfEntity( ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property ) throws IOException {
 		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
-		Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
-		CrudRepository repo = repoMeta.repository();
+		final Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
+		final CrudRepository repo = repoMeta.repository();
 
 		final Object entity;
 		final AttributeMetadata attrMeta;
 		if ( null == ( entity = repo.findOne( serId ) ) || null == ( attrMeta = repoMeta.entityMetadata().attribute( property ) ) ) {
+			return notFoundResponse( request );
+		}
+
+		attrMeta.set( null, entity );
+
+		repo.save( entity );
+
+		return new ResponseEntity( new HttpHeaders(), HttpStatus.OK );
+	}
+
+	@RequestMapping( value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET )
+	@ResponseBody
+	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property ) throws IOException {
+		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
+		final Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
+
+		final Object entity;
+		final AttributeMetadata attrMeta;
+		if ( null == ( entity = repoMeta.repository().findOne( serId ) ) || null == ( attrMeta = repoMeta.entityMetadata().attribute( property ) ) ) {
 			return notFoundResponse( request );
 		}
 
@@ -142,40 +159,24 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		return new ResponseEntity( HttpStatus.BAD_REQUEST );
 	}
 
-	@RequestMapping( value = "/{repository}/{id}/{property}", method = {RequestMethod.PUT, RequestMethod.POST} )
+	@RequestMapping( value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST} )
 	@ResponseBody
-	public ResponseEntity<?> updatePropertyOfEntity( final ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, final @PathVariable String property ) throws IOException {
-		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
-		if ( !repoMeta.exportsMethod( CrudMethod.SAVE_ONE ) ) {
-			return negotiateResponse( request, HttpStatus.METHOD_NOT_ALLOWED, new HttpHeaders(), null );
-		}
-		Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
-		CrudRepository repo = repoMeta.repository();
+	public ResponseEntity<?> saveFilePropertyOfEntity( final ServletServerHttpRequest request ) throws IOException {
+		final MultipartHttpServletRequest multipartHttpServletRequest = ( MultipartHttpServletRequest ) request.getServletRequest();
 
-		final Object entity;
-		final AttributeMetadata attrMeta;
-		if ( null == ( entity = repo.findOne( serId ) ) || null == ( attrMeta = repoMeta.entityMetadata().attribute( property ) ) ) {
-			return notFoundResponse( request );
-		}
+		final Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
 
-		if ( attrMeta.type().equals( byte[].class ) && request.getServletRequest() instanceof MultipartHttpServletRequest ) {
-			final MultipartHttpServletRequest multipartHttpServletRequest = ( MultipartHttpServletRequest ) request.getServletRequest();
+		if ( !fileMap.isEmpty() ) {
+			final Map.Entry<String, MultipartFile> fileEntry = fileMap.entrySet().iterator().next();
 
-			final Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
+			final Map<String, Object> result = newLinkedHashMap();
+			result.put( "fileName", fileEntry.getValue().getOriginalFilename() );
+			result.put( "fileContent", fileEntry.getValue().getBytes() );
 
-			if ( !fileMap.isEmpty() ) {
-				final Map.Entry<String, MultipartFile> fileEntry = fileMap.entrySet().iterator().next();
-
-				attrMetaSet( attrMeta, fileEntry.getValue().getBytes(), entity );
-
-				Object savedEntity = repo.save( entity );
-
-				return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), savedEntity );
-
-			}
+			return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), result );
 		}
 
-		return super.updatePropertyOfEntity( request, baseUri, repository, id, property );
+		return new ResponseEntity( HttpStatus.METHOD_NOT_ALLOWED );
 	}
 
 	@ResponseBody
