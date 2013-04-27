@@ -37,6 +37,10 @@ var FieldValueRenderer = function () {
 		this.targetView = targetView;
 
 		this.render = function ( field ) {
+			if ( !field['fileExists'] ) {
+				return '&nbsp;';
+			}
+
 			var height = '200px';
 			if ( this.targetView == 'listView' ) {
 				height = '21px';
@@ -44,7 +48,7 @@ var FieldValueRenderer = function () {
 				height = '150px';
 			}
 
-			return "<img src='" + field['propertyLink'] + "' style='height:" + height + "'/>";
+			return "<img name='" + field['name'] + "' src='" + field['fileUrl'] + "' style='height:" + height + "'/>";
 		}
 	}
 
@@ -127,7 +131,7 @@ var FieldValueRenderer = function () {
 
 	return {
 		render: function ( field, targetView ) {
-			if ( field['value'] == null ) {
+			if ( field['value'] == null && !field['fileExists'] ) {
 				return new EmptyValueRenderer().render();
 			}
 
