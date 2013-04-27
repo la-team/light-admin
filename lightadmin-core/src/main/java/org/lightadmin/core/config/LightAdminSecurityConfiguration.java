@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PropertiesLoaderUtils;
 import org.springframework.security.access.AccessDecisionVoter;
@@ -147,7 +148,7 @@ public class LightAdminSecurityConfiguration {
 		return provider;
 	}
 
-	@Bean
+	@Bean @Primary
 	public UserDetailsService userDetailsService() throws IOException {
 		Properties usersPproperties = PropertiesLoaderUtils.loadProperties( usersResource );
 		return new InMemoryUserDetailsManager( usersPproperties );
