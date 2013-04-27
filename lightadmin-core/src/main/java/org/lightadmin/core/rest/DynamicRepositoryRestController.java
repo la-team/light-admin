@@ -23,31 +23,36 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
+import org.springframework.data.rest.repository.RepositoryMetadata;
+import org.springframework.data.rest.repository.invoke.CrudMethod;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.server.ServletServerHttpRequest;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
@@ -72,42 +77,110 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		specificationCreator = new SpecificationCreator( conversionService, configuration );
 	}
 
-	@RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
+	@RequestMapping( value = "/{repository}", method = RequestMethod.PUT )
 	@ResponseBody
-	public ResponseEntity<?> createOrUpdate(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository)
-			throws IOException, IllegalAccessException, InstantiationException {
+	public ResponseEntity<?> createOrUpdate( ServletServerHttpRequest request, URI baseUri, @PathVariable String repository ) throws IOException, IllegalAccessException, InstantiationException {
 		return super.createOrUpdate( request, baseUri, repository, "" );
 	}
 
-	private static final Date NULL_PLACEHOLDER_MAGIC_DATE = new Date(-377743392000001L);
+	private static final Date NULL_PLACEHOLDER_MAGIC_DATE = new Date( -377743392000001L );
 
 	@Override
-	@SuppressWarnings("rawtypes")
-	protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) {
+	@SuppressWarnings( "rawtypes" )
+	protected void attrMetaSet( AttributeMetadata attrMeta, Object incomingVal, Object entity ) {
 		DomainTypeBasicConfiguration repo;
-		if (attrMeta.isCollectionLike() || attrMeta.isSetLike()) {
+		if ( attrMeta.isCollectionLike() || attrMeta.isSetLike() ) {
 			// Trying to avoid collection-was-no-longer-referenced issue
 			// if the collection is modifiable
 			try {
-				Collection col = (Collection) attrMeta.get(entity);
+				Collection col = ( Collection ) attrMeta.get( entity );
 				col.clear();
-				col.addAll((Collection) incomingVal);
-			} catch (UnsupportedOperationException e) {
-				attrMeta.set(incomingVal, entity);
+				col.addAll( ( Collection ) incomingVal );
+			} catch ( UnsupportedOperationException e ) {
+				attrMeta.set( incomingVal, entity );
 			}
-		} else if ((repo = configuration.forDomainType(attrMeta.type())) != null &&
-				(repo.getRepository().isNullPlaceholder(incomingVal))) {
-			attrMeta.set(null, entity);
-		} else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
-			attrMeta.set(null, entity);
+		} else if ( ( repo = configuration.forDomainType( attrMeta.type() ) ) != null && ( repo.getRepository().isNullPlaceholder( incomingVal ) ) ) {
+			attrMeta.set( null, entity );
+		} else if ( NULL_PLACEHOLDER_MAGIC_DATE.equals( incomingVal ) ) {
+			attrMeta.set( null, entity );
 		} else {
-			attrMeta.set(incomingVal, entity);
+			attrMeta.set( incomingVal, entity );
 		}
+	}
+
+	@RequestMapping(
+		value = "/{repository}/{id}/{property}/file",
+		method = RequestMethod.GET )
+	@ResponseBody
+	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property ) throws IOException {
+		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
+		Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
+		CrudRepository repo = repoMeta.repository();
+
+		final Object entity;
+		final AttributeMetadata attrMeta;
+		if ( null == ( entity = repo.findOne( serId ) ) || null == ( attrMeta = repoMeta.entityMetadata().attribute( property ) ) ) {
+			return notFoundResponse( request );
+		}
+
+		if ( attrMeta.type().equals( byte[].class ) ) {
+			final byte[] bytes = ( byte[] ) attrMeta.get( entity );
+			if ( bytes != null ) {
+
+				InputStream is = new ByteArrayInputStream( bytes );
+				FileCopyUtils.copy( is, response.getOutputStream() );
+
+				response.flushBuffer();
+
+				HttpHeaders responseHeaders = new HttpHeaders();
+				responseHeaders.setContentLength( bytes.length );
+				responseHeaders.setContentType( MediaType.IMAGE_JPEG );
+
+				return new ResponseEntity( responseHeaders, HttpStatus.OK );
+			}
+		}
+		return new ResponseEntity( HttpStatus.BAD_REQUEST );
+	}
+
+	@RequestMapping( value = "/{repository}/{id}/{property}", method = {RequestMethod.PUT, RequestMethod.POST} )
+	@ResponseBody
+	public ResponseEntity<?> updatePropertyOfEntity( final ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, final @PathVariable String property ) throws IOException {
+		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
+		if ( !repoMeta.exportsMethod( CrudMethod.SAVE_ONE ) ) {
+			return negotiateResponse( request, HttpStatus.METHOD_NOT_ALLOWED, new HttpHeaders(), null );
+		}
+		Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
+		CrudRepository repo = repoMeta.repository();
+
+		final Object entity;
+		final AttributeMetadata attrMeta;
+		if ( null == ( entity = repo.findOne( serId ) ) || null == ( attrMeta = repoMeta.entityMetadata().attribute( property ) ) ) {
+			return notFoundResponse( request );
+		}
+
+		if ( attrMeta.type().equals( byte[].class ) && request.getServletRequest() instanceof MultipartHttpServletRequest ) {
+			final MultipartHttpServletRequest multipartHttpServletRequest = ( MultipartHttpServletRequest ) request.getServletRequest();
+
+			final Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
+
+			if ( !fileMap.isEmpty() ) {
+				final Map.Entry<String, MultipartFile> fileEntry = fileMap.entrySet().iterator().next();
+
+				attrMetaSet( attrMeta, fileEntry.getValue().getBytes(), entity );
+
+				Object savedEntity = repo.save( entity );
+
+				return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), savedEntity );
+
+			}
+		}
+
+		return super.updatePropertyOfEntity( request, baseUri, repository, id, property );
 	}
 
 	@ResponseBody
 	@RequestMapping( value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET )
-	public ResponseEntity<?> entity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repositoryName, @PathVariable String id, @PathVariable String configurationUnit) throws IOException {
+	public ResponseEntity<?> entity( ServletServerHttpRequest request, URI baseUri, @PathVariable String repositoryName, @PathVariable String id, @PathVariable String configurationUnit ) throws IOException {
 
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
 
@@ -123,7 +196,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 	// TODO: Draft impl.
 	@ResponseBody
-	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search/count", method = RequestMethod.GET, produces = "application/json")
+	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search/count", method = RequestMethod.GET, produces = "application/json" )
 	public ResponseEntity<?> countItems( ServletServerHttpRequest request, @SuppressWarnings( "unused" ) URI baseUri, @PathVariable String repositoryName, @PathVariable String scopeName ) {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
 
@@ -143,7 +216,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		if ( isSpecificationScope( scope ) ) {
 			final Specification scopeSpecification = ( ( ScopeMetadataUtils.SpecificationScopeMetadata ) scope ).specification();
 
-			return responseEntity( countItemsBySpecification( repository, and( scopeSpecification, filterSpecification )) );
+			return responseEntity( countItemsBySpecification( repository, and( scopeSpecification, filterSpecification ) ) );
 		}
 
 		return responseEntity( countItemsBySpecification( repository, filterSpecification ) );
@@ -186,47 +259,47 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 	@Override
-	@ExceptionHandler(RepositoryConstraintViolationException.class)
+	@ExceptionHandler( RepositoryConstraintViolationException.class )
 	@ResponseBody
-	public ResponseEntity handleValidationFailure(RepositoryConstraintViolationException ex, ServletServerHttpRequest request) throws IOException {
+	public ResponseEntity handleValidationFailure( RepositoryConstraintViolationException ex, ServletServerHttpRequest request ) throws IOException {
 		final Map packet = newHashMap();
 		final List<Map<String, String>> errors = newArrayList();
 
-		for (FieldError fe : ex.getErrors().getFieldErrors()) {
-			List<Object> args = newArrayList(fe.getObjectName(), fe.getField(), fe.getRejectedValue());
+		for ( FieldError fe : ex.getErrors().getFieldErrors() ) {
+			List<Object> args = newArrayList( fe.getObjectName(), fe.getField(), fe.getRejectedValue() );
 
-			if (fe.getArguments() != null) {
+			if ( fe.getArguments() != null ) {
 				Collections.addAll( args, fe.getArguments() );
 			}
 
-			String msg = applicationContext.getMessage(fe.getCode(), args.toArray(), fe.getDefaultMessage(), null);
+			String msg = applicationContext.getMessage( fe.getCode(), args.toArray(), fe.getDefaultMessage(), null );
 			Map<String, String> error = newHashMap();
-			error.put("field", fe.getField());
-			error.put("message", msg);
-			errors.add(error);
+			error.put( "field", fe.getField() );
+			error.put( "message", msg );
+			errors.add( error );
 		}
-		packet.put("errors", errors);
+		packet.put( "errors", errors );
 
-		return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+		return negotiateResponse( request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet );
 	}
 
 	@Override
-	@ExceptionHandler(Exception.class)
+	@ExceptionHandler( Exception.class )
 	@ResponseBody
-	public ResponseEntity handleMiscFailures(Throwable t, ServletServerHttpRequest request) throws IOException {
-		LOG.debug("Handled exception", t);
-		Map<String, String> error = singletonMap("message", t.getLocalizedMessage());
+	public ResponseEntity handleMiscFailures( Throwable t, ServletServerHttpRequest request ) throws IOException {
+		LOG.debug( "Handled exception", t );
+		Map<String, String> error = singletonMap( "message", t.getLocalizedMessage() );
 		Map packet = newHashMap();
 		packet.put( "errors", asList( error ) );
 		return negotiateResponse( request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet );
 	}
 
 	@Override
-	@ExceptionHandler({ HttpMessageNotReadableException.class, HttpMessageNotWritableException.class })
+	@ExceptionHandler( {HttpMessageNotReadableException.class, HttpMessageNotWritableException.class} )
 	@ResponseBody
-	public ResponseEntity handleMessageConversionFailure(Exception ex, HttpServletRequest request) throws IOException {
-		LOG.error("Handled exception", ex);
-		return handleMiscFailures(ex.getCause(), new ServletServerHttpRequest(request));
+	public ResponseEntity handleMessageConversionFailure( Exception ex, HttpServletRequest request ) throws IOException {
+		LOG.error( "Handled exception", ex );
+		return handleMiscFailures( ex.getCause(), new ServletServerHttpRequest( request ) );
 	}
 
 	private Set<FieldMetadata> fields( String configurationUnit, DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
@@ -309,7 +382,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 	private ResponseEntity<String> responseEntity( Object value ) {
-		return new ResponseEntity<String>(String.valueOf( value ), new HttpHeaders(), HttpStatus.OK);
+		return new ResponseEntity<String>( String.valueOf( value ), new HttpHeaders(), HttpStatus.OK );
 	}
 
 	@Override
@@ -319,8 +392,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 	@Override
-	public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-		super.setApplicationContext(applicationContext);
+	public void setApplicationContext( ApplicationContext applicationContext ) throws BeansException {
+		super.setApplicationContext( applicationContext );
 		this.applicationContext = applicationContext;
 	}
 }

@@ -1,7 +1,5 @@
 package org.lightadmin.demo.model;
 
-import org.codehaus.jackson.annotate.JsonBackReference;
-import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
@@ -12,7 +10,6 @@ public class Address extends AbstractEntity {
 
 	private String street, city, country;
 
-	@JsonBackReference
 	@ManyToOne
 	private Customer customer;
 
@@ -30,7 +27,6 @@ public class Address extends AbstractEntity {
 
 	}
 
-	@JsonIgnore
 	public Address getCopy() {
 		return new Address( this.street, this.city, this.country );
 	}

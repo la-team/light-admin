@@ -4,12 +4,14 @@ import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder
 
 public class DefaultScreenContextConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<ScreenContextConfigurationUnit> implements ScreenContextConfigurationUnitBuilder {
 
-	private String screenName = "Undefined";
+	private String screenName;
 
-	private String menuItemName = "Undefined";
+	private String menuItemName;
 
 	public DefaultScreenContextConfigurationUnitBuilder( final Class<?> domainType ) {
 		super( domainType );
+
+		this.screenName = this.menuItemName = domainType.getSimpleName();
 	}
 
 	@Override

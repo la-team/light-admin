@@ -17,7 +17,7 @@
 <jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
 
 <c:set var="formViewFields" value="${domainTypeAdministrationConfiguration.formViewFragment.fields}"/>
-<c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
+<c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>" scope="request"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
@@ -36,17 +36,15 @@
 				value="${entityId}"/></h5></div>
 		<fieldset>
 			<c:forEach var="fieldEntry" items="${formViewFields}" varStatus="status">
-				<c:if test="${!fieldEntry.primaryKey}">
-					<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
-						<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
+				<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
+					<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
 
-						<div class="formRight">
-							<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}"
-													cssClass="input-xlarge" errorCssClass="error"/>
-						</div>
-						<div class="fix"></div>
+					<div class="formRight">
+						<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}"
+												cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
 					</div>
-				</c:if>
+					<div class="fix"></div>
+				</div>
 			</c:forEach>
 		</fieldset>
 		<div class="wizNav">
@@ -62,11 +60,11 @@
 
 		$( "select, input:checkbox, input:radio, input:file" ).uniform();
 
-		$( ".input-date" ).datepicker({
-			autoSize: true,
-			appendText: '(YYYY-MM-DD)',
-			dateFormat: 'yy-mm-dd'
-		} );
+		$( ".input-date" ).datepicker( {
+										   autoSize: true,
+										   appendText: '(YYYY-MM-DD)',
+										   dateFormat: 'yy-mm-dd'
+									   } );
 		$( ".input-date" ).mask( "9999-99-99" );
 
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}" includeFields="${formViewFields}"/>;

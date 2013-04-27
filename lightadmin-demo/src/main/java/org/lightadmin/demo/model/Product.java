@@ -3,12 +3,7 @@ package org.lightadmin.demo.model;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
@@ -25,7 +20,7 @@ public class Product extends AbstractEntity {
 	private String description;
 
 	@NotNull
-	@NumberFormat(style = NumberFormat.Style.CURRENCY)
+	@NumberFormat( style = NumberFormat.Style.CURRENCY )
 	private BigDecimal price;
 
 	@ElementCollection
@@ -34,8 +29,13 @@ public class Product extends AbstractEntity {
 	@Basic
 	private Boolean retired;
 
-	@Temporal(TemporalType.DATE) @Column(name = "REL_DATE")
+	@Temporal( TemporalType.DATE )
+	@Column( name = "REL_DATE" )
 	private Date releaseDate;
+
+	@Lob
+	@Column( name = "FILE_DATA" )
+	private byte[] fileData;
 
 	public Product( String name, BigDecimal price ) {
 		this( name, price, null );
@@ -87,8 +87,15 @@ public class Product extends AbstractEntity {
 		return releaseDate;
 	}
 
-	public void setReleaseDate(Date releaseDate) {
+	public void setReleaseDate( Date releaseDate ) {
 		this.releaseDate = releaseDate;
 	}
 
+	public byte[] getFileData() {
+		return fileData;
+	}
+
+	public void setFileData( final byte[] fileData ) {
+		this.fileData = fileData;
+	}
 }

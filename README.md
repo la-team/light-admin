@@ -32,13 +32,28 @@ by bringing pluggable fully operational data management back-end for JPA based a
 
 ## Getting started ##
 
-Download the jar though Maven:
+Declare repository in your POM
+
+```xml
+<repositories>
+  <repository>
+    <id>lightadmin-repo</id>
+    <url>https://raw.github.com/max-dev/light-admin/mvn-repo/</url>
+    <snapshots>
+      <enabled>true</enabled>
+      <updatePolicy>always</updatePolicy>
+    </snapshots>
+  </repository>
+</repositories>
+```
+
+Define maven dependency
 
 ```xml
 <dependency>
   <groupId>org.lightadmin</groupId>
   <artifactId>lightadmin</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>1.0.0.M1</version>
 </dependency> 
 ```
 

@@ -9,12 +9,14 @@ import org.lightadmin.core.config.domain.configuration.support.EntityNameExtract
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.rest.webmvc.EntityResource;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -26,7 +28,7 @@ import static java.util.Collections.EMPTY_SET;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
 
-@SuppressWarnings( "unchecked" )
+@SuppressWarnings("unchecked")
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
 
 	private final FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
@@ -59,7 +61,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		addManagedTypeProperty( entityResource, source );
 
 		for ( FieldMetadata field : fieldMetadatas ) {
-			addFieldAttributeValue( entityResource, field, source );
+			addFieldAttributeValue( entityResource, field, source, domainTypeConfiguration, id );
 		}
 
 		return entityResource;
@@ -99,13 +101,44 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		return entityResource.getContent().put( "managedDomainType", configuration.forManagedDomainType( source.getClass() ) != null );
 	}
 
-	private void addFieldAttributeValue( EntityResource resource, FieldMetadata field, Object source ) {
+	private void addFieldAttributeValue( EntityResource resource, FieldMetadata field, Object source, final DomainTypeBasicConfiguration domainTypeConfiguration, final Serializable id ) {
 		Map<String, Object> fieldData = newLinkedHashMap();
-		fieldData.put( "name", field.getName() );
-		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
+		final String fieldName = field.getName();
+		final Object fieldValue = fieldValueEvaluator.evaluate( field, source );
+		final DomainTypeAttributeType attributeType = domainTypeAttributeType( field, fieldValue );
+
+		fieldData.put( "name", fieldName );
+		fieldData.put( "value", fieldValue );
+		fieldData.put( "type", attributeType.name() );
+
 		fieldData.put( "primaryKey", ( field instanceof Persistable ) && ( ( Persistable ) field ).isPrimaryKey() );
 
+		fieldData.put( "propertyLink", propertyLink( field, domainTypeConfiguration.getDomainTypeName(), id ) );
+
 		addAttributeValue( resource, field.getUuid(), fieldData );
+	}
+
+	private String propertyLink( final FieldMetadata field, final String domainTypeName, final Serializable id ) {
+		if ( !( field instanceof Persistable ) ) {
+			return null;
+		}
+
+		final Persistable persistableField = ( Persistable ) field;
+		final DomainTypeAttributeType attributeType = persistableField.getAttributeMetadata().getAttributeType();
+
+		UriComponentsBuilder propertyUriBuilder = UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() ).pathSegment( domainTypeName ).pathSegment( id.toString() ).pathSegment( persistableField.getField() );
+		if ( DomainTypeAttributeType.FILE == attributeType ) {
+			propertyUriBuilder.pathSegment( "file" );
+		}
+
+		return propertyUriBuilder.build().toUri().toString();
+	}
+
+	private DomainTypeAttributeType domainTypeAttributeType( final FieldMetadata field, final Object fieldValue ) {
+		if ( field instanceof Persistable ) {
+			return ( ( Persistable ) field ).getAttributeMetadata().getAttributeType();
+		}
+		return fieldValue != null ? DomainTypeAttributeType.forType( fieldValue.getClass() ) : DomainTypeAttributeType.UNKNOWN;
 	}
 
 	private void addAttributeValue( EntityResource resource, String attributeName, Object value ) {

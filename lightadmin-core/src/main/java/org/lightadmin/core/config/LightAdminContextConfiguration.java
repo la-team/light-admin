@@ -4,6 +4,7 @@ import org.lightadmin.core.context.StandardWebContext;
 import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
 import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
+import org.lightadmin.core.view.SeparateContainerTilesView;
 import org.lightadmin.core.web.ApplicationController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
@@ -13,8 +14,11 @@ import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.env.Environment;
+import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
+import org.springframework.web.method.support.HandlerMethodArgumentResolver;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -22,9 +26,9 @@ import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExc
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
-import org.springframework.web.servlet.view.tiles2.TilesView;
 
 import javax.persistence.EntityManagerFactory;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
@@ -33,8 +37,7 @@ import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINI
 
 @Configuration
 @Import({
-			LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class,
-			LightAdminRepositoryRestConfiguration.class, LightAdminViewConfiguration.class
+			LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class, LightAdminViewConfiguration.class
 		})
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
@@ -47,9 +50,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Autowired
 	private RestConfigurationInitInterceptor restConfigurationInitInterceptor;
-
-	@Autowired
-	ExceptionHandlerExceptionResolver exceptionHandlerResolver;
 
 	@Override
 	public void addInterceptors( InterceptorRegistry registry ) {
@@ -79,6 +79,11 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 		return openEntityManagerInViewInterceptor;
 	}
 
+	@Bean
+	public CommonsMultipartResolver multipartResolver() {
+		return new CommonsMultipartResolver();
+	}
+
 	@Override
 	public void configureDefaultServletHandling( final DefaultServletHandlerConfigurer configurer ) {
 		configurer.enable();
@@ -94,6 +99,10 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
 	@Override
 	public void configureHandlerExceptionResolvers( List<HandlerExceptionResolver> exceptionResolvers ) {
+		ExceptionHandlerExceptionResolver exceptionHandlerResolver = new ExceptionHandlerExceptionResolver();
+		exceptionHandlerResolver.setCustomArgumentResolvers( Arrays.<HandlerMethodArgumentResolver>asList( new ServerHttpRequestMethodArgumentResolver() ) );
+		exceptionHandlerResolver.afterPropertiesSet();
+
 		exceptionResolvers.add( exceptionHandlerResolver );
 	}
 
@@ -114,7 +123,7 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 	@Bean
 	public ViewResolver viewResolver() {
 		UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
-		viewResolver.setViewClass( TilesView.class );
+		viewResolver.setViewClass( SeparateContainerTilesView.class );
 		return viewResolver;
 	}
 

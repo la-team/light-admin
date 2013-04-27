@@ -18,13 +18,13 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import static org.hibernate.validator.internal.util.CollectionHelper.newArrayList;
+import static com.google.common.collect.Lists.newArrayList;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 
-@SuppressWarnings("unchecked")
+@SuppressWarnings( "unchecked" )
 public class DomainTypeElementsTag extends AbstractAutowiredTag {
 
-	@Autowired(required = true)
+	@Autowired( required = true )
 	private GlobalAdministrationConfiguration configuration;
 
 	private Class<?> domainType;
@@ -57,7 +57,7 @@ public class DomainTypeElementsTag extends AbstractAutowiredTag {
 
 		EntityNameExtractor<Object> nameExtractor = elementTypeConfiguration.getEntityConfiguration().getNameExtractor();
 
-		List<Pair<Object, String>> elementNamePairs = newArrayList( elements.size() );
+		List<Pair<Object, String>> elementNamePairs = newArrayList();
 		for ( Object element : elements ) {
 			final String name = exceptionAwareNameExtractor( nameExtractor ).apply( element );
 			elementNamePairs.add( new Pair<Object, String>( element, name ) );

@@ -6,8 +6,8 @@
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="allowEmpty" required="false" type="java.lang.Boolean" %>
-
-<input id="${attributeMetadata.name}" name="${attributeMetadata.name}" ${disabled} type="text"/>
+<%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
+<input id="${attributeMetadata.name}" name="${attributeMetadata.name}" ${disabled ? 'disabled' : ''} type="text"/>
 <label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>
 
 <c:set var="numberIntegerType" value="<%= DomainTypeAttributeType.NUMBER_INTEGER %>"/>

@@ -163,7 +163,6 @@ td.details {
 }
 
 .logo {
-	float: left;
 	margin-top: 40px;
 }
 
@@ -222,4 +221,8 @@ div.selector select {
 
 .mainForm input.input-date {
 	width: 116px;
+}
+
+.data-cell {
+	text-align: center;
 }

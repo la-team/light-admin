@@ -1,6 +1,7 @@
 package org.lightadmin.core.persistence.metamodel;
 
 import javax.persistence.metamodel.Attribute;
+import java.lang.annotation.Annotation;
 
 public interface DomainTypeAttributeMetadata {
 
@@ -66,4 +67,9 @@ public interface DomainTypeAttributeMetadata {
 	Class<?> getAssociationDomainType();
 
 	DomainTypeAttributeType getAttributeType();
+
+	boolean hasAnnotation( Class<? extends Annotation> annoType );
+
+	<A extends Annotation> A annotation( Class<A> annoType );
+
 }

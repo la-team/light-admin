@@ -3,6 +3,11 @@ package org.lightadmin.core.config.domain.field;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 
+import javax.persistence.GeneratedValue;
+
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC_MULTI;
+
 public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
 
 	private final String field;
@@ -31,6 +36,11 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 		return primaryKey;
 	}
 
+	@Override
+	public boolean isGeneratedValue() {
+		return attributeMetadata.hasAnnotation( GeneratedValue.class );
+	}
+
 	public void setPrimaryKey( final boolean primaryKey ) {
 		this.primaryKey = primaryKey;
 	}
@@ -47,7 +57,7 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
 	@Override
 	public boolean isSortable() {
-		return true;
+		return this.attributeMetadata.getAttributeType() != ASSOC && this.attributeMetadata.getAttributeType() != ASSOC_MULTI;
 	}
 
 	@Override

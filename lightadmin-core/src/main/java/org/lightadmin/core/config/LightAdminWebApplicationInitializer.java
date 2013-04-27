@@ -1,5 +1,6 @@
 package org.lightadmin.core.config;
 
+import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
@@ -15,11 +16,14 @@ import java.util.regex.Pattern;
 
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.tiles.startup.BasicTilesInitializer.CONTAINER_KEY_INIT_PARAMETER;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 import static org.lightadmin.core.web.util.WebContextUtils.servletContextAttributeName;
 
 @SuppressWarnings("unused")
 public class LightAdminWebApplicationInitializer implements WebApplicationInitializer {
+
+	private static final String LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE = "org.apache.tiles.CONTAINER.LightAdmin";
 
 	private static final Pattern BASE_URL_PATTERN = Pattern.compile( "(/)|(/[\\w-]+)+" );
 
@@ -48,6 +52,8 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 		}
 
 		registerCharsetFilter( servletContext );
+
+		registerTilesDecorationFilter( servletContext );
 	}
 
 	private void registerLightAdminDispatcher( final ServletContext servletContext ) {
@@ -66,6 +72,12 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 		ServletRegistration.Dynamic lightAdminDispatcherRedirectorRegistration = servletContext.addServlet( LIGHT_ADMIN_DISPATCHER_REDIRECTOR_NAME, handlerServlet );
 		lightAdminDispatcherRedirectorRegistration.setLoadOnStartup( 3 );
 		lightAdminDispatcherRedirectorRegistration.addMapping( lightAdminBaseUrl( servletContext ) );
+	}
+
+	private void registerTilesDecorationFilter( final ServletContext servletContext ) {
+		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
+
+		servletContext.addFilter( "lightAdminTilesContainerEnrichmentFilter", TilesContainerEnrichmentFilter.class ).addMappingForUrlPatterns( null, false, urlMapping );
 	}
 
 	private void registerHiddenHttpMethodFilter( final ServletContext servletContext ) {
@@ -88,6 +100,8 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
 	private AnnotationConfigWebApplicationContext lightAdminApplicationContext( final ServletContext servletContext ) {
 		AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
+
+		servletContext.setInitParameter( CONTAINER_KEY_INIT_PARAMETER, LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE );
 
 		webApplicationContext.register( configurations( servletContext ) );
 

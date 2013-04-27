@@ -30,8 +30,8 @@
 		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(domainTypeName)}"/></h5></div>
 		<fieldset>
 			<c:forEach var="fieldEntry" items="${domainTypeAdministrationConfiguration.formViewFragment.fields}"
-					varStatus="status">
-				<c:if test="${!fieldEntry.primaryKey}">
+					   varStatus="status">
+				<c:if test="${!fieldEntry.generatedValue}">
 					<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
 						<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
 
@@ -58,10 +58,10 @@
 		$( "select, input:checkbox, input:radio, input:file" ).uniform();
 
 		$( ".input-date" ).datepicker( {
-										autoSize: true,
-										appendText: '(YYYY-MM-DD)',
-										dateFormat: 'yy-mm-dd'
-									} );
+										   autoSize: true,
+										   appendText: '(YYYY-MM-DD)',
+										   dateFormat: 'yy-mm-dd'
+									   } );
 		$( ".input-date" ).mask( "9999-99-99" );
 
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
