@@ -14,11 +14,13 @@
 <c:set var="numberFloatType" value="<%= DomainTypeAttributeType.NUMBER_FLOAT %>"/>
 
 <script type="text/javascript">
+	<c:if test="${not disabled}">
 	<c:if test="${attributeMetadata.attributeType eq numberIntegerType}">
 	$( "#${attributeMetadata.name}" ).spinner( { decimals: 0, stepping: 1 ${allowEmpty ? ', allowNull : true' : ''} } );
 	</c:if>
 
 	<c:if test="${attributeMetadata.attributeType eq numberFloatType}">
 	$( "#${attributeMetadata.name}" ).spinner( { decimals: 2 ${allowEmpty ? ', allowNull : true' : ''}} );
+	</c:if>
 	</c:if>
 </script>
