@@ -34,8 +34,10 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationFa
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
 import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.RememberMeAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.util.AntPathRequestMatcher;
 import org.springframework.security.web.util.AnyRequestMatcher;
@@ -116,19 +118,25 @@ public class LightAdminSecurityConfiguration {
 
 	@Bean
 	public Filter logoutFilter() {
-		LogoutFilter logoutFilter = new LogoutFilter( applicationUrl("/"), new SecurityContextLogoutHandler() );
+		SecurityContextLogoutHandler logoutHandler = new SecurityContextLogoutHandler();
+		logoutHandler.setInvalidateHttpSession( false );
+		LogoutFilter logoutFilter = new LogoutFilter( applicationUrl("/"), logoutHandler );
 		logoutFilter.setFilterProcessesUrl( applicationUrl("/logout") );
 		return logoutFilter;
 	}
 
 	@Bean
 	public Filter securityContextPersistenceFilter() {
-		return new SecurityContextPersistenceFilter();
+		HttpSessionSecurityContextRepository repo = new HttpSessionSecurityContextRepository();
+		repo.setSpringSecurityContextKey( keyWithNamespace( HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY ) );
+		return new SecurityContextPersistenceFilter( repo );
 	}
 
 	@Bean
 	public Filter rememberMeAuthenticationFilter( AuthenticationManager authenticationManager, UserDetailsService userDetailsService ) {
-		return new RememberMeAuthenticationFilter( authenticationManager, new TokenBasedRememberMeServices( REMEMBER_ME_DIGEST_KEY, userDetailsService ) );
+		TokenBasedRememberMeServices rememberMeServices = new TokenBasedRememberMeServices( REMEMBER_ME_DIGEST_KEY, userDetailsService );
+		rememberMeServices.setCookieName( keyWithNamespace( AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY ) );
+		return new RememberMeAuthenticationFilter( authenticationManager, rememberMeServices );
 	}
 
 	@Bean
@@ -161,6 +169,10 @@ public class LightAdminSecurityConfiguration {
 
 	private String applicationUrl( String path ) {
 		return webContext.getApplicationUrl( path );
+	}
+
+	private String keyWithNamespace( String key ) {
+		return "lightadmin:" + key;
 	}
 
 }
