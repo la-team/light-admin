@@ -118,6 +118,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		final DomainTypeAttributeType type = fieldValue != null ? DomainTypeAttributeType.forType( fieldValue.getClass() ) : DomainTypeAttributeType.UNKNOWN;
 
 		fieldData.put( "name", field.getName() );
+		fieldData.put( "title", field.getName() );
 		fieldData.put( "value", fieldValue );
 		fieldData.put( "type", type.name() );
 		fieldData.put( "persistable", false );
@@ -137,6 +138,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		final Map<String, Object> fieldData = newLinkedHashMap();
 
 		fieldData.put( "name", field.getField() );
+		fieldData.put( "title", field.getName() );
 		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
 		fieldData.put( "type", field.getAttributeMetadata().getAttributeType().name() );
 		fieldData.put( "persistable", true );
@@ -151,6 +153,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		final byte[] fileContent = ( byte[] ) fieldValueEvaluator.evaluate( field, source );
 
 		fieldData.put( "name", field.getField() );
+		fieldData.put( "title", field.getName() );
 		fieldData.put( "type", DomainTypeAttributeType.FILE.name() );
 		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
 		fieldData.put( "persistable", true );

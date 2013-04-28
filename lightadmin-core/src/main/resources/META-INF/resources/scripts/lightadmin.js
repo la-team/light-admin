@@ -132,7 +132,7 @@ function quickLook( aData ) {
 				}
 
 				detailsHtmlBlock += '<tr class="' + rowClass + '">';
-				detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + aData[prop]['name'] + ':</strong></td>';
+				detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + aData[prop]['title'] + ':</strong></td>';
 				detailsHtmlBlock += '<td class="qv-field-value">' + FieldValueRenderer.render( aData[prop], 'quickView' ) + '</td>';
 				detailsHtmlBlock += '</tr">';
 
