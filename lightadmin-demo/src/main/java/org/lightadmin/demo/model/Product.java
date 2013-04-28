@@ -37,10 +37,6 @@ public class Product extends AbstractEntity {
 	@Column(name = "PICTURE")
 	private byte[] picture;
 
-	@Lob
-	@Column( name = "BIG_PICTURE" )
-	private byte[] bigPicture;
-
 	public Product( String name, BigDecimal price ) {
 		this( name, price, null );
 	}
@@ -101,13 +97,5 @@ public class Product extends AbstractEntity {
 
 	public void setPicture( final byte[] picture ) {
 		this.picture = picture;
-	}
-
-	public byte[] getBigPicture() {
-		return bigPicture;
-	}
-
-	public void setBigPicture( final byte[] bigPicture ) {
-		this.bigPicture = bigPicture;
 	}
 }

@@ -25,19 +25,19 @@ public class ProductAdministration {
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "price" ).caption( "Price" ).field( "retired" ).caption( "Out of production" ).field( "releaseDate" ).caption( "Released on" ).field( "picture" ).caption( "Picture" ).field( "bigPicture" ).caption( "Big Picture" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "price" ).caption( "Price" ).field( "retired" ).caption( "Out of production" ).field( "releaseDate" ).caption( "Released on" ).field( "picture" ).caption( "Picture" ).build();
 	}
 
 	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "price" ).caption( "Price" ).field( "retired" ).caption( "Out of production" ).field( "releaseDate" ).caption( "Released on" ).field( "picture" ).caption( "Picture" ).field( "bigPicture" ).caption( "Big Picture" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "price" ).caption( "Price" ).field( "retired" ).caption( "Out of production" ).field( "releaseDate" ).caption( "Released on" ).field( "picture" ).caption( "Picture" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "price" ).caption( "Price" ).field( "releaseDate" ).caption( "Released on" ).field( "retired" ).caption( "Out of production" ).field( "picture" ).caption( "Picture" ).field( "bigPicture" ).caption( "Big Picture" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "price" ).caption( "Price" ).field( "releaseDate" ).caption( "Released on" ).field( "retired" ).caption( "Out of production" ).field( "picture" ).caption( "Picture" ).build();
 	}
 
 	public static FieldSetConfigurationUnit quickView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "retired" ).caption( "Out of production" ).field( "releaseDate" ).caption( "Released on" ).field( "picture" ).caption( "Picture" ).field( "bigPicture" ).caption( "Big Picture" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "description" ).caption( "Description" ).field( "retired" ).caption( "Out of production" ).field( "releaseDate" ).caption( "Released on" ).field( "picture" ).caption( "Picture" ).build();
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
