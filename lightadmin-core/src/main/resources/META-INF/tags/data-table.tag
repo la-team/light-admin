@@ -125,6 +125,7 @@
 																}
 															} );
 														} );
+														$( "a[rel^='prettyPhoto']" ).prettyPhoto( { social_tools: ''} );
 													}
 												} );
 
@@ -143,6 +144,7 @@
 										   appendText: '(YYYY-MM-DD)',
 										   dateFormat: 'yy-mm-dd'
 									   } );
+
 	} );
 
 	function renderActions( entityId ) {

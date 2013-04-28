@@ -37,21 +37,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.PostConstruct;
+import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.*;
+import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
@@ -130,7 +132,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 	@RequestMapping( value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET )
 	@ResponseBody
-	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property ) throws IOException {
+	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam( value = "width", defaultValue = "-1" ) int width, @RequestParam( value = "height", defaultValue = "-1" ) int height ) throws IOException {
 		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
 		final Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
 
@@ -143,10 +145,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		if ( attrMeta.type().equals( byte[].class ) ) {
 			final byte[] bytes = ( byte[] ) attrMeta.get( entity );
 			if ( bytes != null ) {
-
-				InputStream is = new ByteArrayInputStream( bytes );
-				FileCopyUtils.copy( is, response.getOutputStream() );
-
+				BufferedImage image = resizeImage( bytes, width, height );
+				ImageIO.write( image, "jpeg", response.getOutputStream() );
 				response.flushBuffer();
 
 				HttpHeaders responseHeaders = new HttpHeaders();
@@ -158,6 +158,22 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		}
 		return new ResponseEntity( HttpStatus.BAD_REQUEST );
 	}
+
+	private BufferedImage resizeImage( byte[] content, int width, int height ) throws IOException {
+		BufferedImage sourceImage = ImageIO.read( new ByteArrayInputStream( content ) );
+		if ( width < 0 && height < 0 ) {
+			return sourceImage;
+		}
+
+		Image thumbnail = sourceImage.getScaledInstance( width, height, Image.SCALE_SMOOTH );
+
+		BufferedImage resizedImage = new BufferedImage( thumbnail.getWidth( null ), thumbnail.getHeight( null ), sourceImage.getType() );
+
+		resizedImage.getGraphics().drawImage( thumbnail, 0, 0, null );
+
+		return resizedImage;
+	}
+
 
 	@RequestMapping( value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST} )
 	@ResponseBody

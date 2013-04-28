@@ -41,14 +41,16 @@ var FieldValueRenderer = function () {
 				return '&nbsp;';
 			}
 
-			var height = '200px';
+			var height = '200';
 			if ( this.targetView == 'listView' ) {
-				height = '21px';
+				height = '21';
 			} else if ( this.targetView == 'quickView' ) {
-				height = '150px';
+				height = '150';
 			}
 
-			return "<img name='" + field['name'] + "' src='" + field['fileUrl'] + "' style='height:" + height + "'/>";
+			var imageUrl = field['fileUrl'] + '?height=' + height;
+
+			return "<a href='" + field['fileUrl'] + "' title='' rel='prettyPhoto'>" + "<img name='" + field['name'] + "' src='" + imageUrl + "'/></a>";
 		}
 	}
 

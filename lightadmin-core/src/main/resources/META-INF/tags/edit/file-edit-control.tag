@@ -51,6 +51,11 @@
 			$( '#' + file.id + " b" ).html( file.percent + "%" );
 		} );
 
+		${attributeMetadata.name}Uploader.bind( 'Error', function ( up, err ) {
+			jAlert( err.message + (err.file ? " File: " + err.file.name : ""), 'Upload file operation failure' );
+			up.refresh();
+		} );
+
 		${attributeMetadata.name}Uploader.bind( 'FileUploaded', function ( up, file, response ) {
 			$( '#' + file.id + " b" ).html( "100%" );
 

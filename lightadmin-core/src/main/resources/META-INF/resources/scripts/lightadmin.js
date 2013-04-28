@@ -175,6 +175,7 @@ function bindInfoClickHandlers( tableElement, dataTable ) {
 								 $( 'div.innerDetails', nDetailsRow ).slideDown( 'slow', function () {
 									 infoImg.attr( 'src', "../images/aInactive.png" );
 									 infoImg.attr( 'title', "Click to close Quick View" );
+									 $( "a[rel^='prettyPhoto']", $( nDetailsRow ) ).prettyPhoto( { social_tools: ''} );
 								 } );
 							 }
 						 } );
@@ -194,6 +195,7 @@ function loadDomainObjectForShowView( showViewSection, restRepoUrl ) {
 							field.html( FieldValueRenderer.render( data[name], 'showView' ) );
 						}
 					}
+					$( "a[rel^='prettyPhoto']" ).prettyPhoto( { social_tools: ''} );
 				}
 			} );
 }
@@ -265,6 +267,8 @@ function loadDomainObjectForFormView( form, restRepoUrl ) {
 					}
 					$.uniform.update();
 					$( ".chzn-select" ).trigger( "liszt:updated" );
+
+					$( "a[rel^='prettyPhoto']" ).prettyPhoto( { social_tools: ''} );
 				},
 				statusCode: {
 					400 /* BAD_REQUEST */: function ( jqXHR ) {
