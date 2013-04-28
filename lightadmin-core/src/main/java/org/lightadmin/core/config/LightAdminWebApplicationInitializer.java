@@ -83,19 +83,19 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 	private void registerHiddenHttpMethodFilter( final ServletContext servletContext ) {
 		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
 
-		servletContext.addFilter( "hiddenHttpMethodFilter", HiddenHttpMethodFilter.class ).addMappingForUrlPatterns( null, false, urlMapping );
+		servletContext.addFilter( "lightAdminHiddenHttpMethodFilter", HiddenHttpMethodFilter.class ).addMappingForUrlPatterns( null, false, urlMapping );
 	}
 
 	private void registerSpringSecurityFilter( final ServletContext servletContext ) {
 		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
 
-		servletContext.addFilter( "springSecurityFilterChain", springSecurityFilterChain() ).addMappingForUrlPatterns( null, false, urlMapping );
+		servletContext.addFilter( "lightAdminSpringSecurityFilterChain", springSecurityFilterChain() ).addMappingForUrlPatterns( null, false, urlMapping );
 	}
 
 	private void registerCharsetFilter( final ServletContext servletContext ) {
 		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
 
-		servletContext.addFilter( "charsetFilter", characterEncodingFilter() ).addMappingForServletNames( null, false, urlMapping );
+		servletContext.addFilter( "lightAdminCharsetFilter", characterEncodingFilter() ).addMappingForServletNames( null, false, urlMapping );
 	}
 
 	private AnnotationConfigWebApplicationContext lightAdminApplicationContext( final ServletContext servletContext ) {
