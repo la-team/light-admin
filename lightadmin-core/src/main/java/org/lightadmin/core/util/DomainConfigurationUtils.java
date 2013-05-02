@@ -29,8 +29,10 @@ public abstract class DomainConfigurationUtils {
 		return ClassUtils.isAssignableValue( Class.class, candidate ) && isConfigurationCandidate( ( Class ) candidate );
 	}
 
-	@SuppressWarnings({"unchecked"})
-	public static <T extends ConfigurationUnit> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder<T>> builderInterface, Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass, final Class domainType ) {
+	@SuppressWarnings( {"unchecked"} )
+	public static <T extends ConfigurationUnit> T initializeConfigurationUnitWithBuilder( final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder<T>> builderInterface, Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass ) {
+		final Class<?> domainType = configurationDomainType( configurationClass );
+
 		final Method method = ClassUtils.getMethodIfAvailable( configurationClass, configurationUnitType.getName(), builderInterface );
 
 		ConfigurationUnitBuilder<T> builder = instantiateBuilder( concreteBuilderClass, domainType, configurationUnitType );

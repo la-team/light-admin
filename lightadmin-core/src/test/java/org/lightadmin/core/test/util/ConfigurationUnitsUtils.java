@@ -17,8 +17,8 @@ import static com.google.common.collect.Sets.newLinkedHashSet;
 
 public abstract class ConfigurationUnitsUtils {
 
-	public static ConfigurationUnits configurationUnits( Class<?> domainType, ConfigurationUnit... configurationUnits ) {
-		return new ConfigurationUnits( domainType, configurationUnits );
+	public static ConfigurationUnits configurationUnits( final Class configurationClass, ConfigurationUnit... configurationUnits ) {
+		return new ConfigurationUnits( configurationClass, configurationUnits );
 	}
 
 	public static ConfigurationUnit[] configurationUnitsFor( DomainConfigurationUnitType... unitTypes ) {
@@ -41,9 +41,7 @@ public abstract class ConfigurationUnitsUtils {
 	}
 
 	private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
-		final Collection<DomainTypeAdministrationConfiguration> configurations = newArrayList(
-			domainTypeAdministrationConfiguration( Address.class, "AddressConfiguration" ),
-			domainTypeAdministrationConfiguration( Customer.class, "CustomerConfiguration" ) );
+		final Collection<DomainTypeAdministrationConfiguration> configurations = newArrayList( domainTypeAdministrationConfiguration( Address.class, "AddressConfiguration" ), domainTypeAdministrationConfiguration( Customer.class, "CustomerConfiguration" ) );
 
 		GlobalAdministrationConfiguration globalAdministrationConfiguration = EasyMock.createMock( GlobalAdministrationConfiguration.class );
 		EasyMock.expect( globalAdministrationConfiguration.getDomainTypeConfigurationsValues() ).andReturn( configurations ).once();

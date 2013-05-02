@@ -15,7 +15,6 @@ import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
 import org.springframework.core.convert.converter.Converter;
 
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
-import static org.lightadmin.core.util.DomainConfigurationUtils.configurationDomainType;
 import static org.lightadmin.core.util.DomainConfigurationUtils.initializeConfigurationUnitWithBuilder;
 
 public final class ConfigurationUnitsConverter implements Converter<Class, ConfigurationUnits> {
@@ -28,16 +27,6 @@ public final class ConfigurationUnitsConverter implements Converter<Class, Confi
 
 	@Override
 	public ConfigurationUnits convert( final Class configurationClass ) {
-		final Class<?> domainType = configurationDomainType( configurationClass );
-
-		return new ConfigurationUnits( domainType,
-									initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, QUICK_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, SHOW_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, FORM_VIEW, PersistentFieldSetConfigurationUnitBuilder.class, PersistentFieldSetConfigurationUnitBuilderAdapter.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class, domainType ),
-									initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class, domainType ));
+		return new ConfigurationUnits( configurationClass, initializeConfigurationUnitWithBuilder( configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class ), initializeConfigurationUnitWithBuilder( configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class ), initializeConfigurationUnitWithBuilder( configurationClass, QUICK_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class ), initializeConfigurationUnitWithBuilder( configurationClass, LIST_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class ), initializeConfigurationUnitWithBuilder( configurationClass, SHOW_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class ), initializeConfigurationUnitWithBuilder( configurationClass, FORM_VIEW, PersistentFieldSetConfigurationUnitBuilder.class, PersistentFieldSetConfigurationUnitBuilderAdapter.class ), initializeConfigurationUnitWithBuilder( configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class ), initializeConfigurationUnitWithBuilder( configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class ) );
 	}
 }

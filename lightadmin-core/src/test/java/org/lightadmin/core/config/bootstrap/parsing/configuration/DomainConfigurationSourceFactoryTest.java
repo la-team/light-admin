@@ -3,6 +3,7 @@ package org.lightadmin.core.config.bootstrap.parsing.configuration;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;
@@ -32,7 +33,7 @@ public class DomainConfigurationSourceFactoryTest {
 		final ConfigurationUnit filtersConfigurationUnit = configurationUnitFor( FILTERS );
 		final ConfigurationUnit scopesConfigurationUnit = configurationUnitFor( SCOPES );
 
-		final ConfigurationUnits configurationUnits = configurationUnits( DomainType.class, filtersConfigurationUnit, scopesConfigurationUnit );
+		final ConfigurationUnits configurationUnits = configurationUnits( DomainTypeConfiguration.class, filtersConfigurationUnit, scopesConfigurationUnit );
 
 		final ConfigurationUnitPostProcessor configurationUnitPostProcessor = EasyMock.createMock( ConfigurationUnitPostProcessor.class );
 
@@ -55,13 +56,18 @@ public class DomainConfigurationSourceFactoryTest {
 
 		final Class<DomainType> expectedDomainType = DomainType.class;
 
-		final DomainConfigurationSource domainConfigurationSource = testee.domainConfigurationUnitsSource( configurationUnits( expectedDomainType ) );
+		final DomainConfigurationSource domainConfigurationSource = testee.domainConfigurationUnitsSource( configurationUnits( DomainTypeConfiguration.class ) );
 
 		assertNotNull( domainConfigurationSource );
 		assertEquals( expectedDomainType, domainConfigurationSource.getDomainType() );
 	}
 
 	private static class DomainType {
+
+	}
+
+	@Administration( DomainType.class )
+	private static class DomainTypeConfiguration {
 
 	}
 }

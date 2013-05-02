@@ -14,27 +14,37 @@ import java.util.Iterator;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.lightadmin.core.util.DomainConfigurationUtils.configurationDomainType;
 
 public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializable {
 
+	private final Class configurationClass;
 	private final Class<?> domainType;
 
 	private final Set<ConfigurationUnit> configurationUnits;
 
-	public ConfigurationUnits( Class<?> domainType, ConfigurationUnit... configurationUnits ) {
-		this( domainType, Sets.<ConfigurationUnit>newLinkedHashSet( Arrays.asList( configurationUnits ) ) );
+	public ConfigurationUnits( final Class configurationClass, ConfigurationUnit... configurationUnits ) {
+		this( configurationClass, Sets.<ConfigurationUnit>newLinkedHashSet( Arrays.asList( configurationUnits ) ) );
 	}
 
-	public ConfigurationUnits( Class<?> domainType, final Set<ConfigurationUnit> configurationUnits ) {
-		Assert.notNull( domainType );
+	public ConfigurationUnits( final Class configurationClass, final Set<ConfigurationUnit> configurationUnits ) {
+		Assert.notNull( configurationClass );
 
-		this.domainType = domainType;
+		this.configurationClass = configurationClass;
+
+		this.domainType = configurationDomainType( configurationClass );
+		Assert.notNull( this.domainType );
+
 		this.configurationUnits = newLinkedHashSet( configurationUnits );
 	}
 
 	@Override
 	public Iterator<ConfigurationUnit> iterator() {
 		return configurationUnits.iterator();
+	}
+
+	public Class getConfigurationClass() {
+		return configurationClass;
 	}
 
 	public Class<?> getDomainType() {

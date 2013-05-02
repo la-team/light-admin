@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.domain.unit;
 
 import org.junit.Test;
+import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
 
@@ -20,26 +21,26 @@ public class ConfigurationUnitsTest {
 
 	@Test
 	public void correctDomainTypeReturned() throws Exception {
-		assertEquals( configurationUnits( DomainType.class ).getDomainType(), DomainType.class );
+		assertEquals( configurationUnits( DomainTypeConfiguration.class ).getDomainType(), DomainType.class );
 	}
 
 	@Test
 	public void existingUnitFound() throws Exception {
-		final ConfigurationUnits testee = configurationUnits( DomainType.class, configurationUnitFor( CONFIGURATION, EntityMetadataConfigurationUnit.class ) );
+		final ConfigurationUnits testee = configurationUnits( DomainTypeConfiguration.class, configurationUnitFor( CONFIGURATION, EntityMetadataConfigurationUnit.class ) );
 
 		assertNotNull( testee.getEntityConfiguration() );
 	}
 
 	@Test
 	public void nullReturnedForMissingConfigurationUnit() throws Exception {
-		final ConfigurationUnits testee = configurationUnits( DomainType.class, configurationUnitFor( FILTERS ) );
+		final ConfigurationUnits testee = configurationUnits( DomainTypeConfiguration.class, configurationUnitFor( FILTERS ) );
 
 		assertNull( testee.getScreenContext() );
 	}
 
 	@Test
 	public void unitsOrderTheSameAsInitial() throws Exception {
-		final ConfigurationUnits testee = configurationUnits( DomainType.class, configurationUnitsFor( FILTERS, CONFIGURATION, SCOPES ) );
+		final ConfigurationUnits testee = configurationUnits( DomainTypeConfiguration.class, configurationUnitsFor( FILTERS, CONFIGURATION, SCOPES ) );
 
 		assertUnitsOrderEqual( testee, new DomainConfigurationUnitType[] {FILTERS, CONFIGURATION, SCOPES} );
 	}
@@ -54,6 +55,11 @@ public class ConfigurationUnitsTest {
 	}
 
 	private static class DomainType {
+
+	}
+
+	@Administration( DomainType.class )
+	private static class DomainTypeConfiguration {
 
 	}
 }

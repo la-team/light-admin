@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
 import org.junit.Test;
+import org.lightadmin.core.config.annotation.Administration;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
@@ -50,10 +51,7 @@ public class DomainConfigurationUnitsSourceTest {
 
 	@Test
 	public void correctConfigurationUnitsReturned() {
-		final ConfigurationUnits domainTypeConfigurationUnits = ConfigurationUnitsUtils.configurationUnits( DomainType.class,
-			configurationUnitFor( DomainConfigurationUnitType.CONFIGURATION, EntityMetadataConfigurationUnit.class ),
-			configurationUnitFor( DomainConfigurationUnitType.FILTERS, FiltersConfigurationUnit.class )
-		);
+		final ConfigurationUnits domainTypeConfigurationUnits = ConfigurationUnitsUtils.configurationUnits( DomainTypeConfiguration.class, configurationUnitFor( DomainConfigurationUnitType.CONFIGURATION, EntityMetadataConfigurationUnit.class ), configurationUnitFor( DomainConfigurationUnitType.FILTERS, FiltersConfigurationUnit.class ) );
 
 		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), domainTypeConfigurationUnits );
 
@@ -62,10 +60,15 @@ public class DomainConfigurationUnitsSourceTest {
 	}
 
 	private ConfigurationUnits domainTypeConfigurationUnits() {
-		return new ConfigurationUnits( DomainType.class );
+		return new ConfigurationUnits( DomainTypeConfiguration.class );
 	}
 
 	private static class DomainType {
+
+	}
+
+	@Administration( DomainType.class )
+	private static class DomainTypeConfiguration {
 
 	}
 }
