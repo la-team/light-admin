@@ -6,10 +6,14 @@
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+
+<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:useAttribute name="entityId"/>
 
 <light:url var="fileUploadUrl" value="/rest/upload" scope="page"/>
 
-<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
+<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 <c:set var="filePropertyUrl" value="${domainObjectUrl}/${attributeMetadata.name}/file" scope="page"/>
 
 <div id="${attributeMetadata.name}-file-container">
@@ -52,7 +56,16 @@
 		} );
 
 		${attributeMetadata.name}Uploader.bind( 'Error', function ( up, err ) {
-			jAlert( err.message + (err.file ? " File: " + err.file.name : ""), 'Upload file operation failure' );
+			var errorCode = err.code;
+			var errorMessage = err.message + (err.file ? " File: " + err.file.name : "");
+
+			if ( errorCode == -600 ) {
+				errorMessage = 'Selected file ' + (err.file ? err.file.name + ' ' : "") + 'exceeds file size limit of 10MB';
+			} else if ( errorCode == -601 || errorCode == -700 ) {
+				errorMessage = "Selected file type is not supported" + (err.file ? err.file.name + ' ' : "") + ". Please select JPG, GIF, or PNG file.";
+			}
+
+			jAlert( errorMessage, 'Upload file operation failure' );
 			up.refresh();
 		} );
 

@@ -8,37 +8,37 @@ import java.io.Serializable;
 
 public abstract class EntityNameExtractorFactory {
 
-	public static EntityNameExtractor<?> forSimpleObject() {
-		return new SimpleObjectNameExtractor();
-	}
-
 	public static EntityNameExtractor<?> forPersistentEntity( DomainTypeEntityMetadata entityMetadata ) {
 		return new PersistentEntityNameExtractor( entityMetadata );
+	}
+
+	public static EntityNameExtractor<?> forPersistentEntity( String entityName, DomainTypeEntityMetadata entityMetadata ) {
+		return new PersistentEntityNameExtractor( entityName, entityMetadata );
 	}
 
 	public static EntityNameExtractor<?> forNamedPersistentEntity( String name ) {
 		return new NamedPersistentEntityNameExtractor( name );
 	}
 
-	private static class SimpleObjectNameExtractor implements EntityNameExtractor<Object>, Serializable {
-
-		@Override
-		public String apply( final Object input ) {
-			return input.getClass().getSimpleName();
-		}
-	}
-
 	private static class PersistentEntityNameExtractor implements EntityNameExtractor<Object> {
 
 		private final DomainTypeEntityMetadata entityMetadata;
 
+		private final String entityName;
+
 		public PersistentEntityNameExtractor( final DomainTypeEntityMetadata entityMetadata ) {
 			this.entityMetadata = entityMetadata;
+			this.entityName = entityMetadata.getEntityName();
+		}
+
+		public PersistentEntityNameExtractor( String entityName, final DomainTypeEntityMetadata entityMetadata ) {
+			this.entityMetadata = entityMetadata;
+			this.entityName = entityName;
 		}
 
 		@Override
 		public String apply( final Object entity ) {
-			return String.format( "%s #%s", entityMetadata.getEntityName(), entityMetadata.getIdAttribute().getValue( entity ) );
+			return String.format( "%s #%s", entityName, entityMetadata.getIdAttribute().getValue( entity ) );
 		}
 	}
 

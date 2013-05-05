@@ -7,16 +7,14 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitB
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.TestDiscountProgram;
 
-@Administration( TestDiscountProgram.class )
+@Administration(TestDiscountProgram.class)
 public class ManyToManyEntityConfiguration {
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Discounts Administration" )
-				.menuName( "Test Discounts" ).build();
+		return screenContextBuilder.screenName( "Discounts Administration" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "name" ).caption( "Name" )
-				.field( "customers" ).caption( "Customers" ).build();
+		return fragmentBuilder.field( "name" ).caption( "Name" ).field( "customers" ).caption( "Customers" ).build();
 	}
 }

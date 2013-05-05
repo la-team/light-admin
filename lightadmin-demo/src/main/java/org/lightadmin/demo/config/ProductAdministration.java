@@ -17,11 +17,11 @@ import org.lightadmin.demo.model.Product;
 public class ProductAdministration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameField( "name" ).build();
+		return configurationBuilder.nameField( "name" ).singularName( "Product" ).pluralName( "Products" ).build();
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Products Administration" ).menuName( "Products" ).build();
+		return screenContextBuilder.screenName( "Products Administration" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {

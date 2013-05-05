@@ -6,17 +6,11 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
 import static org.junit.Assert.assertEquals;
-import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory.*;
+import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory.forNamedPersistentEntity;
+import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory.forPersistentEntity;
 
-@SuppressWarnings( "unchecked" )
+@SuppressWarnings("unchecked")
 public class EntityNameExtractorFactoryTest {
-
-	@Test
-	public void simpleObjectNameExtraction() throws Exception {
-		final EntityNameExtractor entityNameExtractor = forSimpleObject();
-
-		assertEquals( "DomainType", entityNameExtractor.apply( new DomainType() ) );
-	}
 
 	@Test
 	public void namedEntityNameExtraction() throws Exception {

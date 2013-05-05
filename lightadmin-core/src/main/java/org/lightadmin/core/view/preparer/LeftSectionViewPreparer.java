@@ -5,6 +5,8 @@ import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.context.TilesRequestContext;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.view.preparer.support.DomainConfigToMenuItemTransformer;
+import org.lightadmin.core.view.preparer.support.MenuItemComparator;
 
 import java.util.Collection;
 import java.util.List;
@@ -22,7 +24,8 @@ public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
 
 	@Override
 	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration ) {
-		final String selectedMenuItemName = configuration.getScreenContext().getMenuItemName();
+		final String selectedMenuItemName = configuration.getEntityConfiguration().getPluralName();
+
 		addAttribute( attributeContext, "selectedMenuItemName", selectedMenuItemName );
 	}
 

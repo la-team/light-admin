@@ -8,8 +8,8 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitB
 import org.lightadmin.test.model.TestAddress;
 import org.lightadmin.test.nameExtractor.AddressNameExtractor;
 
-@SuppressWarnings( "unused" )
-@Administration( TestAddress.class )
+@SuppressWarnings("unused")
+@Administration(TestAddress.class)
 public class TestAddressConfiguration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
@@ -17,8 +17,6 @@ public class TestAddressConfiguration {
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder
-				.screenName( "Administration of Test Adresses" )
-				.menuName( "Test Addresses Domain" ).build();
+		return screenContextBuilder.screenName( "Administration of Test Adresses" ).build();
 	}
 }

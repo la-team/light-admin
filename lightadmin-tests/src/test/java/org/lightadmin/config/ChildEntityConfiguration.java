@@ -7,20 +7,15 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitB
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.ChildTestEntity;
 
-@SuppressWarnings( "unused" )
-@Administration( ChildTestEntity.class )
+@SuppressWarnings("unused")
+@Administration(ChildTestEntity.class)
 public class ChildEntityConfiguration {
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder
-				.screenName( "Test Child Domain Administration" )
-				.menuName( "Test Child Domain" ).build();
+		return screenContextBuilder.screenName( "Test Child Domain Administration" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder listViewBuilder ) {
-		return listViewBuilder
-				.field( "name" ).caption( "Name" )
-				.field( "parent_id" ).caption( "Parent_ID" )
-				.field( "parent.name" ).caption( "Parent Name" ).build();
+		return listViewBuilder.field( "name" ).caption( "Name" ).field( "parent_id" ).caption( "Parent_ID" ).field( "parent.name" ).caption( "Parent Name" ).build();
 	}
 }

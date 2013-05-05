@@ -8,8 +8,8 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitB
 import org.lightadmin.test.model.TestLineItem;
 import org.lightadmin.test.nameExtractor.LineItemNameExtractor;
 
-@SuppressWarnings( "unused" )
-@Administration( TestLineItem.class )
+@SuppressWarnings("unused")
+@Administration(TestLineItem.class)
 public class TestLineItemConfiguration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
@@ -17,9 +17,7 @@ public class TestLineItemConfiguration {
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder
-				.screenName( "Administration of Test Line Items" )
-				.menuName( "Test Line Items Domain" ).build();
+		return screenContextBuilder.screenName( "Administration of Test Line Items" ).build();
 	}
 
 }

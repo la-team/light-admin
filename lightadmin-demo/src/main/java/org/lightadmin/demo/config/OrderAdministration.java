@@ -26,11 +26,11 @@ import static org.springframework.util.StringUtils.collectionToDelimitedString;
 public class OrderAdministration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameExtractor( orderNameExtractor() ).build();
+		return configurationBuilder.nameExtractor( orderNameExtractor() ).singularName( "Order" ).pluralName( "Orders" ).build();
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Orders Administration" ).menuName( "Orders" ).build();
+		return screenContextBuilder.screenName( "Orders Administration" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {

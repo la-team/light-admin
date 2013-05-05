@@ -6,20 +6,18 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
-<%@ attribute name="domainTypeName" required="true" type="java.lang.String" %>
+<%@ attribute name="domainTypeAdministrationConfiguration" required="true" type="org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration" %>
 <%@ attribute name="fields" required="true" type="java.util.Set" %>
 <%@ attribute name="scopes" required="true" type="java.util.List" %>
-<%@ attribute name="domainTypeEntityMetadata" required="true" rtexprvalue="true"
-			  type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata" %>
 
 <c:set var="primaryKeyField" value="<%= FieldMetadataUtils.primaryKeyPersistentField( fields ) %>"/>
 
-<light:url value="${light:domainBaseUrl(domainTypeName)}" var="domainBaseUrl"/>
-<light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeName)}" scope="page"/>
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}"/>
+<light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
 <div class="table">
 	<div class="head">
-		<light-jsp:scopes scopes="${scopes}" domainTypeName="${domainTypeName}"/>
+		<light-jsp:scopes scopes="${scopes}" domainTypeAdministrationConfiguration="${domainTypeAdministrationConfiguration}"/>
 	</div>
 
 	<table cellpadding="0" cellspacing="0" border="0" class="display" id="listViewTable">

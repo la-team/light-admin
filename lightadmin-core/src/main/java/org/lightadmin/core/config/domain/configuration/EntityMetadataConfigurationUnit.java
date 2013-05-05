@@ -6,4 +6,8 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 public interface EntityMetadataConfigurationUnit extends ConfigurationUnit {
 
 	EntityNameExtractor getNameExtractor();
+
+	String getSingularName();
+
+	String getPluralName();
 }

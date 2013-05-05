@@ -18,11 +18,11 @@ import org.lightadmin.demo.model.Address;
 public class AddressAdministration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameExtractor( addressNameExtractor() ).build();
+		return configurationBuilder.nameExtractor( addressNameExtractor() ).singularName( "Address" ).pluralName( "Addresses" ).build();
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Addresses Administration" ).menuName( "Addresses" ).build();
+		return screenContextBuilder.screenName( "Addresses Administration" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {

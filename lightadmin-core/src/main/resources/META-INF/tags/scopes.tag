@@ -5,9 +5,9 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <%@ attribute name="scopes" required="true" rtexprvalue="true" type="java.util.List" %>
-<%@ attribute name="domainTypeName" required="true" type="java.lang.String" %>
+<%@ attribute name="domainTypeAdministrationConfiguration" required="true" type="org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration" %>
 
-<light:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeName)}" scope="page"/>
+<light:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
 <c:if test="${not empty scopes}">
 	<div class="scopes" id="scopes">

@@ -6,6 +6,8 @@ import org.apache.tiles.context.TilesRequestContext;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.util.Pair;
+import org.lightadmin.core.view.preparer.support.DomainConfigToMenuItemTransformer;
+import org.lightadmin.core.view.preparer.support.MenuItemComparator;
 
 import java.util.Collection;
 import java.util.Comparator;

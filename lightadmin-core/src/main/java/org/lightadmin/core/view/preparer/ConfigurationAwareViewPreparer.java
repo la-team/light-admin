@@ -14,6 +14,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static org.lightadmin.core.util.NamingUtils.entityId;
+import static org.lightadmin.core.util.NamingUtils.entityName;
+
 public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, GlobalAdministrationConfigurationAware {
 
 	private static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = ApplicationController.DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY;
@@ -33,10 +36,29 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, Gl
 
 	protected void execute( TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration ) {
 		addAttribute( attributeContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration, true );
+
+		addAttribute( attributeContext, "domainTypeEntityMetadata", configuration.getDomainTypeEntityMetadata(), true );
+		addAttribute( attributeContext, "entityPluralName", configuration.getEntityConfiguration().getPluralName() );
+		addAttribute( attributeContext, "entitySingularName", entitySingularName( tilesContext, configuration ) );
+
+		addAttribute( attributeContext, "entity", entityFromRequest( tilesContext ) );
+		addAttribute( attributeContext, "entityId", entityId( configuration, entityFromRequest( tilesContext ) ) );
 	}
 
 	protected DomainTypeAdministrationConfiguration domainTypeConfiguration( final TilesRequestContext tilesContext ) {
 		return ( DomainTypeAdministrationConfiguration ) attributeFromRequest( tilesContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY );
+	}
+
+	private String entitySingularName( final TilesRequestContext tilesContext, final DomainTypeAdministrationConfiguration configuration ) {
+		final Object entity = entityFromRequest( tilesContext );
+		if ( entity == null ) {
+			return configuration.getEntityConfiguration().getSingularName();
+		}
+		return entityName( configuration, entity );
+	}
+
+	private Object entityFromRequest( TilesRequestContext tilesContext ) {
+		return attributeFromRequest( tilesContext, "entity" );
 	}
 
 	protected Object attributeFromRequest( TilesRequestContext tilesContext, String attributeName ) {

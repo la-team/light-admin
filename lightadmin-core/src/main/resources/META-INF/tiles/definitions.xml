@@ -52,13 +52,13 @@
 
 	<definition name="edit-view" extends="internal-layout">
 		<put-attribute name="main-section">
-			<definition template="/views/pages/edit.jsp" preparer="editViewPreparer"/>
+			<definition template="/views/pages/edit.jsp" preparer="formViewPreparer"/>
 		</put-attribute>
 	</definition>
 
 	<definition name="create-view" extends="internal-layout">
 		<put-attribute name="main-section">
-			<definition template="/views/pages/create.jsp" preparer="editViewPreparer"/>
+			<definition template="/views/pages/create.jsp" preparer="formViewPreparer"/>
 		</put-attribute>
 	</definition>
 

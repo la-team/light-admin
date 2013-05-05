@@ -7,18 +7,15 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitB
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.test.model.TestOrder;
 
-@SuppressWarnings( "unused" )
-@Administration( TestOrder.class )
+@SuppressWarnings("unused")
+@Administration(TestOrder.class)
 public class OrderTestEntityWithoutQuickViewFields {
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder
-				.screenName( "Administration of Test Order Domain" )
-				.menuName( "Test Order Domain" ).build();
+		return screenContextBuilder.screenName( "Administration of Test Order Domain" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder listViewBuilder ) {
-		return listViewBuilder
-				.field( "name" ).caption( "Name" ).build();
+		return listViewBuilder.field( "name" ).caption( "Name" ).build();
 	}
 }

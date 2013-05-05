@@ -10,34 +10,29 @@
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 <tiles:useAttribute name="fields"/>
 
-<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
+<tiles:useAttribute name="entitySingularName"/>
+<tiles:useAttribute name="entityPluralName"/>
 
-<jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
+<tiles:useAttribute name="entityId"/>
 
-<c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
+<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
-<jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
-
-<c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>"/>
-
-<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
-<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
-
-<div class="title"><h5>Show <c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5>
+<div class="title">
+	<h5><c:out value="Show ${light:capitalize(entitySingularName)}"/></h5>
 </div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}"/>
-	<light-jsp:breadcrumb-item name="Show ${domainTypeName}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}" link="${domainBaseUrl}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(entitySingularName)}"/>
 </light-jsp:breadcrumb>
 
 <div class="widget">
 	<div class="head">
-		<h5 class="iList"><c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5>
+		<h5 class="iList"><c:out value="${light:capitalize(entitySingularName)}"/></h5>
 
 		<div style="float: right;margin-top: 5px;display: inline-block;">
-			<a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img
-					src="<light:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
+			<a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img src="<light:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
 		</div>
 	</div>
 	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
@@ -56,6 +51,6 @@
 	loadDomainObjectForShowView( $( '#data-section' ), '${domainObjectUrl}/unit/showView' );
 
 	<c:if test="${param.updateSuccess}">
-	showSuccessMessageNote( '<c:out value="${light:capitalize(domainTypeName)}"/> update operation has been performed successfully!' );
+	showSuccessMessageNote( '<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!' );
 	</c:if>
 </script>

@@ -1,5 +1,6 @@
-package org.lightadmin.core.view.preparer;
+package org.lightadmin.core.view.preparer.support;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.beans.SimpleMenuItem;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
@@ -16,7 +17,7 @@ public class DomainConfigToMenuItemTransformer implements Transformer<DomainType
 
 	@Override
 	public MenuItem apply( final DomainTypeAdministrationConfiguration domainConfiguration ) {
-		return menuItem( domainConfiguration.getScreenContext().getMenuItemName(), domainBaseUrl( domainConfiguration.getDomainTypeName() ) );
+		return menuItem( StringUtils.capitalize( domainConfiguration.getEntityConfiguration().getPluralName() ), domainBaseUrl( domainConfiguration ) );
 	}
 
 	private MenuItem menuItem( final String name, final String url ) {

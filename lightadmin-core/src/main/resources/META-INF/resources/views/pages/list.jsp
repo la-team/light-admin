@@ -10,17 +10,19 @@
 <tiles:useAttribute name="fields"/>
 <tiles:useAttribute name="scopes"/>
 <tiles:useAttribute name="filters"/>
+
+<tiles:useAttribute name="domainTypeEntityMetadata"/>
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
-<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
-<c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
+<tiles:useAttribute name="entitySingularName"/>
+<tiles:useAttribute name="entityPluralName"/>
 
-<light:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeName)}" scope="page"/>
+<light:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
-<div class="title"><h5>List <c:out value="${domainTypeName}"/></h5></div>
+<div class="title"><h5><c:out value="${light:capitalize(entityPluralName)}"/></h5></div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="List ${domainTypeName}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}"/>
 </light-jsp:breadcrumb>
 
 <script type="text/javascript">
@@ -29,5 +31,4 @@
 
 <light-jsp:search filters="${filters}"/>
 
-<light-jsp:data-table domainTypeName="${domainTypeName}" fields="${fields}" scopes="${scopes}"
-					  domainTypeEntityMetadata="${domainTypeEntityMetadata}"/>
+<light-jsp:data-table domainTypeAdministrationConfiguration="${domainTypeAdministrationConfiguration}" fields="${fields}" scopes="${scopes}"/>

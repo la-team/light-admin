@@ -9,4 +9,8 @@ public interface EntityMetadataConfigurationUnitBuilder extends ConfigurationUni
 
 	EntityMetadataConfigurationUnitBuilder nameExtractor( EntityNameExtractor<?> nameExtractor );
 
+	EntityMetadataConfigurationUnitBuilder singularName( String singularName );
+
+	EntityMetadataConfigurationUnitBuilder pluralName( String pluralName );
+
 }

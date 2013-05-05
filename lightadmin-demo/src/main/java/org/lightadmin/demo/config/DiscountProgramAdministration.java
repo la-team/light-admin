@@ -18,11 +18,11 @@ import org.lightadmin.demo.model.DiscountProgram;
 public class DiscountProgramAdministration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameField( "name" ).build();
+		return configurationBuilder.nameField( "name" ).singularName( "Discount Program" ).pluralName( "Discounts" ).build();
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Discounts Administration" ).menuName( "Discounts" ).build();
+		return screenContextBuilder.screenName( "Discounts Administration" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder fragmentBuilder ) {

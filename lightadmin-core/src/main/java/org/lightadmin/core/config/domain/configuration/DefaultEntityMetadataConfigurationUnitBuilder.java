@@ -8,8 +8,13 @@ public class DefaultEntityMetadataConfigurationUnitBuilder extends DomainTypeCon
 
 	private EntityNameExtractor<?> nameExtractor;
 
+	private String singularName;
+	private String pluralName;
+
 	public DefaultEntityMetadataConfigurationUnitBuilder( Class<?> domainType ) {
 		super( domainType );
+		this.singularName = domainType.getSimpleName();
+		this.pluralName = domainType.getSimpleName();
 	}
 
 	@Override
@@ -25,8 +30,20 @@ public class DefaultEntityMetadataConfigurationUnitBuilder extends DomainTypeCon
 	}
 
 	@Override
-	@SuppressWarnings( "unchecked" )
+	public EntityMetadataConfigurationUnitBuilder singularName( final String singularName ) {
+		this.singularName = singularName;
+		return this;
+	}
+
+	@Override
+	public EntityMetadataConfigurationUnitBuilder pluralName( final String pluralName ) {
+		this.pluralName = pluralName;
+		return this;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
 	public EntityMetadataConfigurationUnit build() {
-		return new DefaultEntityMetadataConfigurationUnit( getDomainType(), nameExtractor );
+		return new DefaultEntityMetadataConfigurationUnit( getDomainType(), nameExtractor, singularName, pluralName );
 	}
 }

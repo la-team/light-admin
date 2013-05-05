@@ -3,6 +3,7 @@ package org.lightadmin.core.rest;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import org.apache.commons.io.IOUtils;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
@@ -32,7 +33,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -145,13 +145,18 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		if ( attrMeta.type().equals( byte[].class ) ) {
 			final byte[] bytes = ( byte[] ) attrMeta.get( entity );
 			if ( bytes != null ) {
-				BufferedImage image = resizeImage( bytes, width, height );
-				ImageIO.write( image, "jpeg", response.getOutputStream() );
-				response.flushBuffer();
+				if ( imageResizingRequired( width, height ) ) {
+					BufferedImage sourceImage = ImageIO.read( new ByteArrayInputStream( bytes ) );
+					BufferedImage image = resizeImage( sourceImage, width, height );
+					ImageIO.write( image, "jpeg", response.getOutputStream() );
+					response.flushBuffer();
+				} else {
+					IOUtils.write( bytes, response.getOutputStream() );
+					response.flushBuffer();
+				}
 
 				HttpHeaders responseHeaders = new HttpHeaders();
 				responseHeaders.setContentLength( bytes.length );
-				responseHeaders.setContentType( MediaType.IMAGE_JPEG );
 
 				return new ResponseEntity( responseHeaders, HttpStatus.OK );
 			}
@@ -159,12 +164,11 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		return new ResponseEntity( HttpStatus.BAD_REQUEST );
 	}
 
-	private BufferedImage resizeImage( byte[] content, int width, int height ) throws IOException {
-		BufferedImage sourceImage = ImageIO.read( new ByteArrayInputStream( content ) );
-		if ( width < 0 && height < 0 ) {
-			return sourceImage;
-		}
+	private boolean imageResizingRequired( final int width, final int height ) {
+		return width > 0 || height > 0;
+	}
 
+	private BufferedImage resizeImage( BufferedImage sourceImage, int width, int height ) throws IOException {
 		Image thumbnail = sourceImage.getScaledInstance( width, height, Image.SCALE_SMOOTH );
 
 		BufferedImage resizedImage = new BufferedImage( thumbnail.getWidth( null ), thumbnail.getHeight( null ), sourceImage.getType() );

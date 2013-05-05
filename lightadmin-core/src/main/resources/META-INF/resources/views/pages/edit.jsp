@@ -9,39 +9,37 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:useAttribute name="domainTypeEntityMetadata"/>
 
-<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
-<c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
+<tiles:useAttribute name="fields"/>
 
-<jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
-<jsp:useBean id="entity" type="java.lang.Object" scope="request"/>
+<tiles:useAttribute name="entityId"/>
 
-<c:set var="formViewFields" value="${domainTypeAdministrationConfiguration.formViewFragment.fields}"/>
-<c:set var="entityId" value="<%= domainTypeEntityMetadata.getIdAttribute().getValue( entity ) %>" scope="request"/>
+<tiles:useAttribute name="entitySingularName"/>
+<tiles:useAttribute name="entityPluralName"/>
 
-<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
-<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, entityId)}" scope="page"/>
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
+<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
-<div class="title"><h5>Edit <c:out value="${light:capitalize(domainTypeName)}"/> #<c:out value="${entityId}"/></h5>
+<div class="title">
+	<h5><c:out value="Edit ${light:capitalize(entitySingularName)}"/></h5>
 </div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}"/>
-	<light-jsp:breadcrumb-item name="Edit ${domainTypeName}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}" link="${domainBaseUrl}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(entitySingularName)}"/>
 </light-jsp:breadcrumb>
 
 <form id="editForm" onsubmit="return updateDomainObject(this)" class="mainForm">
 	<div class="widget">
-		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(domainTypeName)}"/> #<c:out
-				value="${entityId}"/></h5></div>
+		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(entitySingularName)}"/></h5></div>
 		<fieldset>
-			<c:forEach var="fieldEntry" items="${formViewFields}" varStatus="status">
+			<c:forEach var="fieldEntry" items="${fields}" varStatus="status">
 				<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
-					<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
+					<label><strong><c:out value="${light:capitalize(fieldEntry.name)}"/>:</strong></label>
 
 					<div class="formRight">
-						<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}"
-												cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
+						<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}" cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
 					</div>
 					<div class="fix"></div>
 				</div>
@@ -67,7 +65,7 @@
 									   } );
 		$( ".input-date" ).mask( "9999-99-99" );
 
-		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}" includeFields="${formViewFields}"/>;
+		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}" includeFields="${fields}"/>;
 
 		loadDomainObjectForFormView( $( '#editForm' ), '${domainObjectUrl}' );
 	} );

@@ -11,14 +11,29 @@ public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurat
 
 	private EntityNameExtractor<?> nameExtractor;
 
-	DefaultEntityMetadataConfigurationUnit( Class<?> domainType, final EntityNameExtractor<?> nameExtractor ) {
+	private final String singularName;
+	private final String pluralName;
+
+	DefaultEntityMetadataConfigurationUnit( Class<?> domainType, final EntityNameExtractor<?> nameExtractor, final String singularName, final String pluralName ) {
 		super( domainType );
 		this.nameExtractor = nameExtractor;
+		this.singularName = singularName;
+		this.pluralName = pluralName;
 	}
 
 	@Override
 	public EntityNameExtractor getNameExtractor() {
-		return nameExtractor != null ? nameExtractor : EntityNameExtractorFactory.forSimpleObject();
+		return nameExtractor;
+	}
+
+	@Override
+	public String getSingularName() {
+		return this.singularName;
+	}
+
+	@Override
+	public String getPluralName() {
+		return this.pluralName;
 	}
 
 	@Override
@@ -29,7 +44,7 @@ public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurat
 	@Override
 	public void setDomainTypeEntityMetadata( final DomainTypeEntityMetadata domainTypeEntityMetadata ) {
 		if ( nameExtractor == null ) {
-			this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity( domainTypeEntityMetadata );
+			this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity( this.singularName, domainTypeEntityMetadata );
 		}
 	}
 }

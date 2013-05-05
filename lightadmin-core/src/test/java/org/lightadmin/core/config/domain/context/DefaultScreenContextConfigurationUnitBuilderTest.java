@@ -27,13 +27,6 @@ public class DefaultScreenContextConfigurationUnitBuilderTest {
 	}
 
 	@Test
-	public void defaultConfigurationUnitWithUndefinedMenuItemNameCreated() throws Exception {
-		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().build();
-
-		assertEquals( "DomainType", configurationUnit.getMenuItemName() );
-	}
-
-	@Test
 	public void configurationWithScreenNameDefined() throws Exception {
 		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().screenName( "Test Screen Name" ).build();
 
@@ -41,18 +34,10 @@ public class DefaultScreenContextConfigurationUnitBuilderTest {
 	}
 
 	@Test
-	public void configurationWithMenuItemNameDefined() throws Exception {
-		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().menuName( "Test Menu Name" ).build();
-
-		assertEquals( "Test Menu Name", configurationUnit.getMenuItemName() );
-	}
-
-	@Test
 	public void configurationFullPacked() throws Exception {
-		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().screenName( "Test Screen Name" ).menuName( "Test Menu Name" ).build();
+		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().screenName( "Test Screen Name" ).build();
 
 		assertEquals( "Test Screen Name", configurationUnit.getScreenName() );
-		assertEquals( "Test Menu Name", configurationUnit.getMenuItemName() );
 	}
 
 	private static class DomainType {

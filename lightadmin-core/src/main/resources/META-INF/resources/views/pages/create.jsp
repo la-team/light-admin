@@ -9,35 +9,36 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:useAttribute name="domainTypeEntityMetadata"/>
 
-<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}"/>
-<c:set var="domainTypeEntityMetadata" value="${domainTypeAdministrationConfiguration.domainTypeEntityMetadata}"/>
+<tiles:useAttribute name="entitySingularName"/>
+<tiles:useAttribute name="entityPluralName"/>
 
-<jsp:useBean id="domainTypeEntityMetadata" type="org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata"/>
+<tiles:useAttribute name="fields"/>
 
-<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeName)}" scope="page"/>
-<light:url var="createObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeName, '')}" scope="page"/>
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
+<light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
-<div class="title"><h5>Create <c:out value="${light:capitalize(domainTypeName)}"/></h5></div>
+<div class="title">
+	<h5><c:out value="Create ${light:capitalize(entitySingularName)}"/></h5>
+</div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="List ${domainTypeName}" link="${domainBaseUrl}"/>
-	<light-jsp:breadcrumb-item name="Create ${domainTypeName}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}" link="${domainBaseUrl}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(entitySingularName)}"/>
 </light-jsp:breadcrumb>
 
 <form id="editForm" onsubmit="return saveDomainObject(this)" class="mainForm">
 	<div class="widget">
-		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(domainTypeName)}"/></h5></div>
+		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(entitySingularName)}"/></h5></div>
 		<fieldset>
-			<c:forEach var="fieldEntry" items="${domainTypeAdministrationConfiguration.formViewFragment.fields}"
-					   varStatus="status">
+			<c:forEach var="fieldEntry" items="${fields}" varStatus="status">
 				<c:if test="${!fieldEntry.generatedValue}">
 					<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
 						<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
 
 						<div class="formRight">
-							<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}"
-													cssClass="input-xlarge" errorCssClass="error"/>
+							<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}" cssClass="input-xlarge" errorCssClass="error"/>
 						</div>
 						<div class="fix"></div>
 					</div>
@@ -65,6 +66,6 @@
 		$( ".input-date" ).mask( "9999-99-99" );
 
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
-		REST_REPO_URL = "${createObjectUrl}";
+		REST_REPO_URL = "${domainRestBaseUrl}";
 	} );
 </script>

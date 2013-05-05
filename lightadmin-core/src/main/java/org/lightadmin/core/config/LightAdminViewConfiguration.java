@@ -34,8 +34,8 @@ public class LightAdminViewConfiguration {
 	}
 
 	@Bean
-	public EditViewPreparer editViewPreparer() {
-		return new EditViewPreparer();
+	public FormViewPreparer formViewPreparer() {
+		return new FormViewPreparer();
 	}
 
 	@Bean

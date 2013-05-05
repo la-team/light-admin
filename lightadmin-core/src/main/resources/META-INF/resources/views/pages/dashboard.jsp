@@ -5,9 +5,11 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
-<div class="title"><h5><spring:message code="application.menu.dashboard"/></h5></div>
-
 <tiles:useAttribute name="dashboardDomainTypes"/>
+
+<div class="title">
+	<h5><spring:message code="application.menu.dashboard"/></h5>
+</div>
 
 <div class="widget">
 	<div class="head"><h5 class="iChart8">Domain type statistics</h5></div>
@@ -22,10 +24,13 @@
 			<tbody>
 			<c:forEach var="dashboardDomainType" items="${dashboardDomainTypes}">
 				<tr id="stat-row-${dashboardDomainType.first.value}" class="stat-row">
-					<td style="padding-left: 35px;"><a class="domain-link" href="<light:url value='${dashboardDomainType.first.link}'/>"
-													   title=""><c:out value="${dashboardDomainType.first.value}"/></a></td>
+					<td style="padding-left: 35px;">
+						<a class="domain-link" href="<light:url value='${dashboardDomainType.first.link}'/>">
+							<c:out value="${dashboardDomainType.first.value}"/>
+						</a>
+					</td>
 					<td align="center">
-						<a href="<light:url value='${dashboardDomainType.first.link}'/>" title="" class="webStatsLink">
+						<a href="<light:url value='${dashboardDomainType.first.link}'/>" class="webStatsLink">
 							<span class="record-count"><c:out value="${dashboardDomainType.second}"/></span>
 						</a>
 					</td>
@@ -36,7 +41,7 @@
 	</c:if>
 	<c:if test="${empty dashboardDomainTypes}">
 		<div class="body aligncenter">
-			No Domain type <strong>@Administration</strong> configuration registered.
+			No Domain Type <strong>@Administration</strong> configurations registered.
 		</div>
 	</c:if>
 </div>

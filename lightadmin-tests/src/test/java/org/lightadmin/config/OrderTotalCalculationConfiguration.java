@@ -14,7 +14,7 @@ import org.lightadmin.test.renderer.OrderTotalRenderer;
 public class OrderTotalCalculationConfiguration {
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Administration of Test Order Domain" ).menuName( "Test Order Domain" ).build();
+		return screenContextBuilder.screenName( "Administration of Test Order Domain" ).build();
 	}
 
 	public static FieldSetConfigurationUnit listView( FieldSetConfigurationUnitBuilder listViewBuilder ) {

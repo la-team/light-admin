@@ -7,23 +7,15 @@ public class DefaultScreenContextConfigurationUnit extends DomainTypeConfigurati
 
 	private final String screenName;
 
-	private final String menuItemName;
-
-	DefaultScreenContextConfigurationUnit( Class<?> domainType, final String screenName, final String menuItemName ) {
+	DefaultScreenContextConfigurationUnit( Class<?> domainType, final String screenName ) {
 		super( domainType );
 
 		this.screenName = screenName;
-		this.menuItemName = menuItemName;
 	}
 
 	@Override
 	public String getScreenName() {
 		return screenName;
-	}
-
-	@Override
-	public String getMenuItemName() {
-		return menuItemName;
 	}
 
 	@Override

@@ -6,6 +6,4 @@ public interface ScreenContextConfigurationUnitBuilder extends ConfigurationUnit
 
 	ScreenContextConfigurationUnitBuilder screenName( String screenName );
 
-	ScreenContextConfigurationUnitBuilder menuName( String menuName );
-
 }

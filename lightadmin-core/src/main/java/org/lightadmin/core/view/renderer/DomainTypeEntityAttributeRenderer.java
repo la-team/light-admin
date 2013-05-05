@@ -20,7 +20,7 @@ public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer
 	}
 
 	@Override
-	@SuppressWarnings( "unchecked" )
+	@SuppressWarnings("unchecked")
 	protected void write( final Object value, final Writer writer ) throws IOException {
 		final DomainTypeAdministrationConfiguration domainTypeConfiguration = domainTypeConfiguration( domainTypeEntityMetadata.getDomainType() );
 
@@ -34,7 +34,7 @@ public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer
 	}
 
 	private String entityShowUrl( final Object value, final DomainTypeAdministrationConfiguration domainTypeConfiguration ) {
-		final String domainBaseUrl = ApplicationUrlResolver.domainBaseUrl( domainTypeConfiguration.getDomainTypeName() );
+		final String domainBaseUrl = ApplicationUrlResolver.domainBaseUrl( domainTypeConfiguration );
 		final Object entityId = domainTypeEntityMetadata.getIdAttribute().getValue( value );
 
 		// TODO: max: Consider rewriting using PageContext

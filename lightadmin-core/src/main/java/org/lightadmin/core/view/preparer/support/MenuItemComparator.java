@@ -1,4 +1,4 @@
-package org.lightadmin.core.view.preparer;
+package org.lightadmin.core.view.preparer.support;
 
 import org.apache.tiles.beans.MenuItem;
 
