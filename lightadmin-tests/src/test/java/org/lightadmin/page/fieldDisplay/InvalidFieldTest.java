@@ -4,7 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.lightadmin.SeleniumIntegrationTest;
-import org.lightadmin.config.InvalidFieldConfiguration;
+import org.lightadmin.config.InvalidFieldAdmin;
 
 import static org.junit.matchers.JUnitMatchers.both;
 import static org.junit.matchers.JUnitMatchers.containsString;
@@ -20,10 +20,10 @@ public class InvalidFieldTest extends SeleniumIntegrationTest {
 	public void correctErrorMessageIsShown() {
 
 		expectedException.expectMessage(
-				both( containsString( "Domain Configuration for")).and(containsString("TestOrder"))
+				both( containsString( "Domain Configuration")).and(containsString("InvalidFieldAdmin"))
 						.and( containsString( "Unit")).and( containsString( "filters"))
 						.and( containsString( "Invalid property/path 'Missing Field' defined!" )));
 
-		registerDomainTypeAdministrationConfiguration( InvalidFieldConfiguration.class );
+		registerDomainTypeAdministrationConfiguration( InvalidFieldAdmin.class );
 	}
 }

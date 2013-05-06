@@ -13,7 +13,7 @@ import org.lightadmin.test.nameExtractor.LineItemNameExtractor;
 public class TestLineItemConfiguration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameExtractor( new LineItemNameExtractor() ).build();
+		return configurationBuilder.nameExtractor( new LineItemNameExtractor() ).pluralName( "Test Line Items Domain" ).build();
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
