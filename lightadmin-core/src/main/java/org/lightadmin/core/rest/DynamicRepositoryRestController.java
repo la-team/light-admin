@@ -163,6 +163,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 					response.flushBuffer();
 				}
 
+				response.setHeader( "content-disposition", "inline;" + "image." + mediaType.getSubtype() );
+
 				HttpHeaders responseHeaders = new HttpHeaders();
 				responseHeaders.setContentLength( bytes.length );
 				responseHeaders.setContentType( mediaType );
