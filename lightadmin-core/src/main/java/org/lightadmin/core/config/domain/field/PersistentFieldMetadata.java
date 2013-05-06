@@ -5,8 +5,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAwar
 
 import javax.persistence.GeneratedValue;
 
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC_MULTI;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
 
 public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
 
@@ -57,7 +56,7 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
 	@Override
 	public boolean isSortable() {
-		return this.attributeMetadata.getAttributeType() != ASSOC && this.attributeMetadata.getAttributeType() != ASSOC_MULTI;
+		return this.attributeMetadata.getAttributeType() != ASSOC && this.attributeMetadata.getAttributeType() != ASSOC_MULTI && this.attributeMetadata.getAttributeType() != FILE;
 	}
 
 	@Override
