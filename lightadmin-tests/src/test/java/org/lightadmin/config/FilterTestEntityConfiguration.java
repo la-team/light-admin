@@ -33,7 +33,7 @@ public class FilterTestEntityConfiguration {
 	}
 
 	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder.filter( "Id", "id" ).filter( "Text Field", "textField" ).filter( "Integer Field", "integerField" ).filter( "Primitive Integer Field", "primitiveIntegerField" ).filter( "Decimal Field", "decimalField" ).filter( "Boolean Field", "booleanField" ).build();
+		return filterBuilder.filter( "Identifier", "id" ).filter( "The Text Field", "textField" ).filter( "The Integer Field", "integerField" ).filter( "The Primitive Integer Field", "primitiveIntegerField" ).filter( "The Decimal Field", "decimalField" ).filter( "The Boolean Field", "booleanField" ).build();
 	}
 
 	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder formViewBuilder ) {

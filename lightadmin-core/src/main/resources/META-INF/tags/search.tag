@@ -24,7 +24,7 @@
 				<fieldset>
 					<c:forEach var="filter" items="${tag_search_filterList}" varStatus="status">
 						<div class="rowElem ${status.first ? 'noborder' : ''}">
-							<label><strong><c:out value="${light:capitalize(filter.name)}"/>:</strong></label>
+							<label id="filter-field-name"><strong><c:out value="${light:capitalize(filter.name)}"/>:</strong></label>
 
 							<div class="formRight">
 								<light-jsp:filter-control attributeMetadata="${filter.attributeMetadata}"

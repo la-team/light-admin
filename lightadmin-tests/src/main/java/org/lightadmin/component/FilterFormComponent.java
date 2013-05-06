@@ -1,6 +1,7 @@
 package org.lightadmin.component;
 
 import org.lightadmin.SeleniumContext;
+import org.lightadmin.util.WebElementTransformer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -40,5 +41,9 @@ public class FilterFormComponent extends StaticComponent {
 		webDriver().clearAndType( field, filterValue );
 
 		searchButton.click();
+	}
+
+	public String[] getCaptions() {
+		return WebElementTransformer.transformToArray( filterForm.findElements( By.id( "filter-field-name" ) ) );
 	}
 }

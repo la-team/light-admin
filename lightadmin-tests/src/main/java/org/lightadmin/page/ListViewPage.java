@@ -104,4 +104,8 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	public void deleteItemByName( String itemName ) {
 		getDataTable().deleteItemByName( itemName );
 	}
+
+	public String[] getFilterCaptions() {
+		return filterFormComponent.getCaptions();
+	}
 }
