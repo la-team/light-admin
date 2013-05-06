@@ -33,7 +33,7 @@
 																		   file_data_name: '${attributeMetadata.name}',
 																		   unique_names: true,
 																		   filters: [
-																			   {title: "Image files", extensions: "jpg,jpeg,gif,png"}
+																			   {title: "Image files", extensions: "jpg,jpeg,png"}
 																		   ],
 																		   browse_button: '${attributeMetadata.name}-pickfiles'
 																	   } );
