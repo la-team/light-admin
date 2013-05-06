@@ -23,7 +23,7 @@ import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
 public class CustomerTestEntityConfiguration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameField( "firstname" ).build();
+		return configurationBuilder.nameField( "firstname" ).pluralName( "Test Customers Domain" ).build();
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {

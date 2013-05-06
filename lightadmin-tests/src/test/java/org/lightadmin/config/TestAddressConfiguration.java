@@ -13,7 +13,7 @@ import org.lightadmin.test.nameExtractor.AddressNameExtractor;
 public class TestAddressConfiguration {
 
 	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameExtractor( new AddressNameExtractor() ).build();
+		return configurationBuilder.nameExtractor( new AddressNameExtractor() ).pluralName( "Test Addresses Domain" ).build();
 	}
 
 	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
