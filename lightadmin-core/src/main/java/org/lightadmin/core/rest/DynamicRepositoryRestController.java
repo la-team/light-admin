@@ -166,7 +166,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 				HttpHeaders responseHeaders = new HttpHeaders();
 				responseHeaders.setContentLength( bytes.length );
 				responseHeaders.setContentType( mediaType );
-
+				responseHeaders.setContentDispositionFormData( "inline", "image." + mediaType.getSubtype() );
 				return new ResponseEntity( responseHeaders, HttpStatus.OK );
 			}
 		}
@@ -204,7 +204,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			height = ( int ) ( width * ratio );
 		}
 
-		return Scalr.resize( sourceImage, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.AUTOMATIC, width, height, Scalr.OP_ANTIALIAS );
+		return Scalr.resize( sourceImage, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, width, height, Scalr.OP_ANTIALIAS );
 	}
 
 
