@@ -4,6 +4,8 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
+import static org.apache.commons.lang.StringUtils.substring;
+import static org.apache.commons.lang.StringUtils.trim;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 
 public class NamingUtils {
@@ -19,5 +21,13 @@ public class NamingUtils {
 		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 
 		return String.valueOf( domainTypeEntityMetadata.getIdAttribute().getValue( entity ) );
+	}
+
+	public static String cutLongText( String text ) {
+		text = trim( text );
+		if ( text.length() > 50 ) {
+			return substring( text, 0, 47 ) + "...";
+		}
+		return text;
 	}
 }

@@ -19,10 +19,10 @@
 
 <light:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
-<div class="title"><h5><c:out value="${light:capitalize(entityPluralName)}"/></h5></div>
+<div class="title"><h5><c:out value="${light:capitalize(light:cutLongText(entityPluralName))}"/></h5></div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}"/>
 </light-jsp:breadcrumb>
 
 <script type="text/javascript">

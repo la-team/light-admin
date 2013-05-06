@@ -124,6 +124,9 @@
 															} );
 														} );
 														$( "a[rel^='prettyPhoto']" ).prettyPhoto( { social_tools: ''} );
+													},
+													"fnInitComplete": function () {
+														this.fnAdjustColumnSizing();
 													}
 												} );
 

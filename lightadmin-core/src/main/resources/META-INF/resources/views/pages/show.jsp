@@ -19,17 +19,17 @@
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
 <div class="title">
-	<h5><c:out value="Show ${light:capitalize(entitySingularName)}"/></h5>
+	<h5><c:out value="Show ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
 </div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}" link="${domainBaseUrl}"/>
-	<light-jsp:breadcrumb-item name="${light:capitalize(entitySingularName)}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
 </light-jsp:breadcrumb>
 
 <div class="widget">
 	<div class="head">
-		<h5 class="iList"><c:out value="${light:capitalize(entitySingularName)}"/></h5>
+		<h5 class="iList"><c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
 
 		<div style="float: right;margin-top: 5px;display: inline-block;">
 			<a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img src="<light:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>

@@ -1,5 +1,13 @@
 var FieldValueRenderer = function () {
 
+	function cutLongText( text ) {
+		var strValue = $.trim( text );
+		if ( strValue.length > 50 ) {
+			return strValue.substr( 0, 47 ) + '...';
+		}
+		return strValue;
+	}
+
 	function EmptyValueRenderer() {
 		this.render = function () {
 			return '&nbsp;';
@@ -12,10 +20,16 @@ var FieldValueRenderer = function () {
 		}
 	}
 
-	function StringValueRenderer() {
+	function StringValueRenderer( targetView ) {
+		this.targetView = targetView;
+
 		this.render = function ( field ) {
 			if ( field['value'].length == 0 ) {
 				return '&nbsp;';
+			}
+
+			if ( this.targetView == 'listView' ) {
+				return cutLongText( field['value'] );
 			}
 			return $.trim( field['value'] );
 		}
@@ -60,11 +74,13 @@ var FieldValueRenderer = function () {
 		}
 	}
 
-	function ArrayValueRenderer() {
+	function ArrayValueRenderer( targetView ) {
 
-		function renderItem( arrayItem ) {
+		this.targetView = targetView;
+
+		function renderItem( arrayItem, targetView ) {
 			if ( isDomainObject( arrayItem ) ) {
-				return new DomainObjectValueRenderer().renderValue( arrayItem );
+				return new DomainObjectValueRenderer( targetView ).renderValue( arrayItem );
 			}
 			return arrayItem.toString();
 		}
@@ -73,19 +89,27 @@ var FieldValueRenderer = function () {
 			var fieldValue = field['value'];
 			var items = '';
 			for ( var arrayIndex in fieldValue ) {
-				items += renderItem( fieldValue[arrayIndex] ) + '<br/>';
+				items += renderItem( fieldValue[arrayIndex], this.targetView ) + '<br/>';
 			}
 			return items.length != 0 ? items : '&nbsp;';
 		}
 	}
 
-	function DomainObjectValueRenderer() {
+	function DomainObjectValueRenderer( targetView ) {
+		this.targetView = targetView;
+
 		this.renderValue = function ( dataValue ) {
 			var stringRepresentation = dataValue['stringRepresentation'];
-			if ( dataValue['managedDomainType'] ) {
-				return "<a href='" + dataValue.links[1].href + "'>" + stringRepresentation + "</a>";
+
+			var valueToRender = $.trim( stringRepresentation );
+			if ( this.targetView == 'listView' ) {
+				valueToRender = cutLongText( stringRepresentation );
 			}
-			return stringRepresentation;
+
+			if ( dataValue['managedDomainType'] ) {
+				return "<a href='" + dataValue.links[1].href + "'>" + valueToRender + "</a>";
+			}
+			return valueToRender;
 		};
 		this.render = function ( field ) {
 			return this.renderValue( field['value'] );
@@ -101,11 +125,11 @@ var FieldValueRenderer = function () {
 		var fieldValue = field['value'];
 
 		if ( fieldValue instanceof Array ) {
-			return new ArrayValueRenderer();
+			return new ArrayValueRenderer( targetView );
 		}
 
 		if ( $.isPlainObject( fieldValue ) && isDomainObject( fieldValue ) ) {
-			return new DomainObjectValueRenderer();
+			return new DomainObjectValueRenderer( targetView );
 		}
 
 		if ( fieldType == 'DATE' ) {
@@ -117,7 +141,7 @@ var FieldValueRenderer = function () {
 		}
 
 		if ( fieldType == 'STRING' ) {
-			return new StringValueRenderer();
+			return new StringValueRenderer( targetView );
 		}
 
 		if ( fieldType == 'NUMBER_INTEGER' || fieldType == 'NUMBER_FLOAT' ) {

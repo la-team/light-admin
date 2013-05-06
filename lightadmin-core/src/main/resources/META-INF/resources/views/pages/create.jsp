@@ -20,17 +20,17 @@
 <light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
 <div class="title">
-	<h5><c:out value="Create ${light:capitalize(entitySingularName)}"/></h5>
+	<h5><c:out value="Create ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
 </div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}" link="${domainBaseUrl}"/>
-	<light-jsp:breadcrumb-item name="${light:capitalize(entitySingularName)}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
 </light-jsp:breadcrumb>
 
 <form id="editForm" onsubmit="return saveDomainObject(this)" class="mainForm">
 	<div class="widget">
-		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(entitySingularName)}"/></h5></div>
+		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5></div>
 		<fieldset>
 			<c:forEach var="fieldEntry" items="${fields}" varStatus="status">
 				<c:if test="${!fieldEntry.generatedValue}">

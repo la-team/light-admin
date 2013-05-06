@@ -22,17 +22,17 @@
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
 <div class="title">
-	<h5><c:out value="Edit ${light:capitalize(entitySingularName)}"/></h5>
+	<h5><c:out value="Edit ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
 </div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="${light:capitalize(entityPluralName)}" link="${domainBaseUrl}"/>
-	<light-jsp:breadcrumb-item name="${light:capitalize(entitySingularName)}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
+	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
 </light-jsp:breadcrumb>
 
 <form id="editForm" onsubmit="return updateDomainObject(this)" class="mainForm">
 	<div class="widget">
-		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(entitySingularName)}"/></h5></div>
+		<div class="head"><h5 class="iCreate"><c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5></div>
 		<fieldset>
 			<c:forEach var="fieldEntry" items="${fields}" varStatus="status">
 				<div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
