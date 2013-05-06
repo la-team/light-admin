@@ -4,6 +4,13 @@ import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
 import org.apache.commons.io.IOUtils;
+import org.apache.tika.metadata.Metadata;
+import org.apache.tika.parser.AutoDetectParser;
+import org.apache.tika.parser.ParseContext;
+import org.apache.tika.parser.Parser;
+import org.apache.tika.sax.BodyContentHandler;
+import org.apache.tika.sax.ContentHandlerDecorator;
+import org.imgscalr.Scalr;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
@@ -33,6 +40,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -46,14 +54,12 @@ import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
 import java.util.*;
-import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
@@ -64,8 +70,8 @@ import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
 
-@SuppressWarnings( "unchecked" )
-@RequestMapping( "/rest" )
+@SuppressWarnings("unchecked")
+@RequestMapping("/rest")
 public class DynamicRepositoryRestController extends FlexibleRepositoryRestController implements GlobalAdministrationConfigurationAware {
 
 	private SpecificationCreator specificationCreator;
@@ -79,7 +85,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		specificationCreator = new SpecificationCreator( conversionService, configuration );
 	}
 
-	@RequestMapping( value = "/{repository}", method = RequestMethod.PUT )
+	@RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
 	@ResponseBody
 	public ResponseEntity<?> createOrUpdate( ServletServerHttpRequest request, URI baseUri, @PathVariable String repository ) throws IOException, IllegalAccessException, InstantiationException {
 		return super.createOrUpdate( request, baseUri, repository, "" );
@@ -88,7 +94,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	private static final Date NULL_PLACEHOLDER_MAGIC_DATE = new Date( -377743392000001L );
 
 	@Override
-	@SuppressWarnings( "rawtypes" )
+	@SuppressWarnings("rawtypes")
 	protected void attrMetaSet( AttributeMetadata attrMeta, Object incomingVal, Object entity ) {
 		DomainTypeBasicConfiguration repo;
 		if ( attrMeta.isCollectionLike() || attrMeta.isSetLike() ) {
@@ -110,7 +116,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		}
 	}
 
-	@RequestMapping( value = "/{repository}/{id}/{property}/file", method = RequestMethod.DELETE )
+	@RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.DELETE)
 	@ResponseBody
 	public ResponseEntity<?> deleteFileOfPropertyOfEntity( ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property ) throws IOException {
 		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
@@ -130,9 +136,9 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		return new ResponseEntity( new HttpHeaders(), HttpStatus.OK );
 	}
 
-	@RequestMapping( value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET )
+	@RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET)
 	@ResponseBody
-	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam( value = "width", defaultValue = "-1" ) int width, @RequestParam( value = "height", defaultValue = "-1" ) int height ) throws IOException {
+	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height ) throws IOException {
 		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
 		final Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
 
@@ -145,10 +151,12 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		if ( attrMeta.type().equals( byte[].class ) ) {
 			final byte[] bytes = ( byte[] ) attrMeta.get( entity );
 			if ( bytes != null ) {
+				final MediaType mediaType = getMediaType( bytes );
 				if ( imageResizingRequired( width, height ) ) {
 					BufferedImage sourceImage = ImageIO.read( new ByteArrayInputStream( bytes ) );
 					BufferedImage image = resizeImage( sourceImage, width, height );
-					ImageIO.write( image, "jpeg", response.getOutputStream() );
+
+					ImageIO.write( image, mediaType.getSubtype(), response.getOutputStream() );
 					response.flushBuffer();
 				} else {
 					IOUtils.write( bytes, response.getOutputStream() );
@@ -157,6 +165,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 				HttpHeaders responseHeaders = new HttpHeaders();
 				responseHeaders.setContentLength( bytes.length );
+				responseHeaders.setContentType( mediaType );
 
 				return new ResponseEntity( responseHeaders, HttpStatus.OK );
 			}
@@ -164,18 +173,38 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		return new ResponseEntity( HttpStatus.BAD_REQUEST );
 	}
 
+	private MediaType getMediaType( final byte[] bytes ) throws IOException {
+		ContentHandlerDecorator contenthandler = new BodyContentHandler();
+		Metadata metadata = new Metadata();
+		Parser parser = new AutoDetectParser();
+		try {
+			final ParseContext parseContext = new ParseContext();
+			parser.parse( new ByteArrayInputStream( bytes ), contenthandler, metadata, parseContext );
+			return MediaType.parseMediaType( metadata.get( "Content-Type" ) );
+		} catch ( Exception e ) {
+			return MediaType.IMAGE_JPEG;
+		}
+	}
+
 	private boolean imageResizingRequired( final int width, final int height ) {
 		return width > 0 || height > 0;
 	}
 
 	private BufferedImage resizeImage( BufferedImage sourceImage, int width, int height ) throws IOException {
-		Image thumbnail = sourceImage.getScaledInstance( width, height, Image.SCALE_SMOOTH );
+		final int currentWidth = sourceImage.getWidth();
+		final int currentHeight = sourceImage.getHeight();
 
-		BufferedImage resizedImage = new BufferedImage( thumbnail.getWidth( null ), thumbnail.getHeight( null ), sourceImage.getType() );
+		float ratio = ( ( float ) currentHeight / ( float ) currentWidth );
 
-		resizedImage.getGraphics().drawImage( thumbnail, 0, 0, null );
+		if ( width <= 0 ) {
+			width = ( int ) ( height / ratio );
+		}
 
-		return resizedImage;
+		if ( height <= 0 ) {
+			height = ( int ) ( width * ratio );
+		}
+
+		return Scalr.resize( sourceImage, Scalr.Method.ULTRA_QUALITY, Scalr.Mode.AUTOMATIC, width, height, Scalr.OP_ANTIALIAS );
 	}
 
 
