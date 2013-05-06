@@ -152,7 +152,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 			final byte[] bytes = ( byte[] ) attrMeta.get( entity );
 			if ( bytes != null ) {
 				final MediaType mediaType = getMediaType( bytes );
-				if ( !mediaType.getSubtype().equals( "gif" ) && imageResizingRequired( width, height ) ) {
+				if ( imageResizingRequired( width, height ) ) {
 					BufferedImage sourceImage = ImageIO.read( new ByteArrayInputStream( bytes ) );
 					BufferedImage image = resizeImage( sourceImage, width, height );
 
