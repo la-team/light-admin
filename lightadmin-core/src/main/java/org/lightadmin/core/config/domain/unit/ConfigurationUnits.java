@@ -18,7 +18,7 @@ import static org.lightadmin.core.util.DomainConfigurationUtils.configurationDom
 
 public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializable {
 
-	private final Class configurationClass;
+	private final String configurationClassName;
 	private final Class<?> domainType;
 
 	private final Set<ConfigurationUnit> configurationUnits;
@@ -29,12 +29,16 @@ public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializ
 
 	public ConfigurationUnits( final Class configurationClass, final Set<ConfigurationUnit> configurationUnits ) {
 		Assert.notNull( configurationClass );
-
-		this.configurationClass = configurationClass;
-
 		this.domainType = configurationDomainType( configurationClass );
 		Assert.notNull( this.domainType );
+		this.configurationClassName = configurationClass.getSimpleName();
+		this.configurationUnits = newLinkedHashSet( configurationUnits );
+	}
 
+	public ConfigurationUnits( final String configurationClassName, final Class domainType, final Set<ConfigurationUnit> configurationUnits ) {
+		Assert.notNull( domainType );
+		this.domainType = domainType;
+		this.configurationClassName = configurationClassName;
 		this.configurationUnits = newLinkedHashSet( configurationUnits );
 	}
 
@@ -43,8 +47,8 @@ public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializ
 		return configurationUnits.iterator();
 	}
 
-	public Class getConfigurationClass() {
-		return configurationClass;
+	public String getConfigurationClassName() {
+		return configurationClassName;
 	}
 
 	public Class<?> getDomainType() {

@@ -14,8 +14,8 @@ import static org.lightadmin.core.test.util.ConfigurationUnitsUtils.*;
 
 public class ConfigurationUnitsTest {
 
-	@Test( expected = IllegalArgumentException.class )
-	public void nullDomainTypeNotAllowed() throws Exception {
+	@Test(expected = IllegalArgumentException.class)
+	public void nullConfigurationClassNotAllowed() throws Exception {
 		configurationUnits( null );
 	}
 
@@ -58,7 +58,7 @@ public class ConfigurationUnitsTest {
 
 	}
 
-	@Administration( DomainType.class )
+	@Administration(DomainType.class)
 	private static class DomainTypeConfiguration {
 
 	}

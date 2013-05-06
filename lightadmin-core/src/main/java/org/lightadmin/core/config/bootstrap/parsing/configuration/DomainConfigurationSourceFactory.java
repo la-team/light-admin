@@ -50,7 +50,7 @@ public class DomainConfigurationSourceFactory {
 		throw new IllegalArgumentException( format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings( "unchecked" )
 	DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
 		final Class<?> domainType = configurationUnits.getDomainType();
 
@@ -74,10 +74,10 @@ public class DomainConfigurationSourceFactory {
 			}
 			processedConfigurationUnits.add( processedConfigurationUnit );
 		}
-		return new ConfigurationUnits( configurationUnits.getConfigurationClass(), processedConfigurationUnits );
+		return new ConfigurationUnits( configurationUnits.getConfigurationClassName(), configurationUnits.getDomainType(), processedConfigurationUnits );
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings( "unchecked" )
 	private boolean isPersistentEntityType( final Class<?> domainType ) {
 		return entityMetadataResolver.resolveEntityMetadata( domainType ) != null;
 	}

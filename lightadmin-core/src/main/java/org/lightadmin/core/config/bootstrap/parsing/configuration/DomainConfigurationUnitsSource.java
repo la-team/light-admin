@@ -30,7 +30,7 @@ public class DomainConfigurationUnitsSource implements DomainConfigurationSource
 
 	@Override
 	public String getConfigurationName() {
-		return configurationUnits.getConfigurationClass().getSimpleName();
+		return configurationUnits.getConfigurationClassName();
 	}
 
 	@Override
