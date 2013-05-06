@@ -102,4 +102,8 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		return editForm.findElement(
 				By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" ) );
 	}
+
+	public boolean isFieldEditable( String fieldName ) {
+		return editForm.findElement( By.id( fieldName ) ).isEnabled();
+	}
 }
