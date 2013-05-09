@@ -29,6 +29,14 @@
 		<url>scm:git:git@github.com:max-dev/light-admin.git</url>
 	</scm>
 
+	<distributionManagement>
+		<repository>
+			<id>LightAdmin Nexus</id>
+			<name>Releases</name>
+			<url>http://151.236.219.110:8080/nexus/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
+
 	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/max-dev/light-admin/issues</url>
@@ -240,30 +248,6 @@
 				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.github.github</groupId>
-				<artifactId>site-maven-plugin</artifactId>
-				<version>0.7</version>
-				<configuration>
-					<message>Maven artifacts for ${project.version}</message>
-					<noJekyll>true</noJekyll>
-					<outputDirectory>${project.build.directory}/mvn-repo</outputDirectory>
-					<branch>refs/heads/mvn-repo</branch>
-					<includes>
-						<include>**/*</include>
-					</includes>
-					<repositoryName>light-admin</repositoryName>
-					<repositoryOwner>max-dev</repositoryOwner>
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>site</goal>
-						</goals>
-						<phase>deploy</phase>
-					</execution>
-				</executions>
-			</plugin>
-			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.12</version>
@@ -311,13 +295,5 @@
 			</plugin>
 		</plugins>
 	</build>
-
-	<distributionManagement>
-		<repository>
-			<id>internal.repo</id>
-			<name>Temporary Staging Repository</name>
-			<url>file://${project.build.directory}/mvn-repo</url>
-		</repository>
-	</distributionManagement>
 
 </project>
