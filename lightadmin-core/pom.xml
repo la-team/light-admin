@@ -32,7 +32,7 @@
 	<distributionManagement>
 		<repository>
 			<id>LightAdmin Nexus</id>
-			<name>Releases</name>
+			<name>Releases (Nexus)</name>
 			<url>http://151.236.219.110:8080/nexus/content/repositories/releases</url>
 		</repository>
 	</distributionManagement>

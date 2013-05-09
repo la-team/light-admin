@@ -200,12 +200,9 @@
 
 	<repositories>
 		<repository>
-			<id>lightadmin-repo</id>
-			<url>https://raw.github.com/max-dev/light-admin/mvn-repo/</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
+			<id>LightAdmin Nexus</id>
+			<name>Releases (Nexus)</name>
+			<url>http://151.236.219.110:8080/nexus/content/repositories/releases/</url>
 		</repository>
 	</repositories>
 
