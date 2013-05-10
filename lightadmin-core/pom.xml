@@ -7,42 +7,78 @@
 	<groupId>org.lightadmin</groupId>
 	<artifactId>lightadmin</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0.M1</version>
+	<version>1.0.0-SNAPSHOT</version>
 
+	<name>LightAdmin</name>
+	<description>Pluggable data management solution for Java web applications developed in a "Rapid" manner</description>
 	<url>http://lightadmin.org</url>
+
+	<inceptionYear>2013</inceptionYear>
+
+	<organization>
+		<name>HighWave Group</name>
+		<url>http://highwave-group.com</url>
+	</organization>
 
 	<licenses>
 		<license>
 			<name>The Apache Software License, Version 2.0</name>
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
+			<comments>A business-friendly OSS license</comments>
 		</license>
 	</licenses>
 
-	<name>LightAdmin</name>
-
-	<description>Pluggable data management solution for Java web applications developed in a "Rapid" manner</description>
-
 	<scm>
-		<connection>scm:git:git@github.com:max-dev/light-admin.git</connection>
-		<developerConnection>scm:git:git@github.com:max-dev/light-admin.git</developerConnection>
-		<url>scm:git:git@github.com:max-dev/light-admin.git</url>
+		<connection>scm:git:git://github.com/max-dev/light-admin</connection>
+		<developerConnection>scm:git:git://github.com/max-dev/light-admin</developerConnection>
+		<url>http://github.com/max-dev/light-admin</url>
 	</scm>
-
-	<distributionManagement>
-		<repository>
-			<id>LightAdmin Nexus</id>
-			<name>Releases (Nexus)</name>
-			<url>http://151.236.219.110:8080/nexus/content/repositories/releases</url>
-		</repository>
-	</distributionManagement>
 
 	<issueManagement>
 		<system>github</system>
 		<url>https://github.com/max-dev/light-admin/issues</url>
 	</issueManagement>
 
-	<inceptionYear>2013</inceptionYear>
+	<ciManagement>
+		<system>jenkins</system>
+		<url>http://lightadmin.org/jenkins</url>
+	</ciManagement>
+
+	<distributionManagement>
+		<snapshotRepository>
+			<id>lightadmin-nexus-snapshots</id>
+			<url>http://151.236.219.110:8080/nexus/content/repositories/snapshots</url>
+		</snapshotRepository>
+		<repository>
+			<id>lightadmin-nexus-releases</id>
+			<url>http://151.236.219.110:8080/nexus/content/repositories/releases</url>
+		</repository>
+	</distributionManagement>
+
+	<developers>
+		<developer>
+			<id>max-dev</id>
+			<name>Maxim Kharchenko</name>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>aliubunia</id>
+			<name>Anatolii Liubunia</name>
+			<roles>
+				<role>developer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>ikostenko</id>
+			<name>Irina Kostenko</name>
+			<roles>
+				<role>test automation engineer</role>
+			</roles>
+		</developer>
+	</developers>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -50,8 +86,6 @@
 
 		<maven.compiler.source>1.6</maven.compiler.source>
 		<maven.compiler.target>1.6</maven.compiler.target>
-
-		<github.global.server>github</github.global.server>
 
 		<spring.version>3.2.1.RELEASE</spring.version>
 		<spring.security.version>3.1.3.RELEASE</spring.security.version>
