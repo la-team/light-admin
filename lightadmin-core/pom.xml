@@ -47,11 +47,11 @@
 
 	<distributionManagement>
 		<snapshotRepository>
-			<id>lightadmin-nexus-snapshots</id>
+			<id>lightadmin-nexus</id>
 			<url>http://151.236.219.110:8080/nexus/content/repositories/snapshots</url>
 		</snapshotRepository>
 		<repository>
-			<id>lightadmin-nexus-releases</id>
+			<id>lightadmin-nexus</id>
 			<url>http://151.236.219.110:8080/nexus/content/repositories/releases</url>
 		</repository>
 	</distributionManagement>

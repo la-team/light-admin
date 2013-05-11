@@ -31,7 +31,8 @@
 		<dependency>
 			<groupId>org.lightadmin</groupId>
 			<artifactId>lightadmin</artifactId>
-			<version>1.0.0.M1</version>
+			<version>1.0.0-SNAPSHOT</version>
+			<type>jar</type>
 		</dependency>
 
 		<dependency>
@@ -200,9 +201,20 @@
 
 	<repositories>
 		<repository>
-			<id>LightAdmin Nexus</id>
-			<name>Releases (Nexus)</name>
-			<url>http://151.236.219.110:8080/nexus/content/repositories/releases/</url>
+			<id>lightadmin-nexus-snapshots</id>
+			<url>http://lightadmin.org/nexus/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>lightadmin-nexus-releases</id>
+			<url>http://lightadmin.org/nexus/content/repositories/releases</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
 		</repository>
 	</repositories>
 
