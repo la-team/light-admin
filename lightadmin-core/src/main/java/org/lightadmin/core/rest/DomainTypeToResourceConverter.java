@@ -28,7 +28,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.Collections.EMPTY_SET;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.LIST_VIEW;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.FORM_VIEW;
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
@@ -158,7 +158,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		fieldData.put( "name", field.getField() );
 		fieldData.put( "title", field.getName() );
 		fieldData.put( "type", DomainTypeAttributeType.FILE.name() );
-		if ( configurationUnitType != LIST_VIEW ) {
+		if ( configurationUnitType == FORM_VIEW ) {
 			fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
 		}
 		fieldData.put( "persistable", true );
