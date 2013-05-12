@@ -112,7 +112,7 @@ function getPrimaryKey( dataValue ) {
 function quickLook( aData ) {
 	var primaryKey = getPrimaryKey( aData );
 
-	var fieldsCount = Object.keys( aData ).length - 2;
+	var fieldsCount = Object.keys( aData ).length - 3;
 
 	var detailsHtmlBlock = '<div id="quickView-' + primaryKey + '" class="innerDetails">';
 
