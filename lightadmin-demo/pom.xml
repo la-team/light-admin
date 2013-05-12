@@ -7,18 +7,17 @@
 	<parent>
 		<artifactId>lightadmin-parent</artifactId>
 		<groupId>org.lightadmin</groupId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.lightadmin</groupId>
 	<artifactId>lightadmin-demo</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 	<packaging>war</packaging>
 
 	<name>LightAdmin Demo</name>
 
 	<properties>
-		<application.context>lightadmin</application.context>
 		<container.port>8080</container.port>
 
 		<spring.version>3.2.1.RELEASE</spring.version>
@@ -109,6 +108,7 @@
 	</dependencies>
 
 	<build>
+		<finalName>lightadmin-demo</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -120,84 +120,15 @@
 				</configuration>
 			</plugin>
 			<plugin>
-				<groupId>org.codehaus.cargo</groupId>
-				<artifactId>cargo-maven2-plugin</artifactId>
-				<version>1.2.4</version>
+				<groupId>org.apache.tomcat.maven</groupId>
+				<artifactId>tomcat7-maven-plugin</artifactId>
+				<version>2.0</version>
 				<configuration>
-					<deployables>
-						<deployable>
-							<groupId>${project.groupId}</groupId>
-							<artifactId>lightadmin-demo</artifactId>
-							<type>war</type>
-							<properties>
-								<context>${application.context}</context>
-							</properties>
-						</deployable>
-					</deployables>
-					<configuration>
-						<properties>
-							<cargo.servlet.port>${container.port}</cargo.servlet.port>
-							<cargo.jvmargs>
-								-Xdebug -Xrunjdwp:transport=dt_socket,address=5005,suspend=n,server=y
-							</cargo.jvmargs>
-						</properties>
-					</configuration>
+					<port>${container.port}</port>
 				</configuration>
 			</plugin>
 		</plugins>
 	</build>
-
-	<profiles>
-		<profile>
-			<id>tomcat7x</id>
-			<activation>
-				<activeByDefault>true</activeByDefault>
-			</activation>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.codehaus.cargo</groupId>
-							<artifactId>cargo-maven2-plugin</artifactId>
-							<configuration>
-								<container>
-									<containerId>tomcat7x</containerId>
-									<zipUrlInstaller>
-										<url>
-											http://archive.apache.org/dist/tomcat/tomcat-7/v7.0.32/bin/apache-tomcat-7.0.32.zip
-										</url>
-									</zipUrlInstaller>
-								</container>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-		<profile>
-			<id>jetty8x</id>
-			<build>
-				<pluginManagement>
-					<plugins>
-						<plugin>
-							<groupId>org.codehaus.cargo</groupId>
-							<artifactId>cargo-maven2-plugin</artifactId>
-							<configuration>
-								<container>
-									<containerId>jetty8x</containerId>
-									<artifactInstaller>
-										<groupId>org.eclipse.jetty</groupId>
-										<artifactId>jetty-distribution</artifactId>
-										<version>8.1.8.v20121106</version>
-									</artifactInstaller>
-								</container>
-							</configuration>
-						</plugin>
-					</plugins>
-				</pluginManagement>
-			</build>
-		</profile>
-	</profiles>
 
 	<repositories>
 		<repository>

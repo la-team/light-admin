@@ -7,19 +7,20 @@
 	<parent>
 		<groupId>org.lightadmin</groupId>
 		<artifactId>lightadmin-parent</artifactId>
-		<version>0.0.1-SNAPSHOT</version>
+		<version>1.0.0-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.lightadmin</groupId>
 	<artifactId>lightadmin-tests</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0.0-SNAPSHOT</version>
 
 	<name>LightAdmin Selenium</name>
 
 	<properties>
-		<cargo.servlet.port>8080</cargo.servlet.port>
-	</properties>
+		<container.port>8080</container.port>
 
+		<spring.version>3.2.1.RELEASE</spring.version>
+	</properties>
 
 	<dependencies>
 		<dependency>
@@ -52,7 +53,7 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-core</artifactId>
-			<version>3.2.1.RELEASE</version>
+			<version>${spring.version}</version>
 			<exclusions>
 				<exclusion>
 					<groupId>commons-logging</groupId>
@@ -63,13 +64,13 @@
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-context</artifactId>
-			<version>3.2.1.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-test</artifactId>
-			<version>3.2.1.RELEASE</version>
+			<version>${spring.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -100,12 +101,6 @@
 								<include>**/*.class</include>
 							</includes>
 							<printSummary>true</printSummary>
-							<systemProperties>
-								<property>
-									<name>servlet.port</name>
-									<value>${cargo.servlet.port}</value>
-								</property>
-							</systemProperties>
 						</configuration>
 					</execution>
 					<execution>
@@ -183,16 +178,14 @@
 									<groupId>${project.groupId}</groupId>
 									<artifactId>lightadmin-demo</artifactId>
 									<type>war</type>
-									<location>${basedir}/../lightadmin-demo/target/lightadmin-demo-${project.version}
-									</location>
 									<properties>
-										<context>lightadmin</context>
+										<context>lightadmin-demo</context>
 									</properties>
 								</deployable>
 							</deployables>
 							<configuration>
 								<properties>
-									<cargo.servlet.port>${cargo.servlet.port}</cargo.servlet.port>
+									<cargo.servlet.port>${container.port}</cargo.servlet.port>
 								</properties>
 								<configfiles>
 									<configfile>
