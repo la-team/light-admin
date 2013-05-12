@@ -2,9 +2,9 @@ var FieldValueRenderer = function () {
 
 	function cutLongText( text ) {
 		var strValue = $.trim( text );
-		if ( strValue.length > 50 ) {
-			return strValue.substr( 0, 47 ) + '...';
-		}
+		//		if ( strValue.length > 50 ) {
+		//			return strValue.substr( 0, 47 ) + '...';
+		//		}
 		return strValue;
 	}
 
