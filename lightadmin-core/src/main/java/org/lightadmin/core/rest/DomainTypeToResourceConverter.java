@@ -2,6 +2,7 @@ package org.lightadmin.core.rest;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -27,10 +28,12 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.Collections.EMPTY_SET;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.LIST_VIEW;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
 
-@SuppressWarnings( "unchecked" )
+@SuppressWarnings("unchecked")
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
 
 	private final FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
@@ -42,7 +45,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		this.configuration = configuration;
 	}
 
-	public Resource convert( final Object source, Set<FieldMetadata> fieldMetadatas ) {
+	public Resource convert( final Object source, DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas ) {
 		if ( source == null ) {
 			return null;
 		}
@@ -63,7 +66,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		addManagedTypeProperty( entityResource, source );
 
 		for ( FieldMetadata field : fieldMetadatas ) {
-			addFieldAttributeValue( entityResource, field, source, domainTypeConfiguration, id );
+			addFieldAttributeValue( entityResource, source, id, field, domainTypeConfiguration, configurationUnitType );
 		}
 
 		return entityResource;
@@ -79,11 +82,11 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		final DomainTypeBasicConfiguration domainTypeBasicConfig = configuration.forDomainType( source.getClass() );
 
 		if ( domainTypeConfiguration != null ) {
-			return convert( source, primaryKeyFieldOnly( domainTypeConfiguration ) );
+			return convert( source, QUICK_VIEW, primaryKeyFieldOnly( domainTypeConfiguration ) );
 		}
 
 		if ( domainTypeBasicConfig != null ) {
-			return convert( source, primaryKeyFieldOnly( domainTypeBasicConfig ) );
+			return convert( source, QUICK_VIEW, primaryKeyFieldOnly( domainTypeBasicConfig ) );
 		}
 
 		return new Resource<Object>( source );
@@ -103,9 +106,9 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		return entityResource.getContent().put( "managedDomainType", configuration.forManagedDomainType( source.getClass() ) != null );
 	}
 
-	private void addFieldAttributeValue( EntityResource resource, FieldMetadata field, Object source, final DomainTypeBasicConfiguration domainTypeConfiguration, final Serializable id ) {
+	private void addFieldAttributeValue( EntityResource resource, Object source, final Serializable id, FieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, DomainConfigurationUnitType configurationUnitType ) {
 		if ( FieldMetadataUtils.persistentFieldMetadataPredicate().apply( field ) ) {
-			addAttributeValue( resource, field.getUuid(), persistentFieldData( ( PersistentFieldMetadata ) field, source, domainTypeConfiguration, id ) );
+			addAttributeValue( resource, field.getUuid(), persistentFieldData( source, id, ( PersistentFieldMetadata ) field, domainTypeConfiguration, configurationUnitType ) );
 		} else {
 			addAttributeValue( resource, field.getUuid(), transientFieldData( field, source ) );
 		}
@@ -126,9 +129,9 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		return fieldData;
 	}
 
-	private Map<String, Object> persistentFieldData( final PersistentFieldMetadata field, final Object source, final DomainTypeBasicConfiguration domainTypeConfiguration, final Serializable id ) {
+	private Map<String, Object> persistentFieldData( final Object source, final Serializable id, final PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType ) {
 		if ( field.getAttributeMetadata().getAttributeType() == DomainTypeAttributeType.FILE ) {
-			return persistentFileFieldData( field, source, domainTypeConfiguration, id );
+			return persistentFileFieldData( source, id, field, domainTypeConfiguration, configurationUnitType );
 		}
 
 		return persistentSimpleFieldData( field, source );
@@ -147,7 +150,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		return fieldData;
 	}
 
-	private Map<String, Object> persistentFileFieldData( PersistentFieldMetadata field, Object source, final DomainTypeBasicConfiguration domainTypeConfiguration, final Serializable id ) {
+	private Map<String, Object> persistentFileFieldData( Object source, final Serializable id, PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType ) {
 		final Map<String, Object> fieldData = newLinkedHashMap();
 
 		final byte[] fileContent = ( byte[] ) fieldValueEvaluator.evaluate( field, source );
@@ -155,7 +158,9 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 		fieldData.put( "name", field.getField() );
 		fieldData.put( "title", field.getName() );
 		fieldData.put( "type", DomainTypeAttributeType.FILE.name() );
-		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
+		if ( configurationUnitType != LIST_VIEW ) {
+			fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
+		}
 		fieldData.put( "persistable", true );
 		fieldData.put( "fileExists", fileContent != null && fileContent.length > 0 );
 		fieldData.put( "fileUrl", filePropertyLink( field, domainTypeConfiguration.getDomainTypeName(), id ) );

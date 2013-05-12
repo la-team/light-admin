@@ -41,7 +41,7 @@ public class DomainTypeResourceModule extends SimpleModule {
 				return;
 			}
 
-			final Resource resource = domainTypeToResourceConverter.convert( value.getResource(), value.getFieldMetadatas() );
+			final Resource resource = domainTypeToResourceConverter.convert( value.getResource(), value.getConfigurationUnitType(), value.getFieldMetadatas() );
 
 			jgen.writeObject( resource );
 		}

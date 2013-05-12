@@ -210,7 +210,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 
-	@RequestMapping( value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST} )
+	@RequestMapping(value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST})
 	@ResponseBody
 	public ResponseEntity<?> saveFilePropertyOfEntity( final ServletServerHttpRequest request ) throws IOException {
 		final MultipartHttpServletRequest multipartHttpServletRequest = ( MultipartHttpServletRequest ) request.getServletRequest();
@@ -231,7 +231,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 	@ResponseBody
-	@RequestMapping( value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET )
+	@RequestMapping(value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET)
 	public ResponseEntity<?> entity( ServletServerHttpRequest request, URI baseUri, @PathVariable String repositoryName, @PathVariable String id, @PathVariable String configurationUnit ) throws IOException {
 
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
@@ -243,13 +243,14 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 		final Object entity = repository.findOne( entityId );
 
-		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new DomainTypeResource( entity, fields( configurationUnit, domainTypeAdministrationConfiguration ) ) );
+		final DomainConfigurationUnitType configurationUnitType = DomainConfigurationUnitType.forName( configurationUnit );
+
+		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new DomainTypeResource( entity, configurationUnitType, fields( domainTypeAdministrationConfiguration, configurationUnitType ) ) );
 	}
 
-	// TODO: Draft impl.
 	@ResponseBody
-	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search/count", method = RequestMethod.GET, produces = "application/json" )
-	public ResponseEntity<?> countItems( ServletServerHttpRequest request, @SuppressWarnings( "unused" ) URI baseUri, @PathVariable String repositoryName, @PathVariable String scopeName ) {
+	@RequestMapping(value = "/{repositoryName}/scope/{scopeName}/search/count", method = RequestMethod.GET, produces = "application/json")
+	public ResponseEntity<?> countItems( ServletServerHttpRequest request, @SuppressWarnings("unused") URI baseUri, @PathVariable String repositoryName, @PathVariable String scopeName ) {
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
 
 		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
@@ -275,8 +276,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 	@ResponseBody
-	@RequestMapping( value = "/{repositoryName}/scope/{scopeName}/search", method = RequestMethod.GET )
-	public ResponseEntity<?> filterEntities( ServletServerHttpRequest request, @SuppressWarnings( "unused" ) URI baseUri, PagingAndSorting pageSort, @PathVariable String repositoryName, @PathVariable String scopeName ) throws IOException {
+	@RequestMapping(value = "/{repositoryName}/scope/{scopeName}/search", method = RequestMethod.GET)
+	public ResponseEntity<?> filterEntities( ServletServerHttpRequest request, @SuppressWarnings("unused") URI baseUri, PagingAndSorting pageSort, @PathVariable String repositoryName, @PathVariable String scopeName ) throws IOException {
 
 		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
 
@@ -294,7 +295,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 			final Page page = findBySpecificationAndPredicate( repository, filterSpecification, predicateScope.predicate(), pageSort );
 
-			return negotiateResponse( request, page, pageMetadata( page ), listViewFields );
+			return negotiateResponse( request, page, pageMetadata( page ), DomainConfigurationUnitType.LIST_VIEW, listViewFields );
 		}
 
 		if ( isSpecificationScope( scope ) ) {
@@ -302,16 +303,16 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
 			Page page = findItemsBySpecification( repository, and( scopeSpecification, filterSpecification ), pageSort );
 
-			return negotiateResponse( request, page, pageMetadata( page ), listViewFields );
+			return negotiateResponse( request, page, pageMetadata( page ), DomainConfigurationUnitType.LIST_VIEW, listViewFields );
 		}
 
 		Page page = findItemsBySpecification( repository, filterSpecification, pageSort );
 
-		return negotiateResponse( request, page, pageMetadata( page ), listViewFields );
+		return negotiateResponse( request, page, pageMetadata( page ), DomainConfigurationUnitType.LIST_VIEW, listViewFields );
 	}
 
 	@Override
-	@ExceptionHandler( RepositoryConstraintViolationException.class )
+	@ExceptionHandler(RepositoryConstraintViolationException.class)
 	@ResponseBody
 	public ResponseEntity handleValidationFailure( RepositoryConstraintViolationException ex, ServletServerHttpRequest request ) throws IOException {
 		final Map packet = newHashMap();
@@ -336,7 +337,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 	@Override
-	@ExceptionHandler( Exception.class )
+	@ExceptionHandler(Exception.class)
 	@ResponseBody
 	public ResponseEntity handleMiscFailures( Throwable t, ServletServerHttpRequest request ) throws IOException {
 		LOG.debug( "Handled exception", t );
@@ -347,16 +348,14 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 	}
 
 	@Override
-	@ExceptionHandler( {HttpMessageNotReadableException.class, HttpMessageNotWritableException.class} )
+	@ExceptionHandler({HttpMessageNotReadableException.class, HttpMessageNotWritableException.class})
 	@ResponseBody
 	public ResponseEntity handleMessageConversionFailure( Exception ex, HttpServletRequest request ) throws IOException {
 		LOG.error( "Handled exception", ex );
 		return handleMiscFailures( ex.getCause(), new ServletServerHttpRequest( request ) );
 	}
 
-	private Set<FieldMetadata> fields( String configurationUnit, DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration ) {
-		final DomainConfigurationUnitType configurationUnitType = DomainConfigurationUnitType.forName( configurationUnit );
-
+	private Set<FieldMetadata> fields( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, final DomainConfigurationUnitType configurationUnitType ) {
 		switch ( configurationUnitType ) {
 			case SHOW_VIEW:
 				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
@@ -413,22 +412,22 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 		return specificationCreator.toSpecification( entityMetadata, parameters );
 	}
 
-	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata, Set<FieldMetadata> fieldMetadatas ) throws IOException {
-		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page, fieldMetadatas ), pageMetadata, Lists.<Link>newArrayList() ) );
+	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas ) throws IOException {
+		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page, configurationUnitType, fieldMetadatas ), pageMetadata, Lists.<Link>newArrayList() ) );
 	}
 
 	private PagedResources.PageMetadata pageMetadata( final Page page ) {
 		return new PagedResources.PageMetadata( page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages() );
 	}
 
-	private List<Object> toResources( Page page, Set<FieldMetadata> fieldMetadatas ) {
+	private List<Object> toResources( Page page, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas ) {
 		if ( !page.hasContent() ) {
 			return newLinkedList();
 		}
 
 		List<Object> allResources = newArrayList();
 		for ( final Object item : page ) {
-			allResources.add( new DomainTypeResource( item, fieldMetadatas ) );
+			allResources.add( new DomainTypeResource( item, configurationUnitType, fieldMetadatas ) );
 		}
 		return allResources;
 	}
