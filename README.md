@@ -15,7 +15,7 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * <b>Filtering Scopes</b>: Use scopes to filter data by predefined criteria
 * <b>Pluggable Security</b>: Authentication based on [Spring Security](http://www.springsource.org/spring-security)
 * <b>REST API</b>: Enriching your application with REST API based on [Spring Data REST](http://www.springsource.org/spring-data/rest)
-* <b>Easy integration</b>: Servlet 3.0 based web applications support
+* <b>Easy integration</b>: Servlet 3.0 based web applications supported
 
 ## Documentation & Support ##
 
