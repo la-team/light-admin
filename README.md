@@ -204,7 +204,7 @@ It's based on [Spring Travel](https://github.com/SpringSource/spring-webflow-sam
 
 		http://localhost:8080/booking-mvc
 		
-## Screenshots from [LightAdmin DEMO application](http://lightadmin.org/demo/admin)
+## Screenshots
 
 <b>Login to LightAdmin:</b>
 
