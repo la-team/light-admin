@@ -178,7 +178,30 @@ By default, the app will run in 'embedded' mode which does not require any exter
 
 		http://localhost:8080/lightadmin-demo
 
+## LightAdmin integration example
 
+We've prepared an example how easy you can integrate LightAdmin back-end to existing web application based on [Spring Travel](https://github.com/SpringSource/spring-webflow-samples/tree/master/booking-mvc) reference application.
+
+1. Clone the repository from GitHub:
+
+		$ git clone git://github.com/max-dev/lightadmin-spring-travel.git
+
+2. Navigate into the cloned repository directory:
+
+		$ cd lightadmin-spring-travel
+
+3. The project uses [Maven](http://maven.apache.org/) to build:
+
+		$ mvn clean install
+			
+4. Launch Tomcat from the command line:
+
+		$ mvn tomcat7:run
+
+5. Access the deployed webapp at 
+
+		http://localhost:8080/booking-mvc
+		
 ## Screenshots from [LightAdmin DEMO application](http://lightadmin.org/demo/admin)
 
 <b>Login to LightAdmin:</b>
