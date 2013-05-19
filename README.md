@@ -1,4 +1,4 @@
-# Light Admin for Rapid Application Development#
+# LightAdmin for Rapid Application Development#
 
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
@@ -15,7 +15,7 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * <b>Filtering Scopes</b>: Use scopes to filter data by predefined criteria
 * <b>Pluggable Security</b>: Authentication based on [Spring Security](http://www.springsource.org/spring-security)
 * <b>REST API</b>: Enriching your application with REST API based on [Spring Data REST](http://www.springsource.org/spring-data/rest)
-* <b>Easy integration</b>: Servlet 3.0 based web applications supported
+* <b>Easy integration</b>: Servlet 3.0 web applications supported
 
 ## Documentation & Support ##
 
@@ -57,7 +57,7 @@ Define maven dependency
 </dependency> 
 ```
 
-### Enable Light Admin web-module in you <b>web.xml</b>: ###
+### Enable LightAdmin web-module in you <b>web.xml</b>: ###
 
 ```xml
 <context-param>
@@ -146,7 +146,7 @@ public class UserAdministration {
 
 ```
 
-Voila! You have a brand new Light Admin back-end configured.
+Voila! You have a brand new LightAdmin back-end configured.
 
 ## Check Out and Build from Source
 
