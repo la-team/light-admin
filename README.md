@@ -180,7 +180,9 @@ By default, the app will run in 'embedded' mode which does not require any exter
 
 ## LightAdmin integration example
 
-We've prepared an example how easy you can integrate LightAdmin back-end to existing web application based on [Spring Travel](https://github.com/SpringSource/spring-webflow-samples/tree/master/booking-mvc) reference application.
+We prepared an example how easily you can integrate LightAdmin back-end to existing web application.
+
+It's based on [Spring Travel](https://github.com/SpringSource/spring-webflow-samples/tree/master/booking-mvc) reference application.
 
 1. Clone the repository from GitHub:
 
