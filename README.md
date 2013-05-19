@@ -15,20 +15,20 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * <b>Filtering Scopes</b>: Use scopes to filter data by predefined criteria
 * <b>Pluggable Security</b>: Authentication based on [Spring Security](http://www.springsource.org/spring-security)
 * <b>REST API</b>: Enriching your application with REST API based on [Spring Data REST](http://www.springsource.org/spring-data/rest)
-* <b>Easy integration</b>: Servlet 2.5 and 3.0 based web applications supported
+* <b>Easy integration</b>: Servlet 3.0 based web applications support
 
 ## Documentation & Support ##
 
 * Web site: [lightadmin.org](http://lightadmin.org)
-* Documentation & Guides: [lightadmin.org/documentation](http://lightadmin.org/documentation)
+* Documentation & Guides: [lightadmin.org/documentation](http://lightadmin.org)
 * Wiki: [github.com/max-dev/light-admin/wiki](http://github.com/max-dev/light-admin/wiki)
-* Live demo: [demo.lightadmin.org/admin](http://demo.lightadmin.org/admin)
+* Live demo: [lightadmin.org/demo/admin](http://lightadmin.org/demo/admin)
+* CI Server: [lightadmin.org/jenkins](http://lightadmin.org/jenkins)
 * For more detailed questions: [groups.google.com/group/lightadmin](http://groups.google.com/group/lightadmin)
 
-## Bug Reports & Contribution:
+## Bug Reports:
 
 * Bug Reports: [github.com/max-dev/light-admin/issues](http://github.com/max-dev/light-admin/issues)
-* <b>Want to Contribute?</b>: Read the Guide ;)
 
 ## Getting started ##
 
@@ -37,8 +37,8 @@ Declare repository in your POM
 ```xml
 <repositories>
   <repository>
-    <id>lightadmin-repo</id>
-    <url>https://raw.github.com/max-dev/light-admin/mvn-repo/</url>
+    <id>lightadmin-nexus-snapshots</id>
+    <url>http://lightadmin.org/nexus/content/repositories/snapshots</url>
     <snapshots>
       <enabled>true</enabled>
       <updatePolicy>always</updatePolicy>
@@ -53,7 +53,7 @@ Define maven dependency
 <dependency>
   <groupId>org.lightadmin</groupId>
   <artifactId>lightadmin</artifactId>
-  <version>1.0.0.M1</version>
+  <version>1.0.0-SNAPSHOT</version>
 </dependency> 
 ```
 
@@ -164,18 +164,18 @@ Voila! You have a brand new Light Admin back-end configured.
 
 ## Running from the Command Line
 
-Deploy the .war to any Servlet 2.5 or Servlet 3.0 container, such as Tomcat. By default, the app will run in 'embedded' mode which does not require any external setup. The Cargo Tomcat 7 Maven plugin is configured for you in the POM file.
+Deploy the DEMO .war to Servlet 3.0 container, such as Tomcat. By default, the app will run in 'embedded' mode which does not require any external setup. The Tomcat 7 Maven plugin is configured for you in the POM file.
 
 1. Launch Tomcat from the command line:
 
-		$ mvn cargo:run
+		$ mvn tomcat7:run
 
 2. Access the deployed webapp at 
 
-		http://localhost:8080/light-admin
+		http://localhost:8080/lightadmin-demo
 
 
-## Screenshots from [LightAdmin DEMO application](http://demo.lightadmin.org/admin)
+## Screenshots from [LightAdmin DEMO application](http://lightadmin.org/demo/admin)
 
 <b>Login to LightAdmin:</b>
 
