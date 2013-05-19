@@ -75,7 +75,14 @@
 			<id>ikostenko</id>
 			<name>Irina Kostenko</name>
 			<roles>
-				<role>test automation engineer</role>
+				<role>qa, test automation engineer</role>
+			</roles>
+		</developer>
+		<developer>
+			<id>Alex-Bar</id>
+			<name>Alexander Baranovskyi</name>
+			<roles>
+				<role>qa</role>
 			</roles>
 		</developer>
 	</developers>
