@@ -164,13 +164,17 @@ Voila! You have a brand new Light Admin back-end configured.
 
 ## Running from the Command Line
 
-Deploy the DEMO .war to Servlet 3.0 container, such as Tomcat. By default, the app will run in 'embedded' mode which does not require any external setup. The Tomcat 7 Maven plugin is configured for you in the POM file.
+By default, the app will run in 'embedded' mode which does not require any external setup. The Tomcat 7 Maven plugin is configured for you in the POM file.
 
-1. Launch Tomcat from the command line:
+1. Navigate into demo application directory:
+
+		$ cd lightadmin-demo
+
+2. Launch Tomcat from the command line:
 
 		$ mvn tomcat7:run
 
-2. Access the deployed webapp at 
+3. Access the deployed webapp at 
 
 		http://localhost:8080/lightadmin-demo
 
