@@ -61,6 +61,6 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
 	@Override
 	public String getUuid() {
-		return attributeMetadata.getName();
+		return field;
 	}
 }

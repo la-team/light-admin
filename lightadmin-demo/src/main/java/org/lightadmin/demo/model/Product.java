@@ -17,6 +17,9 @@ public class Product extends AbstractEntity {
 	@Size(min = 10, max = 100)
 	private String name;
 
+	@Basic
+	private String type;
+
 	private String description;
 
 	@NotNull
@@ -65,6 +68,10 @@ public class Product extends AbstractEntity {
 
 	public String getName() {
 		return name;
+	}
+
+	public String getType() {
+		return type;
 	}
 
 	public String getDescription() {

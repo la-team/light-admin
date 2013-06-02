@@ -3,6 +3,10 @@ package org.lightadmin.core.config.domain.field;
 import java.io.Serializable;
 import java.util.UUID;
 
+import javax.servlet.jsp.tagext.SimpleTag;
+
+import org.apache.commons.collections15.Factory;
+
 public abstract class AbstractFieldMetadata implements FieldMetadata, Serializable {
 
 	private String name;
@@ -10,6 +14,8 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
 	private final int order;
 
 	private final UUID uuid;
+
+	private Factory<SimpleTag> customControlFactory;
 
 	protected AbstractFieldMetadata( final String name ) {
 		this( name, 0 );
@@ -21,6 +27,7 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
 		this.uuid = UUID.randomUUID();
 	}
 
+	@Override
 	public void setName( String name ) {
 		this.name = name;
 	}
@@ -43,6 +50,18 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
 	@Override
 	public boolean isSortable() {
 		return false;
+	}
+
+	public void setCustomControlFactory(Factory<SimpleTag> customControlFactory) {
+		this.customControlFactory = customControlFactory;
+	}
+
+	public SimpleTag getCustomControl() {
+		if (customControlFactory != null) {
+			return customControlFactory.create();
+		} else {
+			return null;
+		}
 	}
 
 	@Override

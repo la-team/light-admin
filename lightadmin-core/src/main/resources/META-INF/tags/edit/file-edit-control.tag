@@ -1,6 +1,6 @@
 <%@ tag body-content="empty" %>
 <%@ attribute name="attributeMetadata" required="true"
-			  type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
+			type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
@@ -19,24 +19,23 @@
 <div id="${attributeMetadata.name}-file-container">
 	<div class="files"></div>
 	<input id="${attributeMetadata.name}" name="${attributeMetadata.name}" type="hidden"/>
-	<label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>
 
 	<a id="${attributeMetadata.name}-pickfiles" href="#">[Select file]</a>
 </div>
 <script type="text/javascript">
 	$( function () {
 		var ${attributeMetadata.name}Uploader = new plupload.Uploader( {
-																		   runtimes: 'html5,html4',
-																		   url: '${fileUploadUrl}',
-																		   container: '${attributeMetadata.name}-file-container',
-																		   max_file_size: '10mb',
-																		   file_data_name: '${attributeMetadata.name}',
-																		   unique_names: true,
-																		   filters: [
-																			   {title: "Image files", extensions: "jpg,jpeg,png"}
-																		   ],
-																		   browse_button: '${attributeMetadata.name}-pickfiles'
-																	   } );
+																		runtimes: 'html5,html4',
+																		url: '${fileUploadUrl}',
+																		container: '${attributeMetadata.name}-file-container',
+																		max_file_size: '10mb',
+																		file_data_name: '${attributeMetadata.name}',
+																		unique_names: true,
+																		filters: [
+																			{title: "Image files", extensions: "jpg,jpeg,png"}
+																		],
+																		browse_button: '${attributeMetadata.name}-pickfiles'
+																	} );
 
 		${attributeMetadata.name}Uploader.init();
 

@@ -88,6 +88,11 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+			<name>customControl</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
 			<name>simpleEditControl</name>
 			<required>true</required>
 			<fragment>true</fragment>

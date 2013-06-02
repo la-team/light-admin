@@ -5,6 +5,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.tagext.JspFragment;
+import javax.servlet.jsp.tagext.SimpleTag;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
 import java.io.IOException;
 
@@ -14,6 +15,7 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 
 	private DomainTypeAttributeMetadata attributeMetadata;
 
+	private SimpleTag customControl;
 	private JspFragment simpleEditControl;
 	private JspFragment numberEditControl;
 	private JspFragment booleanEditControl;
@@ -25,6 +27,16 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 
 	@Override
 	public void doTag() throws JspException, IOException {
+		if (customControl == null) {
+			doWithStandardControl();
+		} else {
+			customControl.setParent(this);
+			customControl.setJspContext(getJspContext());
+			customControl.doTag();
+		}
+	}
+
+	private void doWithStandardControl() throws JspException, IOException {
 		JspContext context = getJspContext();
 		JspFragment worker;
 		switch ( attributeMetadata.getAttributeType() ) {
@@ -72,6 +84,10 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 
 	public void setSimpleEditControl( JspFragment control ) {
 		this.simpleEditControl = control;
+	}
+
+	public void setCustomControl(SimpleTag customControl) {
+		this.customControl = customControl;
 	}
 
 	public void setNumberEditControl( JspFragment control ) {

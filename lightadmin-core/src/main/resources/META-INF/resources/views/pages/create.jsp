@@ -38,7 +38,7 @@
 						<label><c:out value="${light:capitalize(fieldEntry.name)}"/>:</label>
 
 						<div class="formRight">
-							<light-jsp:edit-control attributeMetadata="${fieldEntry.attributeMetadata}" cssClass="input-xlarge" errorCssClass="error"/>
+							<light-jsp:edit-control fieldMetadata="${fieldEntry}" cssClass="input-xlarge" errorCssClass="error"/>
 						</div>
 						<div class="fix"></div>
 					</div>
@@ -59,10 +59,10 @@
 		$( "select, input:checkbox, input:radio, input:file" ).uniform();
 
 		$( ".input-date" ).datepicker( {
-										   autoSize: true,
-										   appendText: '(YYYY-MM-DD)',
-										   dateFormat: 'yy-mm-dd'
-									   } );
+										autoSize: true,
+										appendText: '(YYYY-MM-DD)',
+										dateFormat: 'yy-mm-dd'
+									} );
 		$( ".input-date" ).mask( "9999-99-99" );
 
 		DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"/>;
