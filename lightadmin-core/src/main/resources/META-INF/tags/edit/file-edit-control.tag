@@ -62,7 +62,7 @@
 			if ( errorCode == -600 ) {
 				errorMessage = 'Selected file ' + (err.file ? err.file.name + ' ' : "") + 'exceeds file size limit of 10MB';
 			} else if ( errorCode == -601 || errorCode == -700 ) {
-				errorMessage = "Selected file type is not supported" + (err.file ? err.file.name + ' ' : "") + ". Please select JPG, GIF, or PNG file.";
+				errorMessage = "Selected file type is not supported " + (err.file ? err.file.name : "") + ". Please select JPG or PNG file.";
 			}
 
 			jAlert( errorMessage, 'Upload file operation failure' );
