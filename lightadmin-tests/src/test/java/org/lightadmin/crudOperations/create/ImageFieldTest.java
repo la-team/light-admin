@@ -2,6 +2,7 @@ package org.lightadmin.crudOperations.create;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightadmin.LoginOnce;
 import org.lightadmin.RunWithConfiguration;
@@ -23,6 +24,7 @@ import static org.lightadmin.util.DomainAsserts.assertImagePreviewIsDisplayed;
 
 @RunWithConfiguration( { TestProductConfiguration.class } )
 @LoginOnce( domain = Domain.TEST_PRODUCTS )
+@Ignore
 public class ImageFieldTest extends SeleniumIntegrationTest {
 
 	private CreatePage createPage;
@@ -41,7 +43,7 @@ public class ImageFieldTest extends SeleniumIntegrationTest {
 		repopulateDatabase();
 	}
 
-//	@Test
+	@Test
 	public void fileFormatIsValidated() throws AWTException, IOException {
 
 		warningDialog = createPage.addInvalidFile( invalidFileFormatName );
@@ -54,7 +56,7 @@ public class ImageFieldTest extends SeleniumIntegrationTest {
 		warningDialog.close();
 	}
 
-//	@Test
+	@Test
 	public void fileSizeIsValidated() throws AWTException, IOException {
 
 		warningDialog = createPage.addInvalidFile( largeFileName );
@@ -84,7 +86,7 @@ public class ImageFieldTest extends SeleniumIntegrationTest {
 		assertImagePreviewIsDisplayed( "Quick View", quickView.getField( "Picture" ), webDriver(), webDriverTimeout() );
 	}
 
-//	@Test
+	@Test
 	public void pngFileCanBeUploaded() throws IOException, AWTException {
 		final String itemName = "Test Png";
 
