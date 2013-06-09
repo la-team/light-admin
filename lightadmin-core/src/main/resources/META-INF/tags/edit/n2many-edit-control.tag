@@ -5,7 +5,6 @@
 <%@ attribute name="attributeMetadata" required="true"
 			type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
-<%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
 <select name="${attributeMetadata.name}" multiple="multiple" class="chzn-select" data-placeholder=" " ${disabled ? 'disabled' : ''}>
 	<light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId"

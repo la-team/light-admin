@@ -10,32 +10,25 @@
 	<c:set var="attributeMetadata" value="${fieldMetadata.attributeMetadata}" scope="page"/>
 	<light:edit-control-dispatcher attributeMetadata="${attributeMetadata}" customControl="${fieldMetadata.customControl}">
 		<jsp:attribute name="numberEditControl">
-			<editor:number-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
-										errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+			<editor:number-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
 		<jsp:attribute name="simpleEditControl">
-			<editor:simple-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
-										errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+			<editor:simple-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
 		<jsp:attribute name="booleanEditControl">
-			<editor:boolean-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
-										errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+			<editor:boolean-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
 		<jsp:attribute name="fileEditControl">
-			<editor:file-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
-									errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+			<editor:file-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
 		<jsp:attribute name="dateEditControl">
-			<editor:date-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
-									errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+			<editor:date-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
 		<jsp:attribute name="n2oneEditControl">
-			<editor:n2one-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
-									errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+			<editor:n2one-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
 		<jsp:attribute name="n2manyEditControl">
-			<editor:n2many-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
-										errorCssClass="${errorCssClass}" disabled="${disabled}"/>
+			<editor:n2many-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
 		</jsp:attribute>
 		<jsp:attribute name="mapEditControl">
 			<jsp:text>Map is not supported</jsp:text>

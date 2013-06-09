@@ -4,7 +4,6 @@
 <%@ attribute name="attributeMetadata" required="true"
 			type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
-<%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
 <div class="floatleft">
 	<select name="${attributeMetadata.name}" id="${attributeMetadata.name}" style="opacity: 0; " ${disabled ? 'disabled' : ''}>
