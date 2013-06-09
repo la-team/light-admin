@@ -77,9 +77,4 @@ public class QuickViewComponent extends DynamicComponent<QuickViewComponent> {
 		}
 		return true;
 	}
-
-	public WebElement getField( String fieldName ) {
-		return webDriver().findElement(
-				By.xpath( "//div[@id='quickView-" + itemId + "']//tr[td[strong[contains(text(),'" + fieldName + "')]]]/td[@class='qv-field-value']" ) );
-	}
 }

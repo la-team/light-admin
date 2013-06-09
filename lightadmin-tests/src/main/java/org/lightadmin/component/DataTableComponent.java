@@ -46,11 +46,6 @@ public class DataTableComponent extends StaticComponent {
 		return new QuickViewComponent( itemId, getRowForItem( itemId ), seleniumContext ).get();
 	}
 
-	public QuickViewComponent showQuickViewFor( String itemName ) {
-		int itemId = getItemIdByName( itemName );
-		return new QuickViewComponent( itemId, getRowForItem( itemId ), seleniumContext ).get();
-	}
-
 	public int getRowCount() {
 		return dataRowElements().size();
 	}
@@ -69,14 +64,6 @@ public class DataTableComponent extends StaticComponent {
 
 	private WebElement getRowForItem( int itemId ) {
 		return dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]" ) );
-	}
-
-	public WebElement getRowForItem( String itemName ) {
-		return getRowForItem( getItemIdByName( itemName ) );
-	}
-
-	private int getItemIdByName( String itemName ) {
-		return Integer.parseInt( dataTableElement.findElement( By.xpath( "tbody/tr[td[contains(text(), '" + itemName + "')]]/td[2]" ) ).getText() );
 	}
 
 	private WebElement dataRowElement( int rowIndex ) {
@@ -98,7 +85,9 @@ public class DataTableComponent extends StaticComponent {
 	}
 
 	public void deleteItemByName( String itemName ) {
-		new DeletionDialog( getRowForItem( itemName ), seleniumContext ).confirm();
+		int rowId = Integer.parseInt( dataTableElement.findElement( By.xpath( "tbody/tr[td[contains(text(), '" + itemName + "')]]/td[2]" ) ).getText() );
+
+		new DeletionDialog( getRowForItem( rowId ), seleniumContext ).confirm();
 	}
 
 	public class Column {

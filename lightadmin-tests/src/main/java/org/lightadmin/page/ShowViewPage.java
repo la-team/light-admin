@@ -54,8 +54,4 @@ public class ShowViewPage extends SecuredPage<ShowViewPage> {
 
 		return ArrayUtils.remove( allFieldValues, 0 );
 	}
-
-	public WebElement getField( String fieldName ) {
-		return dataContainer.findElement( By.name( "field-" + fieldName ) );
-	}
 }

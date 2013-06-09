@@ -21,7 +21,7 @@ CREATE TABLE parenttestentity (id BIGINT IDENTITY PRIMARY KEY, name VARCHAR(255)
 
 CREATE TABLE childtestentity (id BIGINT IDENTITY PRIMARY KEY, parent_id BIGINT CONSTRAINT child_to_parent_ref REFERENCES parenttestentity (id), name VARCHAR(255));
 
-CREATE TABLE testproduct (id BIGINT IDENTITY PRIMARY KEY, name VARCHAR(255), price DECIMAL(8, 2), picture BLOB);
+CREATE TABLE testproduct (id BIGINT IDENTITY PRIMARY KEY, name VARCHAR(255), price DECIMAL(8, 2));
 
 CREATE TABLE testcustomer (id BIGINT IDENTITY PRIMARY KEY, firstname VARCHAR(255), lastname VARCHAR(255), email VARCHAR(255));
 CREATE UNIQUE INDEX ix_testcustomer_email ON TESTCUSTOMER (email ASC);
