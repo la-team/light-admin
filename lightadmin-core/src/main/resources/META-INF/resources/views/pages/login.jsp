@@ -6,6 +6,9 @@
 <div class="loginWrapper" style="width: 320px;">
 	<div class="loginLogo"><img src="<light:url value='/images/loginLogo_2-1.png'/>" alt=""/></div>
 
+	<div class="nNote nInformation">
+		<p>Please use admin/admin for access</p>
+	</div>
 	<c:if test="${not empty param.login_error}">
 		<div class="nNote nWarning hideit">
 			<p id="alert-message">
