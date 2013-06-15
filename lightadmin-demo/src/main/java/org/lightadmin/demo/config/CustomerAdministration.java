@@ -28,46 +28,74 @@ import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
 @Administration(Customer.class)
 public class CustomerAdministration {
 
-	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameField( "firstname" ).singularName( "Customer" ).pluralName( "Customers" ).build();
-	}
+    public static EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
+        return configurationBuilder
+                .nameField("firstname")
+                .singularName("Customer")
+                .pluralName("Customers").build();
+    }
 
-	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Customers Administration" ).build();
-	}
+    public static ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
+        return screenContextBuilder.screenName("Customers Administration").build();
+    }
 
-	public static FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "firstname" ).caption( "First Name" ).field( "lastname" ).caption( "Last Name" ).field( "emailAddress" ).caption( "Email Address" ).field( "addresses" ).caption( "Addresses" ).field( "discountPrograms" ).caption( "Discount Programs" ).build();
-	}
+    public static FieldSetConfigurationUnit listView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+        return fragmentBuilder
+                .field("firstname").caption("First Name")
+                .field("lastname").caption("Last Name")
+                .field("emailAddress").caption("Email Address")
+                .field("addresses").caption("Addresses")
+                .field("discountPrograms").caption("Discount Programs").build();
+    }
 
-	public static FieldSetConfigurationUnit quickView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "firstname" ).caption( "First Name" ).field( "lastname" ).caption( "Last Name" ).field( "discountPrograms" ).caption( "Discount Programs" ).field( "addresses" ).caption( "Addresses" ).build();
-	}
+    public static FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+        return fragmentBuilder
+                .field("firstname").caption("First Name")
+                .field("lastname").caption("Last Name")
+                .field("discountPrograms").caption("Discount Programs")
+                .field("addresses").caption("Addresses").build();
+    }
 
-	public static FieldSetConfigurationUnit showView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "firstname" ).caption( "First Name" ).field( "lastname" ).caption( "Last Name" ).field( "emailAddress" ).caption( "Email Address" ).field( "discountPrograms" ).caption( "Discount Programs" ).field( "addresses" ).caption( "Addresses" ).build();
-	}
+    public static FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+        return fragmentBuilder
+                .field("firstname").caption("First Name")
+                .field("lastname").caption("Last Name")
+                .field("emailAddress").caption("Email Address")
+                .field("discountPrograms").caption("Discount Programs")
+                .field("addresses").caption("Addresses").build();
+    }
 
-	public static FieldSetConfigurationUnit formView( final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder ) {
-		return fragmentBuilder.field( "firstname" ).caption( "First Name" ).field( "lastname" ).caption( "Last Name" ).field( "emailAddress" ).caption( "Email Address" ).field( "discountPrograms" ).caption( "Discount Programs" ).field( "addresses" ).caption( "Addresses" ).build();
-	}
+    public static FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
+        return fragmentBuilder
+                .field("firstname").caption("First Name")
+                .field("lastname").caption("Last Name")
+                .field("emailAddress").caption("Email Address")
+                .field("discountPrograms").caption("Discount Programs")
+                .field("addresses").caption("Addresses").build();
+    }
 
-	public static ScopesConfigurationUnit scopes( final ScopesConfigurationUnitBuilder scopeBuilder ) {
-		return scopeBuilder.scope( "All", all() ).defaultScope().scope( "Buyers", filter( DomainTypePredicates.alwaysTrue() ) ).scope( "Sellers", specification( customerNameEqDave() ) ).build();
-	}
+    public static ScopesConfigurationUnit scopes(final ScopesConfigurationUnitBuilder scopeBuilder) {
+        return scopeBuilder
+                .scope("All", all()).defaultScope()
+                .scope("Buyers", filter(DomainTypePredicates.alwaysTrue()))
+                .scope("Sellers", specification(customerNameEqDave())).build();
+    }
 
-	public static FiltersConfigurationUnit filters( final FiltersConfigurationUnitBuilder filterBuilder ) {
-		return filterBuilder.filter( "ID", "id" ).filter( "First Name", "firstname" ).renderer( select( new String[] {
-			"Yes", "No"
-		} ) ).filter( "Last Name", "lastname" ).filter( "Email Address", "emailAddress" ).filter( "Addresses", "addresses" ).filter( "Discount Programs", "discountPrograms" ).build();
-	}
+    public static FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
+        return filterBuilder.filter("ID", "id")
+                .filter("First Name", "firstname").renderer(select(new String[]{"Yes", "No"}))
+                .filter("Last Name", "lastname")
+                .filter("Email Address", "emailAddress")
+                .filter("Addresses", "addresses")
+                .filter("Discount Programs", "discountPrograms").build();
+    }
 
-	public static DomainTypeSpecification<Customer> customerNameEqDave() {
-		return new DomainTypeSpecification<Customer>() {
-			@Override
-			public Predicate toPredicate( final Root<Customer> root, final CriteriaQuery<?> query, final CriteriaBuilder cb ) {
-				return cb.equal( root.get( "firstname" ), "Dave" );
-			}
-		};
-	}
+    public static DomainTypeSpecification<Customer> customerNameEqDave() {
+        return new DomainTypeSpecification<Customer>() {
+            @Override
+            public Predicate toPredicate(final Root<Customer> root, final CriteriaQuery<?> query, final CriteriaBuilder cb) {
+                return cb.equal(root.get("firstname"), "Dave");
+            }
+        };
+    }
 }
