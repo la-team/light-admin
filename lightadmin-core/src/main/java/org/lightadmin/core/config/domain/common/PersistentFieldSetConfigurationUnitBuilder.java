@@ -13,6 +13,8 @@ public interface PersistentFieldSetConfigurationUnitBuilder extends Configuratio
 
 	PersistentFieldSetConfigurationUnitBuilder enumeration( String... values );
 
+	PersistentFieldSetConfigurationUnitBuilder enumeration( EnumElement... elements );
+
 	PersistentFieldSetConfigurationUnitBuilder withCustomEditor( SimpleTag editControl );
 
 }
