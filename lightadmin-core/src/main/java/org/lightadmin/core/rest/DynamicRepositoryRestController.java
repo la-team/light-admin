@@ -74,377 +74,388 @@ import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpeci
 @RequestMapping("/rest")
 public class DynamicRepositoryRestController extends FlexibleRepositoryRestController implements GlobalAdministrationConfigurationAware {
 
-	private SpecificationCreator specificationCreator;
-
-	private GlobalAdministrationConfiguration configuration;
-
-	private ApplicationContext applicationContext;
-
-	@PostConstruct
-	public void init() throws Exception {
-		specificationCreator = new SpecificationCreator( conversionService, configuration );
-	}
-
-	@RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
-	@ResponseBody
-	public ResponseEntity<?> createOrUpdate( ServletServerHttpRequest request, URI baseUri, @PathVariable String repository ) throws IOException, IllegalAccessException, InstantiationException {
-		return super.createOrUpdate( request, baseUri, repository, "" );
-	}
-
-	private static final Date NULL_PLACEHOLDER_MAGIC_DATE = new Date( -377743392000001L );
-
-	@Override
-	@SuppressWarnings("rawtypes")
-	protected void attrMetaSet( AttributeMetadata attrMeta, Object incomingVal, Object entity ) {
-		DomainTypeBasicConfiguration repo;
-		if ( attrMeta.isCollectionLike() || attrMeta.isSetLike() ) {
-			// Trying to avoid collection-was-no-longer-referenced issue
-			// if the collection is modifiable
-			try {
-				Collection col = ( Collection ) attrMeta.get( entity );
-				col.clear();
-				col.addAll( ( Collection ) incomingVal );
-			} catch ( UnsupportedOperationException e ) {
-				attrMeta.set( incomingVal, entity );
-			}
-		} else if ( ( repo = configuration.forDomainType( attrMeta.type() ) ) != null && ( repo.getRepository().isNullPlaceholder( incomingVal ) ) ) {
-			attrMeta.set( null, entity );
-		} else if ( NULL_PLACEHOLDER_MAGIC_DATE.equals( incomingVal ) ) {
-			attrMeta.set( null, entity );
-		} else {
-			attrMeta.set( incomingVal, entity );
-		}
-	}
-
-	@RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.DELETE)
-	@ResponseBody
-	public ResponseEntity<?> deleteFileOfPropertyOfEntity( ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property ) throws IOException {
-		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
-		final Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
-		final CrudRepository repo = repoMeta.repository();
-
-		final Object entity;
-		final AttributeMetadata attrMeta;
-		if ( null == ( entity = repo.findOne( serId ) ) || null == ( attrMeta = repoMeta.entityMetadata().attribute( property ) ) ) {
-			return notFoundResponse( request );
-		}
-
-		attrMeta.set( null, entity );
-
-		repo.save( entity );
-
-		return new ResponseEntity( new HttpHeaders(), HttpStatus.OK );
-	}
-
-	@RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET)
-	@ResponseBody
-	public ResponseEntity<?> filePropertyOfEntity( ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height ) throws IOException {
-		final RepositoryMetadata repoMeta = repositoryMetadataFor( repository );
-		final Serializable serId = stringToSerializable( id, ( Class<? extends Serializable> ) repoMeta.entityMetadata().idAttribute().type() );
-
-		final Object entity;
-		final AttributeMetadata attrMeta;
-		if ( null == ( entity = repoMeta.repository().findOne( serId ) ) || null == ( attrMeta = repoMeta.entityMetadata().attribute( property ) ) ) {
-			return notFoundResponse( request );
-		}
-
-		if ( attrMeta.type().equals( byte[].class ) ) {
-			final byte[] bytes = ( byte[] ) attrMeta.get( entity );
-			if ( bytes != null ) {
-				final MediaType mediaType = getMediaType( bytes );
-				if ( imageResizingRequired( width, height ) ) {
-					BufferedImage sourceImage = ImageIO.read( new ByteArrayInputStream( bytes ) );
-					BufferedImage image = resizeImage( sourceImage, width, height );
-
-					ImageIO.write( image, mediaType.getSubtype(), response.getOutputStream() );
-					response.flushBuffer();
-				} else {
-					IOUtils.write( bytes, response.getOutputStream() );
-					response.flushBuffer();
-				}
-
-				response.setHeader( "content-disposition", "inline;" + "image." + mediaType.getSubtype() );
-
-				HttpHeaders responseHeaders = new HttpHeaders();
-				responseHeaders.setContentLength( bytes.length );
-				responseHeaders.setContentType( mediaType );
-				responseHeaders.setContentDispositionFormData( "inline", "image." + mediaType.getSubtype() );
-				return new ResponseEntity( responseHeaders, HttpStatus.OK );
-			}
-		}
-		return new ResponseEntity( HttpStatus.BAD_REQUEST );
-	}
-
-	private MediaType getMediaType( final byte[] bytes ) throws IOException {
-		ContentHandlerDecorator contenthandler = new BodyContentHandler();
-		Metadata metadata = new Metadata();
-		Parser parser = new AutoDetectParser();
-		try {
-			final ParseContext parseContext = new ParseContext();
-			parser.parse( new ByteArrayInputStream( bytes ), contenthandler, metadata, parseContext );
-			return MediaType.parseMediaType( metadata.get( "Content-Type" ) );
-		} catch ( Exception e ) {
-			return MediaType.IMAGE_JPEG;
-		}
-	}
+    private SpecificationCreator specificationCreator;
+
+    private GlobalAdministrationConfiguration configuration;
+
+    private ApplicationContext applicationContext;
+
+    @PostConstruct
+    public void init() throws Exception {
+        specificationCreator = new SpecificationCreator(conversionService, configuration);
+    }
+
+    @RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
+    @ResponseBody
+    public ResponseEntity<?> createOrUpdate(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository) throws IOException, IllegalAccessException, InstantiationException {
+        return super.createOrUpdate(request, baseUri, repository, "");
+    }
+
+    private static final Date NULL_PLACEHOLDER_MAGIC_DATE = new Date(-377743392000001L);
+
+    @Override
+    @SuppressWarnings("rawtypes")
+    protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) {
+        DomainTypeBasicConfiguration repo;
+        if (attrMeta.isCollectionLike() || attrMeta.isSetLike()) {
+            // Trying to avoid collection-was-no-longer-referenced issue
+            // if the collection is modifiable
+            try {
+                Collection col = (Collection) attrMeta.get(entity);
+                col.clear();
+                col.addAll((Collection) incomingVal);
+            } catch (UnsupportedOperationException e) {
+                attrMeta.set(incomingVal, entity);
+            }
+        } else if ((repo = configuration.forDomainType(attrMeta.type())) != null && (repo.getRepository().isNullPlaceholder(incomingVal))) {
+            attrMeta.set(null, entity);
+        } else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
+            attrMeta.set(null, entity);
+        } else {
+            attrMeta.set(incomingVal, entity);
+        }
+    }
+
+    @RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.DELETE)
+    @ResponseBody
+    public ResponseEntity<?> deleteFileOfPropertyOfEntity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property) throws IOException {
+        final RepositoryMetadata repoMeta = repositoryMetadataFor(repository);
+        final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) repoMeta.entityMetadata().idAttribute().type());
+        final CrudRepository repo = repoMeta.repository();
+
+        final Object entity;
+        final AttributeMetadata attrMeta;
+        if (null == (entity = repo.findOne(serId)) || null == (attrMeta = repoMeta.entityMetadata().attribute(property))) {
+            return notFoundResponse(request);
+        }
+
+        attrMeta.set(null, entity);
+
+        repo.save(entity);
+
+        return new ResponseEntity(new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET)
+    @ResponseBody
+    public ResponseEntity<?> filePropertyOfEntity(ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height) throws IOException {
+        final RepositoryMetadata repoMeta = repositoryMetadataFor(repository);
+        final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) repoMeta.entityMetadata().idAttribute().type());
+
+        final Object entity;
+        final AttributeMetadata attrMeta;
+        if (null == (entity = repoMeta.repository().findOne(serId)) || null == (attrMeta = repoMeta.entityMetadata().attribute(property))) {
+            return notFoundResponse(request);
+        }
+
+        if (attrMeta.type().equals(byte[].class)) {
+            final byte[] bytes = (byte[]) attrMeta.get(entity);
+            if (bytes != null) {
+                final MediaType mediaType = getMediaType(bytes);
+                if (imageResizingRequired(width, height)) {
+                    try {
+                        writeResizedImageToResponse(bytes, width, height, mediaType, response);
+                    } catch (Exception ex) {
+                        writeToResponse(bytes, response);
+                    }
+                } else {
+                    writeToResponse(bytes, response);
+                }
+
+                response.setHeader("content-disposition", "inline;" + "image." + mediaType.getSubtype());
+
+                HttpHeaders responseHeaders = new HttpHeaders();
+                responseHeaders.setContentLength(bytes.length);
+                responseHeaders.setContentType(mediaType);
+                responseHeaders.setContentDispositionFormData("inline", "image." + mediaType.getSubtype());
+                return new ResponseEntity(responseHeaders, HttpStatus.OK);
+            }
+        }
+        return new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    private void writeToResponse(byte[] bytes, HttpServletResponse response) throws IOException {
+        IOUtils.write(bytes, response.getOutputStream());
+        response.flushBuffer();
+    }
 
-	private boolean imageResizingRequired( final int width, final int height ) {
-		return width > 0 || height > 0;
-	}
+    private void writeResizedImageToResponse(byte[] bytes, int width, int height, MediaType mediaType, HttpServletResponse response) throws IOException {
+        BufferedImage sourceImage = ImageIO.read(new ByteArrayInputStream(bytes));
+        BufferedImage image = resizeImage(sourceImage, width, height);
+        ImageIO.write(image, mediaType.getSubtype(), response.getOutputStream());
+        response.flushBuffer();
+    }
 
-	private BufferedImage resizeImage( BufferedImage sourceImage, int width, int height ) throws IOException {
-		final int currentWidth = sourceImage.getWidth();
-		final int currentHeight = sourceImage.getHeight();
+    private MediaType getMediaType(final byte[] bytes) throws IOException {
+        ContentHandlerDecorator contenthandler = new BodyContentHandler();
+        Metadata metadata = new Metadata();
+        Parser parser = new AutoDetectParser();
+        try {
+            final ParseContext parseContext = new ParseContext();
+            parser.parse(new ByteArrayInputStream(bytes), contenthandler, metadata, parseContext);
+            return MediaType.parseMediaType(metadata.get("Content-Type"));
+        } catch (Exception e) {
+            return MediaType.IMAGE_JPEG;
+        }
+    }
 
-		float ratio = ( ( float ) currentHeight / ( float ) currentWidth );
+    private boolean imageResizingRequired(final int width, final int height) {
+        return width > 0 || height > 0;
+    }
 
-		if ( width <= 0 ) {
-			width = ( int ) ( height / ratio );
-		}
+    private BufferedImage resizeImage(BufferedImage sourceImage, int width, int height) throws IOException {
+        final int currentWidth = sourceImage.getWidth();
+        final int currentHeight = sourceImage.getHeight();
 
-		if ( height <= 0 ) {
-			height = ( int ) ( width * ratio );
-		}
+        float ratio = ((float) currentHeight / (float) currentWidth);
 
-		return Scalr.resize( sourceImage, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, width, height, Scalr.OP_ANTIALIAS );
-	}
+        if (width <= 0) {
+            width = (int) (height / ratio);
+        }
 
+        if (height <= 0) {
+            height = (int) (width * ratio);
+        }
 
-	@RequestMapping(value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST})
-	@ResponseBody
-	public ResponseEntity<?> saveFilePropertyOfEntity( final ServletServerHttpRequest request ) throws IOException {
-		final MultipartHttpServletRequest multipartHttpServletRequest = ( MultipartHttpServletRequest ) request.getServletRequest();
+        return Scalr.resize(sourceImage, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, width, height, Scalr.OP_ANTIALIAS);
+    }
 
-		final Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
 
-		if ( !fileMap.isEmpty() ) {
-			final Map.Entry<String, MultipartFile> fileEntry = fileMap.entrySet().iterator().next();
+    @RequestMapping(value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST})
+    @ResponseBody
+    public ResponseEntity<?> saveFilePropertyOfEntity(final ServletServerHttpRequest request) throws IOException {
+        final MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request.getServletRequest();
 
-			final Map<String, Object> result = newLinkedHashMap();
-			result.put( "fileName", fileEntry.getValue().getOriginalFilename() );
-			result.put( "fileContent", fileEntry.getValue().getBytes() );
+        final Map<String, MultipartFile> fileMap = multipartHttpServletRequest.getFileMap();
 
-			return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), result );
-		}
+        if (!fileMap.isEmpty()) {
+            final Map.Entry<String, MultipartFile> fileEntry = fileMap.entrySet().iterator().next();
 
-		return new ResponseEntity( HttpStatus.METHOD_NOT_ALLOWED );
-	}
+            final Map<String, Object> result = newLinkedHashMap();
+            result.put("fileName", fileEntry.getValue().getOriginalFilename());
+            result.put("fileContent", fileEntry.getValue().getBytes());
 
-	@ResponseBody
-	@RequestMapping(value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET)
-	public ResponseEntity<?> entity( ServletServerHttpRequest request, URI baseUri, @PathVariable String repositoryName, @PathVariable String id, @PathVariable String configurationUnit ) throws IOException {
+            return negotiateResponse(request, HttpStatus.OK, new HttpHeaders(), result);
+        }
 
-		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
+        return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+    }
 
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
-		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+    @ResponseBody
+    @RequestMapping(value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET)
+    public ResponseEntity<?> entity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repositoryName, @PathVariable String id, @PathVariable String configurationUnit) throws IOException {
 
-		Serializable entityId = stringToSerializable( id, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
+        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repositoryName);
 
-		final Object entity = repository.findOne( entityId );
+        final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+        final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
 
-		final DomainConfigurationUnitType configurationUnitType = DomainConfigurationUnitType.forName( configurationUnit );
+        Serializable entityId = stringToSerializable(id, (Class<? extends Serializable>) domainTypeEntityMetadata.getIdAttribute().getType());
 
-		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new DomainTypeResource( entity, configurationUnitType, fields( domainTypeAdministrationConfiguration, configurationUnitType ) ) );
-	}
+        final Object entity = repository.findOne(entityId);
 
-	@ResponseBody
-	@RequestMapping(value = "/{repositoryName}/scope/{scopeName}/search/count", method = RequestMethod.GET, produces = "application/json")
-	public ResponseEntity<?> countItems( ServletServerHttpRequest request, @SuppressWarnings("unused") URI baseUri, @PathVariable String repositoryName, @PathVariable String scopeName ) {
-		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
+        final DomainConfigurationUnitType configurationUnitType = DomainConfigurationUnitType.forName(configurationUnit);
 
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
-		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+        return negotiateResponse(request, HttpStatus.OK, new HttpHeaders(), new DomainTypeResource(entity, configurationUnitType, fields(domainTypeAdministrationConfiguration, configurationUnitType)));
+    }
 
-		final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope( scopeName );
+    @ResponseBody
+    @RequestMapping(value = "/{repositoryName}/scope/{scopeName}/search/count", method = RequestMethod.GET, produces = "application/json")
+    public ResponseEntity<?> countItems(ServletServerHttpRequest request, @SuppressWarnings("unused") URI baseUri, @PathVariable String repositoryName, @PathVariable String scopeName) {
+        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repositoryName);
 
-		final Specification filterSpecification = specificationFromRequest( request, domainTypeEntityMetadata );
+        final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+        final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
 
-		if ( isPredicateScope( scope ) ) {
-			final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = ( ScopeMetadataUtils.PredicateScopeMetadata ) scope;
+        final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope(scopeName);
 
-			return responseEntity( countItemsBySpecificationAndPredicate( repository, filterSpecification, predicateScope.predicate() ) );
-		}
+        final Specification filterSpecification = specificationFromRequest(request, domainTypeEntityMetadata);
 
-		if ( isSpecificationScope( scope ) ) {
-			final Specification scopeSpecification = ( ( ScopeMetadataUtils.SpecificationScopeMetadata ) scope ).specification();
+        if (isPredicateScope(scope)) {
+            final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = (ScopeMetadataUtils.PredicateScopeMetadata) scope;
 
-			return responseEntity( countItemsBySpecification( repository, and( scopeSpecification, filterSpecification ) ) );
-		}
+            return responseEntity(countItemsBySpecificationAndPredicate(repository, filterSpecification, predicateScope.predicate()));
+        }
 
-		return responseEntity( countItemsBySpecification( repository, filterSpecification ) );
-	}
+        if (isSpecificationScope(scope)) {
+            final Specification scopeSpecification = ((ScopeMetadataUtils.SpecificationScopeMetadata) scope).specification();
 
-	@ResponseBody
-	@RequestMapping(value = "/{repositoryName}/scope/{scopeName}/search", method = RequestMethod.GET)
-	public ResponseEntity<?> filterEntities( ServletServerHttpRequest request, @SuppressWarnings("unused") URI baseUri, PagingAndSorting pageSort, @PathVariable String repositoryName, @PathVariable String scopeName ) throws IOException {
+            return responseEntity(countItemsBySpecification(repository, and(scopeSpecification, filterSpecification)));
+        }
 
-		final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName( repositoryName );
+        return responseEntity(countItemsBySpecification(repository, filterSpecification));
+    }
 
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
-		final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+    @ResponseBody
+    @RequestMapping(value = "/{repositoryName}/scope/{scopeName}/search", method = RequestMethod.GET)
+    public ResponseEntity<?> filterEntities(ServletServerHttpRequest request, @SuppressWarnings("unused") URI baseUri, PagingAndSorting pageSort, @PathVariable String repositoryName, @PathVariable String scopeName) throws IOException {
 
-		final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope( scopeName );
+        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repositoryName);
 
-		final Specification filterSpecification = specificationFromRequest( request, domainTypeEntityMetadata );
+        final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+        final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
 
-		Set<FieldMetadata> listViewFields = domainTypeAdministrationConfiguration.getListViewFragment().getFields();
+        final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope(scopeName);
 
-		if ( isPredicateScope( scope ) ) {
-			final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = ( ScopeMetadataUtils.PredicateScopeMetadata ) scope;
+        final Specification filterSpecification = specificationFromRequest(request, domainTypeEntityMetadata);
 
-			final Page page = findBySpecificationAndPredicate( repository, filterSpecification, predicateScope.predicate(), pageSort );
+        Set<FieldMetadata> listViewFields = domainTypeAdministrationConfiguration.getListViewFragment().getFields();
 
-			return negotiateResponse( request, page, pageMetadata( page ), DomainConfigurationUnitType.LIST_VIEW, listViewFields );
-		}
+        if (isPredicateScope(scope)) {
+            final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = (ScopeMetadataUtils.PredicateScopeMetadata) scope;
 
-		if ( isSpecificationScope( scope ) ) {
-			final Specification scopeSpecification = ( ( ScopeMetadataUtils.SpecificationScopeMetadata ) scope ).specification();
+            final Page page = findBySpecificationAndPredicate(repository, filterSpecification, predicateScope.predicate(), pageSort);
 
-			Page page = findItemsBySpecification( repository, and( scopeSpecification, filterSpecification ), pageSort );
+            return negotiateResponse(request, page, pageMetadata(page), DomainConfigurationUnitType.LIST_VIEW, listViewFields);
+        }
 
-			return negotiateResponse( request, page, pageMetadata( page ), DomainConfigurationUnitType.LIST_VIEW, listViewFields );
-		}
+        if (isSpecificationScope(scope)) {
+            final Specification scopeSpecification = ((ScopeMetadataUtils.SpecificationScopeMetadata) scope).specification();
 
-		Page page = findItemsBySpecification( repository, filterSpecification, pageSort );
+            Page page = findItemsBySpecification(repository, and(scopeSpecification, filterSpecification), pageSort);
 
-		return negotiateResponse( request, page, pageMetadata( page ), DomainConfigurationUnitType.LIST_VIEW, listViewFields );
-	}
+            return negotiateResponse(request, page, pageMetadata(page), DomainConfigurationUnitType.LIST_VIEW, listViewFields);
+        }
 
-	@Override
-	@ExceptionHandler(RepositoryConstraintViolationException.class)
-	@ResponseBody
-	public ResponseEntity handleValidationFailure( RepositoryConstraintViolationException ex, ServletServerHttpRequest request ) throws IOException {
-		final Map packet = newHashMap();
-		final List<Map<String, String>> errors = newArrayList();
+        Page page = findItemsBySpecification(repository, filterSpecification, pageSort);
 
-		for ( FieldError fe : ex.getErrors().getFieldErrors() ) {
-			List<Object> args = newArrayList( fe.getObjectName(), fe.getField(), fe.getRejectedValue() );
+        return negotiateResponse(request, page, pageMetadata(page), DomainConfigurationUnitType.LIST_VIEW, listViewFields);
+    }
 
-			if ( fe.getArguments() != null ) {
-				Collections.addAll( args, fe.getArguments() );
-			}
+    @Override
+    @ExceptionHandler(RepositoryConstraintViolationException.class)
+    @ResponseBody
+    public ResponseEntity handleValidationFailure(RepositoryConstraintViolationException ex, ServletServerHttpRequest request) throws IOException {
+        final Map packet = newHashMap();
+        final List<Map<String, String>> errors = newArrayList();
 
-			String msg = applicationContext.getMessage( fe.getCode(), args.toArray(), fe.getDefaultMessage(), null );
-			Map<String, String> error = newHashMap();
-			error.put( "field", fe.getField() );
-			error.put( "message", msg );
-			errors.add( error );
-		}
-		packet.put( "errors", errors );
+        for (FieldError fe : ex.getErrors().getFieldErrors()) {
+            List<Object> args = newArrayList(fe.getObjectName(), fe.getField(), fe.getRejectedValue());
 
-		return negotiateResponse( request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet );
-	}
+            if (fe.getArguments() != null) {
+                Collections.addAll(args, fe.getArguments());
+            }
 
-	@Override
-	@ExceptionHandler(Exception.class)
-	@ResponseBody
-	public ResponseEntity handleMiscFailures( Throwable t, ServletServerHttpRequest request ) throws IOException {
-		LOG.debug( "Handled exception", t );
-		Map<String, String> error = singletonMap( "message", t.getLocalizedMessage() );
-		Map packet = newHashMap();
-		packet.put( "errors", asList( error ) );
-		return negotiateResponse( request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet );
-	}
+            String msg = applicationContext.getMessage(fe.getCode(), args.toArray(), fe.getDefaultMessage(), null);
+            Map<String, String> error = newHashMap();
+            error.put("field", fe.getField());
+            error.put("message", msg);
+            errors.add(error);
+        }
+        packet.put("errors", errors);
 
-	@Override
-	@ExceptionHandler({HttpMessageNotReadableException.class, HttpMessageNotWritableException.class})
-	@ResponseBody
-	public ResponseEntity handleMessageConversionFailure( Exception ex, HttpServletRequest request ) throws IOException {
-		LOG.error( "Handled exception", ex );
-		return handleMiscFailures( ex.getCause(), new ServletServerHttpRequest( request ) );
-	}
+        return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+    }
 
-	private Set<FieldMetadata> fields( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, final DomainConfigurationUnitType configurationUnitType ) {
-		switch ( configurationUnitType ) {
-			case SHOW_VIEW:
-				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
-			case FORM_VIEW:
-				return domainTypeAdministrationConfiguration.getFormViewFragment().getFields();
-			case QUICK_VIEW:
-				return domainTypeAdministrationConfiguration.getQuickViewFragment().getFields();
-			default:
-				return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
-		}
-	}
+    @Override
+    @ExceptionHandler(Exception.class)
+    @ResponseBody
+    public ResponseEntity handleMiscFailures(Throwable t, ServletServerHttpRequest request) throws IOException {
+        LOG.debug("Handled exception", t);
+        Map<String, String> error = singletonMap("message", t.getLocalizedMessage());
+        Map packet = newHashMap();
+        packet.put("errors", asList(error));
+        return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+    }
 
-	private long countItemsBySpecificationAndPredicate( DynamicJpaRepository repository, final Specification specification, Predicate predicate ) {
-		final List<?> items = findItemsBySpecification( repository, specification );
+    @Override
+    @ExceptionHandler({HttpMessageNotReadableException.class, HttpMessageNotWritableException.class})
+    @ResponseBody
+    public ResponseEntity handleMessageConversionFailure(Exception ex, HttpServletRequest request) throws IOException {
+        LOG.error("Handled exception", ex);
+        return handleMiscFailures(ex.getCause(), new ServletServerHttpRequest(request));
+    }
 
-		return Collections2.filter( items, predicate ).size();
-	}
+    private Set<FieldMetadata> fields(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, final DomainConfigurationUnitType configurationUnitType) {
+        switch (configurationUnitType) {
+            case SHOW_VIEW:
+                return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
+            case FORM_VIEW:
+                return domainTypeAdministrationConfiguration.getFormViewFragment().getFields();
+            case QUICK_VIEW:
+                return domainTypeAdministrationConfiguration.getQuickViewFragment().getFields();
+            default:
+                return domainTypeAdministrationConfiguration.getShowViewFragment().getFields();
+        }
+    }
 
-	private long countItemsBySpecification( final DynamicJpaRepository repository, final Specification specification ) {
-		return repository.count( specification );
-	}
+    private long countItemsBySpecificationAndPredicate(DynamicJpaRepository repository, final Specification specification, Predicate predicate) {
+        final List<?> items = findItemsBySpecification(repository, specification);
 
-	private Page findBySpecificationAndPredicate( DynamicJpaRepository repository, final Specification specification, Predicate predicate, final PagingAndSorting pageSort ) {
-		final List<?> items = findItemsBySpecification( repository, specification, pageSort.getSort() );
+        return Collections2.filter(items, predicate).size();
+    }
 
-		return selectPage( newArrayList( Collections2.filter( items, predicate ) ), pageSort );
-	}
+    private long countItemsBySpecification(final DynamicJpaRepository repository, final Specification specification) {
+        return repository.count(specification);
+    }
 
-	private Page<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification, final PagingAndSorting pageSort ) {
-		return repository.findAll( specification, pageSort );
-	}
+    private Page findBySpecificationAndPredicate(DynamicJpaRepository repository, final Specification specification, Predicate predicate, final PagingAndSorting pageSort) {
+        final List<?> items = findItemsBySpecification(repository, specification, pageSort.getSort());
 
-	private List<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification, final Sort sort ) {
-		return repository.findAll( specification, sort );
-	}
+        return selectPage(newArrayList(Collections2.filter(items, predicate)), pageSort);
+    }
 
-	private List<?> findItemsBySpecification( final DynamicJpaRepository repository, final Specification specification ) {
-		return repository.findAll( specification );
-	}
+    private Page<?> findItemsBySpecification(final DynamicJpaRepository repository, final Specification specification, final PagingAndSorting pageSort) {
+        return repository.findAll(specification, pageSort);
+    }
 
-	private Page<?> selectPage( List<Object> items, PagingAndSorting pageSort ) {
-		final List<Object> itemsOnPage = items.subList( pageSort.getOffset(), Math.min( items.size(), pageSort.getOffset() + pageSort.getPageSize() ) );
+    private List<?> findItemsBySpecification(final DynamicJpaRepository repository, final Specification specification, final Sort sort) {
+        return repository.findAll(specification, sort);
+    }
 
-		return new PageImpl<Object>( itemsOnPage, pageSort, items.size() );
-	}
+    private List<?> findItemsBySpecification(final DynamicJpaRepository repository, final Specification specification) {
+        return repository.findAll(specification);
+    }
 
-	private Specification and( Specification specification, Specification otherSpecification ) {
-		return Specifications.where( specification ).and( otherSpecification );
-	}
+    private Page<?> selectPage(List<Object> items, PagingAndSorting pageSort) {
+        final List<Object> itemsOnPage = items.subList(pageSort.getOffset(), Math.min(items.size(), pageSort.getOffset() + pageSort.getPageSize()));
 
-	private Specification specificationFromRequest( ServletServerHttpRequest request, final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata ) {
-		final Map<String, String[]> parameters = request.getServletRequest().getParameterMap();
+        return new PageImpl<Object>(itemsOnPage, pageSort, items.size());
+    }
 
-		return specificationCreator.toSpecification( entityMetadata, parameters );
-	}
+    private Specification and(Specification specification, Specification otherSpecification) {
+        return Specifications.where(specification).and(otherSpecification);
+    }
 
-	private ResponseEntity<?> negotiateResponse( ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas ) throws IOException {
-		return negotiateResponse( request, HttpStatus.OK, new HttpHeaders(), new PagedResources( toResources( page, configurationUnitType, fieldMetadatas ), pageMetadata, Lists.<Link>newArrayList() ) );
-	}
+    private Specification specificationFromRequest(ServletServerHttpRequest request, final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> entityMetadata) {
+        final Map<String, String[]> parameters = request.getServletRequest().getParameterMap();
 
-	private PagedResources.PageMetadata pageMetadata( final Page page ) {
-		return new PagedResources.PageMetadata( page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages() );
-	}
+        return specificationCreator.toSpecification(entityMetadata, parameters);
+    }
 
-	private List<Object> toResources( Page page, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas ) {
-		if ( !page.hasContent() ) {
-			return newLinkedList();
-		}
+    private ResponseEntity<?> negotiateResponse(ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) throws IOException {
+        return negotiateResponse(request, HttpStatus.OK, new HttpHeaders(), new PagedResources(toResources(page, configurationUnitType, fieldMetadatas), pageMetadata, Lists.<Link>newArrayList()));
+    }
 
-		List<Object> allResources = newArrayList();
-		for ( final Object item : page ) {
-			allResources.add( new DomainTypeResource( item, configurationUnitType, fieldMetadatas ) );
-		}
-		return allResources;
-	}
+    private PagedResources.PageMetadata pageMetadata(final Page page) {
+        return new PagedResources.PageMetadata(page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages());
+    }
 
-	private ResponseEntity<String> responseEntity( Object value ) {
-		return new ResponseEntity<String>( String.valueOf( value ), new HttpHeaders(), HttpStatus.OK );
-	}
+    private List<Object> toResources(Page page, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) {
+        if (!page.hasContent()) {
+            return newLinkedList();
+        }
 
-	@Override
-	@Autowired
-	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
-		this.configuration = configuration;
-	}
+        List<Object> allResources = newArrayList();
+        for (final Object item : page) {
+            allResources.add(new DomainTypeResource(item, configurationUnitType, fieldMetadatas));
+        }
+        return allResources;
+    }
 
-	@Override
-	public void setApplicationContext( ApplicationContext applicationContext ) throws BeansException {
-		super.setApplicationContext( applicationContext );
-		this.applicationContext = applicationContext;
-	}
+    private ResponseEntity<String> responseEntity(Object value) {
+        return new ResponseEntity<String>(String.valueOf(value), new HttpHeaders(), HttpStatus.OK);
+    }
+
+    @Override
+    @Autowired
+    public void setGlobalAdministrationConfiguration(final GlobalAdministrationConfiguration configuration) {
+        this.configuration = configuration;
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        super.setApplicationContext(applicationContext);
+        this.applicationContext = applicationContext;
+    }
 }
