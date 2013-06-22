@@ -19,8 +19,8 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.RememberMeAuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.authentication.encoding.ShaPasswordEncoder;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.FilterChainProxy;
@@ -41,7 +41,6 @@ import org.springframework.security.web.authentication.rememberme.RememberMeAuth
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
-import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.AntPathRequestMatcher;
 import org.springframework.security.web.util.AnyRequestMatcher;
@@ -161,7 +160,7 @@ public class LightAdminSecurityConfiguration {
 	@Autowired
 	public AuthenticationProvider authenticationProvider( UserDetailsService usersService ) throws Exception {
 		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setPasswordEncoder( NoOpPasswordEncoder.getInstance() );
+		provider.setPasswordEncoder( new ShaPasswordEncoder() );
 		provider.setUserDetailsService( usersService );
 		provider.afterPropertiesSet();
 		return provider;
