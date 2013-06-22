@@ -1,6 +1,7 @@
 package org.lightadmin.core.config;
 
 import org.lightadmin.core.context.WebContext;
+import org.lightadmin.core.web.security.LightAdminRequestCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -30,6 +31,7 @@ import org.springframework.security.web.access.intercept.DefaultFilterInvocation
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.logout.LogoutFilter;
@@ -39,6 +41,8 @@ import org.springframework.security.web.authentication.rememberme.RememberMeAuth
 import org.springframework.security.web.authentication.rememberme.TokenBasedRememberMeServices;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.AntPathRequestMatcher;
 import org.springframework.security.web.util.AnyRequestMatcher;
 import org.springframework.security.web.util.RequestMatcher;
@@ -98,20 +102,23 @@ public class LightAdminSecurityConfiguration {
 
 	@Bean
 	@Autowired
-	public Filter authenticationFilter( AuthenticationManager authenticationManager ) {
+	public Filter authenticationFilter( AuthenticationManager authenticationManager, RequestCache requestCache ) {
 		UsernamePasswordAuthenticationFilter authenticationFilter = new UsernamePasswordAuthenticationFilter();
 		authenticationFilter.setFilterProcessesUrl( applicationUrl("/j_spring_security_check") );
 		authenticationFilter.setAuthenticationManager( authenticationManager );
+		SavedRequestAwareAuthenticationSuccessHandler successHandler = new SavedRequestAwareAuthenticationSuccessHandler();
+		successHandler.setRequestCache( requestCache );
+		authenticationFilter.setAuthenticationSuccessHandler( successHandler );
 		authenticationFilter.setAuthenticationFailureHandler( new SimpleUrlAuthenticationFailureHandler( applicationUrl("/login?login_error=1") ) );
 		return authenticationFilter;
 	}
 
 	@Bean
-	public Filter exceptionTranslationFilter() {
+	public Filter exceptionTranslationFilter( RequestCache requestCache ) {
 		AccessDeniedHandlerImpl accessDeniedHandler = new AccessDeniedHandlerImpl();
 		accessDeniedHandler.setErrorPage( applicationUrl("/access-denied") );
 		LoginUrlAuthenticationEntryPoint authenticationEntryPoint = new LoginUrlAuthenticationEntryPoint( applicationUrl("/login") );
-		ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter( authenticationEntryPoint );
+		ExceptionTranslationFilter exceptionTranslationFilter = new ExceptionTranslationFilter( authenticationEntryPoint, requestCache );
 		exceptionTranslationFilter.setAccessDeniedHandler( accessDeniedHandler );
 		return exceptionTranslationFilter;
 	}
@@ -140,9 +147,13 @@ public class LightAdminSecurityConfiguration {
 	}
 
 	@Bean
+	public RequestCache requestCache() {
+		return new LightAdminRequestCache();
+	}
+
+	@Bean
 	@Autowired
 	public AuthenticationManager authenticationManager( AuthenticationProvider authenticationProvider, AuthenticationProvider rememberMeAuthenticationProvider ) {
-
 		return new ProviderManager( asList( authenticationProvider, rememberMeAuthenticationProvider ) );
 	}
 
