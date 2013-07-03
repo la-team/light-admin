@@ -12,6 +12,9 @@ import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.Product;
 
+import static org.lightadmin.core.view.editor.Editors.enumeration;
+import static org.lightadmin.core.view.editor.Editors.wysiwyg;
+
 @SuppressWarnings("unused")
 @Administration(Product.class)
 public class ProductAdministration {
@@ -51,8 +54,8 @@ public class ProductAdministration {
     public static FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
-                .field("type").caption("Type").enumeration("SMARTPHONE", "TABLET", "OTHER")
-                .field("description").caption("Description")
+                .field("type").caption("Type").editor(enumeration("SMARTPHONE", "TABLET", "OTHER"))
+                .field("description").caption("Description").editor(wysiwyg())
                 .field("price").caption("Price")
                 .field("releaseDate").caption("Released on")
                 .field("retired").caption("Out of production")

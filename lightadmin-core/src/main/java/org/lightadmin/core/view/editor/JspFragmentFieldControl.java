@@ -1,49 +1,59 @@
 package org.lightadmin.core.view.editor;
 
-import java.io.IOException;
-import java.io.Serializable;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
 import javax.servlet.ServletException;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.PageContext;
 import javax.servlet.jsp.tagext.SimpleTagSupport;
+import java.io.IOException;
+import java.io.Serializable;
 
 public class JspFragmentFieldControl extends SimpleTagSupport implements Serializable, Cloneable {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final String jspPath;
-	private String field;
+    private final String jspPath;
 
-	public JspFragmentFieldControl(String jspPath) {
-		this.jspPath = jspPath;
-	}
+    protected DomainTypeAttributeMetadata attributeMetadata;
 
-	@Override
-	public void doTag() throws JspException, IOException {
+    protected String field;
 
-		addAttribute("field", field);
-		prepare();
-		PageContext pageContext = (PageContext) getJspContext();
-		try {
-			pageContext.include(jspPath, true);
-		} catch (ServletException e) {
-			throw new JspException(e);
-		} finally {
-			pageContext.removeAttribute("field", PageContext.REQUEST_SCOPE);
-		}
-	}
+    public JspFragmentFieldControl(String jspPath) {
+        this.jspPath = jspPath;
+    }
 
-	protected void addAttribute(String name, Object value) {
-		PageContext pageContext = (PageContext) getJspContext();
-		pageContext.setAttribute(name, value, PageContext.REQUEST_SCOPE);
-	}
+    @Override
+    public void doTag() throws JspException, IOException {
 
-	public void setField(String field) {
-		this.field = field;
-	}
+        addAttribute("field", field);
+        addAttribute("attributeMetadata", attributeMetadata);
+        prepare();
+        PageContext pageContext = (PageContext) getJspContext();
+        try {
+            pageContext.include(jspPath, true);
+        } catch (ServletException e) {
+            throw new JspException(e);
+        } finally {
+            pageContext.removeAttribute("field", PageContext.REQUEST_SCOPE);
+            pageContext.removeAttribute("attributeMetadata", PageContext.REQUEST_SCOPE);
+        }
+    }
 
-	protected void prepare() {
-	}
+    protected void addAttribute(String name, Object value) {
+        PageContext pageContext = (PageContext) getJspContext();
+        pageContext.setAttribute(name, value, PageContext.REQUEST_SCOPE);
+    }
+
+    public void setField(String field) {
+        this.field = field;
+    }
+
+    public void setAttributeMetadata(DomainTypeAttributeMetadata attributeMetadata) {
+        this.attributeMetadata = attributeMetadata;
+    }
+
+    protected void prepare() {
+    }
 
 }
