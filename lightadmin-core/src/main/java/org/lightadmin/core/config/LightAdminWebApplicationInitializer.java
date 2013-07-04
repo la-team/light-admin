@@ -82,6 +82,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         resourceServlet.setAllowedResources("/WEB-INF/admin/**/*.jsp");
         resourceServlet.setApplyLastModified(true);
         resourceServlet.setContentType("text/html");
+
         ServletRegistration.Dynamic customResourceServletRegistration = servletContext.addServlet(LIGHT_ADMIN_CUSTOM_RESOURCE_SERVLET_NAME, resourceServlet);
         customResourceServletRegistration.setLoadOnStartup(2);
         customResourceServletRegistration.addMapping(customResourceServletMapping(servletContext));
