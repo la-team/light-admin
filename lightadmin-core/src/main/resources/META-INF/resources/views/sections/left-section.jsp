@@ -26,13 +26,11 @@
 
     <c:if test="${not empty sidebars}">
         <c:forEach var="sidebar" items="${sidebars}">
-            <div class="widget">
+            <div class="widget custom-resource">
                 <c:if test="${not empty sidebar.name}">
                     <div class="head"><h5 class="iInfo">${sidebar.name}</h5></div>
                 </c:if>
-                <div class="body">
-                    <jsp:include page="${sidebar.jspFilePath}" flush="true"/>
-                </div>
+                <div class="body" data-resource-url="${sidebar.jspFilePath}"></div>
             </div>
         </c:forEach>
     </c:if>

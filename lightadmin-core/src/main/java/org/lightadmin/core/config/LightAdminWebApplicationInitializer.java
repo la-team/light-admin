@@ -8,6 +8,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.ResourceServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
@@ -23,152 +24,172 @@ import static org.lightadmin.core.web.util.WebContextUtils.servletContextAttribu
 @SuppressWarnings("unused")
 public class LightAdminWebApplicationInitializer implements WebApplicationInitializer {
 
-	private static final String LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE = "org.apache.tiles.CONTAINER.LightAdmin";
+    private static final String LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE = "org.apache.tiles.CONTAINER.LightAdmin";
 
-	private static final Pattern BASE_URL_PATTERN = Pattern.compile( "(/)|(/[\\w-]+)+" );
+    private static final Pattern BASE_URL_PATTERN = Pattern.compile("(/)|(/[\\w-]+)+");
 
-	@Override
-	public void onStartup( final ServletContext servletContext ) throws ServletException {
-		if ( lightAdminConfigurationNotEnabled( servletContext ) ) {
-			servletContext.log( "LightAdmin Web Administration Module is disabled by default. Skipping." );
-			return;
-		}
+    @Override
+    public void onStartup(final ServletContext servletContext) throws ServletException {
+        if (lightAdminConfigurationNotEnabled(servletContext)) {
+            servletContext.log("LightAdmin Web Administration Module is disabled by default. Skipping.");
+            return;
+        }
 
-		if ( notValidBaseUrl( lightAdminBaseUrl( servletContext ) ) ) {
-			servletContext.log( "LightAdmin Web Administration Module's 'baseUrl' property must match " + BASE_URL_PATTERN.pattern() + " pattern. Skipping." );
-			return;
-		}
+        if (notValidBaseUrl(lightAdminBaseUrl(servletContext))) {
+            servletContext.log("LightAdmin Web Administration Module's 'baseUrl' property must match " + BASE_URL_PATTERN.pattern() + " pattern. Skipping.");
+            return;
+        }
 
-		registerLightAdminDispatcher( servletContext );
+        registerCusomResourceServlet(servletContext);
 
-		if ( notRootUrl( lightAdminBaseUrl( servletContext ) ) ) {
-			registerLightAdminDispatcherRedirector( servletContext );
-		}
+        registerLightAdminDispatcher(servletContext);
 
-		registerHiddenHttpMethodFilter( servletContext );
+        if (notRootUrl(lightAdminBaseUrl(servletContext))) {
+            registerLightAdminDispatcherRedirector(servletContext);
+        }
 
-		if ( lightAdminSecurityEnabled( servletContext ) ) {
-			registerSpringSecurityFilter( servletContext );
-		}
+        registerHiddenHttpMethodFilter(servletContext);
 
-		registerCharsetFilter( servletContext );
+        if (lightAdminSecurityEnabled(servletContext)) {
+            registerSpringSecurityFilter(servletContext);
+        }
 
-		registerTilesDecorationFilter( servletContext );
-	}
+        registerCharsetFilter(servletContext);
 
-	private void registerLightAdminDispatcher( final ServletContext servletContext ) {
-		final AnnotationConfigWebApplicationContext webApplicationContext = lightAdminApplicationContext( servletContext );
+        registerTilesDecorationFilter(servletContext);
+    }
 
-		final DispatcherServlet lightAdminDispatcher = new DispatcherServlet( webApplicationContext );
+    private void registerLightAdminDispatcher(final ServletContext servletContext) {
+        final AnnotationConfigWebApplicationContext webApplicationContext = lightAdminApplicationContext(servletContext);
 
-		ServletRegistration.Dynamic lightAdminDispatcherRegistration = servletContext.addServlet( LIGHT_ADMIN_DISPATCHER_NAME, lightAdminDispatcher );
-		lightAdminDispatcherRegistration.setLoadOnStartup( 2 );
-		lightAdminDispatcherRegistration.addMapping( dispatcherUrlMapping( lightAdminBaseUrl( servletContext ) ) );
-	}
+        final DispatcherServlet lightAdminDispatcher = new DispatcherServlet(webApplicationContext);
 
-	private void registerLightAdminDispatcherRedirector( final ServletContext servletContext ) {
-		final DispatcherRedirectorServlet handlerServlet = new DispatcherRedirectorServlet();
+        ServletRegistration.Dynamic lightAdminDispatcherRegistration = servletContext.addServlet(LIGHT_ADMIN_DISPATCHER_NAME, lightAdminDispatcher);
+        lightAdminDispatcherRegistration.setLoadOnStartup(3);
+        lightAdminDispatcherRegistration.addMapping(dispatcherUrlMapping(lightAdminBaseUrl(servletContext)));
+    }
 
-		ServletRegistration.Dynamic lightAdminDispatcherRedirectorRegistration = servletContext.addServlet( LIGHT_ADMIN_DISPATCHER_REDIRECTOR_NAME, handlerServlet );
-		lightAdminDispatcherRedirectorRegistration.setLoadOnStartup( 3 );
-		lightAdminDispatcherRedirectorRegistration.addMapping( lightAdminBaseUrl( servletContext ) );
-	}
+    private void registerLightAdminDispatcherRedirector(final ServletContext servletContext) {
+        final DispatcherRedirectorServlet handlerServlet = new DispatcherRedirectorServlet();
 
-	private void registerTilesDecorationFilter( final ServletContext servletContext ) {
-		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
+        ServletRegistration.Dynamic lightAdminDispatcherRedirectorRegistration = servletContext.addServlet(LIGHT_ADMIN_DISPATCHER_REDIRECTOR_NAME, handlerServlet);
+        lightAdminDispatcherRedirectorRegistration.setLoadOnStartup(4);
+        lightAdminDispatcherRedirectorRegistration.addMapping(lightAdminBaseUrl(servletContext));
+    }
 
-		servletContext.addFilter( "lightAdminTilesContainerEnrichmentFilter", TilesContainerEnrichmentFilter.class ).addMappingForUrlPatterns( null, false, urlMapping );
-	}
+    private void registerCusomResourceServlet(final ServletContext servletContext) {
+        final ResourceServlet resourceServlet = new ResourceServlet();
+        resourceServlet.setAllowedResources("/WEB-INF/admin/**/*.jsp");
+        resourceServlet.setApplyLastModified(true);
+        resourceServlet.setContentType("text/html");
+        ServletRegistration.Dynamic customResourceServletRegistration = servletContext.addServlet(LIGHT_ADMIN_CUSTOM_RESOURCE_SERVLET_NAME, resourceServlet);
+        customResourceServletRegistration.setLoadOnStartup(2);
+        customResourceServletRegistration.addMapping(customResourceServletMapping(servletContext));
+    }
 
-	private void registerHiddenHttpMethodFilter( final ServletContext servletContext ) {
-		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
+    private void registerTilesDecorationFilter(final ServletContext servletContext) {
+        final String urlMapping = urlMapping(lightAdminBaseUrl(servletContext));
 
-		servletContext.addFilter( "lightAdminHiddenHttpMethodFilter", HiddenHttpMethodFilter.class ).addMappingForUrlPatterns( null, false, urlMapping );
-	}
+        servletContext.addFilter("lightAdminTilesContainerEnrichmentFilter", TilesContainerEnrichmentFilter.class).addMappingForUrlPatterns(null, false, urlMapping);
+    }
 
-	private void registerSpringSecurityFilter( final ServletContext servletContext ) {
-		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
+    private void registerHiddenHttpMethodFilter(final ServletContext servletContext) {
+        final String urlMapping = urlMapping(lightAdminBaseUrl(servletContext));
 
-		servletContext.addFilter( "lightAdminSpringSecurityFilterChain", springSecurityFilterChain() ).addMappingForUrlPatterns( null, false, urlMapping );
-	}
+        servletContext.addFilter("lightAdminHiddenHttpMethodFilter", HiddenHttpMethodFilter.class).addMappingForUrlPatterns(null, false, urlMapping);
+    }
 
-	private void registerCharsetFilter( final ServletContext servletContext ) {
-		final String urlMapping = urlMapping( lightAdminBaseUrl( servletContext ) );
+    private void registerSpringSecurityFilter(final ServletContext servletContext) {
+        final String urlMapping = urlMapping(lightAdminBaseUrl(servletContext));
 
-		servletContext.addFilter( "lightAdminCharsetFilter", characterEncodingFilter() ).addMappingForServletNames( null, false, urlMapping );
-	}
+        servletContext.addFilter("lightAdminSpringSecurityFilterChain", springSecurityFilterChain()).addMappingForUrlPatterns(null, false, urlMapping);
+    }
 
-	private AnnotationConfigWebApplicationContext lightAdminApplicationContext( final ServletContext servletContext ) {
-		AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
+    private void registerCharsetFilter(final ServletContext servletContext) {
+        final String urlMapping = urlMapping(lightAdminBaseUrl(servletContext));
 
-		servletContext.setInitParameter( CONTAINER_KEY_INIT_PARAMETER, LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE );
+        servletContext.addFilter("lightAdminCharsetFilter", characterEncodingFilter()).addMappingForServletNames(null, false, urlMapping);
+    }
 
-		webApplicationContext.register( configurations( servletContext ) );
+    private AnnotationConfigWebApplicationContext lightAdminApplicationContext(final ServletContext servletContext) {
+        AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
 
-		webApplicationContext.setDisplayName( "LightAdmin WebApplicationContext" );
-		webApplicationContext.setNamespace( "lightadmin" );
-		return webApplicationContext;
-	}
+        servletContext.setInitParameter(CONTAINER_KEY_INIT_PARAMETER, LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE);
 
-	private Class[] configurations( final ServletContext servletContext ) {
-		if ( lightAdminSecurityEnabled( servletContext ) ) {
-			return new Class[] {LightAdminContextConfiguration.class, LightAdminSecurityConfiguration.class};
-		}
-		return new Class[] {LightAdminContextConfiguration.class};
-	}
+        webApplicationContext.register(configurations(servletContext));
 
-	private DelegatingFilterProxy springSecurityFilterChain() {
-		final DelegatingFilterProxy securityFilterChain = new DelegatingFilterProxy( "springSecurityFilterChain" );
-		securityFilterChain.setContextAttribute( servletContextAttributeName() );
-		return securityFilterChain;
-	}
+        webApplicationContext.setDisplayName("LightAdmin WebApplicationContext");
+        webApplicationContext.setNamespace("lightadmin");
+        return webApplicationContext;
+    }
 
-	private CharacterEncodingFilter characterEncodingFilter() {
-		final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-		characterEncodingFilter.setEncoding( "UTF-8" );
-		characterEncodingFilter.setForceEncoding( true );
-		return characterEncodingFilter;
-	}
+    private Class[] configurations(final ServletContext servletContext) {
+        if (lightAdminSecurityEnabled(servletContext)) {
+            return new Class[]{LightAdminContextConfiguration.class, LightAdminSecurityConfiguration.class};
+        }
+        return new Class[]{LightAdminContextConfiguration.class};
+    }
 
-	private boolean notValidBaseUrl( String url ) {
-		return !BASE_URL_PATTERN.matcher( url ).matches();
-	}
+    private DelegatingFilterProxy springSecurityFilterChain() {
+        final DelegatingFilterProxy securityFilterChain = new DelegatingFilterProxy("springSecurityFilterChain");
+        securityFilterChain.setContextAttribute(servletContextAttributeName());
+        return securityFilterChain;
+    }
 
-	private String urlMapping( String baseUrl ) {
-		if ( rootUrl( baseUrl ) ) {
-			return "/*";
-		}
-		return baseUrl + "/*";
-	}
+    private CharacterEncodingFilter characterEncodingFilter() {
+        final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
+        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setForceEncoding(true);
+        return characterEncodingFilter;
+    }
 
-	private String dispatcherUrlMapping( String url ) {
-		if ( rootUrl( url ) ) {
-			return "/";
-		}
-		return urlMapping( url );
-	}
+    private boolean notValidBaseUrl(String url) {
+        return !BASE_URL_PATTERN.matcher(url).matches();
+    }
 
-	private boolean rootUrl( final String url ) {
-		return "/".equals( url );
-	}
+    private String customResourceServletMapping(ServletContext servletContext) {
+        if (rootUrl(lightAdminBaseUrl(servletContext))) {
+            return "/custom";
+        }
 
-	private boolean notRootUrl( final String url ) {
-		return !rootUrl( url );
-	}
+        return lightAdminBaseUrl(servletContext) + "/custom";
+    }
 
-	private String configurationsBasePackage( final ServletContext servletContext ) {
-		return servletContext.getInitParameter( LIGHT_ADMINISTRATION_BASE_PACKAGE );
-	}
+    private String urlMapping(String baseUrl) {
+        if (rootUrl(baseUrl)) {
+            return "/*";
+        }
+        return baseUrl + "/*";
+    }
 
-	private String lightAdminBaseUrl( final ServletContext servletContext ) {
-		return servletContext.getInitParameter( LIGHT_ADMINISTRATION_BASE_URL );
-	}
+    private String dispatcherUrlMapping(String url) {
+        if (rootUrl(url)) {
+            return "/";
+        }
+        return urlMapping(url);
+    }
 
-	private boolean lightAdminSecurityEnabled( final ServletContext servletContext ) {
-		return toBoolean( servletContext.getInitParameter( LIGHT_ADMINISTRATION_SECURITY ) );
-	}
+    private boolean rootUrl(final String url) {
+        return "/".equals(url);
+    }
 
-	private boolean lightAdminConfigurationNotEnabled( final ServletContext servletContext ) {
-		return isBlank( lightAdminBaseUrl( servletContext ) ) || isBlank( configurationsBasePackage( servletContext ) );
-	}
+    private boolean notRootUrl(final String url) {
+        return !rootUrl(url);
+    }
+
+    private String configurationsBasePackage(final ServletContext servletContext) {
+        return servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_PACKAGE);
+    }
+
+    private String lightAdminBaseUrl(final ServletContext servletContext) {
+        return servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
+    }
+
+    private boolean lightAdminSecurityEnabled(final ServletContext servletContext) {
+        return toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
+    }
+
+    private boolean lightAdminConfigurationNotEnabled(final ServletContext servletContext) {
+        return isBlank(lightAdminBaseUrl(servletContext)) || isBlank(configurationsBasePackage(servletContext));
+    }
 }

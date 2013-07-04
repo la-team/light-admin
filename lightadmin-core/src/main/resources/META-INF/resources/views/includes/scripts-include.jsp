@@ -14,27 +14,33 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wysiwyg/wysiwyg.table.js"/>"></script>
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/flot/jquery.flot.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/flot/jquery.flot.orderBars.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/flot/jquery.flot.orderBars.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/flot/jquery.flot.pie.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/flot/excanvas.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/flot/jquery.flot.resize.js"/>"></script>
 
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/tables/jquery-dataTables.min.js"/>"></script>
 <script type="text/javascript"
-		src="<light:url value="/scripts/vendor/plugins/tables/jquery-dataTables-fnReloadAjax.js"/>"></script>
+        src="<light:url value="/scripts/vendor/plugins/tables/jquery-dataTables.min.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/tables/jquery-dataTables-fnReloadAjax.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/tables/colResizable.min.js"/>"></script>
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/forms.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/autogrowtextarea.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/autotab.js"/>"></script>
 <script type="text/javascript"
-		src="<light:url value="/scripts/vendor/plugins/forms/jquery.validationEngine-en.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/jquery.validationEngine.js"/>"></script>
+        src="<light:url value="/scripts/vendor/plugins/forms/jquery.validationEngine-en.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/forms/jquery.validationEngine.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/jquery.dualListBox.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/chosen.jquery.min.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/jquery.maskedinput.min.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/jquery.inputlimiter.min.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/forms/jquery.tagsinput.min.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/forms/jquery.maskedinput.min.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/forms/jquery.inputlimiter.min.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/forms/jquery.tagsinput.min.js"/>"></script>
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/other/calendar.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/other/elfinder.min.js"/>"></script>
@@ -42,7 +48,8 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/uploader/plupload.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/uploader/plupload.html5.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/uploader/plupload.html4.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/uploader/jquery.plupload.queue.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/uploader/jquery.plupload.queue.js"/>"></script>
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.progress.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.jgrowl.js"/>"></script>
@@ -50,7 +57,8 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.alerts.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.colorpicker.js"/>"></script>
 
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wizards/jquery.form.wizard.js"/>"></script>
+<script type="text/javascript"
+        src="<light:url value="/scripts/vendor/plugins/wizards/jquery.form.wizard.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wizards/jquery.validate.js"/>"></script>
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.core.min.js"/>"></script>
@@ -70,9 +78,22 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/charts/chart.js"/>"></script>
 
 <script type="text/javascript">
-	$( function () {
-		$( "a.not-implemented" ).click( function () {
-			jAlert( 'Sorry mate, but this feature is not yet implemented.', 'Coming soon...' );
-		} );
-	} );
+    $(function () {
+        $("a.not-implemented").click(function () {
+            jAlert('Sorry mate, but this feature is not yet implemented.', 'Coming soon...');
+        });
+
+        $("div.custom-resource").each(function () {
+            var customResourceContainer = $(this);
+            var customResourceServletUrl = "<light:url value='/custom'/>";
+            var customResourceUrl = $("div.body", customResourceContainer).attr('data-resource-url');
+            $.ajax({
+                type: 'GET',
+                url: customResourceServletUrl + "?resource=" + customResourceUrl,
+                success: function (data) {
+                    $("div.body", customResourceContainer).html($(data));
+                }
+            });
+        });
+    });
 </script>

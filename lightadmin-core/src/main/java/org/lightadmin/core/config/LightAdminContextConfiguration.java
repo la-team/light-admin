@@ -62,7 +62,7 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/styles/**").addResourceLocations("classpath:/META-INF/resources/styles/").setCachePeriod(31556926);
-        registry.addResourceHandler("/scripts/**").addResourceLocations("classpath:/META-INF/resources/scripts/");
+        registry.addResourceHandler("/scripts/**").addResourceLocations("classpath:/META-INF/resources/scripts/").setCachePeriod(31556926);
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/META-INF/resources/images/").setCachePeriod(31556926);
     }
 
