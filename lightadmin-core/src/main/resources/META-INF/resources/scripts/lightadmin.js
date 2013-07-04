@@ -295,25 +295,28 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
 
 function removeFileLink(editor, filePropertyUrl) {
     var fieldName = $(editor).attr('name');
+    var jLink = $("<a href='#" + fieldName + "'>[Remove File]</a>");
 
-    var link = "<a href='#" + fieldName + "'>[Remove File]</a>";
-    var jLink = $(link);
     jLink.click(function () {
-        $.ajax({
-            type: 'DELETE',
-            url: filePropertyUrl,
-            contentType: 'application/json',
-            dataType: 'json',
-            success: function () {
-                $(editor).val('');
-                $("img[name='" + fieldName + "']").remove();
-                jLink.remove();
-            },
-            statusCode: {
-                409: function (jqXHR, textStatus, errorThrown) {
-                    var errorMessage = $.parseJSON(jqXHR.responseText)['message'];
-                    jAlert(errorMessage, 'Remove operation failure');
-                }
+        jConfirm('Are you sure you want to remove this file from server? You wan\'t be able to recover!', 'Confirmation Dialog', function (r) {
+            if (r) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: filePropertyUrl,
+                    contentType: 'application/json',
+                    dataType: 'json',
+                    success: function () {
+                        $(editor).val('');
+                        $("img[name='" + fieldName + "']").remove();
+                        jLink.remove();
+                    },
+                    statusCode: {
+                        409: function (jqXHR, textStatus, errorThrown) {
+                            var errorMessage = $.parseJSON(jqXHR.responseText)['message'];
+                            jAlert(errorMessage, 'Remove operation failure');
+                        }
+                    }
+                });
             }
         });
     });
