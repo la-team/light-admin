@@ -20,128 +20,136 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import java.io.Serializable;
 
 @Controller
-@SuppressWarnings( {"unused", "unchecked"} )
+@SuppressWarnings({"unused", "unchecked"})
 public class ApplicationController {
 
-	private static final Logger LOG = LoggerFactory.getLogger( ApplicationController.class );
+    private static final Logger LOG = LoggerFactory.getLogger(ApplicationController.class);
 
-	public static final String BEAN_FACTORY_KEY = "beanFactory";
-	public static final String ADMINISTRATION_CONFIGURATION_KEY = "administrationConfiguration";
-	public static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = "domainTypeAdministrationConfiguration";
+    public static final String BEAN_FACTORY_KEY = "beanFactory";
+    public static final String ADMINISTRATION_CONFIGURATION_KEY = "administrationConfiguration";
+    public static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = "domainTypeAdministrationConfiguration";
 
-	@Autowired
-	private GlobalAdministrationConfiguration configuration;
+    @Autowired
+    private GlobalAdministrationConfiguration configuration;
 
-	@Autowired
-	private ConfigurableApplicationContext appContext;
+    @Autowired
+    private ConfigurableApplicationContext appContext;
 
-	@Autowired
-	private ConversionService conversionService;
+    @Autowired
+    private ConversionService conversionService;
 
-	@Autowired
-	private WebContext lightAdminContext;
+    @Autowired
+    private WebContext lightAdminContext;
 
-	@ResponseStatus( HttpStatus.BAD_REQUEST )
-	@ExceptionHandler( Exception.class )
-	public ModelAndView handleException( Exception ex ) {
-		return new ModelAndView( "error-page" ).addObject( "exception", ex );
-	}
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(Exception.class)
+    public ModelAndView handleException(Exception ex) {
+        return new ModelAndView("error-page").addObject("exception", ex);
+    }
 
-	@ExceptionHandler( NoSuchRequestHandlingMethodException.class )
-	@ResponseStatus( HttpStatus.NOT_FOUND )
-	@RequestMapping( value = "/page-not-found", method = RequestMethod.GET )
-	public String handlePageNotFound() {
-		return "page-not-found";
-	}
+    @ExceptionHandler(NoSuchRequestHandlingMethodException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @RequestMapping(value = "/page-not-found", method = RequestMethod.GET)
+    public String handlePageNotFound() {
+        return "page-not-found";
+    }
 
-	@ResponseStatus( HttpStatus.FORBIDDEN )
-	@RequestMapping( value = "/access-denied", method = RequestMethod.GET )
-	public String handleAccessDenied() {
-		return "access-denied";
-	}
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @RequestMapping(value = "/access-denied", method = RequestMethod.GET)
+    public String handleAccessDenied() {
+        return "access-denied";
+    }
 
-	@RequestMapping(value = "/login", method = RequestMethod.GET)
-	public String login() {
-		return "login";
-	}
+    @RequestMapping(value = "/login", method = RequestMethod.GET)
+    public String login() {
+        return "login";
+    }
 
-	@RequestMapping( value = "/", method = RequestMethod.GET )
-	public String root() {
-		return redirectTo( "/dashboard" );
-	}
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public String root() {
+        return redirectTo("/dashboard");
+    }
 
-	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public String dashboard() {
-		return "dashboard-view";
-	}
+    @RequestMapping(value = "/dashboard", method = RequestMethod.GET)
+    public String dashboard() {
+        return "dashboard-view";
+    }
 
-	@RequestMapping(value = "/domain/{domainType}", method = RequestMethod.GET)
-	public String list( @PathVariable String domainType, Model model ) {
-		addDomainTypeConfigurationToModel( domainType, model );
+    @RequestMapping(value = "/domain/{domainType}", method = RequestMethod.GET)
+    public String list(@PathVariable String domainType, Model model) {
+        addDomainTypeConfigurationToModel(domainType, model);
 
-		return "list-view";
-	}
+        return "list-view";
+    }
 
-	@RequestMapping(value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET)
-	public String show( @PathVariable String domainTypeName, @PathVariable String entityId, Model model ) {
-		addDomainTypeConfigurationToModel( domainTypeName, model );
+    @RequestMapping(value = "/domain/{domainTypeName}/{entityId}", method = RequestMethod.GET)
+    public String show(@PathVariable String domainTypeName, @PathVariable String entityId, Model model) {
+        addDomainTypeConfigurationToModel(domainTypeName, model);
 
-		final Serializable resolvedEntityId = resolveEntityId( entityId, configuration.forEntityName( domainTypeName ).getDomainTypeEntityMetadata() );
+        final Object entity = findEntityOfDomain(entityId, domainTypeName);
+        if (entity == null) {
+            return pageNotFound();
+        }
 
-		Object entity = repositoryForEntity( domainTypeName ).findOne( resolvedEntityId );
-		if ( entity == null ) {
-			return redirectTo( "/page-not-found" );
-		}
-		model.addAttribute( "entity", entity );
-		return "show-view";
-	}
+        model.addAttribute("entity", entity);
+        return "show-view";
+    }
 
-	@RequestMapping( value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET )
-	public String edit( @PathVariable String domainTypeName, @PathVariable String entityId, Model model ) {
-		addDomainTypeConfigurationToModel( domainTypeName, model );
+    @RequestMapping(value = "/domain/{domainTypeName}/{entityId}/edit", method = RequestMethod.GET)
+    public String edit(@PathVariable String domainTypeName, @PathVariable String entityId, Model model) {
+        addDomainTypeConfigurationToModel(domainTypeName, model);
 
-		final Serializable resolvedEntityId = resolveEntityId( entityId, configuration.forEntityName( domainTypeName ).getDomainTypeEntityMetadata() );
+        final Object entity = findEntityOfDomain(entityId, domainTypeName);
+        if (entity == null) {
+            return pageNotFound();
+        }
 
-		Object entity = repositoryForEntity( domainTypeName ).findOne( resolvedEntityId );
-		if ( entity == null ) {
-			return redirectTo( "/page-not-found" );
-		}
-		model.addAttribute( "entity", entity );
-		return "edit-view";
-	}
+        model.addAttribute("entity", entity);
+        return "edit-view";
+    }
 
-	@RequestMapping(value = "/domain/{domainTypeName}/create", method = RequestMethod.GET)
-	public String create( @PathVariable String domainTypeName, Model model ) {
-		addDomainTypeConfigurationToModel( domainTypeName, model );
+    @RequestMapping(value = "/domain/{domainTypeName}/create", method = RequestMethod.GET)
+    public String create(@PathVariable String domainTypeName, Model model) {
+        addDomainTypeConfigurationToModel(domainTypeName, model);
 
-		return "create-view";
-	}
+        return "create-view";
+    }
 
-	private void addDomainTypeConfigurationToModel( String domainTypeName, Model model ) {
-		model.addAttribute( DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration.forEntityName( domainTypeName ) );
-		model.addAttribute( BEAN_FACTORY_KEY, appContext.getAutowireCapableBeanFactory() );
-	}
+    private String pageNotFound() {
+        return redirectTo("/page-not-found");
+    }
 
-	private DynamicJpaRepository repositoryForEntity( final String domainType ) {
-		return configuration.forEntityName( domainType ).getRepository();
-	}
+    private Object findEntityOfDomain(String entityId, String domainTypeName) {
+        final Serializable resolvedEntityId = resolveEntityId(entityId, configuration.forEntityName(domainTypeName).getDomainTypeEntityMetadata());
 
-	private String redirectTo( final String url ) {
-		if ( "/".equals( lightAdminContext.getApplicationBaseUrl() ) ) {
-			return "redirect:" + url;
-		}
+        return repositoryForEntity(domainTypeName).findOne(resolvedEntityId);
+    }
 
-		return String.format( "redirect:%s%s", lightAdminContext.getApplicationBaseUrl(), url );
-	}
+    private void addDomainTypeConfigurationToModel(String domainTypeName, Model model) {
+        model.addAttribute(DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration.forEntityName(domainTypeName));
+        model.addAttribute(BEAN_FACTORY_KEY, appContext.getAutowireCapableBeanFactory());
+    }
 
-	private Serializable resolveEntityId( String entityId, DomainTypeEntityMetadata domainTypeEntityMetadata ) {
-		return stringToSerializable( entityId, ( Class<? extends Serializable> ) domainTypeEntityMetadata.getIdAttribute().getType() );
-	}
+    private DynamicJpaRepository repositoryForEntity(final String domainType) {
+        return configuration.forEntityName(domainType).getRepository();
+    }
 
-	private <V extends Serializable> V stringToSerializable( String s, Class<V> targetType ) {
-		if ( ClassUtils.isAssignable( targetType, String.class ) ) {
-			return ( V ) s;
-		}
-		return conversionService.convert( s, targetType );
-	}
+    private String redirectTo(final String url) {
+        if ("/".equals(lightAdminContext.getApplicationBaseUrl())) {
+            return "redirect:" + url;
+        }
+
+        return String.format("redirect:%s%s", lightAdminContext.getApplicationBaseUrl(), url);
+    }
+
+    private Serializable resolveEntityId(String entityId, DomainTypeEntityMetadata domainTypeEntityMetadata) {
+        return stringToSerializable(entityId, (Class<? extends Serializable>) domainTypeEntityMetadata.getIdAttribute().getType());
+    }
+
+    private <V extends Serializable> V stringToSerializable(String s, Class<V> targetType) {
+        if (ClassUtils.isAssignable(targetType, String.class)) {
+            return (V) s;
+        }
+        return conversionService.convert(s, targetType);
+    }
 }
