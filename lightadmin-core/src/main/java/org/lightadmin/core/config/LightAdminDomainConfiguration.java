@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
+import org.springframework.web.context.support.ServletContextResourceLoader;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,58 +25,61 @@ import javax.persistence.PersistenceContext;
 @Configuration
 public class LightAdminDomainConfiguration {
 
-	@Autowired
-	private Environment environment;
+    @Autowired
+    private Environment environment;
 
-	@PersistenceContext
-	private EntityManager entityManager;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-	@Bean
-	public DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver() {
-		return new JpaDomainTypeEntityMetadataResolver( entityManager );
-	}
+    @Autowired
+    private ServletContextResourceLoader servletContextResourceLoader;
 
-	@Bean
-	@Autowired
-	public DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory( TransactionInterceptor transactionInterceptor ) {
-		return new DynamicJpaRepositoryFactory( entityManager, transactionInterceptor );
-	}
+    @Bean
+    public DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver() {
+        return new JpaDomainTypeEntityMetadataResolver(entityManager);
+    }
 
-	@Bean
-	public DomainConfigurationSourceFactory domainConfigurationSourceFactory() {
-		return new DomainConfigurationSourceFactory( domainTypeEntityMetadataResolver() );
-	}
+    @Bean
+    @Autowired
+    public DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory(TransactionInterceptor transactionInterceptor) {
+        return new DynamicJpaRepositoryFactory(entityManager, transactionInterceptor);
+    }
 
-	@Bean
-	public DomainConfigurationSourceValidatorFactory domainConfigurationSourceValidatorFactory() {
-		return new DomainConfigurationSourceValidatorFactory( domainTypeEntityMetadataResolver() );
-	}
+    @Bean
+    public DomainConfigurationSourceFactory domainConfigurationSourceFactory() {
+        return new DomainConfigurationSourceFactory(domainTypeEntityMetadataResolver());
+    }
 
-	@Bean
-	@Autowired
-	public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory, DomainTypeEntityMetadataResolver entityMetadataResolver) {
-		return new DomainTypeAdministrationConfigurationFactory( dynamicJpaRepositoryFactory, entityMetadataResolver);
-	}
+    @Bean
+    public DomainConfigurationSourceValidatorFactory domainConfigurationSourceValidatorFactory() {
+        return new DomainConfigurationSourceValidatorFactory(domainTypeEntityMetadataResolver(), servletContextResourceLoader);
+    }
 
-	@Bean
-	@Autowired
-	public GlobalAdministrationConfiguration globalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
-		return new GlobalAdministrationConfiguration(domainTypeConfigurationFactory);
-	}
+    @Bean
+    @Autowired
+    public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory(DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory, DomainTypeEntityMetadataResolver entityMetadataResolver) {
+        return new DomainTypeAdministrationConfigurationFactory(dynamicJpaRepositoryFactory, entityMetadataResolver);
+    }
 
-	@Bean
-	public GlobalConfigurationManagementService globalConfigurationManagementService() {
-		return new GlobalConfigurationManagementServiceImpl();
-	}
+    @Bean
+    @Autowired
+    public GlobalAdministrationConfiguration globalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
+        return new GlobalAdministrationConfiguration(domainTypeConfigurationFactory);
+    }
 
-	@Bean
-	public DataManipulationService dataManipulationService() {
-		return new DataManipulationServiceImpl();
-	}
+    @Bean
+    public GlobalConfigurationManagementService globalConfigurationManagementService() {
+        return new GlobalConfigurationManagementServiceImpl();
+    }
 
-	@Bean
-	@Autowired
-	public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor( DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory ) {
-		return new GlobalAdministrationConfigurationProcessor( domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory(), domainConfigurationSourceValidatorFactory(), environment );
-	}
+    @Bean
+    public DataManipulationService dataManipulationService() {
+        return new DataManipulationServiceImpl();
+    }
+
+    @Bean
+    @Autowired
+    public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor(DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory) {
+        return new GlobalAdministrationConfigurationProcessor(domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory(), domainConfigurationSourceValidatorFactory(), environment);
+    }
 }

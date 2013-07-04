@@ -27,7 +27,9 @@
     <c:if test="${not empty sidebars}">
         <c:forEach var="sidebar" items="${sidebars}">
             <div class="widget">
-                <div class="head"><h5 class="iInfo">${sidebar.name}</h5></div>
+                <c:if test="${not empty sidebar.name}">
+                    <div class="head"><h5 class="iInfo">${sidebar.name}</h5></div>
+                </c:if>
                 <div class="body">
                     <jsp:include page="${sidebar.jspFilePath}" flush="true"/>
                 </div>

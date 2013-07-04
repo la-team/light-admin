@@ -11,110 +11,112 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.reporting.ProblemReporter;
+import org.springframework.core.io.ResourceLoader;
 
 import java.util.Iterator;
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.easymock.EasyMock.createNiceMock;
 import static org.junit.Assert.fail;
 
 @SuppressWarnings("unchecked")
 public class DomainConfigurationUnitsSourceValidatorTest {
 
-	private DomainConfigurationUnitsSourceValidator testee;
+    private DomainConfigurationUnitsSourceValidator testee;
 
-	@Test
-	public void domainTypeWithoutConstructorFailure() {
-		testee = new DomainConfigurationUnitsSourceValidator( alwaysValidFieldMetadataValidatorMock() );
+    @Test
+    public void domainTypeWithoutConstructorFailure() {
+        testee = new DomainConfigurationUnitsSourceValidator(alwaysValidFieldMetadataValidatorMock(), createNiceMock(ResourceLoader.class));
 
-		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
+        final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 
-		testee.validateDomainType( domainConfigurationSourceMock( DomainType.class ), problemReporter( problemCapture ) );
+        testee.validateDomainType(domainConfigurationSourceMock(DomainType.class), problemReporter(problemCapture));
 
-		final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
+        final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
 
-		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Type DomainType must have default constructor.", domainConfigurationProblems );
-	}
+        assertValidationMessagePresent("Domain Configuration \"DomainTypeConfiguraiton\": Type DomainType must have default constructor.", domainConfigurationProblems);
+    }
 
-	@Test
-	public void invalidFieldDefinedForFiltersProblemReported() throws Exception {
-		testee = new DomainConfigurationUnitsSourceValidator( alwaysInvalidFieldMetadataValidator() );
+    @Test
+    public void invalidFieldDefinedForFiltersProblemReported() throws Exception {
+        testee = new DomainConfigurationUnitsSourceValidator(alwaysInvalidFieldMetadataValidator(), createNiceMock(ResourceLoader.class));
 
-		final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
+        final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 
-		testee.validateFilters( domainConfigurationSourceMock( DomainType.class ), problemReporter( problemCapture ) );
+        testee.validateFilters(domainConfigurationSourceMock(DomainType.class), problemReporter(problemCapture));
 
-		final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
+        final List<DomainConfigurationProblem> domainConfigurationProblems = problemCapture.getValues();
 
-		assertValidationMessagePresent( "Domain Configuration \"DomainTypeConfiguraiton\": Unit \"filters\": Invalid property/path 'Field' defined!", domainConfigurationProblems );
-	}
+        assertValidationMessagePresent("Domain Configuration \"DomainTypeConfiguraiton\": Unit \"filters\": Invalid property/path 'Field' defined!", domainConfigurationProblems);
+    }
 
-	private FieldMetadataValidator<FieldMetadata> alwaysInvalidFieldMetadataValidator() {
-		final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator = EasyMock.createMock( FieldMetadataValidator.class );
-		EasyMock.expect( fieldMetadataValidator.isValidFieldMetadata( EasyMock.<FieldMetadata>anyObject(), EasyMock.<Class>anyObject() ) ).andReturn( false ).anyTimes();
-		EasyMock.replay( fieldMetadataValidator );
-		return fieldMetadataValidator;
-	}
+    private FieldMetadataValidator<FieldMetadata> alwaysInvalidFieldMetadataValidator() {
+        final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator = EasyMock.createMock(FieldMetadataValidator.class);
+        EasyMock.expect(fieldMetadataValidator.isValidFieldMetadata(EasyMock.<FieldMetadata>anyObject(), EasyMock.<Class>anyObject())).andReturn(false).anyTimes();
+        EasyMock.replay(fieldMetadataValidator);
+        return fieldMetadataValidator;
+    }
 
-	private Capture<DomainConfigurationProblem> configurationProblemCapture() {
-		return new Capture<DomainConfigurationProblem>( CaptureType.ALL );
-	}
+    private Capture<DomainConfigurationProblem> configurationProblemCapture() {
+        return new Capture<DomainConfigurationProblem>(CaptureType.ALL);
+    }
 
-	private void assertValidationMessagePresent( final String validationMessage, final List<DomainConfigurationProblem> configurationProblems ) {
-		for ( DomainConfigurationProblem configurationProblem : configurationProblems ) {
-			if ( StringUtils.equals( validationMessage, configurationProblem.getMessage() ) ) {
-				return;
-			}
-		}
-		fail();
-	}
+    private void assertValidationMessagePresent(final String validationMessage, final List<DomainConfigurationProblem> configurationProblems) {
+        for (DomainConfigurationProblem configurationProblem : configurationProblems) {
+            if (StringUtils.equals(validationMessage, configurationProblem.getMessage())) {
+                return;
+            }
+        }
+        fail();
+    }
 
-	private ProblemReporter problemReporter( Capture<DomainConfigurationProblem> problemCapture ) {
-		ProblemReporter problemReporter = EasyMock.createStrictMock( ProblemReporter.class );
-		problemReporter.error( EasyMock.<DomainConfigurationProblem>capture( problemCapture ) );
-		EasyMock.expectLastCall().anyTimes();
+    private ProblemReporter problemReporter(Capture<DomainConfigurationProblem> problemCapture) {
+        ProblemReporter problemReporter = EasyMock.createStrictMock(ProblemReporter.class);
+        problemReporter.error(EasyMock.<DomainConfigurationProblem>capture(problemCapture));
+        EasyMock.expectLastCall().anyTimes();
 
-		EasyMock.replay( problemReporter );
+        EasyMock.replay(problemReporter);
 
-		return problemReporter;
-	}
+        return problemReporter;
+    }
 
-	@SuppressWarnings("unchecked")
-	private FieldMetadataValidator<FieldMetadata> alwaysValidFieldMetadataValidatorMock() {
-		final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator = EasyMock.createMock( FieldMetadataValidator.class );
-		EasyMock.expect( fieldMetadataValidator.isValidFieldMetadata( EasyMock.<FieldMetadata>anyObject(), EasyMock.<Class>anyObject() ) ).andReturn( true ).anyTimes();
-		EasyMock.replay( fieldMetadataValidator );
-		return fieldMetadataValidator;
-	}
+    @SuppressWarnings("unchecked")
+    private FieldMetadataValidator<FieldMetadata> alwaysValidFieldMetadataValidatorMock() {
+        final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator = EasyMock.createMock(FieldMetadataValidator.class);
+        EasyMock.expect(fieldMetadataValidator.isValidFieldMetadata(EasyMock.<FieldMetadata>anyObject(), EasyMock.<Class>anyObject())).andReturn(true).anyTimes();
+        EasyMock.replay(fieldMetadataValidator);
+        return fieldMetadataValidator;
+    }
 
-	@SuppressWarnings("unchecked")
-	private DomainConfigurationSource domainConfigurationSourceMock( Class domainType ) {
-		DomainConfigurationSource domainConfigurationSource = EasyMock.createMock( DomainConfigurationSource.class );
-		EasyMock.expect( domainConfigurationSource.getDomainType() ).andReturn( domainType ).anyTimes();
-		EasyMock.expect( domainConfigurationSource.getConfigurationName() ).andReturn( "DomainTypeConfiguraiton" ).anyTimes();
+    @SuppressWarnings("unchecked")
+    private DomainConfigurationSource domainConfigurationSourceMock(Class domainType) {
+        DomainConfigurationSource domainConfigurationSource = EasyMock.createMock(DomainConfigurationSource.class);
+        EasyMock.expect(domainConfigurationSource.getDomainType()).andReturn(domainType).anyTimes();
+        EasyMock.expect(domainConfigurationSource.getConfigurationName()).andReturn("DomainTypeConfiguraiton").anyTimes();
 
-		EasyMock.expect( domainConfigurationSource.getFilters() ).andReturn( filterConfigurationUnitMock() ).anyTimes();
-		EasyMock.replay( domainConfigurationSource );
-		return domainConfigurationSource;
-	}
+        EasyMock.expect(domainConfigurationSource.getFilters()).andReturn(filterConfigurationUnitMock()).anyTimes();
+        EasyMock.replay(domainConfigurationSource);
+        return domainConfigurationSource;
+    }
 
-	private FiltersConfigurationUnit filterConfigurationUnitMock() {
-		final FieldMetadata fieldMetadata = EasyMock.createMock( FieldMetadata.class );
-		EasyMock.expect( fieldMetadata.getName() ).andReturn( "Field" ).anyTimes();
-		EasyMock.replay( fieldMetadata );
+    private FiltersConfigurationUnit filterConfigurationUnitMock() {
+        final FieldMetadata fieldMetadata = EasyMock.createMock(FieldMetadata.class);
+        EasyMock.expect(fieldMetadata.getName()).andReturn("Field").anyTimes();
+        EasyMock.replay(fieldMetadata);
 
-		FilterMetadata filterMetadata = EasyMock.createMock( FilterMetadata.class );
-		EasyMock.expect( filterMetadata.getFieldMetadata() ).andReturn( fieldMetadata ).anyTimes();
-		EasyMock.replay( filterMetadata );
+        FilterMetadata filterMetadata = EasyMock.createMock(FilterMetadata.class);
+        EasyMock.expect(filterMetadata.getFieldMetadata()).andReturn(fieldMetadata).anyTimes();
+        EasyMock.replay(filterMetadata);
 
-		final Iterator<FilterMetadata> iterator = newArrayList( filterMetadata ).iterator();
-		final FiltersConfigurationUnit filtersConfigurationUnit = EasyMock.createMock( FiltersConfigurationUnit.class );
-		EasyMock.expect( filtersConfigurationUnit.iterator() ).andReturn( iterator ).anyTimes();
-		EasyMock.replay( filtersConfigurationUnit );
-		return filtersConfigurationUnit;
-	}
+        final Iterator<FilterMetadata> iterator = newArrayList(filterMetadata).iterator();
+        final FiltersConfigurationUnit filtersConfigurationUnit = EasyMock.createMock(FiltersConfigurationUnit.class);
+        EasyMock.expect(filtersConfigurationUnit.iterator()).andReturn(iterator).anyTimes();
+        EasyMock.replay(filtersConfigurationUnit);
+        return filtersConfigurationUnit;
+    }
 
-	private static class DomainType {
+    private static class DomainType {
 
-	}
+    }
 }
