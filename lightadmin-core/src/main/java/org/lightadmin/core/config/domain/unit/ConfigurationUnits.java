@@ -6,6 +6,7 @@ import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurati
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
+import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -18,81 +19,85 @@ import static org.lightadmin.core.util.DomainConfigurationUtils.configurationDom
 
 public class ConfigurationUnits implements Iterable<ConfigurationUnit>, Serializable {
 
-	private final String configurationClassName;
-	private final Class<?> domainType;
+    private final String configurationClassName;
+    private final Class<?> domainType;
 
-	private final Set<ConfigurationUnit> configurationUnits;
+    private final Set<ConfigurationUnit> configurationUnits;
 
-	public ConfigurationUnits( final Class configurationClass, ConfigurationUnit... configurationUnits ) {
-		this( configurationClass, Sets.<ConfigurationUnit>newLinkedHashSet( Arrays.asList( configurationUnits ) ) );
-	}
+    public ConfigurationUnits(final Class configurationClass, ConfigurationUnit... configurationUnits) {
+        this(configurationClass, Sets.<ConfigurationUnit>newLinkedHashSet(Arrays.asList(configurationUnits)));
+    }
 
-	public ConfigurationUnits( final Class configurationClass, final Set<ConfigurationUnit> configurationUnits ) {
-		Assert.notNull( configurationClass );
-		this.domainType = configurationDomainType( configurationClass );
-		Assert.notNull( this.domainType );
-		this.configurationClassName = configurationClass.getSimpleName();
-		this.configurationUnits = newLinkedHashSet( configurationUnits );
-	}
+    public ConfigurationUnits(final Class configurationClass, final Set<ConfigurationUnit> configurationUnits) {
+        Assert.notNull(configurationClass);
+        this.domainType = configurationDomainType(configurationClass);
+        Assert.notNull(this.domainType);
+        this.configurationClassName = configurationClass.getSimpleName();
+        this.configurationUnits = newLinkedHashSet(configurationUnits);
+    }
 
-	public ConfigurationUnits( final String configurationClassName, final Class domainType, final Set<ConfigurationUnit> configurationUnits ) {
-		Assert.notNull( domainType );
-		this.domainType = domainType;
-		this.configurationClassName = configurationClassName;
-		this.configurationUnits = newLinkedHashSet( configurationUnits );
-	}
+    public ConfigurationUnits(final String configurationClassName, final Class domainType, final Set<ConfigurationUnit> configurationUnits) {
+        Assert.notNull(domainType);
+        this.domainType = domainType;
+        this.configurationClassName = configurationClassName;
+        this.configurationUnits = newLinkedHashSet(configurationUnits);
+    }
 
-	@Override
-	public Iterator<ConfigurationUnit> iterator() {
-		return configurationUnits.iterator();
-	}
+    @Override
+    public Iterator<ConfigurationUnit> iterator() {
+        return configurationUnits.iterator();
+    }
 
-	public String getConfigurationClassName() {
-		return configurationClassName;
-	}
+    public String getConfigurationClassName() {
+        return configurationClassName;
+    }
 
-	public Class<?> getDomainType() {
-		return domainType;
-	}
+    public Class<?> getDomainType() {
+        return domainType;
+    }
 
-	public ConfigurationUnit forDomainUnitType( DomainConfigurationUnitType domainConfigurationUnitType ) {
-		for ( ConfigurationUnit configurationUnit : configurationUnits ) {
-			if ( configurationUnit.getDomainConfigurationUnitType().equals( domainConfigurationUnitType ) ) {
-				return configurationUnit;
-			}
-		}
-		return null;
-	}
+    public ConfigurationUnit forDomainUnitType(DomainConfigurationUnitType domainConfigurationUnitType) {
+        for (ConfigurationUnit configurationUnit : configurationUnits) {
+            if (configurationUnit.getDomainConfigurationUnitType().equals(domainConfigurationUnitType)) {
+                return configurationUnit;
+            }
+        }
+        return null;
+    }
 
-	public FiltersConfigurationUnit getFilters() {
-		return ( FiltersConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.FILTERS );
-	}
+    public FiltersConfigurationUnit getFilters() {
+        return (FiltersConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.FILTERS);
+    }
 
-	public ScopesConfigurationUnit getScopes() {
-		return ( ScopesConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.SCOPES );
-	}
+    public ScopesConfigurationUnit getScopes() {
+        return (ScopesConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.SCOPES);
+    }
 
-	public FieldSetConfigurationUnit getListViewConfigurationUnit() {
-		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.LIST_VIEW );
-	}
+    public SidebarsConfigurationUnit getSidebars() {
+        return (SidebarsConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.SIDEBARS);
+    }
 
-	public ScreenContextConfigurationUnit getScreenContext() {
-		return ( ScreenContextConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.SCREEN_CONTEXT );
-	}
+    public FieldSetConfigurationUnit getListViewConfigurationUnit() {
+        return (FieldSetConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.LIST_VIEW);
+    }
 
-	public EntityMetadataConfigurationUnit getEntityConfiguration() {
-		return ( EntityMetadataConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.CONFIGURATION );
-	}
+    public ScreenContextConfigurationUnit getScreenContext() {
+        return (ScreenContextConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.SCREEN_CONTEXT);
+    }
 
-	public FieldSetConfigurationUnit getShowViewConfigurationUnit() {
-		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.SHOW_VIEW );
-	}
+    public EntityMetadataConfigurationUnit getEntityConfiguration() {
+        return (EntityMetadataConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.CONFIGURATION);
+    }
 
-	public FieldSetConfigurationUnit getFormViewConfigurationUnit() {
-		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.FORM_VIEW );
-	}
+    public FieldSetConfigurationUnit getShowViewConfigurationUnit() {
+        return (FieldSetConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.SHOW_VIEW);
+    }
 
-	public FieldSetConfigurationUnit getQuickViewConfigurationUnit() {
-		return ( FieldSetConfigurationUnit ) forDomainUnitType( DomainConfigurationUnitType.QUICK_VIEW );
-	}
+    public FieldSetConfigurationUnit getFormViewConfigurationUnit() {
+        return (FieldSetConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.FORM_VIEW);
+    }
+
+    public FieldSetConfigurationUnit getQuickViewConfigurationUnit() {
+        return (FieldSetConfigurationUnit) forDomainUnitType(DomainConfigurationUnitType.QUICK_VIEW);
+    }
 }

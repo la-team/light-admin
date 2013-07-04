@@ -4,30 +4,33 @@ import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurati
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
+import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
 public interface DomainConfigurationSource {
 
-	Class<?> getDomainType();
+    Class<?> getDomainType();
 
-	String getConfigurationName();
+    String getConfigurationName();
 
-	DomainTypeEntityMetadata getDomainTypeEntityMetadata();
+    DomainTypeEntityMetadata getDomainTypeEntityMetadata();
 
-	FiltersConfigurationUnit getFilters();
+    FiltersConfigurationUnit getFilters();
 
-	ScopesConfigurationUnit getScopes();
+    ScopesConfigurationUnit getScopes();
 
-	FieldSetConfigurationUnit getQuickViewFragment();
+    FieldSetConfigurationUnit getQuickViewFragment();
 
-	FieldSetConfigurationUnit getListViewFragment();
+    FieldSetConfigurationUnit getListViewFragment();
 
-	FieldSetConfigurationUnit getShowViewFragment();
+    FieldSetConfigurationUnit getShowViewFragment();
 
-	FieldSetConfigurationUnit getFormViewFragment();
+    FieldSetConfigurationUnit getFormViewFragment();
 
-	ScreenContextConfigurationUnit getScreenContext();
+    ScreenContextConfigurationUnit getScreenContext();
 
-	EntityMetadataConfigurationUnit getEntityConfiguration();
+    EntityMetadataConfigurationUnit getEntityConfiguration();
+
+    SidebarsConfigurationUnit getSidebars();
 }

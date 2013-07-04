@@ -9,6 +9,8 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
+import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.Product;
 
@@ -79,5 +81,11 @@ public class ProductAdministration {
                 .filter("Price", "price")
                 .filter("Released on", "releaseDate")
                 .filter("Retired", "retired").build();
+    }
+
+    public static SidebarsConfigurationUnit sidebars(final SidebarsConfigurationUnitBuilder sidebarsBuilder) {
+        return sidebarsBuilder
+                .sidebar("Custom Sidebar", "/WEB-INF/admin/sidebars/sidebar.jsp")
+                .build();
     }
 }

@@ -5,6 +5,7 @@ import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.context.TilesRequestContext;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
 import org.lightadmin.core.view.preparer.support.DomainConfigToMenuItemTransformer;
 import org.lightadmin.core.view.preparer.support.MenuItemComparator;
 
@@ -17,23 +18,26 @@ import static java.util.Collections.sort;
 
 public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
 
-	@Override
-	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration ) {
-		addAttribute( attributeContext, "menuItems", menuItems( configuration.getManagedDomainTypeConfigurations().values() ) );
-	}
+    @Override
+    protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration) {
+        addAttribute(attributeContext, "menuItems", menuItems(configuration.getManagedDomainTypeConfigurations().values()));
+    }
 
-	@Override
-	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration ) {
-		final String selectedMenuItemName = configuration.getEntityConfiguration().getPluralName();
+    @Override
+    protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration) {
+        final SidebarsConfigurationUnit sidebarsConfigurationUnit = configuration.getSidebars();
+        final String selectedMenuItemName = configuration.getEntityConfiguration().getPluralName();
 
-		addAttribute( attributeContext, "selectedMenuItemName", selectedMenuItemName );
-	}
+        addAttribute(attributeContext, "selectedMenuItemName", selectedMenuItemName);
 
-	private Collection<MenuItem> menuItems( Collection<DomainTypeAdministrationConfiguration> configurations ) {
-		final List<MenuItem> menuItems = newArrayList( transform( configurations, DomainConfigToMenuItemTransformer.INSTANCE ) );
+        addAttribute(attributeContext, "sidebars", sidebarsConfigurationUnit.getSidebars());
+    }
 
-		sort( menuItems, MenuItemComparator.INSTANCE );
+    private Collection<MenuItem> menuItems(Collection<DomainTypeAdministrationConfiguration> configurations) {
+        final List<MenuItem> menuItems = newArrayList(transform(configurations, DomainConfigToMenuItemTransformer.INSTANCE));
 
-		return menuItems;
-	}
+        sort(menuItems, MenuItemComparator.INSTANCE);
+
+        return menuItems;
+    }
 }

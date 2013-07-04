@@ -9,16 +9,29 @@
 <tiles:useAttribute name="menuItems"/>
 <tiles:useAttribute name="selectedMenuItemName" ignore="true"/>
 
+<tiles:useAttribute name="sidebars" ignore="true"/>
+
 <!-- Left navigation -->
 <div class="leftNav">
-	<ul id="menu">
-		<li class="dash"><a href="<light:url value='/dashboard'/>" title=""
-							class="${empty selectedMenuItemName ? 'active' : ''}"><span><spring:message
-				code="application.menu.dashboard"/></span></a></li>
-		<c:forEach var="menuItem" items="${menuItems}" varStatus="status">
-			<li class="typo"><a href="<light:url value='${menuItem.link}'/>" title=""
-								class="${(not empty(selectedMenuItemName)) and (menuItem.value eq selectedMenuItemName) ? 'active' : ''}"><span><c:out
-					value="${menuItem.value}"/></span></a></li>
-		</c:forEach>
-	</ul>
+    <ul id="menu">
+        <li class="dash"><a href="<light:url value='/dashboard'/>"
+                            class="${empty selectedMenuItemName ? 'active' : ''}"><span><spring:message
+                code="application.menu.dashboard"/></span></a></li>
+        <c:forEach var="menuItem" items="${menuItems}" varStatus="status">
+            <li class="typo"><a href="<light:url value='${menuItem.link}'/>" title=""
+                                class="${(not empty(selectedMenuItemName)) and (menuItem.value eq selectedMenuItemName) ? 'active' : ''}"><span><c:out
+                    value="${menuItem.value}"/></span></a></li>
+        </c:forEach>
+    </ul>
+
+    <c:if test="${not empty sidebars}">
+        <c:forEach var="sidebar" items="${sidebars}">
+            <div class="widget">
+                <div class="head"><h5 class="iInfo">${sidebar.name}</h5></div>
+                <div class="body">
+                    <jsp:include page="${sidebar.jspFilePath}" flush="true"/>
+                </div>
+            </div>
+        </c:forEach>
+    </c:if>
 </div>
