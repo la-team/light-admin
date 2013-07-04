@@ -1,6 +1,8 @@
 package org.lightadmin.core.config.domain.sidebar;
 
-public class SidebarMetadata {
+import java.io.Serializable;
+
+public class SidebarMetadata implements Serializable {
 
     private final String name;
     private final String jspFilePath;
