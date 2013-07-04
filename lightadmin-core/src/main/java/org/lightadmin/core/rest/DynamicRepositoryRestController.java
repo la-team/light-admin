@@ -186,7 +186,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         response.flushBuffer();
     }
 
-    private MediaType getMediaType(final byte[] bytes) throws IOException {
+    private MediaType getMediaType(final byte[] bytes) {
         ContentHandlerDecorator contenthandler = new BodyContentHandler();
         Metadata metadata = new Metadata();
         Parser parser = new AutoDetectParser();
@@ -203,7 +203,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         return width > 0 || height > 0;
     }
 
-    private BufferedImage resizeImage(BufferedImage sourceImage, int width, int height) throws IOException {
+    private BufferedImage resizeImage(BufferedImage sourceImage, int width, int height) {
         final int currentWidth = sourceImage.getWidth();
         final int currentHeight = sourceImage.getHeight();
 

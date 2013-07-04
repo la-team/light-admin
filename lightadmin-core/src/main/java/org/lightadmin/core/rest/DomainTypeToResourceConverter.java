@@ -36,153 +36,153 @@ import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrim
 @SuppressWarnings("unchecked")
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
 
-	private final FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
+    private final FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
 
-	private GlobalAdministrationConfiguration configuration;
+    private final GlobalAdministrationConfiguration configuration;
 
-	public DomainTypeToResourceConverter( GlobalAdministrationConfiguration configuration, RepositoryRestConfiguration restConfiguration ) {
-		super( restConfiguration );
-		this.configuration = configuration;
-	}
+    public DomainTypeToResourceConverter(GlobalAdministrationConfiguration configuration, RepositoryRestConfiguration restConfiguration) {
+        super(restConfiguration);
+        this.configuration = configuration;
+    }
 
-	public Resource convert( final Object source, DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas ) {
-		if ( source == null ) {
-			return null;
-		}
+    public Resource convert(final Object source, DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) {
+        if (source == null) {
+            return null;
+        }
 
-		final DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forDomainType( source.getClass() );
-		if ( domainTypeConfiguration == null ) {
-			return new Resource<Object>( source );
-		}
+        final DomainTypeBasicConfiguration domainTypeConfiguration = configuration.forDomainType(source.getClass());
+        if (domainTypeConfiguration == null) {
+            return new Resource<Object>(source);
+        }
 
-		final DomainTypeEntityMetadata entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
+        final DomainTypeEntityMetadata entityMetadata = domainTypeConfiguration.getDomainTypeEntityMetadata();
 
-		Serializable id = ( Serializable ) entityMetadata.getIdAttribute().getValue( source );
+        Serializable id = (Serializable) entityMetadata.getIdAttribute().getValue(source);
 
-		final EntityResource entityResource = newEntityResource( domainTypeConfiguration.getDomainTypeName(), id );
+        final EntityResource entityResource = newEntityResource(domainTypeConfiguration.getDomainTypeName(), id);
 
-		addObjectStringRepresentation( entityResource, domainTypeConfiguration, source );
+        addObjectStringRepresentation(entityResource, domainTypeConfiguration, source);
 
-		addManagedTypeProperty( entityResource, source );
+        addManagedTypeProperty(entityResource, source);
 
-		for ( FieldMetadata field : fieldMetadatas ) {
-			addFieldAttributeValue( entityResource, source, id, field, domainTypeConfiguration, configurationUnitType );
-		}
+        for (FieldMetadata field : fieldMetadatas) {
+            addFieldAttributeValue(entityResource, source, id, field, domainTypeConfiguration, configurationUnitType);
+        }
 
-		return entityResource;
-	}
+        return entityResource;
+    }
 
-	@Override
-	public Resource convert( Object source ) {
-		if ( source == null ) {
-			return null;
-		}
+    @Override
+    public Resource convert(Object source) {
+        if (source == null) {
+            return null;
+        }
 
-		final DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forManagedDomainType( source.getClass() );
-		final DomainTypeBasicConfiguration domainTypeBasicConfig = configuration.forDomainType( source.getClass() );
+        final DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forManagedDomainType(source.getClass());
+        final DomainTypeBasicConfiguration domainTypeBasicConfig = configuration.forDomainType(source.getClass());
 
-		if ( domainTypeConfiguration != null ) {
-			return convert( source, QUICK_VIEW, primaryKeyFieldOnly( domainTypeConfiguration ) );
-		}
+        if (domainTypeConfiguration != null) {
+            return convert(source, QUICK_VIEW, primaryKeyFieldOnly(domainTypeConfiguration));
+        }
 
-		if ( domainTypeBasicConfig != null ) {
-			return convert( source, QUICK_VIEW, primaryKeyFieldOnly( domainTypeBasicConfig ) );
-		}
+        if (domainTypeBasicConfig != null) {
+            return convert(source, QUICK_VIEW, primaryKeyFieldOnly(domainTypeBasicConfig));
+        }
 
-		return new Resource<Object>( source );
-	}
+        return new Resource<Object>(source);
+    }
 
-	private Set<FieldMetadata> primaryKeyFieldOnly( DomainTypeBasicConfiguration domainTypeBasicConfig ) {
-		return addPrimaryKeyPersistentField( EMPTY_SET, domainTypeBasicConfig.getDomainTypeEntityMetadata().getIdAttribute() );
-	}
+    private Set<FieldMetadata> primaryKeyFieldOnly(DomainTypeBasicConfiguration domainTypeBasicConfig) {
+        return addPrimaryKeyPersistentField(EMPTY_SET, domainTypeBasicConfig.getDomainTypeEntityMetadata().getIdAttribute());
+    }
 
-	private void addObjectStringRepresentation( final EntityResource resource, final DomainTypeBasicConfiguration configuration, final Object source ) {
-		final EntityNameExtractor nameExtractor = configuration.getEntityConfiguration().getNameExtractor();
+    private void addObjectStringRepresentation(final EntityResource resource, final DomainTypeBasicConfiguration configuration, final Object source) {
+        final EntityNameExtractor nameExtractor = configuration.getEntityConfiguration().getNameExtractor();
 
-		resource.getContent().put( "stringRepresentation", exceptionAwareNameExtractor( nameExtractor ).apply( source ) );
-	}
+        resource.getContent().put("stringRepresentation", exceptionAwareNameExtractor(nameExtractor).apply(source));
+    }
 
-	private Object addManagedTypeProperty( final EntityResource entityResource, final Object source ) {
-		return entityResource.getContent().put( "managedDomainType", configuration.forManagedDomainType( source.getClass() ) != null );
-	}
+    private void addManagedTypeProperty(final EntityResource entityResource, final Object source) {
+        entityResource.getContent().put("managedDomainType", configuration.forManagedDomainType(source.getClass()) != null);
+    }
 
-	private void addFieldAttributeValue( EntityResource resource, Object source, final Serializable id, FieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, DomainConfigurationUnitType configurationUnitType ) {
-		if ( FieldMetadataUtils.persistentFieldMetadataPredicate().apply( field ) ) {
-			addAttributeValue( resource, field.getUuid(), persistentFieldData( source, id, ( PersistentFieldMetadata ) field, domainTypeConfiguration, configurationUnitType ) );
-		} else {
-			addAttributeValue( resource, field.getUuid(), transientFieldData( field, source ) );
-		}
-	}
+    private void addFieldAttributeValue(EntityResource resource, Object source, final Serializable id, FieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, DomainConfigurationUnitType configurationUnitType) {
+        if (FieldMetadataUtils.persistentFieldMetadataPredicate().apply(field)) {
+            addAttributeValue(resource, field.getUuid(), persistentFieldData(source, id, (PersistentFieldMetadata) field, domainTypeConfiguration, configurationUnitType));
+        } else {
+            addAttributeValue(resource, field.getUuid(), transientFieldData(field, source));
+        }
+    }
 
-	private Map<String, Object> transientFieldData( FieldMetadata field, Object source ) {
-		final Map<String, Object> fieldData = newLinkedHashMap();
+    private Map<String, Object> transientFieldData(FieldMetadata field, Object source) {
+        final Map<String, Object> fieldData = newLinkedHashMap();
 
-		final Object fieldValue = fieldValueEvaluator.evaluate( field, source );
-		final DomainTypeAttributeType type = fieldValue != null ? DomainTypeAttributeType.forType( fieldValue.getClass() ) : DomainTypeAttributeType.UNKNOWN;
+        final Object fieldValue = fieldValueEvaluator.evaluate(field, source);
+        final DomainTypeAttributeType type = fieldValue != null ? DomainTypeAttributeType.forType(fieldValue.getClass()) : DomainTypeAttributeType.UNKNOWN;
 
-		fieldData.put( "name", field.getName() );
-		fieldData.put( "title", field.getName() );
-		fieldData.put( "value", fieldValue );
-		fieldData.put( "type", type.name() );
-		fieldData.put( "persistable", false );
+        fieldData.put("name", field.getName());
+        fieldData.put("title", field.getName());
+        fieldData.put("value", fieldValue);
+        fieldData.put("type", type.name());
+        fieldData.put("persistable", false);
 
-		return fieldData;
-	}
+        return fieldData;
+    }
 
-	private Map<String, Object> persistentFieldData( final Object source, final Serializable id, final PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType ) {
-		if ( field.getAttributeMetadata().getAttributeType() == DomainTypeAttributeType.FILE ) {
-			return persistentFileFieldData( source, id, field, domainTypeConfiguration, configurationUnitType );
-		}
+    private Map<String, Object> persistentFieldData(final Object source, final Serializable id, final PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType) {
+        if (field.getAttributeMetadata().getAttributeType() == DomainTypeAttributeType.FILE) {
+            return persistentFileFieldData(source, id, field, domainTypeConfiguration, configurationUnitType);
+        }
 
-		return persistentSimpleFieldData( field, source );
-	}
+        return persistentSimpleFieldData(field, source);
+    }
 
-	private Map<String, Object> persistentSimpleFieldData( PersistentFieldMetadata field, Object source ) {
-		final Map<String, Object> fieldData = newLinkedHashMap();
+    private Map<String, Object> persistentSimpleFieldData(PersistentFieldMetadata field, Object source) {
+        final Map<String, Object> fieldData = newLinkedHashMap();
 
-		fieldData.put( "name", field.getField() );
-		fieldData.put( "title", field.getName() );
-		fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
-		fieldData.put( "type", field.getAttributeMetadata().getAttributeType().name() );
-		fieldData.put( "persistable", true );
-		fieldData.put( "primaryKey", field.isPrimaryKey() );
+        fieldData.put("name", field.getField());
+        fieldData.put("title", field.getName());
+        fieldData.put("value", fieldValueEvaluator.evaluate(field, source));
+        fieldData.put("type", field.getAttributeMetadata().getAttributeType().name());
+        fieldData.put("persistable", true);
+        fieldData.put("primaryKey", field.isPrimaryKey());
 
-		return fieldData;
-	}
+        return fieldData;
+    }
 
-	private Map<String, Object> persistentFileFieldData( Object source, final Serializable id, PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType ) {
-		final Map<String, Object> fieldData = newLinkedHashMap();
+    private Map<String, Object> persistentFileFieldData(Object source, final Serializable id, PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType) {
+        final Map<String, Object> fieldData = newLinkedHashMap();
 
-		final byte[] fileContent = ( byte[] ) fieldValueEvaluator.evaluate( field, source );
+        final byte[] fileContent = (byte[]) fieldValueEvaluator.evaluate(field, source);
 
-		fieldData.put( "name", field.getField() );
-		fieldData.put( "title", field.getName() );
-		fieldData.put( "type", DomainTypeAttributeType.FILE.name() );
-		if ( configurationUnitType == FORM_VIEW ) {
-			fieldData.put( "value", fieldValueEvaluator.evaluate( field, source ) );
-		}
-		fieldData.put( "persistable", true );
-		fieldData.put( "fileExists", fileContent != null && fileContent.length > 0 );
-		fieldData.put( "fileUrl", filePropertyLink( field, domainTypeConfiguration.getDomainTypeName(), id ) );
+        fieldData.put("name", field.getField());
+        fieldData.put("title", field.getName());
+        fieldData.put("type", DomainTypeAttributeType.FILE.name());
+        if (configurationUnitType == FORM_VIEW) {
+            fieldData.put("value", fieldValueEvaluator.evaluate(field, source));
+        }
+        fieldData.put("persistable", true);
+        fieldData.put("fileExists", fileContent != null && fileContent.length > 0);
+        fieldData.put("fileUrl", filePropertyLink(field, domainTypeConfiguration.getDomainTypeName(), id));
 
-		return fieldData;
-	}
+        return fieldData;
+    }
 
-	private String filePropertyLink( final Persistable persistable, final String domainTypeName, final Serializable id ) {
-		return UriComponentsBuilder.fromUri( restConfiguration.getBaseUri() ).pathSegment( domainTypeName ).pathSegment( id.toString() ).pathSegment( persistable.getField() ).pathSegment( "file" ).build().toUri().toString();
-	}
+    private String filePropertyLink(final Persistable persistable, final String domainTypeName, final Serializable id) {
+        return UriComponentsBuilder.fromUri(restConfiguration.getBaseUri()).pathSegment(domainTypeName).pathSegment(id.toString()).pathSegment(persistable.getField()).pathSegment("file").build().toUri().toString();
+    }
 
-	private void addAttributeValue( EntityResource resource, String attributeName, Object value ) {
-		if ( value != null ) {
-			resource.getContent().put( attributeName, value );
-		}
-	}
+    private void addAttributeValue(EntityResource resource, String attributeName, Object value) {
+        if (value != null) {
+            resource.getContent().put(attributeName, value);
+        }
+    }
 
-	private EntityResource newEntityResource( String domainTypeName, Serializable id ) {
-		final HashSet<Link> links = Sets.newLinkedHashSet();
-		links.add( selfLink( domainTypeName, id ) );
-		links.add( selfDomainLink( domainTypeName, id ) );
+    private EntityResource newEntityResource(String domainTypeName, Serializable id) {
+        final HashSet<Link> links = Sets.newLinkedHashSet();
+        links.add(selfLink(domainTypeName, id));
+        links.add(selfDomainLink(domainTypeName, id));
 
-		return new EntityResource( Maps.<String, Object>newLinkedHashMap(), links );
-	}
+        return new EntityResource(Maps.<String, Object>newLinkedHashMap(), links);
+    }
 }

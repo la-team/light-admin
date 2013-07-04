@@ -19,66 +19,66 @@ import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationC
 
 public class DomainConfigurationSourceFactory {
 
-	private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
 
-	private final ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
+    private final ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
 
-	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this( entityMetadataResolver, new EmptyConfigurationUnitPostProcessor( entityMetadataResolver ), new DomainTypeMetadataAwareConfigurationUnitPostProcessor( entityMetadataResolver ) );
-	}
+    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver) {
+        this(entityMetadataResolver, new EmptyConfigurationUnitPostProcessor(entityMetadataResolver), new DomainTypeMetadataAwareConfigurationUnitPostProcessor(entityMetadataResolver));
+    }
 
-	public DomainConfigurationSourceFactory( final DomainTypeEntityMetadataResolver entityMetadataResolver, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors ) {
-		this.entityMetadataResolver = entityMetadataResolver;
-		this.configurationUnitPostProcessors = configurationUnitPostProcessors;
-	}
+    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors) {
+        this.entityMetadataResolver = entityMetadataResolver;
+        this.configurationUnitPostProcessors = configurationUnitPostProcessors;
+    }
 
-	public DomainConfigurationSource createConfigurationSource( Object configurationMetadata ) {
-		Assert.notNull( configurationMetadata );
+    public DomainConfigurationSource createConfigurationSource(Object configurationMetadata) {
+        Assert.notNull(configurationMetadata);
 
-		if ( isConfigurationCandidate( configurationMetadata ) ) {
-			final Class configurationMetadataClass = ( Class ) configurationMetadata;
+        if (isConfigurationCandidate(configurationMetadata)) {
+            final Class configurationMetadataClass = (Class) configurationMetadata;
 
-			return domainConfigurationUnitsSource( unitsFromConfiguration( configurationMetadataClass ) );
-		}
+            return domainConfigurationUnitsSource(unitsFromConfiguration(configurationMetadataClass));
+        }
 
-		if ( configurationMetadata instanceof ConfigurationUnits ) {
-			ConfigurationUnits configurationUnits = ( ConfigurationUnits ) configurationMetadata;
+        if (configurationMetadata instanceof ConfigurationUnits) {
+            ConfigurationUnits configurationUnits = (ConfigurationUnits) configurationMetadata;
 
-			return domainConfigurationUnitsSource( configurationUnits );
-		}
+            return domainConfigurationUnitsSource(configurationUnits);
+        }
 
-		throw new IllegalArgumentException( format( "Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType( configurationMetadata ) ) );
-	}
+        throw new IllegalArgumentException(format("Configuration Metadata of type %s is not supported!", ClassUtils.getDescriptiveType(configurationMetadata)));
+    }
 
-	@SuppressWarnings( "unchecked" )
-	DomainConfigurationSource domainConfigurationUnitsSource( final ConfigurationUnits configurationUnits ) {
-		final Class<?> domainType = configurationUnits.getDomainType();
+    @SuppressWarnings("unchecked")
+    DomainConfigurationSource domainConfigurationUnitsSource(final ConfigurationUnits configurationUnits) {
+        final Class<?> domainType = configurationUnits.getDomainType();
 
-		if ( !isPersistentEntityType( domainType ) ) {
-			throw new IllegalArgumentException( format( "Non-persistent type %s is not supported.", domainType.getSimpleName() ) );
-		}
+        if (notPersistentEntityType(domainType)) {
+            throw new IllegalArgumentException(format("Non-persistent type %s is not supported.", domainType.getSimpleName()));
+        }
 
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata( domainType );
+        final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata(domainType);
 
-		final ConfigurationUnits processedConfigurationUnits = processConfigurationUnits( configurationUnits );
+        final ConfigurationUnits processedConfigurationUnits = processConfigurationUnits(configurationUnits);
 
-		return new DomainConfigurationUnitsSource( domainTypeEntityMetadata, processedConfigurationUnits );
-	}
+        return new DomainConfigurationUnitsSource(domainTypeEntityMetadata, processedConfigurationUnits);
+    }
 
-	private ConfigurationUnits processConfigurationUnits( final ConfigurationUnits configurationUnits ) {
-		final Set<ConfigurationUnit> processedConfigurationUnits = newLinkedHashSet();
-		for ( ConfigurationUnit configurationUnit : configurationUnits ) {
-			ConfigurationUnit processedConfigurationUnit = configurationUnit;
-			for ( ConfigurationUnitPostProcessor configurationUnitPostProcessor : configurationUnitPostProcessors ) {
-				processedConfigurationUnit = configurationUnitPostProcessor.postProcess( processedConfigurationUnit );
-			}
-			processedConfigurationUnits.add( processedConfigurationUnit );
-		}
-		return new ConfigurationUnits( configurationUnits.getConfigurationClassName(), configurationUnits.getDomainType(), processedConfigurationUnits );
-	}
+    private ConfigurationUnits processConfigurationUnits(final ConfigurationUnits configurationUnits) {
+        final Set<ConfigurationUnit> processedConfigurationUnits = newLinkedHashSet();
+        for (ConfigurationUnit configurationUnit : configurationUnits) {
+            ConfigurationUnit processedConfigurationUnit = configurationUnit;
+            for (ConfigurationUnitPostProcessor configurationUnitPostProcessor : configurationUnitPostProcessors) {
+                processedConfigurationUnit = configurationUnitPostProcessor.postProcess(processedConfigurationUnit);
+            }
+            processedConfigurationUnits.add(processedConfigurationUnit);
+        }
+        return new ConfigurationUnits(configurationUnits.getConfigurationClassName(), configurationUnits.getDomainType(), processedConfigurationUnits);
+    }
 
-	@SuppressWarnings( "unchecked" )
-	private boolean isPersistentEntityType( final Class<?> domainType ) {
-		return entityMetadataResolver.resolveEntityMetadata( domainType ) != null;
-	}
+    @SuppressWarnings("unchecked")
+    private boolean notPersistentEntityType(final Class<?> domainType) {
+        return entityMetadataResolver.resolveEntityMetadata(domainType) == null;
+    }
 }

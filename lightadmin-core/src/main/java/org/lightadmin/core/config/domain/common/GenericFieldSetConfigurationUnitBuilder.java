@@ -1,7 +1,5 @@
 package org.lightadmin.core.config.domain.common;
 
-import javax.servlet.jsp.tagext.SimpleTag;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections15.functors.PrototypeFactory;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
@@ -11,96 +9,98 @@ import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.config.domain.unit.DefaultFieldSetConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
+
+import javax.servlet.jsp.tagext.SimpleTag;
+
 import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.*;
 import static org.springframework.util.StringUtils.capitalize;
 
 public class GenericFieldSetConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<FieldSetConfigurationUnit> implements FieldSetConfigurationUnitBuilder {
 
-	private final FieldSetConfigurationUnit configurationUnit;
+    private final FieldSetConfigurationUnit configurationUnit;
 
-	private FieldMetadata currentFieldMetadata;
+    private FieldMetadata currentFieldMetadata;
 
-	public GenericFieldSetConfigurationUnitBuilder( Class<?> domainType, DomainConfigurationUnitType configurationUnitType ) {
-		super( domainType );
+    public GenericFieldSetConfigurationUnitBuilder(Class<?> domainType, DomainConfigurationUnitType configurationUnitType) {
+        super(domainType);
 
-		this.configurationUnit = new DefaultFieldSetConfigurationUnit( domainType, configurationUnitType );
-	}
+        this.configurationUnit = new DefaultFieldSetConfigurationUnit(domainType, configurationUnitType);
+    }
 
-	@Override
-	public FieldSetConfigurationUnitBuilder field( final String fieldName ) {
-		addCurrentFieldToUnit();
+    @Override
+    public FieldSetConfigurationUnitBuilder field(final String fieldName) {
+        addCurrentFieldToUnit();
 
-		currentFieldMetadata = persistentField( capitalize( fieldName ), fieldName );
+        currentFieldMetadata = persistentField(capitalize(fieldName), fieldName);
 
-		return this;
-	}
+        return this;
+    }
 
-	@Override
-	public FieldSetConfigurationUnitBuilder caption( final String caption ) {
-		assertFieldMetadataIsNotNull();
+    @Override
+    public FieldSetConfigurationUnitBuilder caption(final String caption) {
+        assertFieldMetadataIsNotNull();
 
-		currentFieldMetadata.setName( caption );
+        currentFieldMetadata.setName(caption);
 
-		return this;
-	}
+        return this;
+    }
 
+    @Override
+    public FieldSetConfigurationUnitBuilder dynamic(final String expression) {
+        addCurrentFieldToUnit();
 
-	public FieldSetConfigurationUnitBuilder withCustomControl(SimpleTag customControl) {
-		assertFieldMetadataType(AbstractFieldMetadata.class);
+        currentFieldMetadata = transientField("Undefined", expression);
 
-		try {
-			BeanUtils.setProperty(customControl, "field", currentFieldMetadata.getUuid());
-		} catch (Exception e) {
-			throw new IllegalArgumentException(e);
-		}
+        return this;
+    }
 
-		AbstractFieldMetadata fieldMetadata = (AbstractFieldMetadata) currentFieldMetadata;
-		fieldMetadata.setCustomControlFactory( PrototypeFactory.getInstance( customControl ));
+    @Override
+    @SuppressWarnings("unchecked")
+    public FieldSetConfigurationUnitBuilder renderable(final FieldValueRenderer renderer) {
+        addCurrentFieldToUnit();
 
-		return this;
-	}
+        currentFieldMetadata = customField("Undefined", renderer);
 
-	@Override
-	public FieldSetConfigurationUnitBuilder dynamic( final String expression ) {
-		addCurrentFieldToUnit();
+        return this;
+    }
 
-		currentFieldMetadata = transientField( "Undefined", expression );
+    FieldSetConfigurationUnitBuilder withCustomControl(SimpleTag customControl) {
+        assertFieldMetadataType(currentFieldMetadata, AbstractFieldMetadata.class);
 
-		return this;
-	}
+        try {
+            BeanUtils.setProperty(customControl, "field", currentFieldMetadata.getUuid());
+        } catch (Exception e) {
+            throw new IllegalArgumentException(e);
+        }
 
-	@Override
-	@SuppressWarnings( "unchecked" )
-	public FieldSetConfigurationUnitBuilder renderable( final FieldValueRenderer renderer ) {
-		addCurrentFieldToUnit();
+        AbstractFieldMetadata fieldMetadata = (AbstractFieldMetadata) currentFieldMetadata;
+        fieldMetadata.setCustomControlFactory(PrototypeFactory.getInstance(customControl));
 
-		currentFieldMetadata = customField( "Undefined", renderer );
+        return this;
+    }
 
-		return this;
-	}
+    @Override
+    public FieldSetConfigurationUnit build() {
+        addCurrentFieldToUnit();
 
-	@Override
-	public FieldSetConfigurationUnit build() {
-		addCurrentFieldToUnit();
+        return configurationUnit;
+    }
 
-		return configurationUnit;
-	}
+    private void addCurrentFieldToUnit() {
+        if (currentFieldMetadata != null) {
+            configurationUnit.addField(currentFieldMetadata);
+        }
+    }
 
-	private void addCurrentFieldToUnit() {
-		if ( currentFieldMetadata != null ) {
-			configurationUnit.addField( currentFieldMetadata );
-		}
-	}
+    private void assertFieldMetadataIsNotNull() {
+        if (currentFieldMetadata == null) {
+            throw new RuntimeException("Field is not defined yet.");
+        }
+    }
 
-	private void assertFieldMetadataIsNotNull() {
-		if ( currentFieldMetadata == null ) {
-			throw new RuntimeException( "Field is not defined yet." );
-		}
-	}
-
-	private void assertFieldMetadataType(Class<?> type) {
-		if ( currentFieldMetadata == null || !AbstractFieldMetadata.class.isAssignableFrom(currentFieldMetadata.getClass()) ) {
-			throw new RuntimeException( "Field is not defined or wrong type." );
-		}
-	}
+    private static void assertFieldMetadataType(FieldMetadata currentFieldMetadata, Class<?> type) {
+        if (currentFieldMetadata == null || !type.isAssignableFrom(currentFieldMetadata.getClass())) {
+            throw new RuntimeException("Field is not defined or wrong type.");
+        }
+    }
 }

@@ -12,27 +12,27 @@ import java.net.URI;
 
 public class RestConfigurationInitInterceptor implements WebRequestInterceptor {
 
-	private RepositoryRestConfiguration config;
+    private final RepositoryRestConfiguration config;
 
-	public RestConfigurationInitInterceptor(RepositoryRestConfiguration restConfiguration) {
-		this.config = restConfiguration;
-	}
+    public RestConfigurationInitInterceptor(RepositoryRestConfiguration restConfiguration) {
+        this.config = restConfiguration;
+    }
 
-	@Override
-	public void preHandle(WebRequest webRequest) throws Exception {
-		if (config.getBaseUri() == null) {
-			HttpServletRequest request = (HttpServletRequest) webRequest.resolveReference(RequestAttributes.REFERENCE_REQUEST);
-			URI baseUri = ServletUriComponentsBuilder.fromServletMapping(request).pathSegment("rest").build().toUri();
-			config.setBaseUri(baseUri);
-		}
-	}
+    @Override
+    public void preHandle(WebRequest webRequest) throws Exception {
+        if (config.getBaseUri() == null) {
+            HttpServletRequest request = (HttpServletRequest) webRequest.resolveReference(RequestAttributes.REFERENCE_REQUEST);
+            URI baseUri = ServletUriComponentsBuilder.fromServletMapping(request).pathSegment("rest").build().toUri();
+            config.setBaseUri(baseUri);
+        }
+    }
 
-	@Override
-	public void postHandle(WebRequest request, ModelMap model) throws Exception {
-	}
+    @Override
+    public void postHandle(WebRequest request, ModelMap model) throws Exception {
+    }
 
-	@Override
-	public void afterCompletion(WebRequest request, Exception ex) throws Exception {
-	}
+    @Override
+    public void afterCompletion(WebRequest request, Exception ex) throws Exception {
+    }
 
 }
