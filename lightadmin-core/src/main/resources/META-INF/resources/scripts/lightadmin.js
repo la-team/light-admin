@@ -298,7 +298,7 @@ function removeFileLink(editor, filePropertyUrl) {
     var jLink = $("<a href='#" + fieldName + "'>[Remove File]</a>");
 
     jLink.click(function () {
-        jConfirm('Are you sure you want to remove this file from server? You wan\'t be able to recover!', 'Confirmation Dialog', function (r) {
+        jConfirm('Are you sure you want to remove this file from server? It won\'t be recoverable!', 'Confirmation Dialog', function (r) {
             if (r) {
                 $.ajax({
                     type: 'DELETE',
