@@ -26,9 +26,13 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * CI Server: [lightadmin.org/jenkins](http://lightadmin.org/jenkins)
 * For more detailed questions: [groups.google.com/group/lightadmin](http://groups.google.com/group/lightadmin)
 
-## Bug Reports:
+## Bug Reports ##
 
 * Bug Reports: [github.com/max-dev/light-admin/issues](http://github.com/max-dev/light-admin/issues)
+
+## License ##
+
+* <b>LightAdmin</b> is released under version 2.0 of the Apache License.
 
 ## Getting started ##
 
