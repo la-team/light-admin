@@ -1,4 +1,4 @@
-# LightAdmin for Rapid Application Development#
+# LightAdmin - Pluggable Web Administration Framework#
 
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
