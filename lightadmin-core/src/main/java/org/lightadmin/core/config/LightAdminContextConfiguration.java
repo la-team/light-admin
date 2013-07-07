@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.core.env.Environment;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
@@ -33,19 +32,12 @@ import javax.servlet.ServletContext;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.apache.commons.lang.BooleanUtils.toBoolean;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_URL;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_SECURITY;
-
 @Configuration
 @Import({
         LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class, LightAdminViewConfiguration.class
 })
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
-
-    @Autowired
-    private Environment environment;
 
     @Autowired
     private EntityManagerFactory entityManagerFactory;
@@ -67,11 +59,9 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public WebContext lightAdminContext() {
-        final String lightAdminBaseUrl = environment.getProperty(LIGHT_ADMINISTRATION_BASE_URL);
-        final boolean securityEnabled = toBoolean(environment.getProperty(LIGHT_ADMINISTRATION_SECURITY));
-
-        return new StandardWebContext(lightAdminBaseUrl, securityEnabled);
+    @Autowired
+    public WebContext lightAdminContext(ServletContext servletContext) {
+        return new StandardWebContext(servletContext);
     }
 
     @Bean

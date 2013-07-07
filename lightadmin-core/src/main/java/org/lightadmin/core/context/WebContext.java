@@ -2,10 +2,11 @@ package org.lightadmin.core.context;
 
 public interface WebContext {
 
-	String getApplicationBaseUrl();
+    String getApplicationBaseUrl();
 
-	String getApplicationUrl(String path);
+    String getApplicationUrl(String path);
 
-	boolean isSecurityEnabled();
+    boolean isSecurityEnabled();
 
+    String getSecurityLogoutUrl();
 }
