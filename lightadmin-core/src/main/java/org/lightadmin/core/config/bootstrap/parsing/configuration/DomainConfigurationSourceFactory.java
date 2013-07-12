@@ -7,6 +7,7 @@ import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareCon
 import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -14,20 +15,22 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.lang.String.format;
-import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromConfiguration;
+import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromAutowiredConfiguration;
 import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationCandidate;
 
 public class DomainConfigurationSourceFactory {
 
+    private final AutowireCapableBeanFactory beanFactory;
     private final DomainTypeEntityMetadataResolver entityMetadataResolver;
 
     private final ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
 
-    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver) {
-        this(entityMetadataResolver, new EmptyConfigurationUnitPostProcessor(entityMetadataResolver), new DomainTypeMetadataAwareConfigurationUnitPostProcessor(entityMetadataResolver));
+    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, AutowireCapableBeanFactory beanFactory) {
+        this(entityMetadataResolver, beanFactory, new EmptyConfigurationUnitPostProcessor(entityMetadataResolver), new DomainTypeMetadataAwareConfigurationUnitPostProcessor(entityMetadataResolver));
     }
 
-    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors) {
+    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, AutowireCapableBeanFactory beanFactory, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors) {
+        this.beanFactory = beanFactory;
         this.entityMetadataResolver = entityMetadataResolver;
         this.configurationUnitPostProcessors = configurationUnitPostProcessors;
     }
@@ -38,7 +41,7 @@ public class DomainConfigurationSourceFactory {
         if (isConfigurationCandidate(configurationMetadata)) {
             final Class configurationMetadataClass = (Class) configurationMetadata;
 
-            return domainConfigurationUnitsSource(unitsFromConfiguration(configurationMetadataClass));
+            return domainConfigurationUnitsSource(unitsFromAutowiredConfiguration(configurationMetadataClass, beanFactory));
         }
 
         if (configurationMetadata instanceof ConfigurationUnits) {

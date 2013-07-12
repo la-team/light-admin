@@ -1,6 +1,6 @@
 package org.lightadmin.demo.config;
 
-import org.lightadmin.core.config.annotation.Administration;
+import org.lightadmin.api.config.AdministrationConfiguration;
 import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
@@ -9,12 +9,15 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.config.domain.scope.DomainTypePredicates;
 import org.lightadmin.core.config.domain.scope.DomainTypeSpecification;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.Customer;
+import org.lightadmin.demo.service.CustomerService;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -25,38 +28,52 @@ import static org.lightadmin.core.config.domain.renderer.Renderers.select;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
 
 @SuppressWarnings("unused")
-@Administration(Customer.class)
-public class CustomerAdministration {
+public class CustomerAdministration extends AdministrationConfiguration<Customer> {
 
-    public static EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
+    @Autowired
+    private CustomerService customerService;
+
+    public EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
         return configurationBuilder
                 .nameField("firstname")
                 .singularName("Customer")
                 .pluralName("Customers").build();
     }
 
-    public static ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
+    public ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
         return screenContextBuilder.screenName("Customers Administration").build();
     }
 
-    public static FieldSetConfigurationUnit listView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit listView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("emailAddress").caption("Email Address")
                 .field("addresses").caption("Addresses")
-                .field("discountPrograms").caption("Discount Programs").build();
+                .field("discountPrograms").caption("Discount Programs")
+                .renderable(vipStatusRenderer()).caption("VIP").build();
     }
 
-    public static FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("discountPrograms").caption("Discount Programs")
-                .field("addresses").caption("Addresses").build();
+                .field("addresses").caption("Addresses")
+                .renderable(vipStatusRenderer()).caption("VIP").build();
     }
 
-    public static FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+        return fragmentBuilder
+                .field("firstname").caption("First Name")
+                .field("lastname").caption("Last Name")
+                .field("emailAddress").caption("Email Address")
+                .field("discountPrograms").caption("Discount Programs")
+                .field("addresses").caption("Addresses")
+                .renderable(vipStatusRenderer()).caption("VIP").build();
+    }
+
+    public FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
@@ -65,23 +82,14 @@ public class CustomerAdministration {
                 .field("addresses").caption("Addresses").build();
     }
 
-    public static FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
-        return fragmentBuilder
-                .field("firstname").caption("First Name")
-                .field("lastname").caption("Last Name")
-                .field("emailAddress").caption("Email Address")
-                .field("discountPrograms").caption("Discount Programs")
-                .field("addresses").caption("Addresses").build();
-    }
-
-    public static ScopesConfigurationUnit scopes(final ScopesConfigurationUnitBuilder scopeBuilder) {
+    public ScopesConfigurationUnit scopes(final ScopesConfigurationUnitBuilder scopeBuilder) {
         return scopeBuilder
                 .scope("All", all()).defaultScope()
                 .scope("Buyers", filter(DomainTypePredicates.alwaysTrue()))
                 .scope("Sellers", specification(customerNameEqDave())).build();
     }
 
-    public static FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
+    public FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
         return filterBuilder.filter("ID", "id")
                 .filter("First Name", "firstname").renderer(select(new String[]{"Yes", "No"}))
                 .filter("Last Name", "lastname")
@@ -90,11 +98,21 @@ public class CustomerAdministration {
                 .filter("Discount Programs", "discountPrograms").build();
     }
 
-    public static DomainTypeSpecification<Customer> customerNameEqDave() {
+    private DomainTypeSpecification<Customer> customerNameEqDave() {
         return new DomainTypeSpecification<Customer>() {
             @Override
             public Predicate toPredicate(final Root<Customer> root, final CriteriaQuery<?> query, final CriteriaBuilder cb) {
                 return cb.equal(root.get("firstname"), "Dave");
+            }
+        };
+    }
+
+    private FieldValueRenderer<Customer> vipStatusRenderer() {
+        final CustomerService _customerService = customerService;
+        return new FieldValueRenderer<Customer>() {
+            @Override
+            public String apply(Customer customer) {
+                return _customerService.isVIP(customer) ? "Yes" : "No";
             }
         };
     }

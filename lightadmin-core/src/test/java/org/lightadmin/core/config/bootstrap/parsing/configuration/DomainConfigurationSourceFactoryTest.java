@@ -8,6 +8,7 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -19,55 +20,55 @@ import static org.lightadmin.core.test.util.DomainTypeEntityMetadataUtils.entity
 
 public class DomainConfigurationSourceFactoryTest {
 
-	private DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private DomainTypeEntityMetadataResolver entityMetadataResolver;
 
-	private DomainConfigurationSourceFactory testee;
+    private DomainConfigurationSourceFactory testee;
 
-	@Before
-	public void setUp() throws Exception {
-		entityMetadataResolver = entityMetadataResolver( DomainType.class );
-	}
+    @Before
+    public void setUp() throws Exception {
+        entityMetadataResolver = entityMetadataResolver(DomainType.class);
+    }
 
-	@Test
-	public void postProcessorCalledForEachConfigurationUnit() throws Exception {
-		final ConfigurationUnit filtersConfigurationUnit = configurationUnitFor( FILTERS );
-		final ConfigurationUnit scopesConfigurationUnit = configurationUnitFor( SCOPES );
+    @Test
+    public void postProcessorCalledForEachConfigurationUnit() throws Exception {
+        final ConfigurationUnit filtersConfigurationUnit = configurationUnitFor(FILTERS);
+        final ConfigurationUnit scopesConfigurationUnit = configurationUnitFor(SCOPES);
 
-		final ConfigurationUnits configurationUnits = configurationUnits( DomainTypeConfiguration.class, filtersConfigurationUnit, scopesConfigurationUnit );
+        final ConfigurationUnits configurationUnits = configurationUnits(DomainTypeConfiguration.class, filtersConfigurationUnit, scopesConfigurationUnit);
 
-		final ConfigurationUnitPostProcessor configurationUnitPostProcessor = EasyMock.createMock( ConfigurationUnitPostProcessor.class );
+        final ConfigurationUnitPostProcessor configurationUnitPostProcessor = EasyMock.createMock(ConfigurationUnitPostProcessor.class);
 
-		EasyMock.expect( configurationUnitPostProcessor.postProcess( filtersConfigurationUnit ) ).andReturn( filtersConfigurationUnit ).once();
+        EasyMock.expect(configurationUnitPostProcessor.postProcess(filtersConfigurationUnit)).andReturn(filtersConfigurationUnit).once();
 
-		EasyMock.expect( configurationUnitPostProcessor.postProcess( scopesConfigurationUnit ) ).andReturn( scopesConfigurationUnit ).once();
+        EasyMock.expect(configurationUnitPostProcessor.postProcess(scopesConfigurationUnit)).andReturn(scopesConfigurationUnit).once();
 
-		EasyMock.replay( configurationUnitPostProcessor );
+        EasyMock.replay(configurationUnitPostProcessor);
 
-		testee = new DomainConfigurationSourceFactory( entityMetadataResolver, configurationUnitPostProcessor );
+        testee = new DomainConfigurationSourceFactory(entityMetadataResolver, EasyMock.createNiceMock(AutowireCapableBeanFactory.class), configurationUnitPostProcessor);
 
-		testee.domainConfigurationUnitsSource( configurationUnits );
+        testee.domainConfigurationUnitsSource(configurationUnits);
 
-		EasyMock.verify( configurationUnitPostProcessor );
-	}
+        EasyMock.verify(configurationUnitPostProcessor);
+    }
 
-	@Test
-	public void configurationSourceForDomainTypeCreated() throws Exception {
-		testee = new DomainConfigurationSourceFactory( entityMetadataResolver, EasyMock.createNiceMock( ConfigurationUnitPostProcessor.class ) );
+    @Test
+    public void configurationSourceForDomainTypeCreated() throws Exception {
+        testee = new DomainConfigurationSourceFactory(entityMetadataResolver, EasyMock.createNiceMock(AutowireCapableBeanFactory.class), EasyMock.createNiceMock(ConfigurationUnitPostProcessor.class));
 
-		final Class<DomainType> expectedDomainType = DomainType.class;
+        final Class<DomainType> expectedDomainType = DomainType.class;
 
-		final DomainConfigurationSource domainConfigurationSource = testee.domainConfigurationUnitsSource( configurationUnits( DomainTypeConfiguration.class ) );
+        final DomainConfigurationSource domainConfigurationSource = testee.domainConfigurationUnitsSource(configurationUnits(DomainTypeConfiguration.class));
 
-		assertNotNull( domainConfigurationSource );
-		assertEquals( expectedDomainType, domainConfigurationSource.getDomainType() );
-	}
+        assertNotNull(domainConfigurationSource);
+        assertEquals(expectedDomainType, domainConfigurationSource.getDomainType());
+    }
 
-	private static class DomainType {
+    private static class DomainType {
 
-	}
+    }
 
-	@Administration( DomainType.class )
-	private static class DomainTypeConfiguration {
+    @Administration(DomainType.class)
+    private static class DomainTypeConfiguration {
 
-	}
+    }
 }

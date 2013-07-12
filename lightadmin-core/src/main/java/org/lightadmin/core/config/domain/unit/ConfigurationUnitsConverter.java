@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.domain.unit;
 
+import org.lightadmin.api.config.AdministrationConfiguration;
 import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.common.GenericFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
@@ -14,21 +15,40 @@ import org.lightadmin.core.config.domain.scope.DefaultScopesConfigurationUnitBui
 import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.sidebar.DefaultSidebarsConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnitBuilder;
-import org.springframework.core.convert.converter.Converter;
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
 import static org.lightadmin.core.util.DomainConfigurationUtils.initializeConfigurationUnitWithBuilder;
+import static org.lightadmin.core.util.DomainConfigurationUtils.isAnnotationBasedConfigurationCandidate;
 
-public final class ConfigurationUnitsConverter implements Converter<Class, ConfigurationUnits> {
+public final class ConfigurationUnitsConverter {
 
     private static final ConfigurationUnitsConverter INSTANCE = new ConfigurationUnitsConverter();
 
-    public static ConfigurationUnits unitsFromConfiguration(Class configurationClass) {
-        return INSTANCE.convert(configurationClass);
+    public static ConfigurationUnits unitsFromAutowiredConfiguration(Class configurationClass, AutowireCapableBeanFactory beanFactory) {
+        return isAnnotationBasedConfigurationCandidate(configurationClass)
+                ? INSTANCE.convertAnnotationBasedConfiguration(configurationClass)
+                : INSTANCE.convertSuperClassBasedConfiguration(configurationClass, autowiredConfigurationInstance(configurationClass, beanFactory));
     }
 
-    @Override
-    public ConfigurationUnits convert(final Class configurationClass) {
+    public static ConfigurationUnits unitsFromConfiguration(Class configurationClass) {
+        return isAnnotationBasedConfigurationCandidate(configurationClass)
+                ? INSTANCE.convertAnnotationBasedConfiguration(configurationClass)
+                : INSTANCE.convertSuperClassBasedConfiguration(configurationClass, configurationInstance(configurationClass));
+    }
+
+    private static AdministrationConfiguration configurationInstance(final Class configurationClass) {
+        return (AdministrationConfiguration) BeanUtils.instantiateClass(configurationClass);
+    }
+
+    private static AdministrationConfiguration autowiredConfigurationInstance(final Class configurationClass, AutowireCapableBeanFactory beanFactory) {
+        final AdministrationConfiguration configurationInstance = configurationInstance(configurationClass);
+        beanFactory.autowireBean(configurationInstance);
+        return configurationInstance;
+    }
+
+    private ConfigurationUnits convertAnnotationBasedConfiguration(final Class configurationClass) {
         return new ConfigurationUnits(configurationClass,
                 initializeConfigurationUnitWithBuilder(configurationClass, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class),
                 initializeConfigurationUnitWithBuilder(configurationClass, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class),
@@ -39,5 +59,20 @@ public final class ConfigurationUnitsConverter implements Converter<Class, Confi
                 initializeConfigurationUnitWithBuilder(configurationClass, FORM_VIEW, PersistentFieldSetConfigurationUnitBuilder.class, PersistentFieldSetConfigurationUnitBuilderAdapter.class),
                 initializeConfigurationUnitWithBuilder(configurationClass, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class),
                 initializeConfigurationUnitWithBuilder(configurationClass, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class));
+    }
+
+    private ConfigurationUnits convertSuperClassBasedConfiguration(final Class configurationClass, final AdministrationConfiguration configurationInstance) {
+        return new ConfigurationUnits(
+                configurationClass,
+                initializeConfigurationUnitWithBuilder(configurationInstance, FILTERS, FiltersConfigurationUnitBuilder.class, DefaultFiltersConfigurationUnitBuilder.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, SCOPES, ScopesConfigurationUnitBuilder.class, DefaultScopesConfigurationUnitBuilder.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, SIDEBARS, SidebarsConfigurationUnitBuilder.class, DefaultSidebarsConfigurationUnitBuilder.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, QUICK_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, LIST_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, SHOW_VIEW, FieldSetConfigurationUnitBuilder.class, GenericFieldSetConfigurationUnitBuilder.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, FORM_VIEW, PersistentFieldSetConfigurationUnitBuilder.class, PersistentFieldSetConfigurationUnitBuilderAdapter.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, SCREEN_CONTEXT, ScreenContextConfigurationUnitBuilder.class, DefaultScreenContextConfigurationUnitBuilder.class),
+                initializeConfigurationUnitWithBuilder(configurationInstance, CONFIGURATION, EntityMetadataConfigurationUnitBuilder.class, DefaultEntityMetadataConfigurationUnitBuilder.class)
+        );
     }
 }

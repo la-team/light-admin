@@ -13,6 +13,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolve
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
@@ -46,8 +47,9 @@ public class LightAdminDomainConfiguration {
     }
 
     @Bean
-    public DomainConfigurationSourceFactory domainConfigurationSourceFactory() {
-        return new DomainConfigurationSourceFactory(domainTypeEntityMetadataResolver());
+    @Autowired
+    public DomainConfigurationSourceFactory domainConfigurationSourceFactory(AutowireCapableBeanFactory beanFactory) {
+        return new DomainConfigurationSourceFactory(domainTypeEntityMetadataResolver(), beanFactory);
     }
 
     @Bean
@@ -79,7 +81,7 @@ public class LightAdminDomainConfiguration {
 
     @Bean
     @Autowired
-    public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor(DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory) {
-        return new GlobalAdministrationConfigurationProcessor(domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory(), domainConfigurationSourceValidatorFactory(), environment);
+    public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor(DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory, AutowireCapableBeanFactory beanFactory) {
+        return new GlobalAdministrationConfigurationProcessor(domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory(beanFactory), domainConfigurationSourceValidatorFactory(), environment);
     }
 }
