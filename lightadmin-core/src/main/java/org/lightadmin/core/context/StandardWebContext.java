@@ -4,6 +4,7 @@ import javax.servlet.ServletContext;
 
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.defaultIfBlank;
+import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 
 public class StandardWebContext implements WebContext {
@@ -12,16 +13,23 @@ public class StandardWebContext implements WebContext {
     private final String applicationBaseNoEndSeparator;
     private final boolean securityEnabled;
     private final String securityLogoutUrl;
+    private final String backToSiteUrl;
 
     public StandardWebContext(ServletContext servletContext) {
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
         this.applicationBaseNoEndSeparator = urlWithoutEndSeparator(this.applicationBaseUrl);
+        this.backToSiteUrl = backToSiteUrl(servletContext);
         this.securityEnabled = toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
         if (securityEnabled) {
             this.securityLogoutUrl = servletContext.getContextPath() + this.applicationBaseNoEndSeparator + LIGHT_ADMIN_SECURITY_LOGOUT_URL_DEFAULT;
         } else {
             this.securityLogoutUrl = servletContext.getContextPath() + defaultIfBlank(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY_LOGOUT_URL), "#");
         }
+    }
+
+    @Override
+    public String getBackToSiteUrl() {
+        return backToSiteUrl;
     }
 
     @Override
@@ -42,6 +50,20 @@ public class StandardWebContext implements WebContext {
     @Override
     public String getSecurityLogoutUrl() {
         return securityLogoutUrl;
+    }
+
+    private String backToSiteUrl(ServletContext servletContext) {
+        final String backToSiteUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BACK_TO_SITE_URL);
+
+        if (isBlank(backToSiteUrl)) {
+            return "#";
+        }
+
+        if (backToSiteUrl.startsWith("/")) {
+            return servletContext.getContextPath() + backToSiteUrl;
+        }
+
+        return backToSiteUrl;
     }
 
     private String urlWithoutEndSeparator(String url) {

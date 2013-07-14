@@ -6,6 +6,7 @@ public class LightAdminConfigurationUtils {
     public static final String LIGHT_ADMINISTRATION_BASE_URL = "light:administration:base-url";
     public static final String LIGHT_ADMINISTRATION_SECURITY = "light:administration:security";
     public static final String LIGHT_ADMINISTRATION_SECURITY_LOGOUT_URL = "light:administration:security-logout-url";
+    public static final String LIGHT_ADMINISTRATION_BACK_TO_SITE_URL = "light:administration:back-to-site-url";
 
     public static final String LIGHT_ADMIN_DISPATCHER_NAME = "lightadmin-dispatcher";
     public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_SERVLET_NAME = "lightadmin-cusom-resource-servlet";

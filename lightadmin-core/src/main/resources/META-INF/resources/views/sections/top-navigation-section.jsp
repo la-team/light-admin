@@ -12,6 +12,14 @@
 <div id="topNav">
     <div class="fixed">
         <div class="wrapper">
+            <div class="userNav" style="float:left;">
+                <ul>
+                    <li><a href="<c:out value='${webContext.backToSiteUrl}'/>" title="Back to Site"><img
+                            src="<light:url value='/images/icons/topnav/mainWebsite.png'/>"
+                            alt=""><span>Back to Site</span></a></li>
+                </ul>
+            </div>
+
             <sec:authorize ifAllGranted="ROLE_ADMIN">
                 <div class="welcome"><a href="#" title=""><img src="<light:url value='/images/userPic.png'/>"
                                                                alt=""/></a><span>Hello, <sec:authentication
@@ -31,9 +39,6 @@
             <sec:authorize ifNotGranted="ROLE_ADMIN">
                 <div class="userNav">
                     <ul>
-                        <li><a href="#" class="not-implemented" title=""><img
-                                src="<light:url value='/images/icons/topnav/register.png'/>"
-                                alt=""><span>Register</span></a></li>
                         <li><a href="#" class="not-implemented" title=""><img
                                 src="<light:url value='/images/icons/topnav/contactAdmin.png'/>"
                                 alt=""><span>Contact admin</span></a></li>

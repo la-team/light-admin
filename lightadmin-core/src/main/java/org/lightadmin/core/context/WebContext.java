@@ -9,4 +9,6 @@ public interface WebContext {
     boolean isSecurityEnabled();
 
     String getSecurityLogoutUrl();
+
+    String getBackToSiteUrl();
 }
