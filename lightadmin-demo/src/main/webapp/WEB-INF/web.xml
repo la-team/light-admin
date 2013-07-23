@@ -46,7 +46,7 @@
     </listener>
 
     <welcome-file-list>
-        <welcome-file>/</welcome-file>
+        <welcome-file>/admin</welcome-file>
     </welcome-file-list>
 
     <session-config>
