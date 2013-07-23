@@ -9,17 +9,22 @@
 
     <context-param>
         <param-name>light:administration:base-url</param-name>
-        <param-value>/</param-value>
+        <param-value>/demo/admin</param-value>
     </context-param>
 
     <context-param>
         <param-name>light:administration:security</param-name>
-        <param-value>true</param-value>
+        <param-value>false</param-value>
     </context-param>
 
+    <!--<context-param>-->
+    <!--<param-name>light:administration:security-logout-url</param-name>-->
+    <!--<param-value>/logout</param-value>-->
+    <!--</context-param>-->
+
     <context-param>
-        <param-name>light:administration:security-logout-url</param-name>
-        <param-value>/logout</param-value>
+        <param-name>light:administration:back-to-site-url</param-name>
+        <param-value>http://lightadmin.org</param-value>
     </context-param>
 
     <context-param>

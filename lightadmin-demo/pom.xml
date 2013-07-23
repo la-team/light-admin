@@ -10,7 +10,6 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>org.lightadmin</groupId>
     <artifactId>lightadmin-demo</artifactId>
     <version>1.0.0-SNAPSHOT</version>
     <packaging>war</packaging>
