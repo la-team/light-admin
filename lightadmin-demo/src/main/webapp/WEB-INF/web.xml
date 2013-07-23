@@ -9,7 +9,7 @@
 
     <context-param>
         <param-name>light:administration:base-url</param-name>
-        <param-value>/demo/admin</param-value>
+        <param-value>/admin</param-value>
     </context-param>
 
     <context-param>
