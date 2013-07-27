@@ -4,6 +4,7 @@ import org.lightadmin.core.context.StandardWebContext;
 import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
 import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
+import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
 import org.lightadmin.core.view.SeparateContainerTilesView;
 import org.lightadmin.core.web.ApplicationController;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,19 +121,28 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public ViewResolver viewResolver() {
-        UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
+        final UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
         viewResolver.setViewClass(SeparateContainerTilesView.class);
         return viewResolver;
     }
 
     @Bean
     public TilesConfigurer tilesConfigurer() {
-        TilesConfigurer configurer = new TilesConfigurer();
-        configurer.setDefinitions(new String[]{
-                "classpath*:META-INF/tiles/**/*.xml"
-        });
+        final String[] definitions = {"classpath*:META-INF/tiles/**/*.xml"};
+
+        final TilesConfigurer configurer = new TilesConfigurer();
+        configurer.setTilesInitializer(lightAdminSpringTilesInitializer(definitions));
+        configurer.setDefinitions(definitions);
         configurer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
         configurer.setCheckRefresh(true);
         return configurer;
+    }
+
+    private LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer(String[] definitions) {
+        final LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer = new LightAdminSpringTilesInitializer();
+        lightAdminSpringTilesInitializer.setCheckRefresh(true);
+        lightAdminSpringTilesInitializer.setDefinitions(definitions);
+        lightAdminSpringTilesInitializer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
+        return lightAdminSpringTilesInitializer;
     }
 }
