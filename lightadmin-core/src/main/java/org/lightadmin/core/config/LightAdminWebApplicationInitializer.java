@@ -2,6 +2,7 @@ package org.lightadmin.core.config;
 
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -20,8 +21,10 @@ import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.apache.tiles.startup.BasicTilesInitializer.CONTAINER_KEY_INIT_PARAMETER;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 import static org.lightadmin.core.web.util.WebContextUtils.servletContextAttributeName;
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 @SuppressWarnings("unused")
+@Order(LOWEST_PRECEDENCE)
 public class LightAdminWebApplicationInitializer implements WebApplicationInitializer {
 
     private static final String LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE = "org.apache.tiles.CONTAINER.LightAdmin";
