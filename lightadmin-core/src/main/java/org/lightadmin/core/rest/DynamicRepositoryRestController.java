@@ -3,7 +3,6 @@ package org.lightadmin.core.rest;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.apache.commons.io.IOUtils;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
@@ -53,9 +52,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.annotation.PostConstruct;
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -69,6 +68,8 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
+import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.MediaType.IMAGE_JPEG;
 
 @SuppressWarnings("unchecked")
 @RequestMapping("/rest")
@@ -138,7 +139,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
     @RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> filePropertyOfEntity(ServletServerHttpRequest request, HttpServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height) throws IOException {
+    public ResponseEntity<?> filePropertyOfEntity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height) throws IOException {
         final RepositoryMetadata repoMeta = repositoryMetadataFor(repository);
         final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) repoMeta.entityMetadata().idAttribute().type());
 
@@ -150,52 +151,76 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
         if (attrMeta.type().equals(byte[].class)) {
             final byte[] bytes = (byte[]) attrMeta.get(entity);
-            if (bytes != null) {
-                final MediaType mediaType = getMediaType(bytes);
-                if (imageResizingRequired(width, height)) {
-                    try {
-                        writeResizedImageToResponse(bytes, width, height, mediaType, response);
-                    } catch (Exception ex) {
-                        writeToResponse(bytes, response);
-                    }
-                } else {
-                    writeToResponse(bytes, response);
-                }
-
-                response.setHeader("content-disposition", "inline;" + "image." + mediaType.getSubtype());
-
-                HttpHeaders responseHeaders = new HttpHeaders();
-                responseHeaders.setContentLength(bytes.length);
-                responseHeaders.setContentType(mediaType);
-                responseHeaders.setContentDispositionFormData("inline", "image." + mediaType.getSubtype());
-                return new ResponseEntity(responseHeaders, HttpStatus.OK);
-            }
+            return downloadImageResource(bytes, width, height);
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
-    private void writeToResponse(byte[] bytes, HttpServletResponse response) throws IOException {
-        IOUtils.write(bytes, response.getOutputStream());
-        response.flushBuffer();
+    private ResponseEntity<?> downloadImageResource(byte[] content, int width, int height) {
+        if (content == null || content.length == 0) {
+            return noContentResponse();
+        }
+
+        try {
+            final MediaType mediaType = mediaTypeOf(content);
+
+            return writeImageResourceResponse(content, mediaType, width, height);
+        } catch (Exception ex) {
+            return serverErrorResponse();
+        }
     }
 
-    private void writeResizedImageToResponse(byte[] bytes, int width, int height, MediaType mediaType, HttpServletResponse response) throws IOException {
+    private ResponseEntity<?> writeImageResourceResponse(byte[] content, MediaType mediaType, int width, int height) throws IOException {
+        if (imageResizingRequired(width, height)) {
+            try {
+                return scaledImageResourceResponse(content, width, height, mediaType);
+            } catch (Exception ex) {
+            }
+        }
+        return imageResourceResponse(content, mediaType);
+    }
+
+    private ResponseEntity<?> imageResourceResponse(byte[] content, MediaType mediaType) {
+        return new ResponseEntity<byte[]>(content, imageResponseHeader(content, mediaType), OK);
+    }
+
+    private ResponseEntity<?> scaledImageResourceResponse(byte[] bytes, int width, int height, MediaType mediaType) throws IOException {
         BufferedImage sourceImage = ImageIO.read(new ByteArrayInputStream(bytes));
         BufferedImage image = resizeImage(sourceImage, width, height);
-        ImageIO.write(image, mediaType.getSubtype(), response.getOutputStream());
-        response.flushBuffer();
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+
+        ImageIO.write(image, mediaType.getSubtype(), byteArrayOutputStream);
+
+        return imageResourceResponse(byteArrayOutputStream.toByteArray(), mediaType);
     }
 
-    private MediaType getMediaType(final byte[] bytes) {
-        ContentHandlerDecorator contenthandler = new BodyContentHandler();
+    private HttpHeaders imageResponseHeader(byte[] content, MediaType mediaType) {
+        HttpHeaders responseHeaders = new HttpHeaders();
+        responseHeaders.setContentLength(content.length);
+        responseHeaders.setContentType(mediaType);
+        responseHeaders.set("Content-Disposition", "inline; filename=\"image." + mediaType.getSubtype() + "\"");
+        return responseHeaders;
+    }
+
+    private ResponseEntity serverErrorResponse() {
+        return new ResponseEntity(INTERNAL_SERVER_ERROR);
+    }
+
+    private ResponseEntity noContentResponse() {
+        return new ResponseEntity(NO_CONTENT);
+    }
+
+    private MediaType mediaTypeOf(final byte[] bytes) {
+        ContentHandlerDecorator contentHandler = new BodyContentHandler();
         Metadata metadata = new Metadata();
         Parser parser = new AutoDetectParser();
         try {
             final ParseContext parseContext = new ParseContext();
-            parser.parse(new ByteArrayInputStream(bytes), contenthandler, metadata, parseContext);
+            parser.parse(new ByteArrayInputStream(bytes), contentHandler, metadata, parseContext);
             return MediaType.parseMediaType(metadata.get("Content-Type"));
         } catch (Exception e) {
-            return MediaType.IMAGE_JPEG;
+            return IMAGE_JPEG;
         }
     }
 
@@ -219,7 +244,6 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
         return Scalr.resize(sourceImage, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, width, height, Scalr.OP_ANTIALIAS);
     }
-
 
     @RequestMapping(value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST})
     @ResponseBody
