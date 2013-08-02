@@ -6,12 +6,14 @@ import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementSe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 import org.springframework.jmx.export.annotation.AnnotationMBeanExporter;
 import org.springframework.remoting.rmi.RmiServiceExporter;
 import org.springframework.util.ClassUtils;
 
 import java.rmi.RemoteException;
 
+@Profile("test-env")
 @Configuration
 public class LightAdminRemoteConfiguration {
 
