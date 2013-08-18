@@ -20,6 +20,7 @@ public class Product extends AbstractEntity {
 	@Basic
 	private String type;
 
+	@Size(max = 255)
 	private String description;
 
 	@NotNull
