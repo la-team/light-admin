@@ -5,8 +5,10 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.DataManipulationService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.page.ListViewPage;
+import org.lightadmin.testContext.TestProfileSource;
 import org.lightadmin.util.ExtendedWebDriver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.ProfileValueSourceConfiguration;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -22,6 +24,7 @@ import java.net.URL;
 	AdministrationConfigurationListener.class, LoginListener.class
 } )
 @ContextConfiguration( loader = AnnotationConfigContextLoader.class, classes = SeleniumConfig.class )
+@ProfileValueSourceConfiguration( TestProfileSource.class )
 public abstract class SeleniumIntegrationTest {
 
 	@Autowired
@@ -34,7 +37,7 @@ public abstract class SeleniumIntegrationTest {
 	private DataManipulationService dataManipulationService;
 
 	@Autowired
-	private LoginService testContext;
+	private LoginService loginService;
 
 	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
 		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( configurationClass ) );
@@ -70,6 +73,6 @@ public abstract class SeleniumIntegrationTest {
 	}
 
 	protected ListViewPage getStartPage() {
-		return testContext.getStartPage();
+		return loginService.getStartPage();
 	}
 }

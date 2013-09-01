@@ -57,8 +57,8 @@ public class SeleniumConfig {
 	}
 
 	@Bean
-	public LoginService theTestContext() {
-		return new LoginService( isSecurityEnabled() );
+	public LoginService loginService() {
+		return new LoginService();
 	}
 
 	private boolean isSecurityEnabled() {

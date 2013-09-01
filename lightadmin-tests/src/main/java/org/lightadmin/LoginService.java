@@ -6,10 +6,12 @@ import org.lightadmin.page.DashboardPage;
 import org.lightadmin.page.ListViewPage;
 import org.lightadmin.page.LoginPage;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 public class LoginService {
 
-	private final boolean securityEnabled;
+	@Value( "${security.enabled}" )
+	private boolean securityEnabled;
 
 	@Autowired
 	private LoginPage loginPage;
@@ -19,14 +21,12 @@ public class LoginService {
 
 	private ListViewPage startPage;
 
-	public LoginService( boolean securityEnabled ) {
-		this.securityEnabled = securityEnabled;
-	}
-
 	public void navigateToDomain( Domain domain ) {
-		startPage = securityEnabled ?
-				loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( domain ) :
-				dashboardPage.get().navigateToDomain( domain );
+		if ( securityEnabled ) {
+			startPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( domain );
+		} else {
+			startPage = dashboardPage.get().navigateToDomain( domain );
+		}
 	}
 
 	public ListViewPage getStartPage() {
