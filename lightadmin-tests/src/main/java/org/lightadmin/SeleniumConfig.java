@@ -58,7 +58,11 @@ public class SeleniumConfig {
 
 	@Bean
 	public LoginService theTestContext() {
-		return new LoginService();
+		return new LoginService( isSecurityEnabled() );
+	}
+
+	private boolean isSecurityEnabled() {
+		return Boolean.valueOf( environment.getProperty( "security.enabled" ) );
 	}
 
 	private URL baseUrl() {

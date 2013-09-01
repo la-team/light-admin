@@ -1,16 +1,14 @@
 package org.lightadmin.page;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
 import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.CustomerTestEntityConfiguration;
 import org.lightadmin.config.FilterTestEntityConfiguration;
 import org.lightadmin.config.OrderTestEntityConfiguration;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -23,23 +21,17 @@ import static org.lightadmin.data.Domain.*;
 						   OrderTestEntityConfiguration.class, CustomerTestEntityConfiguration.class,
 						   FilterTestEntityConfiguration.class
 					   } )
+@LoginOnce( domain = Domain.TEST_CUSTOMERS )
 public class DashboardPageTest extends SeleniumIntegrationTest {
 
 	private final List<Domain> expectedDomains = newArrayList( TEST_ORDERS.setExpectedRecordCount( 8 ), TEST_CUSTOMERS.setExpectedRecordCount( 29 ), FILTER_TEST_DOMAIN.setExpectedRecordCount( 11 ) );
-
-	@Autowired
-	private LoginPage loginPage;
 
 	private DashboardPage dashboardPage;
 
 	@Before
 	public void setup() throws Exception {
-		dashboardPage = loginPage.get().loginAs( User.ADMINISTRATOR );
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		dashboardPage.logout();
+		//todo: ikostenko: test should navigate to dashboard only once, shouldn't navigate to domain
+		dashboardPage = getStartPage().navigateToDashboard();
 	}
 
 	@Test

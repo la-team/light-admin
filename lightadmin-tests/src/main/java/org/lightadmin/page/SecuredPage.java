@@ -30,6 +30,10 @@ public abstract class SecuredPage<P extends BasePage<P>> extends BasePage<P> {
 		return navigationMenuComponent.navigateToDomain( domain );
 	}
 
+	public DashboardPage navigateToDashboard() {
+		return navigationMenuComponent.navigateToDashboard();
+	}
+
 	public boolean isLoggedIn() {
 		return topNavigationComponent.isLoggedIn();
 	}

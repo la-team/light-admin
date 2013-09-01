@@ -4,11 +4,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.data.User;
+import org.lightadmin.testContext.TestProfileSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.IfProfileValue;
+import org.springframework.test.annotation.ProfileValueSourceConfiguration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@ProfileValueSourceConfiguration( TestProfileSource.class )
+@IfProfileValue( name = "security.enabled", value = "true" )
 public class LoginPageTest extends SeleniumIntegrationTest {
 
 	@Autowired
