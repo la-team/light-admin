@@ -3,19 +3,17 @@ package org.lightadmin.util;
 import org.apache.commons.lang.StringUtils;
 import org.lightadmin.component.DataTableComponent;
 import org.lightadmin.page.ListViewPage;
-import org.lightadmin.page.ShowViewPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import javax.annotation.Nullable;
 import java.util.Arrays;
-import java.util.Map;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 
 
 public class DomainAsserts {
@@ -73,6 +71,19 @@ public class DomainAsserts {
 	public static void assertFieldValue( final String fieldName, final String expectedValue, final WebDriver webDriver ) {
 		assertEquals( String.format( "Wrong value for field '%s'", fieldName ),
 				expectedValue, webDriver.findElement( By.xpath( "//*[contains(@name,'" + fieldName + "')]" ) ).getText() );
+	}
+
+	public static void assertImagePreviewIsDisplayed( String viewName, final WebElement webElement, final ExtendedWebDriver webDriver, final long timeout ) {
+		try {
+			new WebDriverWait( webDriver, timeout ).until( new ExpectedCondition<Boolean>() {
+				@Override
+				public Boolean apply( @Nullable WebDriver input ) {
+					return webDriver.isElementPresent( webElement.findElement( By.xpath( "//img[@name='picture']" ) ) );
+				}
+			} );
+		} catch ( TimeoutException e ) {
+			fail( "Image preview is not displayed on " + viewName );
+		}
 	}
 
 }
