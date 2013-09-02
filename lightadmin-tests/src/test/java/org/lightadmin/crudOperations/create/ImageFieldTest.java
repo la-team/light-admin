@@ -2,6 +2,7 @@ package org.lightadmin.crudOperations.create;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightadmin.LoginOnce;
 import org.lightadmin.RunWithConfiguration;
@@ -24,6 +25,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.lightadmin.util.DomainAsserts.assertImagePreviewIsDisplayed;
 
+@Ignore
 @RunWithConfiguration( { TestProductConfiguration.class } )
 @LoginOnce( domain = Domain.TEST_PRODUCTS )
 @ProfileValueSourceConfiguration( SystemProfileValueSource.class )
