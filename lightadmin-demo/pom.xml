@@ -121,9 +121,10 @@
 		<finalName>lightadmin-demo</finalName>
 		<plugins>
 			<!--
-			Unpack JSP pages bundled with LightAdmin JAR artifact to make
-			them accessible for Servlet container 2.5 and below
-
+			Unpacks JSP pages bundled with LightAdmin JAR artifact to make them
+			accessible for Servlet container 2.5 and below.
+			Uncomment along with corresponding section of maven-dependency-plugin -->
+			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
@@ -137,14 +138,15 @@
 						<configuration>
 							<includeGroupIds>org.lightadmin</includeGroupIds>
 							<includeArtifactIds>lightadmin</includeArtifactIds>
-							<includes>/META-INF/resources/views/**.jsp</includes>
-							<outputDirectory>${project.build.outputDirectory}</outputDirectory>
+							<includes>META-INF/resources/views/**/*.jsp</includes>
+							<outputDirectory>${project.build.directory}/lightadmin-jsp-pages</outputDirectory>
 							<overWriteReleases>false</overWriteReleases>
 						</configuration>
 					</execution>
 				</executions>
 			</plugin>
 			-->
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-war-plugin</artifactId>
@@ -152,6 +154,14 @@
 				<configuration>
 					<failOnMissingWebXml>false</failOnMissingWebXml>
 					<attachClasses>true</attachClasses>
+					<!-- Uncomment along with configuration of maven-dependency-plugin -->
+					<!--
+					<webResources>
+						<resource>
+							<directory>${project.build.directory}/lightadmin-jsp-pages/META-INF/resources</directory>
+						</resource>
+					</webResources>
+					-->
 				</configuration>
 			</plugin>
 			<plugin>
