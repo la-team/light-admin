@@ -2,6 +2,7 @@ package org.lightadmin.component;
 
 import org.lightadmin.SeleniumContext;
 import org.lightadmin.data.Domain;
+import org.lightadmin.page.DashboardPage;
 import org.lightadmin.page.ListViewPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -17,8 +18,18 @@ public class NavigationMenuComponent extends StaticComponent {
 	}
 
 	public ListViewPage navigateToDomain( Domain domain ) {
-		navigationMenuContainer.findElement( By.linkText( domain.getLinkText() ) ).click();
+		getNavigationLink( domain.getLinkText() ).click();
 
 		return new ListViewPage( seleniumContext, domain ).get();
+	}
+
+	public DashboardPage navigateToDashboard() {
+		getNavigationLink( "Dashboard" ).click();
+
+		return new DashboardPage( seleniumContext );
+	}
+
+	private WebElement getNavigationLink( String linkText ) {
+		return navigationMenuContainer.findElement( By.linkText( linkText ) );
 	}
 }

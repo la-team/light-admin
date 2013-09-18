@@ -2,6 +2,7 @@ package org.lightadmin.crudOperations.edit;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.lightadmin.LoginOnce;
 import org.lightadmin.RunWithConfiguration;
@@ -18,6 +19,7 @@ import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 		CustomerTestEntityConfiguration.class,
 		OrderTestEntityWithComplexFields.class})
 @LoginOnce( domain = Domain.TEST_ORDERS )
+@Ignore
 public class ComplexFields extends SeleniumIntegrationTest {
 
 	private EditPage editPage;

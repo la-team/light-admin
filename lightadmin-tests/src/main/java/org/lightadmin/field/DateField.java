@@ -8,30 +8,30 @@ import org.openqa.selenium.support.FindBy;
 
 public class DateField extends BaseField {
 
-	private final WebElement webElement;
+	private final WebElement dateField;
 
 	@FindBy( className = "ui-datepicker-calendar" )
 	private WebElement datePicker;
 
-	public DateField( WebElement webElement, SeleniumContext seleniumContext ) {
+	public DateField( WebElement theDateField, SeleniumContext seleniumContext ) {
 		super( seleniumContext );
 
-		this.webElement = webElement;
+		this.dateField = theDateField;
 	}
 
 	public String selectDateOfCurrentMonth( String date ) {
-		webElement.click();
+		dateField.click();
 
 		try {
 			webDriver().waitForElementVisible( datePicker );
 		} catch ( TimeoutException e ) {
-			webElement.click();
+			dateField.click();
 			webDriver().waitForElementVisible( datePicker );
 		}
 
 		datePicker.findElement( By.linkText( date ) ).click();
 		webDriver().waitForElementInvisible( datePicker );
 
-		return webElement.getAttribute( "value" );
+		return dateField.getAttribute( "value" );
 	}
 }

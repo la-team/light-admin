@@ -5,10 +5,12 @@ import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.data.User;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.IfProfileValue;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+@IfProfileValue( name = "security.enabled", value = "true" )
 public class LoginPageTest extends SeleniumIntegrationTest {
 
 	@Autowired

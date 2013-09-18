@@ -1,38 +1,23 @@
 package org.lightadmin.page.fieldDisplay.quickView;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.lightadmin.LoginOnce;
+import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.component.QuickViewComponent;
 import org.lightadmin.config.OrderTestEntityWithoutQuickViewFields;
 import org.lightadmin.data.Domain;
-import org.lightadmin.data.User;
-import org.lightadmin.page.ListViewPage;
-import org.lightadmin.page.LoginPage;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 import static org.lightadmin.util.DomainAsserts.assertQuickViewFields;
 
+@RunWithConfiguration( OrderTestEntityWithoutQuickViewFields.class )
+@LoginOnce( domain = Domain.TEST_ORDERS )
 public class DefaultFieldsTest extends SeleniumIntegrationTest {
-
-	@Autowired
-	private LoginPage loginPage;
-
-	private ListViewPage testOrderListPage;
-
-	@Before
-	public void setup() {
-		removeAllDomainTypeAdministrationConfigurations();
-
-		registerDomainTypeAdministrationConfiguration( OrderTestEntityWithoutQuickViewFields.class );
-
-		testOrderListPage = loginPage.get().loginAs( User.ADMINISTRATOR ).navigateToDomain( Domain.TEST_ORDERS );
-	}
 
 	@Test
 	public void allPersistentFieldsAreDisplayedWhenQuickViewIsNotConfigured() {
-		final QuickViewComponent quickViewComponent = testOrderListPage.showQuickViewForItem( 3 );
+		final QuickViewComponent quickViewComponent = getStartPage().showQuickViewForItem( 3 );
 
 		String[] quickViewFieldNames = quickViewComponent.getQuickViewFieldNames();
 		String[] quickViewFieldValues = quickViewComponent.getQuickViewFieldValues();

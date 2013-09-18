@@ -11,7 +11,7 @@ public class LoginListener extends AbstractTestExecutionListener {
 	@Override
 	public void beforeTestClass( TestContext testContext ) throws Exception {
 		if ( null != ( getTestDomain( testContext ) ) ) {
-			getLoginService( testContext ).loginAndNavigateToDomain( getTestDomain( testContext ) );
+			getLoginService( testContext ).navigateToDomain( getTestDomain( testContext ) );
 		}
 	}
 

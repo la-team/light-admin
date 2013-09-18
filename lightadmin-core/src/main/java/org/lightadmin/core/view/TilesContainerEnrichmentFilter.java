@@ -13,10 +13,9 @@ import static org.apache.tiles.servlet.context.ServletUtil.CURRENT_CONTAINER_ATT
 import static org.lightadmin.core.view.LightAdminSpringTilesInitializer.LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE;
 
 public class TilesContainerEnrichmentFilter extends OncePerRequestFilter {
-
-    @Override
-    protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
-        request.setAttribute(CURRENT_CONTAINER_ATTRIBUTE_NAME, ServletUtil.getContainer(request.getServletContext(), LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE));
-        filterChain.doFilter(request, response);
-    }
+	@Override
+	protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response, final FilterChain filterChain) throws ServletException, IOException {
+		request.setAttribute(CURRENT_CONTAINER_ATTRIBUTE_NAME, ServletUtil.getContainer(getServletContext(), LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE));
+		filterChain.doFilter(request, response);
+	}
 }

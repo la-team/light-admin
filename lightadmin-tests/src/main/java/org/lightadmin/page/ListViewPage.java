@@ -18,7 +18,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	public static final String DEFAULT_SCOPE_LABEL = "All";
 	private Domain domain;
 
-	@FindBy( id = "listViewTable" )
+	@FindBy(id = "listViewTable")
 	private WebElement listViewTable;
 
 	private FilterFormComponent filterFormComponent;
@@ -86,6 +86,10 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 		return getDataTable().showQuickViewFor( itemId );
 	}
 
+	public QuickViewComponent showQuickViewForItem( String itemName ) {
+		return getDataTable().showQuickViewFor( itemName );
+	}
+
 	public int getScopeCount( String scope ) {
 		String fullScopeLabel = getScope( scope ).getText();
 		return Integer.parseInt( fullScopeLabel.substring( fullScopeLabel.indexOf( "(" ) + 1, fullScopeLabel.indexOf( ")" ) ) );
@@ -107,5 +111,9 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 
 	public String[] getFilterCaptions() {
 		return filterFormComponent.getCaptions();
+	}
+
+	public WebElement getRowForItem( String itemName ) {
+		return getDataTable().getRowForItem( itemName );
 	}
 }
