@@ -10,10 +10,7 @@ import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitB
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
-import org.lightadmin.core.config.domain.scope.DomainTypePredicates;
-import org.lightadmin.core.config.domain.scope.DomainTypeSpecification;
-import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
-import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.scope.*;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.demo.model.Customer;
 import org.lightadmin.demo.service.CustomerService;
@@ -24,8 +21,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import static org.lightadmin.core.config.domain.renderer.Renderers.select;
-import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
+import static org.lightadmin.core.config.domain.filter.FilterMetadataBuilder.filter;
+import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.all;
+import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.specification;
 
 @SuppressWarnings("unused")
 public class CustomerAdministration extends AdministrationConfiguration<Customer> {
@@ -85,17 +83,19 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
     public ScopesConfigurationUnit scopes(final ScopesConfigurationUnitBuilder scopeBuilder) {
         return scopeBuilder
                 .scope("All", all()).defaultScope()
-                .scope("Buyers", filter(DomainTypePredicates.alwaysTrue()))
+                .scope("Buyers", ScopeMetadataUtils.filter(DomainTypePredicates.alwaysTrue()))
                 .scope("Sellers", specification(customerNameEqDave())).build();
     }
 
     public FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
-        return filterBuilder.filter("ID", "id")
-                .filter("First Name", "firstname").renderer(select(new String[]{"Yes", "No"}))
-                .filter("Last Name", "lastname")
-                .filter("Email Address", "emailAddress")
-                .filter("Addresses", "addresses")
-                .filter("Discount Programs", "discountPrograms").build();
+        return filterBuilder.filters(
+                filter().field("id").caption("ID").build(),
+                filter().field("firstname").caption("First Name").build(),
+                filter().field("lastname").caption("Last Name").build(),
+                filter().field("emailAddress").caption("Email Address").build(),
+                filter().field("addresses").caption("Addresses").build(),
+                filter().field("discountPrograms").caption("Discount Programs").build()
+        ).build();
     }
 
     private DomainTypeSpecification<Customer> customerNameEqDave() {
