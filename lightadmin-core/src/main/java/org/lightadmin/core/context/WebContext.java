@@ -1,5 +1,7 @@
 package org.lightadmin.core.context;
 
+import java.io.File;
+
 public interface WebContext {
 
     String getApplicationBaseUrl();
@@ -11,4 +13,9 @@ public interface WebContext {
     String getSecurityLogoutUrl();
 
     String getBackToSiteUrl();
+
+    File getFileStorageDirectory();
+
+    boolean isFileStorageEnabled();
+
 }

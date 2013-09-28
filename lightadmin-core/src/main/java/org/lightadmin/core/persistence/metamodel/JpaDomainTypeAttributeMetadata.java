@@ -79,6 +79,11 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
         return attributeMetadata.get(target);
     }
 
+    @Override
+    public void setValue(Object value, Object target) {
+        attributeMetadata.set(value, target);
+    }
+
     public Attribute getAttribute() {
         return attribute;
     }

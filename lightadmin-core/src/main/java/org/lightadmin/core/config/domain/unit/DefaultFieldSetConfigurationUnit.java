@@ -17,54 +17,59 @@ import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.getPers
 
 public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUnit implements FieldSetConfigurationUnit, DomainTypeEntityMetadataAware {
 
-	private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 1L;
 
-	private final DomainConfigurationUnitType configurationUnitType;
+    private final DomainConfigurationUnitType configurationUnitType;
 
-	private Set<FieldMetadata> fields = newLinkedHashSet();
+    private Set<FieldMetadata> fields = newLinkedHashSet();
 
-	public DefaultFieldSetConfigurationUnit( Class<?> domainType, DomainConfigurationUnitType configurationUnitType ) {
-		super( domainType );
-		this.configurationUnitType = configurationUnitType;
-	}
+    public DefaultFieldSetConfigurationUnit(Class<?> domainType, DomainConfigurationUnitType configurationUnitType) {
+        super(domainType);
+        this.configurationUnitType = configurationUnitType;
+    }
 
-	public void addField( FieldMetadata fieldMetadata ) {
-		fields.add( fieldMetadata );
-	}
+    public void addField(FieldMetadata fieldMetadata) {
+        fields.add(fieldMetadata);
+    }
 
-	public Set<FieldMetadata> getFields() {
-		return newLinkedHashSet( fields );
-	}
+    public Set<FieldMetadata> getFields() {
+        return newLinkedHashSet(fields);
+    }
 
-	@Override
-	public Iterator<FieldMetadata> iterator() {
-		return getFields().iterator();
-	}
+    @Override
+    public FieldMetadata getField(String fieldName) {
+        return getPersistentField(fields, fieldName);
+    }
 
-	@Override
-	public boolean isEmpty() {
-		return fields.isEmpty();
-	}
+    @Override
+    public Iterator<FieldMetadata> iterator() {
+        return getFields().iterator();
+    }
 
-	@Override
-	public DomainConfigurationUnitType getDomainConfigurationUnitType() {
-		return configurationUnitType;
-	}
+    @Override
+    public boolean isEmpty() {
+        return fields.isEmpty();
+    }
 
-	@Override
-	public void setDomainTypeEntityMetadata( DomainTypeEntityMetadata domainTypeEntityMetadata ) {
-		final PersistentFieldMetadata primaryKeyField = getPersistentField( fields, domainTypeEntityMetadata.getIdAttribute().getName() );
+    @Override
+    public DomainConfigurationUnitType getDomainConfigurationUnitType() {
+        return configurationUnitType;
+    }
 
-		if ( primaryKeyField != null ) {
-			primaryKeyField.setPrimaryKey( true );
-		} else {
-			fields = addPrimaryKeyPersistentField( fields, domainTypeEntityMetadata.getIdAttribute() );
-		}
+    @Override
+    public void setDomainTypeEntityMetadata(DomainTypeEntityMetadata domainTypeEntityMetadata) {
+        final PersistentFieldMetadata primaryKeyField = getPersistentField(fields, domainTypeEntityMetadata.getIdAttribute().getName());
 
-		for ( FieldMetadata field : fields ) {
-			if ( field instanceof DomainTypeAttributeMetadataAware ) {
-				( ( DomainTypeAttributeMetadataAware ) field ).setAttributeMetadata( domainTypeEntityMetadata.getAttribute( ( ( Persistable ) field ).getField() ) );
-			}
-		}
-	}
+        if (primaryKeyField != null) {
+            primaryKeyField.setPrimaryKey(true);
+        } else {
+            fields = addPrimaryKeyPersistentField(fields, domainTypeEntityMetadata.getIdAttribute());
+        }
+
+        for (FieldMetadata field : fields) {
+            if (field instanceof DomainTypeAttributeMetadataAware) {
+                ((DomainTypeAttributeMetadataAware) field).setAttributeMetadata(domainTypeEntityMetadata.getAttribute(((Persistable) field).getField()));
+            }
+        }
+    }
 }

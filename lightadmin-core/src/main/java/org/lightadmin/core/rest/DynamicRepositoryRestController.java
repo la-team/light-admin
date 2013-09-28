@@ -18,9 +18,11 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadataUtils;
+import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.lightadmin.core.search.SpecificationCreator;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -64,10 +66,12 @@ import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Lists.newLinkedList;
 import static com.google.common.collect.Maps.newHashMap;
 import static com.google.common.collect.Maps.newLinkedHashMap;
+import static java.lang.String.valueOf;
 import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
+import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.IMAGE_JPEG;
 
@@ -80,10 +84,13 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     private GlobalAdministrationConfiguration configuration;
 
     private ApplicationContext applicationContext;
+    private WebContext webContext;
+    private OperationBuilder operationBuilder;
 
     @PostConstruct
     public void init() throws Exception {
         specificationCreator = new SpecificationCreator(conversionService, configuration);
+        operationBuilder = operationBuilder(configuration, webContext);
     }
 
     @RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
@@ -96,23 +103,30 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
     @Override
     @SuppressWarnings("rawtypes")
-    protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) {
+    protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) throws IOException {
         DomainTypeBasicConfiguration repo;
         if (attrMeta.isCollectionLike() || attrMeta.isSetLike()) {
-            // Trying to avoid collection-was-no-longer-referenced issue
-            // if the collection is modifiable
-            try {
-                Collection col = (Collection) attrMeta.get(entity);
-                col.clear();
-                col.addAll((Collection) incomingVal);
-            } catch (UnsupportedOperationException e) {
-                attrMeta.set(incomingVal, entity);
-            }
+            collectionAttrMetaSet(attrMeta, incomingVal, entity);
         } else if ((repo = configuration.forDomainType(attrMeta.type())) != null && (repo.getRepository().isNullPlaceholder(incomingVal))) {
             attrMeta.set(null, entity);
         } else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
             attrMeta.set(null, entity);
+        } else if (attrMeta.type().equals(byte[].class)) {
+            operationBuilder.saveOperation(entity).perform(attrMeta, (byte[]) incomingVal);
         } else {
+            attrMeta.set(incomingVal, entity);
+        }
+    }
+
+
+    private void collectionAttrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) throws IOException {
+        // Trying to avoid collection-was-no-longer-referenced issue
+        // if the collection is modifiable
+        try {
+            Collection col = (Collection) attrMeta.get(entity);
+            col.clear();
+            col.addAll((Collection) incomingVal);
+        } catch (UnsupportedOperationException e) {
             attrMeta.set(incomingVal, entity);
         }
     }
@@ -130,9 +144,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             return notFoundResponse(request);
         }
 
-        attrMeta.set(null, entity);
-
-        repo.save(entity);
+        operationBuilder.deleteOperation(entity).perform(attrMeta);
 
         return new ResponseEntity(new HttpHeaders(), HttpStatus.OK);
     }
@@ -150,8 +162,9 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         }
 
         if (attrMeta.type().equals(byte[].class)) {
-            final byte[] bytes = (byte[]) attrMeta.get(entity);
-            return downloadImageResource(bytes, width, height);
+            byte[] fileData = operationBuilder.getOperation(entity).perform(attrMeta);
+
+            return downloadImageResource(fileData, width, height);
         }
         return new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
@@ -468,7 +481,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     }
 
     private ResponseEntity<String> responseEntity(Object value) {
-        return new ResponseEntity<String>(String.valueOf(value), new HttpHeaders(), HttpStatus.OK);
+        return new ResponseEntity<String>(valueOf(value), new HttpHeaders(), HttpStatus.OK);
     }
 
     @Override
@@ -481,5 +494,10 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         super.setApplicationContext(applicationContext);
         this.applicationContext = applicationContext;
+    }
+
+    @Autowired
+    public void setWebContext(WebContext webContext) {
+        this.webContext = webContext;
     }
 }

@@ -10,9 +10,10 @@ import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+
+import static org.springframework.util.StringUtils.uncapitalize;
 
 public class DomainTypeAdministrationConfiguration implements DomainTypeBasicConfiguration {
 
@@ -45,7 +46,7 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
 
     @Override
     public String getDomainTypeName() {
-        return StringUtils.uncapitalize(getDomainTypeEntityMetadata().getEntityName());
+        return uncapitalize(getDomainTypeEntityMetadata().getEntityName());
     }
 
     public FieldSetConfigurationUnit getQuickViewFragment() {

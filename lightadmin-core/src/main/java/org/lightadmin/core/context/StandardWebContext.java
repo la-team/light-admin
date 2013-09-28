@@ -1,7 +1,9 @@
 package org.lightadmin.core.context;
 
 import javax.servlet.ServletContext;
+import java.io.File;
 
+import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang.StringUtils.isBlank;
@@ -14,17 +16,29 @@ public class StandardWebContext implements WebContext {
     private final boolean securityEnabled;
     private final String securityLogoutUrl;
     private final String backToSiteUrl;
+    private final File fileStorageDirectory;
 
     public StandardWebContext(ServletContext servletContext) {
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
         this.applicationBaseNoEndSeparator = urlWithoutEndSeparator(this.applicationBaseUrl);
         this.backToSiteUrl = backToSiteUrl(servletContext);
+        this.fileStorageDirectory = fileStorageDirectory(servletContext);
         this.securityEnabled = toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
         if (securityEnabled) {
             this.securityLogoutUrl = servletContext.getContextPath() + this.applicationBaseNoEndSeparator + LIGHT_ADMIN_SECURITY_LOGOUT_URL_DEFAULT;
         } else {
             this.securityLogoutUrl = servletContext.getContextPath() + defaultIfBlank(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY_LOGOUT_URL), "#");
         }
+    }
+
+    @Override
+    public File getFileStorageDirectory() {
+        return fileStorageDirectory;
+    }
+
+    @Override
+    public boolean isFileStorageEnabled() {
+        return this.fileStorageDirectory != null;
     }
 
     @Override
@@ -50,6 +64,20 @@ public class StandardWebContext implements WebContext {
     @Override
     public String getSecurityLogoutUrl() {
         return securityLogoutUrl;
+    }
+
+    private File fileStorageDirectory(ServletContext servletContext) {
+        final String fileStoragePath = servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STORAGE_PATH);
+        if (isBlank(fileStoragePath)) {
+            return null;
+        }
+        final File fileStorageDirectory = getFile(fileStoragePath);
+
+        if (fileStorageDirectory.exists() && fileStorageDirectory.canWrite()) {
+            return fileStorageDirectory;
+        }
+
+        return null;
     }
 
     private String backToSiteUrl(ServletContext servletContext) {

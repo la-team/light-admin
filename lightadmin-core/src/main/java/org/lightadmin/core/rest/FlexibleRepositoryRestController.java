@@ -721,7 +721,7 @@ public class FlexibleRepositoryRestController extends RepositoryRestController i
 
     }
 
-    protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) {
+    protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) throws IOException {
         attrMeta.set(incomingVal, entity);
     }
 
