@@ -3,13 +3,6 @@ package org.lightadmin.core.rest;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-import org.apache.tika.metadata.Metadata;
-import org.apache.tika.parser.AutoDetectParser;
-import org.apache.tika.parser.ParseContext;
-import org.apache.tika.parser.Parser;
-import org.apache.tika.sax.BodyContentHandler;
-import org.apache.tika.sax.ContentHandlerDecorator;
-import org.imgscalr.Scalr;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
@@ -24,6 +17,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.lightadmin.core.search.SpecificationCreator;
+import org.lightadmin.core.web.util.ImageResourceControllerSupport;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -41,7 +35,6 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
@@ -52,11 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.PostConstruct;
-import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletRequest;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -72,8 +61,8 @@ import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
-import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.MediaType.IMAGE_JPEG;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
 
 @SuppressWarnings("unchecked")
 @RequestMapping("/rest")
@@ -86,11 +75,13 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     private ApplicationContext applicationContext;
     private WebContext webContext;
     private OperationBuilder operationBuilder;
+    private ImageResourceControllerSupport imageResourceControllerSupport;
 
     @PostConstruct
     public void init() throws Exception {
-        specificationCreator = new SpecificationCreator(conversionService, configuration);
-        operationBuilder = operationBuilder(configuration, webContext);
+        this.specificationCreator = new SpecificationCreator(conversionService, configuration);
+        this.operationBuilder = operationBuilder(configuration, webContext);
+        this.imageResourceControllerSupport = new ImageResourceControllerSupport();
     }
 
     @RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
@@ -164,98 +155,9 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         if (attrMeta.type().equals(byte[].class)) {
             byte[] fileData = operationBuilder.getOperation(entity).perform(attrMeta);
 
-            return downloadImageResource(fileData, width, height);
+            return imageResourceControllerSupport.downloadImageResource(fileData, width, height);
         }
-        return new ResponseEntity(HttpStatus.BAD_REQUEST);
-    }
-
-    private ResponseEntity<?> downloadImageResource(byte[] content, int width, int height) {
-        if (content == null || content.length == 0) {
-            return noContentResponse();
-        }
-
-        try {
-            final MediaType mediaType = mediaTypeOf(content);
-
-            return writeImageResourceResponse(content, mediaType, width, height);
-        } catch (Exception ex) {
-            return serverErrorResponse();
-        }
-    }
-
-    private ResponseEntity<?> writeImageResourceResponse(byte[] content, MediaType mediaType, int width, int height) throws IOException {
-        if (imageResizingRequired(width, height)) {
-            try {
-                return scaledImageResourceResponse(content, width, height, mediaType);
-            } catch (Exception ex) {
-            }
-        }
-        return imageResourceResponse(content, mediaType);
-    }
-
-    private ResponseEntity<?> imageResourceResponse(byte[] content, MediaType mediaType) {
-        return new ResponseEntity<byte[]>(content, imageResponseHeader(content, mediaType), OK);
-    }
-
-    private ResponseEntity<?> scaledImageResourceResponse(byte[] bytes, int width, int height, MediaType mediaType) throws IOException {
-        BufferedImage sourceImage = ImageIO.read(new ByteArrayInputStream(bytes));
-        BufferedImage image = resizeImage(sourceImage, width, height);
-
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-
-        ImageIO.write(image, mediaType.getSubtype(), byteArrayOutputStream);
-
-        return imageResourceResponse(byteArrayOutputStream.toByteArray(), mediaType);
-    }
-
-    private HttpHeaders imageResponseHeader(byte[] content, MediaType mediaType) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setContentLength(content.length);
-        responseHeaders.setContentType(mediaType);
-        responseHeaders.set("Content-Disposition", "inline; filename=\"image." + mediaType.getSubtype() + "\"");
-        return responseHeaders;
-    }
-
-    private ResponseEntity serverErrorResponse() {
-        return new ResponseEntity(INTERNAL_SERVER_ERROR);
-    }
-
-    private ResponseEntity noContentResponse() {
-        return new ResponseEntity(NO_CONTENT);
-    }
-
-    private MediaType mediaTypeOf(final byte[] bytes) {
-        ContentHandlerDecorator contentHandler = new BodyContentHandler();
-        Metadata metadata = new Metadata();
-        Parser parser = new AutoDetectParser();
-        try {
-            final ParseContext parseContext = new ParseContext();
-            parser.parse(new ByteArrayInputStream(bytes), contentHandler, metadata, parseContext);
-            return MediaType.parseMediaType(metadata.get("Content-Type"));
-        } catch (Exception e) {
-            return IMAGE_JPEG;
-        }
-    }
-
-    private boolean imageResizingRequired(final int width, final int height) {
-        return width > 0 || height > 0;
-    }
-
-    private BufferedImage resizeImage(BufferedImage sourceImage, int width, int height) {
-        final int currentWidth = sourceImage.getWidth();
-        final int currentHeight = sourceImage.getHeight();
-
-        float ratio = ((float) currentHeight / (float) currentWidth);
-
-        if (width <= 0) {
-            width = (int) (height / ratio);
-        }
-
-        if (height <= 0) {
-            height = (int) (width * ratio);
-        }
-
-        return Scalr.resize(sourceImage, Scalr.Method.SPEED, Scalr.Mode.AUTOMATIC, width, height, Scalr.OP_ANTIALIAS);
+        return new ResponseEntity(BAD_REQUEST);
     }
 
     @RequestMapping(value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST})
@@ -275,7 +177,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             return negotiateResponse(request, HttpStatus.OK, new HttpHeaders(), result);
         }
 
-        return new ResponseEntity(HttpStatus.METHOD_NOT_ALLOWED);
+        return new ResponseEntity(METHOD_NOT_ALLOWED);
     }
 
     @ResponseBody
@@ -381,7 +283,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         }
         packet.put("errors", errors);
 
-        return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+        return negotiateResponse(request, BAD_REQUEST, new HttpHeaders(), packet);
     }
 
     @Override
@@ -392,7 +294,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         Map<String, String> error = singletonMap("message", t.getLocalizedMessage());
         Map packet = newHashMap();
         packet.put("errors", asList(error));
-        return negotiateResponse(request, HttpStatus.BAD_REQUEST, new HttpHeaders(), packet);
+        return negotiateResponse(request, BAD_REQUEST, new HttpHeaders(), packet);
     }
 
     @Override

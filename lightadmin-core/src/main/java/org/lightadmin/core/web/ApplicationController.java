@@ -12,12 +12,13 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.ClassUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMethodException;
 
 import java.io.Serializable;
+
+import static org.springframework.util.ClassUtils.isAssignable;
 
 @Controller
 @SuppressWarnings({"unused", "unchecked"})
@@ -147,7 +148,7 @@ public class ApplicationController {
     }
 
     private <V extends Serializable> V stringToSerializable(String s, Class<V> targetType) {
-        if (ClassUtils.isAssignable(targetType, String.class)) {
+        if (isAssignable(targetType, String.class)) {
             return (V) s;
         }
         return conversionService.convert(s, targetType);
