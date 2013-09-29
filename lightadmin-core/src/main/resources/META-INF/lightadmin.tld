@@ -1,258 +1,276 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <taglib xmlns="http://java.sun.com/xml/ns/j2ee"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
-		version="2.0">
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-jsptaglibrary_2_0.xsd"
+        version="2.0">
 
-	<description>LightAdmin Custom Tag Library</description>
-	<tlib-version>0.1</tlib-version>
-	<short-name>light</short-name>
-	<uri>http://www.lightadmin.org/tags</uri>
+    <description>LightAdmin Custom Tag Library</description>
+    <tlib-version>0.1</tlib-version>
+    <short-name>light</short-name>
+    <uri>http://www.lightadmin.org/tags</uri>
 
-	<tag>
-		<name>url</name>
-		<tag-class>org.lightadmin.core.view.tags.LightAdminUrlTag</tag-class>
-		<body-content>JSP</body-content>
-		<attribute>
-			<description>The URL to build. This value can include template place holders that are replaced with the URL encoded value of the named parameter. Parameters must be defined using the param tag inside the body
-				of this tag.
-			</description>
-			<name>value</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>Specifies a remote application context path. The default is the current application context path.
-			</description>
-			<name>context</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>The name of the variable to export the URL value to.</description>
-			<name>var</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>The scope for the var. 'application', 'session', 'request' and 'page' scopes are supported. Defaults to page scope. This attribute has no effect unless the var attribute is also defined.
-			</description>
-			<name>scope</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>Set HTML escaping for this tag, as a boolean value. Overrides the default HTML escaping setting for the current page.
-			</description>
-			<name>htmlEscape</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>Set JavaScript escaping for this tag, as a boolean value. Default is false.</description>
-			<name>javaScriptEscape</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
+    <tag>
+        <name>url</name>
+        <tag-class>org.lightadmin.core.view.tags.LightAdminUrlTag</tag-class>
+        <body-content>JSP</body-content>
+        <attribute>
+            <description>The URL to build. This value can include template place holders that are replaced with the URL
+                encoded value of the named parameter. Parameters must be defined using the param tag inside the body
+                of this tag.
+            </description>
+            <name>value</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Specifies a remote application context path. The default is the current application context
+                path.
+            </description>
+            <name>context</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>The name of the variable to export the URL value to.</description>
+            <name>var</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>The scope for the var. 'application', 'session', 'request' and 'page' scopes are supported.
+                Defaults to page scope. This attribute has no effect unless the var attribute is also defined.
+            </description>
+            <name>scope</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Set HTML escaping for this tag, as a boolean value. Overrides the default HTML escaping setting
+                for the current page.
+            </description>
+            <name>htmlEscape</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Set JavaScript escaping for this tag, as a boolean value. Default is false.</description>
+            <name>javaScriptEscape</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
-	<tag>
-		<description>Renders dynamic html element using the bound value.</description>
-		<name>dynamic-element</name>
-		<tag-class>org.lightadmin.core.view.tags.form.DynamicHtmlElementTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<description>Entity Attribute Metadata</description>
-			<name>attributeMetadata</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>Equivalent to "class" - HTML Optional Attribute</description>
-			<name>cssClass</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<dynamic-attributes>true</dynamic-attributes>
-	</tag>
+    <tag>
+        <description>Renders dynamic html element using the bound value.</description>
+        <name>dynamic-element</name>
+        <tag-class>org.lightadmin.core.view.tags.form.DynamicHtmlElementTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>Entity Attribute Metadata</description>
+            <name>attributeMetadata</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Equivalent to "class" - HTML Optional Attribute</description>
+            <name>cssClass</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <dynamic-attributes>true</dynamic-attributes>
+    </tag>
 
-	<tag>
-		<description>Renders html form element control</description>
-		<name>edit-control-dispatcher</name>
-		<tag-class>org.lightadmin.core.view.tags.form.EditControlDispatcherTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<description>Entity Attribute Metadata</description>
-			<name>attributeMetadata</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>customControl</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>simpleEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<name>numberEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<name>booleanEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<name>fileEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<name>dateEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<name>n2oneEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<name>n2manyEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-		<attribute>
-			<name>mapEditControl</name>
-			<required>true</required>
-			<fragment>true</fragment>
-		</attribute>
-	</tag>
+    <tag>
+        <description>Renders html form element control</description>
+        <name>edit-control-dispatcher</name>
+        <tag-class>org.lightadmin.core.view.tags.form.EditControlDispatcherTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>Entity Attribute Metadata</description>
+            <name>attributeMetadata</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>customControl</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>simpleEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>numberEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>booleanEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>fileEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>dateEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>n2oneEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>n2manyEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>mapEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+    </tag>
 
-	<tag>
-		<description>Loops over all elements of the specified domain type</description>
-		<name>domain-type-elements</name>
-		<tag-class>org.lightadmin.core.view.tags.form.DomainTypeElementsTag</tag-class>
-		<body-content>scriptless</body-content>
-		<attribute>
-			<name>domainType</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>idVar</name>
-			<required>true</required>
-			<rtexprvalue>false</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>stringRepresentationVar</name>
-			<required>true</required>
-			<rtexprvalue>false</rtexprvalue>
-		</attribute>
-	</tag>
+    <tag>
+        <description>Loops over all elements of the specified domain type</description>
+        <name>domain-type-elements</name>
+        <tag-class>org.lightadmin.core.view.tags.form.DomainTypeElementsTag</tag-class>
+        <body-content>scriptless</body-content>
+        <attribute>
+            <name>domainType</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>idVar</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>stringRepresentationVar</name>
+            <required>true</required>
+            <rtexprvalue>false</rtexprvalue>
+        </attribute>
+    </tag>
 
-	<tag>
-		<description>Writes domain type metadata in JSON format</description>
-		<name>domain-type-metadata-json</name>
-		<tag-class>org.lightadmin.core.view.tags.form.DomainTypeMetadataJsonTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<name>domainTypeMetadata</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata</type>
-		</attribute>
-		<attribute>
-			<name>includeFields</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-			<type>java.util.Collection</type>
-		</attribute>
-	</tag>
+    <tag>
+        <description>Writes domain type metadata in JSON format</description>
+        <name>domain-type-metadata-json</name>
+        <tag-class>org.lightadmin.core.view.tags.form.DomainTypeMetadataJsonTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <name>domainTypeMetadata</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata</type>
+        </attribute>
+        <attribute>
+            <name>includeFields</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <type>java.util.Collection</type>
+        </attribute>
+    </tag>
 
-	<tag>
-		<description>Renders dynamic entity attribute</description>
-		<name>attribute</name>
-		<tag-class>org.lightadmin.core.view.tags.AttributeRendererTag</tag-class>
-		<body-content>empty</body-content>
-		<attribute>
-			<description>Entity Attribute Metadata</description>
-			<name>attributeMetadata</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<description>Entity</description>
-			<name>entity</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
+    <tag>
+        <description>Renders dynamic entity attribute</description>
+        <name>attribute</name>
+        <tag-class>org.lightadmin.core.view.tags.AttributeRendererTag</tag-class>
+        <body-content>empty</body-content>
+        <attribute>
+            <description>Entity Attribute Metadata</description>
+            <name>attributeMetadata</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <description>Entity</description>
+            <name>entity</name>
+            <required>true</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
 
-	<function>
-		<name>domainBaseUrl</name>
-		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-		<function-signature>java.lang.String domainBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)</function-signature>
-	</function>
+    <function>
+        <name>domainBaseUrl</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>java.lang.String
+            domainBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)
+        </function-signature>
+    </function>
 
-	<function>
-		<name>domainRestEntityBaseUrl</name>
-		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-		<function-signature>java.lang.String domainRestEntityBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration,java.lang.Object)</function-signature>
-	</function>
+    <function>
+        <name>domainRestEntityBaseUrl</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>java.lang.String
+            domainRestEntityBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration,java.lang.Object)
+        </function-signature>
+    </function>
 
-	<function>
-		<name>domainRestBaseUrl</name>
-		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-		<function-signature>java.lang.String domainRestBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)</function-signature>
-	</function>
+    <function>
+        <name>domainRestBaseUrl</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>java.lang.String
+            domainRestBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)
+        </function-signature>
+    </function>
 
-	<function>
-		<name>domainRestScopeBaseUrl</name>
-		<function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-		<function-signature>java.lang.String domainRestScopeBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)</function-signature>
-	</function>
+    <function>
+        <name>domainRestScopeBaseUrl</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>java.lang.String
+            domainRestScopeBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)
+        </function-signature>
+    </function>
 
-	<function>
-		<name>cutLongText</name>
-		<function-class>org.lightadmin.core.util.NamingUtils</function-class>
-		<function-signature>java.lang.String cutLongText(java.lang.String)</function-signature>
-	</function>
+    <function>
+        <name>filePropertyRestUrl</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>java.lang.String filePropertyRestUrl(java.lang.Object,java.lang.String)</function-signature>
+    </function>
 
-	<function>
-		<name>capitalize</name>
-		<function-class>org.springframework.util.StringUtils</function-class>
-		<function-signature>java.lang.String capitalize(java.lang.String)</function-signature>
-	</function>
+    <function>
+        <name>cutLongText</name>
+        <function-class>org.lightadmin.core.util.NamingUtils</function-class>
+        <function-signature>java.lang.String cutLongText(java.lang.String)</function-signature>
+    </function>
 
-	<function>
-		<name>uncapitalize</name>
-		<function-class>org.springframework.util.StringUtils</function-class>
-		<function-signature>java.lang.String uncapitalize(java.lang.String)</function-signature>
-	</function>
+    <function>
+        <name>capitalize</name>
+        <function-class>org.springframework.util.StringUtils</function-class>
+        <function-signature>java.lang.String capitalize(java.lang.String)</function-signature>
+    </function>
 
-	<function>
-		<name>invokeMethod</name>
-		<function-class>org.springframework.util.ReflectionUtils</function-class>
-		<function-signature>java.lang.Object invokeMethod(java.lang.reflect.Method,java.lang.Object,java.lang.Object...)
-		</function-signature>
-	</function>
+    <function>
+        <name>uncapitalize</name>
+        <function-class>org.springframework.util.StringUtils</function-class>
+        <function-signature>java.lang.String uncapitalize(java.lang.String)</function-signature>
+    </function>
 
-	<function>
-		<name>isPrimitiveOrWrapper</name>
-		<function-class>org.springframework.util.ClassUtils</function-class>
-		<function-signature>boolean isPrimitiveOrWrapper(java.lang.Class)</function-signature>
-	</function>
+    <function>
+        <name>invokeMethod</name>
+        <function-class>org.springframework.util.ReflectionUtils</function-class>
+        <function-signature>java.lang.Object invokeMethod(java.lang.reflect.Method,java.lang.Object,java.lang.Object...)
+        </function-signature>
+    </function>
 
-	<function>
-		<name>isSimpleValueType</name>
-		<function-class>org.springframework.beans.BeanUtils</function-class>
-		<function-signature>boolean isSimpleValueType(java.lang.Class)</function-signature>
-	</function>
+    <function>
+        <name>isPrimitiveOrWrapper</name>
+        <function-class>org.springframework.util.ClassUtils</function-class>
+        <function-signature>boolean isPrimitiveOrWrapper(java.lang.Class)</function-signature>
+    </function>
+
+    <function>
+        <name>isSimpleValueType</name>
+        <function-class>org.springframework.beans.BeanUtils</function-class>
+        <function-signature>boolean isSimpleValueType(java.lang.Class)</function-signature>
+    </function>
 
 </taglib>
