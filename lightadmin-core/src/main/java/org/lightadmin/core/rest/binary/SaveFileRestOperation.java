@@ -21,7 +21,7 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
     }
 
     public void perform(AttributeMetadata attrMeta, byte[] incomingVal) throws IOException {
-        if (fileStorageModeDisabled()) {
+        if (fileStorageModeDisabled() || fileStorageDisabledOnFieldLevel(attrMeta)) {
             performDirectSave(attrMeta, incomingVal);
             return;
         }

@@ -1,5 +1,6 @@
 package org.lightadmin.core.rest.binary;
 
+import org.lightadmin.core.config.annotation.EnableFileStorage;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -65,6 +66,10 @@ public abstract class AbstractFileRestOperation {
 
     protected boolean fileStorageModeDisabled() {
         return !webContext.isFileStorageEnabled();
+    }
+
+    protected boolean fileStorageDisabledOnFieldLevel(AttributeMetadata attributeMetadata) {
+        return !attributeMetadata.hasAnnotation(EnableFileStorage.class);
     }
 
     protected DynamicJpaRepository repository() {

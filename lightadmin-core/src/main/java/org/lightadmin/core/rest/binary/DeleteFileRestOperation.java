@@ -15,7 +15,7 @@ public class DeleteFileRestOperation extends AbstractFileRestOperation {
     }
 
     public void perform(AttributeMetadata attrMeta) {
-        if (fileStorageModeDisabled()) {
+        if (fileStorageModeDisabled() || fileStorageDisabledOnFieldLevel(attrMeta)) {
             resetAttrValue(attrMeta);
             repository().save(entity);
             return;

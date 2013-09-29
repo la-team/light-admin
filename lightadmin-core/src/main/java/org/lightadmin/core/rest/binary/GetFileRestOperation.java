@@ -17,7 +17,7 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
     }
 
     public byte[] perform(AttributeMetadata attrMeta) throws IOException {
-        if (fileStorageModeDisabled()) {
+        if (fileStorageModeDisabled() || fileStorageDisabledOnFieldLevel(attrMeta)) {
             return (byte[]) attrMeta.get(entity);
         }
 
