@@ -1,6 +1,5 @@
 package org.lightadmin.core.config;
 
-import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
 import org.springframework.core.annotation.Order;
@@ -59,11 +58,11 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
         registerTilesDecorationFilter(servletContext);
 
-        registerGZipFilter(servletContext,
-                "/styles/*",
-                "/scripts/*",
-                "/images/*"
-        );
+//        registerGZipFilter(servletContext,
+//                "/styles/*",
+//                "/scripts/*",
+//                "/images/*"
+//        );
     }
 
     private void registerLightAdminDispatcher(final ServletContext servletContext) {
@@ -119,11 +118,11 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         servletContext.addFilter("lightAdminCharsetFilter", characterEncodingFilter()).addMappingForServletNames(null, false, urlMapping);
     }
 
-    private void registerGZipFilter(ServletContext servletContext, String... urlMappings) {
-        GzipFilter gzipFilter = new GzipFilter();
-
-        servletContext.addFilter("lightAdminGzipFilter", gzipFilter).addMappingForUrlPatterns(null, false, urlMappings);
-    }
+//    private void registerGZipFilter(ServletContext servletContext, String... urlMappings) {
+//        GzipFilter gzipFilter = new GzipFilter();
+//
+//        servletContext.addFilter("lightAdminGzipFilter", gzipFilter).addMappingForUrlPatterns(null, false, urlMappings);
+//    }
 
     private AnnotationConfigWebApplicationContext lightAdminApplicationContext(final ServletContext servletContext) {
         AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
