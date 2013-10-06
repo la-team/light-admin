@@ -45,6 +45,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.io.Serializable;
@@ -61,8 +62,7 @@ import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
-import static org.springframework.http.HttpStatus.BAD_REQUEST;
-import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
+import static org.springframework.http.HttpStatus.*;
 
 @SuppressWarnings("unchecked")
 @RequestMapping("/rest")
@@ -142,7 +142,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
     @RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET)
     @ResponseBody
-    public ResponseEntity<?> filePropertyOfEntity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height) throws IOException {
+    public ResponseEntity<?> filePropertyOfEntity(ServletServerHttpRequest request, ServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height) throws IOException {
         final RepositoryMetadata repoMeta = repositoryMetadataFor(repository);
         final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) repoMeta.entityMetadata().idAttribute().type());
 
@@ -153,8 +153,12 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         }
 
         if (attrMeta.type().equals(byte[].class)) {
-            byte[] fileData = operationBuilder.getOperation(entity).perform(attrMeta);
+            if (webContext.isFileStreamingEnabled()) {
+                operationBuilder.getOperation(entity).performCopy(attrMeta, response.getOutputStream());
+                return new ResponseEntity(OK);
+            }
 
+            byte[] fileData = operationBuilder.getOperation(entity).perform(attrMeta);
             return imageResourceControllerSupport.downloadImageResource(fileData, width, height);
         }
         return new ResponseEntity(BAD_REQUEST);

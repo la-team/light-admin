@@ -5,8 +5,9 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.util.FileCopyUtils;
 
-import java.io.IOException;
+import java.io.*;
 
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
 
@@ -33,5 +34,27 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
         }
 
         return readFileToByteArray(fileStorageFile(attrMeta));
+    }
+
+    public void performCopy(AttributeMetadata attrMeta, OutputStream outputStream) throws IOException {
+        if (fileStorageModeDisabled() || fileStorageDisabledOnFieldLevel(attrMeta)) {
+            FileCopyUtils.copy((byte[]) attrMeta.get(entity), outputStream);
+        }
+
+        if (attrMeta.hasAnnotation(FileReference.class)) {
+            FileReference fileReference = attrMeta.annotation(FileReference.class);
+            DomainTypeAttributeMetadata referenceDomainAttribute = referenceDomainAttribute(fileReference);
+
+            if (isOfStringType(referenceDomainAttribute)) {
+                copyToOutputStream(referencedFile(fileReference), outputStream);
+            }
+            return;
+        }
+
+        copyToOutputStream(fileStorageFile(attrMeta), outputStream);
+    }
+
+    private void copyToOutputStream(File file, OutputStream outputStream) throws IOException {
+        FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(file)), new BufferedOutputStream(outputStream));
     }
 }

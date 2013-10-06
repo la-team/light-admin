@@ -17,12 +17,16 @@ public class StandardWebContext implements WebContext {
     private final String securityLogoutUrl;
     private final String backToSiteUrl;
     private final File fileStorageDirectory;
+    private final boolean fileStreaming;
 
     public StandardWebContext(ServletContext servletContext) {
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
         this.applicationBaseNoEndSeparator = urlWithoutEndSeparator(this.applicationBaseUrl);
         this.backToSiteUrl = backToSiteUrl(servletContext);
+
         this.fileStorageDirectory = fileStorageDirectory(servletContext);
+        this.fileStreaming = toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING));
+
         this.securityEnabled = toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
         if (securityEnabled) {
             this.securityLogoutUrl = servletContext.getContextPath() + this.applicationBaseNoEndSeparator + LIGHT_ADMIN_SECURITY_LOGOUT_URL_DEFAULT;
@@ -39,6 +43,11 @@ public class StandardWebContext implements WebContext {
     @Override
     public boolean isFileStorageEnabled() {
         return this.fileStorageDirectory != null;
+    }
+
+    @Override
+    public boolean isFileStreamingEnabled() {
+        return fileStreaming;
     }
 
     @Override

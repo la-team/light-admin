@@ -18,4 +18,6 @@ public interface WebContext {
 
     boolean isFileStorageEnabled();
 
+    boolean isFileStreamingEnabled();
+
 }
