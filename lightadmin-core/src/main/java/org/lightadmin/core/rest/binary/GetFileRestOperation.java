@@ -1,5 +1,6 @@
 package org.lightadmin.core.rest.binary;
 
+import org.apache.commons.lang.ArrayUtils;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.context.WebContext;
@@ -36,7 +37,10 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
 
     public void performCopy(AttributeMetadata attrMeta, OutputStream outputStream) throws IOException {
         if (attrMeta.type().equals(byte[].class)) {
-            FileCopyUtils.copy((byte[]) attrMeta.get(entity), outputStream);
+            byte[] fileData = (byte[]) attrMeta.get(entity);
+            if (ArrayUtils.isNotEmpty(fileData)) {
+                FileCopyUtils.copy(fileData, outputStream);
+            }
         }
 
         if (attrMeta.hasAnnotation(FileReference.class)) {
