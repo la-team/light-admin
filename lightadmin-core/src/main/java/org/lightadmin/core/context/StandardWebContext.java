@@ -41,11 +41,6 @@ public class StandardWebContext implements WebContext {
     }
 
     @Override
-    public boolean isFileStorageEnabled() {
-        return this.fileStorageDirectory != null;
-    }
-
-    @Override
     public boolean isFileStreamingEnabled() {
         return fileStreaming;
     }

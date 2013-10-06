@@ -16,8 +16,6 @@ public interface WebContext {
 
     File getFileStorageDirectory();
 
-    boolean isFileStorageEnabled();
-
     boolean isFileStreamingEnabled();
 
 }

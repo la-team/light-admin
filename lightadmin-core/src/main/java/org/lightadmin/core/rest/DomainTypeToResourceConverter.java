@@ -12,8 +12,10 @@ import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
+import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.rest.webmvc.EntityResource;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
@@ -21,6 +23,7 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Map;
@@ -32,6 +35,7 @@ import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainC
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
+import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
 @SuppressWarnings("unchecked")
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
@@ -39,10 +43,12 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
     private final FieldValueEvaluator fieldValueEvaluator = new FieldValueEvaluator();
 
     private final GlobalAdministrationConfiguration configuration;
+    private final OperationBuilder operationBuilder;
 
-    public DomainTypeToResourceConverter(GlobalAdministrationConfiguration configuration, RepositoryRestConfiguration restConfiguration) {
+    public DomainTypeToResourceConverter(GlobalAdministrationConfiguration configuration, WebContext webContext, RepositoryRestConfiguration restConfiguration) {
         super(restConfiguration);
         this.configuration = configuration;
+        this.operationBuilder = operationBuilder(configuration, webContext);
     }
 
     public Resource convert(final Object source, DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) {
@@ -152,19 +158,21 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
     private Map<String, Object> persistentFileFieldData(Object source, final Serializable id, PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType) {
         final Map<String, Object> fieldData = newLinkedHashMap();
+        try {
+            boolean fileExists = operationBuilder.fileExistsOperation(source).perform(field.getAttributeMetadata().getAttributeMetadata());
 
-        final byte[] fileContent = (byte[]) fieldValueEvaluator.evaluate(field, source);
-
-        fieldData.put("name", field.getField());
-        fieldData.put("title", field.getName());
-        fieldData.put("type", DomainTypeAttributeType.FILE.name());
-        if (configurationUnitType == FORM_VIEW) {
-            fieldData.put("value", fieldValueEvaluator.evaluate(field, source));
+            fieldData.put("name", field.getField());
+            fieldData.put("title", field.getName());
+            fieldData.put("type", DomainTypeAttributeType.FILE.name());
+            if (configurationUnitType == FORM_VIEW) {
+                byte[] fileData = operationBuilder.getOperation(source).perform(field.getAttributeMetadata().getAttributeMetadata());
+                fieldData.put("value", fileData);
+            }
+            fieldData.put("persistable", true);
+            fieldData.put("fileExists", fileExists);
+            fieldData.put("fileUrl", filePropertyLink(field, domainTypeConfiguration.getDomainTypeName(), id));
+        } catch (IOException e) {
         }
-        fieldData.put("persistable", true);
-        fieldData.put("fileExists", fileContent != null && fileContent.length > 0);
-        fieldData.put("fileUrl", filePropertyLink(field, domainTypeConfiguration.getDomainTypeName(), id));
-
         return fieldData;
     }
 

@@ -13,6 +13,7 @@ import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadataUtils;
 import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.rest.binary.OperationBuilder;
@@ -102,8 +103,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             attrMeta.set(null, entity);
         } else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
             attrMeta.set(null, entity);
-        } else if (attrMeta.type().equals(byte[].class)) {
-            operationBuilder.saveOperation(entity).perform(attrMeta, (byte[]) incomingVal);
+        } else if (DomainTypeAttributeType.isOfFileType(attrMeta)) {
+            operationBuilder.saveOperation(entity).perform(attrMeta, incomingVal);
         } else {
             attrMeta.set(incomingVal, entity);
         }
@@ -135,6 +136,10 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             return notFoundResponse(request);
         }
 
+        if (!DomainTypeAttributeType.isOfFileType(attrMeta)) {
+            return new ResponseEntity(METHOD_NOT_ALLOWED);
+        }
+
         operationBuilder.deleteOperation(entity).perform(attrMeta);
 
         return new ResponseEntity(new HttpHeaders(), HttpStatus.OK);
@@ -152,7 +157,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             return notFoundResponse(request);
         }
 
-        if (attrMeta.type().equals(byte[].class)) {
+        if (DomainTypeAttributeType.isOfFileType(attrMeta)) {
             if (webContext.isFileStreamingEnabled()) {
                 operationBuilder.getOperation(entity).performCopy(attrMeta, response.getOutputStream());
                 return new ResponseEntity(OK);

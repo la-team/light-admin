@@ -1,5 +1,7 @@
 package org.lightadmin.core.persistence.metamodel;
 
+import org.springframework.data.rest.repository.AttributeMetadata;
+
 import javax.persistence.metamodel.Attribute;
 import java.lang.annotation.Annotation;
 
@@ -74,4 +76,5 @@ public interface DomainTypeAttributeMetadata {
 
     <A extends Annotation> A annotation(Class<A> annoType);
 
+    AttributeMetadata getAttributeMetadata();
 }

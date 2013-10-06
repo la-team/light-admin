@@ -28,4 +28,8 @@ public class OperationBuilder {
     public GetFileRestOperation getOperation(Object entity) {
         return new GetFileRestOperation(configuration, webContext, entity);
     }
+
+    public FileExistsRestOperation fileExistsOperation(Object entity) {
+        return new FileExistsRestOperation(configuration, webContext, entity);
+    }
 }

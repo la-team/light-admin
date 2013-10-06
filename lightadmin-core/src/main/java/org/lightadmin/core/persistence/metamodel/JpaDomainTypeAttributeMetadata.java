@@ -1,5 +1,6 @@
 package org.lightadmin.core.persistence.metamodel;
 
+import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
 
 import javax.persistence.metamodel.Attribute;
@@ -29,6 +30,11 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
     @Override
     public <A extends Annotation> A annotation(final Class<A> annoType) {
         return attributeMetadata.annotation(annoType);
+    }
+
+    @Override
+    public AttributeMetadata getAttributeMetadata() {
+        return attributeMetadata;
     }
 
     @Override
