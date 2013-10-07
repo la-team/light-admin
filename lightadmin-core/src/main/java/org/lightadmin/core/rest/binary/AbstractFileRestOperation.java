@@ -7,6 +7,7 @@ import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.util.ClassUtils;
 
 import java.io.File;
 import java.io.Serializable;
@@ -25,7 +26,7 @@ public abstract class AbstractFileRestOperation {
     protected final Object entity;
 
     protected AbstractFileRestOperation(GlobalAdministrationConfiguration configuration, WebContext webContext, Object entity) {
-        this.domainTypeAdministrationConfiguration = configuration.forManagedDomainType(entity.getClass());
+        this.domainTypeAdministrationConfiguration = configuration.forManagedDomainType(ClassUtils.getUserClass(entity));
         this.domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 
         this.webContext = webContext;
