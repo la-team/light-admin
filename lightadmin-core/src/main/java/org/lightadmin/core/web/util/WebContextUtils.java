@@ -28,6 +28,11 @@ public abstract class WebContextUtils {
         return webApplicationContext.getBean(GlobalAdministrationConfiguration.class);
     }
 
+    public static FileResourceLoader fileResourceLoader(ServletContext servletContext) {
+        WebApplicationContext webApplicationContext = getWebApplicationContext(servletContext);
+        return webApplicationContext.getBean(FileResourceLoader.class);
+    }
+
     public static HttpServletRequest getCurrentRequest() {
         RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
         Assert.state(requestAttributes != null, "Could not find current request via RequestContextHolder");

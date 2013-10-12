@@ -4,7 +4,6 @@ import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.context.WebContext;
 import org.springframework.data.rest.repository.AttributeMetadata;
-import org.springframework.security.crypto.codec.Base64;
 
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +11,8 @@ import java.io.IOException;
 import static org.apache.commons.io.FileUtils.*;
 import static org.apache.commons.lang.ArrayUtils.isEmpty;
 import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToStoreBinaryAttrValue;
+import static org.springframework.security.crypto.codec.Base64.decode;
+import static org.springframework.security.crypto.codec.Base64.isBase64;
 
 public class SaveFileRestOperation extends AbstractFileRestOperation {
 
@@ -26,7 +27,8 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
         }
 
         if (attrMeta.hasAnnotation(FileReference.class)) {
-            byte[] incomingVal = Base64.decode(((String) incomingValueObject).getBytes());
+            final byte[] incomingVal = incomingValue(incomingValueObject);
+
             final FileReference fileReference = attrMeta.annotation(FileReference.class);
             if (getFile(fileReference.baseDirectory()).exists()) {
                 performSaveAgainstReferenceField(attrMeta, incomingVal);
@@ -34,6 +36,14 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
                 performSaveToFileStorage(attrMeta, incomingVal);
             }
         }
+    }
+
+    private byte[] incomingValue(Object incomingValueObject) {
+        final byte[] incomingValue = incomingValueObject instanceof String
+                ? ((String) incomingValueObject).getBytes()
+                : (byte[]) incomingValueObject;
+
+        return isBase64(incomingValue) ? decode(incomingValue) : incomingValue;
     }
 
     private void performSaveToFileStorage(AttributeMetadata attrMeta, byte[] incomingVal) throws IOException {

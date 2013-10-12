@@ -1,12 +1,15 @@
 package org.lightadmin.core.config;
 
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.context.StandardWebContext;
 import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
+import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
 import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
 import org.lightadmin.core.view.SeparateContainerTilesView;
 import org.lightadmin.core.web.ApplicationController;
+import org.lightadmin.core.web.util.FileResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
@@ -69,6 +72,12 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     public ServletContextResourceLoader servletContextResourceLoader(ServletContext servletContext) {
         return new ServletContextResourceLoader(servletContext);
+    }
+
+    @Bean
+    @Autowired
+    public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, DynamicJpaRepositoryExporter jpaRepositoryExporter, WebContext lightAdminContext) {
+        return new FileResourceLoader(globalAdministrationConfiguration, jpaRepositoryExporter, lightAdminContext);
     }
 
     @Bean

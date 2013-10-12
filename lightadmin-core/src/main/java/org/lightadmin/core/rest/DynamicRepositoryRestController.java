@@ -18,7 +18,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.lightadmin.core.search.SpecificationCreator;
-import org.lightadmin.core.web.util.ImageResourceControllerSupport;
+import org.lightadmin.core.web.util.FileResourceLoader;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -48,6 +48,7 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.annotation.PostConstruct;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 import java.net.URI;
@@ -63,7 +64,8 @@ import static java.util.Collections.singletonMap;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.isSpecificationScope;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
-import static org.springframework.http.HttpStatus.*;
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
+import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
 
 @SuppressWarnings("unchecked")
 @RequestMapping("/rest")
@@ -76,13 +78,14 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     private ApplicationContext applicationContext;
     private WebContext webContext;
     private OperationBuilder operationBuilder;
-    private ImageResourceControllerSupport imageResourceControllerSupport;
+
+    @Autowired
+    private FileResourceLoader fileResourceLoader;
 
     @PostConstruct
     public void init() throws Exception {
         this.specificationCreator = new SpecificationCreator(conversionService, configuration);
         this.operationBuilder = operationBuilder(configuration, webContext);
-        this.imageResourceControllerSupport = new ImageResourceControllerSupport();
     }
 
     @RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
@@ -158,13 +161,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         }
 
         if (DomainTypeAttributeType.isOfFileType(attrMeta)) {
-            if (webContext.isFileStreamingEnabled()) {
-                operationBuilder.getOperation(entity).performCopy(attrMeta, response.getOutputStream());
-                return new ResponseEntity(OK);
-            }
-
-            byte[] fileData = operationBuilder.getOperation(entity).perform(attrMeta);
-            return imageResourceControllerSupport.downloadImageResource(fileData, width, height);
+            return fileResourceLoader.loadFile(entity, attrMeta, (HttpServletResponse) response, width, height);
         }
         return new ResponseEntity(BAD_REQUEST);
     }
