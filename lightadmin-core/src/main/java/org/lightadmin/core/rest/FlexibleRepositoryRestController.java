@@ -697,6 +697,13 @@ public class FlexibleRepositoryRestController extends RepositoryRestController i
             }
         } else {
             entity = incoming;
+
+            for (AttributeMetadata attrMeta : (Collection<AttributeMetadata>) repoMeta.entityMetadata().embeddedAttributes().values()) {
+                Object incomingVal;
+                if (null != (incomingVal = attrMeta.get(incoming))) {
+                    attrMetaSet(attrMeta, incomingVal, entity);
+                }
+            }
         }
 
         publishEvent(new BeforeSaveEvent(entity));
