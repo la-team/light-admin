@@ -19,142 +19,70 @@
 <tiles:useAttribute name="entityPluralName"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
-<light:url var="domainObjectUrl"
-           value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
+<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
-<div class="title">
-    <h5><c:out value="Edit ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
-</div>
+<tiles:useAttribute name="dialogMode"/>
 
-<light-jsp:breadcrumb>
-    <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
-    <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
-</light-jsp:breadcrumb>
+<c:set var="dialogMode" value="<%= Boolean.valueOf((String) dialogMode) %>"/>
 
-<form id="editForm" onsubmit="return updateDomainObject(this)" class="mainForm">
+<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
+
+<c:if test="${not dialogMode}">
+    <div class="title">
+        <h5><c:out value="Edit ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
+    </div>
+
+    <light-jsp:breadcrumb>
+        <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
+        <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
+    </light-jsp:breadcrumb>
+</c:if>
+
+<form id="${domainTypeName}-form" onsubmit="return updateDomainObject(this)" class="mainForm">
     <div class="widget">
-        <div class="head"><h5 class="iCreate"><c:out
-                value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5></div>
+        <div class="head">
+            <h5 class="iCreate">
+                <c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/>
+            </h5>
+        </div>
         <fieldset>
             <c:forEach var="fieldEntry" items="${fields}" varStatus="status">
                 <div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
                     <label><strong><c:out value="${light:capitalize(fieldEntry.name)}"/>:</strong></label>
 
                     <div class="formRight">
-                        <light-jsp:edit-control fieldMetadata="${fieldEntry}" cssClass="input-xlarge"
-                                                errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
+                        <light-jsp:edit-control fieldMetadata="${fieldEntry}" cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
                     </div>
                     <div class="fix"></div>
                 </div>
             </c:forEach>
         </fieldset>
         <div class="wizNav">
-            <input id="cancel-changes" class="basicBtn" value="Cancel" type="button" onclick="history.back();">
-            <input id="save-changes" class="blueBtn" value="Save changes" type="submit">
+            <input name="cancel-changes" class="basicBtn" value="Cancel" type="button">
+            <input name="save-changes" class="blueBtn" value="Save changes" type="button">
         </div>
     </div>
 </form>
 
 <script type="text/javascript">
     $(function () {
-        $(".chzn-select").chosen();
+        var domain_form = $("#${domainTypeName}-form");
 
-        $("select, input:checkbox, input:radio, input:file").uniform();
+        formViewVisualDecoration(domain_form);
 
-        $(".input-date").datepicker({
-            autoSize: true,
-            appendText: '(YYYY-MM-DD)',
-            dateFormat: 'yy-mm-dd'
-        });
-        $(".input-date").mask("9999-99-99");
+        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"  includeFields="${fields}"/>);
+        $(domain_form).data('lightadmin.domain-rest-base-url', "${domainObjectUrl}");
 
-        $('.wysiwyg').wysiwyg({
-            iFrameClass: "wysiwyg-input",
-            controls: {
-                bold: { visible: true },
-                italic: { visible: true },
-                underline: { visible: true },
-                strikeThrough: { visible: false },
+        loadDomainObjectForFormView($(domain_form));
 
-                justifyLeft: { visible: true },
-                justifyCenter: { visible: true },
-                justifyRight: { visible: true },
-                justifyFull: { visible: true },
-
-                indent: { visible: true },
-                outdent: { visible: true },
-
-                subscript: { visible: false },
-                superscript: { visible: false },
-
-                undo: { visible: true },
-                redo: { visible: true },
-
-                insertOrderedList: { visible: true },
-                insertUnorderedList: { visible: true },
-                insertHorizontalRule: { visible: false },
-
-                h1: {
-                    visible: true,
-                    className: 'h1',
-                    command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                    arguments: ($.browser.msie || $.browser.safari) ? '<h1>' : 'h1',
-                    tags: ['h1'],
-                    tooltip: 'Header 1'
-                },
-                h2: {
-                    visible: true,
-                    className: 'h2',
-                    command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                    arguments: ($.browser.msie || $.browser.safari) ? '<h2>' : 'h2',
-                    tags: ['h2'],
-                    tooltip: 'Header 2'
-                },
-                h3: {
-                    visible: true,
-                    className: 'h3',
-                    command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                    arguments: ($.browser.msie || $.browser.safari) ? '<h3>' : 'h3',
-                    tags: ['h3'],
-                    tooltip: 'Header 3'
-                },
-                h4: {
-                    visible: true,
-                    className: 'h4',
-                    command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                    arguments: ($.browser.msie || $.browser.safari) ? '<h4>' : 'h4',
-                    tags: ['h4'],
-                    tooltip: 'Header 4'
-                },
-                h5: {
-                    visible: true,
-                    className: 'h5',
-                    command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                    arguments: ($.browser.msie || $.browser.safari) ? '<h5>' : 'h5',
-                    tags: ['h5'],
-                    tooltip: 'Header 5'
-                },
-                h6: {
-                    visible: true,
-                    className: 'h6',
-                    command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                    arguments: ($.browser.msie || $.browser.safari) ? '<h6>' : 'h6',
-                    tags: ['h6'],
-                    tooltip: 'Header 6'
-                },
-
-                cut: { visible: true },
-                copy: { visible: true },
-                paste: { visible: true },
-                html: { visible: true },
-                increaseFontSize: { visible: false },
-                decreaseFontSize: { visible: false }
-            }
+        <c:if test="${not dialogMode}">
+        $(":button[name='cancel-changes']", $(domain_form)).click(function () {
+            history.back();
         });
 
-        DOMAIN_TYPE_METADATA = <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}" includeFields="${fields}"/>;
-
-        loadDomainObjectForFormView($('#editForm'), '${domainObjectUrl}');
-
+        $(":button[name='save-changes']", $(domain_form)).click(function () {
+            $(domain_form).submit();
+        });
+        </c:if>
     });
 </script>

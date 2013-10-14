@@ -1,5 +1,3 @@
-DOMAIN_TYPE_METADATA = {};
-
 (function ($) {
     $.fn.serializeFormJSON = function (usePlaceholders) {
         function resolveObjectHref(attrVal, attrMetadata) {
@@ -14,10 +12,12 @@ DOMAIN_TYPE_METADATA = {};
             return {href: href};
         }
 
+        var domainTypeEntityMetadata = $(this).data('lightadmin.domain-type-metadata');
+
         var json = {};
         $.each(this.serializeArray(), function () {
             var attrVal = this.value || '';
-            var attrMetadata = DOMAIN_TYPE_METADATA[this.name];
+            var attrMetadata = domainTypeEntityMetadata[this.name];
             var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
             if (attrType.indexOf('ASSOC') == 0) {
                 var href = resolveObjectHref(attrVal, attrMetadata);
@@ -33,7 +33,7 @@ DOMAIN_TYPE_METADATA = {};
                 json[this.name] = attrVal;
             }
         });
-        $.each(DOMAIN_TYPE_METADATA, function (attrName, attrMetadata) {
+        $.each(domainTypeEntityMetadata, function (attrName, attrMetadata) {
             var attrVal = json[attrName];
             if (attrVal != undefined && attrVal != '') {
                 return;
@@ -202,7 +202,7 @@ function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
 
 var REST_REPO_URL;
 
-function loadDomainObjectForFormView(form, restRepoUrl) {
+function loadDomainObjectForFormView(form) {
 
     function selectOptions(editor, attrMetadata, data) {
         $.each(data, function () {
@@ -223,7 +223,10 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
         });
     }
 
-    REST_REPO_URL = restRepoUrl;
+    var restRepoUrl = $(form).data('lightadmin.domain-rest-base-url');
+
+    var domainTypeEntityMetadata = $(form).data('lightadmin.domain-type-metadata');
+
     $.ajax({
         type: 'GET',
         url: restRepoUrl + '/unit/formView',
@@ -238,7 +241,7 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
                         continue;
                     }
 
-                    var attrMetadata = DOMAIN_TYPE_METADATA[attr];
+                    var attrMetadata = domainTypeEntityMetadata[attr];
                     var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
 
                     switch (attrType) {
@@ -273,9 +276,9 @@ function loadDomainObjectForFormView(form, restRepoUrl) {
                 }
             }
             $.uniform.update();
-            $(".chzn-select").trigger("liszt:updated");
+            $(".chzn-select", $(form)).trigger("liszt:updated");
 
-            $("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: ''});
+            $("a[rel^='prettyPhoto']", $(form)).prettyPhoto({ social_tools: ''});
         },
         statusCode: {
             400 /* BAD_REQUEST */: function (jqXHR) {
@@ -356,9 +359,10 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders) {
         $(element).text('');
     });
     var jsonForm = $(domForm).serializeFormJSON(usePlaceholders);
+    var restRepoUrl = $(domForm).data('lightadmin.domain-rest-base-url');
     $.ajax({
         type: 'PUT',
-        url: REST_REPO_URL + '?returnBody=true',
+        url: restRepoUrl + '?returnBody=true',
         contentType: 'application/json',
         data: JSON.stringify(jsonForm),
         dataType: 'json',
@@ -389,12 +393,12 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders) {
                     }
                 }
                 if (errorMessages.length > 0) {
-                    showFailureMessageNote(errorMessages);
+                    showFailureMessageNote(errorMessages, $(domForm));
                 }
             },
             409: function (jqXHR) {
                 var data = $.parseJSON(jqXHR.responseText);
-                showFailureMessageNote(data.message);
+                showFailureMessageNote(data.message, $(domForm));
             }
         }
     });
@@ -403,25 +407,175 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders) {
 }
 
 function showSuccessMessageNote(message) {
-    showMessageNote(message, 'nSuccess');
+    showMessageNote(message, 'nSuccess', undefined);
 }
 
-function showFailureMessageNote(message) {
-    showMessageNote(message, 'nFailure');
+function showFailureMessageNote(message, beforeElement) {
+    showMessageNote(message, 'nFailure', beforeElement);
 }
 
-function showMessageNote(message, messageTypeClass) {
-    $('.nNote').remove();
+function showMessageNote(message, messageTypeClass, beforeElement) {
+    $(".nNote").remove();
 
     var noteHtml = "<div class='nNote " + messageTypeClass + "'><p>" + message + "</p></div>";
 
-    $('.breadCrumbHolder').after(noteHtml);
+    if (typeof beforeElement == 'undefined') {
+        $('.breadCrumbHolder').after(noteHtml);
+    } else {
+        $(beforeElement).before(noteHtml);
+    }
 
     $('.nNote').click(function () {
         $(this).fadeTo(200, 0.00, function () {
             $(this).slideUp(300, function () {
                 $(this).remove();
             });
+        });
+    });
+}
+
+function formViewVisualDecoration(container) {
+    $(".chzn-select", $(container)).chosen();
+
+    $("select, input:checkbox, input:radio, input:file", $(container)).uniform();
+
+    $(".input-date", $(container)).datepicker({
+        autoSize: true,
+        appendText: '(YYYY-MM-DD)',
+        dateFormat: 'yy-mm-dd'
+    });
+
+    $(".input-date", $(container)).mask("9999-99-99");
+
+    $('.wysiwyg', $(container)).wysiwyg({
+        iFrameClass: "wysiwyg-input",
+        controls: {
+            bold: { visible: true },
+            italic: { visible: true },
+            underline: { visible: true },
+            strikeThrough: { visible: false },
+
+            justifyLeft: { visible: true },
+            justifyCenter: { visible: true },
+            justifyRight: { visible: true },
+            justifyFull: { visible: true },
+
+            indent: { visible: true },
+            outdent: { visible: true },
+
+            subscript: { visible: false },
+            superscript: { visible: false },
+
+            undo: { visible: true },
+            redo: { visible: true },
+
+            insertOrderedList: { visible: true },
+            insertUnorderedList: { visible: true },
+            insertHorizontalRule: { visible: false },
+
+            h1: {
+                visible: true,
+                className: 'h1',
+                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
+                arguments: ($.browser.msie || $.browser.safari) ? '<h1>' : 'h1',
+                tags: ['h1'],
+                tooltip: 'Header 1'
+            },
+            h2: {
+                visible: true,
+                className: 'h2',
+                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
+                arguments: ($.browser.msie || $.browser.safari) ? '<h2>' : 'h2',
+                tags: ['h2'],
+                tooltip: 'Header 2'
+            },
+            h3: {
+                visible: true,
+                className: 'h3',
+                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
+                arguments: ($.browser.msie || $.browser.safari) ? '<h3>' : 'h3',
+                tags: ['h3'],
+                tooltip: 'Header 3'
+            },
+            h4: {
+                visible: true,
+                className: 'h4',
+                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
+                arguments: ($.browser.msie || $.browser.safari) ? '<h4>' : 'h4',
+                tags: ['h4'],
+                tooltip: 'Header 4'
+            },
+            h5: {
+                visible: true,
+                className: 'h5',
+                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
+                arguments: ($.browser.msie || $.browser.safari) ? '<h5>' : 'h5',
+                tags: ['h5'],
+                tooltip: 'Header 5'
+            },
+            h6: {
+                visible: true,
+                className: 'h6',
+                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
+                arguments: ($.browser.msie || $.browser.safari) ? '<h6>' : 'h6',
+                tags: ['h6'],
+                tooltip: 'Header 6'
+            },
+
+            cut: { visible: true },
+            copy: { visible: true },
+            paste: { visible: true },
+            html: { visible: true },
+            increaseFontSize: { visible: false },
+            decreaseFontSize: { visible: false }
+        }
+    });
+}
+
+function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domainFormViewUrl) {
+    function wrapDialogBlock(dialog_id, dialog_title, data) {
+        return "<div id='" + dialog_id + "' title='" + dialog_title + "'>" + data + "</div>";
+    }
+
+    var dialog_url = domainFormViewUrl + "/create-dialog";
+    var dialog_id = "dialog-" + attributeName;
+    var dialog_selector = '#' + dialog_id;
+    var form_id = domainTypeName + "-form";
+    var form_selector = '#' + form_id;
+    var dialog_title = "[BETA] Create dialog";// + domainTypeName;
+
+    var parent_form = $(elementToBind).parents('form')[0];
+
+    $(elementToBind).click(function () {
+        if ($(dialog_selector).length) {
+            $(dialog_selector).remove();
+        }
+
+        $.get(dialog_url, function (data) {
+            var html = wrapDialogBlock(dialog_id, dialog_title, data);
+
+            $(parent_form).after($(html));
+
+            $('div.formRight', $(dialog_selector)).css({'margin': '0px'});
+
+            $(dialog_selector).dialog({
+                autoOpen: false,
+                width: 650,
+                modal: true,
+                close: function (event, ui) {
+                    $(dialog_selector).remove();
+                }
+            });
+
+            $(":button[name='cancel-changes']", $(dialog_selector)).click(function () {
+                $(dialog_selector).dialog("close");
+            });
+
+            $(":button[name='save-changes']", $(dialog_selector)).click(function () {
+                $(form_selector, $(dialog_selector)).submit();
+            });
+
+            $(dialog_selector).dialog("open");
         });
     });
 }

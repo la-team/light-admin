@@ -7,7 +7,7 @@
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/spinner/jquery.mousewheel.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/spinner/ui.spinner.js"/>"></script>
-
+<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.ui-1.8.0.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wysiwyg/jquery.wysiwyg.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wysiwyg/wysiwyg.image.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wysiwyg/wysiwyg.link.js"/>"></script>

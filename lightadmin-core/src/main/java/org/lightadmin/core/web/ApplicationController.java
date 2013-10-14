@@ -109,11 +109,25 @@ public class ApplicationController {
         return "edit-view";
     }
 
+    @RequestMapping(value = "/domain/{domainTypeName}/{entityId}/edit-dialog", method = RequestMethod.GET)
+    public String editDialog(@PathVariable String domainTypeName, @PathVariable String entityId, Model model) {
+        edit(domainTypeName, entityId, model);
+
+        return "edit-dialog-view";
+    }
+
     @RequestMapping(value = "/domain/{domainTypeName}/create", method = RequestMethod.GET)
     public String create(@PathVariable String domainTypeName, Model model) {
         addDomainTypeConfigurationToModel(domainTypeName, model);
 
         return "create-view";
+    }
+
+    @RequestMapping(value = "/domain/{domainTypeName}/create-dialog", method = RequestMethod.GET)
+    public String createDialog(@PathVariable String domainTypeName, Model model) {
+        create(domainTypeName, model);
+
+        return "create-dialog-view";
     }
 
     private String pageNotFound() {

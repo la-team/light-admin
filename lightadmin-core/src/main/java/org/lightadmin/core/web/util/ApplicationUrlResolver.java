@@ -19,6 +19,10 @@ public final class ApplicationUrlResolver {
         return "/domain/" + configuration.getDomainTypeName();
     }
 
+    public static DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration(Class<?> type) {
+        return globalAdministrationConfiguration(getCurrentRequest().getServletContext()).forManagedDomainType(type);
+    }
+
     public static String domainRestBaseUrl(DomainTypeAdministrationConfiguration configuration) {
         return "/rest/" + configuration.getDomainTypeName();
     }

@@ -199,6 +199,15 @@
     </tag>
 
     <function>
+        <name>domainTypeAdministrationConfigurationFor</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>
+            org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration
+            domainTypeAdministrationConfiguration(java.lang.Class)
+        </function-signature>
+    </function>
+
+    <function>
         <name>domainBaseUrl</name>
         <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
         <function-signature>java.lang.String
