@@ -50,6 +50,7 @@ public class ProductAdministration {
                 .field("price").caption("Price")
                 .field("retired").caption("Out of production")
                 .field("releaseDate").caption("Released on")
+                .field("pictureUrl").caption("Picture Url")
                 .field("picture").caption("Picture").build();
     }
 
@@ -61,6 +62,7 @@ public class ProductAdministration {
                 .field("price").caption("Price")
                 .field("releaseDate").caption("Released on")
                 .field("retired").caption("Out of production")
+                .field("pictureUrl").caption("Picture Url")
                 .field("picture").caption("Picture").build();
     }
 

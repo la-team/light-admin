@@ -38,7 +38,7 @@
     </light-jsp:breadcrumb>
 </c:if>
 
-<form id="${domainTypeName}-form" onsubmit="return updateDomainObject(this)" class="mainForm">
+<form id="${domainTypeName}-form" class="mainForm">
     <div class="widget">
         <div class="head">
             <h5 class="iCreate">
@@ -82,6 +82,15 @@
 
         $(":button[name='save-changes']", $(domain_form)).click(function () {
             $(domain_form).submit();
+        });
+
+        $(domain_form).submit(function () {
+            return updateDomainObject(this, function (data) {
+                var link = $.grep(data.links, function (link) {
+                    return link.rel == 'selfDomainLink';
+                })[0];
+                window.location = link.href + '?updateSuccess=true';
+            });
         });
         </c:if>
     });

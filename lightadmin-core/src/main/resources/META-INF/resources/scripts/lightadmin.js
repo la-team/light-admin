@@ -346,15 +346,15 @@ function removeDomainObject(entityId, restUrl, callback) {
     return false;
 }
 
-function saveDomainObject(domForm) {
-    return saveOrUpdateDomainObject(domForm, false);
+function saveDomainObject(domForm, successCallback) {
+    return saveOrUpdateDomainObject(domForm, false, successCallback);
 }
 
-function updateDomainObject(domForm) {
-    return saveOrUpdateDomainObject(domForm, true);
+function updateDomainObject(domForm, successCallback) {
+    return saveOrUpdateDomainObject(domForm, true, successCallback);
 }
 
-function saveOrUpdateDomainObject(domForm, usePlaceholders) {
+function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback) {
     $.each($(domForm).find('[id$=-error]'), function (index, element) {
         $(element).text('');
     });
@@ -367,10 +367,7 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders) {
         data: JSON.stringify(jsonForm),
         dataType: 'json',
         success: function (data, textStatus) {
-            var link = $.grep(data.links, function (link) {
-                return link.rel == 'selfDomainLink';
-            })[0];
-            window.location = link.href + '?updateSuccess=true';
+            successCallback(data);
         },
         statusCode: {
             400 /* BAD_REQUEST */: function (jqXHR) {
@@ -546,6 +543,8 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
 
     var parent_form = $(elementToBind).parents('form')[0];
 
+    var managed_select = $("select[name='" + attributeName + "']", parent_form);
+
     $(elementToBind).click(function () {
         if ($(dialog_selector).length) {
             $(dialog_selector).remove();
@@ -569,6 +568,20 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
 
             $(":button[name='cancel-changes']", $(dialog_selector)).click(function () {
                 $(dialog_selector).dialog("close");
+            });
+
+            $(form_selector, $(dialog_selector)).submit(function () {
+                return saveDomainObject($(form_selector, $(dialog_selector)), function (data) {
+                    var id = getPrimaryKey(data);
+                    var name = data['stringRepresentation'];
+
+                    managed_select.append("<option value='" + id + "'>" + name + "</option>");
+
+                    $.uniform.update();
+                    $(".chzn-select", $(parent_form)).trigger("liszt:updated");
+
+                    $(dialog_selector).dialog("close");
+                });
             });
 
             $(":button[name='save-changes']", $(dialog_selector)).click(function () {

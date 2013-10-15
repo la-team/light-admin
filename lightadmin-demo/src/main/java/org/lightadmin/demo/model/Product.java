@@ -1,5 +1,6 @@
 package org.lightadmin.demo.model;
 
+import org.lightadmin.core.config.annotation.FileReference;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
@@ -13,97 +14,101 @@ import java.util.Map;
 @Entity
 public class Product extends AbstractEntity {
 
-	@NotNull
-	@Size(min = 10, max = 100)
-	private String name;
+    @NotNull
+    @Size(min = 10, max = 100)
+    private String name;
 
-	@Basic
-	private String type;
+    @Basic
+    private String type;
 
-	@Size(max = 255)
-	private String description;
+    @Size(max = 255)
+    private String description;
 
-	@NotNull
-	@NumberFormat(style = NumberFormat.Style.CURRENCY)
-	private BigDecimal price;
+    @NotNull
+    @NumberFormat(style = NumberFormat.Style.CURRENCY)
+    private BigDecimal price;
 
-	@ElementCollection
-	private Map<String, String> attributes;
+    @ElementCollection
+    private Map<String, String> attributes;
 
-	@Basic
-	private Boolean retired;
+    @Basic
+    private Boolean retired;
 
-	@Temporal(TemporalType.DATE)
-	@Column(name = "REL_DATE")
-	private Date releaseDate;
+    @Temporal(TemporalType.DATE)
+    @Column(name = "REL_DATE")
+    private Date releaseDate;
 
-	@Lob
-	@Column(name = "PICTURE")
-	private byte[] picture;
+    @Basic
+    @FileReference(baseDirectory = "/Users/max/Desktop/hubbery")
+    private String pictureUrl;
 
-	public Product( String name, BigDecimal price ) {
-		this( name, price, null );
-	}
+    @Lob
+    @Column(name = "PICTURE")
+    private byte[] picture;
 
-	public Product( String name, BigDecimal price, String description ) {
-		Assert.hasText( name, "Name must not be null or empty!" );
-		Assert.isTrue( BigDecimal.ZERO.compareTo( price ) < 0, "Price must be greater than zero!" );
+    public Product(String name, BigDecimal price) {
+        this(name, price, null);
+    }
 
-		this.name = name;
-		this.price = price;
-		this.description = description;
-	}
+    public Product(String name, BigDecimal price, String description) {
+        Assert.hasText(name, "Name must not be null or empty!");
+        Assert.isTrue(BigDecimal.ZERO.compareTo(price) < 0, "Price must be greater than zero!");
 
-	public Product() {
-	}
+        this.name = name;
+        this.price = price;
+        this.description = description;
+    }
 
-	public void setAttribute( String name, String value ) {
-		Assert.hasText( name );
+    public Product() {
+    }
 
-		if ( value == null ) {
-			this.attributes.remove( value );
-		} else {
-			this.attributes.put( name, value );
-		}
-	}
+    public void setAttribute(String name, String value) {
+        Assert.hasText(name);
 
-	public String getName() {
-		return name;
-	}
+        if (value == null) {
+            this.attributes.remove(value);
+        } else {
+            this.attributes.put(name, value);
+        }
+    }
 
-	public String getType() {
-		return type;
-	}
+    public String getName() {
+        return name;
+    }
 
-	public String getDescription() {
-		return description;
-	}
+    public String getType() {
+        return type;
+    }
 
-	public Map<String, String> getAttributes() {
-		return attributes;
-	}
+    public String getDescription() {
+        return description;
+    }
 
-	public BigDecimal getPrice() {
-		return price;
-	}
+    public Map<String, String> getAttributes() {
+        return attributes;
+    }
 
-	public Boolean getRetired() {
-		return retired;
-	}
+    public BigDecimal getPrice() {
+        return price;
+    }
 
-	public Date getReleaseDate() {
-		return releaseDate;
-	}
+    public Boolean getRetired() {
+        return retired;
+    }
 
-	public void setReleaseDate( Date releaseDate ) {
-		this.releaseDate = releaseDate;
-	}
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
 
-	public byte[] getPicture() {
-		return picture;
-	}
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
 
-	public void setPicture( final byte[] picture ) {
-		this.picture = picture;
-	}
+    public byte[] getPicture() {
+        return picture;
+    }
+
+    public void setPicture(final byte[] picture) {
+        this.picture = picture;
+    }
 }

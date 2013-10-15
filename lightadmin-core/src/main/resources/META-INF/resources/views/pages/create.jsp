@@ -36,7 +36,7 @@
     </light-jsp:breadcrumb>
 </c:if>
 
-<form id="${domainTypeName}-form" onsubmit="return saveDomainObject(this)" class="mainForm">
+<form id="${domainTypeName}-form" class="mainForm">
     <div class="widget">
         <div class="head"><h5 class="iCreate">
             <c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5></div>
@@ -79,6 +79,16 @@
         $(":button[name='save-changes']", $(domain_form)).click(function () {
             $(domain_form).submit();
         });
+
+        $(domain_form).submit(function () {
+            return saveDomainObject(this, function (data) {
+                var link = $.grep(data.links, function (link) {
+                    return link.rel == 'selfDomainLink';
+                })[0];
+                window.location = link.href + '?updateSuccess=true';
+            });
+        });
+
         </c:if>
     });
 </script>
