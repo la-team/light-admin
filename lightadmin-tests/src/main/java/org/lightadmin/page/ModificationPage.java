@@ -19,13 +19,13 @@ import static org.junit.Assert.fail;
 
 public abstract class ModificationPage<P extends SecuredPage<P>> extends SecuredPage<P> {
 
-	@FindBy( id = "editForm" )
+	@FindBy( className = "mainForm" )
 	private WebElement editForm;
 
-	@FindBy( id = "save-changes" )
+	@FindBy( name = "save-changes" )
 	private WebElement saveButton;
 
-	@FindBy( id = "cancel-changes" )
+	@FindBy( name = "cancel-changes" )
 	private WebElement cancelButton;
 
 	private String domainName;
