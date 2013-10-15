@@ -200,8 +200,6 @@ function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
     });
 }
 
-var REST_REPO_URL;
-
 function loadDomainObjectForFormView(form) {
 
     function selectOptions(editor, attrMetadata, data) {
