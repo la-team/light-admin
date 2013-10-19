@@ -48,6 +48,7 @@
 <!-- Third party script for BrowserPlus runtime (Google Gears included in Gears runtime now) -->
 <script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
 <!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/plupload/js/moxie.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/plupload/js/plupload.dev.js"/>"></script>
 
 <!-- debug
