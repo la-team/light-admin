@@ -1,6 +1,5 @@
 package org.lightadmin.demo.model;
 
-import org.lightadmin.core.config.annotation.FileReference;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
@@ -37,10 +36,6 @@ public class Product extends AbstractEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "REL_DATE")
     private Date releaseDate;
-
-    @Basic
-    @FileReference(baseDirectory = "/Users/max/Desktop/hubbery")
-    private String pictureUrl;
 
     @Lob
     @Column(name = "PICTURE")
