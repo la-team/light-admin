@@ -105,7 +105,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
     private void addObjectStringRepresentation(final EntityResource resource, final DomainTypeBasicConfiguration configuration, final Object source) {
         final EntityNameExtractor nameExtractor = configuration.getEntityConfiguration().getNameExtractor();
 
-        resource.getContent().put("stringRepresentation", exceptionAwareNameExtractor(nameExtractor).apply(source));
+        resource.getContent().put("stringRepresentation", exceptionAwareNameExtractor(nameExtractor, configuration).apply(source));
     }
 
     private void addManagedTypeProperty(final EntityResource entityResource, final Object source) {

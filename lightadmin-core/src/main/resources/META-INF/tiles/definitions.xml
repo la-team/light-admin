@@ -52,17 +52,13 @@
 
     <definition name="edit-view" extends="internal-layout">
         <put-attribute name="main-section">
-            <definition template="/views/pages/edit.jsp" preparer="formViewPreparer">
-                <put-attribute name="dialogMode" value="false" type="string" cascade="true"/>
-            </definition>
+            <definition template="/views/pages/edit.jsp" preparer="formViewPreparer"/>
         </put-attribute>
     </definition>
 
     <definition name="create-view" extends="internal-layout">
         <put-attribute name="main-section">
-            <definition template="/views/pages/create.jsp" preparer="formViewPreparer">
-                <put-attribute name="dialogMode" value="false" type="string" cascade="true"/>
-            </definition>
+            <definition template="/views/pages/create.jsp" preparer="formViewPreparer"/>
         </put-attribute>
     </definition>
 

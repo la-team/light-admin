@@ -535,7 +535,7 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
     var dialog_url = domainFormViewUrl + "/create-dialog";
     var dialog_id = "dialog-" + attributeName;
     var dialog_selector = '#' + dialog_id;
-    var form_id = domainTypeName + "-form";
+    var form_id = domainTypeName + "-dialog-form";
     var form_selector = '#' + form_id;
     var dialog_title = "[BETA] Create dialog";// + domainTypeName;
 
@@ -553,7 +553,7 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
 
             $(parent_form).after($(html));
 
-            $('div.formRight', $(dialog_selector)).css({'margin': '0px'});
+//            $('div.formRight', $(dialog_selector)).css({'margin': '0px'});
 
             $(dialog_selector).dialog({
                 autoOpen: false,
@@ -575,6 +575,12 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
 
                     managed_select.append("<option value='" + id + "'>" + name + "</option>");
 
+                    managed_select.find('option').each(function (index, option) {
+                        if (option.value == id) {
+                            option.selected = true;
+                        }
+                    });
+
                     $.uniform.update();
                     $(".chzn-select", $(parent_form)).trigger("liszt:updated");
 
@@ -589,4 +595,66 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
             $(dialog_selector).dialog("open");
         });
     });
+}
+
+function decorateFileUploader(container, file_input_id, attribute_name, browse_button, file_upload_url) {
+    var container_selector = '#' + container;
+
+    var uploader = new plupload.Uploader({
+        runtimes: 'html5,flash,silverlight,html4',
+        url: file_upload_url,
+        container: document.getElementById(container),
+        browse_button: document.getElementById(browse_button),
+        file_data_name: attribute_name,
+        unique_names: true,
+        flash_swf_url: 'vendor/plugins/plupload/js/Moxie.swf',
+        silverlight_xap_url: 'vendor/plugins/plupload/js/Moxie.xap',
+        filters: {
+            max_file_size: '10mb',
+            mime_types: [
+                {title: "Image files", extensions: "jpg,jpeg,png"}
+            ]
+        },
+
+        init: {
+            FilesAdded: function (up, files) {
+                plupload.each(files, function (file) {
+                    var filesContainer = $('div.files', $(container_selector));
+                    filesContainer.empty();
+                    filesContainer.prepend($('<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>' + '</div>'));
+                });
+                up.refresh();
+
+                uploader.start();
+            },
+
+            UploadProgress: function (up, file) {
+                $('#' + file.id + " b").html(file.percent + "%");
+            },
+
+            Error: function (up, err) {
+                var errorCode = err.code;
+                var errorMessage = err.message + (err.file ? " File: " + err.file.name : "");
+
+                if (errorCode == -600) {
+                    errorMessage = 'Selected file ' + (err.file ? err.file.name + ' ' : "") + 'exceeds file size limit of 10MB';
+                } else if (errorCode == -601 || errorCode == -700) {
+                    errorMessage = "Selected file type is not supported (" + (err.file ? err.file.name : "") + "). Please select JPG or PNG file.";
+                }
+
+                jAlert(errorMessage, 'Upload file operation failure');
+                up.refresh();
+            },
+
+            FileUploaded: function (uploader, file, response) {
+                $('#' + file.id + " b").html("100%");
+
+                var result = $.parseJSON(response.response);
+
+                $(file_input_id).val(result['fileContent']);
+            }
+        }
+    });
+
+    uploader.init();
 }

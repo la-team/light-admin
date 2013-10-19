@@ -9,24 +9,24 @@ import static org.lightadmin.core.config.domain.configuration.support.ExceptionA
 
 public class NamingUtils {
 
-	@SuppressWarnings("unchecked")
-	public static String entityName( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, Object entity ) {
-		final EntityNameExtractor nameExtractor = domainTypeAdministrationConfiguration.getEntityConfiguration().getNameExtractor();
+    @SuppressWarnings("unchecked")
+    public static String entityName(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, Object entity) {
+        final EntityNameExtractor nameExtractor = domainTypeAdministrationConfiguration.getEntityConfiguration().getNameExtractor();
 
-		return exceptionAwareNameExtractor( nameExtractor ).apply( entity );
-	}
+        return exceptionAwareNameExtractor(nameExtractor, domainTypeAdministrationConfiguration).apply(entity);
+    }
 
-	public static String entityId( DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, Object entity ) {
-		final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+    public static String entityId(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, Object entity) {
+        final DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 
-		return String.valueOf( domainTypeEntityMetadata.getIdAttribute().getValue( entity ) );
-	}
+        return String.valueOf(domainTypeEntityMetadata.getIdAttribute().getValue(entity));
+    }
 
-	public static String cutLongText( String text ) {
-		text = trim( text );
-		//		if ( text.length() > 50 ) {
-		//			return substring( text, 0, 47 ) + "...";
-		//		}
-		return text;
-	}
+    public static String cutLongText(String text) {
+        text = trim(text);
+        //		if ( text.length() > 50 ) {
+        //			return substring( text, 0, 47 ) + "...";
+        //		}
+        return text;
+    }
 }

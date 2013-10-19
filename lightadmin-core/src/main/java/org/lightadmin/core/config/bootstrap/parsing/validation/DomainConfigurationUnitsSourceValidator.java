@@ -11,6 +11,7 @@ import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
 import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
+import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
@@ -27,14 +28,16 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
 
     private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
     private final ResourceLoader resourceLoader;
+    private final WebContext webContext;
 
-    public DomainConfigurationUnitsSourceValidator(final DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader) {
-        this(new DomainTypeFieldMetadataValidator(entityMetadataResolver), resourceLoader);
+    public DomainConfigurationUnitsSourceValidator(final DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader, WebContext webContext) {
+        this(new DomainTypeFieldMetadataValidator(entityMetadataResolver, webContext), resourceLoader, webContext);
     }
 
-    public DomainConfigurationUnitsSourceValidator(final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator, ResourceLoader resourceLoader) {
+    public DomainConfigurationUnitsSourceValidator(final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator, ResourceLoader resourceLoader, WebContext webContext) {
         this.fieldMetadataValidator = fieldMetadataValidator;
         this.resourceLoader = resourceLoader;
+        this.webContext = webContext;
     }
 
     @Override

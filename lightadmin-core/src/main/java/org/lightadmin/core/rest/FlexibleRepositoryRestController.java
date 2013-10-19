@@ -61,6 +61,7 @@ import java.net.URI;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static org.lightadmin.core.persistence.metamodel.AttributeMetadataUtils.fileAttributeMetadatas;
 import static org.springframework.data.rest.core.util.UriUtils.buildUri;
 
 /**
@@ -676,20 +677,24 @@ public class FlexibleRepositoryRestController extends RepositoryRestController i
 
         boolean isUpdate = false;
         Object entity;
+
+        final Collection<AttributeMetadata> embeddedAttributeMetadatas = (Collection<AttributeMetadata>) repoMeta.entityMetadata().embeddedAttributes().values();
+        final Collection<AttributeMetadata> linkedAttributeMetadatas = (Collection<AttributeMetadata>) repoMeta.entityMetadata().linkedAttributes().values();
+
         if (null != (entity = repo.findOne(serId))) {
             // Updating an existing resource
             isUpdate = true;
 
             repoMeta.entityMetadata().idAttribute().set(serId, incoming);
 
-            for (AttributeMetadata attrMeta : (Collection<AttributeMetadata>) repoMeta.entityMetadata().embeddedAttributes().values()) {
+            for (AttributeMetadata attrMeta : embeddedAttributeMetadatas) {
                 Object incomingVal;
                 if (null != (incomingVal = attrMeta.get(incoming))) {
                     attrMetaSet(attrMeta, incomingVal, entity);
                 }
             }
 
-            for (AttributeMetadata attrMeta : (Collection<AttributeMetadata>) repoMeta.entityMetadata().linkedAttributes().values()) {
+            for (AttributeMetadata attrMeta : linkedAttributeMetadatas) {
                 Object incomingVal;
                 if (null != (incomingVal = attrMeta.get(incoming))) {
                     attrMetaSet(attrMeta, incomingVal, entity);
@@ -698,7 +703,7 @@ public class FlexibleRepositoryRestController extends RepositoryRestController i
         } else {
             entity = incoming;
 
-            for (AttributeMetadata attrMeta : (Collection<AttributeMetadata>) repoMeta.entityMetadata().embeddedAttributes().values()) {
+            for (AttributeMetadata attrMeta : fileAttributeMetadatas(embeddedAttributeMetadatas)) {
                 Object incomingVal;
                 if (null != (incomingVal = attrMeta.get(incoming))) {
                     attrMetaSet(attrMeta, incomingVal, entity);

@@ -30,6 +30,11 @@ public class LightAdminRepositoryRestConfiguration {
     }
 
     @Bean
+    public DomainRepositoryEventListener domainRepositoryEventListener() {
+        return new DomainRepositoryEventListener();
+    }
+
+    @Bean
     public DynamicJpaRepositoryExporter jpaRepositoryExporter() {
         return new DynamicJpaRepositoryExporter();
     }

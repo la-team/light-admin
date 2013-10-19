@@ -45,11 +45,15 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/other/calendar.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/other/elfinder.min.js"/>"></script>
 
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/uploader/plupload.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/uploader/plupload.html5.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/uploader/plupload.html4.js"/>"></script>
-<script type="text/javascript"
-        src="<light:url value="/scripts/vendor/plugins/uploader/jquery.plupload.queue.js"/>"></script>
+<!-- Third party script for BrowserPlus runtime (Google Gears included in Gears runtime now) -->
+<script type="text/javascript" src="http://bp.yahooapis.com/2.4.21/browserplus-min.js"></script>
+<!-- Load plupload and all it's runtimes and finally the jQuery queue widget -->
+<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/plupload/js/plupload.full.min.js"/>"></script>
+
+<!-- debug
+<script type="text/javascript" src="../js/moxie.js"></script>
+<script type="text/javascript" src="../js/plupload.dev.js"></script>
+-->
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.progress.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.jgrowl.js"/>"></script>

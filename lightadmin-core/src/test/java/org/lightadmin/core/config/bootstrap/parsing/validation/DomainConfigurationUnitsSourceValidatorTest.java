@@ -10,6 +10,7 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
+import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
 
@@ -27,7 +28,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 
     @Test
     public void domainTypeWithoutConstructorFailure() {
-        testee = new DomainConfigurationUnitsSourceValidator(alwaysValidFieldMetadataValidatorMock(), createNiceMock(ResourceLoader.class));
+        testee = new DomainConfigurationUnitsSourceValidator(alwaysValidFieldMetadataValidatorMock(), createNiceMock(ResourceLoader.class), createNiceMock(WebContext.class));
 
         final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 
@@ -40,7 +41,7 @@ public class DomainConfigurationUnitsSourceValidatorTest {
 
     @Test
     public void invalidFieldDefinedForFiltersProblemReported() throws Exception {
-        testee = new DomainConfigurationUnitsSourceValidator(alwaysInvalidFieldMetadataValidator(), createNiceMock(ResourceLoader.class));
+        testee = new DomainConfigurationUnitsSourceValidator(alwaysInvalidFieldMetadataValidator(), createNiceMock(ResourceLoader.class), createNiceMock(WebContext.class));
 
         final Capture<DomainConfigurationProblem> problemCapture = configurationProblemCapture();
 

@@ -16,14 +16,16 @@
 
 <tiles:useAttribute name="fields"/>
 
-<tiles:useAttribute name="dialogMode"/>
+<tiles:useAttribute name="dialogMode" ignore="true"/>
 
-<c:set var="dialogMode" value="<%= Boolean.valueOf((String) dialogMode) %>"/>
+<c:set var="dialogMode" value="${empty dialogMode ? false : true}"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 <light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
+
+<c:set var="domainTypeFormName" value="${domainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
 
 <c:if test="${not dialogMode}">
     <div class="title">
@@ -36,7 +38,7 @@
     </light-jsp:breadcrumb>
 </c:if>
 
-<form id="${domainTypeName}-form" class="mainForm">
+<form id="${domainTypeFormName}" class="mainForm">
     <div class="widget">
         <div class="head"><h5 class="iCreate">
             <c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5></div>
@@ -63,7 +65,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var domain_form = $("#${domainTypeName}-form");
+        var domain_form = $("#${domainTypeFormName}");
 
         formViewVisualDecoration($(domain_form));
 

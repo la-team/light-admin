@@ -21,11 +21,12 @@
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
-<tiles:useAttribute name="dialogMode"/>
-
-<c:set var="dialogMode" value="<%= Boolean.valueOf((String) dialogMode) %>"/>
+<tiles:useAttribute name="dialogMode" ignore="true"/>
+<c:set var="dialogMode" value="${empty dialogMode ? false : true}"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
+
+<c:set var="domainTypeFormName" value="${domainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
 
 <c:if test="${not dialogMode}">
     <div class="title">
@@ -38,7 +39,7 @@
     </light-jsp:breadcrumb>
 </c:if>
 
-<form id="${domainTypeName}-form" class="mainForm">
+<form id="${domainTypeFormName}" class="mainForm">
     <div class="widget">
         <div class="head">
             <h5 class="iCreate">
@@ -66,7 +67,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var domain_form = $("#${domainTypeName}-form");
+        var domain_form = $("#${domainTypeFormName}");
 
         formViewVisualDecoration(domain_form);
 

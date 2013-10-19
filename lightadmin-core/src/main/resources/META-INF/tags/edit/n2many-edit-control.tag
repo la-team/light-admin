@@ -6,6 +6,11 @@
 <%@ attribute name="attributeMetadata" required="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
+<%@ attribute name="modalViewEnabled" required="false" type="java.lang.Boolean" %>
+
+<tiles:useAttribute name="dialogMode" ignore="true"/>
+<c:set var="dialogMode" value="${empty dialogMode ? false : true}"/>
+
 <select name="${attributeMetadata.name}" multiple="multiple" class="chzn-select" data-placeholder=" " ${disabled ? 'disabled' : ''}>
     <light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId" stringRepresentationVar="elementName">
         <option value="${elementId}"><c:out value="${elementName}" escapeXml="true"/></option>
@@ -14,7 +19,7 @@
 
 <c:set var="domainTypeAdministrationConfiguration" value="${light:domainTypeAdministrationConfigurationFor(attributeMetadata.elementType)}"/>
 
-<c:if test="${domainTypeAdministrationConfiguration ne null}">
+<c:if test="${(not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
 
     <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
     <light:url var="domainBaseUrl" value='${light:domainBaseUrl(domainTypeAdministrationConfiguration)}'/>

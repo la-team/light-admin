@@ -77,7 +77,7 @@ public class StandardWebContext implements WebContext {
         }
         final File fileStorageDirectory = getFile(fileStoragePath);
 
-        if (fileStorageDirectory.exists() && fileStorageDirectory.canWrite()) {
+        if (fileStorageDirectory.exists() && fileStorageDirectory.isDirectory()) {
             return fileStorageDirectory;
         }
 

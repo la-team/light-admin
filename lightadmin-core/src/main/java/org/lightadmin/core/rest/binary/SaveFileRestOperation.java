@@ -3,6 +3,7 @@ package org.lightadmin.core.rest.binary;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.context.WebContext;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
 import java.io.File;
@@ -36,6 +37,26 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
                 performSaveToFileStorage(attrMeta, incomingVal);
             }
         }
+    }
+
+    public void performCleanup(AttributeMetadata fileReferenceAttrMetadata) throws IOException {
+        final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+        final FileReference fileReference = fileReferenceAttrMetadata.annotation(FileReference.class);
+
+        if (getFile(fileReference.baseDirectory()).exists()) {
+            File file = referencedFile(fileReferenceAttrMetadata);
+            byte[] fileData = readFileToByteArray(file);
+            deleteQuietly(file);
+            perform(fileReferenceAttrMetadata, fileData);
+
+        } else {
+            File file = fileStorageFile(fileReferenceAttrMetadata);
+            byte[] fileData = readFileToByteArray(file);
+            deleteQuietly(file);
+            perform(fileReferenceAttrMetadata, fileData);
+        }
+
+        repository.save(entity);
     }
 
     private byte[] incomingValue(Object incomingValueObject) {

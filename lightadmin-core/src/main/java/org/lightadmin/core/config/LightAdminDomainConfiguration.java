@@ -9,6 +9,7 @@ import org.lightadmin.core.config.management.rmi.DataManipulationService;
 import org.lightadmin.core.config.management.rmi.DataManipulationServiceImpl;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementServiceImpl;
+import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepositoryFactory;
@@ -35,6 +36,9 @@ public class LightAdminDomainConfiguration {
     @Autowired
     private ServletContextResourceLoader servletContextResourceLoader;
 
+    @Autowired
+    private WebContext webContext;
+
     @Bean
     public DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver() {
         return new JpaDomainTypeEntityMetadataResolver(entityManager);
@@ -54,7 +58,7 @@ public class LightAdminDomainConfiguration {
 
     @Bean
     public DomainConfigurationSourceValidatorFactory domainConfigurationSourceValidatorFactory() {
-        return new DomainConfigurationSourceValidatorFactory(domainTypeEntityMetadataResolver(), servletContextResourceLoader);
+        return new DomainConfigurationSourceValidatorFactory(domainTypeEntityMetadataResolver(), servletContextResourceLoader, webContext);
     }
 
     @Bean

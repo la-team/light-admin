@@ -55,14 +55,19 @@ public enum DomainTypeAttributeType {
         return DomainTypeAttributeType.UNKNOWN;
     }
 
-    public static boolean isOfFileType(AttributeMetadata attributeMetadata) {
-        Class<?> type = attributeMetadata.type();
+    public static boolean isOfBinaryFileType(AttributeMetadata attributeMetadata) {
+        return forType(attributeMetadata.type()) == FILE;
+    }
 
-        if (forType(type) == STRING && attributeMetadata.hasAnnotation(FileReference.class)) {
+    public static boolean isOfFileReferenceType(AttributeMetadata attributeMetadata) {
+        if (forType(attributeMetadata.type()) == STRING && attributeMetadata.hasAnnotation(FileReference.class)) {
             return true;
         }
+        return false;
+    }
 
-        return forType(type) == FILE;
+    public static boolean isOfFileType(AttributeMetadata attributeMetadata) {
+        return isOfBinaryFileType(attributeMetadata) || isOfFileReferenceType(attributeMetadata);
     }
 
     public static DomainTypeAttributeType forAttributeMetadata(DomainTypeAttributeMetadata attributeMetadata) {
