@@ -18,7 +18,7 @@
 
 <tiles:useAttribute name="dialogMode" ignore="true"/>
 
-<c:set var="dialogMode" value="${empty dialogMode ? false : true}"/>
+<c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 <light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>

@@ -22,7 +22,7 @@
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
 <tiles:useAttribute name="dialogMode" ignore="true"/>
-<c:set var="dialogMode" value="${empty dialogMode ? false : true}"/>
+<c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
 

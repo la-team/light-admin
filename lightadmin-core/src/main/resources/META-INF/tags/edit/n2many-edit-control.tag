@@ -9,7 +9,7 @@
 <%@ attribute name="modalViewEnabled" required="false" type="java.lang.Boolean" %>
 
 <tiles:useAttribute name="dialogMode" ignore="true"/>
-<c:set var="dialogMode" value="${empty dialogMode ? false : true}"/>
+<c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
 <select name="${attributeMetadata.name}" multiple="multiple" class="chzn-select" data-placeholder=" " ${disabled ? 'disabled' : ''}>
     <light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId" stringRepresentationVar="elementName">

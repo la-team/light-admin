@@ -9,9 +9,9 @@
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 <tiles:useAttribute name="entityId"/>
-<tiles:useAttribute name="dialogMode"/>
+<tiles:useAttribute name="dialogMode" ignore="true"/>
 
-<c:set var="dialogMode" value="<%= Boolean.valueOf((String) dialogMode) %>"/>
+<c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
 <light:url var="fileUploadUrl" value="/rest/upload" scope="page"/>
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
