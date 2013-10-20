@@ -51,23 +51,16 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/plupload/js/moxie.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/plupload/js/plupload.dev.js"/>"></script>
 
-<!-- debug
-<script type="text/javascript" src="../js/moxie.js"></script>
-<script type="text/javascript" src="../js/plupload.dev.js"></script>
--->
-
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.progress.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.jgrowl.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.tipsy.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.alerts.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.colorpicker.js"/>"></script>
 
-<script type="text/javascript"
-        src="<light:url value="/scripts/vendor/plugins/wizards/jquery.form.wizard.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wizards/jquery.form.wizard.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/wizards/jquery.validate.js"/>"></script>
 
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.core.min.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.datepicker.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.breadcrumbs.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.collapsible.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.ToTop.js"/>"></script>

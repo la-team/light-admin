@@ -1361,7 +1361,7 @@ button.ui-button::-moz-focus-inner {
 
 .ui-dialog input[type=text] {
     width: 96% !important;
-    margin: 12px 0 10px 0;
+    margin: 0px 0 10px 0;
 }
 
 .ui-dialog form {
