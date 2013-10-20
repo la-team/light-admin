@@ -69,12 +69,13 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
 
     private void performSaveToFileStorage(AttributeMetadata attrMeta, byte[] incomingVal) throws IOException {
         final File file = fileStorageFile(attrMeta);
+        String relativePath = relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attrMeta);
         if (isEmpty(incomingVal)) {
             resetAttrValue(attrMeta);
             deleteQuietly(file);
         } else {
             writeByteArrayToFile(file, incomingVal);
-            attrMeta.set(relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attrMeta), entity);
+            attrMeta.set(relativePath, entity);
         }
     }
 

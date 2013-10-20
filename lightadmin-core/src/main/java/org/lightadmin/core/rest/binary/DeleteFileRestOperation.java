@@ -24,14 +24,21 @@ public class DeleteFileRestOperation extends AbstractFileRestOperation {
         if (attrMeta.hasAnnotation(FileReference.class)) {
             final FileReference fileReference = attrMeta.annotation(FileReference.class);
 
-            resetAttrValue(attrMeta);
-            repository().save(entity);
-
-            if (getFile(fileReference.baseDirectory()).exists()) {
-                deleteQuietly(referencedFile(attrMeta));
-            } else {
-                deleteQuietly(fileStorageFile(attrMeta));
+            if (deleteFile(attrMeta, fileReference)) {
+                resetAttrValue(attrMeta);
+                repository().save(entity);
             }
         }
+    }
+
+    public void performDirectoryCleanup() {
+        // TODO
+    }
+
+    private boolean deleteFile(AttributeMetadata attrMeta, FileReference fileReference) {
+        if (getFile(fileReference.baseDirectory()).exists()) {
+            return deleteQuietly(referencedFile(attrMeta));
+        }
+        return deleteQuietly(fileStorageFile(attrMeta));
     }
 }

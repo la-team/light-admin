@@ -46,7 +46,7 @@ public class DomainRepositoryEventListener extends AbstractRepositoryEventListen
     }
 
     @Override
-    protected void onAfterDelete(Object entity) {
+    protected void onBeforeDelete(Object entity) {
         final RepositoryMetadata repoMeta = repositoryMetadataFor(entity.getClass());
         final Collection<AttributeMetadata> embeddedAttributeMetadatas = (Collection<AttributeMetadata>) repoMeta.entityMetadata().embeddedAttributes().values();
         final Collection<AttributeMetadata> fileReferenceAttributeMetadatas = fileReferenceAttributeMetadatas(embeddedAttributeMetadatas);
@@ -54,5 +54,7 @@ public class DomainRepositoryEventListener extends AbstractRepositoryEventListen
         for (AttributeMetadata fileReferenceAttrMetadata : fileReferenceAttributeMetadatas) {
             operationBuilder.deleteOperation(entity).perform(fileReferenceAttrMetadata);
         }
+
+        operationBuilder.deleteOperation(entity).performDirectoryCleanup();
     }
 }
