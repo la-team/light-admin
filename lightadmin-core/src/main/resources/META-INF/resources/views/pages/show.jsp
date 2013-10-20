@@ -17,40 +17,55 @@
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 <light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
+<light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
 <div class="title">
-	<h5><c:out value="Show ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
+    <h5><c:out value="Show ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
 </div>
 
 <light-jsp:breadcrumb>
-	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
-	<light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
+    <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
+    <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
 </light-jsp:breadcrumb>
 
 <div class="widget">
-	<div class="head">
-		<h5 class="iList"><c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
+    <div class="head">
+        <h5 class="iList"><c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
 
-		<div style="float: right;margin-top: 5px;display: inline-block;">
-			<a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img src="<light:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
-		</div>
-	</div>
-	<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
-		<tbody id="data-section">
-		<c:forEach var="field" items="${fields}" varStatus="status">
-			<tr class="${status.first ? 'noborder' : ''}">
-				<td width="30%" align="right"><strong><c:out value="${field.name}"/>:</strong></td>
-				<td name="field-${field.uuid}">&nbsp;</td>
-			</tr>
-		</c:forEach>
-		</tbody>
-	</table>
+        <div style="float: right;margin-top: 5px;display: inline-block;">
+            <a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img src="<light:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
+            <a href="javascript:void(0);" title="Remove" class="btn14 mr5 remove_button"><img src="<light:url value='/images/icons/dark/basket.png'/>" alt="Remove"></a>
+        </div>
+    </div>
+    <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
+        <tbody id="data-section">
+        <c:forEach var="field" items="${fields}" varStatus="status">
+            <tr class="${status.first ? 'noborder' : ''}">
+                <td width="30%" align="right"><strong><c:out value="${field.name}"/>:</strong></td>
+                <td name="field-${field.uuid}">&nbsp;</td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 
 <script type="text/javascript">
-	loadDomainObjectForShowView( $( '#data-section' ), '${domainObjectUrl}/unit/showView' );
+    loadDomainObjectForShowView($('#data-section'), '${domainObjectUrl}/unit/showView');
 
-	<c:if test="${param.updateSuccess}">
-	showSuccessMessageNote( '<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!' );
-	</c:if>
+    <c:if test="${param.updateSuccess}">
+    showSuccessMessageNote('<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!');
+    </c:if>
+
+    $(function () {
+        var entity_id = '${entityId}';
+        $("a.remove_button").click(function () {
+            jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
+                if (r) {
+                    removeDomainObject(entity_id, '${domainRestUrl}', function () {
+                        window.location = '${domainBaseUrl}';
+                    });
+                }
+            });
+        });
+    });
 </script>
