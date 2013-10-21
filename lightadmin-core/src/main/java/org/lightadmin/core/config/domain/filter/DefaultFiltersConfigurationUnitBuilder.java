@@ -5,7 +5,6 @@ import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder
 
 import java.util.Set;
 
-import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
 public class DefaultFiltersConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<FiltersConfigurationUnit> implements FiltersConfigurationUnitBuilder {
@@ -24,7 +23,9 @@ public class DefaultFiltersConfigurationUnitBuilder extends DomainTypeConfigurat
 
     @Override
     public FiltersConfigurationUnitBuilder filters(FilterMetadata... filters) {
-        filtersMetadata.addAll(newHashSet(filters));
+        for (FilterMetadata filter : filters){
+			filtersMetadata.add(filter);
+		}
         return this;
     }
 

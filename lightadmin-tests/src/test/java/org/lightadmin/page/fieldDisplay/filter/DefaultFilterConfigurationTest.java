@@ -10,7 +10,7 @@ import org.lightadmin.data.Domain;
 
 @RunWithConfiguration( {FilterTestEntityConfiguration.class })
 @LoginOnce( domain = Domain.FILTER_TEST_DOMAIN )
-public class CaptionTest extends SeleniumIntegrationTest {
+public class DefaultFilterConfigurationTest extends SeleniumIntegrationTest {
 
 	@Test
 	public void userDefinedCaptionsAreShown(){
@@ -19,5 +19,11 @@ public class CaptionTest extends SeleniumIntegrationTest {
 		Assert.assertArrayEquals( expectedCaptions, getStartPage().getFilterCaptions());
 	}
 
-	private String[] expectedCaptions = new String[] {"Identifier:", "The Text Field:", "The Integer Field:", "The Primitive Integer Field:", "The Decimal Field:", "The Boolean Field:"};
+	private String[] expectedCaptions = new String[] {
+			"Identifier:",
+			"The Text Field:",
+			"The Integer Field:",
+			"The Primitive Integer Field:",
+			"The Decimal Field:",
+			"The Boolean Field:"};
 }
