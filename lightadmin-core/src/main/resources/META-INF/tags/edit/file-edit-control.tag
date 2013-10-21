@@ -18,14 +18,12 @@
 
 <c:set var="filePropertyUrl" value="${domainObjectUrl}/${attributeMetadata.name}/file" scope="page"/>
 
-<div id="${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}">
+<div id="${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}" style="text-align: left;">
     <div class="files"></div>
     <input id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}" name="${attributeMetadata.name}" type="hidden"/>
 
     <a id="${attributeMetadata.name}-pickfiles${dialogMode ? '-dialog' : ''}" href="javascript:;">[Select file]</a>
 </div>
-<br/>
-<pre id="console"></pre>
 
 <script type="text/javascript">
     $(function () {

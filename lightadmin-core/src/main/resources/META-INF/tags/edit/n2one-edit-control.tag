@@ -11,9 +11,9 @@
 <tiles:useAttribute name="dialogMode" ignore="true"/>
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
-<div class="floatleft">
-    <select name="${attributeMetadata.name}" id="${attributeMetadata.name}" style="opacity: 0; " ${disabled ? 'disabled' : ''}>
-        <option value="">Select ${attributeMetadata.name}</option>
+<div class="floatleft searchDrop">
+    <select name="${attributeMetadata.name}" id="${attributeMetadata.name}" class="chzn-select" style="min-width: 302px;" ${disabled ? 'disabled' : ''} data-placeholder="Select ${attributeMetadata.name}">
+        <option value=""></option>
         <light:domain-type-elements domainType="${attributeMetadata.type}" idVar="elementId" stringRepresentationVar="elementName">
             <option value="${elementId}"><c:out value="${elementName}" escapeXml="true"/></option>
         </light:domain-type-elements>

@@ -170,6 +170,25 @@ td.details {
     margin-top: 10px;
 }
 
+.chzn-container-single .chzn-single abbr {
+    display: block;
+    position: absolute;
+    right: 32px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    font-size: 1px;
+    background: url('../images/chosen-sprite.png') -42px 1px no-repeat;
+}
+
+.chosen-container-single .chosen-single abbr:hover {
+    background-position: -42px -10px;
+}
+
+.chosen-container-single.chosen-disabled .chosen-single abbr:hover {
+    background-position: -42px -10px;
+}
+
 div.selector {
     position: relative;
     height: 26px;
@@ -194,6 +213,7 @@ div.selector span {
 }
 
 div.selector select {
+    min-width: 302px;
     width: 302px;
     cursor: pointer;
     font-size: 12px;
@@ -207,12 +227,8 @@ div.selector select {
     width: 302px;
 }
 
-.formRight .chzn-container-multi {
-    width: 302px !important;
-}
-
 .mainForm .chzn-container-multi {
-    width: 90% !important;
+    width: 93% !important;
 }
 
 .nNote {

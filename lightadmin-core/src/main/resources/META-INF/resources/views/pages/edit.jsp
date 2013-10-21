@@ -49,7 +49,11 @@
         <fieldset>
             <c:forEach var="fieldEntry" items="${fields}" varStatus="status">
                 <div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
-                    <label><strong><c:out value="${light:capitalize(fieldEntry.name)}"/>:</strong></label>
+                    <label>
+                        <strong>
+                            <c:out value="${light:capitalize(fieldEntry.name)}"/>:<c:if test="${fieldEntry.required}"><span class="req">*</span></c:if>
+                        </strong>
+                    </label>
 
                     <div class="formRight">
                         <light-jsp:edit-control fieldMetadata="${fieldEntry}" cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>

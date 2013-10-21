@@ -4,11 +4,13 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
 public interface Persistable {
 
-	DomainTypeAttributeMetadata getAttributeMetadata();
+    DomainTypeAttributeMetadata getAttributeMetadata();
 
-	String getField();
+    String getField();
 
-	boolean isPrimaryKey();
+    boolean isPrimaryKey();
 
-	boolean isGeneratedValue();
+    boolean isRequired();
+
+    boolean isGeneratedValue();
 }

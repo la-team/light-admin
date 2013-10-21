@@ -430,7 +430,7 @@ function showMessageNote(message, messageTypeClass, beforeElement) {
 }
 
 function formViewVisualDecoration(container) {
-    $(".chzn-select", $(container)).chosen();
+    $(".chzn-select", $(container)).chosen({allow_single_deselect: true});
 
     $("select, input:checkbox, input:radio, input:file", $(container)).uniform();
 
@@ -537,7 +537,7 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
     var dialog_selector = '#' + dialog_id;
     var form_id = domainTypeName + "-dialog-form";
     var form_selector = '#' + form_id;
-    var dialog_title = "[BETA] Create dialog";// + domainTypeName;
+    var dialog_title = "Create dialog";
 
     var parent_form = $(elementToBind).parents('form')[0];
 

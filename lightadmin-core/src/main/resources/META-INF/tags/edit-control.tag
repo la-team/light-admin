@@ -10,7 +10,7 @@
     <c:set var="attributeMetadata" value="${fieldMetadata.attributeMetadata}" scope="page"/>
     <light:edit-control-dispatcher attributeMetadata="${attributeMetadata}" customControl="${fieldMetadata.customControl}">
 		<jsp:attribute name="numberEditControl">
-			<editor:number-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
+			<editor:number-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}" allowEmpty="${not fieldMetadata.required}"/>
 		</jsp:attribute>
 		<jsp:attribute name="simpleEditControl">
 			<editor:simple-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
@@ -34,5 +34,5 @@
 			<jsp:text>Map is not supported</jsp:text>
 		</jsp:attribute>
     </light:edit-control-dispatcher>
-    <label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}"></label>
+    <label id="${attributeMetadata.name}-error" for="${attributeMetadata.name}" class="${errorCssClass}" style="text-align: left;"></label>
 </jsp:root>
