@@ -14,7 +14,7 @@ import java.io.Serializable;
 
 import static java.lang.String.valueOf;
 import static org.apache.commons.io.FileUtils.getFile;
-import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToStoreBinaryAttrValue;
+import static org.lightadmin.core.rest.binary.FileStorageUtils.*;
 
 public abstract class AbstractFileRestOperation {
 
@@ -40,6 +40,24 @@ public abstract class AbstractFileRestOperation {
 
     protected void performDirectSave(AttributeMetadata attrMeta, byte[] incomingVal) {
         attrMeta.set(incomingVal, entity);
+    }
+
+    protected File referencedFileDomainEntityAttributeDirectory(AttributeMetadata attrMeta) {
+        final FileReference fileReference = attrMeta.annotation(FileReference.class);
+        return getFile(fileReference.baseDirectory(), relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
+    }
+
+    protected File fileStorageDomainEntityAttributeDirectory(AttributeMetadata attrMeta) {
+        return getFile(webContext.getFileStorageDirectory(), relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
+    }
+
+    protected File referencedFileDomainEntityDirectory(AttributeMetadata attrMeta) {
+        final FileReference fileReference = attrMeta.annotation(FileReference.class);
+        return getFile(fileReference.baseDirectory(), relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
+    }
+
+    protected File fileStorageDomainEntityDirectory() {
+        return getFile(webContext.getFileStorageDirectory(), relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
     }
 
     protected File referencedFile(AttributeMetadata attrMeta) {

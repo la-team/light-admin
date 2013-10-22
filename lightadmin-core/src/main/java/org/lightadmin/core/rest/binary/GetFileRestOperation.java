@@ -5,12 +5,12 @@ import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.context.WebContext;
 import org.springframework.data.rest.repository.AttributeMetadata;
-import org.springframework.util.FileCopyUtils;
 
 import java.io.*;
 
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.io.FileUtils.readFileToByteArray;
+import static org.springframework.util.FileCopyUtils.copy;
 
 public class GetFileRestOperation extends AbstractFileRestOperation {
 
@@ -39,7 +39,7 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
         if (attrMeta.type().equals(byte[].class)) {
             byte[] fileData = (byte[]) attrMeta.get(entity);
             if (ArrayUtils.isNotEmpty(fileData)) {
-                FileCopyUtils.copy(fileData, outputStream);
+                copy(fileData, outputStream);
             }
         }
 
@@ -55,6 +55,6 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
     }
 
     private void copyToOutputStream(File file, OutputStream outputStream) throws IOException {
-        FileCopyUtils.copy(new BufferedInputStream(new FileInputStream(file)), new BufferedOutputStream(outputStream));
+        copy(new BufferedInputStream(new FileInputStream(file)), new BufferedOutputStream(outputStream));
     }
 }

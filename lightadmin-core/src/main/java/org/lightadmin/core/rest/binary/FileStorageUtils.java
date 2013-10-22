@@ -10,7 +10,11 @@ import static java.lang.String.valueOf;
 public class FileStorageUtils {
 
     public static String relativePathToStoreBinaryAttrValue(String domainTypeName, Serializable idValue, AttributeMetadata attrMeta) {
-        return relativePathToDomainStorageDirectory(domainTypeName, idValue) + "/" + attrMeta.name() + "/" + "file.bin";
+        return relativePathToDomainStorageAttributeDirectory(domainTypeName, idValue, attrMeta) + "/" + "file.bin";
+    }
+
+    public static String relativePathToDomainStorageAttributeDirectory(String domainTypeName, Serializable idValue, AttributeMetadata attrMeta) {
+        return relativePathToDomainStorageDirectory(domainTypeName, idValue) + "/" + attrMeta.name();
     }
 
     public static String relativePathToDomainStorageDirectory(String domainTypeName, Serializable idValue) {

@@ -54,7 +54,5 @@ public class DomainRepositoryEventListener extends AbstractRepositoryEventListen
         for (AttributeMetadata fileReferenceAttrMetadata : fileReferenceAttributeMetadatas) {
             operationBuilder.deleteOperation(entity).perform(fileReferenceAttrMetadata);
         }
-
-        operationBuilder.deleteOperation(entity).performDirectoryCleanup();
     }
 }
