@@ -20,9 +20,9 @@ by bringing pluggable fully operational data management back-end for JPA based a
 ## Documentation & Support ##
 
 * Web site: [lightadmin.org](http://lightadmin.org)
-* Documentation & Guides: [lightadmin.org/documentation](http://lightadmin.org)
+* Documentation & Guides: [lightadmin.org/getting-started/](http://lightadmin.org/getting-started/)
 * Wiki: [github.com/max-dev/light-admin/wiki](http://github.com/max-dev/light-admin/wiki)
-* Live demo: [lightadmin.org/demo/admin](http://lightadmin.org/demo/admin)
+* Live demo: [lightadmin.org/demo](http://lightadmin.org/demo)
 * CI Server: [lightadmin.org/jenkins](http://lightadmin.org/jenkins)
 * For more detailed questions: [groups.google.com/group/lightadmin](http://groups.google.com/group/lightadmin)
 
