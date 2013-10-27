@@ -22,7 +22,7 @@ public class InvalidFieldTest extends SeleniumIntegrationTest {
 		expectedException.expectMessage(
 				both( containsString( "Domain Configuration")).and(containsString("InvalidFieldAdmin"))
 						.and( containsString( "Unit")).and( containsString( "filters"))
-						.and( containsString( "Invalid property/path 'Missing Field' defined!" )));
+						.and( containsString( "Missing property 'Missing Field' defined!" )));
 
 		registerDomainTypeAdministrationConfiguration( InvalidFieldAdmin.class );
 	}
