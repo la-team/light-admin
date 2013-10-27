@@ -189,6 +189,10 @@ td.details {
     background-position: -42px -10px;
 }
 
+.chzn-container-single .chzn-search input {
+    width: 265px !important;
+}
+
 div.selector {
     position: relative;
     height: 26px;
