@@ -8,14 +8,27 @@ import static java.lang.String.format;
 @SuppressWarnings("unused")
 public class InvalidPropertyConfigurationProblem extends DomainConfigurationProblem {
 
-	private final String propertyName;
+    private InvalidPropertyConfigurationProblem(final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, String message) {
+        super(domainConfiguration, configurationUnitType, message);
+    }
 
-	public InvalidPropertyConfigurationProblem( String propertyName, final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType ) {
-		super( domainConfiguration, configurationUnitType, format( "Invalid property/path '%s' defined!", propertyName ) );
-		this.propertyName = propertyName;
-	}
+    public static InvalidPropertyConfigurationProblem missingFieldProblem(final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, String propertyName) {
+        return new InvalidPropertyConfigurationProblem(domainConfiguration, configurationUnitType, format("Missing property '%s' defined!", propertyName));
+    }
 
-	public String getPropertyName() {
-		return propertyName;
-	}
+    public static InvalidPropertyConfigurationProblem rendererNotDefinedForFieldProblem(final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, String propertyName) {
+        return new InvalidPropertyConfigurationProblem(domainConfiguration, configurationUnitType, format("Renderer not defined for custom property '%s'!", propertyName));
+    }
+
+    public static InvalidPropertyConfigurationProblem notSupportedTypeFieldProblem(final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, String propertyName) {
+        return new InvalidPropertyConfigurationProblem(domainConfiguration, configurationUnitType, format("Persistent property '%s' has not supported type!", propertyName));
+    }
+
+    public static InvalidPropertyConfigurationProblem missingBaseDirectoryInFileReferenceProblem(final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, String propertyName) {
+        return new InvalidPropertyConfigurationProblem(domainConfiguration, configurationUnitType, format("@FileReference property '%s' has incorrect baseDirectory defined!", propertyName));
+    }
+
+    public static InvalidPropertyConfigurationProblem invalidPropertyValueExpressionProblem(final DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, String propertyName) {
+        return new InvalidPropertyConfigurationProblem(domainConfiguration, configurationUnitType, format("Property '%s' has invalid path/expression defined!", propertyName));
+    }
 }

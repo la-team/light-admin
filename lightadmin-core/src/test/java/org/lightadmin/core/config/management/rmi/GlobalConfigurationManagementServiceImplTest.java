@@ -4,8 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.lightadmin.core.config.LightAdminRepositoryRestConfiguration;
 import org.lightadmin.core.config.annotation.Administration;
+import org.lightadmin.core.config.context.LightAdminRepositoryRestConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.test.IntegrationTest;
 import org.lightadmin.core.test.LightAdminConfigurationContextLoader;
@@ -18,66 +18,66 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
 
-@Category( IntegrationTest.class )
-@RunWith( SpringJUnit4ClassRunner.class )
-@ContextConfiguration( loader = LightAdminConfigurationContextLoader.class,
-					   classes = {LightAdminTestConfiguration.class, LightAdminRepositoryRestConfiguration.class} )
+@Category(IntegrationTest.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = LightAdminConfigurationContextLoader.class,
+        classes = {LightAdminTestConfiguration.class, LightAdminRepositoryRestConfiguration.class})
 public class GlobalConfigurationManagementServiceImplTest {
 
-	@Autowired
-	private GlobalConfigurationManagementService globalConfigurationManagementService;
+    @Autowired
+    private GlobalConfigurationManagementService globalConfigurationManagementService;
 
-	@Before
-	public void setUp() throws Exception {
-		globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
-	}
+    @Before
+    public void setUp() throws Exception {
+        globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
+    }
 
-	@Test
-	public void runtimeConfigurationRegistration() {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
+    @Test
+    public void runtimeConfigurationRegistration() {
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
 
-		assertNotNull( globalConfigurationManagementService.getRegisteredDomainTypeConfiguration( Address.class ) );
-	}
+        assertNotNull(globalConfigurationManagementService.getRegisteredDomainTypeConfiguration(Address.class));
+    }
 
-	@Test
-	public void runtimeConfigurationRemoval() {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
+    @Test
+    public void runtimeConfigurationRemoval() {
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
 
-		globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration( Address.class );
+        globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration(Address.class);
 
-		assertNull( globalConfigurationManagementService.getRegisteredDomainTypeConfiguration( Address.class ) );
-	}
+        assertNull(globalConfigurationManagementService.getRegisteredDomainTypeConfiguration(Address.class));
+    }
 
-	@Test
-	public void runtimeMultipleConfigurationsRegistration() {
-		assertTrue( globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().isEmpty() );
+    @Test
+    public void runtimeMultipleConfigurationsRegistration() {
+        assertTrue(globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().isEmpty());
 
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( CustomerConfiguration.class ) );
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(CustomerConfiguration.class));
 
-		assertEquals( 2, globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().size() );
+        assertEquals(2, globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().size());
 
-		assertNotNull( globalConfigurationManagementService.getRegisteredDomainTypeConfiguration( Address.class ) );
-		assertNotNull( globalConfigurationManagementService.getRegisteredDomainTypeConfiguration( Customer.class ) );
-	}
+        assertNotNull(globalConfigurationManagementService.getRegisteredDomainTypeConfiguration(Address.class));
+        assertNotNull(globalConfigurationManagementService.getRegisteredDomainTypeConfiguration(Customer.class));
+    }
 
-	@Test
-	public void runtimeConfigurationsCleanup() {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( CustomerConfiguration.class ) );
+    @Test
+    public void runtimeConfigurationsCleanup() {
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(CustomerConfiguration.class));
 
-		globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
+        globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
 
-		assertTrue( globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().isEmpty() );
-	}
+        assertTrue(globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().isEmpty());
+    }
 
-	@Administration( Address.class )
-	private static class AddressConfiguration {
+    @Administration(Address.class)
+    private static class AddressConfiguration {
 
-	}
+    }
 
-	@Administration( Customer.class )
-	private static class CustomerConfiguration {
+    @Administration(Customer.class)
+    private static class CustomerConfiguration {
 
-	}
+    }
 }

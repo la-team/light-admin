@@ -1,6 +1,6 @@
 package org.lightadmin.core.test;
 
-import org.lightadmin.core.config.LightAdminDomainConfiguration;
+import org.lightadmin.core.config.context.LightAdminDomainConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -19,47 +19,47 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
 @Configuration
-@Import( {
-			 LightAdminTestConfiguration.PersistanceConfiguration.class, LightAdminDomainConfiguration.class
-		 } )
+@Import({
+        LightAdminTestConfiguration.PersistanceConfiguration.class, LightAdminDomainConfiguration.class
+})
 public class LightAdminTestConfiguration {
 
-	@Configuration
-	@EnableTransactionManagement
-	public static class PersistanceConfiguration {
+    @Configuration
+    @EnableTransactionManagement
+    public static class PersistanceConfiguration {
 
-		private static final String MODEL_BASE_PACKAGE = "org.lightadmin.core.test.model";
+        private static final String MODEL_BASE_PACKAGE = "org.lightadmin.core.test.model";
 
-		@Bean
-		public PlatformTransactionManager transactionManager() {
-			return new JpaTransactionManager( entityManagerFactory() );
-		}
+        @Bean
+        public PlatformTransactionManager transactionManager() {
+            return new JpaTransactionManager(entityManagerFactory());
+        }
 
-		@Bean
-		public DataSource dataSource() {
-			EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-			return builder.setType( EmbeddedDatabaseType.HSQL ).addScript( "classpath:db/schema.sql" ).addScript( "classpath:db/data.sql" ).build();
-		}
+        @Bean
+        public DataSource dataSource() {
+            EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+            return builder.setType(EmbeddedDatabaseType.HSQL).addScript("classpath:db/schema.sql").addScript("classpath:db/data.sql").build();
+        }
 
-		@Bean
-		public EntityManagerFactory entityManagerFactory() {
-			HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
-			vendorAdapter.setDatabase( Database.HSQL );
-			vendorAdapter.setGenerateDdl( true );
+        @Bean
+        public EntityManagerFactory entityManagerFactory() {
+            HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+            vendorAdapter.setDatabase(Database.HSQL);
+            vendorAdapter.setGenerateDdl(true);
 
-			LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
-			factory.setJpaVendorAdapter( vendorAdapter );
-			factory.setPackagesToScan( MODEL_BASE_PACKAGE );
-			factory.setDataSource( dataSource() );
+            LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+            factory.setJpaVendorAdapter(vendorAdapter);
+            factory.setPackagesToScan(MODEL_BASE_PACKAGE);
+            factory.setDataSource(dataSource());
 
-			factory.afterPropertiesSet();
+            factory.afterPropertiesSet();
 
-			return factory.getObject();
-		}
+            return factory.getObject();
+        }
 
-		@Bean
-		public JpaDialect jpaDialect() {
-			return new HibernateJpaDialect();
-		}
-	}
+        @Bean
+        public JpaDialect jpaDialect() {
+            return new HibernateJpaDialect();
+        }
+    }
 }

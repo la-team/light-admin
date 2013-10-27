@@ -1,7 +1,7 @@
 package org.lightadmin.core.web.util;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.springframework.data.rest.repository.AttributeMetadata;
@@ -17,22 +17,22 @@ import static org.springframework.http.HttpStatus.OK;
 public class FileResourceLoader {
 
     private final DynamicJpaRepositoryExporter jpaRepositoryExporter;
-    private final WebContext webContext;
+    private final LightAdminConfiguration lightAdminConfiguration;
 
     private final ImageResourceControllerSupport imageResourceControllerSupport;
 
     private final OperationBuilder operationBuilder;
 
-    public FileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, DynamicJpaRepositoryExporter jpaRepositoryExporter, WebContext webContext) {
+    public FileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, DynamicJpaRepositoryExporter jpaRepositoryExporter, LightAdminConfiguration lightAdminConfiguration) {
         this.jpaRepositoryExporter = jpaRepositoryExporter;
-        this.webContext = webContext;
+        this.lightAdminConfiguration = lightAdminConfiguration;
 
-        this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, webContext);
+        this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, lightAdminConfiguration);
         this.imageResourceControllerSupport = new ImageResourceControllerSupport();
     }
 
     public ResponseEntity<?> loadFile(Object entity, AttributeMetadata attrMeta, HttpServletResponse response, int width, int height) throws IOException {
-        if (webContext.isFileStreamingEnabled()) {
+        if (lightAdminConfiguration.isFileStreamingEnabled()) {
             operationBuilder.getOperation(entity).performCopy(attrMeta, response.getOutputStream());
             return new ResponseEntity(OK);
         }

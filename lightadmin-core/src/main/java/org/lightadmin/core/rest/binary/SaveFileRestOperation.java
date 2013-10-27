@@ -1,8 +1,8 @@
 package org.lightadmin.core.rest.binary;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
@@ -17,8 +17,8 @@ import static org.springframework.security.crypto.codec.Base64.isBase64;
 
 public class SaveFileRestOperation extends AbstractFileRestOperation {
 
-    protected SaveFileRestOperation(GlobalAdministrationConfiguration configuration, WebContext webContext, Object entity) {
-        super(configuration, webContext, entity);
+    protected SaveFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
+        super(configuration, lightAdminConfiguration, entity);
     }
 
     public void perform(AttributeMetadata attrMeta, Object incomingValueObject) throws IOException {

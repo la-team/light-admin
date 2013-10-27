@@ -1,8 +1,8 @@
-package org.lightadmin.core.context;
+package org.lightadmin.core.config;
 
 import java.io.File;
 
-public interface WebContext {
+public interface LightAdminConfiguration {
 
     String getApplicationBaseUrl();
 

@@ -1,35 +1,35 @@
 package org.lightadmin.core.rest.binary;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 
 public class OperationBuilder {
 
     private GlobalAdministrationConfiguration configuration;
-    private WebContext webContext;
+    private LightAdminConfiguration lightAdminConfiguration;
 
-    private OperationBuilder(GlobalAdministrationConfiguration configuration, WebContext webContext) {
+    private OperationBuilder(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration) {
         this.configuration = configuration;
-        this.webContext = webContext;
+        this.lightAdminConfiguration = lightAdminConfiguration;
     }
 
-    public static OperationBuilder operationBuilder(GlobalAdministrationConfiguration configuration, WebContext webContext) {
-        return new OperationBuilder(configuration, webContext);
+    public static OperationBuilder operationBuilder(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration) {
+        return new OperationBuilder(configuration, lightAdminConfiguration);
     }
 
     public SaveFileRestOperation saveOperation(Object entity) {
-        return new SaveFileRestOperation(configuration, webContext, entity);
+        return new SaveFileRestOperation(configuration, lightAdminConfiguration, entity);
     }
 
     public DeleteFileRestOperation deleteOperation(Object entity) {
-        return new DeleteFileRestOperation(configuration, webContext, entity);
+        return new DeleteFileRestOperation(configuration, lightAdminConfiguration, entity);
     }
 
     public GetFileRestOperation getOperation(Object entity) {
-        return new GetFileRestOperation(configuration, webContext, entity);
+        return new GetFileRestOperation(configuration, lightAdminConfiguration, entity);
     }
 
     public FileExistsRestOperation fileExistsOperation(Object entity) {
-        return new FileExistsRestOperation(configuration, webContext, entity);
+        return new FileExistsRestOperation(configuration, lightAdminConfiguration, entity);
     }
 }

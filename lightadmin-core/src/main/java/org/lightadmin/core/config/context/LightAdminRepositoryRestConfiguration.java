@@ -1,7 +1,7 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.config.context;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.rest.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -51,7 +51,7 @@ public class LightAdminRepositoryRestConfiguration {
 
     @Bean
     @Autowired
-    public DomainTypeToResourceConverter domainTypeToResourceConverter(GlobalAdministrationConfiguration configuration, WebContext lightAdminContext) {
+    public DomainTypeToResourceConverter domainTypeToResourceConverter(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminContext) {
         return new DomainTypeToResourceConverter(configuration, lightAdminContext, repositoryRestConfiguration());
     }
 

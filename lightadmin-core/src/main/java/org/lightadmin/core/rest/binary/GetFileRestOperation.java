@@ -1,9 +1,9 @@
 package org.lightadmin.core.rest.binary;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
 import java.io.*;
@@ -14,8 +14,8 @@ import static org.springframework.util.FileCopyUtils.copy;
 
 public class GetFileRestOperation extends AbstractFileRestOperation {
 
-    protected GetFileRestOperation(GlobalAdministrationConfiguration configuration, WebContext webContext, Object entity) {
-        super(configuration, webContext, entity);
+    protected GetFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
+        super(configuration, lightAdminConfiguration, entity);
     }
 
     public byte[] perform(AttributeMetadata attrMeta) throws IOException {

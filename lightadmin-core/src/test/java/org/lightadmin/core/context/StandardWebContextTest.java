@@ -1,6 +1,8 @@
 package org.lightadmin.core.context;
 
 import org.junit.Test;
+import org.lightadmin.core.config.LightAdminConfiguration;
+import org.lightadmin.core.config.StandardLightAdminConfiguration;
 import org.springframework.mock.web.MockServletContext;
 
 import javax.servlet.ServletContext;
@@ -13,48 +15,48 @@ public class StandardWebContextTest {
 
     @Test
     public void testApplicationBaseUrlWithoutEndSeparator() {
-        WebContext webContext = new StandardWebContext(servletContext("/admin"));
+        LightAdminConfiguration lightAdminConfiguration = new StandardLightAdminConfiguration(servletContext("/admin"));
 
-        assertEquals("/admin", webContext.getApplicationBaseUrl());
-        assertEquals("/admin/url", webContext.getApplicationUrl("/url"));
+        assertEquals("/admin", lightAdminConfiguration.getApplicationBaseUrl());
+        assertEquals("/admin/url", lightAdminConfiguration.getApplicationUrl("/url"));
     }
 
     @Test
     public void testApplicationBaseUrlWithEndSeparator() {
-        WebContext webContext = new StandardWebContext(servletContext("/admin/"));
+        LightAdminConfiguration lightAdminConfiguration = new StandardLightAdminConfiguration(servletContext("/admin/"));
 
-        assertEquals("/admin/", webContext.getApplicationBaseUrl());
-        assertEquals("/admin/url", webContext.getApplicationUrl("/url"));
+        assertEquals("/admin/", lightAdminConfiguration.getApplicationBaseUrl());
+        assertEquals("/admin/url", lightAdminConfiguration.getApplicationUrl("/url"));
     }
 
     @Test
     public void testSecurityEnabled() {
         final ServletContext servletContext = servletContext("/admin/", true, null);
 
-        WebContext webContext = new StandardWebContext(servletContext);
+        LightAdminConfiguration lightAdminConfiguration = new StandardLightAdminConfiguration(servletContext);
 
-        assertTrue(webContext.isSecurityEnabled());
-        assertEquals("/lightadmin-demo/admin/logout", webContext.getSecurityLogoutUrl());
+        assertTrue(lightAdminConfiguration.isSecurityEnabled());
+        assertEquals("/lightadmin-demo/admin/logout", lightAdminConfiguration.getSecurityLogoutUrl());
     }
 
     @Test
     public void testSecurityDisabledByDefault() {
         final ServletContext servletContext = servletContext("/admin/", null, null);
 
-        WebContext webContext = new StandardWebContext(servletContext);
+        LightAdminConfiguration lightAdminConfiguration = new StandardLightAdminConfiguration(servletContext);
 
-        assertFalse(webContext.isSecurityEnabled());
-        assertEquals("/lightadmin-demo#", webContext.getSecurityLogoutUrl());
+        assertFalse(lightAdminConfiguration.isSecurityEnabled());
+        assertEquals("/lightadmin-demo#", lightAdminConfiguration.getSecurityLogoutUrl());
     }
 
     @Test
     public void testExternalSecurityEnabledWithLogoutUrl() {
         final ServletContext servletContext = servletContext("/admin/", false, "/external_logout");
 
-        WebContext webContext = new StandardWebContext(servletContext);
+        LightAdminConfiguration lightAdminConfiguration = new StandardLightAdminConfiguration(servletContext);
 
-        assertFalse(webContext.isSecurityEnabled());
-        assertEquals("/lightadmin-demo/external_logout", webContext.getSecurityLogoutUrl());
+        assertFalse(lightAdminConfiguration.isSecurityEnabled());
+        assertEquals("/lightadmin-demo/external_logout", lightAdminConfiguration.getSecurityLogoutUrl());
     }
 
     private ServletContext servletContext(final String applicationBaseUrl) {

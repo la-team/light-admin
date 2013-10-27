@@ -2,9 +2,9 @@ package org.lightadmin.core.rest.binary;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.ArrayUtils;
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
 import java.io.File;
@@ -14,8 +14,8 @@ import static org.apache.commons.io.FileUtils.getFile;
 
 public class FileExistsRestOperation extends AbstractFileRestOperation {
 
-    protected FileExistsRestOperation(GlobalAdministrationConfiguration configuration, WebContext webContext, Object entity) {
-        super(configuration, webContext, entity);
+    protected FileExistsRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
+        super(configuration, lightAdminConfiguration, entity);
     }
 
     public boolean perform(AttributeMetadata attrMeta) throws IOException {

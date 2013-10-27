@@ -1,4 +1,4 @@
-package org.lightadmin.core.context;
+package org.lightadmin.core.config;
 
 import javax.servlet.ServletContext;
 import java.io.File;
@@ -9,7 +9,7 @@ import static org.apache.commons.lang.StringUtils.defaultIfBlank;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 
-public class StandardWebContext implements WebContext {
+public class StandardLightAdminConfiguration implements LightAdminConfiguration {
 
     private final String applicationBaseUrl;
     private final String applicationBaseNoEndSeparator;
@@ -19,7 +19,7 @@ public class StandardWebContext implements WebContext {
     private final File fileStorageDirectory;
     private final boolean fileStreaming;
 
-    public StandardWebContext(ServletContext servletContext) {
+    public StandardLightAdminConfiguration(ServletContext servletContext) {
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
         this.applicationBaseNoEndSeparator = urlWithoutEndSeparator(this.applicationBaseUrl);
         this.backToSiteUrl = backToSiteUrl(servletContext);
@@ -72,16 +72,8 @@ public class StandardWebContext implements WebContext {
 
     private File fileStorageDirectory(ServletContext servletContext) {
         final String fileStoragePath = servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STORAGE_PATH);
-        if (isBlank(fileStoragePath)) {
-            return null;
-        }
-        final File fileStorageDirectory = getFile(fileStoragePath);
 
-        if (fileStorageDirectory.exists() && fileStorageDirectory.isDirectory()) {
-            return fileStorageDirectory;
-        }
-
-        return null;
+        return isBlank(fileStoragePath) ? null : getFile(fileStoragePath);
     }
 
     private String backToSiteUrl(ServletContext servletContext) {

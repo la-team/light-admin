@@ -1,4 +1,4 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.config.context;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -14,12 +14,12 @@ import javax.persistence.EntityManagerFactory;
 @EnableTransactionManagement
 public class LightAdminDataConfiguration implements TransactionManagementConfigurer {
 
-	@Autowired
-	private EntityManagerFactory entityManagerFactory;
+    @Autowired
+    private EntityManagerFactory entityManagerFactory;
 
-	@Override
-	@Bean
-	public PlatformTransactionManager annotationDrivenTransactionManager() {
-		return new JpaTransactionManager( entityManagerFactory );
-	}
+    @Override
+    @Bean
+    public PlatformTransactionManager annotationDrivenTransactionManager() {
+        return new JpaTransactionManager(entityManagerFactory);
+    }
 }

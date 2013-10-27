@@ -3,6 +3,7 @@ package org.lightadmin.core.rest;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
@@ -11,7 +12,6 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadataUtils;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
@@ -76,7 +76,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     private GlobalAdministrationConfiguration configuration;
 
     private ApplicationContext applicationContext;
-    private WebContext webContext;
+    private LightAdminConfiguration lightAdminConfiguration;
     private OperationBuilder operationBuilder;
 
     @Autowired
@@ -85,7 +85,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     @PostConstruct
     public void init() throws Exception {
         this.specificationCreator = new SpecificationCreator(conversionService, configuration);
-        this.operationBuilder = operationBuilder(configuration, webContext);
+        this.operationBuilder = operationBuilder(configuration, lightAdminConfiguration);
     }
 
     @RequestMapping(value = "/{repository}", method = RequestMethod.PUT)
@@ -405,7 +405,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     }
 
     @Autowired
-    public void setWebContext(WebContext webContext) {
-        this.webContext = webContext;
+    public void setLightAdminConfiguration(LightAdminConfiguration lightAdminConfiguration) {
+        this.lightAdminConfiguration = lightAdminConfiguration;
     }
 }

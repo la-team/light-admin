@@ -1,6 +1,6 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.config.context;
 
-import org.lightadmin.core.context.WebContext;
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.web.security.LightAdminRequestCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -67,7 +67,7 @@ public class LightAdminSecurityConfiguration {
     private Resource usersResource;
 
     @Autowired
-    private WebContext webContext;
+    private LightAdminConfiguration lightAdminConfiguration;
 
     @Bean
     @Autowired
@@ -180,7 +180,7 @@ public class LightAdminSecurityConfiguration {
     }
 
     private String applicationUrl(String path) {
-        return webContext.getApplicationUrl(path);
+        return lightAdminConfiguration.getApplicationUrl(path);
     }
 
     private String keyWithNamespace(String key) {

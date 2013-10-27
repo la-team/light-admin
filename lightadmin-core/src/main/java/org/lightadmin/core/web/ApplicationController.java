@@ -1,7 +1,7 @@
 package org.lightadmin.core.web;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
@@ -40,7 +40,7 @@ public class ApplicationController {
     private ConversionService conversionService;
 
     @Autowired
-    private WebContext lightAdminContext;
+    private LightAdminConfiguration lightAdminContext;
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)

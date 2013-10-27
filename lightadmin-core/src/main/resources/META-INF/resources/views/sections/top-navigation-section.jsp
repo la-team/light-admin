@@ -6,7 +6,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<tiles:useAttribute name="webContext" ignore="true"/>
+<tiles:useAttribute name="lightAdminConfiguration" ignore="true"/>
 
 <!-- Top navigation bar -->
 <div id="topNav">
@@ -14,7 +14,7 @@
         <div class="wrapper">
             <div class="userNav" style="float:left;">
                 <ul>
-                    <li><a href="<c:out value='${webContext.backToSiteUrl}'/>" title="Back to Site"><img
+                    <li><a href="<c:out value='${lightAdminConfiguration.backToSiteUrl}'/>" title="Back to Site"><img
                             src="<light:url value='/images/icons/topnav/mainWebsite.png'/>"
                             alt=""><span>Back to Site</span></a></li>
                 </ul>
@@ -29,7 +29,7 @@
                         <li><a href="#" class="not-implemented" title=""><img
                                 src="<light:url value='/images/icons/topnav/profile.png'/>" alt=""/><span>Profile</span></a>
                         </li>
-                        <li><a href="<c:out value='${webContext.securityLogoutUrl}'/>" title=""><img
+                        <li><a href="<c:out value='${lightAdminConfiguration.securityLogoutUrl}'/>" title=""><img
                                 src="<light:url value='/images/icons/topnav/logout.png'/>"
                                 alt=""/><span>Logout</span></a></li>
                     </ul>

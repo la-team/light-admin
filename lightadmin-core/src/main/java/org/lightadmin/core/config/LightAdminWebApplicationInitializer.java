@@ -1,5 +1,7 @@
 package org.lightadmin.core.config;
 
+import org.lightadmin.core.config.context.LightAdminContextConfiguration;
+import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
 import org.springframework.core.annotation.Order;
@@ -14,8 +16,10 @@ import org.springframework.web.servlet.ResourceServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import java.io.File;
 import java.util.regex.Pattern;
 
+import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang.BooleanUtils.toBoolean;
 import static org.apache.commons.lang.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
@@ -28,6 +32,8 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
     private static final Pattern BASE_URL_PATTERN = Pattern.compile("(/)|(/[\\w-]+)+");
 
+    private static final String CHARSET_ENCODING = "UTF-8";
+
     @Override
     public void onStartup(final ServletContext servletContext) throws ServletException {
         if (lightAdminConfigurationNotEnabled(servletContext)) {
@@ -37,6 +43,11 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
         if (notValidBaseUrl(lightAdminBaseUrl(servletContext))) {
             servletContext.log("LightAdmin Web Administration Module's 'baseUrl' property must match " + BASE_URL_PATTERN.pattern() + " pattern. Skipping.");
+            return;
+        }
+
+        if (notValidFileStorageDirectoryDefined(servletContext)) {
+            servletContext.log("LightAdmin Web Administration Module's global file storage directory doesn't exist or not a directory.");
             return;
         }
 
@@ -149,7 +160,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
     private CharacterEncodingFilter characterEncodingFilter() {
         final CharacterEncodingFilter characterEncodingFilter = new CharacterEncodingFilter();
-        characterEncodingFilter.setEncoding("UTF-8");
+        characterEncodingFilter.setEncoding(CHARSET_ENCODING);
         characterEncodingFilter.setForceEncoding(true);
         return characterEncodingFilter;
     }
@@ -200,7 +211,26 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         return toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
     }
 
+    private String lightAdminGlobalFileStorageDirectory(final ServletContext servletContext) {
+        return servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STORAGE_PATH);
+    }
+
     private boolean lightAdminConfigurationNotEnabled(final ServletContext servletContext) {
         return isBlank(lightAdminBaseUrl(servletContext)) || isBlank(configurationsBasePackage(servletContext));
+    }
+
+    private boolean notValidFileStorageDirectoryDefined(final ServletContext servletContext) {
+        final String fileStorageDirectoryPath = lightAdminGlobalFileStorageDirectory(servletContext);
+
+        if (isBlank(fileStorageDirectoryPath)) {
+            return false;
+        }
+
+        final File fileStorageDirectory = getFile(fileStorageDirectoryPath);
+        if (fileStorageDirectory.exists() && fileStorageDirectory.isDirectory()) {
+            return false;
+        }
+
+        return true;
     }
 }

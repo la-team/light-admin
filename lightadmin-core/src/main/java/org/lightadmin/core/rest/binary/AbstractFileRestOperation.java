@@ -1,9 +1,9 @@
 package org.lightadmin.core.rest.binary;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
@@ -21,15 +21,15 @@ public abstract class AbstractFileRestOperation {
     protected final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration;
     protected final DomainTypeEntityMetadata domainTypeEntityMetadata;
 
-    protected final WebContext webContext;
+    protected final LightAdminConfiguration lightAdminConfiguration;
 
     protected final Object entity;
 
-    protected AbstractFileRestOperation(GlobalAdministrationConfiguration configuration, WebContext webContext, Object entity) {
+    protected AbstractFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
         this.domainTypeAdministrationConfiguration = configuration.forManagedDomainType(ClassUtils.getUserClass(entity));
         this.domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
 
-        this.webContext = webContext;
+        this.lightAdminConfiguration = lightAdminConfiguration;
 
         this.entity = entity;
     }
@@ -48,7 +48,7 @@ public abstract class AbstractFileRestOperation {
     }
 
     protected File fileStorageDomainEntityAttributeDirectory(AttributeMetadata attrMeta) {
-        return getFile(webContext.getFileStorageDirectory(), relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
+        return getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
     }
 
     protected File referencedFileDomainEntityDirectory(AttributeMetadata attrMeta) {
@@ -57,7 +57,7 @@ public abstract class AbstractFileRestOperation {
     }
 
     protected File fileStorageDomainEntityDirectory() {
-        return getFile(webContext.getFileStorageDirectory(), relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
+        return getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
     }
 
     protected File referencedFile(AttributeMetadata attrMeta) {
@@ -66,7 +66,7 @@ public abstract class AbstractFileRestOperation {
     }
 
     protected File fileStorageFile(AttributeMetadata attributeMetadata) {
-        return getFile(webContext.getFileStorageDirectory(), relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attributeMetadata));
+        return getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attributeMetadata));
     }
 
     protected DynamicJpaRepository repository() {

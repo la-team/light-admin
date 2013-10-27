@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
-import org.lightadmin.core.config.bootstrap.parsing.InvalidPropertyConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
@@ -11,33 +11,36 @@ import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
 import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.SCOPES;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.SIDEBARS;
+import static java.lang.String.format;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
 import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
 import static org.springframework.util.ClassUtils.hasConstructor;
 
 class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSourceValidator<DomainConfigurationSource> {
 
     private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
-    private final ResourceLoader resourceLoader;
-    private final WebContext webContext;
 
-    public DomainConfigurationUnitsSourceValidator(final DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader, WebContext webContext) {
-        this(new DomainTypeFieldMetadataValidator(entityMetadataResolver, webContext), resourceLoader, webContext);
+    private final LightAdminConfiguration lightAdminConfiguration;
+    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final ResourceLoader resourceLoader;
+
+    public DomainConfigurationUnitsSourceValidator(final DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader, LightAdminConfiguration lightAdminConfiguration) {
+        this(new DomainTypeFieldMetadataValidator(), lightAdminConfiguration, entityMetadataResolver, resourceLoader);
     }
 
-    public DomainConfigurationUnitsSourceValidator(final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator, ResourceLoader resourceLoader, WebContext webContext) {
+    DomainConfigurationUnitsSourceValidator(final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator, LightAdminConfiguration lightAdminConfiguration, DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader) {
         this.fieldMetadataValidator = fieldMetadataValidator;
         this.resourceLoader = resourceLoader;
-        this.webContext = webContext;
+        this.lightAdminConfiguration = lightAdminConfiguration;
+        this.entityMetadataResolver = entityMetadataResolver;
     }
 
     @Override
@@ -63,7 +66,7 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
         final Class<?> domainType = domainConfigurationSource.getDomainType();
 
         if (!hasConstructor(domainType)) {
-            problemReporter.error(new DomainConfigurationProblem(domainConfigurationSource, String.format("Type %s must have default constructor.", domainType.getSimpleName())));
+            problemReporter.error(new DomainConfigurationProblem(domainConfigurationSource, format("Type %s must have default constructor.", domainType.getSimpleName())));
         }
     }
 
@@ -134,14 +137,19 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
     void validateFilters(final DomainConfigurationSource domainConfigurationSource, final ProblemReporter problemReporter) {
         final Set<FieldMetadata> fields = FieldMetadataUtils.extractFields(domainConfigurationSource.getFilters());
 
-        validateFields(fields, domainConfigurationSource, DomainConfigurationUnitType.FILTERS, problemReporter);
+        validateFields(fields, domainConfigurationSource, FILTERS, problemReporter);
     }
 
     private void validateFields(Set<FieldMetadata> fields, DomainConfigurationSource domainConfigurationSource, final DomainConfigurationUnitType configurationUnitType, ProblemReporter problemReporter) {
         for (FieldMetadata field : fields) {
-            if (!fieldMetadataValidator.isValidFieldMetadata(field, domainConfigurationSource.getDomainType())) {
-                problemReporter.error(new InvalidPropertyConfigurationProblem(field.getName(), domainConfigurationSource, configurationUnitType));
+            final Collection<? extends DomainConfigurationProblem> problems = fieldMetadataValidator.validateFieldMetadata(field, domainConfigurationSource.getDomainType(), newDomainConfigurationValidationContext(domainConfigurationSource, configurationUnitType));
+            if (!problems.isEmpty()) {
+                problemReporter.errors(problems);
             }
         }
+    }
+
+    private DomainConfigurationValidationContext newDomainConfigurationValidationContext(DomainConfigurationSource domainConfigurationSource, DomainConfigurationUnitType domainConfigurationUnitType) {
+        return new DomainConfigurationValidationContext(lightAdminConfiguration, domainConfigurationSource, domainConfigurationUnitType, entityMetadataResolver, resourceLoader);
     }
 }

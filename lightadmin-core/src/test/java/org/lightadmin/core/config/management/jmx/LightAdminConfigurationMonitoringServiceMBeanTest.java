@@ -6,8 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
-import org.lightadmin.core.config.LightAdminRepositoryRestConfiguration;
 import org.lightadmin.core.config.annotation.Administration;
+import org.lightadmin.core.config.context.LightAdminRepositoryRestConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.test.IntegrationTest;
@@ -23,49 +23,49 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newHashSet;
 import static org.junit.Assert.assertTrue;
 
-@Category( IntegrationTest.class )
-@RunWith( SpringJUnit4ClassRunner.class )
-@ContextConfiguration( loader = LightAdminConfigurationContextLoader.class,
-					   classes = {LightAdminTestConfiguration.class, LightAdminRepositoryRestConfiguration.class} )
+@Category(IntegrationTest.class)
+@RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(loader = LightAdminConfigurationContextLoader.class,
+        classes = {LightAdminTestConfiguration.class, LightAdminRepositoryRestConfiguration.class})
 public class LightAdminConfigurationMonitoringServiceMBeanTest {
 
-	@Autowired
-	private GlobalConfigurationManagementService globalConfigurationManagementService;
+    @Autowired
+    private GlobalConfigurationManagementService globalConfigurationManagementService;
 
-	private LightAdminConfigurationMonitoringServiceMBean testee;
+    private LightAdminConfigurationMonitoringServiceMBean testee;
 
-	@Before
-	public void setUp() throws Exception {
-		testee = new LightAdminConfigurationMonitoringServiceMBean( globalConfigurationManagementService );
+    @Before
+    public void setUp() throws Exception {
+        testee = new LightAdminConfigurationMonitoringServiceMBean(globalConfigurationManagementService);
 
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( AddressConfiguration.class ) );
-	}
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
+    }
 
-	@After
-	public void tearDown() throws Exception {
-		globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration( AddressConfiguration.class );
-	}
+    @After
+    public void tearDown() throws Exception {
+        globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration(AddressConfiguration.class);
+    }
 
-	@Test
-	public void domainTypesInfoRetrieval() throws Exception {
-		final Set<String> actualDomainTypes = testee.getDomainTypes();
+    @Test
+    public void domainTypesInfoRetrieval() throws Exception {
+        final Set<String> actualDomainTypes = testee.getDomainTypes();
 
-		final Set<String> expectedDomainTypeNames = newHashSet( "address" );
+        final Set<String> expectedDomainTypeNames = newHashSet("address");
 
-		assertTrue( Sets.difference( expectedDomainTypeNames, actualDomainTypes ).isEmpty() );
-	}
+        assertTrue(Sets.difference(expectedDomainTypeNames, actualDomainTypes).isEmpty());
+    }
 
-	@Test
-	public void domainConfigurationNamesRetrieval() throws Exception {
-		final Set<String> actualConfigurationNames = testee.getDomainTypeAdministrationConfigurations();
+    @Test
+    public void domainConfigurationNamesRetrieval() throws Exception {
+        final Set<String> actualConfigurationNames = testee.getDomainTypeAdministrationConfigurations();
 
-		final Set<String> expectedConfigurationNames = newHashSet( "AddressConfiguration" );
+        final Set<String> expectedConfigurationNames = newHashSet("AddressConfiguration");
 
-		assertTrue( Sets.difference( expectedConfigurationNames, actualConfigurationNames ).isEmpty() );
-	}
+        assertTrue(Sets.difference(expectedConfigurationNames, actualConfigurationNames).isEmpty());
+    }
 
-	@Administration( Address.class )
-	private static class AddressConfiguration {
+    @Administration(Address.class)
+    private static class AddressConfiguration {
 
-	}
+    }
 }

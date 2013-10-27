@@ -2,6 +2,7 @@ package org.lightadmin.core.rest;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
@@ -12,7 +13,6 @@ import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
-import org.lightadmin.core.context.WebContext;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.rest.binary.OperationBuilder;
@@ -45,10 +45,10 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
     private final GlobalAdministrationConfiguration configuration;
     private final OperationBuilder operationBuilder;
 
-    public DomainTypeToResourceConverter(GlobalAdministrationConfiguration configuration, WebContext webContext, RepositoryRestConfiguration restConfiguration) {
+    public DomainTypeToResourceConverter(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, RepositoryRestConfiguration restConfiguration) {
         super(restConfiguration);
         this.configuration = configuration;
-        this.operationBuilder = operationBuilder(configuration, webContext);
+        this.operationBuilder = operationBuilder(configuration, lightAdminConfiguration);
     }
 
     public Resource convert(final Object source, DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) {

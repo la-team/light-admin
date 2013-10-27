@@ -1,8 +1,8 @@
 package org.lightadmin.core.rest.binary;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.context.WebContext;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
 import java.io.File;
@@ -13,8 +13,8 @@ import static org.apache.commons.lang.ArrayUtils.isEmpty;
 
 public class DeleteFileRestOperation extends AbstractFileRestOperation {
 
-    public DeleteFileRestOperation(GlobalAdministrationConfiguration configuration, WebContext webContext, Object entity) {
-        super(configuration, webContext, entity);
+    public DeleteFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
+        super(configuration, lightAdminConfiguration, entity);
     }
 
     public void perform(AttributeMetadata attrMeta) {

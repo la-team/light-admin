@@ -1,4 +1,4 @@
-package org.lightadmin.core.config;
+package org.lightadmin.core.config.context;
 
 import org.lightadmin.core.config.management.jmx.LightAdminConfigurationMonitoringServiceMBean;
 import org.lightadmin.core.config.management.rmi.DataManipulationService;
