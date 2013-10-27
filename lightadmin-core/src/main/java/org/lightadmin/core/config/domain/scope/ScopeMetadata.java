@@ -4,11 +4,11 @@ import java.io.Serializable;
 
 public interface ScopeMetadata extends Serializable {
 
-	ScopeMetadata name( String name );
+    ScopeMetadata name(String name);
 
-	String getName();
+    String getName();
 
-	boolean isDefaultScope();
+    boolean isDefaultScope();
 
-	ScopeMetadata defaultScope( boolean isDefault );
+    ScopeMetadata defaultScope(boolean isDefault);
 }

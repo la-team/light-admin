@@ -1,12 +1,7 @@
 package org.lightadmin.core.config.domain;
 
+import org.lightadmin.api.config.unit.*;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
-import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
-import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
-import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
-import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
-import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.util.Assert;

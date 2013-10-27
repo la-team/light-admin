@@ -3,9 +3,9 @@ package org.lightadmin.core.view.preparer;
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.context.TilesRequestContext;
+import org.lightadmin.api.config.unit.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
 import org.lightadmin.core.view.preparer.support.DomainConfigToMenuItemTransformer;
 import org.lightadmin.core.view.preparer.support.MenuItemComparator;
 

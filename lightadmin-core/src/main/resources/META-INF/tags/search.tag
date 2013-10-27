@@ -7,7 +7,7 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
 <%@ attribute name="filters" required="true" rtexprvalue="true"
-              type="org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit" %>
+              type="org.lightadmin.api.config.unit.FiltersConfigurationUnit" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 

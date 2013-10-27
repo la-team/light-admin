@@ -1,5 +1,8 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
+import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
+import org.lightadmin.api.config.unit.ScopesConfigurationUnit;
+import org.lightadmin.api.config.unit.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
@@ -7,10 +10,7 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
-import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
 import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
-import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
-import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
@@ -20,8 +20,8 @@ import java.util.List;
 import java.util.Set;
 
 import static java.lang.String.format;
+import static org.lightadmin.api.config.utils.ScopeMetadataUtils.*;
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
-import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.*;
 import static org.springframework.util.ClassUtils.hasConstructor;
 
 class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSourceValidator<DomainConfigurationSource> {

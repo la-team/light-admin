@@ -2,7 +2,7 @@ package org.lightadmin.core.config.domain.field;
 
 public interface FieldMetadata extends Identifiable, Nameable {
 
-	boolean isSortable();
+    boolean isSortable();
 
-	int getSortOrder();
+    int getSortOrder();
 }

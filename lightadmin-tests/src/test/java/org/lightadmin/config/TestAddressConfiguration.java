@@ -1,10 +1,10 @@
 package org.lightadmin.config;
 
-import org.lightadmin.core.config.annotation.Administration;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
-import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
+import org.lightadmin.api.config.annotation.Administration;
+import org.lightadmin.api.config.builder.EntityMetadataConfigurationUnitBuilder;
+import org.lightadmin.api.config.builder.ScreenContextConfigurationUnitBuilder;
+import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
+import org.lightadmin.api.config.unit.ScreenContextConfigurationUnit;
 import org.lightadmin.test.model.TestAddress;
 import org.lightadmin.test.nameExtractor.AddressNameExtractor;
 
@@ -12,11 +12,11 @@ import org.lightadmin.test.nameExtractor.AddressNameExtractor;
 @Administration(TestAddress.class)
 public class TestAddressConfiguration {
 
-	public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
-		return configurationBuilder.nameExtractor( new AddressNameExtractor() ).pluralName( "Test Addresses Domain" ).build();
-	}
+    public static EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
+        return configurationBuilder.nameExtractor(new AddressNameExtractor()).pluralName("Test Addresses Domain").build();
+    }
 
-	public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
-		return screenContextBuilder.screenName( "Administration of Test Adresses" ).build();
-	}
+    public static ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
+        return screenContextBuilder.screenName("Administration of Test Adresses").build();
+    }
 }

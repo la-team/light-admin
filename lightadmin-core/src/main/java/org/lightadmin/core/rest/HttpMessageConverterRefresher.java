@@ -17,68 +17,68 @@ import java.util.List;
 
 public class HttpMessageConverterRefresher implements BeanFactoryAware {
 
-	@Autowired
-	private RepositoryAwareMappingHttpMessageConverter repositoryAwareMappingHttpMessageConverter;
+    @Autowired
+    private RepositoryAwareMappingHttpMessageConverter repositoryAwareMappingHttpMessageConverter;
 
-	@Autowired
-	private DomainTypeResourceModule domainTypeResourceModule;
+    @Autowired
+    private DomainTypeResourceModule domainTypeResourceModule;
 
-	private AutowireCapableBeanFactory autowireCapableBeanFactory;
+    private AutowireCapableBeanFactory autowireCapableBeanFactory;
 
-	public void refresh() {
-		final RepositoryAwareJacksonModule repositoryAwareJacksonModule = repositoryAwareJacksonModule();
+    public void refresh() {
+        final RepositoryAwareJacksonModule repositoryAwareJacksonModule = repositoryAwareJacksonModule();
 
-		setJacksonModuleFieldValue( repositoryAwareJacksonModule );
+        setJacksonModuleFieldValue(repositoryAwareJacksonModule);
 
-		setModulesFieldValue( repositoryAwareJacksonModule );
+        setModulesFieldValue(repositoryAwareJacksonModule);
 
-		setObjectMapperFieldValue( new ObjectMapper() );
+        setObjectMapperFieldValue(new ObjectMapper());
 
-		refreshConverterConfiguration();
-	}
+        refreshConverterConfiguration();
+    }
 
-	private void refreshConverterConfiguration() {
-		try {
-			repositoryAwareMappingHttpMessageConverter.afterPropertiesSet();
-		} catch ( Exception e ) {
-			throw new RuntimeException( e );
-		}
-	}
+    private void refreshConverterConfiguration() {
+        try {
+            repositoryAwareMappingHttpMessageConverter.afterPropertiesSet();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
 
-	private void setObjectMapperFieldValue( final ObjectMapper objectMapper ) {
-		final Field mapperField = ReflectionUtils.findField( RepositoryAwareMappingHttpMessageConverter.class, "mapper" );
-		ReflectionUtils.makeAccessible( mapperField );
-		ReflectionUtils.setField( mapperField, repositoryAwareMappingHttpMessageConverter, objectMapper );
-	}
+    private void setObjectMapperFieldValue(final ObjectMapper objectMapper) {
+        final Field mapperField = ReflectionUtils.findField(RepositoryAwareMappingHttpMessageConverter.class, "mapper");
+        ReflectionUtils.makeAccessible(mapperField);
+        ReflectionUtils.setField(mapperField, repositoryAwareMappingHttpMessageConverter, objectMapper);
+    }
 
-	private void setModulesFieldValue( final RepositoryAwareJacksonModule repositoryAwareJacksonModule ) {
-		List<Module> modules = Lists.newArrayList();
-		modules.add( repositoryAwareJacksonModule );
-		modules.add( domainTypeResourceModule );
+    private void setModulesFieldValue(final RepositoryAwareJacksonModule repositoryAwareJacksonModule) {
+        List<Module> modules = Lists.newArrayList();
+        modules.add(repositoryAwareJacksonModule);
+        modules.add(domainTypeResourceModule);
 
-		final Field modulesField = ReflectionUtils.findField( RepositoryAwareMappingHttpMessageConverter.class, "modules" );
-		ReflectionUtils.makeAccessible( modulesField );
-		ReflectionUtils.setField( modulesField, repositoryAwareMappingHttpMessageConverter, modules );
-	}
+        final Field modulesField = ReflectionUtils.findField(RepositoryAwareMappingHttpMessageConverter.class, "modules");
+        ReflectionUtils.makeAccessible(modulesField);
+        ReflectionUtils.setField(modulesField, repositoryAwareMappingHttpMessageConverter, modules);
+    }
 
-	private void setJacksonModuleFieldValue( final RepositoryAwareJacksonModule repositoryAwareJacksonModule ) {
-		final Field jacksonModuleField = ReflectionUtils.findField( RepositoryAwareMappingHttpMessageConverter.class, "jacksonModule" );
-		ReflectionUtils.makeAccessible( jacksonModuleField );
-		ReflectionUtils.setField( jacksonModuleField, repositoryAwareMappingHttpMessageConverter, repositoryAwareJacksonModule );
-	}
+    private void setJacksonModuleFieldValue(final RepositoryAwareJacksonModule repositoryAwareJacksonModule) {
+        final Field jacksonModuleField = ReflectionUtils.findField(RepositoryAwareMappingHttpMessageConverter.class, "jacksonModule");
+        ReflectionUtils.makeAccessible(jacksonModuleField);
+        ReflectionUtils.setField(jacksonModuleField, repositoryAwareMappingHttpMessageConverter, repositoryAwareJacksonModule);
+    }
 
-	private RepositoryAwareJacksonModule repositoryAwareJacksonModule() {
-		final RepositoryAwareJacksonModule repositoryAwareJacksonModule = ( RepositoryAwareJacksonModule ) autowireCapableBeanFactory.autowire( RepositoryAwareJacksonModule.class, AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false );
-		try {
-			repositoryAwareJacksonModule.afterPropertiesSet();
-		} catch ( Exception e ) {
-			throw new RuntimeException( e );
-		}
-		return repositoryAwareJacksonModule;
-	}
+    private RepositoryAwareJacksonModule repositoryAwareJacksonModule() {
+        final RepositoryAwareJacksonModule repositoryAwareJacksonModule = (RepositoryAwareJacksonModule) autowireCapableBeanFactory.autowire(RepositoryAwareJacksonModule.class, AutowireCapableBeanFactory.AUTOWIRE_BY_TYPE, false);
+        try {
+            repositoryAwareJacksonModule.afterPropertiesSet();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return repositoryAwareJacksonModule;
+    }
 
-	@Override
-	public void setBeanFactory( final BeanFactory beanFactory ) throws BeansException {
-		this.autowireCapableBeanFactory = ( AutowireCapableBeanFactory ) beanFactory;
-	}
+    @Override
+    public void setBeanFactory(final BeanFactory beanFactory) throws BeansException {
+        this.autowireCapableBeanFactory = (AutowireCapableBeanFactory) beanFactory;
+    }
 }

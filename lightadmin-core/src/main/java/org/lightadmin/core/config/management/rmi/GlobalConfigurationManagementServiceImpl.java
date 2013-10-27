@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.management.rmi;
 
+import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
@@ -16,58 +17,58 @@ import java.util.Collection;
 
 public class GlobalConfigurationManagementServiceImpl implements GlobalConfigurationManagementService {
 
-	@Autowired
-	private GlobalAdministrationConfiguration globalAdministrationConfiguration;
+    @Autowired
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
-	@Autowired
-	private DomainConfigurationSourceFactory domainConfigurationSourceFactory;
+    @Autowired
+    private DomainConfigurationSourceFactory domainConfigurationSourceFactory;
 
-	@Autowired
-	private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
+    @Autowired
+    private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 
-	@Autowired
-	private DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
+    @Autowired
+    private DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
 
-	@Autowired
-	private HttpMessageConverterRefresher httpMessageConverterRefresher;
+    @Autowired
+    private HttpMessageConverterRefresher httpMessageConverterRefresher;
 
-	@Override
-	@SuppressWarnings( "unchecked" )
-	public void registerDomainTypeConfiguration( final ConfigurationUnits configurationUnits ) {
-		final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource( configurationUnits );
+    @Override
+    @SuppressWarnings("unchecked")
+    public void registerDomainTypeConfiguration(final ConfigurationUnits configurationUnits) {
+        final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource(configurationUnits);
 
-		final DomainConfigurationSourceValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
+        final DomainConfigurationSourceValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
 
-		configurationSourceValidator.validate( configurationSource, ProblemReporterFactory.failFastReporter() );
+        configurationSourceValidator.validate(configurationSource, ProblemReporterFactory.failFastReporter());
 
-		final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration( configurationSource );
+        final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(configurationSource);
 
-		globalAdministrationConfiguration.registerDomainTypeConfiguration( administrationConfiguration );
+        globalAdministrationConfiguration.registerDomainTypeConfiguration(administrationConfiguration);
 
-		httpMessageConverterRefresher.refresh();
-	}
+        httpMessageConverterRefresher.refresh();
+    }
 
-	@Override
-	public void removeDomainTypeAdministrationConfiguration( final Class<?> domainType ) {
-		globalAdministrationConfiguration.removeDomainTypeConfiguration( domainType );
+    @Override
+    public void removeDomainTypeAdministrationConfiguration(final Class<?> domainType) {
+        globalAdministrationConfiguration.removeDomainTypeConfiguration(domainType);
 
-		httpMessageConverterRefresher.refresh();
-	}
+        httpMessageConverterRefresher.refresh();
+    }
 
-	@Override
-	public void removeAllDomainTypeAdministrationConfigurations() {
-		globalAdministrationConfiguration.removeAllDomainTypeAdministrationConfigurations();
+    @Override
+    public void removeAllDomainTypeAdministrationConfigurations() {
+        globalAdministrationConfiguration.removeAllDomainTypeAdministrationConfigurations();
 
-		httpMessageConverterRefresher.refresh();
-	}
+        httpMessageConverterRefresher.refresh();
+    }
 
-	@Override
-	public Collection<DomainTypeAdministrationConfiguration> getRegisteredDomainTypeConfigurations() {
-		return globalAdministrationConfiguration.getDomainTypeConfigurationsValues();
-	}
+    @Override
+    public Collection<DomainTypeAdministrationConfiguration> getRegisteredDomainTypeConfigurations() {
+        return globalAdministrationConfiguration.getDomainTypeConfigurationsValues();
+    }
 
-	@Override
-	public DomainTypeAdministrationConfiguration getRegisteredDomainTypeConfiguration( final Class<?> domainType ) {
-		return globalAdministrationConfiguration.forManagedDomainType( domainType );
-	}
+    @Override
+    public DomainTypeAdministrationConfiguration getRegisteredDomainTypeConfiguration(final Class<?> domainType) {
+        return globalAdministrationConfiguration.forManagedDomainType(domainType);
+    }
 }

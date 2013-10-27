@@ -1,46 +1,47 @@
 package org.lightadmin.core.config.domain.context;
 
 import org.junit.Test;
+import org.lightadmin.api.config.unit.ScreenContextConfigurationUnit;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 
 import static org.junit.Assert.assertEquals;
 
 public class DefaultScreenContextConfigurationUnitBuilderTest {
 
-	@Test
-	public void defaultConfigurationUnitCreatedForDomainType() throws Exception {
-		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().build();
+    @Test
+    public void defaultConfigurationUnitCreatedForDomainType() throws Exception {
+        ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().build();
 
-		assertEquals( DomainConfigurationUnitType.SCREEN_CONTEXT, configurationUnit.getDomainConfigurationUnitType() );
-		assertEquals( DomainType.class, configurationUnit.getDomainType() );
-	}
+        assertEquals(DomainConfigurationUnitType.SCREEN_CONTEXT, configurationUnit.getDomainConfigurationUnitType());
+        assertEquals(DomainType.class, configurationUnit.getDomainType());
+    }
 
-	private DefaultScreenContextConfigurationUnitBuilder screenContextBuilder() {
-		return new DefaultScreenContextConfigurationUnitBuilder( DomainType.class );
-	}
+    private DefaultScreenContextConfigurationUnitBuilder screenContextBuilder() {
+        return new DefaultScreenContextConfigurationUnitBuilder(DomainType.class);
+    }
 
-	@Test
-	public void defaultConfigurationUnitWithUndefinedScreenNameCreated() throws Exception {
-		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().build();
+    @Test
+    public void defaultConfigurationUnitWithUndefinedScreenNameCreated() throws Exception {
+        ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().build();
 
-		assertEquals( "DomainType", configurationUnit.getScreenName() );
-	}
+        assertEquals("DomainType", configurationUnit.getScreenName());
+    }
 
-	@Test
-	public void configurationWithScreenNameDefined() throws Exception {
-		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().screenName( "Test Screen Name" ).build();
+    @Test
+    public void configurationWithScreenNameDefined() throws Exception {
+        ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().screenName("Test Screen Name").build();
 
-		assertEquals( "Test Screen Name", configurationUnit.getScreenName() );
-	}
+        assertEquals("Test Screen Name", configurationUnit.getScreenName());
+    }
 
-	@Test
-	public void configurationFullPacked() throws Exception {
-		ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().screenName( "Test Screen Name" ).build();
+    @Test
+    public void configurationFullPacked() throws Exception {
+        ScreenContextConfigurationUnit configurationUnit = screenContextBuilder().screenName("Test Screen Name").build();
 
-		assertEquals( "Test Screen Name", configurationUnit.getScreenName() );
-	}
+        assertEquals("Test Screen Name", configurationUnit.getScreenName());
+    }
 
-	private static class DomainType {
+    private static class DomainType {
 
-	}
+    }
 }

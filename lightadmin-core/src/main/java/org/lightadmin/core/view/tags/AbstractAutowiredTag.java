@@ -8,13 +8,13 @@ import javax.servlet.jsp.tagext.SimpleTagSupport;
 
 public abstract class AbstractAutowiredTag extends SimpleTagSupport {
 
-	@Override
-	public void setJspContext(JspContext context) {
-		super.setJspContext(context);
+    @Override
+    public void setJspContext(JspContext context) {
+        super.setJspContext(context);
 
-		AutowireCapableBeanFactory beanFactory =
-				(AutowireCapableBeanFactory) context.findAttribute(ApplicationController.BEAN_FACTORY_KEY);
-		beanFactory.autowireBean(this);
-	}
+        AutowireCapableBeanFactory beanFactory =
+                (AutowireCapableBeanFactory) context.findAttribute(ApplicationController.BEAN_FACTORY_KEY);
+        beanFactory.autowireBean(this);
+    }
 
 }

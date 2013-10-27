@@ -2,12 +2,12 @@ package org.lightadmin.core.rest;
 
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
+import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.field.Persistable;

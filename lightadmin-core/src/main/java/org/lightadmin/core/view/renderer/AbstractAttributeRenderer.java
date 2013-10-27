@@ -11,29 +11,29 @@ import java.io.Writer;
 
 public abstract class AbstractAttributeRenderer implements AttributeRenderer, GlobalAdministrationConfigurationAware {
 
-	protected GlobalAdministrationConfiguration configuration;
+    protected GlobalAdministrationConfiguration configuration;
 
-	@Override
-	public void render( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject, final PageContext pageContext ) throws IOException {
-		Object value = evaluateValue( attributeMetadata, domainTypeObject );
+    @Override
+    public void render(final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject, final PageContext pageContext) throws IOException {
+        Object value = evaluateValue(attributeMetadata, domainTypeObject);
 
-		write( value, pageContext.getOut() );
-	}
+        write(value, pageContext.getOut());
+    }
 
-	protected void write( final Object value, Writer writer ) throws IOException {
-		writer.write( value.toString() );
-	}
+    protected void write(final Object value, Writer writer) throws IOException {
+        writer.write(value.toString());
+    }
 
-	protected Object evaluateValue( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject ) {
-		return attributeMetadata.getValue( domainTypeObject );
-	}
+    protected Object evaluateValue(final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject) {
+        return attributeMetadata.getValue(domainTypeObject);
+    }
 
-	protected DomainTypeAdministrationConfiguration domainTypeConfiguration( Class domainType ) {
-		return configuration.forManagedDomainType( domainType );
-	}
+    protected DomainTypeAdministrationConfiguration domainTypeConfiguration(Class domainType) {
+        return configuration.forManagedDomainType(domainType);
+    }
 
-	@Override
-	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
-		this.configuration = configuration;
-	}
+    @Override
+    public void setGlobalAdministrationConfiguration(final GlobalAdministrationConfiguration configuration) {
+        this.configuration = configuration;
+    }
 }

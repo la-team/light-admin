@@ -1,7 +1,7 @@
 package org.lightadmin.core.view.renderer;
 
+import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.web.util.ApplicationUrlResolver;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;

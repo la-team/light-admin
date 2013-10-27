@@ -18,30 +18,30 @@ import static java.util.Collections.sort;
 
 public class DashboardViewPreparer extends ConfigurationAwareViewPreparer {
 
-	@Override
-	protected void execute( final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration ) {
-		super.execute( tilesContext, attributeContext, configuration );
+    @Override
+    protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration) {
+        super.execute(tilesContext, attributeContext, configuration);
 
-		addAttribute( attributeContext, "dashboardDomainTypes", dashboardDomainTypes( configuration.getManagedDomainTypeConfigurations().values() ) );
-	}
+        addAttribute(attributeContext, "dashboardDomainTypes", dashboardDomainTypes(configuration.getManagedDomainTypeConfigurations().values()));
+    }
 
-	private Collection<Pair<MenuItem, Long>> dashboardDomainTypes( Collection<DomainTypeAdministrationConfiguration> configurations ) {
-		final List<Pair<MenuItem, Long>> domainTypeItems = newLinkedList();
-		for ( DomainTypeAdministrationConfiguration configuration : configurations ) {
-			domainTypeItems.add( Pair.create( menuItem( configuration ), configuration.getRepository().count() ) );
-		}
+    private Collection<Pair<MenuItem, Long>> dashboardDomainTypes(Collection<DomainTypeAdministrationConfiguration> configurations) {
+        final List<Pair<MenuItem, Long>> domainTypeItems = newLinkedList();
+        for (DomainTypeAdministrationConfiguration configuration : configurations) {
+            domainTypeItems.add(Pair.create(menuItem(configuration), configuration.getRepository().count()));
+        }
 
-		sort( domainTypeItems, new Comparator<Pair<MenuItem, Long>>() {
-			@Override
-			public int compare( final Pair<MenuItem, Long> menuItemPair1, final Pair<MenuItem, Long> menuItemPair2 ) {
-				return MenuItemComparator.INSTANCE.compare( menuItemPair1.first, menuItemPair2.first );
-			}
-		} );
+        sort(domainTypeItems, new Comparator<Pair<MenuItem, Long>>() {
+            @Override
+            public int compare(final Pair<MenuItem, Long> menuItemPair1, final Pair<MenuItem, Long> menuItemPair2) {
+                return MenuItemComparator.INSTANCE.compare(menuItemPair1.first, menuItemPair2.first);
+            }
+        });
 
-		return domainTypeItems;
-	}
+        return domainTypeItems;
+    }
 
-	private MenuItem menuItem( final DomainTypeAdministrationConfiguration configuration ) {
-		return DomainConfigToMenuItemTransformer.INSTANCE.apply( configuration );
-	}
+    private MenuItem menuItem(final DomainTypeAdministrationConfiguration configuration) {
+        return DomainConfigToMenuItemTransformer.INSTANCE.apply(configuration);
+    }
 }

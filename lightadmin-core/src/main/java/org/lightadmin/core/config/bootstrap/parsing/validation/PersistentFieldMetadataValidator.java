@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
+import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
-import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;

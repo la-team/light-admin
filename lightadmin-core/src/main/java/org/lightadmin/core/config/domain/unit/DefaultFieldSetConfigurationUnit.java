@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.domain.unit;
 
+import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.Persistable;

@@ -7,19 +7,19 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolve
 
 public abstract class EntityMetadataResolverAwareConfigurationUnitPostProcessor implements ConfigurationUnitPostProcessor {
 
-	private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
 
-	public EntityMetadataResolverAwareConfigurationUnitPostProcessor( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this.entityMetadataResolver = entityMetadataResolver;
-	}
+    public EntityMetadataResolverAwareConfigurationUnitPostProcessor(final DomainTypeEntityMetadataResolver entityMetadataResolver) {
+        this.entityMetadataResolver = entityMetadataResolver;
+    }
 
 
-	DomainTypeEntityMetadata<DomainTypeAttributeMetadata> resolveEntityMetadata( ConfigurationUnit configurationUnit ) {
-		return resolveEntityMetadata( configurationUnit.getDomainType() );
-	}
+    DomainTypeEntityMetadata<DomainTypeAttributeMetadata> resolveEntityMetadata(ConfigurationUnit configurationUnit) {
+        return resolveEntityMetadata(configurationUnit.getDomainType());
+    }
 
-	@SuppressWarnings( "unchecked" )
-	DomainTypeEntityMetadata<DomainTypeAttributeMetadata> resolveEntityMetadata( Class<?> domainType ) {
-		return entityMetadataResolver.resolveEntityMetadata( domainType );
-	}
+    @SuppressWarnings("unchecked")
+    DomainTypeEntityMetadata<DomainTypeAttributeMetadata> resolveEntityMetadata(Class<?> domainType) {
+        return entityMetadataResolver.resolveEntityMetadata(domainType);
+    }
 }

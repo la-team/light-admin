@@ -1,9 +1,9 @@
 package org.lightadmin;
 
 import org.junit.runner.RunWith;
+import org.lightadmin.api.config.management.rmi.DataManipulationService;
+import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
-import org.lightadmin.core.config.management.rmi.DataManipulationService;
-import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.page.ListViewPage;
 import org.lightadmin.testContext.TestProfileSource;
 import org.lightadmin.util.ExtendedWebDriver;
@@ -19,60 +19,60 @@ import org.springframework.test.context.support.DirtiesContextTestExecutionListe
 import java.net.URL;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@TestExecutionListeners( listeners = {
-	DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
-	AdministrationConfigurationListener.class, LoginListener.class
-} )
-@ContextConfiguration( loader = AnnotationConfigContextLoader.class, classes = SeleniumConfig.class )
-@ProfileValueSourceConfiguration( TestProfileSource.class )
+@TestExecutionListeners(listeners = {
+        DependencyInjectionTestExecutionListener.class, DirtiesContextTestExecutionListener.class,
+        AdministrationConfigurationListener.class, LoginListener.class
+})
+@ContextConfiguration(loader = AnnotationConfigContextLoader.class, classes = SeleniumConfig.class)
+@ProfileValueSourceConfiguration(TestProfileSource.class)
 public abstract class SeleniumIntegrationTest {
 
-	@Autowired
-	private SeleniumContext seleniumContext;
+    @Autowired
+    private SeleniumContext seleniumContext;
 
-	@Autowired
-	private GlobalConfigurationManagementService globalConfigurationManagementService;
+    @Autowired
+    private GlobalConfigurationManagementService globalConfigurationManagementService;
 
-	@Autowired
-	private DataManipulationService dataManipulationService;
+    @Autowired
+    private DataManipulationService dataManipulationService;
 
-	@Autowired
-	private LoginService loginService;
+    @Autowired
+    private LoginService loginService;
 
-	protected void registerDomainTypeAdministrationConfiguration( Class configurationClass ) {
-		globalConfigurationManagementService.registerDomainTypeConfiguration( ConfigurationUnitsConverter.unitsFromConfiguration( configurationClass ) );
-	}
+    protected void registerDomainTypeAdministrationConfiguration(Class configurationClass) {
+        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(configurationClass));
+    }
 
-	protected void removeAllDomainTypeAdministrationConfigurations() {
-		globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
-	}
+    protected void removeAllDomainTypeAdministrationConfigurations() {
+        globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
+    }
 
-	protected void repopulateDatabase() {
-		truncateDatabase();
-		populateDatabase();
-	}
+    protected void repopulateDatabase() {
+        truncateDatabase();
+        populateDatabase();
+    }
 
-	protected void truncateDatabase() {
-		dataManipulationService.truncateDatabase();
-	}
+    protected void truncateDatabase() {
+        dataManipulationService.truncateDatabase();
+    }
 
-	protected void populateDatabase() {
-		dataManipulationService.populateDatabase();
-	}
+    protected void populateDatabase() {
+        dataManipulationService.populateDatabase();
+    }
 
-	protected ExtendedWebDriver webDriver() {
-		return seleniumContext.getWebDriver();
-	}
+    protected ExtendedWebDriver webDriver() {
+        return seleniumContext.getWebDriver();
+    }
 
-	protected URL baseUrl() {
-		return seleniumContext.getBaseUrl();
-	}
+    protected URL baseUrl() {
+        return seleniumContext.getBaseUrl();
+    }
 
-	protected long webDriverTimeout() {
-		return seleniumContext.getWebDriverWaitTimeout();
-	}
+    protected long webDriverTimeout() {
+        return seleniumContext.getWebDriverWaitTimeout();
+    }
 
-	protected ListViewPage getStartPage() {
-		return loginService.getStartPage();
-	}
+    protected ListViewPage getStartPage() {
+        return loginService.getStartPage();
+    }
 }

@@ -1,8 +1,8 @@
 package org.lightadmin.core.config.context;
 
+import org.lightadmin.api.config.management.rmi.DataManipulationService;
+import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.management.jmx.LightAdminConfigurationMonitoringServiceMBean;
-import org.lightadmin.core.config.management.rmi.DataManipulationService;
-import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

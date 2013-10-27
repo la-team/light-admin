@@ -5,8 +5,8 @@ import org.springframework.beans.PropertyAccessorFactory;
 
 class ObjectAttributeRenderer extends AbstractAttributeRenderer {
 
-	@Override
-	protected Object evaluateValue( final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject ) {
-		return PropertyAccessorFactory.forBeanPropertyAccess( domainTypeObject ).getPropertyValue( attributeMetadata.getName() );
-	}
+    @Override
+    protected Object evaluateValue(final DomainTypeAttributeMetadata attributeMetadata, final Object domainTypeObject) {
+        return PropertyAccessorFactory.forBeanPropertyAccess(domainTypeObject).getPropertyValue(attributeMetadata.getName());
+    }
 }

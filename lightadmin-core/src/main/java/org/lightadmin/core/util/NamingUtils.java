@@ -1,7 +1,7 @@
 package org.lightadmin.core.util;
 
+import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
 import static org.apache.commons.lang.StringUtils.trim;

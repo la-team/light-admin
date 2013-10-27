@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.configuration.support;
+package org.lightadmin.api.config.utils;
 
 import org.lightadmin.core.util.Transformer;
 
@@ -7,6 +7,6 @@ import java.io.Serializable;
 
 public interface EntityNameExtractor<F> extends Transformer<F, String>, Serializable {
 
-	@Override
-	String apply( @Nullable F input );
+    @Override
+    String apply(@Nullable F input);
 }

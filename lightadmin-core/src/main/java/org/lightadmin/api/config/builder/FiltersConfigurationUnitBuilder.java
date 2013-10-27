@@ -1,5 +1,7 @@
-package org.lightadmin.core.config.domain.filter;
+package org.lightadmin.api.config.builder;
 
+import org.lightadmin.api.config.unit.FiltersConfigurationUnit;
+import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.config.domain.renderer.Renderer;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 

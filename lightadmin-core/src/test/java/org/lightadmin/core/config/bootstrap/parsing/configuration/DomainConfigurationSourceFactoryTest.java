@@ -3,7 +3,7 @@ package org.lightadmin.core.config.bootstrap.parsing.configuration;
 import org.easymock.EasyMock;
 import org.junit.Before;
 import org.junit.Test;
-import org.lightadmin.core.config.annotation.Administration;
+import org.lightadmin.api.config.annotation.Administration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;

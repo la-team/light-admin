@@ -6,11 +6,11 @@ import org.easymock.CaptureType;
 import org.easymock.EasyMock;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.lightadmin.api.config.unit.FiltersConfigurationUnit;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
-import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
 import org.lightadmin.core.reporting.ProblemReporter;
 
 import java.util.Iterator;

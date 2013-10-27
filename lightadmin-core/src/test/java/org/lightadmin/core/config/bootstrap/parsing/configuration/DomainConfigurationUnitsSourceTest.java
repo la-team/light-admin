@@ -1,9 +1,9 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
 import org.junit.Test;
-import org.lightadmin.core.config.annotation.Administration;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
-import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
+import org.lightadmin.api.config.annotation.Administration;
+import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
+import org.lightadmin.api.config.unit.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.test.util.ConfigurationUnitsUtils;
@@ -14,61 +14,61 @@ import static org.lightadmin.core.test.util.DomainTypeEntityMetadataUtils.domain
 
 public class DomainConfigurationUnitsSourceTest {
 
-	private DomainConfigurationUnitsSource testee;
+    private DomainConfigurationUnitsSource testee;
 
-	@Test( expected = IllegalArgumentException.class )
-	public void nullDomainTypeEntityMetadataNotAllowed() {
-		testee = new DomainConfigurationUnitsSource( null, domainTypeConfigurationUnits() );
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void nullDomainTypeEntityMetadataNotAllowed() {
+        testee = new DomainConfigurationUnitsSource(null, domainTypeConfigurationUnits());
+    }
 
-	@Test( expected = IllegalArgumentException.class )
-	public void nullConfigurationClassNotAllowed() {
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), null );
-	}
+    @Test(expected = IllegalArgumentException.class)
+    public void nullConfigurationClassNotAllowed() {
+        testee = new DomainConfigurationUnitsSource(domainTypeEntityMetadata(DomainType.class), null);
+    }
 
-	@Test
-	public void correctDomainTypeReturned() {
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), domainTypeConfigurationUnits() );
+    @Test
+    public void correctDomainTypeReturned() {
+        testee = new DomainConfigurationUnitsSource(domainTypeEntityMetadata(DomainType.class), domainTypeConfigurationUnits());
 
-		assertEquals( DomainType.class, testee.getDomainType() );
-	}
+        assertEquals(DomainType.class, testee.getDomainType());
+    }
 
-	@Test
-	public void correctConfigurationNameReturnedForDomainType() {
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), domainTypeConfigurationUnits() );
+    @Test
+    public void correctConfigurationNameReturnedForDomainType() {
+        testee = new DomainConfigurationUnitsSource(domainTypeEntityMetadata(DomainType.class), domainTypeConfigurationUnits());
 
-		assertEquals( "DomainTypeConfiguration", testee.getConfigurationName() );
-	}
+        assertEquals("DomainTypeConfiguration", testee.getConfigurationName());
+    }
 
-	@Test
-	public void correctEntityMetadataReturned() {
-		final DomainTypeEntityMetadata expectedMetadata = domainTypeEntityMetadata( DomainType.class );
+    @Test
+    public void correctEntityMetadataReturned() {
+        final DomainTypeEntityMetadata expectedMetadata = domainTypeEntityMetadata(DomainType.class);
 
-		testee = new DomainConfigurationUnitsSource( expectedMetadata, domainTypeConfigurationUnits() );
+        testee = new DomainConfigurationUnitsSource(expectedMetadata, domainTypeConfigurationUnits());
 
-		assertEquals( expectedMetadata, testee.getDomainTypeEntityMetadata() );
-	}
+        assertEquals(expectedMetadata, testee.getDomainTypeEntityMetadata());
+    }
 
-	@Test
-	public void correctConfigurationUnitsReturned() {
-		final ConfigurationUnits domainTypeConfigurationUnits = ConfigurationUnitsUtils.configurationUnits( DomainTypeConfiguration.class, configurationUnitFor( DomainConfigurationUnitType.CONFIGURATION, EntityMetadataConfigurationUnit.class ), configurationUnitFor( DomainConfigurationUnitType.FILTERS, FiltersConfigurationUnit.class ) );
+    @Test
+    public void correctConfigurationUnitsReturned() {
+        final ConfigurationUnits domainTypeConfigurationUnits = ConfigurationUnitsUtils.configurationUnits(DomainTypeConfiguration.class, configurationUnitFor(DomainConfigurationUnitType.CONFIGURATION, EntityMetadataConfigurationUnit.class), configurationUnitFor(DomainConfigurationUnitType.FILTERS, FiltersConfigurationUnit.class));
 
-		testee = new DomainConfigurationUnitsSource( domainTypeEntityMetadata( DomainType.class ), domainTypeConfigurationUnits );
+        testee = new DomainConfigurationUnitsSource(domainTypeEntityMetadata(DomainType.class), domainTypeConfigurationUnits);
 
-		assertEquals( domainTypeConfigurationUnits.getEntityConfiguration(), testee.getEntityConfiguration() );
-		assertEquals( domainTypeConfigurationUnits.getFilters(), testee.getFilters() );
-	}
+        assertEquals(domainTypeConfigurationUnits.getEntityConfiguration(), testee.getEntityConfiguration());
+        assertEquals(domainTypeConfigurationUnits.getFilters(), testee.getFilters());
+    }
 
-	private ConfigurationUnits domainTypeConfigurationUnits() {
-		return new ConfigurationUnits( DomainTypeConfiguration.class );
-	}
+    private ConfigurationUnits domainTypeConfigurationUnits() {
+        return new ConfigurationUnits(DomainTypeConfiguration.class);
+    }
 
-	private static class DomainType {
+    private static class DomainType {
 
-	}
+    }
 
-	@Administration( DomainType.class )
-	private static class DomainTypeConfiguration {
+    @Administration(DomainType.class)
+    private static class DomainTypeConfiguration {
 
-	}
+    }
 }

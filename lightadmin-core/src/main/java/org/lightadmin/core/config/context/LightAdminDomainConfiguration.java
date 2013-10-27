@@ -1,14 +1,14 @@
 package org.lightadmin.core.config.context;
 
+import org.lightadmin.api.config.management.rmi.DataManipulationService;
+import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.GlobalAdministrationConfigurationProcessor;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.management.rmi.DataManipulationService;
 import org.lightadmin.core.config.management.rmi.DataManipulationServiceImpl;
-import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementServiceImpl;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;

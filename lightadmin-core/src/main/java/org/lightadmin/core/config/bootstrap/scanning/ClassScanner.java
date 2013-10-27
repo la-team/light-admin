@@ -4,6 +4,6 @@ import java.util.Set;
 
 public interface ClassScanner {
 
-	Set<Class> scan( String basePackage );
+    Set<Class> scan(String basePackage);
 
 }

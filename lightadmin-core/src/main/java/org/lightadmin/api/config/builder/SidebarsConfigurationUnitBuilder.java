@@ -1,5 +1,6 @@
-package org.lightadmin.core.config.domain.sidebar;
+package org.lightadmin.api.config.builder;
 
+import org.lightadmin.api.config.unit.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 
 public interface SidebarsConfigurationUnitBuilder extends ConfigurationUnitBuilder<SidebarsConfigurationUnit> {

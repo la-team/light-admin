@@ -1,5 +1,6 @@
-package org.lightadmin.core.config.domain.sidebar;
+package org.lightadmin.api.config.unit;
 
+import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 
 import java.util.List;

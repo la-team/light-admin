@@ -8,17 +8,17 @@ import org.springframework.util.ClassUtils;
 
 public class DomainTypeMetadataAwareConfigurationUnitPostProcessor extends EntityMetadataResolverAwareConfigurationUnitPostProcessor {
 
-	public DomainTypeMetadataAwareConfigurationUnitPostProcessor( final DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		super( entityMetadataResolver );
-	}
+    public DomainTypeMetadataAwareConfigurationUnitPostProcessor(final DomainTypeEntityMetadataResolver entityMetadataResolver) {
+        super(entityMetadataResolver);
+    }
 
-	@Override
-	public ConfigurationUnit postProcess( final ConfigurationUnit configurationUnit ) {
-		if ( ClassUtils.isAssignableValue( DomainTypeEntityMetadataAware.class, configurationUnit ) ) {
-			final DomainTypeEntityMetadata domainTypeEntityMetadata = resolveEntityMetadata( configurationUnit );
+    @Override
+    public ConfigurationUnit postProcess(final ConfigurationUnit configurationUnit) {
+        if (ClassUtils.isAssignableValue(DomainTypeEntityMetadataAware.class, configurationUnit)) {
+            final DomainTypeEntityMetadata domainTypeEntityMetadata = resolveEntityMetadata(configurationUnit);
 
-			( ( DomainTypeEntityMetadataAware ) configurationUnit ).setDomainTypeEntityMetadata( domainTypeEntityMetadata );
-		}
-		return configurationUnit;
-	}
+            ((DomainTypeEntityMetadataAware) configurationUnit).setDomainTypeEntityMetadata(domainTypeEntityMetadata);
+        }
+        return configurationUnit;
+    }
 }

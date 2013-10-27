@@ -1,6 +1,6 @@
 package org.lightadmin.core.persistence.metamodel;
 
-import org.lightadmin.core.config.annotation.FileReference;
+import org.lightadmin.api.config.annotation.FileReference;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
 import javax.persistence.metamodel.Attribute;

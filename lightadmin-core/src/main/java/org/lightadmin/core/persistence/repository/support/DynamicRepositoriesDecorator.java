@@ -21,92 +21,92 @@ import java.util.Map;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 
-@SuppressWarnings( {"rawtypes", "unchecked"} )
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class DynamicRepositoriesDecorator extends Repositories {
 
-	private final Map<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations;
+    private final Map<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations;
 
-	private final DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver;
+    private final DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver;
 
-	public DynamicRepositoriesDecorator( GlobalAdministrationConfiguration globalAdministrationConfiguration, DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver ) {
-		super( emptyBeanFactory() );
+    public DynamicRepositoriesDecorator(GlobalAdministrationConfiguration globalAdministrationConfiguration, DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver) {
+        super(emptyBeanFactory());
 
-		this.domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver;
-		this.domainTypeConfigurations = newLinkedHashMap( globalAdministrationConfiguration.getDomainTypeConfigurations() );
+        this.domainTypeEntityMetadataResolver = domainTypeEntityMetadataResolver;
+        this.domainTypeConfigurations = newLinkedHashMap(globalAdministrationConfiguration.getDomainTypeConfigurations());
 
-	}
+    }
 
-	@Override
-	public boolean hasRepositoryFor( Class<?> domainClass ) {
-		return domainTypeConfigurations.containsKey( domainClass );
-	}
+    @Override
+    public boolean hasRepositoryFor(Class<?> domainClass) {
+        return domainTypeConfigurations.containsKey(domainClass);
+    }
 
-	@Override
-	public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor( Class<?> domainClass ) {
-		if ( hasRepositoryFor( domainClass ) ) {
-			return ( CrudRepository<T, S> ) domainTypeConfigurations.get( domainClass ).getRepository();
-		}
-		return null;
-	}
+    @Override
+    public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor(Class<?> domainClass) {
+        if (hasRepositoryFor(domainClass)) {
+            return (CrudRepository<T, S>) domainTypeConfigurations.get(domainClass).getRepository();
+        }
+        return null;
+    }
 
-	@Override
-	public <T, S extends Serializable> EntityInformation<T, S> getEntityInformationFor( Class<?> domainClass ) {
-		RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor( domainClass );
-		return information == null ? null : ( EntityInformation<T, S> ) information.getEntityInformation();
-	}
+    @Override
+    public <T, S extends Serializable> EntityInformation<T, S> getEntityInformationFor(Class<?> domainClass) {
+        RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor(domainClass);
+        return information == null ? null : (EntityInformation<T, S>) information.getEntityInformation();
+    }
 
-	@Override
-	public RepositoryInformation getRepositoryInformationFor( Class<?> domainClass ) {
-		RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor( domainClass );
-		return information == null ? null : information.getRepositoryInformation();
-	}
+    @Override
+    public RepositoryInformation getRepositoryInformationFor(Class<?> domainClass) {
+        RepositoryFactoryInformation<Object, Serializable> information = getRepoInfoFor(domainClass);
+        return information == null ? null : information.getRepositoryInformation();
+    }
 
-	@Override
-	public List<QueryMethod> getQueryMethodsFor( Class<?> domainClass ) {
-		return Collections.emptyList();
-	}
+    @Override
+    public List<QueryMethod> getQueryMethodsFor(Class<?> domainClass) {
+        return Collections.emptyList();
+    }
 
-	@Override
-	public Iterator<Class<?>> iterator() {
-		return domainTypeConfigurations.keySet().iterator();
-	}
+    @Override
+    public Iterator<Class<?>> iterator() {
+        return domainTypeConfigurations.keySet().iterator();
+    }
 
-	private static StaticListableBeanFactory emptyBeanFactory() {
-		return new StaticListableBeanFactory();
-	}
+    private static StaticListableBeanFactory emptyBeanFactory() {
+        return new StaticListableBeanFactory();
+    }
 
-	private RepositoryFactoryInformation<Object, Serializable> getRepoInfoFor( Class<?> domainClass ) {
-		Assert.notNull( domainClass );
-		if ( hasRepositoryFor( domainClass ) ) {
-			return new ConfigurationRepositoryFactoryInformationAdapter( domainTypeConfigurations.get( domainClass ) );
+    private RepositoryFactoryInformation<Object, Serializable> getRepoInfoFor(Class<?> domainClass) {
+        Assert.notNull(domainClass);
+        if (hasRepositoryFor(domainClass)) {
+            return new ConfigurationRepositoryFactoryInformationAdapter(domainTypeConfigurations.get(domainClass));
 
-		}
-		return null;
-	}
+        }
+        return null;
+    }
 
-	private class ConfigurationRepositoryFactoryInformationAdapter<T, ID extends Serializable> implements RepositoryFactoryInformation<T, ID> {
+    private class ConfigurationRepositoryFactoryInformationAdapter<T, ID extends Serializable> implements RepositoryFactoryInformation<T, ID> {
 
-		private final DomainTypeBasicConfiguration domainTypeConfiguration;
+        private final DomainTypeBasicConfiguration domainTypeConfiguration;
 
-		public ConfigurationRepositoryFactoryInformationAdapter( final DomainTypeBasicConfiguration domainTypeAdministrationConfiguration ) {
-			this.domainTypeConfiguration = domainTypeAdministrationConfiguration;
-		}
+        public ConfigurationRepositoryFactoryInformationAdapter(final DomainTypeBasicConfiguration domainTypeAdministrationConfiguration) {
+            this.domainTypeConfiguration = domainTypeAdministrationConfiguration;
+        }
 
-		@Override
-		@SuppressWarnings( "unchecked" )
-		public EntityInformation<T, ID> getEntityInformation() {
-			return domainTypeEntityMetadataResolver.getEntityInformation( domainTypeConfiguration.getDomainType() );
-		}
+        @Override
+        @SuppressWarnings("unchecked")
+        public EntityInformation<T, ID> getEntityInformation() {
+            return domainTypeEntityMetadataResolver.getEntityInformation(domainTypeConfiguration.getDomainType());
+        }
 
-		@Override
-		public RepositoryInformation getRepositoryInformation() {
-			RepositoryMetadata metadata = new DynamicRepositoryMetadata( getEntityInformation() );
-			return new DynamicRepositoryInformation( metadata );
-		}
+        @Override
+        public RepositoryInformation getRepositoryInformation() {
+            RepositoryMetadata metadata = new DynamicRepositoryMetadata(getEntityInformation());
+            return new DynamicRepositoryInformation(metadata);
+        }
 
-		@Override
-		public List<QueryMethod> getQueryMethods() {
-			return Collections.emptyList();
-		}
-	}
+        @Override
+        public List<QueryMethod> getQueryMethods() {
+            return Collections.emptyList();
+        }
+    }
 }

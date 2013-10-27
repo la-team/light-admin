@@ -13,44 +13,44 @@ import javax.servlet.jsp.tagext.TryCatchFinally;
 
 public abstract class AttributeRendererFactoryAwareTag extends TagSupport implements TryCatchFinally {
 
-	protected AttributeRendererFactory attributeRendererFactory;
+    protected AttributeRendererFactory attributeRendererFactory;
 
-	@Override
-	public final int doStartTag() throws JspException {
-		try {
-			this.attributeRendererFactory = applicationContext().getBean( AttributeRendererFactory.class );
+    @Override
+    public final int doStartTag() throws JspException {
+        try {
+            this.attributeRendererFactory = applicationContext().getBean(AttributeRendererFactory.class);
 
-			return doStartTagInternal();
-		} catch ( Exception ex ) {
-			throw new JspTagException( ex.getMessage() );
-		}
-	}
+            return doStartTagInternal();
+        } catch (Exception ex) {
+            throw new JspTagException(ex.getMessage());
+        }
+    }
 
-	protected AttributeRenderer rendererFor( DomainTypeAttributeMetadata attributeMetadata ) {
-		return attributeRendererFactory.getRenderer( attributeMetadata );
-	}
+    protected AttributeRenderer rendererFor(DomainTypeAttributeMetadata attributeMetadata) {
+        return attributeRendererFactory.getRenderer(attributeMetadata);
+    }
 
-	/**
-	 * Called by doStartTag to perform the actual work.
-	 *
-	 * @return same as TagSupport.doStartTag
-	 * @throws Exception any exception, any checked one other than
-	 *                   a JspException gets wrapped in a JspException by doStartTag
-	 * @see javax.servlet.jsp.tagext.TagSupport#doStartTag
-	 */
-	protected abstract int doStartTagInternal() throws Exception;
+    /**
+     * Called by doStartTag to perform the actual work.
+     *
+     * @return same as TagSupport.doStartTag
+     * @throws Exception any exception, any checked one other than
+     *                   a JspException gets wrapped in a JspException by doStartTag
+     * @see javax.servlet.jsp.tagext.TagSupport#doStartTag
+     */
+    protected abstract int doStartTagInternal() throws Exception;
 
-	@Override
-	public void doCatch( Throwable throwable ) throws Throwable {
-		throw throwable;
-	}
+    @Override
+    public void doCatch(Throwable throwable) throws Throwable {
+        throw throwable;
+    }
 
-	@Override
-	public void doFinally() {
-		this.attributeRendererFactory = null;
-	}
+    @Override
+    public void doFinally() {
+        this.attributeRendererFactory = null;
+    }
 
-	private WebApplicationContext applicationContext() {
-		return WebContextUtils.getWebApplicationContext( pageContext.getServletContext() );
-	}
+    private WebApplicationContext applicationContext() {
+        return WebContextUtils.getWebApplicationContext(pageContext.getServletContext());
+    }
 }

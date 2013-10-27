@@ -2,13 +2,14 @@ package org.lightadmin.core.config.domain.common;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections15.functors.PrototypeFactory;
+import org.lightadmin.api.config.builder.FieldSetConfigurationUnitBuilder;
+import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
+import org.lightadmin.api.config.utils.FieldValueRenderer;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.AbstractFieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
-import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.config.domain.unit.DefaultFieldSetConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
 
 import javax.servlet.jsp.tagext.SimpleTag;
 

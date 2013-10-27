@@ -4,16 +4,16 @@ import java.util.Collection;
 
 public interface DomainTypeEntityMetadata<A extends DomainTypeAttributeMetadata> {
 
-	Class<?> getDomainType();
+    Class<?> getDomainType();
 
-	String getEntityName();
+    String getEntityName();
 
-	Collection<A> getAttributes();
+    Collection<A> getAttributes();
 
-	A getAttribute( String name );
+    A getAttribute(String name);
 
-	A getIdAttribute();
+    A getIdAttribute();
 
-	boolean containsAttribute( String name );
+    boolean containsAttribute(String name);
 
 }

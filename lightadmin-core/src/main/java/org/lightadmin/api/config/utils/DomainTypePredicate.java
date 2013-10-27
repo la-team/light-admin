@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.scope;
+package org.lightadmin.api.config.utils;
 
 import com.google.common.base.Predicate;
 

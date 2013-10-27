@@ -1,20 +1,14 @@
 package org.lightadmin.core.config.domain.unit;
 
 import org.lightadmin.api.config.AdministrationConfiguration;
-import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
+import org.lightadmin.api.config.builder.*;
 import org.lightadmin.core.config.domain.common.GenericFieldSetConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilderAdapter;
 import org.lightadmin.core.config.domain.configuration.DefaultEntityMetadataConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.context.DefaultScreenContextConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.filter.DefaultFiltersConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.scope.DefaultScopesConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.sidebar.DefaultSidebarsConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnitBuilder;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 

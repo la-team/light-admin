@@ -12,29 +12,29 @@ import java.io.Serializable;
 
 public class DomainTypeAdministrationConfigurationFactory {
 
-	private final DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory;
-	private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory;
+    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
 
-	public DomainTypeAdministrationConfigurationFactory( DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory, DomainTypeEntityMetadataResolver entityMetadataResolver ) {
-		this.entityMetadataResolver = entityMetadataResolver;
-		this.dynamicJpaRepositoryFactory = dynamicJpaRepositoryFactory;
-	}
+    public DomainTypeAdministrationConfigurationFactory(DynamicJpaRepositoryFactory dynamicJpaRepositoryFactory, DomainTypeEntityMetadataResolver entityMetadataResolver) {
+        this.entityMetadataResolver = entityMetadataResolver;
+        this.dynamicJpaRepositoryFactory = dynamicJpaRepositoryFactory;
+    }
 
-	@SuppressWarnings("unchecked")
-	public DomainTypeAdministrationConfiguration createAdministrationConfiguration( DomainConfigurationSource domainConfigurationSource ) {
-		final DynamicJpaRepository<?, ? extends Serializable> repository = dynamicJpaRepositoryFactory.createRepository( domainConfigurationSource.getDomainType() );
+    @SuppressWarnings("unchecked")
+    public DomainTypeAdministrationConfiguration createAdministrationConfiguration(DomainConfigurationSource domainConfigurationSource) {
+        final DynamicJpaRepository<?, ? extends Serializable> repository = dynamicJpaRepositoryFactory.createRepository(domainConfigurationSource.getDomainType());
 
-		return new DomainTypeAdministrationConfiguration( domainConfigurationSource, repository );
-	}
+        return new DomainTypeAdministrationConfiguration(domainConfigurationSource, repository);
+    }
 
-	@SuppressWarnings({"rawtypes", "unchecked"})
-	public DomainTypeBasicConfiguration createNonManagedDomainTypeConfiguration( Class<?> domainType ) {
-		DynamicJpaRepository<?, ? extends Serializable> repository = dynamicJpaRepositoryFactory.createRepository( domainType );
-		DomainTypeEntityMetadata entityMetadata = entityMetadataResolver.resolveEntityMetadata( domainType );
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    public DomainTypeBasicConfiguration createNonManagedDomainTypeConfiguration(Class<?> domainType) {
+        DynamicJpaRepository<?, ? extends Serializable> repository = dynamicJpaRepositoryFactory.createRepository(domainType);
+        DomainTypeEntityMetadata entityMetadata = entityMetadataResolver.resolveEntityMetadata(domainType);
 
-		DefaultEntityMetadataConfigurationUnitBuilder builder = new DefaultEntityMetadataConfigurationUnitBuilder( domainType );
-		builder.nameExtractor( EntityNameExtractorFactory.forPersistentEntity( entityMetadata ) );
+        DefaultEntityMetadataConfigurationUnitBuilder builder = new DefaultEntityMetadataConfigurationUnitBuilder(domainType);
+        builder.nameExtractor(EntityNameExtractorFactory.forPersistentEntity(entityMetadata));
 
-		return new NonManagedDomainTypeConfiguration( builder.build(), entityMetadata, repository );
-	}
+        return new NonManagedDomainTypeConfiguration(builder.build(), entityMetadata, repository);
+    }
 }

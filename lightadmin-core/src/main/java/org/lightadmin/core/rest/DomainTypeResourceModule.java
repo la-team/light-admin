@@ -12,38 +12,38 @@ import java.io.IOException;
 
 public class DomainTypeResourceModule extends SimpleModule {
 
-	private final DomainTypeToResourceConverter domainTypeToResourceConverter;
+    private final DomainTypeToResourceConverter domainTypeToResourceConverter;
 
-	public DomainTypeResourceModule( final DomainTypeToResourceConverter domainTypeToResourceConverter ) {
-		super( "DomainTypeResourceModule", Version.unknownVersion() );
+    public DomainTypeResourceModule(final DomainTypeToResourceConverter domainTypeToResourceConverter) {
+        super("DomainTypeResourceModule", Version.unknownVersion());
 
-		this.domainTypeToResourceConverter = domainTypeToResourceConverter;
-	}
+        this.domainTypeToResourceConverter = domainTypeToResourceConverter;
+    }
 
-	@Override
-	public void setupModule( final SetupContext context ) {
-		SimpleSerializers serializers = new SimpleSerializers();
-		serializers.addSerializer( DomainTypeResource.class, new DomainTypeResourceSerializer() );
+    @Override
+    public void setupModule(final SetupContext context) {
+        SimpleSerializers serializers = new SimpleSerializers();
+        serializers.addSerializer(DomainTypeResource.class, new DomainTypeResourceSerializer());
 
-		context.addSerializers( serializers );
-	}
+        context.addSerializers(serializers);
+    }
 
-	private class DomainTypeResourceSerializer extends SerializerBase<DomainTypeResource> {
+    private class DomainTypeResourceSerializer extends SerializerBase<DomainTypeResource> {
 
-		protected DomainTypeResourceSerializer() {
-			super( DomainTypeResource.class );
-		}
+        protected DomainTypeResourceSerializer() {
+            super(DomainTypeResource.class);
+        }
 
-		@Override
-		public void serialize( DomainTypeResource value, JsonGenerator jgen, SerializerProvider provider ) throws IOException {
-			if ( null == value ) {
-				provider.defaultSerializeNull( jgen );
-				return;
-			}
+        @Override
+        public void serialize(DomainTypeResource value, JsonGenerator jgen, SerializerProvider provider) throws IOException {
+            if (null == value) {
+                provider.defaultSerializeNull(jgen);
+                return;
+            }
 
-			final Resource resource = domainTypeToResourceConverter.convert( value.getResource(), value.getConfigurationUnitType(), value.getFieldMetadatas() );
+            final Resource resource = domainTypeToResourceConverter.convert(value.getResource(), value.getConfigurationUnitType(), value.getFieldMetadatas());
 
-			jgen.writeObject( resource );
-		}
-	}
+            jgen.writeObject(resource);
+        }
+    }
 }

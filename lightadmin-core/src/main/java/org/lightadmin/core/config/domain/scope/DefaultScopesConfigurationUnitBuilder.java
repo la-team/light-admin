@@ -1,5 +1,8 @@
 package org.lightadmin.core.config.domain.scope;
 
+import org.lightadmin.api.config.builder.ScopesConfigurationUnitBuilder;
+import org.lightadmin.api.config.unit.ScopesConfigurationUnit;
+import org.lightadmin.api.config.utils.ScopeMetadataUtils;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
 import java.util.List;

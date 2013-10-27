@@ -1,13 +1,15 @@
-package org.lightadmin.core.view.editor;
+package org.lightadmin.api.config.utils;
 
-import org.lightadmin.core.config.domain.common.EnumElement;
+import org.lightadmin.core.view.editor.EnumFieldEditControl;
+import org.lightadmin.core.view.editor.JspFragmentFieldControl;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Arrays.asList;
-import static org.lightadmin.core.config.domain.common.EnumElement.element;
+import static org.lightadmin.api.config.utils.EnumElement.element;
 
+@SuppressWarnings("unused")
 public abstract class Editors {
 
     public static JspFragmentFieldControl textArea() {
@@ -27,7 +29,7 @@ public abstract class Editors {
     }
 
     public static JspFragmentFieldControl enumeration(String... values) {
-        List<EnumElement> elements = new ArrayList<EnumElement>(values.length);
+        final List<EnumElement> elements = newArrayList();
         for (String value : values) {
             elements.add(element(value, value));
         }

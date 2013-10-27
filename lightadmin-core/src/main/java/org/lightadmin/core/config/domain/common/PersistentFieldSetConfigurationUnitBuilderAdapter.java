@@ -1,8 +1,10 @@
 package org.lightadmin.core.config.domain.common;
 
+import org.lightadmin.api.config.builder.PersistentFieldSetConfigurationUnitBuilder;
+import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
+import org.lightadmin.api.config.utils.Editors;
+import org.lightadmin.api.config.utils.EnumElement;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
-import org.lightadmin.core.view.editor.Editors;
 import org.lightadmin.core.view.editor.JspFragmentFieldControl;
 
 import static java.util.Arrays.asList;

@@ -13,69 +13,69 @@ import static com.google.common.collect.Maps.newHashMap;
 
 public class JpaDomainTypeEntityMetadata implements DomainTypeEntityMetadata<JpaDomainTypeAttributeMetadata> {
 
-	private final Class<?> domainType;
+    private final Class<?> domainType;
 
-	private final JpaDomainTypeAttributeMetadata idAttribute;
+    private final JpaDomainTypeAttributeMetadata idAttribute;
 
-	private final Map<String, JpaDomainTypeAttributeMetadata> attributes = newHashMap();
+    private final Map<String, JpaDomainTypeAttributeMetadata> attributes = newHashMap();
 
-	public JpaDomainTypeEntityMetadata( EntityType<?> entityType ) {
-		domainType = entityType.getJavaType();
+    public JpaDomainTypeEntityMetadata(EntityType<?> entityType) {
+        domainType = entityType.getJavaType();
 
-		idAttribute = idAttribute( entityType );
+        idAttribute = idAttribute(entityType);
 
-		for ( Attribute attribute : entityType.getAttributes() ) {
-			if ( notIdAttribute( attribute ) ) {
-				attributes.put( attribute.getName(), new JpaDomainTypeAttributeMetadata( entityType, attribute ) );
-			}
-		}
-	}
+        for (Attribute attribute : entityType.getAttributes()) {
+            if (notIdAttribute(attribute)) {
+                attributes.put(attribute.getName(), new JpaDomainTypeAttributeMetadata(entityType, attribute));
+            }
+        }
+    }
 
-	@Override
-	public Class<?> getDomainType() {
-		return domainType;
-	}
+    @Override
+    public Class<?> getDomainType() {
+        return domainType;
+    }
 
-	public String getEntityName() {
-		Entity entity = domainType.getAnnotation( Entity.class );
-		boolean hasName = null != entity && StringUtils.hasText( entity.name() );
+    public String getEntityName() {
+        Entity entity = domainType.getAnnotation(Entity.class);
+        boolean hasName = null != entity && StringUtils.hasText(entity.name());
 
-		return hasName ? entity.name() : domainType.getSimpleName();
-	}
+        return hasName ? entity.name() : domainType.getSimpleName();
+    }
 
-	@Override
-	public Collection<JpaDomainTypeAttributeMetadata> getAttributes() {
-		return attributes.values();
-	}
+    @Override
+    public Collection<JpaDomainTypeAttributeMetadata> getAttributes() {
+        return attributes.values();
+    }
 
-	@Override
-	public JpaDomainTypeAttributeMetadata getIdAttribute() {
-		return idAttribute;
-	}
+    @Override
+    public JpaDomainTypeAttributeMetadata getIdAttribute() {
+        return idAttribute;
+    }
 
-	@Override
-	public JpaDomainTypeAttributeMetadata getAttribute( String name ) {
-		if ( idAttribute.getName().equals( name ) ) {
-			return idAttribute;
-		}
+    @Override
+    public JpaDomainTypeAttributeMetadata getAttribute(String name) {
+        if (idAttribute.getName().equals(name)) {
+            return idAttribute;
+        }
 
-		if ( attributes.containsKey( name ) ) {
-			return attributes.get( name );
-		}
+        if (attributes.containsKey(name)) {
+            return attributes.get(name);
+        }
 
-		return null;
-	}
+        return null;
+    }
 
-	@Override
-	public boolean containsAttribute( final String name ) {
-		return getAttribute( name ) != null;
-	}
+    @Override
+    public boolean containsAttribute(final String name) {
+        return getAttribute(name) != null;
+    }
 
-	private boolean notIdAttribute( final Attribute attribute ) {
-		return !( attribute instanceof SingularAttribute && ( ( SingularAttribute ) attribute ).isId() );
-	}
+    private boolean notIdAttribute(final Attribute attribute) {
+        return !(attribute instanceof SingularAttribute && ((SingularAttribute) attribute).isId());
+    }
 
-	private JpaDomainTypeAttributeMetadata idAttribute( final EntityType<?> entityType ) {
-		return new JpaDomainTypeAttributeMetadata( entityType, entityType.getId( entityType.getIdType().getJavaType() ) );
-	}
+    private JpaDomainTypeAttributeMetadata idAttribute(final EntityType<?> entityType) {
+        return new JpaDomainTypeAttributeMetadata(entityType, entityType.getId(entityType.getIdType().getJavaType()));
+    }
 }

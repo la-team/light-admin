@@ -1,7 +1,8 @@
 package org.lightadmin.core.config.domain.configuration.support;
 
+import org.lightadmin.api.config.utils.EntityNameExtractor;
+import org.lightadmin.api.config.utils.FieldValueRenderer;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
-import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
 import org.lightadmin.core.util.Transformer;
 
 import static java.lang.String.format;

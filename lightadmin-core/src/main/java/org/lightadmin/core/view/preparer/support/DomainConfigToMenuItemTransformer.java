@@ -10,20 +10,20 @@ import static org.lightadmin.core.web.util.ApplicationUrlResolver.domainBaseUrl;
 
 public class DomainConfigToMenuItemTransformer implements Transformer<DomainTypeAdministrationConfiguration, MenuItem> {
 
-	public static final DomainConfigToMenuItemTransformer INSTANCE = new DomainConfigToMenuItemTransformer();
+    public static final DomainConfigToMenuItemTransformer INSTANCE = new DomainConfigToMenuItemTransformer();
 
-	private DomainConfigToMenuItemTransformer() {
-	}
+    private DomainConfigToMenuItemTransformer() {
+    }
 
-	@Override
-	public MenuItem apply( final DomainTypeAdministrationConfiguration domainConfiguration ) {
-		return menuItem( StringUtils.capitalize( domainConfiguration.getEntityConfiguration().getPluralName() ), domainBaseUrl( domainConfiguration ) );
-	}
+    @Override
+    public MenuItem apply(final DomainTypeAdministrationConfiguration domainConfiguration) {
+        return menuItem(StringUtils.capitalize(domainConfiguration.getEntityConfiguration().getPluralName()), domainBaseUrl(domainConfiguration));
+    }
 
-	private MenuItem menuItem( final String name, final String url ) {
-		MenuItem menuItem = new SimpleMenuItem();
-		menuItem.setValue( name );
-		menuItem.setLink( url );
-		return menuItem;
-	}
+    private MenuItem menuItem(final String name, final String url) {
+        MenuItem menuItem = new SimpleMenuItem();
+        menuItem.setValue(name);
+        menuItem.setLink(url);
+        return menuItem;
+    }
 }

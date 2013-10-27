@@ -10,11 +10,11 @@ import java.io.Serializable;
 
 public interface FilterMetadata extends DomainTypeAttributeMetadataAware, Identifiable, Nameable, Serializable {
 
-	Class<?> getType();
+    Class<?> getType();
 
-	String getFieldName();
+    String getFieldName();
 
-	DomainTypeAttributeMetadata getAttributeMetadata();
+    DomainTypeAttributeMetadata getAttributeMetadata();
 
-	FieldMetadata getFieldMetadata();
+    FieldMetadata getFieldMetadata();
 }

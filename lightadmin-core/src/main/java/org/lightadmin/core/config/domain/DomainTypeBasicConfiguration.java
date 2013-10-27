@@ -1,21 +1,21 @@
 package org.lightadmin.core.config.domain;
 
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
+import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 
 public interface DomainTypeBasicConfiguration {
 
-	String getConfigurationName();
+    String getConfigurationName();
 
-	Class<?> getDomainType();
+    Class<?> getDomainType();
 
-	String getDomainTypeName();
+    String getDomainTypeName();
 
-	DomainTypeEntityMetadata getDomainTypeEntityMetadata();
+    DomainTypeEntityMetadata getDomainTypeEntityMetadata();
 
-	DynamicJpaRepository<?, ?> getRepository();
+    DynamicJpaRepository<?, ?> getRepository();
 
-	EntityMetadataConfigurationUnit getEntityConfiguration();
+    EntityMetadataConfigurationUnit getEntityConfiguration();
 
 }

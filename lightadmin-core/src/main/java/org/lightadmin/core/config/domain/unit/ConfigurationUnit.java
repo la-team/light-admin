@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 public interface ConfigurationUnit extends Serializable {
 
-	DomainConfigurationUnitType getDomainConfigurationUnitType();
+    DomainConfigurationUnitType getDomainConfigurationUnitType();
 
-	Class<?> getDomainType();
+    Class<?> getDomainType();
 }

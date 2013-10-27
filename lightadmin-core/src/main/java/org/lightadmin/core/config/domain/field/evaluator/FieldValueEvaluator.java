@@ -11,29 +11,29 @@ import static org.lightadmin.core.config.domain.configuration.support.ExceptionA
 @SuppressWarnings("unchecked")
 public class FieldValueEvaluator {
 
-	public Object evaluate( FieldMetadata fieldMetadata, Object source ) {
-		if ( fieldMetadata instanceof CustomFieldMetadata ) {
-			CustomFieldMetadata customFieldMetadata = ( CustomFieldMetadata ) fieldMetadata;
+    public Object evaluate(FieldMetadata fieldMetadata, Object source) {
+        if (fieldMetadata instanceof CustomFieldMetadata) {
+            CustomFieldMetadata customFieldMetadata = (CustomFieldMetadata) fieldMetadata;
 
-			return exceptionAwareFieldValueRenderer( customFieldMetadata.getRenderer() ).apply( source );
-		}
+            return exceptionAwareFieldValueRenderer(customFieldMetadata.getRenderer()).apply(source);
+        }
 
-		if ( fieldMetadata instanceof PersistentFieldMetadata ) {
-			PersistentFieldMetadata persistentFieldMetadata = ( PersistentFieldMetadata ) fieldMetadata;
+        if (fieldMetadata instanceof PersistentFieldMetadata) {
+            PersistentFieldMetadata persistentFieldMetadata = (PersistentFieldMetadata) fieldMetadata;
 
-			return getPropertyValue( persistentFieldMetadata.getField(), source );
-		}
+            return getPropertyValue(persistentFieldMetadata.getField(), source);
+        }
 
-		TransientFieldMetadata transientFieldMetadata = ( TransientFieldMetadata ) fieldMetadata;
+        TransientFieldMetadata transientFieldMetadata = (TransientFieldMetadata) fieldMetadata;
 
-		return getPropertyValue( transientFieldMetadata.getProperty(), source );
-	}
+        return getPropertyValue(transientFieldMetadata.getProperty(), source);
+    }
 
-	private Object getPropertyValue( String property, Object source ) {
-		try {
-			return new DirectFieldAccessFallbackBeanWrapper( source ).getPropertyValue( property );
-		} catch ( Exception ex ) {
-			return null;
-		}
-	}
+    private Object getPropertyValue(String property, Object source) {
+        try {
+            return new DirectFieldAccessFallbackBeanWrapper(source).getPropertyValue(property);
+        } catch (Exception ex) {
+            return null;
+        }
+    }
 }

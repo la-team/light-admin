@@ -2,8 +2,8 @@ package org.lightadmin.core.persistence.repository;
 
 public interface NullPlaceholderSupport<T> {
 
-	T getNullPlaceholder();
+    T getNullPlaceholder();
 
-	boolean isNullPlaceholder(Object val);
+    boolean isNullPlaceholder(Object val);
 
 }

@@ -1,8 +1,8 @@
 package org.lightadmin.core.view.tags.form;
 
+import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.util.Pair;
 import org.lightadmin.core.view.tags.AbstractAutowiredTag;

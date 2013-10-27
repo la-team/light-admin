@@ -7,5 +7,5 @@ import java.io.IOException;
 
 public interface AttributeRenderer {
 
-	void render( final DomainTypeAttributeMetadata attributeMetadata, Object domainTypeObject, PageContext pageContext ) throws IOException;
+    void render(final DomainTypeAttributeMetadata attributeMetadata, Object domainTypeObject, PageContext pageContext) throws IOException;
 }

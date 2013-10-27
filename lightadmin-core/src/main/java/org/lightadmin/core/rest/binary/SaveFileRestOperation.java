@@ -1,7 +1,7 @@
 package org.lightadmin.core.rest.binary;
 
+import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
-import org.lightadmin.core.config.annotation.FileReference;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;

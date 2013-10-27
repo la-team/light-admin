@@ -1,6 +1,6 @@
 package org.lightadmin.core.view.editor;
 
-import org.lightadmin.core.config.domain.common.EnumElement;
+import org.lightadmin.api.config.utils.EnumElement;
 
 import java.util.List;
 

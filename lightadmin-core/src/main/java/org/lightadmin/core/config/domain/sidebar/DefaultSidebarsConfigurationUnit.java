@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.domain.sidebar;
 
+import org.lightadmin.api.config.unit.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
 

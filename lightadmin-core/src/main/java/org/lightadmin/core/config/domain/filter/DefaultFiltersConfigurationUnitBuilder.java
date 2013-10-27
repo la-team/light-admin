@@ -1,5 +1,8 @@
 package org.lightadmin.core.config.domain.filter;
 
+import org.lightadmin.api.config.builder.FiltersConfigurationUnitBuilder;
+import org.lightadmin.api.config.unit.FiltersConfigurationUnit;
+import org.lightadmin.api.config.utils.FilterMetadataUtils;
 import org.lightadmin.core.config.domain.renderer.Renderer;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
@@ -23,9 +26,9 @@ public class DefaultFiltersConfigurationUnitBuilder extends DomainTypeConfigurat
 
     @Override
     public FiltersConfigurationUnitBuilder filters(FilterMetadata... filters) {
-        for (FilterMetadata filter : filters){
-			filtersMetadata.add(filter);
-		}
+        for (FilterMetadata filter : filters) {
+            filtersMetadata.add(filter);
+        }
         return this;
     }
 

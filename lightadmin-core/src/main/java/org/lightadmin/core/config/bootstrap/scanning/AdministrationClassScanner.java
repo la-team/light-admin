@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.bootstrap.scanning;
 
 import org.lightadmin.api.config.AdministrationConfiguration;
-import org.lightadmin.core.config.annotation.Administration;
+import org.lightadmin.api.config.annotation.Administration;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.core.io.support.ResourcePatternResolver;

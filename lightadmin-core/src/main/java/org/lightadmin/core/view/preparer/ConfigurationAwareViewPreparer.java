@@ -19,66 +19,66 @@ import static org.lightadmin.core.util.NamingUtils.entityName;
 
 public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, GlobalAdministrationConfigurationAware {
 
-	private static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = ApplicationController.DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY;
+    private static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = ApplicationController.DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY;
 
-	private GlobalAdministrationConfiguration globalAdministrationConfiguration;
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
-	public final void execute( TilesRequestContext tilesContext, AttributeContext attributeContext ) {
-		execute( tilesContext, attributeContext, globalAdministrationConfiguration );
-		DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = domainTypeConfiguration( tilesContext );
-		if ( domainTypeAdministrationConfiguration != null ) {
-			execute( tilesContext, attributeContext, domainTypeAdministrationConfiguration );
-		}
-	}
+    public final void execute(TilesRequestContext tilesContext, AttributeContext attributeContext) {
+        execute(tilesContext, attributeContext, globalAdministrationConfiguration);
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = domainTypeConfiguration(tilesContext);
+        if (domainTypeAdministrationConfiguration != null) {
+            execute(tilesContext, attributeContext, domainTypeAdministrationConfiguration);
+        }
+    }
 
-	protected void execute( TilesRequestContext tilesContext, AttributeContext attributeContext, GlobalAdministrationConfiguration configuration ) {
-	}
+    protected void execute(TilesRequestContext tilesContext, AttributeContext attributeContext, GlobalAdministrationConfiguration configuration) {
+    }
 
-	protected void execute( TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration ) {
-		addAttribute( attributeContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration, true );
+    protected void execute(TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration) {
+        addAttribute(attributeContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration, true);
 
-		addAttribute( attributeContext, "domainTypeEntityMetadata", configuration.getDomainTypeEntityMetadata(), true );
-		addAttribute( attributeContext, "entityPluralName", configuration.getEntityConfiguration().getPluralName() );
-		addAttribute( attributeContext, "entitySingularName", entitySingularName( tilesContext, configuration ) );
+        addAttribute(attributeContext, "domainTypeEntityMetadata", configuration.getDomainTypeEntityMetadata(), true);
+        addAttribute(attributeContext, "entityPluralName", configuration.getEntityConfiguration().getPluralName());
+        addAttribute(attributeContext, "entitySingularName", entitySingularName(tilesContext, configuration));
 
-		addAttribute( attributeContext, "entity", entityFromRequest( tilesContext ) );
-		addAttribute( attributeContext, "entityId", entityId( configuration, entityFromRequest( tilesContext ) ) );
-	}
+        addAttribute(attributeContext, "entity", entityFromRequest(tilesContext));
+        addAttribute(attributeContext, "entityId", entityId(configuration, entityFromRequest(tilesContext)));
+    }
 
-	protected DomainTypeAdministrationConfiguration domainTypeConfiguration( final TilesRequestContext tilesContext ) {
-		return ( DomainTypeAdministrationConfiguration ) attributeFromRequest( tilesContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY );
-	}
+    protected DomainTypeAdministrationConfiguration domainTypeConfiguration(final TilesRequestContext tilesContext) {
+        return (DomainTypeAdministrationConfiguration) attributeFromRequest(tilesContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY);
+    }
 
-	private String entitySingularName( final TilesRequestContext tilesContext, final DomainTypeAdministrationConfiguration configuration ) {
-		final Object entity = entityFromRequest( tilesContext );
-		if ( entity == null ) {
-			return configuration.getEntityConfiguration().getSingularName();
-		}
-		return entityName( configuration, entity );
-	}
+    private String entitySingularName(final TilesRequestContext tilesContext, final DomainTypeAdministrationConfiguration configuration) {
+        final Object entity = entityFromRequest(tilesContext);
+        if (entity == null) {
+            return configuration.getEntityConfiguration().getSingularName();
+        }
+        return entityName(configuration, entity);
+    }
 
-	private Object entityFromRequest( TilesRequestContext tilesContext ) {
-		return attributeFromRequest( tilesContext, "entity" );
-	}
+    private Object entityFromRequest(TilesRequestContext tilesContext) {
+        return attributeFromRequest(tilesContext, "entity");
+    }
 
-	protected Object attributeFromRequest( TilesRequestContext tilesContext, String attributeName ) {
-		final ServletTilesRequestContext servletTilesRequestContext = ServletUtil.getServletRequest( tilesContext );
-		final HttpServletRequest httpServletRequest = servletTilesRequestContext.getRequest();
+    protected Object attributeFromRequest(TilesRequestContext tilesContext, String attributeName) {
+        final ServletTilesRequestContext servletTilesRequestContext = ServletUtil.getServletRequest(tilesContext);
+        final HttpServletRequest httpServletRequest = servletTilesRequestContext.getRequest();
 
-		return httpServletRequest.getAttribute( attributeName );
-	}
+        return httpServletRequest.getAttribute(attributeName);
+    }
 
-	protected void addAttribute( AttributeContext attributeContext, String attributeName, Object attributeValue ) {
-		addAttribute( attributeContext, attributeName, attributeValue, false );
-	}
+    protected void addAttribute(AttributeContext attributeContext, String attributeName, Object attributeValue) {
+        addAttribute(attributeContext, attributeName, attributeValue, false);
+    }
 
-	protected void addAttribute( AttributeContext attributeContext, String attributeName, Object attributeValue, boolean cascade ) {
-		attributeContext.putAttribute( attributeName, new Attribute( attributeValue ), cascade );
-	}
+    protected void addAttribute(AttributeContext attributeContext, String attributeName, Object attributeValue, boolean cascade) {
+        attributeContext.putAttribute(attributeName, new Attribute(attributeValue), cascade);
+    }
 
-	@Override
-	@Autowired
-	public void setGlobalAdministrationConfiguration( final GlobalAdministrationConfiguration configuration ) {
-		this.globalAdministrationConfiguration = configuration;
-	}
+    @Override
+    @Autowired
+    public void setGlobalAdministrationConfiguration(final GlobalAdministrationConfiguration configuration) {
+        this.globalAdministrationConfiguration = configuration;
+    }
 }

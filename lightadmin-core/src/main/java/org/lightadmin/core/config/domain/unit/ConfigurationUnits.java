@@ -1,12 +1,8 @@
 package org.lightadmin.core.config.domain.unit;
 
 import com.google.common.collect.Sets;
+import org.lightadmin.api.config.unit.*;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
-import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
-import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
-import org.lightadmin.core.config.domain.scope.ScopesConfigurationUnit;
-import org.lightadmin.core.config.domain.sidebar.SidebarsConfigurationUnit;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;

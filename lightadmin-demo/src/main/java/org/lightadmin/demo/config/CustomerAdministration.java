@@ -1,17 +1,12 @@
 package org.lightadmin.demo.config;
 
 import org.lightadmin.api.config.AdministrationConfiguration;
-import org.lightadmin.core.config.domain.common.FieldSetConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.common.PersistentFieldSetConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnit;
-import org.lightadmin.core.config.domain.configuration.EntityMetadataConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnit;
-import org.lightadmin.core.config.domain.context.ScreenContextConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnit;
-import org.lightadmin.core.config.domain.filter.FiltersConfigurationUnitBuilder;
-import org.lightadmin.core.config.domain.renderer.FieldValueRenderer;
-import org.lightadmin.core.config.domain.scope.*;
-import org.lightadmin.core.config.domain.unit.FieldSetConfigurationUnit;
+import org.lightadmin.api.config.builder.*;
+import org.lightadmin.api.config.unit.*;
+import org.lightadmin.api.config.utils.DomainTypePredicates;
+import org.lightadmin.api.config.utils.DomainTypeSpecification;
+import org.lightadmin.api.config.utils.FieldValueRenderer;
+import org.lightadmin.api.config.utils.ScopeMetadataUtils;
 import org.lightadmin.demo.model.Customer;
 import org.lightadmin.demo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +16,9 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
-import static org.lightadmin.core.config.domain.filter.FilterMetadataBuilder.filter;
-import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.all;
-import static org.lightadmin.core.config.domain.scope.ScopeMetadataUtils.specification;
+import static org.lightadmin.api.config.utils.FilterMetadataUtils.filter;
+import static org.lightadmin.api.config.utils.ScopeMetadataUtils.all;
+import static org.lightadmin.api.config.utils.ScopeMetadataUtils.specification;
 
 @SuppressWarnings("unused")
 public class CustomerAdministration extends AdministrationConfiguration<Customer> {
