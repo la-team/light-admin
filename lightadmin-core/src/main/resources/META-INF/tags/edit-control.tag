@@ -13,7 +13,7 @@
 <c:set var="attributeMetadata" value="${fieldMetadata.attributeMetadata}" scope="page"/>
 <light:edit-control-dispatcher attributeMetadata="${attributeMetadata}" customControl="${fieldMetadata.customControl}">
     <jsp:attribute name="numberEditControl">
-        <light-jsp:number-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}" allowEmpty="${not fieldMetadata.required}"/>
+        <light-jsp:number-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}" allowEmpty="${true}"/>
     </jsp:attribute>
     <jsp:attribute name="simpleEditControl">
         <light-jsp:simple-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
