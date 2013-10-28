@@ -9,8 +9,8 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.core.reporting.ProblemReporterFactory;
 import org.lightadmin.core.rest.HttpMessageConverterRefresher;
+import org.lightadmin.reporting.ProblemReporterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;

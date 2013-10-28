@@ -1,4 +1,4 @@
-package org.lightadmin.core.reporting;
+package org.lightadmin.reporting;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

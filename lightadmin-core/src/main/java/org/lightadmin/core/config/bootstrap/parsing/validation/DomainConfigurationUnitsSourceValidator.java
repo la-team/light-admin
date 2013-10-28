@@ -12,7 +12,7 @@ import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
-import org.lightadmin.core.reporting.ProblemReporter;
+import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
 
 import java.util.Collection;

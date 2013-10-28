@@ -1,4 +1,4 @@
-package org.lightadmin.core.reporting;
+package org.lightadmin.reporting;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 

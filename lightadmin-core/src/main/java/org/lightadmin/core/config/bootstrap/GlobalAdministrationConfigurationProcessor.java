@@ -8,7 +8,7 @@ import org.lightadmin.core.config.bootstrap.scanning.AdministrationClassScanner;
 import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.reporting.ProblemReporter;
+import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.core.env.Environment;
@@ -16,8 +16,8 @@ import org.springframework.core.env.Environment;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
-import static org.lightadmin.core.reporting.ProblemReporterFactory.failFastReporter;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE;
+import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
 import static org.springframework.util.ClassUtils.isAssignableValue;
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
 

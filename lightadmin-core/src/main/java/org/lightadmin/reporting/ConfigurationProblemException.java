@@ -1,4 +1,4 @@
-package org.lightadmin.core.reporting;
+package org.lightadmin.reporting;
 
 import java.util.Collection;
 

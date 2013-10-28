@@ -11,7 +11,7 @@ import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
-import org.lightadmin.core.reporting.ProblemReporter;
+import org.lightadmin.reporting.ProblemReporter;
 
 import java.util.Iterator;
 import java.util.List;
