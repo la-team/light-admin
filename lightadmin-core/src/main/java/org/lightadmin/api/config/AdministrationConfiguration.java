@@ -37,4 +37,8 @@ public abstract class AdministrationConfiguration<T> {
     public ScopesConfigurationUnit scopes(final ScopesConfigurationUnitBuilder scopeBuilder) {
         return scopeBuilder.build();
     }
+
+    public SidebarsConfigurationUnit sidebars(final SidebarsConfigurationUnitBuilder sidebarsBuilder) {
+        return sidebarsBuilder.build();
+    }
 }
