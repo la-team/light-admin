@@ -26,10 +26,8 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.domain.Specifications;
-import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
-import org.springframework.data.rest.repository.RepositoryMetadata;
 import org.springframework.data.rest.webmvc.PagingAndSorting;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.PagedResources;
@@ -129,15 +127,20 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     @RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.DELETE)
     @ResponseBody
     public ResponseEntity<?> deleteFileOfPropertyOfEntity(ServletServerHttpRequest request, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property) throws IOException {
-        final RepositoryMetadata repoMeta = repositoryMetadataFor(repository);
-        final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) repoMeta.entityMetadata().idAttribute().type());
-        final CrudRepository repo = repoMeta.repository();
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repository);
+
+        DynamicJpaRepository repo = domainTypeAdministrationConfiguration.getRepository();
+
+        DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+
+        final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) domainTypeEntityMetadata.getIdAttribute().getType());
 
         final Object entity;
-        final AttributeMetadata attrMeta;
-        if (null == (entity = repo.findOne(serId)) || null == (attrMeta = repoMeta.entityMetadata().attribute(property))) {
+        if (null == (entity = repo.findOne(serId)) || null == domainTypeEntityMetadata.getAttribute(property)) {
             return notFoundResponse(request);
         }
+
+        final AttributeMetadata attrMeta = domainTypeEntityMetadata.getAttribute(property).getAttributeMetadata();
 
         if (!isOfFileType(attrMeta)) {
             return new ResponseEntity(METHOD_NOT_ALLOWED);
@@ -150,14 +153,17 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 
     @RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET)
     public void filePropertyOfEntity(ServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property) throws IOException {
-        final RepositoryMetadata repoMeta = repositoryMetadataFor(repository);
-        final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) repoMeta.entityMetadata().idAttribute().type());
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repository);
+        DynamicJpaRepository repo = domainTypeAdministrationConfiguration.getRepository();
+        DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+        final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) domainTypeEntityMetadata.getIdAttribute().getType());
 
         final Object entity;
-        final AttributeMetadata attrMeta;
-        if (null == (entity = repoMeta.repository().findOne(serId)) || null == (attrMeta = repoMeta.entityMetadata().attribute(property))) {
+        if (null == (entity = repo.findOne(serId)) || null == domainTypeEntityMetadata.getAttribute(property)) {
             return;
         }
+
+        final AttributeMetadata attrMeta = domainTypeEntityMetadata.getAttribute(property).getAttributeMetadata();
 
         if (isOfFileType(attrMeta)) {
             fileResourceLoader.downloadFile(entity, attrMeta, (HttpServletResponse) response);
