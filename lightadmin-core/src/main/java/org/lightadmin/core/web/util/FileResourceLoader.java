@@ -1,55 +1,52 @@
 package org.lightadmin.core.web.util;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.springframework.data.rest.repository.AttributeMetadata;
-import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
-import org.springframework.data.rest.repository.jpa.JpaRepositoryMetadata;
-import org.springframework.http.ResponseEntity;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.springframework.http.HttpStatus.OK;
+import static org.lightadmin.core.util.ResponseUtils.*;
+import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 
+@SuppressWarnings("unused")
 public class FileResourceLoader {
 
-    private final DynamicJpaRepositoryExporter jpaRepositoryExporter;
-    private final LightAdminConfiguration lightAdminConfiguration;
-
-    private final ImageResourceControllerSupport imageResourceControllerSupport;
+    private final GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
     private final OperationBuilder operationBuilder;
 
-    public FileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, DynamicJpaRepositoryExporter jpaRepositoryExporter, LightAdminConfiguration lightAdminConfiguration) {
-        this.jpaRepositoryExporter = jpaRepositoryExporter;
-        this.lightAdminConfiguration = lightAdminConfiguration;
+    public FileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
+        this.globalAdministrationConfiguration = globalAdministrationConfiguration;
 
         this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, lightAdminConfiguration);
-        this.imageResourceControllerSupport = new ImageResourceControllerSupport();
     }
 
-    public ResponseEntity<?> loadFile(Object entity, AttributeMetadata attrMeta, HttpServletResponse response, int width, int height) throws IOException {
-        if (lightAdminConfiguration.isFileStreamingEnabled()) {
-            operationBuilder.getOperation(entity).performCopy(attrMeta, response.getOutputStream());
-            return new ResponseEntity(OK);
-        }
+    public void downloadFile(Object entity, AttributeMetadata attrMeta, HttpServletResponse response) throws IOException {
+        final long size = operationBuilder.getOperation(entity).performCopy(attrMeta, response.getOutputStream());
+        final String eTag = eTag(entity.getClass(), attrMeta.name(), size);
 
-        byte[] fileData = operationBuilder.getOperation(entity).perform(attrMeta);
-        return imageResourceControllerSupport.downloadImageResource(fileData, width, height);
+        addImageResourceHeaders(response, octetStreamResponseHeader(APPLICATION_OCTET_STREAM, size, eTag));
     }
 
-    public ResponseEntity<?> loadFile(Object entity, String field, HttpServletResponse response, int width, int height) throws IOException {
-        final AttributeMetadata attrMeta = attributeMetadata(entity.getClass(), field);
+    public void downloadFile(Object entity, String field, HttpServletResponse response) throws IOException {
+        Class<?> domainType = entity.getClass();
 
-        return loadFile(entity, attrMeta, response, width, height);
+        downloadFile(entity, attributeMetadata(domainType, field), response);
     }
 
-    private JpaAttributeMetadata attributeMetadata(Class<?> domainType, String field) {
-        JpaRepositoryMetadata repositoryMetadata = jpaRepositoryExporter.repositoryMetadataFor(domainType);
+    private AttributeMetadata attributeMetadata(Class<?> domainType, String field) {
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forManagedDomainType(domainType);
 
-        return repositoryMetadata.entityMetadata().attribute(field);
+        DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+
+        DomainTypeAttributeMetadata attribute = domainTypeEntityMetadata.getAttribute(field);
+
+        return attribute.getAttributeMetadata();
     }
 }

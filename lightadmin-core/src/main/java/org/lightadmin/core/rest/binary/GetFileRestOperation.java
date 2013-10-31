@@ -6,10 +6,12 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.io.FileUtils.readFileToByteArray;
+import static org.apache.commons.io.FileUtils.*;
 import static org.springframework.util.FileCopyUtils.copy;
 
 public class GetFileRestOperation extends AbstractFileRestOperation {
@@ -35,11 +37,12 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
         return new byte[]{};
     }
 
-    public void performCopy(AttributeMetadata attrMeta, OutputStream outputStream) throws IOException {
+    public long performCopy(AttributeMetadata attrMeta, OutputStream outputStream) throws IOException {
         if (attrMeta.type().equals(byte[].class)) {
             byte[] fileData = (byte[]) attrMeta.get(entity);
             if (ArrayUtils.isNotEmpty(fileData)) {
                 copy(fileData, outputStream);
+                return fileData.length;
             }
         }
 
@@ -47,14 +50,18 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
             FileReference fileReference = attrMeta.annotation(FileReference.class);
 
             if (getFile(fileReference.baseDirectory()).exists()) {
-                copyToOutputStream(referencedFile(attrMeta), outputStream);
-            } else {
-                copyToOutputStream(fileStorageFile(attrMeta), outputStream);
+                return copyToOutputStream(referencedFile(attrMeta), outputStream);
             }
+
+            return copyToOutputStream(fileStorageFile(attrMeta), outputStream);
         }
+
+        return 0l;
     }
 
-    private void copyToOutputStream(File file, OutputStream outputStream) throws IOException {
-        copy(new BufferedInputStream(new FileInputStream(file)), new BufferedOutputStream(outputStream));
+    private long copyToOutputStream(File file, OutputStream outputStream) throws IOException {
+        copy(new FileInputStream(file), outputStream);
+
+        return sizeOf(file);
     }
 }

@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +17,7 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 
 import java.io.Serializable;
 
+import static org.springframework.http.HttpStatus.FORBIDDEN;
 import static org.springframework.util.ClassUtils.isAssignable;
 
 @Controller
@@ -42,20 +42,18 @@ public class ApplicationController {
     @Autowired
     private LightAdminConfiguration lightAdminContext;
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
         return new ModelAndView("error-page").addObject("exception", ex);
     }
 
     @ExceptionHandler(NoSuchRequestHandlingMethodException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
     @RequestMapping(value = "/page-not-found", method = RequestMethod.GET)
     public String handlePageNotFound() {
         return "page-not-found";
     }
 
-    @ResponseStatus(HttpStatus.FORBIDDEN)
+    @ResponseStatus(FORBIDDEN)
     @RequestMapping(value = "/access-denied", method = RequestMethod.GET)
     public String handleAccessDenied() {
         return "access-denied";

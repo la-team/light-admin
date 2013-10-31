@@ -4,7 +4,6 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.StandardLightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.rest.DomainTypeToResourceConverter;
-import org.lightadmin.core.rest.DynamicJpaRepositoryExporter;
 import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
 import org.lightadmin.core.view.SeparateContainerTilesView;
@@ -20,6 +19,8 @@ import org.springframework.core.convert.ConversionService;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.ServletContextResourceLoader;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
@@ -57,8 +58,8 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/styles/**").addResourceLocations("classpath:/META-INF/resources/styles/").setCachePeriod(31556926);
-        registry.addResourceHandler("/scripts/**").addResourceLocations("classpath:/META-INF/resources/scripts/").setCachePeriod(31556926);
+        registry.addResourceHandler("/styles/**").addResourceLocations("classpath:/META-INF/resources/styles/");
+        registry.addResourceHandler("/scripts/**").addResourceLocations("classpath:/META-INF/resources/scripts/");
         registry.addResourceHandler("/images/**").addResourceLocations("classpath:/META-INF/resources/images/").setCachePeriod(31556926);
     }
 
@@ -76,8 +77,8 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     @Autowired
-    public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, DynamicJpaRepositoryExporter jpaRepositoryExporter, LightAdminConfiguration lightAdminContext) {
-        return new FileResourceLoader(globalAdministrationConfiguration, jpaRepositoryExporter, lightAdminContext);
+    public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
+        return new FileResourceLoader(globalAdministrationConfiguration, lightAdminConfiguration);
     }
 
     @Bean
@@ -114,12 +115,26 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
         exceptionResolvers.add(exceptionHandlerResolver);
     }
 
+    @Override
+    public Validator getValidator() {
+        return validator();
+    }
+
+    @Bean
+    public LocalValidatorFactoryBean validator() {
+        LocalValidatorFactoryBean validator = new LocalValidatorFactoryBean();
+        validator.setValidationMessageSource(messageSource());
+        validator.afterPropertiesSet();
+        return validator;
+    }
+
     @Bean
     public MessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:messages");
         messageSource.setDefaultEncoding("UTF-8");
-        messageSource.setCacheSeconds(5);
+        messageSource.setCacheSeconds(0);
+        messageSource.setFallbackToSystemLocale(false);
         return messageSource;
     }
 

@@ -1,5 +1,6 @@
 package org.lightadmin.core.config;
 
+import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import org.lightadmin.core.config.context.LightAdminContextConfiguration;
 import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
@@ -69,11 +70,10 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
         registerTilesDecorationFilter(servletContext);
 
-//        registerGZipFilter(servletContext,
-//                "/styles/*",
-//                "/scripts/*",
-//                "/images/*"
-//        );
+        registerGZipFilter(servletContext,
+                resourceMapping("/styles/*", servletContext),
+                resourceMapping("/scripts/*", servletContext)
+        );
     }
 
     private void registerLightAdminDispatcher(final ServletContext servletContext) {
@@ -129,11 +129,11 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         servletContext.addFilter("lightAdminCharsetFilter", characterEncodingFilter()).addMappingForServletNames(null, false, urlMapping);
     }
 
-//    private void registerGZipFilter(ServletContext servletContext, String... urlMappings) {
-//        GzipFilter gzipFilter = new GzipFilter();
-//
-//        servletContext.addFilter("lightAdminGzipFilter", gzipFilter).addMappingForUrlPatterns(null, false, urlMappings);
-//    }
+    private void registerGZipFilter(ServletContext servletContext, String... urlMappings) {
+        GzipFilter gzipFilter = new GzipFilter();
+
+        servletContext.addFilter("lightAdminGzipFilter", gzipFilter).addMappingForUrlPatterns(null, false, urlMappings);
+    }
 
     private AnnotationConfigWebApplicationContext lightAdminApplicationContext(final ServletContext servletContext) {
         AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
@@ -167,6 +167,14 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
     private boolean notValidBaseUrl(String url) {
         return !BASE_URL_PATTERN.matcher(url).matches();
+    }
+
+    private String resourceMapping(String resource, ServletContext servletContext) {
+        if (rootUrl(lightAdminBaseUrl(servletContext))) {
+            return resource;
+        }
+
+        return lightAdminBaseUrl(servletContext) + resource;
     }
 
     private String customResourceServletMapping(ServletContext servletContext) {

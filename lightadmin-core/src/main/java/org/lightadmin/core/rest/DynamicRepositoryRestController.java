@@ -13,7 +13,6 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.rest.binary.OperationBuilder;
@@ -63,6 +62,7 @@ import static java.util.Arrays.asList;
 import static java.util.Collections.singletonMap;
 import static org.lightadmin.api.config.utils.ScopeMetadataUtils.isPredicateScope;
 import static org.lightadmin.api.config.utils.ScopeMetadataUtils.isSpecificationScope;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isOfFileType;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
@@ -106,7 +106,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             attrMeta.set(null, entity);
         } else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
             attrMeta.set(null, entity);
-        } else if (DomainTypeAttributeType.isOfFileType(attrMeta)) {
+        } else if (isOfFileType(attrMeta)) {
             operationBuilder.saveOperation(entity).perform(attrMeta, incomingVal);
         } else {
             attrMeta.set(incomingVal, entity);
@@ -139,7 +139,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             return notFoundResponse(request);
         }
 
-        if (!DomainTypeAttributeType.isOfFileType(attrMeta)) {
+        if (!isOfFileType(attrMeta)) {
             return new ResponseEntity(METHOD_NOT_ALLOWED);
         }
 
@@ -149,21 +149,19 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     }
 
     @RequestMapping(value = "/{repository}/{id}/{property}/file", method = RequestMethod.GET)
-    @ResponseBody
-    public ResponseEntity<?> filePropertyOfEntity(ServletServerHttpRequest request, ServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property, @RequestParam(value = "width", defaultValue = "-1") int width, @RequestParam(value = "height", defaultValue = "-1") int height) throws IOException {
+    public void filePropertyOfEntity(ServletResponse response, URI baseUri, @PathVariable String repository, @PathVariable String id, @PathVariable String property) throws IOException {
         final RepositoryMetadata repoMeta = repositoryMetadataFor(repository);
         final Serializable serId = stringToSerializable(id, (Class<? extends Serializable>) repoMeta.entityMetadata().idAttribute().type());
 
         final Object entity;
         final AttributeMetadata attrMeta;
         if (null == (entity = repoMeta.repository().findOne(serId)) || null == (attrMeta = repoMeta.entityMetadata().attribute(property))) {
-            return notFoundResponse(request);
+            return;
         }
 
-        if (DomainTypeAttributeType.isOfFileType(attrMeta)) {
-            return fileResourceLoader.loadFile(entity, attrMeta, (HttpServletResponse) response, width, height);
+        if (isOfFileType(attrMeta)) {
+            fileResourceLoader.downloadFile(entity, attrMeta, (HttpServletResponse) response);
         }
-        return new ResponseEntity(BAD_REQUEST);
     }
 
     @RequestMapping(value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST})

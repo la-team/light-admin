@@ -7,7 +7,6 @@ import org.apache.tika.parser.ParseContext;
 import org.apache.tika.parser.Parser;
 import org.apache.tika.sax.BodyContentHandler;
 import org.apache.tika.sax.ContentHandlerDecorator;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 
@@ -22,8 +21,9 @@ import static org.imgscalr.Scalr.Method.SPEED;
 import static org.imgscalr.Scalr.Mode.AUTOMATIC;
 import static org.imgscalr.Scalr.OP_ANTIALIAS;
 import static org.imgscalr.Scalr.resize;
+import static org.lightadmin.core.util.ResponseUtils.responseHeader;
 import static org.springframework.http.HttpStatus.*;
-import static org.springframework.http.MediaType.IMAGE_JPEG;
+import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 import static org.springframework.http.MediaType.parseMediaType;
 
 @SuppressWarnings("unused")
@@ -63,16 +63,7 @@ public class ImageResourceControllerSupport {
     }
 
     private ResponseEntity<?> imageResourceResponse(byte[] content, MediaType mediaType) {
-        return new ResponseEntity<byte[]>(content, imageResponseHeader(content, mediaType), OK);
-    }
-
-    protected HttpHeaders imageResponseHeader(byte[] content, MediaType mediaType) {
-        HttpHeaders responseHeaders = new HttpHeaders();
-        responseHeaders.setContentLength(content.length);
-        responseHeaders.setContentType(mediaType);
-        responseHeaders.setCacheControl("public");
-        responseHeaders.set("Content-Disposition", "inline; filename=\"image." + mediaType.getSubtype() + "\"");
-        return responseHeaders;
+        return new ResponseEntity<byte[]>(content, responseHeader(content, mediaType), OK);
     }
 
     private ResponseEntity serverErrorResponse() {
@@ -92,7 +83,7 @@ public class ImageResourceControllerSupport {
             parser.parse(new ByteArrayInputStream(bytes), contentHandler, metadata, parseContext);
             return parseMediaType(metadata.get("Content-Type"));
         } catch (Exception e) {
-            return IMAGE_JPEG;
+            return APPLICATION_OCTET_STREAM;
         }
     }
 
