@@ -1365,7 +1365,7 @@ button.ui-button::-moz-focus-inner {
 }
 
 .ui-dialog form {
-    text-align: center;
+    /*text-align: center;*/
 }
 
 .ui-dialog .icon {
