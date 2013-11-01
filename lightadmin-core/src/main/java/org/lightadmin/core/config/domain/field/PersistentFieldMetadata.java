@@ -4,7 +4,7 @@ import org.hibernate.validator.constraints.NotBlank;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
 
 import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
@@ -41,12 +41,7 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
     public boolean isRequired() {
         return attributeMetadata.hasAnnotation(NotNull.class)
                 || attributeMetadata.hasAnnotation(NotBlank.class)
-                || attributeMetadata.hasAnnotation(org.hibernate.validator.constraints.NotEmpty.class)
-                || (attributeMetadata.hasAnnotation(Column.class) && !attributeMetadata.annotation(Column.class).nullable()
-                || (attributeMetadata.hasAnnotation(Basic.class) && !attributeMetadata.annotation(Basic.class).optional())
-                || (attributeMetadata.hasAnnotation(ManyToOne.class) && !attributeMetadata.annotation(ManyToOne.class).optional())
-                || (attributeMetadata.hasAnnotation(OneToOne.class) && !attributeMetadata.annotation(OneToOne.class).optional())
-        );
+                || attributeMetadata.hasAnnotation(org.hibernate.validator.constraints.NotEmpty.class);
     }
 
     @Override
