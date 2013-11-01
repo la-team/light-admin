@@ -56,7 +56,7 @@
                     </label>
 
                     <div class="formRight">
-                        <light-jsp:edit-control fieldMetadata="${fieldEntry}" cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
+                        <light-jsp:edit-control domainType="${domainTypeAdministrationConfiguration.domainType}" fieldMetadata="${fieldEntry}" cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
                     </div>
                     <div class="fix"></div>
                 </div>

@@ -4,6 +4,7 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
+<%@ attribute name="domainType" required="true" type="java.lang.Class" %>
 <%@ attribute name="fieldMetadata" required="true" type="org.lightadmin.core.config.domain.field.PersistentFieldMetadata" %>
 <%@ attribute name="customControl" required="false" type="javax.servlet.jsp.tagext.SimpleTag" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
@@ -28,10 +29,10 @@
         <light-jsp:date-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}"/>
     </jsp:attribute>
     <jsp:attribute name="n2oneEditControl">
-        <light-jsp:n2one-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}" modalViewEnabled="${true}"/>
+        <light-jsp:n2one-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}" modalViewEnabled="${true}"/>
     </jsp:attribute>
     <jsp:attribute name="n2manyEditControl">
-        <light-jsp:n2many-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}" modalViewEnabled="${true}"/>
+        <light-jsp:n2many-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" disabled="${disabled}" modalViewEnabled="${true}"/>
     </jsp:attribute>
     <jsp:attribute name="mapEditControl">
         <jsp:text>Map is not supported</jsp:text>

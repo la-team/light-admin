@@ -3,6 +3,7 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
+<%@ attribute name="domainType" required="true" type="java.lang.Class" %>
 <%@ attribute name="attributeMetadata" required="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
@@ -19,7 +20,7 @@
 
 <c:set var="domainTypeAdministrationConfiguration" value="${light:domainTypeAdministrationConfigurationFor(attributeMetadata.elementType)}"/>
 
-<c:if test="${(not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
+<c:if test="${(domainType ne attributeMetadata.elementType) and (not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
 
     <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
     <light:url var="domainBaseUrl" value='${light:domainBaseUrl(domainTypeAdministrationConfiguration)}'/>

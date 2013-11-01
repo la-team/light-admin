@@ -4,6 +4,7 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
+<%@ attribute name="domainType" required="true" type="java.lang.Class" %>
 <%@ attribute name="attributeMetadata" required="true" type="org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
@@ -25,10 +26,10 @@
         <jsp:text>File is not supported</jsp:text>
     </jsp:attribute>
     <jsp:attribute name="n2oneEditControl">
-        <light-jsp:n2one-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" modalViewEnabled="${false}"/>
+        <light-jsp:n2one-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" modalViewEnabled="${false}"/>
     </jsp:attribute>
     <jsp:attribute name="n2manyEditControl">
-        <light-jsp:n2many-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" modalViewEnabled="${false}"/>
+        <light-jsp:n2many-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}" cssClass="${cssClass}" modalViewEnabled="${false}"/>
     </jsp:attribute>
     <jsp:attribute name="mapEditControl">
         <jsp:text>Map is not supported</jsp:text>
