@@ -253,11 +253,10 @@ function loadDomainObjectForFormView(form) {
                             editor.prop('checked', attrVal);
                             break;
                         case 'FILE':
-                            $(editor).parent('div').parent('div').prepend(FieldValueRenderer.render(data[attr], 'formView'));
-                            if (attrVal.length > 0) {
-                                $(editor).parent('div').prepend(removeFileLink(editor, restRepoUrl + '/' + attr + '/file'));
+                            var fileSelected = attrVal.length > 0;
+                            if (fileSelected) {
+                                selectFileFieldValue(form, attr, data[attr], restRepoUrl);
                             }
-
                             editor.val(attrVal.toString());
                             break;
                         case 'STRING':
@@ -294,25 +293,56 @@ function loadDomainObjectForFormView(form) {
     });
 }
 
-function removeFileLink(editor, filePropertyUrl) {
-    var fieldName = $(editor).attr('name');
-    var jLink = $("<a href='#" + fieldName + "'>[Remove File]</a>");
+function selectFileFieldValue(form, attr, attr_value, restRepoUrl) {
+    var editor = form.find('[name="' + attr + '"]');
+    var field_name = $(editor).attr('name');
+    var url = restRepoUrl + '/' + attr + '/file';
 
-    jLink.click(function () {
+    var uploader_container = $(editor).parent('div');
+
+    var remove_button = $('span.action.remove', uploader_container);
+    var add_button = $("span.action.add", uploader_container);
+
+    var plupload_container = $(uploader_container).parent('div');
+
+    var uploader = $(plupload_container).data('plupload');
+
+    var picture_container_id = field_name + '-picture-container';
+
+    var picture_container_html = "<div id='" + picture_container_id + "' style='margin-top:10px;'>" + FieldValueRenderer.render(attr_value, 'formView') + "</div>";
+
+    $('span.filename', uploader_container).html('File selected');
+
+    uploader_container.after(picture_container_html);
+
+    add_button.hide();
+    remove_button.show();
+
+    remove_button.click(function () {
         jConfirm('Are you sure you want to remove this file from server? It won\'t be recoverable!', 'Confirmation Dialog', function (r) {
             if (r) {
                 $.ajax({
                     type: 'DELETE',
-                    url: filePropertyUrl,
+                    url: url,
                     contentType: 'application/json',
                     dataType: 'json',
                     success: function () {
                         $(editor).val('');
-                        $("img[name='" + fieldName + "']").remove();
-                        jLink.remove();
+                        $('#' + picture_container_id).remove();
+                        remove_button.hide();
+                        add_button.show();
+
+                        if (uploader.files.length > 0) {
+                            $.each(uploader.files, function () {
+                                uploader.removeFile(this);
+                            });
+                            uploader.refresh();
+                        }
+
+                        $('span.filename', uploader_container).html('No file selected');
                     },
                     statusCode: {
-                        409: function (jqXHR, textStatus, errorThrown) {
+                        409: function (jqXHR) {
                             var errorMessage = $.parseJSON(jqXHR.responseText)['message'];
                             jAlert(errorMessage, 'Remove operation failure');
                         }
@@ -321,7 +351,6 @@ function removeFileLink(editor, filePropertyUrl) {
             }
         });
     });
-    return jLink;
 }
 
 function removeDomainObject(entityId, restUrl, callback) {
@@ -334,7 +363,7 @@ function removeDomainObject(entityId, restUrl, callback) {
             callback();
         },
         statusCode: {
-            409: function (jqXHR, textStatus, errorThrown) {
+            409: function (jqXHR) {
                 var errorMessage = $.parseJSON(jqXHR.responseText)['message'];
                 jAlert(errorMessage, 'Remove operation failure');
             }
@@ -619,9 +648,8 @@ function decorateFileUploader(container, file_input_id, attribute_name, browse_b
         init: {
             FilesAdded: function (up, files) {
                 plupload.each(files, function (file) {
-                    var filesContainer = $('div.files', $(container_selector));
-                    filesContainer.empty();
-                    filesContainer.prepend($('<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>' + '</div>'));
+                    var filesContainer = $('span.filename', $(container_selector));
+                    filesContainer.html($('<div id="' + file.id + '">' + file.name + ' (' + plupload.formatSize(file.size) + ') <b></b>' + '</div>'));
                 });
                 up.refresh();
 
@@ -657,4 +685,6 @@ function decorateFileUploader(container, file_input_id, attribute_name, browse_b
     });
 
     uploader.init();
+
+    $(container_selector).data('plupload', uploader);
 }

@@ -19,10 +19,12 @@
 <c:set var="filePropertyUrl" value="${domainObjectUrl}/${attributeMetadata.name}/file" scope="page"/>
 
 <div id="${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}" style="text-align: left;">
-    <div class="files"></div>
-    <input id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}" name="${attributeMetadata.name}" type="hidden"/>
-
-    <a id="${attributeMetadata.name}-pickfiles${dialogMode ? '-dialog' : ''}" href="javascript:;">[Select file]</a>
+    <div class="uploader" style="z-index: 1;">
+        <input type="hidden" class="fileInput" id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}" name="${attributeMetadata.name}" size="24" style="opacity: 0;">
+        <span class="filename">No file selected</span>
+        <span class="action add" id="${attributeMetadata.name}-pickfiles${dialogMode ? '-dialog' : ''}">Choose File</span>
+        <span style="display: none;" class="action remove" id="${attributeMetadata.name}-removefiles{dialogMode ? '-dialog' : ''}">Remove File</span>
+    </div>
 </div>
 
 <script type="text/javascript">
