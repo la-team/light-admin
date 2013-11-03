@@ -68,8 +68,10 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
     }
 
     private void performSaveToFileStorage(AttributeMetadata attrMeta, byte[] incomingVal) throws IOException {
-        final File file = fileStorageFile(attrMeta);
         String relativePath = relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attrMeta);
+
+        File file = getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePath);
+
         if (isEmpty(incomingVal)) {
             resetAttrValue(attrMeta);
             deleteQuietly(file);

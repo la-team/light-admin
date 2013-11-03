@@ -14,7 +14,8 @@ import java.io.Serializable;
 
 import static java.lang.String.valueOf;
 import static org.apache.commons.io.FileUtils.getFile;
-import static org.lightadmin.core.rest.binary.FileStorageUtils.*;
+import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToDomainStorageAttributeDirectory;
+import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToDomainStorageDirectory;
 
 public abstract class AbstractFileRestOperation {
 
@@ -66,7 +67,7 @@ public abstract class AbstractFileRestOperation {
     }
 
     protected File fileStorageFile(AttributeMetadata attributeMetadata) {
-        return getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attributeMetadata));
+        return getFile(lightAdminConfiguration.getFileStorageDirectory(), valueOf(attributeMetadata.get(entity)));
     }
 
     protected DynamicJpaRepository repository() {
