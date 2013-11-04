@@ -407,11 +407,11 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback) {
                     if (!error.field) {
                         errorMessages += errorMessage + '<br>';
                     }
-                    var messageDiv = $('#' + error.field + '-error');
+                    var messageDiv = $('#' + error.field + '-error', $(domForm));
                     if (messageDiv.length > 0) {
                         messageDiv.text(errorMessage);
                     }
-                    var controlGroup = $('#' + error.field + '-control-group');
+                    var controlGroup = $('#' + error.field + '-control-group', $(domForm));
                     if (controlGroup.length > 0) {
                         controlGroup.addClass('error');
                     }
