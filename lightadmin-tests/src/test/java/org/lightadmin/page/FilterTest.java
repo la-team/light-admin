@@ -1,7 +1,6 @@
 package org.lightadmin.page;
 
 import org.junit.After;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightadmin.LoginOnce;
 import org.lightadmin.RunWithConfiguration;
@@ -81,17 +80,16 @@ public class FilterTest extends SeleniumIntegrationTest {
 
 	//Covers LA-46: https://github.com/max-dev/light-admin/issues/46
 	@Test
-	@Ignore // TODO: max: Will be fixed later
 	public void canFilterByTextWithSpecialCharacters() {
 		getStartPage().openAdvancedSearch();
-		getStartPage().filter( "textField", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½" );
+		getStartPage().filter( "textField", "管#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½" );
 
 		assertTableData( expectedResult3, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
 
 	private static final String[][] expectedResult1 = {{"1", "integer search test", "1234567", "521", "22.2", ""}};
 	private static final String[][] expectedResult2 = {{"2", "decimal search test", "456", "31264", "1499.99", ""}};
-	private static final String[][] expectedResult3 = {{"3", "#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½", "789", "62342", "22.2", ""}};
+	private static final String[][] expectedResult3 = {{"3", "管#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½", "789", "62342", "22.2", ""}};
 	private static final String[][] expectedResult4 = {{"4", "Case Sensitivity Test", "901", "823", "22.2", "Yes"}};
 	private static final String[][] expectedResult5 = {
 		{"6", "query partial search test", "234", "9164", "22.2", "Yes"},

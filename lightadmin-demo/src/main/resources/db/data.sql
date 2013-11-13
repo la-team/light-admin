@@ -41,7 +41,7 @@ insert into customer_discount (customer_id, discount_program_id) values (3, 2);
 
 insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield, booleanField) values (1, 'integer search test', 1234567, 521, 22.2, null);
 insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield, booleanField) values (2, 'decimal search test', 456, 31264, 1499.99, null);
-insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield, booleanField) values (3, '#<,&«$''(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½', 789, 62342, 22.2, null);
+insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield, booleanField) values (3, '管#<,&«$''(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½', 789, 62342, 22.2, null);
 insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield, booleanField) values (4, 'Case Sensitivity Test', 901, 823, 22.2, 1);
 insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield, booleanField) values (5, 'Case sensitivity test', 901, 9521, 22.2, 0);
 insert into FilterTestEntity (id, textfield, integerfield, primitiveintegerfield, decimalfield, booleanField) values (6, 'query partial search test', 234, 9164, 22.2, 1);
