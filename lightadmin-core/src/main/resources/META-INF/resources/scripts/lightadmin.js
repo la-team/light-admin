@@ -262,11 +262,15 @@ function loadDomainObjectForFormView(form) {
                         case 'STRING':
                             if (editor.hasClass('wysiwyg')) {
                                 editor.wysiwyg("insertHtml", attrVal);
-                            } else {
-                                editor.val(attrVal.toString());
+                                break;
                             }
-                            break;
                         default:
+                            if (editor.prop('tagName')=='SELECT' && editor.find("option[value='"+attrVal+"']").length<=0) {
+                                editor.append($('<option>', {
+                                    value: attrVal,
+                                    text : attrVal
+                                }));
+                            }
                             editor.val(attrVal.toString());
                             break;
                     }
