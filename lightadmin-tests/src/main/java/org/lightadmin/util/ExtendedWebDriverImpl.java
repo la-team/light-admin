@@ -75,6 +75,7 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 
 	@Override
 	public void clear( final WebElement field ) {
+		webDriver.switchTo().window( webDriver.getWindowHandle() );
 		field.click();
 		field.clear();
 		field.sendKeys( Keys.TAB );
