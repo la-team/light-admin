@@ -2,12 +2,14 @@ package org.lightadmin.crudOperations.edit;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.lightadmin.LoginOnce;
 import org.lightadmin.RunWithConfiguration;
 import org.lightadmin.SeleniumIntegrationTest;
-import org.lightadmin.config.*;
+import org.lightadmin.config.CustomerTestEntityConfiguration;
+import org.lightadmin.config.OrderTestEntityWithComplexFields;
+import org.lightadmin.config.TestAddressConfiguration;
+import org.lightadmin.config.TestLineItemConfiguration;
 import org.lightadmin.data.Domain;
 import org.lightadmin.page.EditPage;
 import org.lightadmin.page.ShowViewPage;
@@ -19,7 +21,6 @@ import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 		CustomerTestEntityConfiguration.class,
 		OrderTestEntityWithComplexFields.class})
 @LoginOnce( domain = Domain.TEST_ORDERS )
-@Ignore
 public class ComplexFields extends SeleniumIntegrationTest {
 
 	private EditPage editPage;
@@ -109,9 +110,9 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	private void clearAllFieldsAndSave() {
 		editPage = getStartPage().editItem( 4 );
 
-		editPage.deselect( "customer" );
-		editPage.clearAllSelections( "shippingAddresses" );
-		editPage.clearAllSelections( "lineItems" );
+		editPage.clearSelection( "customer" );
+		editPage.clearSelection( "shippingAddresses" );
+		editPage.clearSelection( "lineItems" );
 		editPage.clear( "dueDate" );
 
 		showView = editPage.submit();
@@ -120,8 +121,9 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	private void addSelectionsAndSave() {
 		editPage = getStartPage().editItem( 5 );
 
-		editPage.multiSelect( "shippingAddresses", new String[]{ "Kreschatik, Kiev, Ukraine" } );
-		editPage.multiSelect( "lineItems", new String[]{ "110. Product: Product 3; Amount: 4; Total: 196.00", "114. Product: Product 1; Amount: 7; Total: 3493.00" } );
+		editPage.select( "shippingAddresses", "Kreschatik, Kiev, Ukraine" );
+		editPage.select( "lineItems",
+				"110. Product: Product 3; Amount: 4; Total: 196.00", "114. Product: Product 1; Amount: 7; Total: 3493.00" );
 
 		showView = editPage.submit();
 	}

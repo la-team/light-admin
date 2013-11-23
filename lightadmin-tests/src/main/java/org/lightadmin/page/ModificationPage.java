@@ -2,13 +2,14 @@ package org.lightadmin.page;
 
 import org.lightadmin.SeleniumContext;
 import org.lightadmin.component.WarningDialog;
+import org.lightadmin.field.BaseSelect;
 import org.lightadmin.field.DateField;
 import org.lightadmin.field.MultiSelect;
+import org.lightadmin.field.SmartSelect;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
-import org.openqa.selenium.support.ui.Select;
 import org.springframework.core.io.DefaultResourceLoader;
 
 import java.awt.*;
@@ -48,6 +49,8 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		} catch ( TimeoutException e ) {
 			fail( "Save button is not displayed" );
 		}
+
+		webDriver().forceFocusOnCurrentWindow();
 	}
 
 	public String getDomainName() {
@@ -74,26 +77,12 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		getFieldByName( booleanField ).click();
 	}
 
-	private WebElement getFieldByName( String booleanField ) {
-		return editForm.findElement( By.name( booleanField ) );
+	public void select( String fieldName, String... values ) {
+		getSelectField( fieldName ).select( values );
 	}
 
-	public void select( String fieldName, String value ) {
-		new Select( getFieldByName( fieldName ) ).selectByVisibleText( value );
-	}
-
-	public void multiSelect( String fieldName, String[] values ) {
-		new MultiSelect(
-				getMultiSelectElement( fieldName ), seleniumContext )
-				.multiSelect( values );
-	}
-
-	public void deselect( String fieldName ) {
-		new Select( getFieldByName( fieldName ) ).selectByIndex( 0 );
-	}
-
-	public void clearAllSelections( String fieldName ) {
-		new MultiSelect( getMultiSelectElement( fieldName ), seleniumContext ).clear();
+	public void clearSelection( String fieldName ) {
+		getSelectField( fieldName ).clear();
 	}
 
 	public void replaceFieldSelections( String fieldName, String[] optionsToRemove, String[] optionsToAdd ) {
@@ -102,11 +91,6 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 
 	public String selectDateOfCurrentMonth( String fieldName, String date ) {
 		return new DateField( editForm.findElement( By.name( fieldName ) ), seleniumContext ).selectDateOfCurrentMonth( date );
-	}
-
-	private WebElement getMultiSelectElement( String fieldName ) {
-		return editForm.findElement(
-				By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" ) );
 	}
 
 	public boolean isFieldEditable( String fieldName ) {
@@ -123,6 +107,23 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		addFile( fileName );
 
 		return new WarningDialog( seleniumContext );
+	}
+
+	private BaseSelect getSelectField( String fieldName ) {
+		final WebElement theSelect = editForm.findElement( By.xpath( "//div[@id='" + fieldName + "-control-group']//div[contains(@class,'chzn-container')]" ) );
+		if ( theSelect.getAttribute( "class" ).contains( "multi" ) ) {
+			return new MultiSelect( theSelect, seleniumContext );
+		} else
+			return new SmartSelect( theSelect.findElement( By.xpath( "a" ) ), seleniumContext );
+	}
+
+	private WebElement getMultiSelectElement( String fieldName ) {
+		return editForm.findElement(
+				By.xpath( "//div[@id='" + fieldName + "-control-group']//div[@class='chzn-container chzn-container-multi']" ) );
+	}
+
+	private WebElement getFieldByName( String fieldName ) {
+		return editForm.findElement( By.name( fieldName ) );
 	}
 
 	private void addFile( String fileName ) throws AWTException, IOException {

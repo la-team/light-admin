@@ -19,4 +19,6 @@ public interface ExtendedWebDriver extends WebDriver {
 	public void clearAndType( WebElement element, String text );
 
 	public void clear( WebElement element );
+
+	public void forceFocusOnCurrentWindow();
 }
