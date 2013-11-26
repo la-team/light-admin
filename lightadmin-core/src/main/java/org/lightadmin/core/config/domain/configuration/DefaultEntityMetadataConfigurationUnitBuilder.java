@@ -4,7 +4,8 @@ import org.lightadmin.api.config.builder.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.common.AbstractFieldSetConfigurationBuilder;
-import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
+
+import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory.forNamedPersistentEntity;
 
 public class DefaultEntityMetadataConfigurationUnitBuilder extends AbstractFieldSetConfigurationBuilder<EntityMetadataConfigurationUnit, EntityMetadataConfigurationUnitBuilder>
         implements EntityMetadataConfigurationUnitBuilder {
@@ -20,8 +21,7 @@ public class DefaultEntityMetadataConfigurationUnitBuilder extends AbstractField
 
     @Override
     public EntityMetadataConfigurationUnitBuilder nameField(final String nameField) {
-        EntityNameExtractor<?> nameExtractor = EntityNameExtractorFactory.forNamedPersistentEntity(nameField);
-        configurationUnit.setNameExtractor(nameExtractor);
+        configurationUnit.setNameExtractor(forNamedPersistentEntity(nameField));
         return this;
     }
 
@@ -39,7 +39,7 @@ public class DefaultEntityMetadataConfigurationUnitBuilder extends AbstractField
 
     @Override
     public EntityMetadataConfigurationUnitBuilder pluralName(final String pluralName) {
-        configurationUnit.setSingularName(pluralName);
+        configurationUnit.setPluralName(pluralName);
         return this;
     }
 
