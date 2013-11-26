@@ -4,16 +4,15 @@ import com.google.common.base.Function;
 import com.google.common.base.Predicate;
 import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.springframework.util.ClassUtils;
 
-import javax.annotation.Nullable;
 import java.util.Comparator;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.springframework.util.ClassUtils.isAssignableValue;
 
 public class FieldMetadataUtils {
 
@@ -115,7 +114,7 @@ public class FieldMetadataUtils {
     private static class FieldMetadataExtractor implements Function<FilterMetadata, FieldMetadata> {
 
         @Override
-        public FieldMetadata apply(@Nullable final FilterMetadata filterMetadata) {
+        public FieldMetadata apply(final FilterMetadata filterMetadata) {
             return filterMetadata.getFieldMetadata();
         }
     }
@@ -129,8 +128,8 @@ public class FieldMetadataUtils {
         }
 
         @Override
-        public boolean apply(@Nullable final FieldMetadata fieldMetadata) {
-            return ClassUtils.isAssignableValue(fieldMetadataClass, fieldMetadata);
+        public boolean apply(final FieldMetadata fieldMetadata) {
+            return isAssignableValue(fieldMetadataClass, fieldMetadata);
         }
     }
 }

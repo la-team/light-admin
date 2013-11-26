@@ -1,12 +1,13 @@
 package org.lightadmin.core.config.domain;
 
-import org.apache.commons.lang.StringUtils;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+
+import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 @SuppressWarnings("unchecked")
 public class GlobalAdministrationConfiguration {
@@ -71,7 +72,7 @@ public class GlobalAdministrationConfiguration {
 
     public DomainTypeAdministrationConfiguration forEntityName(String entityName) {
         for (DomainTypeAdministrationConfiguration configuration : managedDomainTypeConfigurations.values()) {
-            if (StringUtils.equalsIgnoreCase(entityName, configuration.getDomainTypeName())) {
+            if (equalsIgnoreCase(entityName, configuration.getDomainTypeName())) {
                 return configuration;
             }
         }

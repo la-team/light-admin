@@ -1,5 +1,6 @@
 package org.lightadmin.core.search;
 
+import org.apache.commons.lang3.BooleanUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
@@ -17,9 +18,8 @@ import java.util.List;
 import java.util.Map;
 
 import static com.google.common.collect.Lists.newLinkedList;
-import static org.apache.commons.lang.BooleanUtils.toBoolean;
-import static org.apache.commons.lang.StringUtils.isNotBlank;
-import static org.apache.commons.lang.StringUtils.trim;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.trim;
 import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
 import static org.lightadmin.core.util.NumberUtils.isNumber;
 import static org.lightadmin.core.util.NumberUtils.parseNumber;
@@ -149,7 +149,7 @@ public class SpecificationCreator {
 
             for (String parameterValue : parameterValues) {
                 if (isNotBlank(parameterValue)) {
-                    final boolean boolValue = toBoolean(parameterValue);
+                    final boolean boolValue = BooleanUtils.toBoolean(parameterValue);
 
                     attributesPredicates.add(builder.equal(root.<String>get(attributeName), boolValue));
                 }

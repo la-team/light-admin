@@ -10,10 +10,10 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.apache.commons.io.FileUtils.*;
-import static org.apache.commons.lang.ArrayUtils.isEmpty;
 import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToStoreBinaryAttrValue;
 import static org.springframework.security.crypto.codec.Base64.decode;
 import static org.springframework.security.crypto.codec.Base64.isBase64;
+import static org.springframework.util.StringUtils.isEmpty;
 
 public class SaveFileRestOperation extends AbstractFileRestOperation {
 

@@ -1,12 +1,12 @@
 package org.lightadmin.core.view.preparer.support;
 
-import org.apache.commons.lang.StringUtils;
 import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.beans.SimpleMenuItem;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.util.Transformer;
 
 import static org.lightadmin.core.web.util.ApplicationUrlResolver.domainBaseUrl;
+import static org.springframework.util.StringUtils.capitalize;
 
 public class DomainConfigToMenuItemTransformer implements Transformer<DomainTypeAdministrationConfiguration, MenuItem> {
 
@@ -17,7 +17,7 @@ public class DomainConfigToMenuItemTransformer implements Transformer<DomainType
 
     @Override
     public MenuItem apply(final DomainTypeAdministrationConfiguration domainConfiguration) {
-        return menuItem(StringUtils.capitalize(domainConfiguration.getEntityConfiguration().getPluralName()), domainBaseUrl(domainConfiguration));
+        return menuItem(capitalize(domainConfiguration.getEntityConfiguration().getPluralName()), domainBaseUrl(domainConfiguration));
     }
 
     private MenuItem menuItem(final String name, final String url) {

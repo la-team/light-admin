@@ -1,6 +1,6 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.easymock.Capture;
 import org.easymock.CaptureType;
 import org.easymock.EasyMock;

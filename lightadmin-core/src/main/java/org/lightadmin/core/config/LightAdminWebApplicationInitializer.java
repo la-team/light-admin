@@ -1,6 +1,7 @@
 package org.lightadmin.core.config;
 
 import net.sf.ehcache.constructs.web.filter.GzipFilter;
+import org.apache.commons.lang3.BooleanUtils;
 import org.lightadmin.core.config.context.LightAdminContextConfiguration;
 import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
@@ -21,8 +22,7 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.lang.BooleanUtils.toBoolean;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 import static org.lightadmin.core.web.util.WebContextUtils.servletContextAttributeName;
 import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
@@ -216,7 +216,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
     }
 
     private boolean lightAdminSecurityEnabled(final ServletContext servletContext) {
-        return toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
+        return BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
     }
 
     private String lightAdminGlobalFileStorageDirectory(final ServletContext servletContext) {

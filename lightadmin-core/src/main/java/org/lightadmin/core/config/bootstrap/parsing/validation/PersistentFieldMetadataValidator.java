@@ -15,7 +15,7 @@ import java.util.Collection;
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.lang.StringUtils.isEmpty;
+import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isOfFileReferenceType;
 import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isSupportedAttributeType;
 

@@ -1,6 +1,5 @@
 package org.lightadmin.core.rest;
 
-import org.apache.commons.lang.StringUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
@@ -8,6 +7,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.Serializable;
 import java.net.URI;
+
+import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
 
 public class DomainTypeResourceSupport {
 
@@ -19,7 +20,7 @@ public class DomainTypeResourceSupport {
 
     public Link selfDomainLink(String domainTypeName, Serializable id) {
         String baseRestUrl = restConfiguration.getBaseUri().toString();
-        String baseUrl = StringUtils.substringBeforeLast(baseRestUrl, "/");
+        String baseUrl = substringBeforeLast(baseRestUrl, "/");
         URI selfUri = UriComponentsBuilder.fromUriString(baseUrl)
                 .pathSegment("domain")
                 .pathSegment(domainTypeName)

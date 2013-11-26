@@ -9,7 +9,7 @@ import java.io.File;
 
 import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.lang.ArrayUtils.isEmpty;
+import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 public class DeleteFileRestOperation extends AbstractFileRestOperation {
 

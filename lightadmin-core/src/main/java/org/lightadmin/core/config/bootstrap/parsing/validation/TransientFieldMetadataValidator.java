@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
+import org.apache.commons.lang3.StringUtils;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
 import org.springframework.data.util.ClassTypeInformation;
@@ -12,8 +13,7 @@ import java.util.regex.Pattern;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
-import static org.apache.commons.lang.StringUtils.isBlank;
-import static org.apache.commons.lang.StringUtils.split;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 
 class TransientFieldMetadataValidator implements FieldMetadataValidator<TransientFieldMetadata> {
 
@@ -58,6 +58,6 @@ class TransientFieldMetadataValidator implements FieldMetadataValidator<Transien
         if (!PROPERTY_NAME_PATTERN.matcher(propertyPath).matches()) {
             return emptyList();
         }
-        return newArrayList(split(propertyPath, PROPERTY_SEPARATOR));
+        return newArrayList(StringUtils.split(propertyPath, PROPERTY_SEPARATOR));
     }
 }

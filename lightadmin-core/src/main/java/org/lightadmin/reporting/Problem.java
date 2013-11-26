@@ -1,6 +1,6 @@
 package org.lightadmin.reporting;
 
-import org.apache.commons.lang.builder.ToStringBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Problem {
 

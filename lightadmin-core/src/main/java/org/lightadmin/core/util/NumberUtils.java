@@ -8,11 +8,11 @@ import java.math.BigInteger;
 public abstract class NumberUtils {
 
     public static boolean isNumber(String str) {
-        return org.apache.commons.lang.math.NumberUtils.isNumber(str);
+        return org.apache.commons.lang3.math.NumberUtils.isNumber(str);
     }
 
     public static Number parseNumber(String text, Class<? extends Number> targetType) {
-        final Number number = org.apache.commons.lang.math.NumberUtils.createNumber(text);
+        final Number number = org.apache.commons.lang3.math.NumberUtils.createNumber(text);
 
         try {
             return convertNumberToTargetClass(number, targetType);

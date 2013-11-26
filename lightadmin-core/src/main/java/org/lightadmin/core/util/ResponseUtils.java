@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 
 import javax.servlet.http.HttpServletResponse;
 
-import static org.apache.commons.lang.StringUtils.isNotBlank;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 public abstract class ResponseUtils {
 

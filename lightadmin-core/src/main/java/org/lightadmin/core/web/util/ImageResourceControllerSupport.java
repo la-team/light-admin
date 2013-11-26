@@ -1,6 +1,5 @@
 package org.lightadmin.core.web.util;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.parser.AutoDetectParser;
 import org.apache.tika.parser.ParseContext;
@@ -17,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import static javax.imageio.ImageIO.read;
+import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 import static org.imgscalr.Scalr.Method.SPEED;
 import static org.imgscalr.Scalr.Mode.AUTOMATIC;
 import static org.imgscalr.Scalr.OP_ANTIALIAS;
@@ -30,7 +30,7 @@ import static org.springframework.http.MediaType.parseMediaType;
 public class ImageResourceControllerSupport {
 
     public ResponseEntity<?> downloadImageResource(byte[] content, int width, int height) {
-        if (ArrayUtils.isEmpty(content)) {
+        if (isEmpty(content)) {
             return noContentResponse();
         }
 

@@ -1,12 +1,13 @@
 package org.lightadmin.core.config;
 
+import org.apache.commons.lang3.BooleanUtils;
+
 import javax.servlet.ServletContext;
 import java.io.File;
 
 import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.lang.BooleanUtils.toBoolean;
-import static org.apache.commons.lang.StringUtils.defaultIfBlank;
-import static org.apache.commons.lang.StringUtils.isBlank;
+import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
+import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 
 public class StandardLightAdminConfiguration implements LightAdminConfiguration {
@@ -25,9 +26,9 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
         this.backToSiteUrl = backToSiteUrl(servletContext);
 
         this.fileStorageDirectory = fileStorageDirectory(servletContext);
-        this.fileStreaming = toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING));
+        this.fileStreaming = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING));
 
-        this.securityEnabled = toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
+        this.securityEnabled = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
         if (securityEnabled) {
             this.securityLogoutUrl = servletContext.getContextPath() + this.applicationBaseNoEndSeparator + LIGHT_ADMIN_SECURITY_LOGOUT_URL_DEFAULT;
         } else {
