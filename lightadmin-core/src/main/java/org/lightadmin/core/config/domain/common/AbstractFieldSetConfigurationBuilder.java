@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.domain.common;
 
 import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.persistentField;
+import static org.springframework.util.ObjectUtils.nullSafeEquals;
 import static org.springframework.util.StringUtils.capitalize;
 
 import javax.servlet.jsp.tagext.SimpleTag;
@@ -47,7 +48,10 @@ public abstract class AbstractFieldSetConfigurationBuilder<T extends Configurati
     @SuppressWarnings("unchecked")
     public B enumeration(EnumElement... elements) {
 
+        assertFieldMetadataIsNotNull();
         assertFieldMetadataType(currentFieldMetadata, PersistentFieldMetadata.class);
+
+        assertValidEnumElements(elements);
 
         PersistentFieldMetadata fieldMetadata = (PersistentFieldMetadata) currentFieldMetadata;
         fieldMetadata.setRenderer(new EnumRenderer(elements));
@@ -83,6 +87,18 @@ public abstract class AbstractFieldSetConfigurationBuilder<T extends Configurati
     protected void assertFieldMetadataIsNotNull() {
         if (currentFieldMetadata == null) {
             throw new RuntimeException("Field is not defined yet.");
+        }
+    }
+
+    protected void assertValidEnumElements(final EnumElement[] elements) {
+        for (int i = 0, n = elements.length; i < n; i++) {
+            Object baseVal = elements[i].getValue();
+            for (int j = i+1; j < n; j++) {
+                Object cmpVal = elements[j].getValue();
+                if (nullSafeEquals(baseVal, cmpVal)) {
+                    throw new RuntimeException("Non-unique value of EnumElement: " + baseVal);
+                }
+            }
         }
     }
 
