@@ -4,22 +4,20 @@ import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
-import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.DefaultFieldSetConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
 
-public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurationUnit implements EntityMetadataConfigurationUnit, DomainTypeEntityMetadataAware {
+public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfigurationUnit
+        implements EntityMetadataConfigurationUnit,	DomainTypeEntityMetadataAware {
 
     private EntityNameExtractor<?> nameExtractor;
 
-    private final String singularName;
-    private final String pluralName;
+    private String singularName;
+    private String pluralName;
 
-    DefaultEntityMetadataConfigurationUnit(Class<?> domainType, final EntityNameExtractor<?> nameExtractor, final String singularName, final String pluralName) {
-        super(domainType);
-        this.nameExtractor = nameExtractor;
-        this.singularName = singularName;
-        this.pluralName = pluralName;
+    DefaultEntityMetadataConfigurationUnit(Class<?> domainType) {
+        super(domainType, DomainConfigurationUnitType.CONFIGURATION);
     }
 
     @Override
@@ -37,9 +35,21 @@ public class DefaultEntityMetadataConfigurationUnit extends DomainTypeConfigurat
         return this.pluralName;
     }
 
+    public void setNameExtractor(EntityNameExtractor<?> nameExtractor) {
+        this.nameExtractor = nameExtractor;
+    }
+
+    public void setSingularName(String singularName) {
+        this.singularName = singularName;
+    }
+
+    public void setPluralName(String pluralName) {
+        this.pluralName = pluralName;
+    }
+
     @Override
-    public DomainConfigurationUnitType getDomainConfigurationUnitType() {
-        return DomainConfigurationUnitType.CONFIGURATION;
+    public DomainConfigurationUnitType getParentUnitType() {
+        return null;
     }
 
     @Override

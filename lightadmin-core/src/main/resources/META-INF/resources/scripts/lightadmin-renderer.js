@@ -20,6 +20,12 @@ var FieldValueRenderer = function () {
         }
     }
 
+    function LabelRenderer() {
+        this.render = function (field) {
+            return field['label'];
+        }
+    }
+
     function StringValueRenderer(targetView) {
         this.targetView = targetView;
 
@@ -123,6 +129,11 @@ var FieldValueRenderer = function () {
     function createRenderer(field, targetView) {
         var fieldType = field['type'];
         var fieldValue = field['value'];
+        var fieldLabel = field['label'];
+
+        if (fieldLabel != undefined) {
+            return new LabelRenderer();
+        }
 
         if (fieldValue instanceof Array) {
             return new ArrayValueRenderer(targetView);

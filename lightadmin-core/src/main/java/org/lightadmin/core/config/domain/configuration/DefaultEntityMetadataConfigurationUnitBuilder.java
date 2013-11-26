@@ -3,49 +3,56 @@ package org.lightadmin.core.config.domain.configuration;
 import org.lightadmin.api.config.builder.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
+import org.lightadmin.core.config.domain.common.AbstractFieldSetConfigurationBuilder;
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
-import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
 
-public class DefaultEntityMetadataConfigurationUnitBuilder extends DomainTypeConfigurationUnitBuilder<EntityMetadataConfigurationUnit> implements EntityMetadataConfigurationUnitBuilder {
+public class DefaultEntityMetadataConfigurationUnitBuilder extends AbstractFieldSetConfigurationBuilder<EntityMetadataConfigurationUnit, EntityMetadataConfigurationUnitBuilder>
+        implements EntityMetadataConfigurationUnitBuilder {
 
-    private EntityNameExtractor<?> nameExtractor;
-
-    private String singularName;
-    private String pluralName;
+    private final DefaultEntityMetadataConfigurationUnit configurationUnit;
 
     public DefaultEntityMetadataConfigurationUnitBuilder(Class<?> domainType) {
         super(domainType);
-        this.singularName = domainType.getSimpleName();
-        this.pluralName = domainType.getSimpleName();
+        configurationUnit = new DefaultEntityMetadataConfigurationUnit(domainType);
+        configurationUnit.setSingularName(domainType.getSimpleName());
+        configurationUnit.setPluralName(domainType.getSimpleName());
     }
 
     @Override
     public EntityMetadataConfigurationUnitBuilder nameField(final String nameField) {
-        this.nameExtractor = EntityNameExtractorFactory.forNamedPersistentEntity(nameField);
+        EntityNameExtractor<?> nameExtractor = EntityNameExtractorFactory.forNamedPersistentEntity(nameField);
+        configurationUnit.setNameExtractor(nameExtractor);
         return this;
     }
 
     @Override
     public EntityMetadataConfigurationUnitBuilder nameExtractor(final EntityNameExtractor<?> nameExtractor) {
-        this.nameExtractor = nameExtractor;
+        configurationUnit.setNameExtractor(nameExtractor);
         return this;
     }
 
     @Override
     public EntityMetadataConfigurationUnitBuilder singularName(final String singularName) {
-        this.singularName = singularName;
+        configurationUnit.setSingularName(singularName);
         return this;
     }
 
     @Override
     public EntityMetadataConfigurationUnitBuilder pluralName(final String pluralName) {
-        this.pluralName = pluralName;
+        configurationUnit.setSingularName(pluralName);
         return this;
     }
 
     @Override
-    @SuppressWarnings("unchecked")
+    protected void addCurrentFieldToUnit() {
+        if (currentFieldMetadata != null) {
+            configurationUnit.addField(currentFieldMetadata);
+        }
+    }
+
+    @Override
     public EntityMetadataConfigurationUnit build() {
-        return new DefaultEntityMetadataConfigurationUnit(getDomainType(), nameExtractor, singularName, pluralName);
+        addCurrentFieldToUnit();
+        return configurationUnit;
     }
 }

@@ -5,6 +5,7 @@ import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.common.GenericFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.util.ClassUtils;
@@ -13,6 +14,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.sort;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.CONFIGURATION;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.DomainTypeAttributeMetadataComparator;
 import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isSupportedAttributeType;
 
@@ -23,8 +25,8 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
     }
 
     @Override
-    public ConfigurationUnit postProcess(final ConfigurationUnit configurationUnit) {
-        if (isEmptyFieldSetConfigurationUnit(configurationUnit)) {
+    public ConfigurationUnit postProcess(final ConfigurationUnit configurationUnit, ConfigurationUnits configurationUnits) {
+        if (configurationUnit.getDomainConfigurationUnitType() != CONFIGURATION && isEmptyFieldSetConfigurationUnit(configurationUnit)) {
             return fieldSetUnitWithPersistentFields(configurationUnit.getDomainType(), configurationUnit.getDomainConfigurationUnitType());
         }
 

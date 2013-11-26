@@ -1,10 +1,12 @@
 package org.lightadmin.core.config.domain.field;
 
-import org.apache.commons.collections15.Factory;
-
-import javax.servlet.jsp.tagext.SimpleTag;
 import java.io.Serializable;
 import java.util.UUID;
+
+import javax.servlet.jsp.tagext.SimpleTag;
+
+import org.apache.commons.collections15.Factory;
+import org.lightadmin.api.config.utils.FieldValueRenderer;
 
 public abstract class AbstractFieldMetadata implements FieldMetadata, Serializable {
 
@@ -15,6 +17,8 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
     private final UUID uuid;
 
     private Factory<SimpleTag> customControlFactory;
+
+    protected FieldValueRenderer renderer;
 
     protected AbstractFieldMetadata(final String name) {
         this(name, 0);
@@ -51,6 +55,14 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
         return false;
     }
 
+    public FieldValueRenderer getRenderer() {
+        return renderer;
+    }
+
+    public void setRenderer(FieldValueRenderer renderer) {
+        this.renderer = renderer;
+    }
+
     public void setCustomControlFactory(Factory<SimpleTag> customControlFactory) {
         this.customControlFactory = customControlFactory;
     }
@@ -60,6 +72,15 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
             return customControlFactory.create();
         } else {
             return null;
+        }
+    }
+
+    public void inheritFrom(AbstractFieldMetadata field) {
+        if (renderer == null) {
+            renderer = field.renderer;
+        }
+        if (customControlFactory == null) {
+            customControlFactory = field.customControlFactory;
         }
     }
 
@@ -81,4 +102,5 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
     public int hashCode() {
         return uuid.hashCode();
     }
+
 }

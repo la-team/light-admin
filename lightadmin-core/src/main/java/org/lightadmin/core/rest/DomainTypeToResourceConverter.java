@@ -1,7 +1,19 @@
 package org.lightadmin.core.rest;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import static com.google.common.collect.Maps.newLinkedHashMap;
+import static java.util.Collections.EMPTY_SET;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.FORM_VIEW;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
+import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
+import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
@@ -23,19 +35,8 @@ import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
-import static com.google.common.collect.Maps.newLinkedHashMap;
-import static java.util.Collections.EMPTY_SET;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.FORM_VIEW;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
-import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
-import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 
 @SuppressWarnings("unchecked")
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {
@@ -146,13 +147,16 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
     private Map<String, Object> persistentSimpleFieldData(PersistentFieldMetadata field, Object source) {
         final Map<String, Object> fieldData = newLinkedHashMap();
 
+        Object fieldValue = fieldValueEvaluator.evaluate(field, source);
         fieldData.put("name", field.getField());
         fieldData.put("title", field.getName());
-        fieldData.put("value", fieldValueEvaluator.evaluate(field, source));
+        fieldData.put("value", fieldValue);
         fieldData.put("type", field.getAttributeMetadata().getAttributeType().name());
         fieldData.put("persistable", true);
         fieldData.put("primaryKey", field.isPrimaryKey());
-
+        if (field.getRenderer() != null) {
+            fieldData.put("label", field.getRenderer().apply(fieldValue));
+        }
         return fieldData;
     }
 

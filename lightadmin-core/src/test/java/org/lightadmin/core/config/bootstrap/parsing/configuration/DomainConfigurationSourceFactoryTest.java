@@ -38,9 +38,9 @@ public class DomainConfigurationSourceFactoryTest {
 
         final ConfigurationUnitPostProcessor configurationUnitPostProcessor = EasyMock.createMock(ConfigurationUnitPostProcessor.class);
 
-        EasyMock.expect(configurationUnitPostProcessor.postProcess(filtersConfigurationUnit)).andReturn(filtersConfigurationUnit).once();
+        EasyMock.expect(configurationUnitPostProcessor.postProcess(filtersConfigurationUnit, configurationUnits)).andReturn(filtersConfigurationUnit).once();
 
-        EasyMock.expect(configurationUnitPostProcessor.postProcess(scopesConfigurationUnit)).andReturn(scopesConfigurationUnit).once();
+        EasyMock.expect(configurationUnitPostProcessor.postProcess(scopesConfigurationUnit, configurationUnits)).andReturn(scopesConfigurationUnit).once();
 
         EasyMock.replay(configurationUnitPostProcessor);
 

@@ -1,13 +1,15 @@
 package org.lightadmin.core.config.domain.field;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC_MULTI;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.FILE;
 
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
 
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
+import org.hibernate.validator.constraints.NotBlank;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 
 public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
 
@@ -72,4 +74,5 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
     public String getUuid() {
         return field;
     }
+
 }

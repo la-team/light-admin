@@ -5,6 +5,7 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
+import org.lightadmin.core.config.domain.unit.support.HierarchicalConfigurationPostProcessor;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -26,7 +27,10 @@ public class DomainConfigurationSourceFactory {
     private final ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
 
     public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, AutowireCapableBeanFactory beanFactory) {
-        this(entityMetadataResolver, beanFactory, new EmptyConfigurationUnitPostProcessor(entityMetadataResolver), new DomainTypeMetadataAwareConfigurationUnitPostProcessor(entityMetadataResolver));
+        this(entityMetadataResolver, beanFactory,
+                new EmptyConfigurationUnitPostProcessor(entityMetadataResolver),
+                new DomainTypeMetadataAwareConfigurationUnitPostProcessor(entityMetadataResolver),
+                new HierarchicalConfigurationPostProcessor());
     }
 
     public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, AutowireCapableBeanFactory beanFactory, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors) {
@@ -73,7 +77,7 @@ public class DomainConfigurationSourceFactory {
         for (ConfigurationUnit configurationUnit : configurationUnits) {
             ConfigurationUnit processedConfigurationUnit = configurationUnit;
             for (ConfigurationUnitPostProcessor configurationUnitPostProcessor : configurationUnitPostProcessors) {
-                processedConfigurationUnit = configurationUnitPostProcessor.postProcess(processedConfigurationUnit);
+                processedConfigurationUnit = configurationUnitPostProcessor.postProcess(processedConfigurationUnit, configurationUnits);
             }
             processedConfigurationUnits.add(processedConfigurationUnit);
         }

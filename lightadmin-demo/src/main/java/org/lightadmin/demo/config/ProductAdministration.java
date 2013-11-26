@@ -3,10 +3,12 @@ package org.lightadmin.demo.config;
 import org.lightadmin.api.config.annotation.Administration;
 import org.lightadmin.api.config.builder.*;
 import org.lightadmin.api.config.unit.*;
+import org.lightadmin.api.config.utils.EnumElement;
 import org.lightadmin.demo.model.Product;
 
 import static org.lightadmin.api.config.utils.Editors.enumeration;
 import static org.lightadmin.api.config.utils.Editors.wysiwyg;
+import static org.lightadmin.api.config.utils.EnumElement.element;
 
 @SuppressWarnings("unused")
 @Administration(Product.class)
@@ -16,7 +18,12 @@ public class ProductAdministration {
         return configurationBuilder
                 .nameField("name")
                 .singularName("Product")
-                .pluralName("Products").build();
+                .pluralName("Products")
+                .field("type").enumeration(
+                        element("SP", "Smartphone"),
+                        element("TB", "Tablet"),
+                        element("OT", "Other"))
+                .build();
     }
 
     public static ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
@@ -26,6 +33,10 @@ public class ProductAdministration {
     public static FieldSetConfigurationUnit listView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
+                .field("type").caption("Type").enumeration(
+                        element("SP", "S"),
+                        element("TB", "T"),
+                        element("OT", "O"))
                 .field("description").caption("Description")
                 .field("price").caption("Price")
                 .field("retired").caption("Out of production")
@@ -47,7 +58,7 @@ public class ProductAdministration {
     public static FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
-                .field("type").caption("Type").editor(enumeration("SMARTPHONE", "TABLET", "OTHER"))
+                .field("type").caption("Type")
                 .field("description").caption("Description").editor(wysiwyg())
                 .field("price").caption("Price")
                 .field("releaseDate").caption("Released on")
