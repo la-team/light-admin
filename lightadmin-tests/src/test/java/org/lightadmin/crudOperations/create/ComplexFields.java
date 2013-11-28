@@ -16,10 +16,10 @@ import org.lightadmin.page.ShowViewPage;
 
 import static org.lightadmin.util.DomainAsserts.assertFieldValues;
 
-@RunWithConfiguration( {TestLineItemConfiguration.class,
+@RunWithConfiguration( { TestLineItemConfiguration.class,
 		TestAddressConfiguration.class,
 		CustomerTestEntityConfiguration.class,
-		OrderTestEntityWithComplexFields.class})
+		OrderTestEntityWithComplexFields.class } )
 @LoginOnce( domain = Domain.TEST_ORDERS )
 public class ComplexFields extends SeleniumIntegrationTest {
 
@@ -55,9 +55,30 @@ public class ComplexFields extends SeleniumIntegrationTest {
 	public void itemCanBeCreatedWithAllFieldsEmpty() {
 		leaveFieldsEmptyAndSave();
 
-		String[] showViewFieldValues = showView.getFieldValuesExcludingId();
+		assertFieldValues( new String[]{ " ", " ", " ", "0", " " }, showView.getFieldValuesExcludingId() );
+	}
 
-		assertFieldValues( new String[]{" ", " ", " ", "0", " "}, showViewFieldValues );
+	@Test
+	public void associatedFieldValuesCanBeFilteredByTyping() {
+
+		createPage.searchAndSelect( "customer", "c", "New Customer" );
+
+		createPage.searchAndSelect( "shippingAddresses", "A", "Via Aurelia, Rome, Italy" );
+		createPage.searchAndSelect( "shippingAddresses", "k", "Kreschatik, Kiev, Ukraine" );
+
+		createPage.searchAndSelect( "lineItems", "55", "55. Product: Product 2; Amount: 1; Total: 1299.00" );
+		createPage.searchAndSelect( "lineItems", "49", "67. Product: Product 3; Amount: 1; Total: 49.00" );
+
+		showView = createPage.submit();
+
+		assertFieldValues( new String[]{
+				"New Customer",
+				"Kreschatik, Kiev, Ukraine\n" +
+						"Via Aurelia, Rome, Italy",
+				"LineItem Id: 55; Product Name: Product 2\n" +
+						"LineItem Id: 67; Product Name: Product 3",
+				"1348.00",
+				" "  }, showView.getFieldValuesExcludingId() );
 	}
 
 	private void fillInFieldsAndSave() {

@@ -132,6 +132,10 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		new FileUploader( fileName ).inputFilePathAndSubmit();
 	}
 
+	public void searchAndSelect( String fieldName, String searchString, String labelToSelect ) {
+		getSelectField( fieldName ).searchAndSelect( searchString, labelToSelect );
+	}
+
 	private class FileUploader {
 
 		private final Robot robot;

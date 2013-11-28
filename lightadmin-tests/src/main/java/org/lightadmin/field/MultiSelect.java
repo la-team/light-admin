@@ -37,6 +37,12 @@ public class MultiSelect extends BaseField implements BaseSelect {
 		}
 	}
 
+	@Override
+	public void searchAndSelect( String searchString, String labelToSelect ) {
+		theField.sendKeys( searchString );
+		select( labelToSelect );
+	}
+
 	public void replaceSelections( String[] optionsToRemove, String[] optionsToAdd ) {
 		for ( String optionToRemove : optionsToRemove ) {
 			final WebElement selectedOption = getSelectedOption( optionToRemove );
