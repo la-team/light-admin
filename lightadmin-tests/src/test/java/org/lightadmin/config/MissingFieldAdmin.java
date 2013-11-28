@@ -7,7 +7,7 @@ import org.lightadmin.test.model.TestOrder;
 
 @SuppressWarnings("unused")
 @Administration(TestOrder.class)
-public class InvalidFieldAdmin {
+public class MissingFieldAdmin {
 
     public static FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
         return filterBuilder
