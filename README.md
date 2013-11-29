@@ -43,10 +43,10 @@ Declare repository in your POM
   <repository>
     <id>lightadmin-nexus-releases</id>
     <url>http://lightadmin.org/nexus/content/repositories/releases</url>
-    <snapshots>
+    <releases>
       <enabled>true</enabled>
       <updatePolicy>always</updatePolicy>
-    </snapshots>
+    </releases>
   </repository>
 </repositories>
 ```
