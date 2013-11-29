@@ -41,8 +41,8 @@ Declare repository in your POM
 ```xml
 <repositories>
   <repository>
-    <id>lightadmin-nexus-snapshots</id>
-    <url>http://lightadmin.org/nexus/content/repositories/snapshots</url>
+    <id>lightadmin-nexus-releases</id>
+    <url>http://lightadmin.org/nexus/content/repositories/releases</url>
     <snapshots>
       <enabled>true</enabled>
       <updatePolicy>always</updatePolicy>
@@ -57,7 +57,7 @@ Define maven dependency
 <dependency>
   <groupId>org.lightadmin</groupId>
   <artifactId>lightadmin</artifactId>
-  <version>1.0.0-SNAPSHOT</version>
+  <version>1.0.0.M2</version>
 </dependency> 
 ```
 
