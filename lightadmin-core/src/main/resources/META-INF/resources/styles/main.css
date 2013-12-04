@@ -1672,7 +1672,7 @@ html ul.tabs li.activeTab a {
     width: 100%;
     color: #eeeeee;
     margin-top: 42px;
-    position: absolute;
+    position: fixed;
     bottom: 0;
 }
 
