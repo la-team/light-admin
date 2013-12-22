@@ -21,14 +21,14 @@ by bringing pluggable fully operational data management back-end for JPA based a
 
 * Web site: [lightadmin.org](http://lightadmin.org)
 * Documentation & Guides: [lightadmin.org/getting-started/](http://lightadmin.org/getting-started/)
-* Wiki: [github.com/max-dev/light-admin/wiki](http://github.com/max-dev/light-admin/wiki)
+* Wiki: [github.com/highwave-group/light-admin/wiki](http://github.com/highwave-group/light-admin/wiki)
 * Live demo: [lightadmin.org/demo](http://lightadmin.org/demo)
 * CI Server: [lightadmin.org/jenkins](http://lightadmin.org/jenkins)
 * For more detailed questions: [groups.google.com/group/lightadmin](http://groups.google.com/group/lightadmin)
 
 ## Bug Reports ##
 
-* Bug Reports: [github.com/max-dev/light-admin/issues](http://github.com/max-dev/light-admin/issues)
+* Bug Reports: [github.com/highwave-group/light-admin/issues](http://github.com/highwave-group/light-admin/issues)
 
 ## License ##
 
@@ -156,7 +156,7 @@ Voila! You have a brand new LightAdmin back-end configured.
 
 1. Clone the repository from GitHub:
 
-		$ git clone git://github.com/max-dev/light-admin.git
+		$ git clone git://github.com/highwave-group/light-admin.git
 
 2. Navigate into the cloned repository directory:
 
@@ -190,7 +190,7 @@ It's based on [Spring Travel](https://github.com/SpringSource/spring-webflow-sam
 
 1. Clone the repository from GitHub:
 
-		$ git clone git://github.com/max-dev/lightadmin-spring-travel.git
+		$ git clone git://github.com/highwave-group/lightadmin-spring-travel.git
 
 2. Navigate into the cloned repository directory:
 
@@ -212,28 +212,28 @@ It's based on [Spring Travel](https://github.com/SpringSource/spring-webflow-sam
 
 <b>Login to LightAdmin:</b>
 
-![Login view](https://github.com/max-dev/light-admin/raw/master/screenshots/login.png "login view")
+![Login view](https://github.com/highwave-group/light-admin/raw/master/screenshots/login.png "login view")
 
 <b>Dashboard:</b>
 
-![Dashboard view](https://github.com/max-dev/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
+![Dashboard view](https://github.com/highwave-group/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
 
 <b>List of persistent entities configured:</b>
 
-![List view](https://github.com/max-dev/light-admin/raw/master/screenshots/list-view.png "list view")
+![List view](https://github.com/highwave-group/light-admin/raw/master/screenshots/list-view.png "list view")
 
 <b>Search entities by criteria:</b>
 
-![List view & Filtering](https://github.com/max-dev/light-admin/raw/master/screenshots/search.png "list view & filtering")
+![List view & Filtering](https://github.com/highwave-group/light-admin/raw/master/screenshots/search.png "list view & filtering")
 
 <b>Quick view for particular entity:</b>
 
-![Quick view](https://github.com/max-dev/light-admin/raw/master/screenshots/quick-view.png "quick view")
+![Quick view](https://github.com/highwave-group/light-admin/raw/master/screenshots/quick-view.png "quick view")
 
 <b>Editing entity:</b>
 
-![Form view](https://github.com/max-dev/light-admin/raw/master/screenshots/form-view-validation.png "form view")
+![Form view](https://github.com/highwave-group/light-admin/raw/master/screenshots/form-view-validation.png "form view")
 
 <b>Show entity with all fields:</b>
 
-![Show view](https://github.com/max-dev/light-admin/raw/master/screenshots/show-view.png "show view")
+![Show view](https://github.com/highwave-group/light-admin/raw/master/screenshots/show-view.png "show view")
