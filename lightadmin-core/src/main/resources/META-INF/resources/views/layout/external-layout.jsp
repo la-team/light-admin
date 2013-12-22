@@ -10,16 +10,17 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
+    <meta name="robots" content="noindex">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"/>
 
-	<title>LightAdmin - Web administration framework.</title>
+    <title>LightAdmin - Web administration framework.</title>
 
-	<link rel="stylesheet" type="text/css" href="<light:url value="/styles/main.css"/>">
-	<link rel="stylesheet" type="text/css" href="<light:url value="/styles/lightadmin.css"/>">
-	<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Cuprum">
+    <link rel="stylesheet" type="text/css" href="<light:url value="/styles/main.css"/>">
+    <link rel="stylesheet" type="text/css" href="<light:url value="/styles/lightadmin.css"/>">
+    <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Cuprum">
 
-	<tiles:insertAttribute name="scripts-include"/>
+    <tiles:insertAttribute name="scripts-include"/>
 </head>
 
 <body>
