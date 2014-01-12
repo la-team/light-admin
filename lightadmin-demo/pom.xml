@@ -19,8 +19,8 @@
     <properties>
         <container.port>8080</container.port>
 
-        <spring.version>3.2.4.RELEASE</spring.version>
-        <hibernate.version>4.2.0.Final</hibernate.version>
+        <spring.version>3.2.5.RELEASE</spring.version>
+        <hibernate.version>4.3.0.Final</hibernate.version>
         <logback.version>1.0.9</logback.version>
     </properties>
 

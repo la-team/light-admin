@@ -95,11 +95,11 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
 
-        <spring.version>3.2.4.RELEASE</spring.version>
+        <spring.version>3.2.5.RELEASE</spring.version>
         <spring.security.version>3.1.4.RELEASE</spring.security.version>
         <spring.data.jpa.version>1.2.0.RELEASE</spring.data.jpa.version>
         <spring.data.commons.core.version>1.4.0.RELEASE</spring.data.commons.core.version>
-        <spring.data.rest.webmvc.version>1.0.0.RELEASE</spring.data.rest.webmvc.version>
+        <spring.data.rest.webmvc.version>2.0.0.M1</spring.data.rest.webmvc.version>
         <spring.hateoas.version>0.3.0.RELEASE</spring.hateoas.version>
         <apache.tiles.version>2.2.2</apache.tiles.version>
     </properties>
@@ -164,7 +164,7 @@
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-jpa</artifactId>
-            <version>${spring.data.jpa.version}</version>
+            <version>1.4.3.RELEASE</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.data</groupId>
