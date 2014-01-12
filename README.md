@@ -44,7 +44,7 @@ You're interested in contributing to LightAdmin? AWESOME. Here are the basic ste
 * If necessary, rebase your commits into logical chunks, without errors
 * Verify your code by running the test suite, and adding additional tests if able
 * Push the branch up to GitHub
-* Send a pull request to the <b>highwave-group/lightadmin</b> project
+* Send a pull request to the <b>highwave-group/light-admin</b> project
 
 We'll do our best to get your changes in!
 
