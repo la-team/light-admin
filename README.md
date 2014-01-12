@@ -38,13 +38,13 @@ by bringing pluggable fully operational data management back-end for JPA based a
 
 You're interested in contributing to LightAdmin? AWESOME. Here are the basic steps:
 
-* Fork LightAdmin from here: http://github.com/highwave-group/light-admin
+* Fork <b>LightAdmin</b> from here: http://github.com/highwave-group/light-admin
 * Clone your fork
 * Hack away
 * If necessary, rebase your commits into logical chunks, without errors
 * Verify your code by running the test suite, and adding additional tests if able
 * Push the branch up to GitHub
-* Send a pull request to the highwave-group/lightadmin project
+* Send a pull request to the <b>highwave-group/lightadmin</b> project
 
 We'll do our best to get your changes in!
 
