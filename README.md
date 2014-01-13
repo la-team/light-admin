@@ -1,4 +1,4 @@
-# LightAdmin - Pluggable Web Administration Framework# 
+# LightAdmin - Pluggable Web Administration Framework
 
 <img src="https://travis-ci.org/highwave-group/light-admin.png?branch=master"/>
 
