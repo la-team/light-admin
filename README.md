@@ -1,4 +1,6 @@
-# LightAdmin - Pluggable Web Administration Framework#
+# LightAdmin - Pluggable Web Administration Framework# 
+
+<img src="https://travis-ci.org/highwave-group/light-admin.png?branch=master"/>
 
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
