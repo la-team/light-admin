@@ -1,4 +1,4 @@
-# LightAdmin - Pluggable data administration UI interface for Java web applications [Spring/JPA]
+# LightAdmin - Pluggable data administration UI interface for Java web applications
 
 <img src="https://travis-ci.org/highwave-group/light-admin.png?branch=master"/>
 
