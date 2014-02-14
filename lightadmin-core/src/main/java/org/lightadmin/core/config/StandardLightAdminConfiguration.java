@@ -19,8 +19,11 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     private final String backToSiteUrl;
     private final File fileStorageDirectory;
     private final boolean fileStreaming;
+    private final String basePackage;
 
     public StandardLightAdminConfiguration(ServletContext servletContext) {
+        this.basePackage = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_PACKAGE);
+
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
         this.applicationBaseNoEndSeparator = urlWithoutEndSeparator(this.applicationBaseUrl);
         this.backToSiteUrl = backToSiteUrl(servletContext);
@@ -34,6 +37,11 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
         } else {
             this.securityLogoutUrl = servletContext.getContextPath() + defaultIfBlank(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY_LOGOUT_URL), "#");
         }
+    }
+
+    @Override
+    public String getBasePackage() {
+        return this.basePackage;
     }
 
     @Override

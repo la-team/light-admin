@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.env.Environment;
 import org.springframework.transaction.interceptor.TransactionInterceptor;
 import org.springframework.web.context.support.ServletContextResourceLoader;
 
@@ -26,9 +25,6 @@ import javax.persistence.PersistenceContext;
 
 @Configuration
 public class LightAdminDomainConfiguration {
-
-    @Autowired
-    private Environment environment;
 
     @PersistenceContext
     private EntityManager entityManager;
@@ -86,6 +82,6 @@ public class LightAdminDomainConfiguration {
     @Bean
     @Autowired
     public GlobalAdministrationConfigurationProcessor globalAdministrationConfigurationProcessor(DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory, AutowireCapableBeanFactory beanFactory) {
-        return new GlobalAdministrationConfigurationProcessor(domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory(beanFactory), domainConfigurationSourceValidatorFactory(), environment);
+        return new GlobalAdministrationConfigurationProcessor(domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory(beanFactory), domainConfigurationSourceValidatorFactory(), lightAdminConfiguration);
     }
 }

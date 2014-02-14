@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.bootstrap;
 
+import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
@@ -11,12 +12,10 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.core.env.Environment;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE;
 import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
 import static org.springframework.util.ClassUtils.isAssignableValue;
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
@@ -29,19 +28,17 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
     private final DomainConfigurationSourceFactory domainConfigurationSourceFactory;
 
     private final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
-
-    private final Environment environment;
+    private final LightAdminConfiguration lightAdminConfiguration;
 
     public GlobalAdministrationConfigurationProcessor(final DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory,
                                                       final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
                                                       final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory,
-                                                      final Environment environment) {
+                                                      final LightAdminConfiguration lightAdminConfiguration) {
 
         this.domainConfigurationSourceFactory = domainConfigurationSourceFactory;
         this.domainTypeAdministrationConfigurationFactory = domainTypeAdministrationConfigurationFactory;
         this.configurationSourceValidatorFactory = configurationSourceValidatorFactory;
-
-        this.environment = environment;
+        this.lightAdminConfiguration = lightAdminConfiguration;
     }
 
     @Override
@@ -84,9 +81,7 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
     }
 
     private String[] configurationsBasePackages() {
-        final String basePackageLocations = environment.getProperty(LIGHT_ADMINISTRATION_BASE_PACKAGE);
-
-        return tokenizeToStringArray(basePackageLocations, CONFIG_LOCATION_DELIMITERS);
+        return tokenizeToStringArray(lightAdminConfiguration.getBasePackage(), CONFIG_LOCATION_DELIMITERS);
     }
 
     @Override
