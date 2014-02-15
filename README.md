@@ -1,6 +1,6 @@
 # LightAdmin - Pluggable data administration UI library for Java web applications
 
-<img src="https://travis-ci.org/highwave-group/light-admin.png?branch=master"/>
+<img src="https://travis-ci.org/la-team/light-admin.png?branch=master"/>
 
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
@@ -17,13 +17,13 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * <b>Filtering Scopes</b>: Use scopes to filter data by predefined criteria
 * <b>Pluggable Security</b>: Authentication based on [Spring Security](http://www.springsource.org/spring-security)
 * <b>REST API</b>: Enriching your application with REST API based on [Spring Data REST](http://www.springsource.org/spring-data/rest)
-* <b>Easy integration</b>: Servlet 3.0 web applications supported
+* <b>Easy integration</b>: Servlet 2.5/3.0 web applications supported
 
 ## Documentation & Support ##
 
 * Web site: [lightadmin.org](http://lightadmin.org)
 * Documentation & Guides: [lightadmin.org/getting-started/](http://lightadmin.org/getting-started/)
-* Wiki: [github.com/highwave-group/light-admin/wiki](http://github.com/highwave-group/light-admin/wiki)
+* Wiki: [github.com/la-team/light-admin/wiki](http://github.com/la-team/light-admin/wiki)
 * Live demo: [lightadmin.org/demo](http://lightadmin.org/demo)
 * CI Server: [lightadmin.org/jenkins](http://lightadmin.org/jenkins)
 * For more detailed questions: [groups.google.com/group/lightadmin](http://groups.google.com/group/lightadmin)
@@ -77,7 +77,9 @@ Define maven dependency
 </dependency> 
 ```
 
-### Enable LightAdmin web-module in you <b>web.xml</b>: ###
+
+
+### Enable LightAdmin web-module in your <b>web.xml</b> if you have one: ###
 
 ```xml
 <context-param>
@@ -95,6 +97,20 @@ Define maven dependency
   <param-value>[package with @Administration configurations, ex.: org.lightadmin.demo.config]</param-value>
 </context-param>
 ```
+
+### Or enable LightAdmin web-module in your <b>WebApplicationInitializer</b>: ###
+
+```java
+@Override
+public void onStartup(ServletContext servletContext) throws ServletException {
+  servletContext.setInitParameter(LIGHT_ADMINISTRATION_BASE_URL, "/admin");
+  servletContext.setInitParameter(LIGHT_ADMINISTRATION_BACK_TO_SITE_URL, "http://lightadmin.org");
+  servletContext.setInitParameter(LIGHT_ADMINISTRATION_BASE_PACKAGE, "org.lightadmin.administration");
+
+  super.onStartup(servletContext);
+}
+```
+
 
 ### Include your JPA persistence provider of choice (Hibernate, EclipseLink, OpenJpa) and setup basic <b>Spring JPA</b> configuration. ###
 
