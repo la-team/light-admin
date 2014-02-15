@@ -159,21 +159,20 @@ public class User {
 ### Create an <b>@Administration configuration</b> in the package defined in <b>web.xml</b> previously: ###
 
 ```java
-@Administration( User.class )
-public class UserAdministration {
+public class UserAdministration extends AdministrationConfiguration<User> {
 
-  public static EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
+  public EntityMetadataConfigurationUnit configuration( EntityMetadataConfigurationUnitBuilder configurationBuilder ) {
     return configurationBuilder.nameField( "firstname" ).build();
   }
 
-  public static ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
+  public ScreenContextConfigurationUnit screenContext( ScreenContextConfigurationUnitBuilder screenContextBuilder ) {
     return screenContextBuilder
       .screenName( "Users Administration" )
       .menuName( "Users" )
       .build();
   }
 
-  public static FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
+  public FieldSetConfigurationUnit listView( final FieldSetConfigurationUnitBuilder fragmentBuilder ) {
     return fragmentBuilder
       .field( "firstname" ).caption( "First Name" )
       .field( "lastname" ).caption( "Last Name" )
