@@ -31,14 +31,14 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:git://github.com/max-dev/light-admin</connection>
-        <developerConnection>scm:git:git://github.com/max-dev/light-admin</developerConnection>
-        <url>http://github.com/max-dev/light-admin</url>
+        <connection>scm:git:git://github.com/la-team/light-admin</connection>
+        <developerConnection>scm:git:git://github.com/la-team/light-admin</developerConnection>
+        <url>http://github.com/la-team/light-admin</url>
     </scm>
 
     <issueManagement>
         <system>github</system>
-        <url>https://github.com/max-dev/light-admin/issues</url>
+        <url>https://github.com/la-team/light-admin/issues</url>
     </issueManagement>
 
     <ciManagement>
