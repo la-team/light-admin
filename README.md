@@ -1,4 +1,6 @@
-# LightAdmin - Pluggable Web Administration Framework#
+# LightAdmin - Pluggable data administration UI library for Java web applications
+
+<img src="https://travis-ci.org/highwave-group/light-admin.png?branch=master"/>
 
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
@@ -28,11 +30,25 @@ by bringing pluggable fully operational data management back-end for JPA based a
 
 ## Bug Reports ##
 
-* Bug Reports: [github.com/highwave-group/light-admin/issues](http://github.com/highwave-group/light-admin/issues)
+* Bug Reports: [github.com/la-team/light-admin/issues](http://github.com/la-team/light-admin/issues)
 
 ## License ##
 
 * <b>LightAdmin</b> is released under version 2.0 of the Apache License.
+
+## Contribute ##
+
+You're interested in contributing to LightAdmin? AWESOME. Here are the basic steps:
+
+* Fork <b>LightAdmin</b> from here: http://github.com/la-team/light-admin
+* Clone your fork
+* Hack away
+* If necessary, rebase your commits into logical chunks, without errors
+* Verify your code by running the test suite, and adding additional tests if able
+* Push the branch up to GitHub
+* Send a pull request to the <b>la-team/light-admin</b> project
+
+We'll do our best to get your changes in!
 
 ## Getting started ##
 
@@ -156,7 +172,7 @@ Voila! You have a brand new LightAdmin back-end configured.
 
 1. Clone the repository from GitHub:
 
-		$ git clone git://github.com/highwave-group/light-admin.git
+		$ git clone git://github.com/la-team/light-admin.git
 
 2. Navigate into the cloned repository directory:
 
@@ -190,7 +206,7 @@ It's based on [Spring Travel](https://github.com/SpringSource/spring-webflow-sam
 
 1. Clone the repository from GitHub:
 
-		$ git clone git://github.com/highwave-group/lightadmin-spring-travel.git
+		$ git clone git://github.com/la-team/lightadmin-spring-travel.git
 
 2. Navigate into the cloned repository directory:
 
@@ -212,28 +228,28 @@ It's based on [Spring Travel](https://github.com/SpringSource/spring-webflow-sam
 
 <b>Login to LightAdmin:</b>
 
-![Login view](https://github.com/highwave-group/light-admin/raw/master/screenshots/login.png "login view")
+![Login view](https://github.com/la-team/light-admin/raw/master/screenshots/login.png "login view")
 
 <b>Dashboard:</b>
 
-![Dashboard view](https://github.com/highwave-group/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
+![Dashboard view](https://github.com/la-team/light-admin/raw/master/screenshots/dashboard.png "dashboard view")
 
 <b>List of persistent entities configured:</b>
 
-![List view](https://github.com/highwave-group/light-admin/raw/master/screenshots/list-view.png "list view")
+![List view](https://github.com/la-team/light-admin/raw/master/screenshots/list-view.png "list view")
 
 <b>Search entities by criteria:</b>
 
-![List view & Filtering](https://github.com/highwave-group/light-admin/raw/master/screenshots/search.png "list view & filtering")
+![List view & Filtering](https://github.com/la-team/light-admin/raw/master/screenshots/search.png "list view & filtering")
 
 <b>Quick view for particular entity:</b>
 
-![Quick view](https://github.com/highwave-group/light-admin/raw/master/screenshots/quick-view.png "quick view")
+![Quick view](https://github.com/la-team/light-admin/raw/master/screenshots/quick-view.png "quick view")
 
 <b>Editing entity:</b>
 
-![Form view](https://github.com/highwave-group/light-admin/raw/master/screenshots/form-view-validation.png "form view")
+![Form view](https://github.com/la-team/light-admin/raw/master/screenshots/form-view-validation.png "form view")
 
 <b>Show entity with all fields:</b>
 
-![Show view](https://github.com/highwave-group/light-admin/raw/master/screenshots/show-view.png "show view")
+![Show view](https://github.com/la-team/light-admin/raw/master/screenshots/show-view.png "show view")
