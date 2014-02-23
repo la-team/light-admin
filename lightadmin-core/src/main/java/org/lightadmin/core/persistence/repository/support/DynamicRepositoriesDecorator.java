@@ -4,7 +4,7 @@ import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.support.StaticListableBeanFactory;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
@@ -41,13 +41,13 @@ public class DynamicRepositoriesDecorator extends Repositories {
         return domainTypeConfigurations.containsKey(domainClass);
     }
 
-    @Override
-    public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor(Class<?> domainClass) {
-        if (hasRepositoryFor(domainClass)) {
-            return (CrudRepository<T, S>) domainTypeConfigurations.get(domainClass).getRepository();
-        }
-        return null;
-    }
+//    @Override
+//    public <T, S extends Serializable> CrudRepository<T, S> getRepositoryFor(Class<?> domainClass) {
+//        if (hasRepositoryFor(domainClass)) {
+//            return (CrudRepository<T, S>) domainTypeConfigurations.get(domainClass).getRepository();
+//        }
+//        return null;
+//    }
 
     @Override
     public <T, S extends Serializable> EntityInformation<T, S> getEntityInformationFor(Class<?> domainClass) {
@@ -102,6 +102,11 @@ public class DynamicRepositoriesDecorator extends Repositories {
         public RepositoryInformation getRepositoryInformation() {
             RepositoryMetadata metadata = new DynamicRepositoryMetadata(getEntityInformation());
             return new DynamicRepositoryInformation(metadata);
+        }
+
+        @Override
+        public PersistentEntity<?, ?> getPersistentEntity() {
+            return null;
         }
 
         @Override

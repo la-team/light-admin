@@ -44,7 +44,6 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
 import org.springframework.security.web.savedrequest.RequestCache;
 import org.springframework.security.web.util.AntPathRequestMatcher;
 import org.springframework.security.web.util.AnyRequestMatcher;
-import org.springframework.security.web.util.RequestMatcher;
 
 import javax.servlet.Filter;
 import java.io.IOException;
@@ -95,7 +94,7 @@ public class LightAdminSecurityConfiguration {
     }
 
     private FilterInvocationSecurityMetadataSource securityMetadataSource() {
-        LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> map = new LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>>();
+        LinkedHashMap<org.springframework.security.web.util.matcher.RequestMatcher, Collection<ConfigAttribute>> map = new LinkedHashMap<org.springframework.security.web.util.matcher.RequestMatcher, Collection<ConfigAttribute>>();
         map.put(new AnyRequestMatcher(), asList((ConfigAttribute) new SecurityConfig(ROLE_ADMIN)));
         return new DefaultFilterInvocationSecurityMetadataSource(map);
     }

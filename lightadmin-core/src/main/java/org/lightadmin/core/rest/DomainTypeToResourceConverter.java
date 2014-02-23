@@ -1,19 +1,7 @@
 package org.lightadmin.core.rest;
 
-import static com.google.common.collect.Maps.newLinkedHashMap;
-import static java.util.Collections.EMPTY_SET;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.FORM_VIEW;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
-import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
-import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
-
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
@@ -29,14 +17,24 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.springframework.core.convert.converter.Converter;
-import org.springframework.data.rest.webmvc.EntityResource;
-import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.google.common.collect.Maps;
-import com.google.common.collect.Sets;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Maps.newLinkedHashMap;
+import static java.util.Collections.EMPTY_SET;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.FORM_VIEW;
+import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
+import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
+import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
 @SuppressWarnings("unchecked")
 public class DomainTypeToResourceConverter extends DomainTypeResourceSupport implements Converter<Object, Resource> {

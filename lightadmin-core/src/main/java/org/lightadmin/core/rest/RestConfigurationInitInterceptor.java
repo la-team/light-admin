@@ -1,6 +1,6 @@
 package org.lightadmin.core.rest;
 
-import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.context.request.RequestAttributes;
 import org.springframework.web.context.request.WebRequest;

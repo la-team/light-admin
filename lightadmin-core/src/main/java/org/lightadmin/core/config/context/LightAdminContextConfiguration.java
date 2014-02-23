@@ -2,22 +2,20 @@ package org.lightadmin.core.config.context;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.StandardLightAdminConfiguration;
+import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
+import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.rest.DomainTypeToResourceConverter;
-import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
+import org.lightadmin.core.extension.WebApplicationContextListener;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
 import org.lightadmin.core.view.SeparateContainerTilesView;
-import org.lightadmin.core.web.ApplicationController;
-import org.lightadmin.core.web.util.FileResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -39,7 +37,12 @@ import java.util.List;
 
 @Configuration
 @Import({
-        LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class, LightAdminViewConfiguration.class
+        LightAdminDataConfiguration.class,
+        LightAdminDynamicRepositoryConfiguration.class,
+        LightAdminDomainConfiguration.class,
+//        LightAdminRemoteConfiguration.class,
+        NewLightAdminRepositoryRestMvcConfiguration.class
+//        LightAdminViewConfiguration.class
 })
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
@@ -47,13 +50,13 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
-    @Autowired
-    private RestConfigurationInitInterceptor restConfigurationInitInterceptor;
+//    @Autowired
+//    private RestConfigurationInitInterceptor restConfigurationInitInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor());
-        registry.addWebRequestInterceptor(restConfigurationInitInterceptor);
+//        registry.addWebRequestInterceptor(restConfigurationInitInterceptor);
     }
 
     @Override
@@ -71,15 +74,25 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     @Autowired
-    public ServletContextResourceLoader servletContextResourceLoader(ServletContext servletContext) {
-        return new ServletContextResourceLoader(servletContext);
+    public WebApplicationContextListener webApplicationContextListener(final GlobalAdministrationConfiguration globalAdministrationConfiguration,
+                                                                       final DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory,
+                                                                       final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
+                                                                       final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory,
+                                                                       final LightAdminConfiguration lightAdminConfiguration) {
+        return new WebApplicationContextListener(globalAdministrationConfiguration, domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory, configurationSourceValidatorFactory, lightAdminConfiguration);
     }
 
     @Bean
     @Autowired
-    public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
-        return new FileResourceLoader(globalAdministrationConfiguration, lightAdminConfiguration);
+    public ServletContextResourceLoader servletContextResourceLoader(ServletContext servletContext) {
+        return new ServletContextResourceLoader(servletContext);
     }
+
+//    @Bean
+//    @Autowired
+//    public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
+//        return new FileResourceLoader(globalAdministrationConfiguration, lightAdminConfiguration);
+//    }
 
     @Bean
     public OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor() {
@@ -98,13 +111,13 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
         configurer.enable();
     }
 
-    @Bean
-    @Autowired
-    public ConversionService conversionService(DomainTypeToResourceConverter domainTypeToResourceConverter) {
-        DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
-        bean.addConverter(domainTypeToResourceConverter);
-        return bean;
-    }
+//    @Bean
+//    @Autowired
+//    public ConversionService conversionService(DomainTypeToResourceConverter domainTypeToResourceConverter) {
+//        DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
+//        bean.addConverter(domainTypeToResourceConverter);
+//        return bean;
+//    }
 
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {
@@ -138,10 +151,10 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
         return messageSource;
     }
 
-    @Bean
-    public ApplicationController applicationController() {
-        return new ApplicationController();
-    }
+//    @Bean
+//    public ApplicationController applicationController() {
+//        return new ApplicationController();
+//    }
 
     @Bean
     public ViewResolver viewResolver() {

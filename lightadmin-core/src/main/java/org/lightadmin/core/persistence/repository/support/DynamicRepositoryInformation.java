@@ -2,6 +2,7 @@ package org.lightadmin.core.persistence.repository.support;
 
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.core.MethodParameter;
+import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.util.Assert;
@@ -34,6 +35,16 @@ class DynamicRepositoryInformation implements RepositoryInformation {
     @Override
     public Class<?> getReturnedDomainClass(final Method method) {
         return metadata.getDomainType();
+    }
+
+    @Override
+    public CrudMethods getCrudMethods() {
+        return null;
+    }
+
+    @Override
+    public boolean isPagingRepository() {
+        return false;
     }
 
     @Override
@@ -74,6 +85,11 @@ class DynamicRepositoryInformation implements RepositoryInformation {
 
     @Override
     public boolean isQueryMethod(final Method method) {
+        return false;
+    }
+
+    @Override
+    public boolean isBaseClassMethod(Method method) {
         return false;
     }
 

@@ -18,7 +18,6 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
 
     public DomainTypeAdministrationConfiguration(DomainConfigurationSource domainConfigurationSource, final DynamicJpaRepository<?, ?> repository) {
         Assert.notNull(domainConfigurationSource);
-        Assert.notNull(repository);
 
         this.domainConfigurationSource = domainConfigurationSource;
         this.repository = repository;

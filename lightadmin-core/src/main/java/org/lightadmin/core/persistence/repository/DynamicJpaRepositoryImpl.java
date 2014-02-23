@@ -69,6 +69,11 @@ class DynamicJpaRepositoryImpl<T, ID extends Serializable> implements DynamicJpa
     }
 
     @Override
+    public T getOne(ID id) {
+        return simpleJpaRepository.getOne(id);
+    }
+
+    @Override
     public T findOne(final ID id) {
         if (id == null) {
             return null;

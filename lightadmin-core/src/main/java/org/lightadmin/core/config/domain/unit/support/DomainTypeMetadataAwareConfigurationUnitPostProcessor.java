@@ -18,7 +18,7 @@ public class DomainTypeMetadataAwareConfigurationUnitPostProcessor extends Entit
         if (ClassUtils.isAssignableValue(DomainTypeEntityMetadataAware.class, configurationUnit)) {
             final DomainTypeEntityMetadata domainTypeEntityMetadata = resolveEntityMetadata(configurationUnit);
 
-            ((DomainTypeEntityMetadataAware) configurationUnit).setDomainTypeEntityMetadata(domainTypeEntityMetadata);
+//            ((DomainTypeEntityMetadataAware) configurationUnit).setDomainTypeEntityMetadata(domainTypeEntityMetadata);
         }
         return configurationUnit;
     }

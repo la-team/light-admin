@@ -1,6 +1,7 @@
 package org.lightadmin.core.persistence.repository.support;
 
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.springframework.data.repository.core.CrudMethods;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.core.RepositoryMetadata;
 import org.springframework.util.Assert;
@@ -37,5 +38,15 @@ class DynamicRepositoryMetadata implements RepositoryMetadata {
     @Override
     public Class<?> getReturnedDomainClass(final Method method) {
         return entityInformation.getJavaType();
+    }
+
+    @Override
+    public CrudMethods getCrudMethods() {
+        return null;
+    }
+
+    @Override
+    public boolean isPagingRepository() {
+        return false;
     }
 }

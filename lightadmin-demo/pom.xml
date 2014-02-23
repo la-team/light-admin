@@ -19,7 +19,7 @@
     <properties>
         <container.port>8080</container.port>
 
-        <spring.version>3.2.5.RELEASE</spring.version>
+        <spring.version>3.2.8.RELEASE</spring.version>
         <hibernate.version>4.3.0.Final</hibernate.version>
         <logback.version>1.0.9</logback.version>
     </properties>
@@ -71,8 +71,8 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.0-api</artifactId>
-            <version>1.0.1.Final</version>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>1.0.0.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>

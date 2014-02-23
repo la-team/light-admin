@@ -5,8 +5,10 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 @SuppressWarnings("unchecked")
@@ -22,7 +24,7 @@ public class GlobalAdministrationConfiguration {
 
     public void registerDomainTypeConfiguration(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
         managedDomainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
-        registerAssociationDomainTypeConfigurations(domainTypeAdministrationConfiguration);
+//        registerAssociationDomainTypeConfigurations(domainTypeAdministrationConfiguration);
     }
 
     private void registerAssociationDomainTypeConfigurations(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
@@ -48,6 +50,21 @@ public class GlobalAdministrationConfiguration {
         managedDomainTypeConfigurations.clear();
 
         domainTypeConfigurations.clear();
+    }
+
+    public Set<Class<?>> getManagedDomainTypes() {
+        return managedDomainTypeConfigurations.keySet();
+    }
+
+    public Set<Class<?>> getNonManagedDomainTypes() {
+        return domainTypeConfigurations.keySet();
+    }
+
+    public Set<Class<?>> getAllDomainTypes() {
+        final Set<Class<?>> domainTypes = newLinkedHashSet();
+        domainTypes.addAll(getNonManagedDomainTypes());
+        domainTypes.addAll(getManagedDomainTypes());
+        return domainTypes;
     }
 
     public Map<Class<?>, DomainTypeAdministrationConfiguration> getManagedDomainTypeConfigurations() {

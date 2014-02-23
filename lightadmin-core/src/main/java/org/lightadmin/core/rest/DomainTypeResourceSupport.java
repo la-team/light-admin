@@ -1,7 +1,7 @@
 package org.lightadmin.core.rest;
 
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
-import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.web.util.UriComponentsBuilder;
 
