@@ -15,8 +15,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.springframework.beans.factory.BeanFactoryUtils.beanNamesForTypeIncludingAncestors;
-
 public class RefreshableRepositories extends Repositories implements Refreshable, ApplicationListener<DynamicRepositoryBeanFactoryRefreshedEvent>, ApplicationEventPublisherAware {
 
     private static final String DOMAIN_CLASS_TO_BEAN_NAME_FIELD = "domainClassToBeanName";
@@ -54,9 +52,7 @@ public class RefreshableRepositories extends Repositories implements Refreshable
     }
 
     private void repopulateCache() {
-        final String[] beanNamesForType = beanNamesForTypeIncludingAncestors(factory, RepositoryFactoryInformation.class, false, false);
-
-        repositoryFactoryBeanNames().addAll(Arrays.asList(beanNamesForType));
+        repositoryFactoryBeanNames().addAll(Arrays.asList(factory.getBeanDefinitionNames()));
     }
 
     @SuppressWarnings("unchecked")

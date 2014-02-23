@@ -57,7 +57,7 @@ public class DefaultDynamicRepositoryBeanFactory implements DynamicRepositoryBea
         RepositoryInformation repositoryInformation = repositoryFactoryBean.getRepositoryInformation();
         Class<?> repositoryInterface = repositoryInformation.getRepositoryInterface();
 
-        final String beanName = beanNameGenerator.generateBeanNameDecapitalized(domainType, repositoryInterface);
+        final String beanName = beanNameGenerator.generateBeanNameDecapitalized(repositoryInterface);
 
         addBean(beanName, repositoryFactoryBean);
     }
@@ -78,6 +78,14 @@ public class DefaultDynamicRepositoryBeanFactory implements DynamicRepositoryBea
 
     @Override
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
+
+//        Object bean = getBean(name);
+//        if (requiredType != null && !requiredType.isAssignableFrom(bean.getClass())) {
+//            throw new BeanNotOfRequiredTypeException(name, requiredType, bean.getClass());
+//        }
+//        return (T) bean;
+
+
         return beanFactoryDelegate.getBean(name, requiredType);
     }
 
