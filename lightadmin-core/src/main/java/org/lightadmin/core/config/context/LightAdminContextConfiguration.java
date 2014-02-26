@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
 import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
@@ -100,9 +101,11 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     @Autowired
-    public ConversionService conversionService(DomainTypeToResourceConverter domainTypeToResourceConverter) {
+    public ConversionService conversionService(List<Converter> converters) {
         DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
-        bean.addConverter(domainTypeToResourceConverter);
+        for (Converter converter : converters) {
+            bean.addConverter(converter);
+        }
         return bean;
     }
 
