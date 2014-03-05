@@ -2,6 +2,7 @@ package org.lightadmin.core.extension;
 
 import org.junit.Before;
 import org.junit.Test;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 public class JavassistDynamicJpaRepositoryClassFactoryTest {
 
@@ -14,6 +15,8 @@ public class JavassistDynamicJpaRepositoryClassFactoryTest {
 
     @Test
     public void testCreateDynamicRepositoryClass() {
-        testee.createDynamicRepositoryClass(String.class, Long.class);
+        Class<JpaRepository<String, Long>> dynamicRepositoryClass = testee.createDynamicRepositoryClass(String.class, Long.class);
+        Class<JpaRepository<String, Long>> dynamicRepositoryClass1 = testee.createDynamicRepositoryClass(String.class, Long.class);
+        Class<JpaRepository<String, Long>> dynamicRepositoryClass2 = testee.createDynamicRepositoryClass(String.class, Long.class);
     }
 }

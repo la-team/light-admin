@@ -71,22 +71,21 @@ public class DefaultDynamicRepositoryBeanFactory implements DynamicRepositoryBea
         beanWrapper.setPropertyValue(DELEGATE_BEANS_FIELD, new HashMap<String, Object>());
     }
 
+    @SuppressWarnings("unchecked")
+    private Map<String, Object> beans() {
+        BeanWrapper beanWrapper = new DirectFieldAccessFallbackBeanWrapper(beanFactoryDelegate);
+        return (Map<String, Object>) beanWrapper.getPropertyValue(DELEGATE_BEANS_FIELD);
+    }
+
     @Override
     public Object getBean(String name) throws BeansException {
         return beanFactoryDelegate.getBean(name);
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public <T> T getBean(String name, Class<T> requiredType) throws BeansException {
-
-//        Object bean = getBean(name);
-//        if (requiredType != null && !requiredType.isAssignableFrom(bean.getClass())) {
-//            throw new BeanNotOfRequiredTypeException(name, requiredType, bean.getClass());
-//        }
-//        return (T) bean;
-
-
-        return beanFactoryDelegate.getBean(name, requiredType);
+        return (T) beans().get(name);
     }
 
     @Override

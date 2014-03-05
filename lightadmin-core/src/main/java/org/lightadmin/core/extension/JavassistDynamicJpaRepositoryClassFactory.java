@@ -12,17 +12,21 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.util.ClassUtils;
+import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.UUID;
 
-public class JavassistDynamicJpaRepositoryClassFactory implements DynamicJpaRepositoryClassFactory {
+public class JavassistDynamicJpaRepositoryClassFactory implements DynamicRepositoryClassFactory {
 
     private final Logger logger = LoggerFactory.getLogger(JavassistDynamicJpaRepositoryClassFactory.class);
 
     private final DynamicRepositoryBeanNameGenerator dynamicRepositoryBeanNameGenerator;
+    private final ClassLoader classLoader;
 
     public JavassistDynamicJpaRepositoryClassFactory(DynamicRepositoryBeanNameGenerator dynamicRepositoryBeanNameGenerator) {
         this.dynamicRepositoryBeanNameGenerator = dynamicRepositoryBeanNameGenerator;
+        this.classLoader = ClassUtils.getDefaultClassLoader();
     }
 
     @Override
@@ -31,19 +35,25 @@ public class JavassistDynamicJpaRepositoryClassFactory implements DynamicJpaRepo
         try {
             ClassPool classPool = ClassPool.getDefault();
 
-            CtClass ctClass = classPool.makeInterface(generateDynamicRepositoryClassReference(domainType));
-            ClassFile classFile = ctClass.getClassFile();
-            ConstPool classFileConstPool = classFile.getConstPool();
+            CtClass jpaRepositoryCtClass = classPool.getOrNull(JpaRepository.class.getName());
+            if (jpaRepositoryCtClass == null) {
+                jpaRepositoryCtClass = classPool.makeInterface(JpaRepository.class.getName());
+            }
+
+            CtClass dynamicRepositoryInterface = classPool.makeInterface(generateDynamicRepositoryClassReference(domainType), jpaRepositoryCtClass);
+            ClassFile dynamicRepositoryInterfaceClassFile = dynamicRepositoryInterface.getClassFile();
+
+            ConstPool classFileConstPool = dynamicRepositoryInterfaceClassFile.getConstPool();
 
             Annotation annot = new Annotation(RepositoryDefinition.class.getName(), classFileConstPool);
-            annot.addMemberValue("domainClass", new ClassMemberValue(domainType.getName(), classFile.getConstPool()));
-            annot.addMemberValue("idClass", new ClassMemberValue(idType.getName(), classFile.getConstPool()));
+            annot.addMemberValue("domainClass", new ClassMemberValue(domainType.getName(), dynamicRepositoryInterfaceClassFile.getConstPool()));
+            annot.addMemberValue("idClass", new ClassMemberValue(idType.getName(), dynamicRepositoryInterfaceClassFile.getConstPool()));
 
             AnnotationsAttribute annotationsAttribute = new AnnotationsAttribute(classFileConstPool, AnnotationsAttribute.visibleTag);
             annotationsAttribute.addAnnotation(annot);
-            classFile.addAttribute(annotationsAttribute);
+            dynamicRepositoryInterfaceClassFile.addAttribute(annotationsAttribute);
 
-            return ctClass.toClass();
+            return dynamicRepositoryInterface.toClass(classLoader, JavassistDynamicJpaRepositoryClassFactory.class.getProtectionDomain());
         } catch (Exception e) {
             logger.error("Problem occured during DynamicRepository class creation process", e);
             throw new RuntimeException(e);
@@ -51,9 +61,10 @@ public class JavassistDynamicJpaRepositoryClassFactory implements DynamicJpaRepo
     }
 
     private String generateDynamicRepositoryClassReference(Class<?> domainType) {
+        String uuid = StringUtils.deleteAny(UUID.randomUUID().toString(), "-");
         String packageName = ClassUtils.getPackageName(JavassistDynamicJpaRepositoryClassFactory.class);
-        String dynamicRepositoryClassName = dynamicRepositoryBeanNameGenerator.generateBeanName(domainType, JpaRepository.class);
+        String domainRepositoryClassName = dynamicRepositoryBeanNameGenerator.generateBeanName(domainType, JpaRepository.class);
 
-        return packageName + "." + dynamicRepositoryClassName;
+        return packageName + "." + domainRepositoryClassName + "$$DYNAMIC$$" + uuid;
     }
 }

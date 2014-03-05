@@ -16,7 +16,7 @@ import java.io.Serializable;
 import java.util.List;
 
 @Transactional(readOnly = true)
-class DynamicJpaRepositoryImpl<T, ID extends Serializable> implements DynamicJpaRepository<T, ID> {
+public class DynamicJpaRepositoryImpl<T, ID extends Serializable> implements DynamicJpaRepository<T, ID> {
 
     private static final Logger log = LoggerFactory.getLogger(DynamicJpaRepositoryImpl.class);
 

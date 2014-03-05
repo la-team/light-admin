@@ -10,18 +10,18 @@ import javax.persistence.EntityManager;
 
 public class JpaRepositoryFactoryBeanCreator implements RepositoryFactoryBeanCreator {
 
-    private final DynamicJpaRepositoryClassFactory dynamicJpaRepositoryClassFactory;
+    private final DynamicRepositoryClassFactory dynamicRepositoryClassFactory;
 
     private final EntityManager entityManager;
     private final BeanFactory beanFactory;
     private final ClassLoader classLoader;
 
-    public JpaRepositoryFactoryBeanCreator(DynamicJpaRepositoryClassFactory dynamicJpaRepositoryClassFactory, EntityManager entityManager, BeanFactory beanFactory) {
+    public JpaRepositoryFactoryBeanCreator(DynamicRepositoryClassFactory dynamicRepositoryClassFactory, EntityManager entityManager, BeanFactory beanFactory) {
         this.entityManager = entityManager;
-        this.classLoader = ClassUtils.getDefaultClassLoader();
         this.beanFactory = beanFactory;
+        this.dynamicRepositoryClassFactory = dynamicRepositoryClassFactory;
 
-        this.dynamicJpaRepositoryClassFactory = dynamicJpaRepositoryClassFactory;
+        this.classLoader = ClassUtils.getDefaultClassLoader();
     }
 
     @Override
@@ -33,7 +33,7 @@ public class JpaRepositoryFactoryBeanCreator implements RepositoryFactoryBeanCre
         jpaRepositoryFactoryBean.setEntityManager(this.entityManager);
         jpaRepositoryFactoryBean.setBeanClassLoader(this.classLoader);
         jpaRepositoryFactoryBean.setBeanFactory(this.beanFactory);
-        jpaRepositoryFactoryBean.setRepositoryInterface(dynamicJpaRepositoryClassFactory.createDynamicRepositoryClass(domainType, idType));
+        jpaRepositoryFactoryBean.setRepositoryInterface(this.dynamicRepositoryClassFactory.createDynamicRepositoryClass(domainType, idType));
 
         jpaRepositoryFactoryBean.afterPropertiesSet();
 

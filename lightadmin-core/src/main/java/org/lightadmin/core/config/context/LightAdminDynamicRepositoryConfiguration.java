@@ -29,7 +29,7 @@ public class LightAdminDynamicRepositoryConfiguration {
     }
 
     @Bean
-    public DynamicJpaRepositoryClassFactory dynamicJpaRepositoryClassFactory() {
+    public DynamicRepositoryClassFactory dynamicJpaRepositoryClassFactory() {
         return new JavassistDynamicJpaRepositoryClassFactory(dynamicRepositoryBeanNameGenerator());
     }
 

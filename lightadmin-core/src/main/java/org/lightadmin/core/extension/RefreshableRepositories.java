@@ -2,24 +2,23 @@ package org.lightadmin.core.extension;
 
 import org.lightadmin.core.util.DirectFieldAccessFallbackBeanWrapper;
 import org.springframework.beans.BeanWrapper;
+import org.springframework.beans.factory.BeanFactoryUtils;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.context.ApplicationListener;
 import org.springframework.data.repository.core.support.RepositoryFactoryInformation;
 import org.springframework.data.repository.support.Repositories;
+import org.springframework.util.ClassUtils;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Map;
 
 public class RefreshableRepositories extends Repositories implements Refreshable, ApplicationListener<DynamicRepositoryBeanFactoryRefreshedEvent>, ApplicationEventPublisherAware {
 
-    private static final String DOMAIN_CLASS_TO_BEAN_NAME_FIELD = "domainClassToBeanName";
-    private static final String REPOSITORIES_FIELD = "repositories";
-    private static final String REPOSITORY_FACTORY_BEAN_NAMES_FIELD = "repositoryFactoryBeanNames";
+    private static final String REPOSITORY_BEAN_NAMES_FIELD = "repositoryBeanNames";
+    private static final String REPOSITORY_FACTORY_INFOS_FIELD = "repositoryFactoryInfos";
 
     private final ListableBeanFactory factory;
 
@@ -35,11 +34,10 @@ public class RefreshableRepositories extends Repositories implements Refreshable
 
     @Override
     public void refresh() {
-        emptyDomainClassToBeanNamesCache();
-        emptyRepositoriesCache();
-        emptyRepositoryFactoryBeanNames();
+        emptyRepositoryBeanNames();
+        emptyRepositoryFactoryInfosCache();
 
-        repopulateCache();
+        repopulateRepositoryFactoryInformation();
 
         if (applicationEventPublisher != null) {
             applicationEventPublisher.publishEvent(new RepositoriesRefreshedEvent(this));
@@ -51,25 +49,34 @@ public class RefreshableRepositories extends Repositories implements Refreshable
         refresh();
     }
 
-    private void repopulateCache() {
-        repositoryFactoryBeanNames().addAll(Arrays.asList(factory.getBeanDefinitionNames()));
+    @SuppressWarnings("unchecked")
+    private void repopulateRepositoryFactoryInformation() {
+        String[] repositoryBeanNames = factory.getBeanDefinitionNames();
+        for (String repositoryBeanName : repositoryBeanNames) {
+            RepositoryFactoryInformation repositoryFactoryInformation = factory.getBean(repositoryBeanName, RepositoryFactoryInformation.class);
+            Class<?> userDomainType = ClassUtils.getUserClass(repositoryFactoryInformation.getRepositoryInformation().getDomainType());
+
+            repositoryFactoryInfos().put(userDomainType, repositoryFactoryInformation);
+            repositoryBeanNames().put(userDomainType, BeanFactoryUtils.transformedBeanName(repositoryBeanName));
+        }
     }
 
     @SuppressWarnings("unchecked")
-    private Set<String> repositoryFactoryBeanNames() {
-        return (Set<String>) delegateBeanWrapper.getPropertyValue(REPOSITORY_FACTORY_BEAN_NAMES_FIELD);
+    private Map<Class<?>, String> repositoryBeanNames() {
+        return (Map<Class<?>, String>) delegateBeanWrapper.getPropertyValue(REPOSITORY_BEAN_NAMES_FIELD);
     }
 
-    private void emptyDomainClassToBeanNamesCache() {
-        this.delegateBeanWrapper.setPropertyValue(DOMAIN_CLASS_TO_BEAN_NAME_FIELD, new HashMap<Class<?>, RepositoryFactoryInformation<Object, Serializable>>());
+    @SuppressWarnings("unchecked")
+    private Map<Class<?>, RepositoryFactoryInformation<Object, Serializable>> repositoryFactoryInfos() {
+        return (Map<Class<?>, RepositoryFactoryInformation<Object, Serializable>>) delegateBeanWrapper.getPropertyValue(REPOSITORY_FACTORY_INFOS_FIELD);
     }
 
-    private void emptyRepositoriesCache() {
-        this.delegateBeanWrapper.setPropertyValue(REPOSITORIES_FIELD, new HashMap<RepositoryFactoryInformation<Object, Serializable>, String>());
+    private void emptyRepositoryFactoryInfosCache() {
+        this.delegateBeanWrapper.setPropertyValue(REPOSITORY_FACTORY_INFOS_FIELD, new HashMap<Class<?>, RepositoryFactoryInformation<Object, Serializable>>());
     }
 
-    private void emptyRepositoryFactoryBeanNames() {
-        this.delegateBeanWrapper.setPropertyValue(REPOSITORY_FACTORY_BEAN_NAMES_FIELD, new HashSet<String>());
+    private void emptyRepositoryBeanNames() {
+        this.delegateBeanWrapper.setPropertyValue(REPOSITORY_BEAN_NAMES_FIELD, new HashMap<Class<?>, String>());
     }
 
     @Override
