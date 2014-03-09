@@ -1,21 +1,17 @@
 package org.lightadmin.core.extension;
 
+import java.io.Serializable;
+import java.util.UUID;
+
 import javassist.ClassPool;
 import javassist.CtClass;
-import javassist.bytecode.AnnotationsAttribute;
-import javassist.bytecode.ClassFile;
-import javassist.bytecode.ConstPool;
-import javassist.bytecode.annotation.Annotation;
-import javassist.bytecode.annotation.ClassMemberValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.repository.RepositoryDefinition;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import java.io.Serializable;
-import java.util.UUID;
+import static javassist.bytecode.SignatureAttribute.*;
 
 public class JavassistDynamicJpaRepositoryClassFactory implements DynamicRepositoryClassFactory {
 
@@ -35,23 +31,13 @@ public class JavassistDynamicJpaRepositoryClassFactory implements DynamicReposit
         try {
             ClassPool classPool = ClassPool.getDefault();
 
-            CtClass jpaRepositoryCtClass = classPool.getOrNull(JpaRepository.class.getName());
-            if (jpaRepositoryCtClass == null) {
-                jpaRepositoryCtClass = classPool.makeInterface(JpaRepository.class.getName());
-            }
+            CtClass baseInterface = classPool.get(JpaRepository.class.getName());
+            CtClass dynamicRepositoryInterface = classPool.makeInterface(generateDynamicRepositoryClassReference(domainType), baseInterface);
 
-            CtClass dynamicRepositoryInterface = classPool.makeInterface(generateDynamicRepositoryClassReference(domainType), jpaRepositoryCtClass);
-            ClassFile dynamicRepositoryInterfaceClassFile = dynamicRepositoryInterface.getClassFile();
-
-            ConstPool classFileConstPool = dynamicRepositoryInterfaceClassFile.getConstPool();
-
-            Annotation annot = new Annotation(RepositoryDefinition.class.getName(), classFileConstPool);
-            annot.addMemberValue("domainClass", new ClassMemberValue(domainType.getName(), dynamicRepositoryInterfaceClassFile.getConstPool()));
-            annot.addMemberValue("idClass", new ClassMemberValue(idType.getName(), dynamicRepositoryInterfaceClassFile.getConstPool()));
-
-            AnnotationsAttribute annotationsAttribute = new AnnotationsAttribute(classFileConstPool, AnnotationsAttribute.visibleTag);
-            annotationsAttribute.addAnnotation(annot);
-            dynamicRepositoryInterfaceClassFile.addAttribute(annotationsAttribute);
+            ClassType baseInterfaceType = new ClassType(JpaRepository.class.getName(),
+                    new TypeArgument[]{new TypeArgument(new ClassType(domainType.getName())), new TypeArgument(new ClassType(idType.getName()))});
+            ClassSignature signature = new ClassSignature(null, null, new ClassType[]{baseInterfaceType});
+            dynamicRepositoryInterface.setGenericSignature(signature.encode());
 
             return dynamicRepositoryInterface.toClass(classLoader, JavassistDynamicJpaRepositoryClassFactory.class.getProtectionDomain());
         } catch (Exception e) {
