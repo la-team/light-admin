@@ -90,8 +90,8 @@
 
         <spring.version>3.2.8.RELEASE</spring.version>
         <spring.security.version>3.2.0.RELEASE</spring.security.version>
-        <spring.data.jpa.version>1.6.0.BUILD-SNAPSHOT</spring.data.jpa.version>
-        <spring.data.rest.webmvc.version>2.1.0.BUILD-SNAPSHOT</spring.data.rest.webmvc.version>
+        <spring.data.jpa.version>1.5.1.RELEASE</spring.data.jpa.version>
+        <spring.data.rest.webmvc.version>2.0.1.RELEASE</spring.data.rest.webmvc.version>
         <apache.tiles.version>2.2.2</apache.tiles.version>
     </properties>
 
