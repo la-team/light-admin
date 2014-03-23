@@ -4,7 +4,6 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
-import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +30,6 @@ public class LightAdminDomainConfiguration {
 
     @Autowired
     private AutowireCapableBeanFactory beanFactory;
-
-    @Bean
-    @Autowired
-    public GlobalAdministrationConfiguration globalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory) {
-        return new GlobalAdministrationConfiguration(domainTypeAdministrationConfigFactory);
-    }
 
     @Bean
     public DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver() {

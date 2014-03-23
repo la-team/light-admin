@@ -6,10 +6,8 @@ import static java.beans.Introspector.decapitalize;
 
 public class DynamicRepositoryBeanNameGenerator {
 
-    public String generateBeanNameDecapitalized(Class<?> repositoryInterface) {
-        String repositoryInterfaceClassName = ClassUtils.getShortName(repositoryInterface);
-
-        return decapitalize(repositoryInterfaceClassName);
+    public String generateBeanNameDecapitalized(Class<?> clazz) {
+        return decapitalize(ClassUtils.getShortName(clazz));
     }
 
     public String generateBeanName(Class<?> domainType, Class<?> repositoryInterface) {

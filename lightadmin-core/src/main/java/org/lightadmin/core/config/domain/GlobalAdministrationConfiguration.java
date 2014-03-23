@@ -18,6 +18,10 @@ public class GlobalAdministrationConfiguration {
     private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
     private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
 
+    public GlobalAdministrationConfiguration() {
+        this.domainTypeConfigurationFactory = null;
+    }
+
     public GlobalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
         this.domainTypeConfigurationFactory = domainTypeConfigurationFactory;
     }
