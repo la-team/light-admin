@@ -2,9 +2,9 @@ package org.lightadmin.core.extension;
 
 import javassist.ClassPool;
 import javassist.CtClass;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
@@ -27,18 +27,18 @@ public class JavassistDynamicJpaRepositoryClassFactory implements DynamicReposit
 
     @Override
     @SuppressWarnings("unchecked")
-    public <T, ID extends Serializable> Class<JpaRepository<T, ID>> createDynamicRepositoryClass(Class<T> domainType, Class<ID> idType) {
+    public <T, ID extends Serializable> Class<DynamicJpaRepository<T, ID>> createDynamicRepositoryClass(Class<T> domainType, Class<ID> idType) {
         try {
             ClassPool classPool = ClassPool.getDefault();
 
-            CtClass baseInterface = classPool.getOrNull(JpaRepository.class.getName());
+            CtClass baseInterface = classPool.getOrNull(DynamicJpaRepository.class.getName());
             if (baseInterface == null) {
-                baseInterface = classPool.makeInterface(JpaRepository.class.getName());
+                baseInterface = classPool.makeInterface(DynamicJpaRepository.class.getName());
             }
 
             CtClass dynamicRepositoryInterface = classPool.makeInterface(generateDynamicRepositoryClassReference(domainType), baseInterface);
 
-            ClassType baseInterfaceType = new ClassType(JpaRepository.class.getName(),
+            ClassType baseInterfaceType = new ClassType(DynamicJpaRepository.class.getName(),
                     new TypeArgument[]{new TypeArgument(new ClassType(domainType.getName())), new TypeArgument(new ClassType(idType.getName()))});
             ClassSignature signature = new ClassSignature(null, null, new ClassType[]{baseInterfaceType});
             dynamicRepositoryInterface.setGenericSignature(signature.encode());
@@ -53,7 +53,7 @@ public class JavassistDynamicJpaRepositoryClassFactory implements DynamicReposit
     private String generateDynamicRepositoryClassReference(Class<?> domainType) {
         String uuid = StringUtils.deleteAny(UUID.randomUUID().toString(), "-");
         String packageName = ClassUtils.getPackageName(JavassistDynamicJpaRepositoryClassFactory.class);
-        String domainRepositoryClassName = dynamicRepositoryBeanNameGenerator.generateBeanName(domainType, JpaRepository.class);
+        String domainRepositoryClassName = dynamicRepositoryBeanNameGenerator.generateBeanName(domainType, DynamicJpaRepository.class);
 
         return packageName + "." + domainRepositoryClassName + "$$DYNAMIC$$" + uuid;
     }

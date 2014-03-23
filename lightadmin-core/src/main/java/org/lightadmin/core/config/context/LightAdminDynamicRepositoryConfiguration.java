@@ -1,5 +1,7 @@
 package org.lightadmin.core.config.context;
 
+import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.extension.DynamicRepositoryBeanNameGenerator;
 import org.lightadmin.core.extension.DynamicRepositoryClassFactory;
 import org.lightadmin.core.extension.JavassistDynamicJpaRepositoryClassFactory;
@@ -10,6 +12,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.Map;
 
 @Configuration
 public class LightAdminDynamicRepositoryConfiguration {
@@ -19,6 +22,17 @@ public class LightAdminDynamicRepositoryConfiguration {
 
     @Autowired
     private WebApplicationContext webApplicationContext;
+
+    @Autowired
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration;
+
+    //
+    @Bean
+    public String testBean() {
+        Map<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = globalAdministrationConfiguration.getDomainTypeConfigurations();
+
+        return "Str";
+    }
 
 //    @Bean
 //    public DynamicRepositoryBeanFactory dynamicRepositoryBeanFactory() {

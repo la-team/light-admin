@@ -8,6 +8,7 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.util.Pair;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class ListViewPreparer extends ConfigurationAwareViewPreparer {
     }
 
     @SuppressWarnings("unchecked")
-    private Pair<? extends ScopeMetadata, Long> scopeWithRecordsCount(final PredicateScopeMetadata scope, final DynamicJpaRepository<?, ?> repository) {
+    private Pair<? extends ScopeMetadata, Long> scopeWithRecordsCount(final PredicateScopeMetadata scope, final JpaRepository<?, ?> repository) {
         long recordsCount = Collections2.filter(repository.findAll(), scope.predicate()).size();
 
         return Pair.create(scope, recordsCount);

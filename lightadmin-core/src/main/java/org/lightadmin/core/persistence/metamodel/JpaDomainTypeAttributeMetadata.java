@@ -1,24 +1,17 @@
 package org.lightadmin.core.persistence.metamodel;
 
 import org.springframework.data.rest.repository.AttributeMetadata;
-import org.springframework.data.rest.repository.jpa.JpaAttributeMetadata;
 
 import javax.persistence.metamodel.Attribute;
 import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.PluralAttribute;
 import java.lang.annotation.Annotation;
 
 public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetadata {
 
-    private final JpaAttributeMetadata attributeMetadata;
-
     private Attribute attribute;
 
-    public JpaDomainTypeAttributeMetadata(JpaAttributeMetadata attributeMetadata) {
-        this.attributeMetadata = attributeMetadata;
-    }
-
     public JpaDomainTypeAttributeMetadata(EntityType<?> entityType, Attribute attribute) {
-        this(new JpaAttributeMetadata(entityType, attribute));
         this.attribute = attribute;
     }
 
@@ -34,7 +27,7 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
     @Override
     public AttributeMetadata getAttributeMetadata() {
-        return attributeMetadata;
+        throw new RuntimeException("No Attribute metadata found!");
     }
 
     @Override
@@ -44,12 +37,12 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
     @Override
     public Class<?> getType() {
-        return attributeMetadata.type();
+        return attribute.getJavaType();
     }
 
     @Override
     public Class<?> getElementType() {
-        return attributeMetadata.elementType();
+        return ((PluralAttribute) attribute).getElementType().getJavaType();
     }
 
     @Override

@@ -3,12 +3,12 @@ package org.lightadmin.core.web;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -143,7 +143,7 @@ public class ApplicationController {
         model.addAttribute(BEAN_FACTORY_KEY, appContext.getAutowireCapableBeanFactory());
     }
 
-    private DynamicJpaRepository repositoryForEntity(final String domainType) {
+    private JpaRepository repositoryForEntity(final String domainType) {
         return configuration.forEntityName(domainType).getRepository();
     }
 

@@ -5,9 +5,9 @@ import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.ClassUtils;
 
 import javax.persistence.criteria.*;
@@ -130,7 +130,7 @@ public class SpecificationCreator {
 
             final DomainTypeBasicConfiguration domainTypeBasicConfiguration = domainTypeConfigurationFor(domainType);
 
-            final DynamicJpaRepository repository = domainTypeBasicConfiguration.getRepository();
+            final JpaRepository repository = domainTypeBasicConfiguration.getRepository();
 
             final Serializable id = stringToSerializable(parameterValue, (Class<? extends Serializable>) domainTypeBasicConfiguration.getDomainTypeEntityMetadata().getIdAttribute().getType());
 

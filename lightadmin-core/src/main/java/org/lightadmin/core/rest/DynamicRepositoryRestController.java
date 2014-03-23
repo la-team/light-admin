@@ -70,7 +70,8 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
         DomainTypeBasicConfiguration repo;
         if (attrMeta.isCollectionLike() || attrMeta.isSetLike()) {
             collectionAttrMetaSet(attrMeta, incomingVal, entity);
-        } else if ((repo = configuration.forDomainType(attrMeta.type())) != null && (repo.getRepository().isNullPlaceholder(incomingVal))) {
+//        } else if ((repo = configuration.forDomainType(attrMeta.type())) != null && (repo.getRepository().isNullPlaceholder(incomingVal))) { // TODO: Please take a look!
+        } else if ((repo = configuration.forDomainType(attrMeta.type())) != null) {
             attrMeta.set(null, entity);
         } else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
             attrMeta.set(null, entity);

@@ -5,7 +5,7 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.rest.repository.AttributeMetadata;
 import org.springframework.util.ClassUtils;
 
@@ -70,7 +70,7 @@ public abstract class AbstractFileRestOperation {
         return getFile(lightAdminConfiguration.getFileStorageDirectory(), valueOf(attributeMetadata.get(entity)));
     }
 
-    protected DynamicJpaRepository repository() {
+    protected JpaRepository repository() {
         return domainTypeAdministrationConfiguration.getRepository();
     }
 

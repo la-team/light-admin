@@ -1,8 +1,5 @@
 package org.lightadmin.core.config.domain;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -18,32 +15,17 @@ public class GlobalAdministrationConfiguration {
     private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
     private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
 
-    public GlobalAdministrationConfiguration() {
-        this.domainTypeConfigurationFactory = null;
-    }
-
     public GlobalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
         this.domainTypeConfigurationFactory = domainTypeConfigurationFactory;
     }
 
     public void registerDomainTypeConfiguration(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
         managedDomainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
-//        registerAssociationDomainTypeConfigurations(domainTypeAdministrationConfiguration);
+        domainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
     }
 
-    private void registerAssociationDomainTypeConfigurations(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
-
-        domainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
-
-        DomainTypeEntityMetadata<DomainTypeAttributeMetadata> entityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
-        for (DomainTypeAttributeMetadata attrMetadata : entityMetadata.getAttributes()) {
-            if (!attrMetadata.isAssociation()) {
-                continue;
-            }
-            Class<?> associationDomainType = attrMetadata.getAssociationDomainType();
-            DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeConfigurationFactory.createNonManagedDomainTypeConfiguration(associationDomainType);
-            domainTypeConfigurations.putIfAbsent(associationDomainType, associationTypeConfiguration);
-        }
+    public void registerNonDomainTypeConfiguration(DomainTypeBasicConfiguration domainTypeBasicConfiguration) {
+        domainTypeConfigurations.put(domainTypeBasicConfiguration.getDomainType(), domainTypeBasicConfiguration);
     }
 
     public void removeDomainTypeConfiguration(final Class<?> domainType) {

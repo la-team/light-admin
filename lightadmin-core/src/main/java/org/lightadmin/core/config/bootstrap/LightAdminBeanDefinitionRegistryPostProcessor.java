@@ -28,6 +28,7 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromAutowiredConfiguration;
 import static org.lightadmin.core.util.DomainConfigurationUtils.configurationDomainType;
+import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
@@ -67,20 +68,21 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
             registry.registerBeanDefinition(nameGenerator.generateBeanNameDecapitalized(repoInterface), repositoryFactoryBeanDefinition);
         }
 
-        BeanDefinition configurationBeanDefinition = globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection);
+        BeanDefinition configurationBeanDefinition = globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection, entityManager);
 
         registry.registerBeanDefinition(nameGenerator.generateBeanNameDecapitalized(GlobalAdministrationConfiguration.class), configurationBeanDefinition);
     }
 
-    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(GlobalAdministrationConfigurationFactoryBean.class);
-        builder.addPropertyValue("configurationUnits", configurationUnits);
+    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits, Object entityManager) {
+        BeanDefinitionBuilder builder = rootBeanDefinition(GlobalAdministrationConfigurationFactoryBean.class);
+        builder.addPropertyValue("domainTypeConfigurationUnits", configurationUnits);
         builder.addPropertyValue("repositories", new RuntimeBeanReference("repositories"));
+        builder.addPropertyValue("entityManager", entityManager);
         return builder.getBeanDefinition();
     }
 
     private BeanDefinition repositoryFactoryBeanDefinition(Class repoInterface, EntityManager entityManager) {
-        BeanDefinitionBuilder builder = BeanDefinitionBuilder.rootBeanDefinition(JpaRepositoryFactoryBean.class);
+        BeanDefinitionBuilder builder = rootBeanDefinition(JpaRepositoryFactoryBean.class);
         builder.addPropertyValue("entityManager", entityManager);
         builder.addPropertyValue("repositoryInterface", repoInterface);
         return builder.getBeanDefinition();

@@ -160,14 +160,4 @@ public class DynamicJpaRepositoryImpl<T, ID extends Serializable> implements Dyn
         simpleJpaRepository.flush();
     }
 
-    @Override
-    public T getNullPlaceholder() {
-        return nullPlaceholder;
-    }
-
-    @Override
-    public boolean isNullPlaceholder(Object val) {
-        return (val == nullPlaceholder);
-    }
-
 }

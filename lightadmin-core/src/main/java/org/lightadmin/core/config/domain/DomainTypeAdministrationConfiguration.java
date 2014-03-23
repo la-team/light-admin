@@ -34,7 +34,7 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
     }
 
     @Override
-    public DynamicJpaRepository<?, ?> getRepository() {
+    public DynamicJpaRepository getRepository() {
         return repository;
     }
 

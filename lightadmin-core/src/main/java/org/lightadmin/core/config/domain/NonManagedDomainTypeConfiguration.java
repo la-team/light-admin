@@ -2,7 +2,7 @@ package org.lightadmin.core.config.domain;
 
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -11,9 +11,9 @@ public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfigu
 
     private final EntityMetadataConfigurationUnit entityConfiguration;
     private final DomainTypeEntityMetadata entityMetadata;
-    private final DynamicJpaRepository<?, ? extends Serializable> repository;
+    private final JpaRepository<?, ? extends Serializable> repository;
 
-    public NonManagedDomainTypeConfiguration(EntityMetadataConfigurationUnit entityConfiguration, DomainTypeEntityMetadata entityMetadata, DynamicJpaRepository<?, ? extends Serializable> repository) {
+    public NonManagedDomainTypeConfiguration(EntityMetadataConfigurationUnit entityConfiguration, DomainTypeEntityMetadata entityMetadata, JpaRepository<?, ? extends Serializable> repository) {
         this.entityConfiguration = entityConfiguration;
         this.entityMetadata = entityMetadata;
         this.repository = repository;
@@ -40,7 +40,7 @@ public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfigu
     }
 
     @Override
-    public DynamicJpaRepository<?, ?> getRepository() {
+    public JpaRepository<?, ?> getRepository() {
         return repository;
     }
 

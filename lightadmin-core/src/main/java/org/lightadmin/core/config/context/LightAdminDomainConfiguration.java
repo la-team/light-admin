@@ -50,7 +50,7 @@ public class LightAdminDomainConfiguration {
     @Bean
     @Autowired
     public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory(Repositories repositories, DomainTypeEntityMetadataResolver entityMetadataResolver) {
-        return new DomainTypeAdministrationConfigurationFactory(repositories, entityMetadataResolver);
+        return new DomainTypeAdministrationConfigurationFactory(repositories, entityManager);
     }
 
 
