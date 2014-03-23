@@ -1,8 +1,5 @@
 package org.lightadmin.core.extension;
 
-import java.io.Serializable;
-import java.util.UUID;
-
 import javassist.ClassPool;
 import javassist.CtClass;
 import org.slf4j.Logger;
@@ -10,6 +7,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
+
+import java.io.Serializable;
+import java.util.UUID;
 
 import static javassist.bytecode.SignatureAttribute.*;
 
@@ -31,7 +31,11 @@ public class JavassistDynamicJpaRepositoryClassFactory implements DynamicReposit
         try {
             ClassPool classPool = ClassPool.getDefault();
 
-            CtClass baseInterface = classPool.get(JpaRepository.class.getName());
+            CtClass baseInterface = classPool.getOrNull(JpaRepository.class.getName());
+            if (baseInterface == null) {
+                baseInterface = classPool.makeInterface(JpaRepository.class.getName());
+            }
+
             CtClass dynamicRepositoryInterface = classPool.makeInterface(generateDynamicRepositoryClassReference(domainType), baseInterface);
 
             ClassType baseInterfaceType = new ClassType(JpaRepository.class.getName(),

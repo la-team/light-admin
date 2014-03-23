@@ -1,15 +1,13 @@
 package org.lightadmin.core.config.domain.field;
 
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC_MULTI;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.FILE;
+import org.hibernate.validator.constraints.NotBlank;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
+import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
 
 public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
 

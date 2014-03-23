@@ -7,7 +7,6 @@ import org.lightadmin.core.extension.DynamicRepositoryBeanNameGenerator;
 import org.lightadmin.core.extension.DynamicRepositoryClassFactory;
 import org.lightadmin.core.extension.JavassistDynamicJpaRepositoryClassFactory;
 import org.lightadmin.core.util.DomainConfigurationUtils;
-import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
@@ -17,10 +16,10 @@ import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.data.repository.config.RepositoryBeanNameGenerator;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.persistence.EntityManager;
@@ -31,7 +30,6 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromAutowiredConfiguration;
-import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
@@ -50,7 +48,8 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
-        AutowireCapableBeanFactory rootFactory = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext).getAutowireCapableBeanFactory();
+        WebApplicationContext rootContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
+        AutowireCapableBeanFactory rootFactory = rootContext.getAutowireCapableBeanFactory();
 
         EntityManagerFactory entityManagerFactory = EntityManagerFactoryUtils.findEntityManagerFactory((ListableBeanFactory) rootFactory, null);
 
@@ -58,12 +57,8 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
         Set<Class> administrationConfigs = scanPackageForAdministrationClasses();
 
-        ProblemReporter problemReporter = failFastReporter();
-
-        ResourceLoader resourceLoader = (ResourceLoader) registry;
-
         RepositoryBeanNameGenerator generator = new RepositoryBeanNameGenerator();
-        generator.setBeanClassLoader(resourceLoader.getClassLoader());
+        generator.setBeanClassLoader(rootContext.getClassLoader());
 
 
         for (Class administrationConfig : administrationConfigs) {

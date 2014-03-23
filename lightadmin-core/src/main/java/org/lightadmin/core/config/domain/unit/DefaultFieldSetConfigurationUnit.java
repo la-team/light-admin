@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.domain.unit;
 
+import com.google.common.collect.FluentIterable;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
@@ -9,9 +10,6 @@ import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
-
-import com.google.common.base.Predicate;
-import com.google.common.collect.FluentIterable;
 
 import java.util.Iterator;
 import java.util.Set;

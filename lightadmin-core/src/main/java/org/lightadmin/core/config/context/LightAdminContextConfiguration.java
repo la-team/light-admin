@@ -2,11 +2,6 @@ package org.lightadmin.core.config.context;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.StandardLightAdminConfiguration;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
-import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
-import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
-import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.extension.WebApplicationContextListener;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
 import org.lightadmin.core.view.SeparateContainerTilesView;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.validation.Validator;
@@ -50,6 +46,9 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     private EntityManagerFactory entityManagerFactory;
 
+    @Autowired
+    private Repositories repositories;
+
 //    @Autowired
 //    private RestConfigurationInitInterceptor restConfigurationInitInterceptor;
 
@@ -72,15 +71,15 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
         return new StandardLightAdminConfiguration(servletContext);
     }
 
-    @Bean
-    @Autowired
-    public WebApplicationContextListener webApplicationContextListener(final GlobalAdministrationConfiguration globalAdministrationConfiguration,
-                                                                       final DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory,
-                                                                       final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
-                                                                       final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory,
-                                                                       final LightAdminConfiguration lightAdminConfiguration) {
-        return new WebApplicationContextListener(globalAdministrationConfiguration, domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory, configurationSourceValidatorFactory, lightAdminConfiguration);
-    }
+//    @Bean
+//    @Autowired
+//    public WebApplicationContextListener webApplicationContextListener(final GlobalAdministrationConfiguration globalAdministrationConfiguration,
+//                                                                       final DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory,
+//                                                                       final DomainConfigurationSourceFactory domainConfigurationSourceFactory,
+//                                                                       final DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory,
+//                                                                       final LightAdminConfiguration lightAdminConfiguration) {
+//        return new WebApplicationContextListener(globalAdministrationConfiguration, domainTypeAdministrationConfigurationFactory, domainConfigurationSourceFactory, configurationSourceValidatorFactory, lightAdminConfiguration);
+//    }
 
     @Bean
     @Autowired

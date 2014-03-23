@@ -1,13 +1,13 @@
 package org.lightadmin.core.config.domain.common;
 
-import static java.util.Arrays.asList;
-
 import org.lightadmin.api.config.builder.PersistentFieldSetConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.api.config.utils.Editors;
 import org.lightadmin.api.config.utils.EnumElement;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.view.editor.JspFragmentFieldControl;
+
+import static java.util.Arrays.asList;
 
 public class PersistentFieldSetConfigurationUnitBuilderAdapter implements PersistentFieldSetConfigurationUnitBuilder {
 
@@ -29,7 +29,8 @@ public class PersistentFieldSetConfigurationUnitBuilderAdapter implements Persis
         return this;
     }
 
-    @Deprecated @Override
+    @Deprecated
+    @Override
     public PersistentFieldSetConfigurationUnitBuilder enumeration(String... values) {
         fieldSetConfigurationUnitBuilder.withCustomControl(Editors.enumeration(values));
         return this;

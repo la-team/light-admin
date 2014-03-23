@@ -1,12 +1,11 @@
 package org.lightadmin.core.config.domain.field;
 
-import java.io.Serializable;
-import java.util.UUID;
-
-import javax.servlet.jsp.tagext.SimpleTag;
-
 import org.apache.commons.collections15.Factory;
 import org.lightadmin.api.config.utils.FieldValueRenderer;
+
+import javax.servlet.jsp.tagext.SimpleTag;
+import java.io.Serializable;
+import java.util.UUID;
 
 public abstract class AbstractFieldMetadata implements FieldMetadata, Serializable {
 

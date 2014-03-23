@@ -18,7 +18,7 @@ public class LightAdminDataConfiguration implements TransactionManagementConfigu
     private EntityManagerFactory entityManagerFactory;
 
     @Override
-    @Bean
+    @Bean(name = "transactionManager")
     public PlatformTransactionManager annotationDrivenTransactionManager() {
         return new JpaTransactionManager(entityManagerFactory);
     }
