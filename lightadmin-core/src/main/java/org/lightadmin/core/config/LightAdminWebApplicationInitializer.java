@@ -4,6 +4,7 @@ import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import org.apache.commons.lang3.BooleanUtils;
 import org.lightadmin.core.config.context.LightAdminContextConfiguration;
 import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
+import org.lightadmin.core.config.context.ReloadableWebApplicationContext;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
 import org.springframework.core.annotation.Order;
@@ -136,7 +137,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
     }
 
     private AnnotationConfigWebApplicationContext lightAdminApplicationContext(final ServletContext servletContext) {
-        AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
+        AnnotationConfigWebApplicationContext webApplicationContext = new ReloadableWebApplicationContext();
 
         webApplicationContext.register(configurations(servletContext));
 
