@@ -2,6 +2,7 @@ package org.lightadmin.core.config;
 
 import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import org.apache.commons.lang3.BooleanUtils;
+import org.lightadmin.core.config.bootstrap.LightAdminBeanDefinitionRegistryPostProcessor;
 import org.lightadmin.core.config.context.LightAdminContextConfiguration;
 import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
 import org.lightadmin.core.config.context.ReloadableWebApplicationContext;
@@ -139,7 +140,9 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
     private AnnotationConfigWebApplicationContext lightAdminApplicationContext(final ServletContext servletContext) {
         AnnotationConfigWebApplicationContext webApplicationContext = new ReloadableWebApplicationContext();
 
+        String basePackage = configurationsBasePackage(servletContext);
         webApplicationContext.register(configurations(servletContext));
+        webApplicationContext.addBeanFactoryPostProcessor(new LightAdminBeanDefinitionRegistryPostProcessor(basePackage, servletContext));
 
         webApplicationContext.setDisplayName("LightAdmin WebApplicationContext");
         webApplicationContext.setNamespace("lightadmin");
