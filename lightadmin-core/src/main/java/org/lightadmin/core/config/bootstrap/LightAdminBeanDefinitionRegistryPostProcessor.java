@@ -2,6 +2,7 @@ package org.lightadmin.core.config.bootstrap;
 
 import org.lightadmin.core.config.bootstrap.scanning.AdministrationClassScanner;
 import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.extension.DynamicRepositoryBeanNameGenerator;
@@ -49,13 +50,12 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         WebApplicationContext rootContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
-        EntityManagerFactory entityManagerFactory = EntityManagerFactoryUtils.findEntityManagerFactory(rootContext, null);
-
-        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        EntityManager entityManager = findEntityManager(rootContext);
 
         Set<Class> administrationConfigs = scanPackageForAdministrationClasses();
 
         Set<ConfigurationUnits> configurationUnitsCollection = newLinkedHashSet();
+
         for (Class administrationConfig : administrationConfigs) {
             ConfigurationUnits configurationUnits = unitsFromAutowiredConfiguration(administrationConfig, rootContext.getAutowireCapableBeanFactory());
 
@@ -65,19 +65,20 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
             BeanDefinition repositoryFactoryBeanDefinition = repositoryFactoryBeanDefinition(repoInterface, entityManager);
 
-            registry.registerBeanDefinition(nameGenerator.generateBeanNameDecapitalized(repoInterface), repositoryFactoryBeanDefinition);
+            registry.registerBeanDefinition(beanName(repoInterface), repositoryFactoryBeanDefinition);
         }
 
-        BeanDefinition configurationBeanDefinition = globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection, entityManager);
+        BeanDefinition configurationBeanDefinition = globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection);
 
-        registry.registerBeanDefinition(nameGenerator.generateBeanNameDecapitalized(GlobalAdministrationConfiguration.class), configurationBeanDefinition);
+        registry.registerBeanDefinition(beanName(GlobalAdministrationConfiguration.class), configurationBeanDefinition);
+
+        registry.registerBeanDefinition(beanName(DomainTypeAdministrationConfigurationFactory.class), domainTypeAdministrationConfigurationFactoryDefinition());
     }
 
-    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits, Object entityManager) {
+    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits) {
         BeanDefinitionBuilder builder = rootBeanDefinition(GlobalAdministrationConfigurationFactoryBean.class);
         builder.addPropertyValue("domainTypeConfigurationUnits", configurationUnits);
-        builder.addPropertyValue("repositories", new RuntimeBeanReference("repositories"));
-        builder.addPropertyValue("entityManager", entityManager);
+        builder.addPropertyValue("domainTypeAdministrationConfigurationFactory", new RuntimeBeanReference(beanName(DomainTypeAdministrationConfigurationFactory.class)));
         return builder.getBeanDefinition();
     }
 
@@ -86,6 +87,19 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
         builder.addPropertyValue("entityManager", entityManager);
         builder.addPropertyValue("repositoryInterface", repoInterface);
         return builder.getBeanDefinition();
+    }
+
+    private BeanDefinition domainTypeAdministrationConfigurationFactoryDefinition() {
+        BeanDefinitionBuilder builder = rootBeanDefinition(DomainTypeAdministrationConfigurationFactory.class);
+        builder.addConstructorArgReference("repositories");
+        builder.addConstructorArgReference("entityManager");
+        return builder.getBeanDefinition();
+    }
+
+    private EntityManager findEntityManager(WebApplicationContext rootContext) {
+        EntityManagerFactory entityManagerFactory = EntityManagerFactoryUtils.findEntityManagerFactory(rootContext, null);
+
+        return entityManagerFactory.createEntityManager();
     }
 
     private Class createDynamicRepositoryClass(Class administrationConfig, EntityManager entityManager) {
@@ -109,6 +123,10 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
     private String[] configurationsBasePackages() {
         return tokenizeToStringArray(basePackage, CONFIG_LOCATION_DELIMITERS);
+    }
+
+    private String beanName(Class type) {
+        return nameGenerator.generateBeanNameDecapitalized(type);
     }
 
     @Override

@@ -11,7 +11,8 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -66,32 +67,32 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
     private static final Date NULL_PLACEHOLDER_MAGIC_DATE = new Date(-377743392000001L);
 
     @SuppressWarnings("rawtypes")
-    protected void attrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) throws IOException {
+    protected void attrMetaSet(PersistentProperty attrMeta, Object incomingVal, Object entity) throws IOException {
         DomainTypeBasicConfiguration repo;
-        if (attrMeta.isCollectionLike() || attrMeta.isSetLike()) {
+        if (attrMeta.isCollectionLike()) {
             collectionAttrMetaSet(attrMeta, incomingVal, entity);
 //        } else if ((repo = configuration.forDomainType(attrMeta.type())) != null && (repo.getRepository().isNullPlaceholder(incomingVal))) { // TODO: Please take a look!
-        } else if ((repo = configuration.forDomainType(attrMeta.type())) != null) {
-            attrMeta.set(null, entity);
+        } else if ((repo = configuration.forDomainType(attrMeta.getType())) != null) {
+            BeanWrapper.create(entity, null).setProperty(attrMeta, null);
         } else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
-            attrMeta.set(null, entity);
+            BeanWrapper.create(entity, null).setProperty(attrMeta, null);
         } else if (isOfFileType(attrMeta)) {
             operationBuilder.saveOperation(entity).perform(attrMeta, incomingVal);
         } else {
-            attrMeta.set(incomingVal, entity);
+            BeanWrapper.create(entity, null).setProperty(attrMeta, incomingVal);
         }
     }
 
 
-    private void collectionAttrMetaSet(AttributeMetadata attrMeta, Object incomingVal, Object entity) throws IOException {
+    private void collectionAttrMetaSet(PersistentProperty attrMeta, Object incomingVal, Object entity) throws IOException {
         // Trying to avoid collection-was-no-longer-referenced issue
         // if the collection is modifiable
         try {
-            Collection col = (Collection) attrMeta.get(entity);
+            Collection col = (Collection) BeanWrapper.create(entity, null).getProperty(attrMeta);
             col.clear();
             col.addAll((Collection) incomingVal);
         } catch (UnsupportedOperationException e) {
-            attrMeta.set(incomingVal, entity);
+            BeanWrapper.create(entity, null).setProperty(attrMeta, incomingVal);
         }
     }
 

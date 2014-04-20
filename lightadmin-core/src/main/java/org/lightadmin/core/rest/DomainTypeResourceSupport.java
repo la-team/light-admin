@@ -5,7 +5,6 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.io.Serializable;
 import java.net.URI;
 
 import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
@@ -18,7 +17,7 @@ public class DomainTypeResourceSupport {
         this.restConfiguration = restConfiguration;
     }
 
-    public Link selfDomainLink(String domainTypeName, Serializable id) {
+    public Link selfDomainLink(String domainTypeName, Object id) {
         String baseRestUrl = restConfiguration.getBaseUri().toString();
         String baseUrl = substringBeforeLast(baseRestUrl, "/");
         URI selfUri = UriComponentsBuilder.fromUriString(baseUrl)
@@ -29,7 +28,7 @@ public class DomainTypeResourceSupport {
         return new Link(selfUri.toString(), "selfDomainLink");
     }
 
-    public Link selfLink(String domainTypeName, Serializable id) {
+    public Link selfLink(String domainTypeName, Object id) {
         URI selfUri = UriComponentsBuilder.fromUri(restConfiguration.getBaseUri())
                 .pathSegment(domainTypeName)
                 .pathSegment(id.toString()).build().toUri();
@@ -37,7 +36,7 @@ public class DomainTypeResourceSupport {
         return new Link(selfUri.toString(), "self");
     }
 
-    public Link selfLink(DomainTypeBasicConfiguration domainTypeConfig, Serializable id) {
+    public Link selfLink(DomainTypeBasicConfiguration domainTypeConfig, Object id) {
         return selfLink(domainTypeConfig.getDomainTypeName(), id);
     }
 

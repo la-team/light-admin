@@ -17,12 +17,14 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
     @Override
     public boolean hasAnnotation(final Class<? extends Annotation> annoType) {
-        return attributeMetadata.hasAnnotation(annoType);
+//        return attributeMetadata.hasAnnotation(annoType);
+        return false;
     }
 
     @Override
     public <A extends Annotation> A annotation(final Class<A> annoType) {
-        return attributeMetadata.annotation(annoType);
+//        return attributeMetadata.annotation(annoType);
+        return null;
     }
 
     @Override
@@ -32,7 +34,7 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
     @Override
     public String getName() {
-        return attributeMetadata.name();
+        return attribute.getName();
     }
 
     @Override
@@ -47,17 +49,20 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
     @Override
     public boolean isCollectionLike() {
-        return attributeMetadata.isCollectionLike() || attributeMetadata.isSetLike();
+//        return attributeMetadata.isCollectionLike() || attributeMetadata.isSetLike();
+        return false;
     }
 
     @Override
     public boolean isSetLike() {
-        return attributeMetadata.isSetLike();
+//        return attributeMetadata.isSetLike();
+        return false;
     }
 
     @Override
     public boolean isMapLike() {
-        return attributeMetadata.isMapLike();
+//        return attributeMetadata.isMapLike();
+        return false;
     }
 
     @Override
@@ -75,12 +80,14 @@ public class JpaDomainTypeAttributeMetadata implements DomainTypeAttributeMetada
 
     @Override
     public Object getValue(final Object target) {
-        return attributeMetadata.get(target);
+//        return attributeMetadata.get(target);
+        return null;
     }
 
     @Override
     public void setValue(Object value, Object target) {
-        attributeMetadata.set(value, target);
+//        attributeMetadata.set(value, target);
+
     }
 
     public Attribute getAttribute() {

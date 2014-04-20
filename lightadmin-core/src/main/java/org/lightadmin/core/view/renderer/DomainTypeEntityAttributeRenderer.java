@@ -2,8 +2,9 @@ package org.lightadmin.core.view.renderer;
 
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.web.util.ApplicationUrlResolver;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
@@ -13,16 +14,16 @@ import static org.lightadmin.core.config.domain.configuration.support.ExceptionA
 
 public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer {
 
-    private final DomainTypeEntityMetadata domainTypeEntityMetadata;
+    private final PersistentEntity domainTypeEntityMetadata;
 
-    public DomainTypeEntityAttributeRenderer(final DomainTypeEntityMetadata domainTypeEntityMetadata) {
+    public DomainTypeEntityAttributeRenderer(final PersistentEntity domainTypeEntityMetadata) {
         this.domainTypeEntityMetadata = domainTypeEntityMetadata;
     }
 
     @Override
     @SuppressWarnings("unchecked")
     protected void write(final Object value, final Writer writer) throws IOException {
-        final DomainTypeAdministrationConfiguration domainTypeConfiguration = domainTypeConfiguration(domainTypeEntityMetadata.getDomainType());
+        final DomainTypeAdministrationConfiguration domainTypeConfiguration = domainTypeConfiguration(domainTypeEntityMetadata.getType());
 
         final String entityViewUrl = entityShowUrl(value, domainTypeConfiguration);
 
@@ -35,7 +36,8 @@ public class DomainTypeEntityAttributeRenderer extends AbstractAttributeRenderer
 
     private String entityShowUrl(final Object value, final DomainTypeAdministrationConfiguration domainTypeConfiguration) {
         final String domainBaseUrl = ApplicationUrlResolver.domainBaseUrl(domainTypeConfiguration);
-        final Object entityId = domainTypeEntityMetadata.getIdAttribute().getValue(value);
+
+        final Object entityId = BeanWrapper.create(value, null).getProperty(domainTypeEntityMetadata.getIdProperty());
 
         // TODO: max: Consider rewriting using PageContext
         final ServletUriComponentsBuilder servletUriComponentsBuilder = ServletUriComponentsBuilder.fromCurrentServletMapping();

@@ -41,7 +41,7 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
 
         configurationSourceValidator.validate(configurationSource, ProblemReporterFactory.failFastReporter());
 
-        final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(configurationSource);
+        final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(null);
 
         globalAdministrationConfiguration.registerDomainTypeConfiguration(administrationConfiguration);
 

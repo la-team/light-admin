@@ -4,7 +4,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.model.BeanWrapper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -20,40 +21,40 @@ public class GetFileRestOperation extends AbstractFileRestOperation {
         super(configuration, lightAdminConfiguration, entity);
     }
 
-    public byte[] perform(AttributeMetadata attrMeta) throws IOException {
-        if (attrMeta.type().equals(byte[].class)) {
-            return (byte[]) attrMeta.get(entity);
+    public byte[] perform(PersistentProperty persistentProperty) throws IOException {
+        if (persistentProperty.getType().equals(byte[].class)) {
+            return (byte[]) BeanWrapper.create(entity, null).getProperty(persistentProperty);
         }
 
-        if (attrMeta.hasAnnotation(FileReference.class)) {
-            FileReference fileReference = attrMeta.annotation(FileReference.class);
+        if (persistentProperty.isAnnotationPresent(FileReference.class)) {
+            FileReference fileReference = (FileReference) persistentProperty.findAnnotation(FileReference.class);
 
             if (getFile(fileReference.baseDirectory()).exists()) {
-                return readFileToByteArray(referencedFile(attrMeta));
+                return readFileToByteArray(referencedFile(persistentProperty));
             } else {
-                return readFileToByteArray(fileStorageFile(attrMeta));
+                return readFileToByteArray(fileStorageFile(persistentProperty));
             }
         }
         return new byte[]{};
     }
 
-    public long performCopy(AttributeMetadata attrMeta, OutputStream outputStream) throws IOException {
-        if (attrMeta.type().equals(byte[].class)) {
-            byte[] fileData = (byte[]) attrMeta.get(entity);
+    public long performCopy(PersistentProperty persistentProperty, OutputStream outputStream) throws IOException {
+        if (persistentProperty.getType().equals(byte[].class)) {
+            byte[] fileData = (byte[]) BeanWrapper.create(entity, null).getProperty(persistentProperty);
             if (ArrayUtils.isNotEmpty(fileData)) {
                 copy(fileData, outputStream);
                 return fileData.length;
             }
         }
 
-        if (attrMeta.hasAnnotation(FileReference.class)) {
-            FileReference fileReference = attrMeta.annotation(FileReference.class);
+        if (persistentProperty.isAnnotationPresent(FileReference.class)) {
+            FileReference fileReference = (FileReference) persistentProperty.findAnnotation(FileReference.class);
 
             if (getFile(fileReference.baseDirectory()).exists()) {
-                return copyToOutputStream(referencedFile(attrMeta), outputStream);
+                return copyToOutputStream(referencedFile(persistentProperty), outputStream);
             }
 
-            return copyToOutputStream(fileStorageFile(attrMeta), outputStream);
+            return copyToOutputStream(fileStorageFile(persistentProperty), outputStream);
         }
 
         return 0l;

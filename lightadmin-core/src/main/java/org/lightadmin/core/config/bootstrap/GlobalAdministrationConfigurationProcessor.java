@@ -62,7 +62,7 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
             validator.validate(configurationSource, problemReporter);
 
             globalAdministrationConfiguration.registerDomainTypeConfiguration(
-                    domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(configurationSource)
+                    domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(null)
             );
         }
 

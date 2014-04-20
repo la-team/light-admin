@@ -132,7 +132,7 @@ public class SpecificationCreator {
 
             final JpaRepository repository = domainTypeBasicConfiguration.getRepository();
 
-            final Serializable id = stringToSerializable(parameterValue, (Class<? extends Serializable>) domainTypeBasicConfiguration.getDomainTypeEntityMetadata().getIdAttribute().getType());
+            final Serializable id = stringToSerializable(parameterValue, (Class<? extends Serializable>) domainTypeBasicConfiguration.getPersistentEntity().getIdProperty().getType());
 
             final Object entity = repository.findOne(id);
 

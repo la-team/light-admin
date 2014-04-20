@@ -1,10 +1,10 @@
 package org.lightadmin.core.web.util;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.model.BeanWrapper;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
 
 import static java.lang.String.valueOf;
 import static org.lightadmin.core.web.util.WebContextUtils.getCurrentRequest;
@@ -37,9 +37,9 @@ public final class ApplicationUrlResolver {
 
     public static String filePropertyRestUrl(Object entity, String property) {
         DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = domainTypeAdministrationConfiguration(getCurrentRequest(), entity);
-        DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+        PersistentEntity persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
 
-        String idValue = valueOf(idAttributeValue(entity, domainTypeEntityMetadata));
+        String idValue = valueOf(idAttributeValue(entity, persistentEntity));
 
         return domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, idValue) + "/" + property + "/file";
     }
@@ -48,7 +48,7 @@ public final class ApplicationUrlResolver {
         return globalAdministrationConfiguration(currentRequest.getServletContext()).forManagedDomainType(entity.getClass());
     }
 
-    private static Serializable idAttributeValue(Object entity, DomainTypeEntityMetadata domainTypeEntityMetadata) {
-        return (Serializable) domainTypeEntityMetadata.getIdAttribute().getValue(entity);
+    private static Object idAttributeValue(Object entity, PersistentEntity persistentProperty) {
+        return BeanWrapper.create(entity, null).getProperty(persistentProperty.getIdProperty());
     }
 }

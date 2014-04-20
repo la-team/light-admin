@@ -11,13 +11,8 @@ import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 @SuppressWarnings("unchecked")
 public class GlobalAdministrationConfiguration {
 
-    private final DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory;
     private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
     private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
-
-    public GlobalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
-        this.domainTypeConfigurationFactory = domainTypeConfigurationFactory;
-    }
 
     public void registerDomainTypeConfiguration(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
         managedDomainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);

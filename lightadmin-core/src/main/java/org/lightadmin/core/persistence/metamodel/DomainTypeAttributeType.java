@@ -1,8 +1,10 @@
 package org.lightadmin.core.persistence.metamodel;
 
 import org.lightadmin.api.config.annotation.FileReference;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.repository.AttributeMetadata;
 
+import javax.persistence.Embedded;
 import javax.persistence.metamodel.Attribute;
 import java.util.Date;
 
@@ -68,6 +70,46 @@ public enum DomainTypeAttributeType {
 
     public static boolean isOfFileType(AttributeMetadata attributeMetadata) {
         return isOfBinaryFileType(attributeMetadata) || isOfFileReferenceType(attributeMetadata);
+    }
+
+    public static boolean isOfBinaryFileType(PersistentProperty persistentProperty) {
+        return forType(persistentProperty.getType()) == FILE;
+    }
+
+    public static boolean isOfFileReferenceType(PersistentProperty persistentProperty) {
+        if (forType(persistentProperty.getType()) == STRING && persistentProperty.isAnnotationPresent(FileReference.class)) {
+            return true;
+        }
+        return false;
+    }
+
+    public static boolean isOfFileType(PersistentProperty persistentProperty) {
+        return isOfBinaryFileType(persistentProperty) || isOfFileReferenceType(persistentProperty);
+    }
+
+    public static DomainTypeAttributeType forPersistentProperty(PersistentProperty persistentProperty) {
+        final Class<?> attrType = persistentProperty.getType();
+
+        if (persistentProperty.isAssociation()) {
+            if (persistentProperty.isCollectionLike()) {
+                return DomainTypeAttributeType.ASSOC_MULTI;
+            }
+            return DomainTypeAttributeType.ASSOC;
+        }
+
+        if (persistentProperty.isAnnotationPresent(Embedded.class)) {
+            return DomainTypeAttributeType.EMBEDDED;
+        }
+
+        if (persistentProperty.isMap()) {
+            return DomainTypeAttributeType.MAP;
+        }
+
+        if (forType(attrType) == STRING && persistentProperty.isAnnotationPresent(FileReference.class)) {
+            return DomainTypeAttributeType.FILE;
+        }
+
+        return forType(attrType);
     }
 
     public static DomainTypeAttributeType forAttributeMetadata(DomainTypeAttributeMetadata attributeMetadata) {

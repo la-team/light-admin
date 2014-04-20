@@ -1,10 +1,10 @@
 package org.lightadmin.core.config.domain.field;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.springframework.data.mapping.PersistentProperty;
 
 public interface Persistable {
 
-    DomainTypeAttributeMetadata getAttributeMetadata();
+    PersistentProperty getPersistentProperty();
 
     String getField();
 

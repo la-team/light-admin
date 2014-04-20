@@ -7,6 +7,7 @@ import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.StringUtils;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.springframework.data.mapping.PersistentProperty;
 
 import java.util.Comparator;
 import java.util.Set;
@@ -58,7 +59,7 @@ public class FieldMetadataUtils {
         return null;
     }
 
-    public static Set<FieldMetadata> addPrimaryKeyPersistentField(final Set<FieldMetadata> fields, final DomainTypeAttributeMetadata idAttribute) {
+    public static Set<FieldMetadata> addPrimaryKeyPersistentField(final Set<FieldMetadata> fields, final PersistentProperty idAttribute) {
         final Set<FieldMetadata> fieldsWithPrimaryKey = newLinkedHashSet();
         PersistentFieldMetadata idField = new PersistentFieldMetadata(StringUtils.capitalize(idAttribute.getName()), idAttribute.getName(), true);
         idField.setAttributeMetadata(idAttribute);

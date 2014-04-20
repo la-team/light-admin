@@ -1,6 +1,8 @@
 package org.lightadmin.core.persistence.metamodel;
 
+import org.springframework.data.mapping.PersistentProperty;
+
 public interface DomainTypeAttributeMetadataAware {
 
-    void setAttributeMetadata(DomainTypeAttributeMetadata attributeMetadata);
+    void setAttributeMetadata(PersistentProperty attributeMetadata);
 }

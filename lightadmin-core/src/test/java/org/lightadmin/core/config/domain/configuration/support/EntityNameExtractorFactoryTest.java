@@ -24,7 +24,7 @@ public class EntityNameExtractorFactoryTest {
     public void persistentEntityNameExtraction() throws Exception {
         final DomainTypeEntityMetadata entityMetadata = domainTypeEntityMetadata("Entity", 1);
 
-        final EntityNameExtractor entityNameExtractor = forPersistentEntity(entityMetadata);
+        final EntityNameExtractor entityNameExtractor = forPersistentEntity(null);
 
         assertEquals("Entity #1", entityNameExtractor.apply(new DomainType()));
     }

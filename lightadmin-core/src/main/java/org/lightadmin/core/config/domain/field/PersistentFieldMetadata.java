@@ -1,13 +1,11 @@
 package org.lightadmin.core.config.domain.field;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
+import org.springframework.data.mapping.PersistentProperty;
 
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
-
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
 
 public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
 
@@ -15,7 +13,7 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
     private boolean primaryKey;
 
-    private DomainTypeAttributeMetadata attributeMetadata;
+    private PersistentProperty persistentProperty;
 
     public PersistentFieldMetadata(final String name, final String field, boolean primaryKey) {
         this(name, field);
@@ -39,14 +37,14 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
     @Override
     public boolean isRequired() {
-        return attributeMetadata.hasAnnotation(NotNull.class)
-                || attributeMetadata.hasAnnotation(NotBlank.class)
-                || attributeMetadata.hasAnnotation(org.hibernate.validator.constraints.NotEmpty.class);
+        return persistentProperty.isAnnotationPresent(NotNull.class)
+                || persistentProperty.isAnnotationPresent(NotBlank.class)
+                || persistentProperty.isAnnotationPresent(org.hibernate.validator.constraints.NotEmpty.class);
     }
 
     @Override
     public boolean isGeneratedValue() {
-        return attributeMetadata.hasAnnotation(GeneratedValue.class);
+        return persistentProperty.isAnnotationPresent(GeneratedValue.class);
     }
 
     public void setPrimaryKey(final boolean primaryKey) {
@@ -54,18 +52,20 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
     }
 
     @Override
-    public void setAttributeMetadata(final DomainTypeAttributeMetadata attributeMetadata) {
-        this.attributeMetadata = attributeMetadata;
+    public void setAttributeMetadata(final PersistentProperty persistentProperty) {
+        this.persistentProperty = persistentProperty;
     }
 
     @Override
-    public DomainTypeAttributeMetadata getAttributeMetadata() {
-        return attributeMetadata;
+    public PersistentProperty getPersistentProperty() {
+        return persistentProperty;
     }
 
     @Override
     public boolean isSortable() {
-        return this.attributeMetadata.getAttributeType() != ASSOC && this.attributeMetadata.getAttributeType() != ASSOC_MULTI && this.attributeMetadata.getAttributeType() != FILE;
+        return !this.persistentProperty.isAssociation();
+
+//        return this.attributeMetadata.getAttributeType() != ASSOC && this.attributeMetadata.getAttributeType() != ASSOC_MULTI && this.attributeMetadata.getAttributeType() != FILE;
     }
 
     @Override

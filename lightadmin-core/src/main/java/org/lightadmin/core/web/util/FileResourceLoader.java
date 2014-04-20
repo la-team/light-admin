@@ -3,10 +3,9 @@ package org.lightadmin.core.web.util;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.rest.binary.OperationBuilder;
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -27,9 +26,9 @@ public class FileResourceLoader {
         this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, lightAdminConfiguration);
     }
 
-    public void downloadFile(Object entity, AttributeMetadata attrMeta, HttpServletResponse response) throws IOException {
-        final long size = operationBuilder.getOperation(entity).performCopy(attrMeta, response.getOutputStream());
-        final String eTag = eTag(entity.getClass(), attrMeta.name(), size);
+    public void downloadFile(Object entity, PersistentProperty persistentProperty, HttpServletResponse response) throws IOException {
+        final long size = operationBuilder.getOperation(entity).performCopy(persistentProperty, response.getOutputStream());
+        final String eTag = eTag(entity.getClass(), persistentProperty.getName(), size);
 
         addImageResourceHeaders(response, octetStreamResponseHeader(APPLICATION_OCTET_STREAM, size, eTag));
     }
@@ -40,13 +39,11 @@ public class FileResourceLoader {
         downloadFile(entity, attributeMetadata(domainType, field), response);
     }
 
-    private AttributeMetadata attributeMetadata(Class<?> domainType, String field) {
+    private PersistentProperty attributeMetadata(Class<?> domainType, String field) {
         DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forManagedDomainType(domainType);
 
-        DomainTypeEntityMetadata domainTypeEntityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+        PersistentEntity persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
 
-        DomainTypeAttributeMetadata attribute = domainTypeEntityMetadata.getAttribute(field);
-
-        return attribute.getAttributeMetadata();
+        return persistentEntity.getPersistentProperty(field);
     }
 }

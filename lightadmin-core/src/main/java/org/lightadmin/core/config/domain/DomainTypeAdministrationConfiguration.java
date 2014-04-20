@@ -1,10 +1,9 @@
 package org.lightadmin.core.config.domain;
 
 import org.lightadmin.api.config.unit.*;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
-import org.springframework.util.Assert;
+import org.springframework.data.mapping.PersistentEntity;
 
 import java.io.Serializable;
 
@@ -14,23 +13,24 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
 
     private final DynamicJpaRepository<?, ? extends Serializable> repository;
 
-    private final DomainConfigurationSource domainConfigurationSource;
+    private PersistentEntity persistentEntity;
 
-    public DomainTypeAdministrationConfiguration(DomainConfigurationSource domainConfigurationSource, final DynamicJpaRepository<?, ?> repository) {
-        Assert.notNull(domainConfigurationSource);
+    private final ConfigurationUnits configurationUnits;
 
-        this.domainConfigurationSource = domainConfigurationSource;
+    public DomainTypeAdministrationConfiguration(final DynamicJpaRepository<?, ?> repository, PersistentEntity persistentEntity, ConfigurationUnits configurationUnits) {
+        this.persistentEntity = persistentEntity;
+        this.configurationUnits = configurationUnits;
         this.repository = repository;
     }
 
     @Override
-    public DomainTypeEntityMetadata getDomainTypeEntityMetadata() {
-        return domainConfigurationSource.getDomainTypeEntityMetadata();
+    public PersistentEntity getPersistentEntity() {
+        return persistentEntity;
     }
 
     @Override
     public Class<?> getDomainType() {
-        return domainConfigurationSource.getDomainType();
+        return persistentEntity.getType();
     }
 
     @Override
@@ -40,48 +40,48 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
 
     @Override
     public String getDomainTypeName() {
-        return uncapitalize(getDomainTypeEntityMetadata().getEntityName());
+        return uncapitalize(persistentEntity.getType().getSimpleName());
     }
 
     public FieldSetConfigurationUnit getQuickViewFragment() {
-        return domainConfigurationSource.getQuickViewFragment();
+        return configurationUnits.getQuickViewConfigurationUnit();
     }
 
     public FieldSetConfigurationUnit getListViewFragment() {
-        return domainConfigurationSource.getListViewFragment();
+        return configurationUnits.getListViewConfigurationUnit();
     }
 
     public FieldSetConfigurationUnit getShowViewFragment() {
-        return domainConfigurationSource.getShowViewFragment();
+        return configurationUnits.getShowViewConfigurationUnit();
     }
 
     public FieldSetConfigurationUnit getFormViewFragment() {
-        return domainConfigurationSource.getFormViewFragment();
+        return configurationUnits.getFormViewConfigurationUnit();
     }
 
     public ScreenContextConfigurationUnit getScreenContext() {
-        return domainConfigurationSource.getScreenContext();
+        return configurationUnits.getScreenContext();
     }
 
     public ScopesConfigurationUnit getScopes() {
-        return domainConfigurationSource.getScopes();
+        return configurationUnits.getScopes();
     }
 
     public SidebarsConfigurationUnit getSidebars() {
-        return domainConfigurationSource.getSidebars();
+        return configurationUnits.getSidebars();
     }
 
     public FiltersConfigurationUnit getFilters() {
-        return domainConfigurationSource.getFilters();
+        return configurationUnits.getFilters();
     }
 
     @Override
     public EntityMetadataConfigurationUnit getEntityConfiguration() {
-        return domainConfigurationSource.getEntityConfiguration();
+        return configurationUnits.getEntityConfiguration();
     }
 
     @Override
     public String getConfigurationName() {
-        return domainConfigurationSource.getConfigurationName();
+        return configurationUnits.getConfigurationClassName();
     }
 }

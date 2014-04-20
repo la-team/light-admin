@@ -9,7 +9,7 @@ import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
 
 public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfigurationUnit
-        implements EntityMetadataConfigurationUnit,	DomainTypeEntityMetadataAware {
+        implements EntityMetadataConfigurationUnit, DomainTypeEntityMetadataAware {
 
     private EntityNameExtractor<?> nameExtractor;
 
@@ -55,7 +55,7 @@ public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfi
     @Override
     public void setDomainTypeEntityMetadata(final DomainTypeEntityMetadata domainTypeEntityMetadata) {
         if (nameExtractor == null) {
-            this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity(this.singularName, domainTypeEntityMetadata);
+            this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity(this.singularName, null);
         }
     }
 }

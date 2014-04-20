@@ -4,10 +4,10 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfigurationAware;
 import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
 import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PersistentEntity;
 
 import javax.servlet.jsp.PageContext;
 import java.io.IOException;
@@ -74,9 +74,9 @@ public class BasicAttributeRendererFactory implements AttributeRendererFactory, 
         return objectAttributeRenderer;
     }
 
-    private DomainTypeEntityMetadata domainTypeEntityMetadata(final Class<?> type) {
+    private PersistentEntity domainTypeEntityMetadata(final Class<?> type) {
         final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forManagedDomainType(type);
-        return domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
+        return domainTypeAdministrationConfiguration.getPersistentEntity();
     }
 
     private boolean isPersistentEntity(final Class<?> type) {
