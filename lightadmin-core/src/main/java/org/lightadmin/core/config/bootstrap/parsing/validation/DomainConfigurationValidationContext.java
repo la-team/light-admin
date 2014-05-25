@@ -5,8 +5,8 @@ import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.InvalidPropertyConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.mapping.context.MappingContext;
 
 public class DomainConfigurationValidationContext {
 
@@ -15,14 +15,14 @@ public class DomainConfigurationValidationContext {
     private final DomainConfigurationSource domainConfiguration;
     private final DomainConfigurationUnitType configurationUnitType;
 
-    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final MappingContext mappingContext;
     private final ResourceLoader resourceLoader;
 
-    public DomainConfigurationValidationContext(LightAdminConfiguration lightAdminConfiguration, DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader) {
+    public DomainConfigurationValidationContext(LightAdminConfiguration lightAdminConfiguration, DomainConfigurationSource domainConfiguration, DomainConfigurationUnitType configurationUnitType, MappingContext mappingContext, ResourceLoader resourceLoader) {
         this.lightAdminConfiguration = lightAdminConfiguration;
         this.domainConfiguration = domainConfiguration;
         this.configurationUnitType = configurationUnitType;
-        this.entityMetadataResolver = entityMetadataResolver;
+        this.mappingContext = mappingContext;
         this.resourceLoader = resourceLoader;
     }
 
@@ -59,8 +59,8 @@ public class DomainConfigurationValidationContext {
         return lightAdminConfiguration;
     }
 
-    public DomainTypeEntityMetadataResolver getEntityMetadataResolver() {
-        return entityMetadataResolver;
+    public MappingContext getMappingContext() {
+        return mappingContext;
     }
 
     public ResourceLoader getResourceLoader() {

@@ -3,11 +3,12 @@ package org.lightadmin.core.search;
 import org.apache.commons.lang3.BooleanUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.util.ClassUtils;
 
 import javax.persistence.criteria.*;
@@ -20,7 +21,7 @@ import java.util.Map;
 import static com.google.common.collect.Lists.newLinkedList;
 import static org.apache.commons.lang3.StringUtils.isNotBlank;
 import static org.apache.commons.lang3.StringUtils.trim;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.*;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.*;
 import static org.lightadmin.core.util.NumberUtils.isNumber;
 import static org.lightadmin.core.util.NumberUtils.parseNumber;
 
@@ -35,11 +36,11 @@ public class SpecificationCreator {
         this.configuration = configuration;
     }
 
-    public Specification toSpecification(final DomainTypeEntityMetadata<? extends DomainTypeAttributeMetadata> domainTypeEntityMetadata, final Map<String, String[]> parameters) {
+    public Specification toSpecification(final PersistentEntity persistentEntity, final Map<String, String[]> parameters) {
         return new Specification<Object>() {
             @Override
             public Predicate toPredicate(final Root<Object> root, final CriteriaQuery<?> query, final CriteriaBuilder builder) {
-                return new PredicatesBuilder(root, builder, domainTypeEntityMetadata).build(parameters);
+                return new PredicatesBuilder(root, builder, persistentEntity).build(parameters);
             }
         };
     }
@@ -48,47 +49,48 @@ public class SpecificationCreator {
 
         private final Root<Object> root;
         private final CriteriaBuilder builder;
-        private final DomainTypeEntityMetadata domainTypeEntityMetadata;
+        private final PersistentEntity persistentEntity;
 
-        private PredicatesBuilder(final Root<Object> root, final CriteriaBuilder builder, final DomainTypeEntityMetadata domainTypeEntityMetadata) {
+        private PredicatesBuilder(final Root<Object> root, final CriteriaBuilder builder, final PersistentEntity persistentEntity) {
             this.root = root;
             this.builder = builder;
-            this.domainTypeEntityMetadata = domainTypeEntityMetadata;
+            this.persistentEntity = persistentEntity;
         }
 
         public javax.persistence.criteria.Predicate build(final Map<String, String[]> parameters) {
             final List<Predicate> attributesPredicates = newLinkedList();
 
             for (String parameterName : parameters.keySet()) {
-                if (domainTypeEntityMetadata.containsAttribute(parameterName)) {
-                    final DomainTypeAttributeMetadata attribute = domainTypeEntityMetadata.getAttribute(parameterName);
-                    final String attributeName = attribute.getName();
+                if (persistentEntity.getPersistentProperty(parameterName) != null) {
+                    PersistentProperty persistentProperty = persistentEntity.getPersistentProperty(parameterName);
+
+                    final String attributeName = persistentProperty.getName();
 
                     final String[] parameterValues = parameters.get(attributeName);
 
-                    attributesPredicates.add(attributePredicate(attribute, attributeName, parameterValues));
+                    attributesPredicates.add(attributePredicate(persistentProperty, attributeName, parameterValues));
                 }
             }
 
             return builder.and(attributesPredicates.toArray(new Predicate[attributesPredicates.size()]));
         }
 
-        private Predicate attributePredicate(DomainTypeAttributeMetadata attribute, final String attributeName, final String... parameterValues) {
+        private Predicate attributePredicate(PersistentProperty persistentProperty, final String attributeName, final String... parameterValues) {
             final String parameterValue = trim(parameterValues[0]);
 
-            if (isNumericType(attribute)) {
-                return numericAttributePredicate(attribute, attributeName, parameterValue);
+            if (isNumericType(persistentProperty)) {
+                return numericAttributePredicate(persistentProperty, attributeName, parameterValue);
             }
 
-            if (isBooleanType(attribute)) {
+            if (isBooleanType(persistentProperty)) {
                 return booleanAttributePredicate(attributeName, parameterValues);
             }
 
-            if (isAssociation(attribute)) {
-                return associationAttributesPredicate(attribute, attributeName, parameterValues);
+            if (isAssociation(persistentProperty)) {
+                return associationAttributesPredicate(persistentProperty, attributeName, parameterValues);
             }
 
-            if (isDateType(attribute)) {
+            if (isDateType(persistentProperty)) {
                 return dateAttributePredicate(attributeName, parameterValue);
             }
 
@@ -113,7 +115,7 @@ public class SpecificationCreator {
             return builder.and();
         }
 
-        private Predicate associationAttributesPredicate(final DomainTypeAttributeMetadata attribute, final String attributeName, final String... parameterValues) {
+        private Predicate associationAttributesPredicate(final PersistentProperty attribute, final String attributeName, final String... parameterValues) {
             final List<Predicate> attributesPredicates = newLinkedList();
 
             for (String parameterValue : parameterValues) {
@@ -125,8 +127,8 @@ public class SpecificationCreator {
             return builder.and(attributesPredicates.toArray(new Predicate[attributesPredicates.size()]));
         }
 
-        private Predicate associationAttributePredicate(final DomainTypeAttributeMetadata attribute, final String attributeName, final String parameterValue) {
-            final Class<?> domainType = attribute.getAssociationDomainType();
+        private Predicate associationAttributePredicate(final PersistentProperty attribute, final String attributeName, final String parameterValue) {
+            final Class<?> domainType = attribute.getActualType();
 
             final DomainTypeBasicConfiguration domainTypeBasicConfiguration = domainTypeConfigurationFor(domainType);
 
@@ -158,7 +160,7 @@ public class SpecificationCreator {
             return builder.or(attributesPredicates.toArray(new Predicate[attributesPredicates.size()]));
         }
 
-        private Predicate numericAttributePredicate(final DomainTypeAttributeMetadata attribute, final String attributeName, final String parameterValue) {
+        private Predicate numericAttributePredicate(final PersistentProperty attribute, final String attributeName, final String parameterValue) {
             if (isNumber(parameterValue)) {
                 final Number attributeValue = parseNumber(parameterValue, (Class<? extends Number>) attribute.getType());
 
@@ -168,20 +170,20 @@ public class SpecificationCreator {
             return builder.and();
         }
 
-        private boolean isDateType(final DomainTypeAttributeMetadata attribute) {
-            return attribute.getAttributeType() == DATE;
+        private boolean isDateType(final PersistentProperty attribute) {
+            return PersistentPropertyType.forPersistentProperty(attribute) == DATE;
         }
 
-        private boolean isAssociation(final DomainTypeAttributeMetadata attribute) {
-            return attribute.getAttributeType() == ASSOC || attribute.getAttributeType() == ASSOC_MULTI;
+        private boolean isAssociation(final PersistentProperty attribute) {
+            return PersistentPropertyType.forPersistentProperty(attribute) == ASSOC || PersistentPropertyType.forPersistentProperty(attribute) == ASSOC_MULTI;
         }
 
-        private boolean isBooleanType(final DomainTypeAttributeMetadata attribute) {
-            return attribute.getAttributeType() == BOOL;
+        private boolean isBooleanType(final PersistentProperty attribute) {
+            return PersistentPropertyType.forPersistentProperty(attribute) == BOOL;
         }
 
-        private boolean isNumericType(final DomainTypeAttributeMetadata attribute) {
-            return attribute.getAttributeType() == NUMBER_INTEGER || attribute.getAttributeType() == NUMBER_FLOAT;
+        private boolean isNumericType(final PersistentProperty attribute) {
+            return PersistentPropertyType.forPersistentProperty(attribute) == NUMBER_INTEGER || PersistentPropertyType.forPersistentProperty(attribute) == NUMBER_FLOAT;
         }
 
         private DomainTypeBasicConfiguration domainTypeConfigurationFor(final Class<?> domainType) {

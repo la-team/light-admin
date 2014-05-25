@@ -37,7 +37,7 @@ public abstract class EntityNameExtractorFactory {
 
         @Override
         public String apply(final Object entity) {
-            BeanWrapper<PersistentEntity<Object, ?>, Object> wrapper = BeanWrapper.create(entity, null);
+            BeanWrapper wrapper = BeanWrapper.create(entity, null);
             Object entityId = wrapper.getProperty(persistentEntity.getIdProperty());
 
             return String.format("%s #%s", entityName, entityId);

@@ -1,22 +1,22 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.mapping.context.MappingContext;
 
 public class DomainConfigurationSourceValidatorFactory {
 
-    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final MappingContext mappingContext;
     private final ResourceLoader resourceLoader;
     private final LightAdminConfiguration lightAdminConfiguration;
 
-    public DomainConfigurationSourceValidatorFactory(LightAdminConfiguration lightAdminConfiguration, final DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader) {
-        this.entityMetadataResolver = entityMetadataResolver;
+    public DomainConfigurationSourceValidatorFactory(LightAdminConfiguration lightAdminConfiguration, final MappingContext entityMetadataResolver, ResourceLoader resourceLoader) {
+        mappingContext = entityMetadataResolver;
         this.resourceLoader = resourceLoader;
         this.lightAdminConfiguration = lightAdminConfiguration;
     }
 
     public DomainConfigurationSourceValidator getValidator() {
-        return new DomainConfigurationUnitsSourceValidator(entityMetadataResolver, resourceLoader, lightAdminConfiguration);
+        return new DomainConfigurationUnitsSourceValidator(mappingContext, resourceLoader, lightAdminConfiguration);
     }
 }

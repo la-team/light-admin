@@ -1,25 +1,24 @@
 package org.lightadmin.core.config.domain.unit.support;
 
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.context.MappingContext;
 
 public abstract class EntityMetadataResolverAwareConfigurationUnitPostProcessor implements ConfigurationUnitPostProcessor {
 
-    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final MappingContext mappingContext;
 
-    public EntityMetadataResolverAwareConfigurationUnitPostProcessor(final DomainTypeEntityMetadataResolver entityMetadataResolver) {
-        this.entityMetadataResolver = entityMetadataResolver;
-    }
-
-
-    DomainTypeEntityMetadata<DomainTypeAttributeMetadata> resolveEntityMetadata(ConfigurationUnit configurationUnit) {
-        return resolveEntityMetadata(configurationUnit.getDomainType());
+    public EntityMetadataResolverAwareConfigurationUnitPostProcessor(final MappingContext mappingContext) {
+        this.mappingContext = mappingContext;
     }
 
     @SuppressWarnings("unchecked")
-    DomainTypeEntityMetadata<DomainTypeAttributeMetadata> resolveEntityMetadata(Class<?> domainType) {
-        return entityMetadataResolver.resolveEntityMetadata(domainType);
+    protected PersistentEntity resolveEntityMetadata(ConfigurationUnit configurationUnit) {
+        return mappingContext.getPersistentEntity(configurationUnit.getDomainType());
+    }
+
+    @SuppressWarnings("unchecked")
+    protected PersistentEntity resolveEntityMetadata(Class<?> domainType) {
+        return mappingContext.getPersistentEntity(domainType);
     }
 }

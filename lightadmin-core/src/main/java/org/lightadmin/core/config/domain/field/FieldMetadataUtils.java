@@ -6,7 +6,6 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.StringUtils;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.springframework.data.mapping.PersistentProperty;
 
 import java.util.Comparator;
@@ -62,7 +61,7 @@ public class FieldMetadataUtils {
     public static Set<FieldMetadata> addPrimaryKeyPersistentField(final Set<FieldMetadata> fields, final PersistentProperty idAttribute) {
         final Set<FieldMetadata> fieldsWithPrimaryKey = newLinkedHashSet();
         PersistentFieldMetadata idField = new PersistentFieldMetadata(StringUtils.capitalize(idAttribute.getName()), idAttribute.getName(), true);
-        idField.setAttributeMetadata(idAttribute);
+        idField.setPersistentProperty(idAttribute);
         fieldsWithPrimaryKey.add(idField);
         fieldsWithPrimaryKey.addAll(fields);
         return fieldsWithPrimaryKey;
@@ -101,14 +100,6 @@ public class FieldMetadataUtils {
         @Override
         public int compare(final Nameable nameable, final Nameable nameable2) {
             return nameable.getName().compareTo(nameable2.getName());
-        }
-    }
-
-    public static class DomainTypeAttributeMetadataComparator implements Comparator<DomainTypeAttributeMetadata> {
-
-        @Override
-        public int compare(final DomainTypeAttributeMetadata domainTypeAttributeMetadata, final DomainTypeAttributeMetadata domainTypeAttributeMetadata2) {
-            return domainTypeAttributeMetadata.getName().compareTo(domainTypeAttributeMetadata2.getName());
         }
     }
 

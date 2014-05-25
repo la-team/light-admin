@@ -6,22 +6,20 @@ import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigur
 import org.lightadmin.core.config.domain.common.GenericFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.SimplePropertyHandler;
+import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.ClassUtils;
 
-import java.util.List;
-
-import static com.google.common.collect.Lists.newArrayList;
-import static java.util.Collections.sort;
 import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.CONFIGURATION;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.DomainTypeAttributeMetadataComparator;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isSupportedAttributeType;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isSupportedAttributeType;
 
 public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverAwareConfigurationUnitPostProcessor {
 
-    public EmptyConfigurationUnitPostProcessor(final DomainTypeEntityMetadataResolver entityMetadataResolver) {
-        super(entityMetadataResolver);
+    public EmptyConfigurationUnitPostProcessor(final MappingContext mappingContext) {
+        super(mappingContext);
     }
 
     @Override
@@ -34,17 +32,19 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
     }
 
     private FieldSetConfigurationUnit fieldSetUnitWithPersistentFields(final Class<?> domainType, DomainConfigurationUnitType configurationUnitType) {
-        FieldSetConfigurationUnitBuilder fieldSetConfigurationUnitBuilder = new GenericFieldSetConfigurationUnitBuilder(domainType, configurationUnitType);
+        final FieldSetConfigurationUnitBuilder fieldSetConfigurationUnitBuilder = new GenericFieldSetConfigurationUnitBuilder(domainType, configurationUnitType);
 
-        final List<DomainTypeAttributeMetadata> attributes = newArrayList(resolveEntityMetadata(domainType).getAttributes());
+        PersistentEntity persistentEntity = resolveEntityMetadata(domainType);
 
-        sort(attributes, new DomainTypeAttributeMetadataComparator());
-
-        for (DomainTypeAttributeMetadata attribute : attributes) {
-            if (isSupportedAttributeType(attribute.getAttributeType())) {
-                fieldSetConfigurationUnitBuilder.field(attribute.getName());
+        persistentEntity.doWithProperties(new SimplePropertyHandler() {
+            @Override
+            public void doWithPersistentProperty(PersistentProperty<?> property) {
+                PersistentPropertyType persistentPropertyType = PersistentPropertyType.forPersistentProperty(property);
+                if (isSupportedAttributeType(persistentPropertyType)) {
+                    fieldSetConfigurationUnitBuilder.field(property.getName());
+                }
             }
-        }
+        });
 
         return fieldSetConfigurationUnitBuilder.build();
     }

@@ -12,8 +12,7 @@ public abstract class AbstractAutowiredTag extends SimpleTagSupport {
     public void setJspContext(JspContext context) {
         super.setJspContext(context);
 
-        AutowireCapableBeanFactory beanFactory =
-                (AutowireCapableBeanFactory) context.findAttribute(ApplicationController.BEAN_FACTORY_KEY);
+        AutowireCapableBeanFactory beanFactory = (AutowireCapableBeanFactory) context.findAttribute(ApplicationController.BEAN_FACTORY_KEY);
         beanFactory.autowireBean(this);
     }
 

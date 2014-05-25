@@ -31,7 +31,6 @@ public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
 
     private String[] definitions;
     private boolean checkRefresh;
-    private boolean validateDefinitions;
 
     private Class<? extends PreparerFactory> preparerFactoryClass;
 
@@ -46,10 +45,6 @@ public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
 
     public void setCheckRefresh(boolean checkRefresh) {
         this.checkRefresh = checkRefresh;
-    }
-
-    public void setValidateDefinitions(boolean validateDefinitions) {
-        this.validateDefinitions = validateDefinitions;
     }
 
     public void setPreparerFactoryClass(Class<? extends PreparerFactory> preparerFactoryClass) {
@@ -108,11 +103,9 @@ public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
         protected DefinitionsReader createDefinitionsReader(TilesApplicationContext applicationContext,
                                                             TilesRequestContextFactory contextFactory) {
             DigesterDefinitionsReader reader = new DigesterDefinitionsReader();
-            if (!validateDefinitions) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put(DigesterDefinitionsReader.PARSER_VALIDATE_PARAMETER_NAME, Boolean.FALSE.toString());
-                reader.init(map);
-            }
+            Map<String, String> map = new HashMap<String, String>();
+            map.put(DigesterDefinitionsReader.PARSER_VALIDATE_PARAMETER_NAME, Boolean.FALSE.toString());
+            reader.init(map);
             return reader;
         }
 

@@ -11,9 +11,9 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.mapping.context.MappingContext;
 
 import java.util.Collection;
 import java.util.List;
@@ -29,18 +29,18 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
     private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
 
     private final LightAdminConfiguration lightAdminConfiguration;
-    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final MappingContext mappingContext;
     private final ResourceLoader resourceLoader;
 
-    public DomainConfigurationUnitsSourceValidator(final DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader, LightAdminConfiguration lightAdminConfiguration) {
-        this(new DomainTypeFieldMetadataValidator(), lightAdminConfiguration, entityMetadataResolver, resourceLoader);
+    public DomainConfigurationUnitsSourceValidator(final MappingContext mappingContext, ResourceLoader resourceLoader, LightAdminConfiguration lightAdminConfiguration) {
+        this(new DomainTypeFieldMetadataValidator(), lightAdminConfiguration, mappingContext, resourceLoader);
     }
 
-    DomainConfigurationUnitsSourceValidator(final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator, LightAdminConfiguration lightAdminConfiguration, DomainTypeEntityMetadataResolver entityMetadataResolver, ResourceLoader resourceLoader) {
+    DomainConfigurationUnitsSourceValidator(final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator, LightAdminConfiguration lightAdminConfiguration, MappingContext mappingContext, ResourceLoader resourceLoader) {
         this.fieldMetadataValidator = fieldMetadataValidator;
         this.resourceLoader = resourceLoader;
         this.lightAdminConfiguration = lightAdminConfiguration;
-        this.entityMetadataResolver = entityMetadataResolver;
+        this.mappingContext = mappingContext;
     }
 
     @Override
@@ -150,6 +150,6 @@ class DomainConfigurationUnitsSourceValidator implements DomainConfigurationSour
     }
 
     private DomainConfigurationValidationContext newDomainConfigurationValidationContext(DomainConfigurationSource domainConfigurationSource, DomainConfigurationUnitType domainConfigurationUnitType) {
-        return new DomainConfigurationValidationContext(lightAdminConfiguration, domainConfigurationSource, domainConfigurationUnitType, entityMetadataResolver, resourceLoader);
+        return new DomainConfigurationValidationContext(lightAdminConfiguration, domainConfigurationSource, domainConfigurationUnitType, mappingContext, resourceLoader);
     }
 }

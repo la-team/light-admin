@@ -14,6 +14,7 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
 
     private final String applicationBaseUrl;
     private final String applicationBaseNoEndSeparator;
+    private final String applicationRestBaseUrl;
     private final boolean securityEnabled;
     private final String securityLogoutUrl;
     private final String backToSiteUrl;
@@ -31,12 +32,19 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
         this.fileStorageDirectory = fileStorageDirectory(servletContext);
         this.fileStreaming = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING));
 
+        this.applicationRestBaseUrl = servletContext.getContextPath() + this.applicationBaseNoEndSeparator + LIGHT_ADMIN_REST_URL_DEFAULT;
+
         this.securityEnabled = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
         if (securityEnabled) {
             this.securityLogoutUrl = servletContext.getContextPath() + this.applicationBaseNoEndSeparator + LIGHT_ADMIN_SECURITY_LOGOUT_URL_DEFAULT;
         } else {
             this.securityLogoutUrl = servletContext.getContextPath() + defaultIfBlank(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY_LOGOUT_URL), "#");
         }
+    }
+
+    @Override
+    public String getApplicationRestBaseUrl() {
+        return applicationRestBaseUrl;
     }
 
     @Override

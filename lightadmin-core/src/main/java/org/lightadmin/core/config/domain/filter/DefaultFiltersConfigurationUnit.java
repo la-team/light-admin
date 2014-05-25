@@ -3,8 +3,9 @@ package org.lightadmin.core.config.domain.filter;
 import org.lightadmin.api.config.unit.FiltersConfigurationUnit;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
+import org.lightadmin.core.persistence.metamodel.PersistentEntityAware;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;
@@ -12,7 +13,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
-public class DefaultFiltersConfigurationUnit extends DomainTypeConfigurationUnit implements FiltersConfigurationUnit, DomainTypeEntityMetadataAware {
+public class DefaultFiltersConfigurationUnit extends DomainTypeConfigurationUnit implements FiltersConfigurationUnit, PersistentEntityAware {
 
     private final Set<FilterMetadata> filtersMetadata;
 
@@ -39,9 +40,11 @@ public class DefaultFiltersConfigurationUnit extends DomainTypeConfigurationUnit
     }
 
     @Override
-    public void setDomainTypeEntityMetadata(final DomainTypeEntityMetadata domainTypeEntityMetadata) {
+    public void setPersistentEntity(final PersistentEntity persistenEntity) {
         for (FilterMetadata filterMetadata : filtersMetadata) {
-            filterMetadata.setAttributeMetadata(domainTypeEntityMetadata.getAttribute(filterMetadata.getFieldName()));
+            PersistentProperty persistentProperty = persistenEntity.getPersistentProperty(filterMetadata.getFieldName());
+
+            filterMetadata.setPersistentProperty(persistentProperty);
         }
     }
 }

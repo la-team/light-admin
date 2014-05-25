@@ -2,21 +2,21 @@ package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
 import org.lightadmin.api.config.unit.*;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.util.Assert;
 
 public class DomainConfigurationUnitsSource implements DomainConfigurationSource {
 
     private final ConfigurationUnits configurationUnits;
 
-    private final DomainTypeEntityMetadata domainTypeEntityMetadata;
+    private final PersistentEntity persistentEntity;
 
-    public DomainConfigurationUnitsSource(final DomainTypeEntityMetadata domainTypeEntityMetadata, ConfigurationUnits configurationUnits) {
-        Assert.notNull(domainTypeEntityMetadata, "DomainTypeEntityMetadata must not be null");
+    public DomainConfigurationUnitsSource(final PersistentEntity persistentEntity, ConfigurationUnits configurationUnits) {
+        Assert.notNull(persistentEntity, "DomainTypeEntityMetadata must not be null");
         Assert.notNull(configurationUnits, "ConfigurationUnits must not be null");
 
         this.configurationUnits = configurationUnits;
-        this.domainTypeEntityMetadata = domainTypeEntityMetadata;
+        this.persistentEntity = persistentEntity;
     }
 
     @Override
@@ -30,8 +30,8 @@ public class DomainConfigurationUnitsSource implements DomainConfigurationSource
     }
 
     @Override
-    public DomainTypeEntityMetadata getDomainTypeEntityMetadata() {
-        return domainTypeEntityMetadata;
+    public PersistentEntity getPersistentEntity() {
+        return persistentEntity;
     }
 
     @Override

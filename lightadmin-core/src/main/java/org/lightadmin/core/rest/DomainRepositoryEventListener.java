@@ -1,47 +1,65 @@
 package org.lightadmin.core.rest;
 
-//import org.springframework.data.rest.repository.RepositoryMetadata;
-//import org.springframework.data.rest.repository.context.AbstractRepositoryEventListener;
+import org.lightadmin.core.config.LightAdminConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
+import org.lightadmin.core.rest.binary.OperationBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.SimplePropertyHandler;
+import org.springframework.data.repository.support.Repositories;
+import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
-@SuppressWarnings("unchecked")
-public class DomainRepositoryEventListener {
-//        extends AbstractRepositoryEventListener {
-//
-//    @Autowired
-//    private GlobalAdministrationConfiguration configuration;
-//
-//    @Autowired
-//    private LightAdminConfiguration lightAdminConfiguration;
-//
-//    private OperationBuilder operationBuilder;
-//
-//    @PostConstruct
-//    public void init() {
-//        this.operationBuilder = operationBuilder(configuration, lightAdminConfiguration);
-//    }
-//
-//    @Override
-//    protected void onAfterSave(Object entity) {
-//        final RepositoryMetadata repoMeta = repositoryMetadataFor(entity.getClass());
-//        final Collection<AttributeMetadata> embeddedAttributeMetadatas = (Collection<AttributeMetadata>) repoMeta.entityMetadata().embeddedAttributes().values();
-//        final Collection<AttributeMetadata> fileReferenceAttributeMetadatas = fileReferenceAttributeMetadatas(embeddedAttributeMetadatas);
-//
-//        for (AttributeMetadata fileReferenceAttrMetadata : fileReferenceAttributeMetadatas) {
-//            try {
-//                operationBuilder.saveOperation(entity).performCleanup(fileReferenceAttrMetadata);
-//            } catch (IOException e) {
-//            }
-//        }
-//    }
-//
-//    @Override
-//    protected void onBeforeDelete(Object entity) {
-//        final RepositoryMetadata repoMeta = repositoryMetadataFor(entity.getClass());
-//        final Collection<AttributeMetadata> embeddedAttributeMetadatas = (Collection<AttributeMetadata>) repoMeta.entityMetadata().embeddedAttributes().values();
-//        final Collection<AttributeMetadata> fileReferenceAttributeMetadatas = fileReferenceAttributeMetadatas(embeddedAttributeMetadatas);
-//
-//        for (AttributeMetadata fileReferenceAttrMetadata : fileReferenceAttributeMetadatas) {
-//            operationBuilder.deleteOperation(entity).perform(fileReferenceAttrMetadata);
-//        }
-//    }
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+
+public class DomainRepositoryEventListener extends AbstractRepositoryEventListener<Object> {
+
+    @Autowired
+    private GlobalAdministrationConfiguration configuration;
+
+    @Autowired
+    private LightAdminConfiguration lightAdminConfiguration;
+
+    @Autowired
+    private Repositories repositories;
+
+    private OperationBuilder operationBuilder;
+
+    @PostConstruct
+    public void init() {
+        this.operationBuilder = OperationBuilder.operationBuilder(configuration, lightAdminConfiguration);
+    }
+
+    @Override
+    protected void onAfterSave(final Object entity) {
+        PersistentEntity<?, ?> persistentEntity = repositories.getPersistentEntity(entity.getClass());
+
+        persistentEntity.doWithProperties(new SimplePropertyHandler() {
+            @Override
+            public void doWithPersistentProperty(PersistentProperty<?> property) {
+                if (PersistentPropertyType.isOfFileReferenceType(property)) {
+                    try {
+                        operationBuilder.saveOperation(entity).performCleanup(property);
+                    } catch (IOException e) {
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    protected void onBeforeDelete(final Object entity) {
+        PersistentEntity<?, ?> persistentEntity = repositories.getPersistentEntity(entity.getClass());
+
+        persistentEntity.doWithProperties(new SimplePropertyHandler() {
+            @Override
+            public void doWithPersistentProperty(PersistentProperty<?> property) {
+                if (PersistentPropertyType.isOfFileReferenceType(property)) {
+                    operationBuilder.deleteOperation(entity).perform(property);
+                }
+            }
+        });
+    }
 }

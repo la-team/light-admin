@@ -7,9 +7,10 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
+import org.lightadmin.core.persistence.metamodel.PersistentEntityAware;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyAware;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
 
 import java.util.Iterator;
 import java.util.Set;
@@ -19,7 +20,7 @@ import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrim
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.getPersistentField;
 
 public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUnit
-        implements FieldSetConfigurationUnit, DomainTypeEntityMetadataAware, HierarchicalConfigurationUnit {
+        implements FieldSetConfigurationUnit, PersistentEntityAware, HierarchicalConfigurationUnit {
 
     private static final long serialVersionUID = 1L;
 
@@ -68,18 +69,20 @@ public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUni
     }
 
     @Override
-    public void setDomainTypeEntityMetadata(DomainTypeEntityMetadata domainTypeEntityMetadata) {
-        final PersistentFieldMetadata primaryKeyField = getPersistentField(fields, domainTypeEntityMetadata.getIdAttribute().getName());
+    public void setPersistentEntity(PersistentEntity persistenEntity) {
+        final PersistentFieldMetadata primaryKeyField = getPersistentField(fields, persistenEntity.getIdProperty().getName());
 
         if (primaryKeyField != null) {
             primaryKeyField.setPrimaryKey(true);
         } else {
-            fields = addPrimaryKeyPersistentField(fields, domainTypeEntityMetadata.getIdAttribute());
+            fields = addPrimaryKeyPersistentField(fields, persistenEntity.getIdProperty());
         }
 
         for (FieldMetadata field : fields) {
-            if (field instanceof DomainTypeAttributeMetadataAware) {
-                ((DomainTypeAttributeMetadataAware) field).setAttributeMetadata(domainTypeEntityMetadata.getAttribute(((Persistable) field).getField()));
+            if (field instanceof PersistentPropertyAware) {
+                Persistable persistable = (Persistable) field;
+                PersistentProperty persistentProperty = persistenEntity.getPersistentProperty(persistable.getField());
+                ((PersistentPropertyAware) field).setPersistentProperty(persistentProperty);
             }
         }
     }

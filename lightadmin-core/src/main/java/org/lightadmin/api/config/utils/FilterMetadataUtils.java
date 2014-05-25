@@ -48,6 +48,11 @@ public abstract class FilterMetadataUtils {
         }
 
         @Override
+        public PersistentProperty getAttributeMetadata() {
+            return fieldMetadata.getPersistentProperty();
+        }
+
+        @Override
         public String getUuid() {
             return fieldMetadata.getUuid();
         }
@@ -63,8 +68,8 @@ public abstract class FilterMetadataUtils {
         }
 
         @Override
-        public void setAttributeMetadata(final PersistentProperty attributeMetadata) {
-            this.fieldMetadata.setAttributeMetadata(attributeMetadata);
+        public void setPersistentProperty(final PersistentProperty persistentProperty) {
+            this.fieldMetadata.setPersistentProperty(persistentProperty);
         }
 
         @Override

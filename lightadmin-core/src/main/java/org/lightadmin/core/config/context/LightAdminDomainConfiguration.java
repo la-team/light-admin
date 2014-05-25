@@ -4,12 +4,12 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
-import org.lightadmin.core.persistence.metamodel.JpaDomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
+import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.web.context.support.ServletContextResourceLoader;
 
@@ -32,27 +32,26 @@ public class LightAdminDomainConfiguration {
     private AutowireCapableBeanFactory beanFactory;
 
     @Bean
-    public DomainTypeEntityMetadataResolver domainTypeEntityMetadataResolver() {
-        return new JpaDomainTypeEntityMetadataResolver(entityManager);
+    public MappingContext metamodelMappingContext() {
+        return new JpaMetamodelMappingContext(entityManager.getMetamodel());
     }
 
     @Bean
     @Autowired
     public DomainConfigurationSourceFactory domainConfigurationSourceFactory() {
-        return new DomainConfigurationSourceFactory(domainTypeEntityMetadataResolver(), this.beanFactory);
+        return new DomainConfigurationSourceFactory(metamodelMappingContext(), this.beanFactory);
     }
 
     @Bean
     public DomainConfigurationSourceValidatorFactory domainConfigurationSourceValidatorFactory() {
-        return new DomainConfigurationSourceValidatorFactory(lightAdminConfiguration, domainTypeEntityMetadataResolver(), servletContextResourceLoader);
+        return new DomainConfigurationSourceValidatorFactory(lightAdminConfiguration, metamodelMappingContext(), servletContextResourceLoader);
     }
 
     @Bean
     @Autowired
-    public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory(Repositories repositories, DomainTypeEntityMetadataResolver entityMetadataResolver) {
+    public DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigFactory(Repositories repositories) {
         return new DomainTypeAdministrationConfigurationFactory(repositories, entityManager);
     }
-
 
 //    @Bean
 //    public GlobalConfigurationManagementService globalConfigurationManagementService() {

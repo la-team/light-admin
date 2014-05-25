@@ -5,7 +5,6 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.util.ClassUtils;
@@ -71,7 +70,7 @@ public abstract class AbstractFileRestOperation {
     }
 
     protected Object idAttributeValue() {
-        BeanWrapper<PersistentEntity<Object, ?>, Object> beanWrapper = BeanWrapper.create(entity, null);
+        BeanWrapper beanWrapper = BeanWrapper.create(entity, null);
 
         return beanWrapper.getProperty(domainTypeAdministrationConfiguration.getPersistentEntity().getIdProperty());
     }

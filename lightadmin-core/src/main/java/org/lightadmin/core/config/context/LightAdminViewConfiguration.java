@@ -1,17 +1,11 @@
 package org.lightadmin.core.config.context;
 
 import org.lightadmin.core.view.preparer.*;
-import org.lightadmin.core.view.renderer.BasicAttributeRendererFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class LightAdminViewConfiguration {
-
-    @Bean
-    public BasicAttributeRendererFactory basicAttributeRendererFactory() {
-        return new BasicAttributeRendererFactory();
-    }
 
     @Bean
     public FooterSectionViewPreparer footerSectionViewPreparer() {

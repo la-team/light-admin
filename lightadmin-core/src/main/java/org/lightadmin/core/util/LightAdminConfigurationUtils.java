@@ -14,4 +14,6 @@ public class LightAdminConfigurationUtils {
     public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_SERVLET_NAME = "lightadmin-cusom-resource-servlet";
     public static final String LIGHT_ADMIN_DISPATCHER_REDIRECTOR_NAME = "lightadmin-dispatcher-redirector";
     public static final String LIGHT_ADMIN_SECURITY_LOGOUT_URL_DEFAULT = "/logout";
+
+    public static final String LIGHT_ADMIN_REST_URL_DEFAULT = "/rest";
 }

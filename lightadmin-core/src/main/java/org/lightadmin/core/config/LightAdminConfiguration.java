@@ -10,6 +10,8 @@ public interface LightAdminConfiguration {
 
     String getApplicationUrl(String path);
 
+    String getApplicationRestBaseUrl();
+
     boolean isSecurityEnabled();
 
     String getSecurityLogoutUrl();

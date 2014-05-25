@@ -4,20 +4,21 @@ import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.context.MappingContext;
 
 import java.io.File;
+import java.lang.annotation.Annotation;
 import java.util.Collection;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.emptyList;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.StringUtils.isEmpty;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isOfFileReferenceType;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isSupportedAttributeType;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileReferenceType;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isSupportedAttributeType;
 
 class PersistentFieldMetadataValidator implements FieldMetadataValidator<PersistentFieldMetadata> {
 
@@ -27,28 +28,28 @@ class PersistentFieldMetadataValidator implements FieldMetadataValidator<Persist
     @Override
     @SuppressWarnings("unchecked")
     public Collection<? extends DomainConfigurationProblem> validateFieldMetadata(PersistentFieldMetadata fieldMetadata, Class<?> domainType, DomainConfigurationValidationContext validationContext) {
-        final DomainTypeEntityMetadataResolver entityMetadataResolver = validationContext.getEntityMetadataResolver();
+        MappingContext mappingContext = validationContext.getMappingContext();
         final LightAdminConfiguration lightAdminConfiguration = validationContext.getLightAdminConfiguration();
 
-        final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata(domainType);
+        final PersistentEntity persistentEntity = mappingContext.getPersistentEntity(domainType);
 
-        final DomainTypeAttributeMetadata domainTypeAttributeMetadata = domainTypeEntityMetadata.getAttribute(fieldMetadata.getField());
+        PersistentProperty persistentProperty = persistentEntity.getPersistentProperty(fieldMetadata.getField());
 
-        if (domainTypeAttributeMetadata == null) {
+        if (persistentProperty == null) {
             return newArrayList(validationContext.notPersistableFieldProblem(fieldMetadata.getName()));
         }
 
-        if (!isSupportedAttributeType(domainTypeAttributeMetadata.getAttributeType())) {
+        if (!isSupportedAttributeType(PersistentPropertyType.forPersistentProperty(persistentProperty))) {
             return newArrayList(validationContext.notSupportedTypeFieldProblem(fieldMetadata.getName()));
         }
 
-        AttributeMetadata attributeMetadata = domainTypeAttributeMetadata.getAttributeMetadata();
-
-        if (isNotFileReferenceField(attributeMetadata)) {
+        if (!isOfFileReferenceType(persistentProperty)) {
             return emptyList();
         }
 
-        final FileReference fileReference = attributeMetadata.annotation(FileReference.class);
+        Annotation annotation = persistentProperty.findAnnotation(FileReference.class);
+
+        FileReference fileReference = (FileReference) annotation;
 
         if (isEmpty(fileReference.baseDirectory())) {
             if (lightAdminConfiguration.getFileStorageDirectory() != null) {
@@ -63,10 +64,5 @@ class PersistentFieldMetadataValidator implements FieldMetadataValidator<Persist
         }
 
         return newArrayList(validationContext.missingBaseDirectoryInFileReferenceProblem(fieldMetadata.getName()));
-
-    }
-
-    private boolean isNotFileReferenceField(AttributeMetadata attributeMetadata) {
-        return !isOfFileReferenceType(attributeMetadata);
     }
 }

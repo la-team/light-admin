@@ -4,7 +4,6 @@ import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.api.config.utils.FieldValueRenderer;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.util.Transformer;
-import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.model.BeanWrapper;
 
 import static java.lang.String.format;
@@ -23,7 +22,7 @@ public abstract class ExceptionAwareTransformer implements Transformer<Object, S
                 } catch (Exception ex) {
                     String domainTypeName = domainTypeBasicConfiguration.getDomainTypeName();
 
-                    BeanWrapper<PersistentEntity<Object, ?>, Object> beanWrapper = BeanWrapper.create(input, null);
+                    BeanWrapper beanWrapper = BeanWrapper.create(input, null);
 
                     Object id = beanWrapper.getProperty(domainTypeBasicConfiguration.getPersistentEntity().getIdProperty());
 

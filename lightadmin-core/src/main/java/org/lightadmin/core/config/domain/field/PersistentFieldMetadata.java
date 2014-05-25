@@ -1,13 +1,16 @@
 package org.lightadmin.core.config.domain.field;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyAware;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.springframework.data.mapping.PersistentProperty;
 
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
 
-public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.*;
+
+public class PersistentFieldMetadata extends AbstractFieldMetadata implements PersistentPropertyAware, Persistable {
 
     private final String field;
 
@@ -52,7 +55,7 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
     }
 
     @Override
-    public void setAttributeMetadata(final PersistentProperty persistentProperty) {
+    public void setPersistentProperty(final PersistentProperty persistentProperty) {
         this.persistentProperty = persistentProperty;
     }
 
@@ -63,9 +66,8 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
 
     @Override
     public boolean isSortable() {
-        return !this.persistentProperty.isAssociation();
-
-//        return this.attributeMetadata.getAttributeType() != ASSOC && this.attributeMetadata.getAttributeType() != ASSOC_MULTI && this.attributeMetadata.getAttributeType() != FILE;
+        PersistentPropertyType persistentPropertyType = PersistentPropertyType.forPersistentProperty(persistentProperty);
+        return persistentPropertyType != ASSOC && persistentPropertyType != ASSOC_MULTI && persistentPropertyType != FILE;
     }
 
     @Override

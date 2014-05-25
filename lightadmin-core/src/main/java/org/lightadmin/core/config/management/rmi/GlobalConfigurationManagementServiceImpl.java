@@ -9,7 +9,6 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.core.rest.HttpMessageConverterRefresher;
 import org.lightadmin.reporting.ProblemReporterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -29,8 +28,6 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
     @Autowired
     private DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
 
-    @Autowired
-    private HttpMessageConverterRefresher httpMessageConverterRefresher;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -44,22 +41,16 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
         final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(null);
 
         globalAdministrationConfiguration.registerDomainTypeConfiguration(administrationConfiguration);
-
-        httpMessageConverterRefresher.refresh();
     }
 
     @Override
     public void removeDomainTypeAdministrationConfiguration(final Class<?> domainType) {
         globalAdministrationConfiguration.removeDomainTypeConfiguration(domainType);
-
-        httpMessageConverterRefresher.refresh();
     }
 
     @Override
     public void removeAllDomainTypeAdministrationConfigurations() {
         globalAdministrationConfiguration.removeAllDomainTypeAdministrationConfigurations();
-
-        httpMessageConverterRefresher.refresh();
     }
 
     @Override

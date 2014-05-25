@@ -29,7 +29,6 @@ import java.util.Collection;
 import java.util.Date;
 
 import static java.lang.String.valueOf;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.isOfFileType;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
 //import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
@@ -76,7 +75,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
             BeanWrapper.create(entity, null).setProperty(attrMeta, null);
         } else if (NULL_PLACEHOLDER_MAGIC_DATE.equals(incomingVal)) {
             BeanWrapper.create(entity, null).setProperty(attrMeta, null);
-        } else if (isOfFileType(attrMeta)) {
+//        } else if (isOfFileType(attrMeta)) {
             operationBuilder.saveOperation(entity).perform(attrMeta, incomingVal);
         } else {
             BeanWrapper.create(entity, null).setProperty(attrMeta, incomingVal);
@@ -112,7 +111,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 //            return notFoundResponse(request);
 //        }
 //
-//        final AttributeMetadata attrMeta = domainTypeEntityMetadata.getAttribute(property).getAttributeMetadata();
+//        final AttributeMetadata attrMeta = domainTypeEntityMetadata.getAttribute(property).getPersistentProperty();
 //
 //        if (!isOfFileType(attrMeta)) {
 //            return new ResponseEntity(METHOD_NOT_ALLOWED);
@@ -135,7 +134,7 @@ public class DynamicRepositoryRestController extends FlexibleRepositoryRestContr
 //            return;
 //        }
 //
-//        final AttributeMetadata attrMeta = domainTypeEntityMetadata.getAttribute(property).getAttributeMetadata();
+//        final AttributeMetadata attrMeta = domainTypeEntityMetadata.getAttribute(property).getPersistentProperty();
 //
 //        if (isOfFileType(attrMeta)) {
 //            fileResourceLoader.downloadFile(entity, attrMeta, (HttpServletResponse) response);

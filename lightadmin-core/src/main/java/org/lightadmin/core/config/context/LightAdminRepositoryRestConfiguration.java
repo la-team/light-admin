@@ -21,17 +21,6 @@ import org.springframework.context.annotation.Configuration;
 public class LightAdminRepositoryRestConfiguration {
 
 //    @Bean
-//    public RepositoryRestConfiguration repositoryRestConfiguration() {
-//        return RepositoryRestConfiguration.DEFAULT.setDefaultPageSize(10);
-//    }
-//
-//    @Bean
-//    @Autowired
-//    public RestConfigurationInitInterceptor restConfigurationInitInterceptor(RepositoryRestConfiguration config) {
-//        return new RestConfigurationInitInterceptor(config);
-//    }
-//
-//    @Bean
 //    public DomainRepositoryEventListener domainRepositoryEventListener() {
 //        return new DomainRepositoryEventListener();
 //    }

@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
 import org.lightadmin.api.config.unit.*;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.springframework.data.mapping.PersistentEntity;
 
 public interface DomainConfigurationSource {
 
@@ -9,7 +9,7 @@ public interface DomainConfigurationSource {
 
     String getConfigurationName();
 
-    DomainTypeEntityMetadata getDomainTypeEntityMetadata();
+    PersistentEntity getPersistentEntity();
 
     FiltersConfigurationUnit getFilters();
 

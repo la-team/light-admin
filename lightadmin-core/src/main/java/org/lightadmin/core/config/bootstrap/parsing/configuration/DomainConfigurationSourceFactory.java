@@ -6,9 +6,9 @@ import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProce
 import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.HierarchicalConfigurationPostProcessor;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataResolver;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.Assert;
 import org.springframework.util.ClassUtils;
 
@@ -22,20 +22,20 @@ import static org.lightadmin.core.util.DomainConfigurationUtils.isConfigurationC
 public class DomainConfigurationSourceFactory {
 
     private final AutowireCapableBeanFactory beanFactory;
-    private final DomainTypeEntityMetadataResolver entityMetadataResolver;
+    private final MappingContext mappingContext;
 
     private final ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
 
-    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, AutowireCapableBeanFactory beanFactory) {
-        this(entityMetadataResolver, beanFactory,
-                new EmptyConfigurationUnitPostProcessor(entityMetadataResolver),
-                new DomainTypeMetadataAwareConfigurationUnitPostProcessor(entityMetadataResolver),
+    public DomainConfigurationSourceFactory(final MappingContext mappingContext, AutowireCapableBeanFactory beanFactory) {
+        this(mappingContext, beanFactory,
+                new EmptyConfigurationUnitPostProcessor(mappingContext),
+                new DomainTypeMetadataAwareConfigurationUnitPostProcessor(mappingContext),
                 new HierarchicalConfigurationPostProcessor());
     }
 
-    public DomainConfigurationSourceFactory(final DomainTypeEntityMetadataResolver entityMetadataResolver, AutowireCapableBeanFactory beanFactory, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors) {
+    public DomainConfigurationSourceFactory(final MappingContext mappingContext, AutowireCapableBeanFactory beanFactory, final ConfigurationUnitPostProcessor... configurationUnitPostProcessors) {
         this.beanFactory = beanFactory;
-        this.entityMetadataResolver = entityMetadataResolver;
+        this.mappingContext = mappingContext;
         this.configurationUnitPostProcessors = configurationUnitPostProcessors;
     }
 
@@ -65,11 +65,11 @@ public class DomainConfigurationSourceFactory {
             throw new IllegalArgumentException(format("Non-persistent type %s is not supported.", domainType.getSimpleName()));
         }
 
-        final DomainTypeEntityMetadata domainTypeEntityMetadata = entityMetadataResolver.resolveEntityMetadata(domainType);
+        PersistentEntity persistentEntity = mappingContext.getPersistentEntity(domainType);
 
         final ConfigurationUnits processedConfigurationUnits = processConfigurationUnits(configurationUnits);
 
-        return new DomainConfigurationUnitsSource(domainTypeEntityMetadata, processedConfigurationUnits);
+        return new DomainConfigurationUnitsSource(persistentEntity, processedConfigurationUnits);
     }
 
     private ConfigurationUnits processConfigurationUnits(final ConfigurationUnits configurationUnits) {
@@ -86,6 +86,6 @@ public class DomainConfigurationSourceFactory {
 
     @SuppressWarnings("unchecked")
     private boolean notPersistentEntityType(final Class<?> domainType) {
-        return entityMetadataResolver.resolveEntityMetadata(domainType) == null;
+        return mappingContext.hasPersistentEntityFor(domainType);
     }
 }

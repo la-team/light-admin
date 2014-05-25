@@ -13,7 +13,7 @@ import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mapping.PersistentEntity;
@@ -62,7 +62,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
         final PersistentEntity persistentEntity = domainTypeConfiguration.getPersistentEntity();
 
-        BeanWrapper<PersistentEntity<Object, ?>, Object> beanWrapper = BeanWrapper.create(source, null);
+        BeanWrapper beanWrapper = BeanWrapper.create(source, null);
 
         Object id = beanWrapper.getProperty(persistentEntity.getIdProperty());
 
@@ -125,7 +125,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
         final Map<String, Object> fieldData = newLinkedHashMap();
 
         final Object fieldValue = fieldValueEvaluator.evaluate(field, source);
-        final DomainTypeAttributeType type = fieldValue != null ? DomainTypeAttributeType.forType(fieldValue.getClass()) : DomainTypeAttributeType.UNKNOWN;
+        final PersistentPropertyType type = fieldValue != null ? PersistentPropertyType.forType(fieldValue.getClass()) : PersistentPropertyType.UNKNOWN;
 
         fieldData.put("name", field.getName());
         fieldData.put("title", field.getName());
@@ -137,7 +137,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
     }
 
     private Map<String, Object> persistentFieldData(final Object source, final Object id, final PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final DomainConfigurationUnitType configurationUnitType) {
-        if (DomainTypeAttributeType.forPersistentProperty(field.getPersistentProperty()) == DomainTypeAttributeType.FILE) {
+        if (PersistentPropertyType.forPersistentProperty(field.getPersistentProperty()) == PersistentPropertyType.FILE) {
             return persistentFileFieldData(source, id, field, domainTypeConfiguration, configurationUnitType);
         }
 
@@ -151,7 +151,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
         fieldData.put("name", field.getField());
         fieldData.put("title", field.getName());
         fieldData.put("value", fieldValue);
-        fieldData.put("type", DomainTypeAttributeType.forPersistentProperty(field.getPersistentProperty()).name());
+        fieldData.put("type", PersistentPropertyType.forPersistentProperty(field.getPersistentProperty()).name());
         fieldData.put("persistable", true);
         fieldData.put("primaryKey", field.isPrimaryKey());
         if (field.getRenderer() != null) {
@@ -167,7 +167,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
             fieldData.put("name", field.getField());
             fieldData.put("title", field.getName());
-            fieldData.put("type", DomainTypeAttributeType.FILE.name());
+            fieldData.put("type", PersistentPropertyType.FILE.name());
             if (configurationUnitType == FORM_VIEW) {
                 byte[] fileData = operationBuilder.getOperation(source).perform(field.getPersistentProperty());
                 fieldData.put("value", fileData);

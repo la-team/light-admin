@@ -4,6 +4,7 @@ import org.lightadmin.api.config.unit.*;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.repository.support.Repositories;
 
 import java.io.Serializable;
 
@@ -12,15 +13,15 @@ import static org.springframework.util.StringUtils.uncapitalize;
 public class DomainTypeAdministrationConfiguration implements DomainTypeBasicConfiguration {
 
     private final DynamicJpaRepository<?, ? extends Serializable> repository;
-
-    private PersistentEntity persistentEntity;
-
+    private final PersistentEntity persistentEntity;
     private final ConfigurationUnits configurationUnits;
 
-    public DomainTypeAdministrationConfiguration(final DynamicJpaRepository<?, ?> repository, PersistentEntity persistentEntity, ConfigurationUnits configurationUnits) {
-        this.persistentEntity = persistentEntity;
+    public DomainTypeAdministrationConfiguration(Repositories repositories, ConfigurationUnits configurationUnits) {
+        final Class<?> domainType = configurationUnits.getDomainType();
+
+        this.repository = (DynamicJpaRepository<?, ? extends Serializable>) repositories.getRepositoryFor(domainType);
+        this.persistentEntity = repositories.getPersistentEntity(domainType);
         this.configurationUnits = configurationUnits;
-        this.repository = repository;
     }
 
     @Override
