@@ -33,16 +33,16 @@ public class DomainConfigurationProblem extends Problem {
         return stringBuilder.toString();
     }
 
-    @Override
-    public String toString() {
-        return getMessage();
-    }
-
     public ConfigurationUnits getConfigurationUnits() {
         return configurationUnits;
     }
 
     public DomainConfigurationUnitType getConfigurationUnitType() {
         return configurationUnitType;
+    }
+
+    @Override
+    public String toString() {
+        return getMessage();
     }
 }

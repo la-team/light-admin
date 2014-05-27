@@ -53,8 +53,8 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
     protected String basePackage;
 
     public LightAdminBeanDefinitionRegistryPostProcessor(String basePackage, ServletContext servletContext) {
-        this.basePackage = basePackage;
         this.servletContext = servletContext;
+        this.basePackage = basePackage;
     }
 
     @Override
