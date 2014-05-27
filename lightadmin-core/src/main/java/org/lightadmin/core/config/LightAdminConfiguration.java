@@ -1,6 +1,7 @@
 package org.lightadmin.core.config;
 
 import java.io.File;
+import java.net.URI;
 
 public interface LightAdminConfiguration {
 
@@ -10,7 +11,7 @@ public interface LightAdminConfiguration {
 
     String getApplicationUrl(String path);
 
-    String getApplicationRestBaseUrl();
+    URI getApplicationRestBaseUrl();
 
     boolean isSecurityEnabled();
 

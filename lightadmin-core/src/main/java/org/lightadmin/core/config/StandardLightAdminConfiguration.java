@@ -1,9 +1,11 @@
 package org.lightadmin.core.config;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.net.URI;
 
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
@@ -21,8 +23,11 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     private final File fileStorageDirectory;
     private final boolean fileStreaming;
     private final String basePackage;
+    private final ServletContext servletContext;
 
     public StandardLightAdminConfiguration(ServletContext servletContext) {
+        this.servletContext = servletContext;
+
         this.basePackage = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_PACKAGE);
 
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
@@ -43,8 +48,10 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     }
 
     @Override
-    public String getApplicationRestBaseUrl() {
-        return applicationRestBaseUrl;
+    public URI getApplicationRestBaseUrl() {
+
+
+        return UriComponentsBuilder.fromHttpUrl(servletContext.getContextPath()).path(applicationRestBaseUrl).build().toUri();
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -37,6 +38,7 @@ public class ApplicationController {
     private ConfigurableApplicationContext appContext;
 
     @Autowired
+    @Qualifier("defaultConversionService")
     private ConversionService conversionService;
 
     @Autowired

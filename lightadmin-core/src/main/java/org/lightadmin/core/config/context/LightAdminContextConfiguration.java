@@ -3,7 +3,6 @@ package org.lightadmin.core.config.context;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.StandardLightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.rest.DomainTypeToResourceConverter;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
 import org.lightadmin.core.view.SeparateContainerTilesView;
 import org.lightadmin.core.web.ApplicationController;
@@ -14,9 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
-import org.springframework.format.support.DefaultFormattingConversionService;
 import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
@@ -98,13 +95,13 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
         configurer.enable();
     }
 
-    @Bean
-    @Autowired
-    public ConversionService conversionService(DomainTypeToResourceConverter domainTypeToResourceConverter) {
-        DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
-        bean.addConverter(domainTypeToResourceConverter);
-        return bean;
-    }
+//    @Bean
+//    @Autowired
+//    public ConversionService conversionService(DomainTypeToResourceConverter domainTypeToResourceConverter) {
+//        DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
+//        bean.addConverter(domainTypeToResourceConverter);
+//        return bean;
+//    }
 
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {

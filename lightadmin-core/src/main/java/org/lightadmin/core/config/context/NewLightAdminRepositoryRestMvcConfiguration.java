@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 
-import static org.springframework.web.util.UriComponentsBuilder.fromHttpUrl;
-
 @Configuration
 public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcConfiguration {
 
@@ -19,7 +17,7 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     @Override
     protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.setDefaultPageSize(10);
-        config.setBaseUri(fromHttpUrl(lightAdminConfiguration.getApplicationRestBaseUrl()).build().toUri());
+//        config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
     }
 
     @Bean

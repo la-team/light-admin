@@ -11,7 +11,9 @@ import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimpleAssociationHandler;
+import org.springframework.data.repository.support.Repositories;
 
+import javax.persistence.EntityManager;
 import java.util.Set;
 
 public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactoryBean<GlobalAdministrationConfiguration> implements InitializingBean {
@@ -19,6 +21,10 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 
     private Set<ConfigurationUnits> domainTypeConfigurationUnits;
+
+    private EntityManager entityManager;
+
+    private Repositories repositories;
 
     @Override
     public Class<?> getObjectType() {
@@ -46,12 +52,22 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
         persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
             @Override
             public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
-                Class<?> associationDomainType = association.getInverse().getComponentType();
-                DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeAdministrationConfigurationFactory.createNonManagedDomainTypeConfiguration(associationDomainType);
+                Class<?> associationDomainType = association.getInverse().getActualType();
 
-                globalAdministrationConfiguration.registerNonDomainTypeConfiguration(associationTypeConfiguration);
+                if (isManagedEntity(associationDomainType) && !repositories.hasRepositoryFor(associationDomainType)) {
+                    DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeAdministrationConfigurationFactory.createNonManagedDomainTypeConfiguration(associationDomainType);
+                    globalAdministrationConfiguration.registerNonDomainTypeConfiguration(associationTypeConfiguration);
+                }
             }
         });
+    }
+
+    private boolean isManagedEntity(Class type) {
+        try {
+            return entityManager.getMetamodel().entity(type) != null;
+        } catch (IllegalArgumentException e) {
+            return false;
+        }
     }
 
     public void setDomainTypeConfigurationUnits(Set<ConfigurationUnits> domainTypeConfigurationUnits) {
@@ -60,5 +76,13 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     public void setDomainTypeAdministrationConfigurationFactory(DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory) {
         this.domainTypeAdministrationConfigurationFactory = domainTypeAdministrationConfigurationFactory;
+    }
+
+    public void setEntityManager(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
+    public void setRepositories(Repositories repositories) {
+        this.repositories = repositories;
     }
 }

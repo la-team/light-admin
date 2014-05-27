@@ -11,8 +11,8 @@ public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfigu
 
     private final EntityMetadataConfigurationUnit entityConfiguration;
 
-    private final PersistentEntity persistentEntity;
     private final JpaRepository<?, ? extends Serializable> repository;
+    private final PersistentEntity persistentEntity;
 
     public NonManagedDomainTypeConfiguration(EntityMetadataConfigurationUnit entityConfiguration, PersistentEntity persistentEntity, JpaRepository<?, ? extends Serializable> repository) {
         this.entityConfiguration = entityConfiguration;

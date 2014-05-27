@@ -8,10 +8,10 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.extension.DynamicRepositoryBeanNameGenerator;
 import org.lightadmin.core.extension.DynamicRepositoryClassFactory;
 import org.lightadmin.core.extension.JavassistDynamicJpaRepositoryClassFactory;
+import org.lightadmin.core.persistence.JpaMetamodelMappingContextFactoryBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
@@ -34,11 +34,16 @@ import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
 public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
+    public static final String JPA_MAPPPING_CONTEXT_BEAN = "jpaMapppingContext";
+    public static final String REPOSITORIES_BEAN = "repositories";
+
     protected static final String CONFIG_LOCATION_DELIMITERS = ",; \t\n";
 
     protected final DynamicRepositoryBeanNameGenerator nameGenerator = new DynamicRepositoryBeanNameGenerator();
     protected final DynamicRepositoryClassFactory classFactory = new JavassistDynamicJpaRepositoryClassFactory(nameGenerator);
+
     protected final ServletContext servletContext;
+
     protected final String basePackage;
 
     public LightAdminBeanDefinitionRegistryPostProcessor(String basePackage, ServletContext servletContext) {
@@ -51,6 +56,8 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
         WebApplicationContext rootContext = WebApplicationContextUtils.getRequiredWebApplicationContext(servletContext);
 
         EntityManager entityManager = findEntityManager(rootContext);
+
+        registry.registerBeanDefinition(JPA_MAPPPING_CONTEXT_BEAN, mappingContext(entityManager));
 
         Set<Class> administrationConfigs = scanPackageForAdministrationClasses();
 
@@ -68,31 +75,38 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
             registry.registerBeanDefinition(beanName(repoInterface), repositoryFactoryBeanDefinition);
         }
 
-        BeanDefinition configurationBeanDefinition = globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection);
-
-        registry.registerBeanDefinition(beanName(GlobalAdministrationConfiguration.class), configurationBeanDefinition);
-
-        registry.registerBeanDefinition(beanName(DomainTypeAdministrationConfigurationFactory.class), domainTypeAdministrationConfigurationFactoryDefinition());
+        registry.registerBeanDefinition(beanName(GlobalAdministrationConfiguration.class), globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection, entityManager));
+        registry.registerBeanDefinition(beanName(DomainTypeAdministrationConfigurationFactory.class), domainTypeAdministrationConfigurationFactoryDefinition(entityManager));
     }
 
-    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits) {
-        BeanDefinitionBuilder builder = rootBeanDefinition(GlobalAdministrationConfigurationFactoryBean.class);
-        builder.addPropertyValue("domainTypeConfigurationUnits", configurationUnits);
-        builder.addPropertyValue("domainTypeAdministrationConfigurationFactory", new RuntimeBeanReference(beanName(DomainTypeAdministrationConfigurationFactory.class)));
+    private BeanDefinition mappingContext(EntityManager entityManager) {
+        BeanDefinitionBuilder builder = rootBeanDefinition(JpaMetamodelMappingContextFactoryBean.class);
+        builder.addPropertyValue("entityManager", entityManager);
         return builder.getBeanDefinition();
     }
 
-    private BeanDefinition repositoryFactoryBeanDefinition(Class repoInterface, EntityManager entityManager) {
+    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits, EntityManager entityManager) {
+        BeanDefinitionBuilder builder = rootBeanDefinition(GlobalAdministrationConfigurationFactoryBean.class);
+        builder.addPropertyReference("domainTypeAdministrationConfigurationFactory", beanName(DomainTypeAdministrationConfigurationFactory.class));
+        builder.addPropertyValue("domainTypeConfigurationUnits", configurationUnits);
+        builder.addPropertyValue("entityManager", entityManager);
+        builder.addPropertyReference("repositories", REPOSITORIES_BEAN);
+        return builder.getBeanDefinition();
+    }
+
+    private BeanDefinition repositoryFactoryBeanDefinition(Class<?> repoInterface, EntityManager entityManager) {
         BeanDefinitionBuilder builder = rootBeanDefinition(JpaRepositoryFactoryBean.class);
         builder.addPropertyValue("entityManager", entityManager);
+        builder.addPropertyReference("mappingContext", JPA_MAPPPING_CONTEXT_BEAN);
         builder.addPropertyValue("repositoryInterface", repoInterface);
         return builder.getBeanDefinition();
     }
 
-    private BeanDefinition domainTypeAdministrationConfigurationFactoryDefinition() {
+    private BeanDefinition domainTypeAdministrationConfigurationFactoryDefinition(EntityManager entityManager) {
         BeanDefinitionBuilder builder = rootBeanDefinition(DomainTypeAdministrationConfigurationFactory.class);
-        builder.addConstructorArgReference("repositories");
-        builder.addConstructorArgReference("entityManager");
+        builder.addConstructorArgReference(REPOSITORIES_BEAN);
+        builder.addConstructorArgValue(entityManager);
+        builder.addConstructorArgReference(JPA_MAPPPING_CONTEXT_BEAN);
         return builder.getBeanDefinition();
     }
 
