@@ -7,9 +7,9 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFa
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.extension.DynamicRepositoryBeanNameGenerator;
-import org.lightadmin.core.extension.DynamicRepositoryClassFactory;
-import org.lightadmin.core.extension.JavassistDynamicJpaRepositoryClassFactory;
 import org.lightadmin.core.persistence.JpaMetamodelMappingContextFactoryBean;
+import org.lightadmin.core.persistence.repository.DynamicRepositoryClassFactory;
+import org.lightadmin.core.persistence.repository.JavassistDynamicJpaRepositoryClassFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;

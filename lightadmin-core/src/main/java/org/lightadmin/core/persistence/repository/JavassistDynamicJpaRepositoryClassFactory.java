@@ -1,8 +1,8 @@
-package org.lightadmin.core.extension;
+package org.lightadmin.core.persistence.repository;
 
 import javassist.ClassPool;
 import javassist.CtClass;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.lightadmin.core.extension.DynamicRepositoryBeanNameGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ClassUtils;

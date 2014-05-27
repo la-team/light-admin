@@ -1,6 +1,4 @@
-package org.lightadmin.core.extension;
-
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+package org.lightadmin.core.persistence.repository;
 
 import java.io.Serializable;
 

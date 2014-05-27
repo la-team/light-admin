@@ -3,6 +3,7 @@ package org.lightadmin.core.extension;
 import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.lightadmin.core.persistence.repository.JavassistDynamicJpaRepositoryClassFactory;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
