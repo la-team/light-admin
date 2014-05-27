@@ -1,10 +1,12 @@
 package org.lightadmin.core.config.bootstrap;
 
+import org.lightadmin.core.config.bootstrap.parsing.validation.ConfigurationUnitsValidator;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.data.mapping.Association;
@@ -16,6 +18,8 @@ import org.springframework.data.repository.support.Repositories;
 import javax.persistence.EntityManager;
 import java.util.Set;
 
+import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
+
 public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactoryBean<GlobalAdministrationConfiguration> implements InitializingBean {
 
     private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
@@ -26,6 +30,8 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     private Repositories repositories;
 
+    private ConfigurationUnitsValidator<ConfigurationUnits> configurationUnitsValidator;
+
     @Override
     public Class<?> getObjectType() {
         return GlobalAdministrationConfiguration.class;
@@ -35,7 +41,12 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     protected GlobalAdministrationConfiguration createInstance() throws Exception {
         GlobalAdministrationConfiguration globalAdministrationConfiguration = new GlobalAdministrationConfiguration();
 
+        final ProblemReporter problemReporter = failFastReporter();
+
         for (ConfigurationUnits configurationUnits : domainTypeConfigurationUnits) {
+
+            configurationUnitsValidator.validate(configurationUnits, problemReporter);
+
             DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(configurationUnits);
 
             globalAdministrationConfiguration.registerDomainTypeConfiguration(domainTypeAdministrationConfiguration);
@@ -76,6 +87,10 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     public void setDomainTypeAdministrationConfigurationFactory(DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory) {
         this.domainTypeAdministrationConfigurationFactory = domainTypeAdministrationConfigurationFactory;
+    }
+
+    public void setConfigurationUnitsValidator(ConfigurationUnitsValidator configurationUnitsValidator) {
+        this.configurationUnitsValidator = configurationUnitsValidator;
     }
 
     public void setEntityManager(EntityManager entityManager) {

@@ -23,7 +23,7 @@ import static org.junit.Assert.fail;
 @SuppressWarnings("unchecked")
 public class DomainConfigurationUnitsSourceValidatorTest {
 
-    private DomainConfigurationUnitsSourceValidator testee;
+    private CompositeConfigurationUnitsValidator testee;
 
     @Test
     public void domainTypeWithoutConstructorFailure() {

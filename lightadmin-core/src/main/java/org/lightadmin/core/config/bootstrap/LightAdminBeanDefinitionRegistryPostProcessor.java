@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.bootstrap;
 
+import org.lightadmin.core.config.bootstrap.parsing.validation.CompositeConfigurationUnitsValidator;
 import org.lightadmin.core.config.bootstrap.scanning.AdministrationClassScanner;
 import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
@@ -15,9 +16,11 @@ import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.ServletContextResourceLoader;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
 import javax.persistence.EntityManager;
@@ -36,6 +39,8 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
     public static final String JPA_MAPPPING_CONTEXT_BEAN = "jpaMapppingContext";
     public static final String REPOSITORIES_BEAN = "repositories";
+    private static final String LIGHTADMIN_CONFIGURATION_BEAN = "lightAdminConfiguration";
+    private static final String CONFIGURATION_UNITS_VALIDATOR_BEAN = "configurationUnitsValidator";
 
     protected static final String CONFIG_LOCATION_DELIMITERS = ",; \t\n";
 
@@ -57,7 +62,11 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
         EntityManager entityManager = findEntityManager(rootContext);
 
+        ResourceLoader resourceLoader = new ServletContextResourceLoader(servletContext);
+
         registry.registerBeanDefinition(JPA_MAPPPING_CONTEXT_BEAN, mappingContext(entityManager));
+
+        registry.registerBeanDefinition(CONFIGURATION_UNITS_VALIDATOR_BEAN, configurationUnitsValidator(resourceLoader));
 
         Set<Class> administrationConfigs = scanPackageForAdministrationClasses();
 
@@ -79,6 +88,14 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
         registry.registerBeanDefinition(beanName(DomainTypeAdministrationConfigurationFactory.class), domainTypeAdministrationConfigurationFactoryDefinition(entityManager));
     }
 
+    private BeanDefinition configurationUnitsValidator(ResourceLoader resourceLoader) {
+        BeanDefinitionBuilder builder = rootBeanDefinition(CompositeConfigurationUnitsValidator.class);
+        builder.addConstructorArgReference(JPA_MAPPPING_CONTEXT_BEAN);
+        builder.addConstructorArgValue(resourceLoader);
+        builder.addConstructorArgReference(LIGHTADMIN_CONFIGURATION_BEAN);
+        return builder.getBeanDefinition();
+    }
+
     private BeanDefinition mappingContext(EntityManager entityManager) {
         BeanDefinitionBuilder builder = rootBeanDefinition(JpaMetamodelMappingContextFactoryBean.class);
         builder.addPropertyValue("entityManager", entityManager);
@@ -91,6 +108,7 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
         builder.addPropertyValue("domainTypeConfigurationUnits", configurationUnits);
         builder.addPropertyValue("entityManager", entityManager);
         builder.addPropertyReference("repositories", REPOSITORIES_BEAN);
+        builder.addPropertyReference("configurationUnitsValidator", CONFIGURATION_UNITS_VALIDATOR_BEAN);
         return builder.getBeanDefinition();
     }
 

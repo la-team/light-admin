@@ -16,7 +16,7 @@ public class DomainConfigurationSourceValidatorFactory {
         this.lightAdminConfiguration = lightAdminConfiguration;
     }
 
-    public DomainConfigurationSourceValidator getValidator() {
-        return new DomainConfigurationUnitsSourceValidator(mappingContext, resourceLoader, lightAdminConfiguration);
+    public ConfigurationUnitsValidator getValidator() {
+        return new CompositeConfigurationUnitsValidator(mappingContext, resourceLoader, lightAdminConfiguration);
     }
 }

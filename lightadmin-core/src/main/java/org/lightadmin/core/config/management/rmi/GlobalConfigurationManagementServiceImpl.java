@@ -3,7 +3,7 @@ package org.lightadmin.core.config.management.rmi;
 import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
-import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
+import org.lightadmin.core.config.bootstrap.parsing.validation.ConfigurationUnitsValidator;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
@@ -34,7 +34,7 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
     public void registerDomainTypeConfiguration(final ConfigurationUnits configurationUnits) {
         final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource(configurationUnits);
 
-        final DomainConfigurationSourceValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
+        final ConfigurationUnitsValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
 
         configurationSourceValidator.validate(configurationSource, ProblemReporterFactory.failFastReporter());
 

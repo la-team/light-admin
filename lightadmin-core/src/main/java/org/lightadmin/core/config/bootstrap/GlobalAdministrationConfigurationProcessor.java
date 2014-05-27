@@ -3,7 +3,7 @@ package org.lightadmin.core.config.bootstrap;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
-import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidator;
+import org.lightadmin.core.config.bootstrap.parsing.validation.ConfigurationUnitsValidator;
 import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.bootstrap.scanning.AdministrationClassScanner;
 import org.lightadmin.core.config.bootstrap.scanning.ClassScanner;
@@ -52,14 +52,14 @@ public class GlobalAdministrationConfigurationProcessor implements BeanPostProce
 
         final Set<Class> metadataClasses = scanPackageForAdministrationClasses();
 
-        final DomainConfigurationSourceValidator validator = configurationSourceValidatorFactory.getValidator();
+        final ConfigurationUnitsValidator validator = configurationSourceValidatorFactory.getValidator();
 
         final ProblemReporter problemReporter = failFastReporter();
 
         for (Class metadataClass : metadataClasses) {
             final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource(metadataClass);
 
-            validator.validate(configurationSource, problemReporter);
+//            validator.validate(configurationSource, problemReporter);
 
             globalAdministrationConfiguration.registerDomainTypeConfiguration(
                     domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(null)
