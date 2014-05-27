@@ -4,7 +4,7 @@ import org.lightadmin.api.config.builder.PersistentFieldSetConfigurationUnitBuil
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.api.config.utils.Editors;
 import org.lightadmin.api.config.utils.EnumElement;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.view.editor.JspFragmentFieldControl;
 
 import static java.util.Arrays.asList;

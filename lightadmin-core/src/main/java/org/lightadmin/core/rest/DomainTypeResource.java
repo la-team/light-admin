@@ -1,7 +1,7 @@
 package org.lightadmin.core.rest;
 
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 
 import java.util.Set;
 

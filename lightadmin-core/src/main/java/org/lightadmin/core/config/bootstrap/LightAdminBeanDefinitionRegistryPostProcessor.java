@@ -44,12 +44,13 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
     protected static final String CONFIG_LOCATION_DELIMITERS = ",; \t\n";
 
-    protected final DynamicRepositoryBeanNameGenerator nameGenerator = new DynamicRepositoryBeanNameGenerator();
-    protected final DynamicRepositoryClassFactory classFactory = new JavassistDynamicJpaRepositoryClassFactory(nameGenerator);
+    protected DynamicRepositoryBeanNameGenerator nameGenerator = new DynamicRepositoryBeanNameGenerator();
+    protected DynamicRepositoryClassFactory classFactory = new JavassistDynamicJpaRepositoryClassFactory(nameGenerator);
+    protected ClassScanner classScanner = new AdministrationClassScanner();
 
-    protected final ServletContext servletContext;
+    protected ServletContext servletContext;
 
-    protected final String basePackage;
+    protected String basePackage;
 
     public LightAdminBeanDefinitionRegistryPostProcessor(String basePackage, ServletContext servletContext) {
         this.basePackage = basePackage;
@@ -105,6 +106,7 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
         builder.addPropertyReference("domainTypeAdministrationConfigurationFactory", beanName(DomainTypeAdministrationConfigurationFactory.class));
         builder.addPropertyValue("domainTypeConfigurationUnits", configurationUnits);
         builder.addPropertyValue("entityManager", entityManager);
+        builder.addPropertyReference("mappingContext", JPA_MAPPPING_CONTEXT_BEAN);
         builder.addPropertyReference("repositories", REPOSITORIES_BEAN);
         builder.addPropertyReference("configurationUnitsValidator", CONFIGURATION_UNITS_VALIDATOR_BEAN);
         return builder.getBeanDefinition();
@@ -145,8 +147,6 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
     }
 
     private Set<Class> scanPackageForAdministrationClasses() {
-        final ClassScanner classScanner = new AdministrationClassScanner();
-
         final Set<Class> administrationConfigs = newLinkedHashSet();
         for (String configurationsBasePackage : configurationsBasePackages()) {
             administrationConfigs.addAll(classScanner.scan(configurationsBasePackage));

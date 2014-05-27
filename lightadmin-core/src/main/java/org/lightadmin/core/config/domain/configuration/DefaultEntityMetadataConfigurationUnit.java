@@ -2,9 +2,9 @@ package org.lightadmin.core.config.domain.configuration;
 
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
 import org.lightadmin.core.config.domain.unit.DefaultFieldSetConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentEntityAware;
 import org.springframework.data.mapping.PersistentEntity;
 

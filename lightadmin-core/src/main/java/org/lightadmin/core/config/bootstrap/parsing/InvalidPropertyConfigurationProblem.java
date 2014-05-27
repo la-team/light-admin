@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.bootstrap.parsing;
 
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 
 import static java.lang.String.format;
 

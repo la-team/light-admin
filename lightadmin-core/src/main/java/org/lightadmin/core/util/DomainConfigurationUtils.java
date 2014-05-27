@@ -2,9 +2,9 @@ package org.lightadmin.core.util;
 
 import org.lightadmin.api.config.AdministrationConfiguration;
 import org.lightadmin.api.config.annotation.Administration;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ClassUtils;
 

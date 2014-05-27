@@ -4,7 +4,7 @@ import org.junit.Test;
 import org.lightadmin.api.config.builder.ScopesConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.ScopesConfigurationUnit;
 import org.lightadmin.api.config.utils.DomainTypePredicates;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 
 import static org.junit.Assert.*;
 import static org.lightadmin.api.config.utils.ScopeMetadataUtils.all;

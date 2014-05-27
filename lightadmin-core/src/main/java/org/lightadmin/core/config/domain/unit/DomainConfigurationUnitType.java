@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.bootstrap.parsing.configuration;
+package org.lightadmin.core.config.domain.unit;
 
 import static java.lang.String.format;
 

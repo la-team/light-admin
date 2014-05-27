@@ -5,12 +5,12 @@ import org.lightadmin.api.config.unit.ScopesConfigurationUnit;
 import org.lightadmin.api.config.unit.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.mapping.context.MappingContext;
@@ -21,7 +21,7 @@ import java.util.Set;
 
 import static java.lang.String.format;
 import static org.lightadmin.api.config.utils.ScopeMetadataUtils.*;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
+import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.*;
 import static org.springframework.util.ClassUtils.hasConstructor;
 
 public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsValidator<ConfigurationUnits> {
@@ -29,7 +29,7 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
     private final FieldMetadataValidator<FieldMetadata> fieldMetadataValidator;
 
     private final LightAdminConfiguration lightAdminConfiguration;
-    private final MappingContext mappingContext;
+    private final MappingContext<?, ?> mappingContext;
     private final ResourceLoader resourceLoader;
 
     @SuppressWarnings("unused")
@@ -65,6 +65,10 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
 
     void validateDomainType(final ConfigurationUnits configurationUnits, final ProblemReporter problemReporter) {
         final Class<?> domainType = configurationUnits.getDomainType();
+
+        if (notPersistentEntityType(domainType)) {
+            problemReporter.error(new DomainConfigurationProblem(configurationUnits, format("Non-persistent type %s is not supported.", domainType.getSimpleName())));
+        }
 
         if (!hasConstructor(domainType)) {
             problemReporter.error(new DomainConfigurationProblem(configurationUnits, format("Type %s must have default constructor.", domainType.getSimpleName())));
@@ -148,6 +152,10 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
                 problemReporter.errors(problems);
             }
         }
+    }
+
+    private boolean notPersistentEntityType(final Class<?> domainType) {
+        return !mappingContext.hasPersistentEntityFor(domainType);
     }
 
     private DomainConfigurationValidationContext newDomainConfigurationValidationContext(ConfigurationUnits configurationUnits, DomainConfigurationUnitType domainConfigurationUnitType) {

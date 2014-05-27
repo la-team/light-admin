@@ -1,8 +1,6 @@
 package org.lightadmin.core.config.management.rmi;
 
 import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -16,8 +14,8 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
     @Autowired
     private GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
-    @Autowired
-    private DomainConfigurationSourceFactory domainConfigurationSourceFactory;
+//    @Autowired
+//    private DomainConfigurationSourceFactory domainConfigurationSourceFactory;
 
     @Autowired
     private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
@@ -26,8 +24,8 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
     @Override
     @SuppressWarnings("unchecked")
     public void registerDomainTypeConfiguration(final ConfigurationUnits configurationUnits) {
-        final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource(configurationUnits);
-
+//        final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource(configurationUnits);
+//
 //        final ConfigurationUnitsValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
 //
 //        configurationSourceValidator.validate(configurationSource, ProblemReporterFactory.failFastReporter());

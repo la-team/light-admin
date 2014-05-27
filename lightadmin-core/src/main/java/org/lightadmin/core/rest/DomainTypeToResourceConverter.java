@@ -4,7 +4,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.LightAdminConfiguration;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -13,6 +12,7 @@ import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
 import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.springframework.core.convert.converter.Converter;
@@ -30,10 +30,10 @@ import java.util.Set;
 
 import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.Collections.EMPTY_SET;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.FORM_VIEW;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.QUICK_VIEW;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
+import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.FORM_VIEW;
+import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.QUICK_VIEW;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
 @SuppressWarnings("unchecked")

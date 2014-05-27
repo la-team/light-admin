@@ -2,7 +2,6 @@ package org.lightadmin.core.config.domain.unit;
 
 import com.google.common.collect.Sets;
 import org.lightadmin.api.config.unit.*;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;

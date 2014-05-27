@@ -3,8 +3,8 @@ package org.lightadmin.core.config.bootstrap.parsing.validation;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.InvalidPropertyConfigurationProblem;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.mapping.context.MappingContext;
 
@@ -15,7 +15,7 @@ public class DomainConfigurationValidationContext {
     private final ConfigurationUnits configurationUnits;
     private final DomainConfigurationUnitType configurationUnitType;
 
-    private final MappingContext mappingContext;
+    private final MappingContext<?, ?> mappingContext;
     private final ResourceLoader resourceLoader;
 
     public DomainConfigurationValidationContext(LightAdminConfiguration lightAdminConfiguration, ConfigurationUnits configurationUnits, DomainConfigurationUnitType configurationUnitType, MappingContext mappingContext, ResourceLoader resourceLoader) {
@@ -54,12 +54,11 @@ public class DomainConfigurationValidationContext {
         return InvalidPropertyConfigurationProblem.invalidPropertyValueExpressionProblem(configurationUnits, configurationUnitType, propertyName);
     }
 
-
     public LightAdminConfiguration getLightAdminConfiguration() {
         return lightAdminConfiguration;
     }
 
-    public MappingContext getMappingContext() {
+    public MappingContext<?, ?> getMappingContext() {
         return mappingContext;
     }
 

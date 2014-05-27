@@ -4,7 +4,7 @@ import org.easymock.EasyMock;
 import org.junit.Test;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;

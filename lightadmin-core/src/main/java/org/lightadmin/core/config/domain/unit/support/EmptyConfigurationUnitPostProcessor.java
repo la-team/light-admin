@@ -2,10 +2,10 @@ package org.lightadmin.core.config.domain.unit.support;
 
 import org.lightadmin.api.config.builder.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.common.GenericFieldSetConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
@@ -13,7 +13,7 @@ import org.springframework.data.mapping.SimplePropertyHandler;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.ClassUtils;
 
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.CONFIGURATION;
+import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.CONFIGURATION;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isSupportedAttributeType;
 
 public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverAwareConfigurationUnitPostProcessor {

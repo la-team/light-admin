@@ -5,7 +5,12 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;
+import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareConfigurationUnitPostProcessor;
+import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
+import org.lightadmin.core.config.domain.unit.support.HierarchicalConfigurationPostProcessor;
 import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
@@ -13,11 +18,14 @@ import org.springframework.data.mapping.Association;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimpleAssociationHandler;
+import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.repository.support.Repositories;
 
 import javax.persistence.EntityManager;
 import java.util.Set;
 
+import static com.google.common.collect.Sets.newLinkedHashSet;
+import static org.apache.commons.lang3.ArrayUtils.toArray;
 import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
 
 @SuppressWarnings("unused")
@@ -29,9 +37,23 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     private EntityManager entityManager;
 
+    private MappingContext<?, ?> mappingContext;
+
     private Repositories repositories;
 
     private ConfigurationUnitsValidator<ConfigurationUnits> configurationUnitsValidator;
+
+    private ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
+
+    @Override
+    public void afterPropertiesSet() throws Exception {
+        this.configurationUnitPostProcessors = toArray(
+                new EmptyConfigurationUnitPostProcessor(mappingContext),
+                new DomainTypeMetadataAwareConfigurationUnitPostProcessor(mappingContext),
+                new HierarchicalConfigurationPostProcessor());
+
+        super.afterPropertiesSet();
+    }
 
     @Override
     public Class<?> getObjectType() {
@@ -42,11 +64,13 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     protected GlobalAdministrationConfiguration createInstance() throws Exception {
         GlobalAdministrationConfiguration globalAdministrationConfiguration = new GlobalAdministrationConfiguration();
 
-        final ProblemReporter problemReporter = failFastReporter();
+        ProblemReporter problemReporter = failFastReporter();
 
         for (ConfigurationUnits configurationUnits : domainTypeConfigurationUnits) {
 
             configurationUnitsValidator.validate(configurationUnits, problemReporter);
+
+            configurationUnits = processConfigurationUnits(configurationUnits);
 
             DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(configurationUnits);
 
@@ -72,6 +96,18 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
                 }
             }
         });
+    }
+
+    private ConfigurationUnits processConfigurationUnits(final ConfigurationUnits configurationUnits) {
+        final Set<ConfigurationUnit> processedConfigurationUnits = newLinkedHashSet();
+        for (ConfigurationUnit configurationUnit : configurationUnits) {
+            ConfigurationUnit processedConfigurationUnit = configurationUnit;
+            for (ConfigurationUnitPostProcessor configurationUnitPostProcessor : configurationUnitPostProcessors) {
+                processedConfigurationUnit = configurationUnitPostProcessor.postProcess(processedConfigurationUnit, configurationUnits);
+            }
+            processedConfigurationUnits.add(processedConfigurationUnit);
+        }
+        return new ConfigurationUnits(configurationUnits.getConfigurationClassName(), configurationUnits.getDomainType(), processedConfigurationUnits);
     }
 
     private boolean isManagedEntity(Class type) {
@@ -100,5 +136,9 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     public void setRepositories(Repositories repositories) {
         this.repositories = repositories;
+    }
+
+    public void setMappingContext(MappingContext<?, ?> mappingContext) {
+        this.mappingContext = mappingContext;
     }
 }
