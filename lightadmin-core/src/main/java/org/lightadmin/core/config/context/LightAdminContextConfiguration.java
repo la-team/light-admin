@@ -36,7 +36,6 @@ import java.util.List;
 @Configuration
 @Import({
         LightAdminDataConfiguration.class,
-        LightAdminDynamicRepositoryConfiguration.class,
         LightAdminDomainConfiguration.class,
 //        LightAdminRemoteConfiguration.class,
         NewLightAdminRepositoryRestMvcConfiguration.class,

@@ -3,6 +3,7 @@ package org.lightadmin.core.config.domain;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
@@ -15,6 +16,10 @@ public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfigu
     private final PersistentEntity persistentEntity;
 
     public NonManagedDomainTypeConfiguration(EntityMetadataConfigurationUnit entityConfiguration, PersistentEntity persistentEntity, JpaRepository<?, ? extends Serializable> repository) {
+        Assert.notNull(persistentEntity, "Persistent Entity must not be null!");
+        Assert.notNull(repository, "Repository must not be null!");
+        Assert.notNull(repository, "Entity Configuration must not be null!");
+
         this.entityConfiguration = entityConfiguration;
         this.persistentEntity = persistentEntity;
         this.repository = repository;

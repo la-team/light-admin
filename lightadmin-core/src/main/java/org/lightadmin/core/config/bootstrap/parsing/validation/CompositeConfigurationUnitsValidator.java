@@ -32,6 +32,7 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
     private final MappingContext mappingContext;
     private final ResourceLoader resourceLoader;
 
+    @SuppressWarnings("unused")
     public CompositeConfigurationUnitsValidator(final MappingContext mappingContext, ResourceLoader resourceLoader, LightAdminConfiguration lightAdminConfiguration) {
         this(new DomainTypeFieldMetadataValidator(), lightAdminConfiguration, mappingContext, resourceLoader);
     }

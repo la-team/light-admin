@@ -14,33 +14,13 @@ public class JpaMetamodelMappingContextFactoryBean extends AbstractFactoryBean<J
 
     private EntityManager entityManager;
 
-    /**
-     * Configures the {@link EntityManager} to use to create the {@link JpaMetamodelMappingContext}.
-     *
-     * @param entityManager must not be {@literal null}.
-     */
-    public void setEntityManager(EntityManager entityManager) {
-
-        Assert.notNull(entityManager, "EntityManager must not be null!");
-        this.entityManager = entityManager;
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.beans.factory.config.AbstractFactoryBean#getObjectType()
-     */
     @Override
     public Class<?> getObjectType() {
         return JpaMetamodelMappingContext.class;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.beans.factory.config.AbstractFactoryBean#createInstance()
-     */
     @Override
     protected JpaMetamodelMappingContext createInstance() throws Exception {
-
         Metamodel metamodel = entityManager.getMetamodel();
 
         Set<ManagedType<?>> managedTypes = metamodel.getManagedTypes();
@@ -62,15 +42,15 @@ public class JpaMetamodelMappingContextFactoryBean extends AbstractFactoryBean<J
         return context;
     }
 
-    /*
-     * (non-Javadoc)
-     * @see org.springframework.beans.factory.config.AbstractFactoryBean#afterPropertiesSet()
-     */
     @Override
     public void afterPropertiesSet() throws Exception {
-
         Assert.notNull(entityManager, "EntityManager must not be null!");
-
         super.afterPropertiesSet();
+    }
+
+    @SuppressWarnings("unused")
+    public void setEntityManager(EntityManager entityManager) {
+        Assert.notNull(entityManager, "EntityManager must not be null!");
+        this.entityManager = entityManager;
     }
 }

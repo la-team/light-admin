@@ -3,13 +3,10 @@ package org.lightadmin.core.config.management.rmi;
 import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
 import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSourceFactory;
-import org.lightadmin.core.config.bootstrap.parsing.validation.ConfigurationUnitsValidator;
-import org.lightadmin.core.config.bootstrap.parsing.validation.DomainConfigurationSourceValidatorFactory;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.reporting.ProblemReporterFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
@@ -25,18 +22,15 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
     @Autowired
     private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 
-    @Autowired
-    private DomainConfigurationSourceValidatorFactory configurationSourceValidatorFactory;
-
 
     @Override
     @SuppressWarnings("unchecked")
     public void registerDomainTypeConfiguration(final ConfigurationUnits configurationUnits) {
         final DomainConfigurationSource configurationSource = domainConfigurationSourceFactory.createConfigurationSource(configurationUnits);
 
-        final ConfigurationUnitsValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
-
-        configurationSourceValidator.validate(configurationSource, ProblemReporterFactory.failFastReporter());
+//        final ConfigurationUnitsValidator configurationSourceValidator = configurationSourceValidatorFactory.getValidator();
+//
+//        configurationSourceValidator.validate(configurationSource, ProblemReporterFactory.failFastReporter());
 
         final DomainTypeAdministrationConfiguration administrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(null);
 

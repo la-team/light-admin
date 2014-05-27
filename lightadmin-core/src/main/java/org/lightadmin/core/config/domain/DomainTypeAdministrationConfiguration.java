@@ -5,6 +5,7 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.support.Repositories;
+import org.springframework.util.Assert;
 
 import java.io.Serializable;
 
@@ -17,7 +18,10 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
     private final ConfigurationUnits configurationUnits;
 
     public DomainTypeAdministrationConfiguration(Repositories repositories, ConfigurationUnits configurationUnits) {
-        final Class<?> domainType = configurationUnits.getDomainType();
+        Assert.notNull(repositories, "Repositories must not be null!");
+        Assert.notNull(configurationUnits, "ConfigurationUnits must not be null!");
+
+        Class<?> domainType = configurationUnits.getDomainType();
 
         this.repository = (DynamicJpaRepository<?, ? extends Serializable>) repositories.getRepositoryFor(domainType);
         this.persistentEntity = repositories.getPersistentEntity(domainType);

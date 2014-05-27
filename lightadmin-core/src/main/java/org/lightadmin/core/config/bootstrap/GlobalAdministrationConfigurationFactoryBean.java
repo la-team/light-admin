@@ -20,6 +20,7 @@ import java.util.Set;
 
 import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
 
+@SuppressWarnings("unused")
 public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactoryBean<GlobalAdministrationConfiguration> implements InitializingBean {
 
     private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
@@ -89,7 +90,7 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
         this.domainTypeAdministrationConfigurationFactory = domainTypeAdministrationConfigurationFactory;
     }
 
-    public void setConfigurationUnitsValidator(ConfigurationUnitsValidator configurationUnitsValidator) {
+    public void setConfigurationUnitsValidator(ConfigurationUnitsValidator<ConfigurationUnits> configurationUnitsValidator) {
         this.configurationUnitsValidator = configurationUnitsValidator;
     }
 
