@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.util.UUID;
 
 import static javassist.bytecode.SignatureAttribute.*;
+import static org.apache.commons.lang3.ArrayUtils.toArray;
 
 public class JavassistDynamicJpaRepositoryClassFactory implements DynamicRepositoryClassFactory {
 
@@ -38,16 +39,27 @@ public class JavassistDynamicJpaRepositoryClassFactory implements DynamicReposit
 
             CtClass dynamicRepositoryInterface = classPool.makeInterface(generateDynamicRepositoryClassReference(domainType), baseInterface);
 
-            ClassType baseInterfaceType = new ClassType(DynamicJpaRepository.class.getName(),
-                    new TypeArgument[]{new TypeArgument(new ClassType(domainType.getName())), new TypeArgument(new ClassType(idType.getName()))});
-            ClassSignature signature = new ClassSignature(null, null, new ClassType[]{baseInterfaceType});
-            dynamicRepositoryInterface.setGenericSignature(signature.encode());
+            ClassType baseInterfaceType = classType(DynamicJpaRepository.class, toArray(typeArgument(domainType), typeArgument(idType)));
+
+            dynamicRepositoryInterface.setGenericSignature(classSignature(baseInterfaceType).encode());
 
             return dynamicRepositoryInterface.toClass(classLoader, JavassistDynamicJpaRepositoryClassFactory.class.getProtectionDomain());
         } catch (Exception e) {
             logger.error("Problem occured during DynamicRepository class creation process", e);
             throw new RuntimeException(e);
         }
+    }
+
+    private ClassSignature classSignature(ClassType baseInterfaceType) {
+        return new ClassSignature(null, null, new ClassType[]{baseInterfaceType});
+    }
+
+    private <T, ID extends Serializable> ClassType classType(Class<DynamicJpaRepository> classType, TypeArgument[] typeArguments) {
+        return new ClassType(classType.getName(), typeArguments);
+    }
+
+    private <T> TypeArgument typeArgument(Class<T> domainType) {
+        return new TypeArgument(new ClassType(domainType.getName()));
     }
 
     private String generateDynamicRepositoryClassReference(Class<?> domainType) {
