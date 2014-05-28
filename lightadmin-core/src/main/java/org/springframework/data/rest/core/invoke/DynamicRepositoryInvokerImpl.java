@@ -29,6 +29,11 @@ public class DynamicRepositoryInvokerImpl implements DynamicRepositoryInvoker {
     }
 
     @Override
+    public List findAll(Specification spec, Sort sort) {
+        return repository.findAll(spec, sort);
+    }
+
+    @Override
     public List findAll(Specification spec) {
         return repository.findAll(spec);
     }
