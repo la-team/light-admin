@@ -17,7 +17,7 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     @Override
     protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.setDefaultPageSize(10);
-//        config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
+        config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
     }
 
     @Bean

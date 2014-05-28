@@ -16,18 +16,14 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
 
     private final String applicationBaseUrl;
     private final String applicationBaseNoEndSeparator;
-    private final String applicationRestBaseUrl;
     private final boolean securityEnabled;
     private final String securityLogoutUrl;
     private final String backToSiteUrl;
     private final File fileStorageDirectory;
     private final boolean fileStreaming;
     private final String basePackage;
-    private final ServletContext servletContext;
 
     public StandardLightAdminConfiguration(ServletContext servletContext) {
-        this.servletContext = servletContext;
-
         this.basePackage = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_PACKAGE);
 
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
@@ -36,8 +32,6 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
 
         this.fileStorageDirectory = fileStorageDirectory(servletContext);
         this.fileStreaming = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING));
-
-        this.applicationRestBaseUrl = servletContext.getContextPath() + this.applicationBaseNoEndSeparator + LIGHT_ADMIN_REST_URL_DEFAULT;
 
         this.securityEnabled = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
         if (securityEnabled) {
@@ -49,9 +43,7 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
 
     @Override
     public URI getApplicationRestBaseUrl() {
-
-
-        return UriComponentsBuilder.fromHttpUrl(servletContext.getContextPath()).path(applicationRestBaseUrl).build().toUri();
+        return UriComponentsBuilder.fromUriString(LIGHT_ADMIN_REST_URL_DEFAULT).build().toUri();
     }
 
     @Override
