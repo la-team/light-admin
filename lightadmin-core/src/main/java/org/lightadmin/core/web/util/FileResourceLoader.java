@@ -26,7 +26,7 @@ public class FileResourceLoader {
         this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, lightAdminConfiguration);
     }
 
-    public void downloadFile(Object entity, PersistentProperty persistentProperty, HttpServletResponse response) throws IOException {
+    public void downloadFile(Object entity, PersistentProperty<?> persistentProperty, HttpServletResponse response) throws IOException {
         final long size = operationBuilder.getOperation(entity).performCopy(persistentProperty, response.getOutputStream());
         final String eTag = eTag(entity.getClass(), persistentProperty.getName(), size);
 

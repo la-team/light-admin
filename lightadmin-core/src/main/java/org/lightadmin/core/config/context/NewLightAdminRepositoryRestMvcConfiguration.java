@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
+import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 
 @Configuration
@@ -18,6 +20,11 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.setDefaultPageSize(10);
         config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
+    }
+
+    @Bean
+    public RepositoryInvokerFactory repositoryInvokerFactory() {
+        return new DynamicRepositoryInvokerFactory(repositories(), defaultConversionService());
     }
 
     @Bean
