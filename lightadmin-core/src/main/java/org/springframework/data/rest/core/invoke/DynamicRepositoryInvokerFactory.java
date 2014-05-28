@@ -6,8 +6,9 @@ import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.util.Assert;
 
-import java.util.HashMap;
 import java.util.Map;
+
+import static com.google.common.collect.Maps.newHashMap;
 
 public class DynamicRepositoryInvokerFactory implements RepositoryInvokerFactory {
 
@@ -21,7 +22,7 @@ public class DynamicRepositoryInvokerFactory implements RepositoryInvokerFactory
 
         this.repositories = repositories;
         this.conversionService = conversionService;
-        this.invokers = new HashMap<>();
+        this.invokers = newHashMap();
     }
 
     @SuppressWarnings("unchecked")
