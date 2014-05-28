@@ -19,7 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvoker;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.PagedResources;
 import org.springframework.hateoas.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -129,9 +128,29 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
 //        return negotiateResponse(request, page, pageMetadata(page), DomainConfigurationUnitType.LIST_VIEW, listViewFields);
     }
 
-    private PagedResources.PageMetadata pageMetadata(final Page page) {
-        return new PagedResources.PageMetadata(page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages());
-    }
+//    private ResponseEntity<?> negotiateResponse(ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) throws IOException {
+//        return negotiateResponse(request, HttpStatus.OK, new HttpHeaders(), new PagedResources(toResources(page, configurationUnitType, fieldMetadatas), pageMetadata, Lists.<Link>newArrayList()));
+//    }
+//
+//    private PagedResources.PageMetadata pageMetadata(final Page page) {
+//        return new PagedResources.PageMetadata(page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages());
+//    }
+//
+//    private List<Object> toResources(Page page, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) {
+//        if (!page.hasContent()) {
+//            return newLinkedList();
+//        }
+//
+//        List<Object> allResources = newArrayList();
+//        for (final Object item : page) {
+//            allResources.add(new DomainTypeResource(item, configurationUnitType, fieldMetadatas));
+//        }
+//        return allResources;
+//    }
+
+//    private PagedResources.PageMetadata pageMetadata(final Page page) {
+//        return new PagedResources.PageMetadata(page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages());
+//    }
 
     private Specification specificationFromRequest(WebRequest request, PersistentEntity<?, ?> persistentEntity) {
         return specificationCreator.toSpecification(persistentEntity, request.getParameterMap());
