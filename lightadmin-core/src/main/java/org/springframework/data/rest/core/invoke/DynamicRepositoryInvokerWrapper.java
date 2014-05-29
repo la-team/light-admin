@@ -13,12 +13,13 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
-public class DynamicRepositoryInvokerImpl implements DynamicRepositoryInvoker {
+@SuppressWarnings("unchecked")
+public class DynamicRepositoryInvokerWrapper implements DynamicRepositoryInvoker {
 
     private DynamicJpaRepository<?, ?> repository;
     private RepositoryInvoker repositoryInvoker;
 
-    public DynamicRepositoryInvokerImpl(DynamicJpaRepository<Object, Serializable> repository, RepositoryInformation information, ConversionService conversionService) {
+    public DynamicRepositoryInvokerWrapper(DynamicJpaRepository<Object, Serializable> repository, RepositoryInformation information, ConversionService conversionService) {
         this.repository = repository;
         this.repositoryInvoker = new PagingAndSortingRepositoryInvoker(repository, information, conversionService);
     }

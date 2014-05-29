@@ -30,7 +30,7 @@ public class DynamicRepositoryInvokerFactory implements RepositoryInvokerFactory
         DynamicJpaRepository repository = (DynamicJpaRepository) repositories.getRepositoryFor(domainType);
         RepositoryInformation information = repositories.getRepositoryInformationFor(domainType);
 
-        return new DynamicRepositoryInvokerImpl(repository, information, conversionService);
+        return new DynamicRepositoryInvokerWrapper(repository, information, conversionService);
     }
 
     @Override
