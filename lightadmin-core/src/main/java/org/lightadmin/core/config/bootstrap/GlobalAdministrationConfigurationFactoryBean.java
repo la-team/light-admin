@@ -112,7 +112,7 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     private boolean isManagedEntity(Class type) {
         try {
-            return entityManager.getMetamodel().entity(type) != null;
+            return entityManager.getMetamodel().managedType(type) != null;
         } catch (IllegalArgumentException e) {
             return false;
         }

@@ -263,4 +263,12 @@
         <function-signature>boolean isSimpleValueType(java.lang.Class)</function-signature>
     </function>
 
+    <function>
+        <name>persistentPropertyTypeOf</name>
+        <function-class>org.lightadmin.core.persistence.metamodel.PersistentPropertyType</function-class>
+        <function-signature>org.lightadmin.core.persistence.metamodel.PersistentPropertyType
+            forPersistentProperty(org.springframework.data.mapping.PersistentProperty)
+        </function-signature>
+    </function>
+
 </taglib>

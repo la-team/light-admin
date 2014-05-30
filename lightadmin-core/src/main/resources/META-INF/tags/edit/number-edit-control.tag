@@ -1,6 +1,7 @@
 <%@ tag import="org.lightadmin.core.persistence.metamodel.PersistentPropertyType" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+<%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ tag body-content="empty" %>
 <%@ attribute name="attributeMetadata" required="true"
               type="org.springframework.data.mapping.PersistentProperty" %>
@@ -20,11 +21,11 @@
 
 <script type="text/javascript">
     <c:if test="${not disabled}">
-    <c:if test="${attributeMetadata.attributeType eq numberIntegerType}">
+    <c:if test="${light:persistentPropertyTypeOf(attributeMetadata) eq numberIntegerType}">
     $("#${numericFieldId}").spinner({ decimals: 0, stepping: 1 ${allowEmpty ? ', allowNull : true' : ''} });
     </c:if>
 
-    <c:if test="${attributeMetadata.attributeType eq numberFloatType}">
+    <c:if test="${light:persistentPropertyTypeOf(attributeMetadata) eq numberFloatType}">
     $("#${numericFieldId}").spinner({ decimals: 2 ${allowEmpty ? ', allowNull : true' : ''}});
     </c:if>
     </c:if>
