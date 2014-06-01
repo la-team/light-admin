@@ -13,6 +13,7 @@ import org.springframework.data.rest.webmvc.RepositoryRestController;
  *
  * @see RepositoryRestController
  */
+@Deprecated
 public class FlexibleRepositoryRestController implements ApplicationContextAware, InitializingBean {
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {

@@ -4,6 +4,7 @@ package org.lightadmin.core.legacy;
 //import org.springframework.data.rest.webmvc.PagingAndSortingMethodArgumentResolver;
 //import org.springframework.data.rest.webmvc.RepositoryRestConfiguration;
 
+@Deprecated
 public class DynamicPagingAndSortingMethodArgumentResolver {
 //    extends
 //} PagingAndSortingMethodArgumentResolver {

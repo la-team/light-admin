@@ -14,6 +14,7 @@ package org.lightadmin.core.legacy;
  * <p/>
  * // * @see org.springframework.data.rest.repository.context.AnnotatedHandlerRepositoryEventListener
  */
+@Deprecated
 public class CustomAnnotatedHandlerRepositoryEventListener {
 //        implements ApplicationListener<RepositoryEvent>, InitializingBean {
 //

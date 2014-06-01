@@ -34,6 +34,7 @@ import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 //import org.springframework.data.rest.repository.RepositoryConstraintViolationException;
 //import org.springframework.data.rest.webmvc.PagingAndSorting;
 
+@Deprecated
 @SuppressWarnings("unchecked")
 @RequestMapping("/rest")
 public class DynamicRepositoryRestController extends FlexibleRepositoryRestController implements GlobalAdministrationConfigurationAware {

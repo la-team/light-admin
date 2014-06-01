@@ -17,6 +17,7 @@ import org.springframework.context.annotation.Configuration;
 //import org.springframework.validation.Validator;
 //import org.springframework.web.servlet.mvc.method.annotation.ServletResponseMethodArgumentResolver;
 
+@Deprecated
 @Configuration
 public class LightAdminRepositoryRestConfiguration {
 

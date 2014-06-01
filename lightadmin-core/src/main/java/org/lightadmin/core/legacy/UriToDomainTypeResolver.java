@@ -4,6 +4,7 @@ package org.lightadmin.core.legacy;
 //import org.springframework.data.rest.repository.RepositoryMetadata;
 //import org.springframework.data.rest.repository.UriToDomainObjectUriResolver;
 
+@Deprecated
 public class UriToDomainTypeResolver {
 //    extends
 //} UriToDomainObjectUriResolver {
