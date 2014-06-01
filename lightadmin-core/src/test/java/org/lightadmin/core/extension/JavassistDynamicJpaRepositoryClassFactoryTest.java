@@ -4,6 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.persistence.repository.JavassistDynamicJpaRepositoryClassFactory;
+import org.lightadmin.core.util.DynamicRepositoryBeanNameGenerator;
 
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;

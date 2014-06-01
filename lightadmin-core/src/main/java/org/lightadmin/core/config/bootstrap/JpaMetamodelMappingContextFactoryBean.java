@@ -1,4 +1,4 @@
-package org.lightadmin.core.persistence;
+package org.lightadmin.core.config.bootstrap;
 
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;

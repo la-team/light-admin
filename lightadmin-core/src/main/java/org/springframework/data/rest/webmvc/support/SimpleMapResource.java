@@ -1,4 +1,4 @@
-package org.springframework.data.rest.webmvc;
+package org.springframework.data.rest.webmvc.support;
 
 import com.google.common.collect.Maps;
 import org.springframework.hateoas.Link;

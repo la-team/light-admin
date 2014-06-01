@@ -20,7 +20,7 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.DynamicPersistentEntityResource;
-import org.springframework.data.rest.webmvc.SimpleMapResource;
+import org.springframework.data.rest.webmvc.support.SimpleMapResource;
 import org.springframework.hateoas.Link;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;

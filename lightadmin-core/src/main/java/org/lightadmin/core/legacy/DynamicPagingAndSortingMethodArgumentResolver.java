@@ -1,4 +1,4 @@
-package org.lightadmin.core.rest;
+package org.lightadmin.core.legacy;
 
 //import org.springframework.data.rest.webmvc.PagingAndSorting;
 //import org.springframework.data.rest.webmvc.PagingAndSortingMethodArgumentResolver;

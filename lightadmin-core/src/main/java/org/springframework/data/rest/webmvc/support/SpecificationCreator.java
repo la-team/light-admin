@@ -1,4 +1,4 @@
-package org.lightadmin.core.search;
+package org.springframework.data.rest.webmvc.support;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;

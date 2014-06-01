@@ -1,4 +1,4 @@
-package org.lightadmin.core.extension;
+package org.lightadmin.core.util;
 
 import org.springframework.util.ClassUtils;
 
