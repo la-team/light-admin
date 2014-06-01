@@ -14,16 +14,16 @@
 
 <select name="${attributeMetadata.name}" multiple="multiple" class="chzn-select"
         data-placeholder=" " ${disabled ? 'disabled' : ''}>
-    <light:domain-type-elements domainType="${attributeMetadata.elementType}" idVar="elementId"
+    <light:domain-type-elements domainType="${attributeMetadata.actualType}" idVar="elementId"
                                 stringRepresentationVar="elementName">
         <option value="${elementId}"><c:out value="${elementName}" escapeXml="true"/></option>
     </light:domain-type-elements>
 </select>
 
 <c:set var="domainTypeAdministrationConfiguration"
-       value="${light:domainTypeAdministrationConfigurationFor(attributeMetadata.elementType)}"/>
+       value="${light:domainTypeAdministrationConfigurationFor(attributeMetadata.actualType)}"/>
 
-<c:if test="${(domainType ne attributeMetadata.elementType) and (not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
+<c:if test="${(domainType ne attributeMetadata.actualType) and (not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
 
     <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
     <light:url var="domainBaseUrl" value='${light:domainBaseUrl(domainTypeAdministrationConfiguration)}'/>

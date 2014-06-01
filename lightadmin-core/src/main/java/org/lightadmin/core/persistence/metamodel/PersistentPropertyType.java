@@ -73,15 +73,15 @@ public enum PersistentPropertyType {
     public static PersistentPropertyType forPersistentProperty(PersistentProperty persistentProperty) {
         final Class<?> attrType = persistentProperty.getType();
 
+        if (persistentProperty.isAnnotationPresent(Embedded.class)) {
+            return PersistentPropertyType.EMBEDDED;
+        }
+
         if (persistentProperty.isAssociation()) {
             if (persistentProperty.isCollectionLike()) {
                 return PersistentPropertyType.ASSOC_MULTI;
             }
             return PersistentPropertyType.ASSOC;
-        }
-
-        if (persistentProperty.isAnnotationPresent(Embedded.class)) {
-            return PersistentPropertyType.EMBEDDED;
         }
 
         if (persistentProperty.isMap()) {

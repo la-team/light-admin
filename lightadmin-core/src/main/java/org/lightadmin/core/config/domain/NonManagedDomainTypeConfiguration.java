@@ -3,12 +3,17 @@ package org.lightadmin.core.config.domain;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.hateoas.RelProvider;
+import org.springframework.hateoas.core.EvoInflectorRelProvider;
 import org.springframework.util.Assert;
-import org.springframework.util.StringUtils;
 
 import java.io.Serializable;
 
+import static org.springframework.util.StringUtils.uncapitalize;
+
 public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfiguration {
+
+    private static RelProvider REL_PROVIDER = new EvoInflectorRelProvider();
 
     private final EntityMetadataConfigurationUnit entityConfiguration;
 
@@ -37,7 +42,12 @@ public class NonManagedDomainTypeConfiguration implements DomainTypeBasicConfigu
 
     @Override
     public String getDomainTypeName() {
-        return StringUtils.uncapitalize(persistentEntity.getName());
+        return uncapitalize(getDomainType().getSimpleName());
+    }
+
+    @Override
+    public String getPluralDomainTypeName() {
+        return REL_PROVIDER.getCollectionResourceRelFor(getDomainType());
     }
 
     @Override

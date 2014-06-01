@@ -37,7 +37,7 @@ public class DomainTypeResourceSupport {
     }
 
     public Link selfLink(DomainTypeBasicConfiguration domainTypeConfig, Object id) {
-        return selfLink(domainTypeConfig.getDomainTypeName(), id);
+        return selfLink(domainTypeConfig.getPluralDomainTypeName(), id);
     }
 
 }

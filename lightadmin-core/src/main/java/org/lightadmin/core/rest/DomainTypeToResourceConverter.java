@@ -66,7 +66,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
 
         Object id = beanWrapper.getProperty(persistentEntity.getIdProperty());
 
-        final EntityResource entityResource = newEntityResource(domainTypeConfiguration.getDomainTypeName(), id);
+        final EntityResource entityResource = newEntityResource(domainTypeConfiguration, id);
 
         addObjectStringRepresentation(entityResource, domainTypeConfiguration, source);
 
@@ -174,7 +174,7 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
             }
             fieldData.put("persistable", true);
             fieldData.put("fileExists", fileExists);
-            fieldData.put("fileUrl", filePropertyLink(field, domainTypeConfiguration.getDomainTypeName(), id));
+            fieldData.put("fileUrl", filePropertyLink(field, domainTypeConfiguration.getPluralDomainTypeName(), id));
         } catch (IOException e) {
         }
         return fieldData;
@@ -190,10 +190,10 @@ public class DomainTypeToResourceConverter extends DomainTypeResourceSupport imp
         }
     }
 
-    private EntityResource newEntityResource(String domainTypeName, Object id) {
+    private EntityResource newEntityResource(DomainTypeBasicConfiguration domainTypeBasicConfiguration, Object id) {
         final HashSet<Link> links = Sets.newLinkedHashSet();
-        links.add(selfLink(domainTypeName, id));
-        links.add(selfDomainLink(domainTypeName, id));
+        links.add(selfLink(domainTypeBasicConfiguration.getPluralDomainTypeName(), id));
+        links.add(selfDomainLink(domainTypeBasicConfiguration.getDomainTypeName(), id));
 
         return new EntityResource(Maps.<String, Object>newLinkedHashMap(), links);
     }

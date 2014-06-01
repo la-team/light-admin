@@ -5,6 +5,8 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.support.Repositories;
+import org.springframework.hateoas.RelProvider;
+import org.springframework.hateoas.core.EvoInflectorRelProvider;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
@@ -12,6 +14,8 @@ import java.io.Serializable;
 import static org.springframework.util.StringUtils.uncapitalize;
 
 public class DomainTypeAdministrationConfiguration implements DomainTypeBasicConfiguration {
+
+    private static RelProvider REL_PROVIDER = new EvoInflectorRelProvider();
 
     private final DynamicJpaRepository<?, ? extends Serializable> repository;
     private final PersistentEntity persistentEntity;
@@ -45,7 +49,12 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
 
     @Override
     public String getDomainTypeName() {
-        return uncapitalize(persistentEntity.getType().getSimpleName());
+        return uncapitalize(getDomainType().getSimpleName());
+    }
+
+    @Override
+    public String getPluralDomainTypeName() {
+        return REL_PROVIDER.getCollectionResourceRelFor(getDomainType());
     }
 
     public FieldSetConfigurationUnit getQuickViewFragment() {

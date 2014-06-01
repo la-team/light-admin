@@ -19,8 +19,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvoker;
 import org.springframework.data.web.PagedResourcesAssembler;
-import org.springframework.hateoas.Resource;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,7 +39,7 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 @RepositoryRestController
 public class RepositoryScopedSearchController extends AbstractRepositoryRestController {
 
-    private static final String BASE_MAPPING = "/{repositoryName}/scope/{scopeName}";
+    private static final String BASE_MAPPING = "/{repository}/scope/{scopeName}";
 
     private GlobalAdministrationConfiguration configuration;
     private SpecificationCreator specificationCreator;
@@ -55,8 +53,8 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
     }
 
     @RequestMapping(value = BASE_MAPPING + "/search/count", method = RequestMethod.GET)
-    public ResponseEntity<?> countItems(RootResourceInformation repoRequest, WebRequest request, @PathVariable String repositoryName, @PathVariable String scopeName) {
-        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repositoryName);
+    public ResponseEntity<?> countItems(RootResourceInformation repoRequest, WebRequest request, @PathVariable String repository, @PathVariable String scopeName) {
+        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repository);
 
         DynamicRepositoryInvoker repositoryInvoker = (DynamicRepositoryInvoker) repoRequest.getInvoker();
 
@@ -69,22 +67,27 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         if (isPredicateScope(scope)) {
             final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = (ScopeMetadataUtils.PredicateScopeMetadata) scope;
 
-            return responseEntity(countItemsBySpecificationAndPredicate(repositoryInvoker, filterSpecification, predicateScope.predicate()));
+            return new ResponseEntity<>(countItemsBySpecificationAndPredicate(repositoryInvoker, filterSpecification, predicateScope.predicate()), HttpStatus.OK);
+
+//        return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), new Resource<>(value));
         }
 
         if (isSpecificationScope(scope)) {
             final Specification scopeSpecification = ((ScopeMetadataUtils.SpecificationScopeMetadata) scope).specification();
 
-            return responseEntity(countItemsBySpecification(repositoryInvoker, and(scopeSpecification, filterSpecification)));
+            return new ResponseEntity<>(countItemsBySpecification(repositoryInvoker, and(scopeSpecification, filterSpecification)), HttpStatus.OK);
+
+//        return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), new Resource<>(value));
         }
 
-        return responseEntity(countItemsBySpecification(repositoryInvoker, filterSpecification));
+        return new ResponseEntity<>(countItemsBySpecification(repositoryInvoker, filterSpecification), HttpStatus.OK);
+
+//        return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), new Resource<>(value));
     }
 
     @RequestMapping(value = BASE_MAPPING + "/search", method = RequestMethod.GET)
-    public ResponseEntity<?> filterEntities(RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, WebRequest request, Pageable pageable, @PathVariable String repositoryName, @PathVariable String scopeName) throws Exception {
-
-        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repositoryName);
+    public ResponseEntity<?> filterEntities(RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, WebRequest request, Pageable pageable, @PathVariable String repository, @PathVariable String scopeName) throws Exception {
+        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repository);
 
         DynamicRepositoryInvoker repositoryInvoker = (DynamicRepositoryInvoker) repoRequest.getInvoker();
 
@@ -172,10 +175,6 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
 
     private Specification and(Specification specification, Specification otherSpecification) {
         return where(specification).and(otherSpecification);
-    }
-
-    private ResponseEntity<?> responseEntity(Object value) {
-        return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), new Resource<>(value));
     }
 
     private Page<?> findItemsBySpecification(final DynamicRepositoryInvoker invoker, final Specification specification, final Pageable pageSort) {

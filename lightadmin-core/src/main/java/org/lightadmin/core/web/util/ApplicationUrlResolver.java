@@ -24,7 +24,7 @@ public final class ApplicationUrlResolver {
     }
 
     public static String domainRestBaseUrl(DomainTypeAdministrationConfiguration configuration) {
-        return "/rest/" + configuration.getDomainTypeName();
+        return "/rest/" + configuration.getPluralDomainTypeName();
     }
 
     public static String domainRestEntityBaseUrl(DomainTypeAdministrationConfiguration configuration, Object id) {
@@ -32,7 +32,7 @@ public final class ApplicationUrlResolver {
     }
 
     public static String domainRestScopeBaseUrl(DomainTypeAdministrationConfiguration configuration) {
-        return "/rest/" + configuration.getDomainTypeName() + "/scope";
+        return "/rest/" + configuration.getPluralDomainTypeName() + "/scope";
     }
 
     public static String filePropertyRestUrl(Object entity, String property) {

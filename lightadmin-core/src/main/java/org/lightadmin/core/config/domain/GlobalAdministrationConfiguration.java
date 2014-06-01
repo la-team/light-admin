@@ -1,5 +1,7 @@
 package org.lightadmin.core.config.domain;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -48,6 +50,16 @@ public class GlobalAdministrationConfiguration {
         return domainTypes;
     }
 
+    public Class<?>[] getAllDomainTypesAsArray() {
+        Set<Class<?>> allDomainTypes = getAllDomainTypes();
+
+        Class<?>[] domainTypes = new Class[]{};
+        for (Class<?> domainType : allDomainTypes) {
+            domainTypes = ArrayUtils.add(domainTypes, domainType);
+        }
+        return domainTypes;
+    }
+
     public Map<Class<?>, DomainTypeAdministrationConfiguration> getManagedDomainTypeConfigurations() {
         return managedDomainTypeConfigurations;
     }
@@ -70,7 +82,7 @@ public class GlobalAdministrationConfiguration {
 
     public DomainTypeAdministrationConfiguration forEntityName(String entityName) {
         for (DomainTypeAdministrationConfiguration configuration : managedDomainTypeConfigurations.values()) {
-            if (equalsIgnoreCase(entityName, configuration.getDomainTypeName())) {
+            if (equalsIgnoreCase(entityName, configuration.getDomainTypeName()) || equalsIgnoreCase(entityName, configuration.getPluralDomainTypeName())) {
                 return configuration;
             }
         }

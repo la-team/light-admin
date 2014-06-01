@@ -12,6 +12,8 @@ public interface DomainTypeBasicConfiguration {
 
     String getDomainTypeName();
 
+    String getPluralDomainTypeName();
+
     PersistentEntity getPersistentEntity();
 
     JpaRepository<?, ?> getRepository();

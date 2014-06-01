@@ -31,9 +31,9 @@ public class RepositoryDynamicEntityController extends AbstractRepositoryRestCon
         this.configuration = configuration;
     }
 
-    @RequestMapping(value = "/{repositoryName}/{id}/unit/{configurationUnit}", method = RequestMethod.GET)
-    public ResponseEntity<?> entity(RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, @PathVariable String repositoryName, @BackendId Serializable id, @PathVariable String configurationUnit) throws Exception {
-        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repositoryName);
+    @RequestMapping(value = "/{repository}/{id}/unit/{configurationUnit}", method = RequestMethod.GET)
+    public ResponseEntity<?> entity(RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, @PathVariable String repository, @BackendId Serializable id, @PathVariable String configurationUnit) throws Exception {
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repository);
         DomainConfigurationUnitType configurationUnitType = DomainConfigurationUnitType.forName(configurationUnit);
         RepositoryInvoker invoker = repoRequest.getInvoker();
 

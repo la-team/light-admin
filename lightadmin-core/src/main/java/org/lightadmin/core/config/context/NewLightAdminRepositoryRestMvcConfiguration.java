@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.context;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.rest.DomainRepositoryEventListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -16,10 +17,14 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     @Autowired
     private LightAdminConfiguration lightAdminConfiguration;
 
+    @Autowired
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration;
+
     @Override
     protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.setDefaultPageSize(10);
         config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
+        config.exposeIdsFor(globalAdministrationConfiguration.getAllDomainTypesAsArray());
     }
 
     @Bean
