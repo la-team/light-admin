@@ -71,6 +71,7 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
         return new DomainRepositoryEventListener();
     }
 
+    @SuppressWarnings("unchecked")
     private void configureRepositoryExporterHandlerAdapter(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
         ConfigurablePropertyAccessor configurablePropertyAccessor = forDirectFieldAccess(requestMappingHandlerAdapter);
 

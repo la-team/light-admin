@@ -189,10 +189,11 @@ function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
         url: restRepoUrl,
         dataType: 'json',
         success: function (data) {
-            for (name in data) {
+            var content = data['content'];
+            for (var name in content) {
                 var field = showViewSection.find('[name="field-' + name + '"]');
                 if (field.length > 0) {
-                    field.html(FieldValueRenderer.render(data[name], 'showView'));
+                    field.html(FieldValueRenderer.render(content[name], 'showView'));
                 }
             }
             $("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: ''});
@@ -230,10 +231,11 @@ function loadDomainObjectForFormView(form) {
         url: restRepoUrl + '/unit/formView',
         dataType: 'json',
         success: function (data, textStatus) {
-            for (var attr in data) {
+            var content = data['content'];
+            for (var attr in content) {
                 var editor = form.find('[name="' + attr + '"]');
                 if (editor.length > 0) {
-                    var attrVal = data[attr].value;
+                    var attrVal = content[attr].value;
 
                     if (attrVal == null) {
                         continue;

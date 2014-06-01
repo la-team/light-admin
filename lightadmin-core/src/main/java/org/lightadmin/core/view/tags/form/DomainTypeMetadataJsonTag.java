@@ -6,14 +6,17 @@ import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
-import org.lightadmin.core.rest.DomainTypeResourceSupport;
 import org.lightadmin.core.view.tags.AbstractAutowiredTag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.hateoas.Link;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -28,10 +31,10 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
     }
 
     @Autowired
-    private DomainTypeResourceSupport support;
+    private GlobalAdministrationConfiguration globalConfiguration;
 
     @Autowired
-    private GlobalAdministrationConfiguration globalConfiguration;
+    private RepositoryRestConfiguration repositoryRestConfiguration;
 
     private PersistentEntity persistentEntity;
 
@@ -76,7 +79,7 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
         if (attribDomainTypeConfig != null) {
             json.writeStringField("idAttribute", persistentEntity.getIdProperty().getName());
             String idPlaceholder = "{" + persistentProperty.getName() + "}";
-            json.writeStringField("hrefTemplate", support.selfLink(attribDomainTypeConfig, idPlaceholder).getHref());
+            json.writeStringField("hrefTemplate", selfLink(attribDomainTypeConfig, idPlaceholder).getHref());
         }
     }
 
@@ -91,4 +94,15 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
         }
     }
 
+    public Link selfLink(String domainTypeName, Object id) {
+        URI selfUri = UriComponentsBuilder.fromUri(repositoryRestConfiguration.getBaseUri())
+                .pathSegment(domainTypeName)
+                .pathSegment(id.toString()).build().toUri();
+
+        return new Link(selfUri.toString(), "self");
+    }
+
+    public Link selfLink(DomainTypeBasicConfiguration domainTypeConfig, Object id) {
+        return selfLink(domainTypeConfig.getPluralDomainTypeName(), id);
+    }
 }

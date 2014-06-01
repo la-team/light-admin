@@ -52,7 +52,7 @@
 <script type="text/javascript">
     loadDomainObjectForShowView($('#data-section'), '${domainObjectUrl}/unit/showView');
 
-    <c:if test="${param.updateSuccess}">
+    <c:if test="${not empty (param['updateSuccess'])}">
     showSuccessMessageNote('<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!');
     </c:if>
 
