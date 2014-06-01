@@ -1,7 +1,9 @@
 package org.lightadmin.core.config.domain;
 
 import org.lightadmin.api.config.unit.*;
+import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.support.Repositories;
@@ -10,6 +12,7 @@ import org.springframework.hateoas.core.EvoInflectorRelProvider;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import static org.springframework.util.StringUtils.uncapitalize;
 
@@ -55,6 +58,21 @@ public class DomainTypeAdministrationConfiguration implements DomainTypeBasicCon
     @Override
     public String getPluralDomainTypeName() {
         return REL_PROVIDER.getCollectionResourceRelFor(getDomainType());
+    }
+
+    public Set<FieldMetadata> fieldsForUnit(DomainConfigurationUnitType configurationUnitType) {
+        switch (configurationUnitType) {
+            case LIST_VIEW:
+                return getListViewFragment().getFields();
+            case SHOW_VIEW:
+                return getShowViewFragment().getFields();
+            case FORM_VIEW:
+                return getFormViewFragment().getFields();
+            case QUICK_VIEW:
+                return getQuickViewFragment().getFields();
+            default:
+                return getShowViewFragment().getFields();
+        }
     }
 
     public FieldSetConfigurationUnit getQuickViewFragment() {

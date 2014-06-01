@@ -7,25 +7,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
 
-import static org.apache.commons.lang3.StringUtils.substringBeforeLast;
-
 public class DomainTypeResourceSupport {
 
     protected final RepositoryRestConfiguration restConfiguration;
 
     public DomainTypeResourceSupport(RepositoryRestConfiguration restConfiguration) {
         this.restConfiguration = restConfiguration;
-    }
-
-    public Link selfDomainLink(String domainTypeName, Object id) {
-        String baseRestUrl = restConfiguration.getBaseUri().toString();
-        String baseUrl = substringBeforeLast(baseRestUrl, "/");
-        URI selfUri = UriComponentsBuilder.fromUriString(baseUrl)
-                .pathSegment("domain")
-                .pathSegment(domainTypeName)
-                .pathSegment(id.toString()).build().toUri();
-
-        return new Link(selfUri.toString(), "selfDomainLink");
     }
 
     public Link selfLink(String domainTypeName, Object id) {

@@ -1,7 +1,6 @@
 package org.springframework.data.rest.webmvc;
 
 import com.google.common.base.Predicate;
-import com.google.common.collect.Collections2;
 import org.lightadmin.api.config.utils.ScopeMetadataUtils;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -31,8 +30,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
-import static org.lightadmin.api.config.utils.ScopeMetadataUtils.isPredicateScope;
-import static org.lightadmin.api.config.utils.ScopeMetadataUtils.isSpecificationScope;
+import static org.lightadmin.api.config.utils.ScopeMetadataUtils.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
 
 @SuppressWarnings("unchecked")
@@ -41,21 +39,17 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
 
     private static final String BASE_MAPPING = "/{repository}/scope/{scopeName}";
 
-    private GlobalAdministrationConfiguration configuration;
     private SpecificationCreator specificationCreator;
 
     @Autowired
     public RepositoryScopedSearchController(GlobalAdministrationConfiguration configuration, @Qualifier("defaultConversionService") ConversionService conversionService, PagedResourcesAssembler<Object> pagedResourcesAssembler) {
         super(pagedResourcesAssembler);
 
-        this.configuration = configuration;
         this.specificationCreator = new SpecificationCreator(conversionService, configuration);
     }
 
     @RequestMapping(value = BASE_MAPPING + "/search/count", method = RequestMethod.GET)
-    public ResponseEntity<?> countItems(RootResourceInformation repoRequest, WebRequest request, @PathVariable String repository, @PathVariable String scopeName) {
-        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repository);
-
+    public ResponseEntity<?> countItems(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, RootResourceInformation repoRequest, WebRequest request, @PathVariable String scopeName) {
         DynamicRepositoryInvoker repositoryInvoker = (DynamicRepositoryInvoker) repoRequest.getInvoker();
 
         PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();
@@ -65,49 +59,40 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         final Specification filterSpecification = specificationFromRequest(request, persistentEntity);
 
         if (isPredicateScope(scope)) {
-            final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = (ScopeMetadataUtils.PredicateScopeMetadata) scope;
+            final PredicateScopeMetadata predicateScope = (PredicateScopeMetadata) scope;
 
             return new ResponseEntity<>(countItemsBySpecificationAndPredicate(repositoryInvoker, filterSpecification, predicateScope.predicate()), HttpStatus.OK);
-
-//        return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), new Resource<>(value));
         }
 
         if (isSpecificationScope(scope)) {
             final Specification scopeSpecification = ((ScopeMetadataUtils.SpecificationScopeMetadata) scope).specification();
 
             return new ResponseEntity<>(countItemsBySpecification(repositoryInvoker, and(scopeSpecification, filterSpecification)), HttpStatus.OK);
-
-//        return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), new Resource<>(value));
         }
 
         return new ResponseEntity<>(countItemsBySpecification(repositoryInvoker, filterSpecification), HttpStatus.OK);
-
-//        return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), new Resource<>(value));
     }
 
     @RequestMapping(value = BASE_MAPPING + "/search", method = RequestMethod.GET)
-    public ResponseEntity<?> filterEntities(RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, WebRequest request, Pageable pageable, @PathVariable String repository, @PathVariable String scopeName) throws Exception {
-        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forEntityName(repository);
-
+    public ResponseEntity<?> filterEntities(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, WebRequest request, Pageable pageable, @PathVariable String scopeName) throws Exception {
         DynamicRepositoryInvoker repositoryInvoker = (DynamicRepositoryInvoker) repoRequest.getInvoker();
-
+        Set<FieldMetadata> listViewFields = domainTypeAdministrationConfiguration.getListViewFragment().getFields();
         PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();
+
+        DynamicPersistentEntityResourceAssembler dynamicPersistentEntityResourceAssembler = DynamicPersistentEntityResourceAssembler.wrap(assembler, listViewFields, false);
 
         final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope(scopeName);
 
         final Specification filterSpecification = specificationFromRequest(request, persistentEntity);
 
-        Set<FieldMetadata> listViewFields = domainTypeAdministrationConfiguration.getListViewFragment().getFields();
-
         if (isPredicateScope(scope)) {
-            final ScopeMetadataUtils.PredicateScopeMetadata predicateScope = (ScopeMetadataUtils.PredicateScopeMetadata) scope;
+            final PredicateScopeMetadata predicateScope = (PredicateScopeMetadata) scope;
 
             final Page page = findBySpecificationAndPredicate(repositoryInvoker, filterSpecification, predicateScope.predicate(), pageable);
 
-            Object resources = resultToResources(page, assembler);
+            Object resources = resultToResources(page, dynamicPersistentEntityResourceAssembler);
 
             return new ResponseEntity<>(resources, HttpStatus.OK);
-//            return negotiateResponse(request, page, pageMetadata(page), DomainConfigurationUnitType.LIST_VIEW, listViewFields);
         }
 
         if (isSpecificationScope(scope)) {
@@ -115,45 +100,17 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
 
             Page page = findItemsBySpecification(repositoryInvoker, and(scopeSpecification, filterSpecification), pageable);
 
-            Object resources = resultToResources(page, assembler);
+            Object resources = resultToResources(page, dynamicPersistentEntityResourceAssembler);
 
             return new ResponseEntity<>(resources, HttpStatus.OK);
-
-//            return negotiateResponse(request, page, pageMetadata(page), DomainConfigurationUnitType.LIST_VIEW, listViewFields);
         }
 
         Page page = findItemsBySpecification(repositoryInvoker, filterSpecification, pageable);
 
-        Object resources = resultToResources(page, assembler);
+        Object resources = resultToResources(page, dynamicPersistentEntityResourceAssembler);
 
         return new ResponseEntity<>(resources, HttpStatus.OK);
-
-//        return negotiateResponse(request, page, pageMetadata(page), DomainConfigurationUnitType.LIST_VIEW, listViewFields);
     }
-
-//    private ResponseEntity<?> negotiateResponse(ServletServerHttpRequest request, Page page, PagedResources.PageMetadata pageMetadata, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) throws IOException {
-//        return negotiateResponse(request, HttpStatus.OK, new HttpHeaders(), new PagedResources(toResources(page, configurationUnitType, fieldMetadatas), pageMetadata, Lists.<Link>newArrayList()));
-//    }
-//
-//    private PagedResources.PageMetadata pageMetadata(final Page page) {
-//        return new PagedResources.PageMetadata(page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages());
-//    }
-//
-//    private List<Object> toResources(Page page, final DomainConfigurationUnitType configurationUnitType, Set<FieldMetadata> fieldMetadatas) {
-//        if (!page.hasContent()) {
-//            return newLinkedList();
-//        }
-//
-//        List<Object> allResources = newArrayList();
-//        for (final Object item : page) {
-//            allResources.add(new DomainTypeResource(item, configurationUnitType, fieldMetadatas));
-//        }
-//        return allResources;
-//    }
-
-//    private PagedResources.PageMetadata pageMetadata(final Page page) {
-//        return new PagedResources.PageMetadata(page.getSize(), page.getNumber() + 1, page.getTotalElements(), page.getTotalPages());
-//    }
 
     private Specification specificationFromRequest(WebRequest request, PersistentEntity<?, ?> persistentEntity) {
         return specificationCreator.toSpecification(persistentEntity, request.getParameterMap());
@@ -194,6 +151,6 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
     private Page findBySpecificationAndPredicate(DynamicRepositoryInvoker invoker, final Specification specification, Predicate predicate, final Pageable pageable) {
         final List<?> items = findItemsBySpecification(invoker, specification, pageable.getSort());
 
-        return selectPage(newArrayList(Collections2.filter(items, predicate)), pageable);
+        return selectPage(newArrayList(filter(items, predicate)), pageable);
     }
 }
