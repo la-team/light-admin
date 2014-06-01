@@ -9,6 +9,7 @@ import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.invoke.RepositoryInvoker;
 import org.springframework.data.rest.webmvc.support.BackendId;
+import org.springframework.data.rest.webmvc.support.SimpleMapResource;
 import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceSupport;
@@ -28,7 +29,6 @@ import java.io.IOException;
 import java.io.Serializable;
 import java.util.Map;
 
-import static com.google.common.collect.Maps.newLinkedHashMap;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileType;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
@@ -45,8 +45,8 @@ public class RepositoryFilePropertyController extends AbstractRepositoryRestCont
                                             PagedResourcesAssembler<Object> pagedResourcesAssembler, FileResourceLoader fileResourceLoader) {
         super(pagedResourcesAssembler);
 
-        this.fileResourceLoader = fileResourceLoader;
         this.operationBuilder = operationBuilder(configuration, lightAdminConfiguration);
+        this.fileResourceLoader = fileResourceLoader;
     }
 
     @RequestMapping(value = BASE_MAPPING + "/file", method = RequestMethod.GET)
@@ -111,10 +111,10 @@ public class RepositoryFilePropertyController extends AbstractRepositoryRestCont
         return ControllerUtils.toEmptyResponse(HttpStatus.METHOD_NOT_ALLOWED);
     }
 
-    private Resource<Map<String, Object>> fileResource(Map.Entry<String, MultipartFile> fileEntry) throws IOException {
-        final Map<String, Object> result = newLinkedHashMap();
-        result.put("fileName", fileEntry.getValue().getOriginalFilename());
-        result.put("fileContent", fileEntry.getValue().getBytes());
-        return new Resource<>(result);
+    private Resource<?> fileResource(Map.Entry<String, MultipartFile> fileEntry) throws IOException {
+        SimpleMapResource resource = new SimpleMapResource();
+        resource.put("fileName", fileEntry.getValue().getOriginalFilename());
+        resource.put("fileContent", fileEntry.getValue().getBytes());
+        return resource;
     }
 }

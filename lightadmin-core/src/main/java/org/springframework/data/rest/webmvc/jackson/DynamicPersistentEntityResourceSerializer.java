@@ -34,6 +34,7 @@ import static com.google.common.collect.Maps.newLinkedHashMap;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
+// TODO: max: Don't forget about embedded entities custom serialization
 class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPersistentEntityResource<?>> {
 
     private FieldValueEvaluator fieldValueEvaluator;
@@ -180,6 +181,7 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
         return new Link(selfUriBuilder.build().toString(), "selfDomainLink");
     }
 
+    @SuppressWarnings("unchecked")
     private Serializable idValue(DynamicPersistentEntityResource<?> resource) {
         BeanWrapper beanWrapper = BeanWrapper.create(resource.getContent(), null);
         return (Serializable) beanWrapper.getProperty(resource.getPersistentEntity().getIdProperty());
