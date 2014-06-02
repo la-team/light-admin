@@ -11,6 +11,7 @@
 <%@ attribute name="scopes" required="true" type="java.util.List" %>
 
 <c:set var="primaryKeyField" value="<%= FieldMetadataUtils.primaryKeyPersistentField( fields ) %>"/>
+<c:set var="pluralDomainTypeName" value="${domainTypeAdministrationConfiguration.pluralDomainTypeName}" scope="page"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}"/>
 <light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
@@ -49,7 +50,7 @@
         var dataTable = tableElement.dataTable({
             "bJQueryUI": true,
             "bStateSave": true,
-            "sAjaxDataProp": 'content',
+            "sAjaxDataProp": '_embedded.${pluralDomainTypeName}',
             "aoColumnDefs": [
                 {
                     "bSortable": false,
@@ -64,7 +65,7 @@
                 {
                     "bSortable": ${field.sortable},
                     "aTargets": [ ${status.index + 1 } ],
-                    "mData": '${field.uuid}',
+                    "mData": 'content.${field.uuid}',
                     "mRender": function (data) {
                         return FieldValueRenderer.render(data, 'listView');
                     },
@@ -77,7 +78,7 @@
                     "mData": null,
                     "sClass": "center",
                     "mRender": function (data, type, full) {
-                        var entityId = full['${primaryKeyField.uuid}']['value'];
+                        var entityId = full['content']['${primaryKeyField.uuid}']['value'];
                         return renderActions(entityId);
                     }
                 }

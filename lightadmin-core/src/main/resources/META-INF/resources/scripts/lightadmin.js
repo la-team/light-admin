@@ -70,12 +70,13 @@ function dataTableRESTAdapter(sSource, aoData, fnCallback) {
     //page calculations
     var pageSize = paramMap.iDisplayLength;
     var start = paramMap.iDisplayStart;
-    var pageNum = (start == 0) ? 1 : (start / pageSize) + 1; // pageNum is 1 based
+//    var pageNum = (start == 0) ? 1 : (start / pageSize) + 1; // pageNum is 1 based
+    var pageNum = start / pageSize; // pageNum is 1 based
 
     // extract sort information
     var sortCol = paramMap.iSortCol_0;
     var sortDir = paramMap.sSortDir_0;
-    var sortName = paramMap['mDataProp_' + sortCol];
+    var sortName = paramMap['mDataProp_' + sortCol].replace('content.', '');
 
     //create new json structure for parameters for REST request
     var restParams = [];
@@ -122,7 +123,7 @@ function quickLook(aData) {
 
         var currentFieldIdx = 1;
         for (var prop in aData) {
-            if (prop != 'links' && prop != 'stringRepresentation' && prop != 'managedDomainType') {
+            if (prop != 'stringRepresentation' && prop != 'managedDomainType') {
                 var rowClass = '';
                 if (currentFieldIdx == 1) {
                     rowClass = 'noborder';
@@ -163,13 +164,13 @@ function bindInfoClickHandlers(tableElement, dataTable) {
             });
         } else {
             var aData = dataTable.fnGetData(nTr);
-            var restEntityUrl = aData.links[0].href;
+            var restEntityUrl = aData['_links']['self'].href;
             jQuery.ajax({
                 "dataType": 'json',
                 "type": "GET",
                 "url": restEntityUrl + '/unit/quickView',
                 "success": function (data) {
-                    var nDetailsRow = dataTable.fnOpen(nTr, quickLook(data), 'details');
+                    var nDetailsRow = dataTable.fnOpen(nTr, quickLook(data['content']), 'details');
                     $(nDetailsRow).addClass($(nDetailsRow).prev().attr('class'));
                     $('div.innerDetails', nDetailsRow).hide();
                     $('div.innerDetails', nDetailsRow).slideDown('slow', function () {
