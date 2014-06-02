@@ -9,7 +9,7 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-<tiles:useAttribute name="domainTypeEntityMetadata"/>
+<tiles:useAttribute name="persistentEntity"/>
 
 <tiles:useAttribute name="entitySingularName"/>
 <tiles:useAttribute name="entityPluralName"/>
@@ -20,9 +20,8 @@
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
-<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
-<light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}"
-           scope="page"/>
+<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}"/>
+<light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}"/>
 
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
 
@@ -78,7 +77,7 @@
 
         formViewVisualDecoration($(domain_form));
 
-        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json persistentEntity="${domainTypeEntityMetadata}"/>);
+        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json persistentEntity="${persistentEntity}"/>);
 
         $(domain_form).data('lightadmin.domain-rest-base-url', "${domainRestBaseUrl}");
 

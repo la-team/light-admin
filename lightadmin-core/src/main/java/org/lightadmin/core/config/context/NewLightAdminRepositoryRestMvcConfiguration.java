@@ -12,8 +12,10 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.webmvc.ConfigurationHandlerMethodArgumentResolver;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.data.rest.webmvc.jackson.DynamicPersistentEntityJackson2Module;
+import org.springframework.data.rest.webmvc.support.Projector;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
@@ -63,7 +65,7 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
 
     @Override
     protected void configureJacksonObjectMapper(ObjectMapper objectMapper) {
-        objectMapper.registerModule(new DynamicPersistentEntityJackson2Module(globalAdministrationConfiguration, lightAdminConfiguration, config()));
+        objectMapper.registerModule(new DynamicPersistentEntityJackson2Module(globalAdministrationConfiguration, lightAdminConfiguration, config(), simplePersistentEntityResourceAssembler()));
     }
 
     @Bean
@@ -82,5 +84,14 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
         argumentResolvers.add(configurationHandlerMethodArgumentResolver());
 
         configurablePropertyAccessor.setPropertyValue("argumentResolvers", argumentResolvers);
+    }
+
+    private PersistentEntityResourceAssembler simplePersistentEntityResourceAssembler() {
+        return new PersistentEntityResourceAssembler(repositories(), entityLinks(), new Projector() {
+            @Override
+            public Object project(Object source) {
+                return source;
+            }
+        });
     }
 }

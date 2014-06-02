@@ -105,15 +105,15 @@ var FieldValueRenderer = function () {
         this.targetView = targetView;
 
         this.renderValue = function (dataValue) {
-            var stringRepresentation = dataValue['stringRepresentation'];
+            var stringRepresentation = dataValue['content']['stringRepresentation'];
 
             var valueToRender = $.trim(stringRepresentation);
             if (this.targetView == 'listView') {
                 valueToRender = cutLongText(stringRepresentation);
             }
 
-            if (dataValue['managedDomainType']) {
-                return "<a href='" + dataValue.links[1].href + "'>" + valueToRender + "</a>";
+            if (dataValue['content']['managedDomainType']) {
+                return "<a href='" + dataValue['_links']['selfDomainLink'].href + "'>" + valueToRender + "</a>";
             }
             return valueToRender;
         };
@@ -123,7 +123,7 @@ var FieldValueRenderer = function () {
     }
 
     function isDomainObject(fieldValue) {
-        return typeof fieldValue === 'object' && fieldValue['stringRepresentation'] !== undefined;
+        return typeof fieldValue === 'object' && fieldValue['content']['stringRepresentation'] !== undefined;
     }
 
     function createRenderer(field, targetView) {

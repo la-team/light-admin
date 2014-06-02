@@ -21,7 +21,6 @@ import org.springframework.data.mapping.SimpleAssociationHandler;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.data.repository.support.Repositories;
 
-import javax.persistence.EntityManager;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
@@ -34,8 +33,6 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 
     private Set<ConfigurationUnits> domainTypeConfigurationUnits;
-
-    private EntityManager entityManager;
 
     private MappingContext<?, ?> mappingContext;
 
@@ -90,7 +87,7 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
             public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
                 Class<?> associationDomainType = association.getInverse().getActualType();
 
-                if (isManagedEntity(associationDomainType) && !repositories.hasRepositoryFor(associationDomainType)) {
+                if (!isManagedEntity(associationDomainType) && repositories.hasRepositoryFor(associationDomainType)) {
                     DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeAdministrationConfigurationFactory.createNonManagedDomainTypeConfiguration(associationDomainType);
                     globalAdministrationConfiguration.registerNonDomainTypeConfiguration(associationTypeConfiguration);
                 }
@@ -111,11 +108,12 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     }
 
     private boolean isManagedEntity(Class type) {
-        try {
-            return entityManager.getMetamodel().entity(type) != null;
-        } catch (IllegalArgumentException e) {
-            return false;
+        for (ConfigurationUnits domainTypeConfigurationUnit : domainTypeConfigurationUnits) {
+            if (domainTypeConfigurationUnit.getDomainType().equals(type)) {
+                return true;
+            }
         }
+        return false;
     }
 
     public void setDomainTypeConfigurationUnits(Set<ConfigurationUnits> domainTypeConfigurationUnits) {
@@ -128,10 +126,6 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     public void setConfigurationUnitsValidator(ConfigurationUnitsValidator<ConfigurationUnits> configurationUnitsValidator) {
         this.configurationUnitsValidator = configurationUnitsValidator;
-    }
-
-    public void setEntityManager(EntityManager entityManager) {
-        this.entityManager = entityManager;
     }
 
     public void setRepositories(Repositories repositories) {

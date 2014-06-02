@@ -5,12 +5,13 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 
 public class DynamicPersistentEntityJackson2Module extends SimpleModule {
 
-    public DynamicPersistentEntityJackson2Module(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration, RepositoryRestConfiguration config) {
+    public DynamicPersistentEntityJackson2Module(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration, RepositoryRestConfiguration config, PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
         super(new Version(1, 0, 0, null, "org.lightadmin", "jackson-module"));
 
-        addSerializer(new DynamicPersistentEntityResourceSerializer(globalAdministrationConfiguration, lightAdminConfiguration, config));
+        addSerializer(new DynamicPersistentEntityResourceSerializer(globalAdministrationConfiguration, lightAdminConfiguration, config, persistentEntityResourceAssembler));
     }
 }

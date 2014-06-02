@@ -28,9 +28,9 @@ import javax.persistence.metamodel.EntityType;
 import javax.servlet.ServletContext;
 import java.util.Set;
 
+import static com.google.common.collect.Sets.newHashSet;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromAutowiredConfiguration;
-import static org.lightadmin.core.util.DomainConfigurationUtils.configurationDomainType;
 import static org.springframework.beans.factory.support.BeanDefinitionBuilder.rootBeanDefinition;
 import static org.springframework.util.StringUtils.tokenizeToStringArray;
 
@@ -64,26 +64,38 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
         ResourceLoader resourceLoader = newResourceLoader(servletContext);
 
+        Set<Class> administrationConfigs = scanPackageForAdministrationClasses();
+
+        Set<ConfigurationUnits> configurationUnitsCollection = configurationUnits(rootContext, administrationConfigs);
+
         registry.registerBeanDefinition(JPA_MAPPPING_CONTEXT_BEAN, mappingContext(entityManager));
 
         registry.registerBeanDefinition(CONFIGURATION_UNITS_VALIDATOR_BEAN, configurationUnitsValidator(resourceLoader));
 
-        Set<Class> administrationConfigs = scanPackageForAdministrationClasses();
-
-        Set<ConfigurationUnits> configurationUnitsCollection = newLinkedHashSet();
-
-        for (Class administrationConfig : administrationConfigs) {
-            ConfigurationUnits configurationUnits = unitsFromAutowiredConfiguration(administrationConfig, rootContext.getAutowireCapableBeanFactory());
-
-            configurationUnitsCollection.add(configurationUnits);
-
-            Class repoInterface = createDynamicRepositoryClass(administrationConfig, entityManager);
-
+        for (Class<?> managedEntityType : managedEntities(entityManager)) {
+            Class repoInterface = createDynamicRepositoryClass(managedEntityType, entityManager);
             registry.registerBeanDefinition(beanName(repoInterface), repositoryFactory(repoInterface, entityManager));
         }
 
-        registry.registerBeanDefinition(beanName(GlobalAdministrationConfiguration.class), globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection, entityManager));
+        registry.registerBeanDefinition(beanName(GlobalAdministrationConfiguration.class), globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection));
         registry.registerBeanDefinition(beanName(DomainTypeAdministrationConfigurationFactory.class), domainTypeAdministrationConfigurationFactoryDefinition(entityManager));
+    }
+
+    private Set<ConfigurationUnits> configurationUnits(WebApplicationContext rootContext, Set<Class> administrationConfigs) {
+        Set<ConfigurationUnits> configurationUnitsCollection = newLinkedHashSet();
+        for (Class administrationConfig : administrationConfigs) {
+            ConfigurationUnits configurationUnits = unitsFromAutowiredConfiguration(administrationConfig, rootContext.getAutowireCapableBeanFactory());
+            configurationUnitsCollection.add(configurationUnits);
+        }
+        return configurationUnitsCollection;
+    }
+
+    private Iterable<Class<?>> managedEntities(EntityManager entityManager) {
+        Set<Class<?>> managedEntities = newHashSet();
+        for (EntityType<?> entity : entityManager.getMetamodel().getEntities()) {
+            managedEntities.add(entity.getJavaType());
+        }
+        return managedEntities;
     }
 
     private BeanDefinition configurationUnitsValidator(ResourceLoader resourceLoader) {
@@ -100,11 +112,10 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
         return builder.getBeanDefinition();
     }
 
-    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits, EntityManager entityManager) {
+    private BeanDefinition globalAdministrationConfigurationFactoryBeanDefinition(Set<ConfigurationUnits> configurationUnits) {
         BeanDefinitionBuilder builder = rootBeanDefinition(GlobalAdministrationConfigurationFactoryBean.class);
         builder.addPropertyReference("domainTypeAdministrationConfigurationFactory", beanName(DomainTypeAdministrationConfigurationFactory.class));
         builder.addPropertyValue("domainTypeConfigurationUnits", configurationUnits);
-        builder.addPropertyValue("entityManager", entityManager);
         builder.addPropertyReference("mappingContext", JPA_MAPPPING_CONTEXT_BEAN);
         builder.addPropertyReference("repositories", REPOSITORIES_BEAN);
         builder.addPropertyReference("configurationUnitsValidator", CONFIGURATION_UNITS_VALIDATOR_BEAN);
@@ -137,8 +148,7 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
         return new ServletContextResourceLoader(servletContext);
     }
 
-    private Class createDynamicRepositoryClass(Class administrationConfig, EntityManager entityManager) {
-        Class domainType = configurationDomainType(administrationConfig);
+    private Class createDynamicRepositoryClass(Class domainType, EntityManager entityManager) {
         EntityType entityType = entityManager.getMetamodel().entity(domainType);
         Class idType = entityType.getIdType().getJavaType();
 

@@ -20,6 +20,7 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.DynamicPersistentEntityResource;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.support.SimpleMapResource;
 import org.springframework.hateoas.Link;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -27,14 +28,20 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Maps.newLinkedHashMap;
+import static com.google.common.collect.Sets.newHashSet;
+import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.ASSOC;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.ASSOC_MULTI;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
-// TODO: max: Don't forget about embedded entities custom serialization
 class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPersistentEntityResource<?>> {
 
     private FieldValueEvaluator fieldValueEvaluator;
@@ -42,11 +49,13 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
 
     private GlobalAdministrationConfiguration adminConfiguration;
     private RepositoryRestConfiguration restConfiguration;
+    private final PersistentEntityResourceAssembler persistentEntityResourceAssembler;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    DynamicPersistentEntityResourceSerializer(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration, RepositoryRestConfiguration config) {
+    DynamicPersistentEntityResourceSerializer(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration, RepositoryRestConfiguration config, PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
         super((Class) DynamicPersistentEntityResource.class);
 
+        this.persistentEntityResourceAssembler = persistentEntityResourceAssembler;
         this.adminConfiguration = globalAdministrationConfiguration;
         this.restConfiguration = config;
 
@@ -64,7 +73,7 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
 
         PersistentEntity<?, ? extends PersistentProperty<?>> persistentEntity = resource.getPersistentEntity();
 
-        DomainTypeBasicConfiguration domainTypeBasicConfiguration = adminConfiguration.forManagedDomainType(persistentEntity.getType());
+        DomainTypeBasicConfiguration domainTypeBasicConfiguration = adminConfiguration.forDomainType(persistentEntity.getType());
 
         Set<FieldMetadata> fieldMetadatas = resource.getFields();
         Object source = resource.getContent();
@@ -129,17 +138,53 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
     private Map<String, Object> persistentSimpleFieldData(PersistentFieldMetadata field, Object source) {
         final Map<String, Object> fieldData = newLinkedHashMap();
 
+        PersistentProperty persistentProperty = field.getPersistentProperty();
+        PersistentPropertyType persistentPropertyType = PersistentPropertyType.forPersistentProperty(persistentProperty);
+
         Object fieldValue = fieldValueEvaluator.evaluate(field, source);
+
+        if (persistentPropertyType == ASSOC_MULTI) {
+            Collection<DynamicPersistentEntityResource> resources = newArrayList();
+            for (Object entity : toIterable(fieldValue)) {
+                resources.add(dynamicPersistentEntityResource(entity));
+            }
+            fieldData.put("value", resources);
+        } else if (persistentPropertyType == ASSOC) {
+            fieldData.put("value", dynamicPersistentEntityResource(fieldValue));
+        } else {
+            fieldData.put("value", fieldValue);
+        }
+
         fieldData.put("name", field.getField());
         fieldData.put("title", field.getName());
-        fieldData.put("value", fieldValue);
-        fieldData.put("type", PersistentPropertyType.forPersistentProperty(field.getPersistentProperty()).name());
+        fieldData.put("type", persistentPropertyType.name());
         fieldData.put("persistable", true);
         fieldData.put("primaryKey", field.isPrimaryKey());
         if (field.getRenderer() != null) {
             fieldData.put("label", field.getRenderer().apply(fieldValue));
         }
         return fieldData;
+    }
+
+    private DynamicPersistentEntityResource<Object> dynamicPersistentEntityResource(Object entity) {
+        DomainTypeBasicConfiguration domainTypeBasicConfiguration = adminConfiguration.forDomainType(entity.getClass());
+        PersistentEntity embeddedPersistentEntity = domainTypeBasicConfiguration.getPersistentEntity();
+        return DynamicPersistentEntityResource.wrap(persistentEntityResourceAssembler.toResource(entity), newHashSet(idPropertyField(embeddedPersistentEntity)), false);
+    }
+
+    private Iterable<Object> toIterable(Object o) {
+        if (o.getClass().isArray()) {
+            Object[] array = (Object[]) o;
+            return Arrays.asList(array);
+        }
+        return (Iterable<Object>) o;
+    }
+
+    private FieldMetadata idPropertyField(PersistentEntity persistentEntity) {
+        PersistentProperty idProperty = persistentEntity.getIdProperty();
+        PersistentFieldMetadata idField = new PersistentFieldMetadata(capitalize(idProperty.getName()), idProperty.getName(), true);
+        idField.setPersistentProperty(idProperty);
+        return idField;
     }
 
     private Map<String, Object> persistentFileFieldData(Object source, final Object id, PersistentFieldMetadata field, final DomainTypeBasicConfiguration domainTypeConfiguration, final boolean exportBinaryData) {

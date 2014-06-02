@@ -8,9 +8,7 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.lightadmin.core.view.tags.AbstractAutowiredTag;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.data.mapping.SimplePropertyHandler;
+import org.springframework.data.mapping.*;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -45,6 +43,27 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
         final JsonGenerator json = JSON_FACTORY.createJsonGenerator(getJspContext().getOut());
         json.writeStartObject();
         try {
+            persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
+                @Override
+                public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
+                    PersistentProperty property = association.getInverse();
+                    if (includedAttributes != null && !includedAttributes.contains(property.getName())) {
+                        return;
+                    }
+                    try {
+                        json.writeObjectFieldStart(property.getName());
+                        json.writeStringField("type", PersistentPropertyType.forPersistentProperty(property).name());
+                        writeAssociationMetadata(property, json);
+                    } catch (Exception ex) {
+                    } finally {
+                        try {
+                            json.writeEndObject();
+                        } catch (IOException e) {
+                        }
+                    }
+                }
+            });
+
             persistentEntity.doWithProperties(new SimplePropertyHandler() {
                 @Override
                 public void doWithPersistentProperty(PersistentProperty<?> property) {
@@ -53,11 +72,7 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
                     }
                     try {
                         json.writeObjectFieldStart(property.getName());
-
                         json.writeStringField("type", PersistentPropertyType.forPersistentProperty(property).name());
-                        if (property.isAssociation()) {
-                            writeAssociationMetadata(property, json);
-                        }
                     } catch (Exception ex) {
                     } finally {
                         try {

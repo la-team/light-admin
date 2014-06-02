@@ -9,7 +9,7 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-<tiles:useAttribute name="domainTypeEntityMetadata"/>
+<tiles:useAttribute name="persistentEntity"/>
 
 <tiles:useAttribute name="fields"/>
 
@@ -80,7 +80,7 @@
 
         formViewVisualDecoration(domain_form);
 
-        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json persistentEntity="${domainTypeEntityMetadata}"  includeFields="${fields}"/>);
+        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json persistentEntity="${persistentEntity}"  includeFields="${fields}"/>);
         $(domain_form).data('lightadmin.domain-rest-base-url', "${domainObjectUrl}");
 
         loadDomainObjectForFormView($(domain_form));

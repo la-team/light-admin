@@ -12,12 +12,12 @@
             return {href: href};
         }
 
-        var domainTypeEntityMetadata = $(this).data('lightadmin.domain-type-metadata');
+        var persistentEntity = $(this).data('lightadmin.domain-type-metadata');
 
         var json = {};
         $.each(this.serializeArray(), function () {
             var attrVal = this.value || '';
-            var attrMetadata = domainTypeEntityMetadata[this.name];
+            var attrMetadata = persistentEntity[this.name];
             var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
             if (attrType.indexOf('ASSOC') == 0) {
                 var href = resolveObjectHref(attrVal, attrMetadata);
@@ -33,7 +33,7 @@
                 json[this.name] = attrVal;
             }
         });
-        $.each(domainTypeEntityMetadata, function (attrName, attrMetadata) {
+        $.each(persistentEntity, function (attrName, attrMetadata) {
             var attrVal = json[attrName];
             if (attrVal != undefined && attrVal != '') {
                 return;
@@ -211,7 +211,7 @@ function loadDomainObjectForFormView(form) {
     }
 
     function selectOption(editor, attrMetadata, data) {
-        var objectIdData = data[attrMetadata.idAttribute];
+        var objectIdData = data['content'][attrMetadata.idAttribute];
         var objectId = $.isPlainObject(objectIdData) ? objectIdData.value : objectIdData;
         if (objectId == null) {
             objectId = '';
@@ -225,7 +225,7 @@ function loadDomainObjectForFormView(form) {
 
     var restRepoUrl = $(form).data('lightadmin.domain-rest-base-url');
 
-    var domainTypeEntityMetadata = $(form).data('lightadmin.domain-type-metadata');
+    var persistentEntity = $(form).data('lightadmin.domain-type-metadata');
 
     $.ajax({
         type: 'GET',
@@ -242,7 +242,7 @@ function loadDomainObjectForFormView(form) {
                         continue;
                     }
 
-                    var attrMetadata = domainTypeEntityMetadata[attr];
+                    var attrMetadata = persistentEntity[attr];
                     var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
 
                     switch (attrType) {
@@ -268,10 +268,10 @@ function loadDomainObjectForFormView(form) {
                                 break;
                             }
                         default:
-                            if (editor.prop('tagName')=='SELECT' && editor.find("option[value='"+attrVal+"']").length<=0) {
+                            if (editor.prop('tagName') == 'SELECT' && editor.find("option[value='" + attrVal + "']").length <= 0) {
                                 editor.append($('<option>', {
                                     value: attrVal,
-                                    text : attrVal
+                                    text: attrVal
                                 }));
                             }
                             editor.val(attrVal.toString());
