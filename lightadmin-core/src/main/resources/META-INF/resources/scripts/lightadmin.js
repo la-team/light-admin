@@ -80,10 +80,9 @@ function dataTableRESTAdapter(sSource, aoData, fnCallback) {
 
     //create new json structure for parameters for REST request
     var restParams = [];
-    restParams.push({"name": "limit", "value": pageSize});
+    restParams.push({"name": "size", "value": pageSize});
     restParams.push({"name": "page", "value": pageNum });
-    restParams.push({ "name": "sort", "value": sortName });
-    restParams.push({ "name": sortName + ".dir", "value": sortDir });
+    restParams.push({ "name": "sort", "value": sortName + ',' + sortDir });
 
     jQuery.ajax({
         "dataType": 'json',
@@ -381,22 +380,22 @@ function removeDomainObject(entityId, restUrl, callback) {
 }
 
 function saveDomainObject(domForm, successCallback) {
-    return saveOrUpdateDomainObject(domForm, false, successCallback);
+    return saveOrUpdateDomainObject(domForm, false, successCallback, 'POST');
 }
 
 function updateDomainObject(domForm, successCallback) {
-    return saveOrUpdateDomainObject(domForm, true, successCallback);
+    return saveOrUpdateDomainObject(domForm, true, successCallback, 'PUT');
 }
 
-function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback) {
+function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback, method) {
     $.each($(domForm).find('[id$=-error]'), function (index, element) {
         $(element).text('');
     });
     var jsonForm = $(domForm).serializeFormJSON(usePlaceholders);
     var restRepoUrl = $(domForm).data('lightadmin.domain-rest-base-url');
     $.ajax({
-        type: 'PUT',
-        url: restRepoUrl + '?returnBody=true',
+        type: method,
+        url: restRepoUrl,
         contentType: 'application/json',
         data: JSON.stringify(jsonForm),
         dataType: 'json',

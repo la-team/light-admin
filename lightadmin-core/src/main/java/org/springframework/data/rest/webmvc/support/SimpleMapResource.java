@@ -12,6 +12,10 @@ public class SimpleMapResource extends Resource<Map<String, Object>> {
         super(Maps.<String, Object>newLinkedHashMap(), links);
     }
 
+    public SimpleMapResource(Iterable<Link> links) {
+        super(Maps.<String, Object>newLinkedHashMap(), links);
+    }
+
     public void put(String key, Object value) {
         getContent().put(key, value);
     }

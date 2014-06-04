@@ -96,10 +96,7 @@
 
         $(domain_form).submit(function () {
             return updateDomainObject(this, function (data) {
-                var link = $.grep(data.links, function (link) {
-                    return link.rel == 'selfDomainLink';
-                })[0];
-                window.location = link.href + '?updateSuccess=true';
+                window.location = data['_links']['selfDomainLink'].href + '?updateSuccess=true';
             });
         });
         </c:if>

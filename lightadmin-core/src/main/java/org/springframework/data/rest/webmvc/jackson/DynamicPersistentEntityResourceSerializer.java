@@ -20,10 +20,10 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.webmvc.DynamicPersistentEntityResource;
+import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.support.SimpleMapResource;
 import org.springframework.hateoas.Link;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
@@ -41,6 +41,7 @@ import static org.lightadmin.core.config.domain.configuration.support.ExceptionA
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.ASSOC;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.ASSOC_MULTI;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
+import static org.lightadmin.core.web.util.ApplicationUrlResolver.selfDomainLink;
 
 class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPersistentEntityResource<?>> {
 
@@ -217,17 +218,8 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
         }
     }
 
-    private Link selfDomainLink(DynamicPersistentEntityResource<?> resource, DomainTypeBasicConfiguration domainTypeBasicConfiguration) {
-        UriComponentsBuilder selfUriBuilder = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                .pathSegment("domain")
-                .pathSegment(domainTypeBasicConfiguration.getDomainTypeName())
-                .pathSegment(idValue(resource).toString());
-
-        return new Link(selfUriBuilder.build().toString(), "selfDomainLink");
-    }
-
     @SuppressWarnings("unchecked")
-    private Serializable idValue(DynamicPersistentEntityResource<?> resource) {
+    private Serializable idValue(PersistentEntityResource<?> resource) {
         BeanWrapper beanWrapper = BeanWrapper.create(resource.getContent(), null);
         return (Serializable) beanWrapper.getProperty(resource.getPersistentEntity().getIdProperty());
     }

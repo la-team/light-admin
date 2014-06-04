@@ -12,6 +12,7 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.webmvc.ConfigurationHandlerMethodArgumentResolver;
+import org.springframework.data.rest.webmvc.DynamicPersistentEntityResourceProcessor;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.data.rest.webmvc.jackson.DynamicPersistentEntityJackson2Module;
@@ -38,6 +39,14 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
         config.setDefaultPageSize(10);
         config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
         config.exposeIdsFor(globalAdministrationConfiguration.getAllDomainTypesAsArray());
+        config.setReturnBodyOnCreate(true);
+        config.setReturnBodyOnUpdate(true);
+    }
+
+    @Bean
+    @Autowired
+    public DynamicPersistentEntityResourceProcessor dynamicPersistentEntityResourceProcessor(GlobalAdministrationConfiguration globalAdministrationConfiguration) {
+        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration);
     }
 
     @Bean
