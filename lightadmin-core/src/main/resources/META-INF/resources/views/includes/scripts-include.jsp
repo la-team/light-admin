@@ -77,6 +77,8 @@
 
 <script type="text/javascript">
     $(function () {
+        $.ajaxSetup({ cache: false });
+
         $("a.not-implemented").click(function () {
             jAlert('Sorry mate, but this feature is not yet implemented.', 'Coming soon...');
         });
