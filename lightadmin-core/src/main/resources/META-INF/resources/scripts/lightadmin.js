@@ -8,8 +8,7 @@
                     return null;
                 }
             }
-            var href = decodeURIComponent(attrMetadata.hrefTemplate).replace('{' + attrMetadata.idAttribute + '}', attrVal);
-            return {href: href};
+            return decodeURIComponent(attrMetadata.hrefTemplate).replace('{' + attrMetadata.idAttribute + '}', attrVal);
         }
 
         var persistentEntity = $(this).data('lightadmin.domain-type-metadata');
@@ -384,7 +383,7 @@ function saveDomainObject(domForm, successCallback) {
 }
 
 function updateDomainObject(domForm, successCallback) {
-    return saveOrUpdateDomainObject(domForm, true, successCallback, 'PUT');
+    return saveOrUpdateDomainObject(domForm, false, successCallback, 'PUT');
 }
 
 function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback, method) {

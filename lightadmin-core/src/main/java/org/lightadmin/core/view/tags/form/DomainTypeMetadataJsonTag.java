@@ -11,10 +11,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.*;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.hateoas.Link;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
-import java.net.URI;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -90,10 +90,13 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 
     private void writeAssociationMetadata(PersistentProperty persistentProperty, JsonGenerator json) throws IOException {
         Class<?> attribDomainType = persistentProperty.getActualType();
+        DomainTypeBasicConfiguration entityDomainTypeConfig = globalConfiguration.forDomainType(persistentProperty.getOwner().getType());
         DomainTypeBasicConfiguration attribDomainTypeConfig = globalConfiguration.forDomainType(attribDomainType);
         if (attribDomainTypeConfig != null) {
-            json.writeStringField("idAttribute", persistentEntity.getIdProperty().getName());
-            String idPlaceholder = "{" + persistentProperty.getName() + "}";
+            PersistentProperty idProperty = persistentEntity.getIdProperty();
+            json.writeStringField("idAttribute", idProperty.getName());
+            json.writeStringField("rel", entityDomainTypeConfig.getPluralDomainTypeName() + "." + persistentProperty.getName());
+            String idPlaceholder = "{" + idProperty.getName() + "}";
             json.writeStringField("hrefTemplate", selfLink(attribDomainTypeConfig, idPlaceholder).getHref());
         }
     }
@@ -109,15 +112,12 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
         }
     }
 
-    public Link selfLink(String domainTypeName, Object id) {
-        URI selfUri = UriComponentsBuilder.fromUri(repositoryRestConfiguration.getBaseUri())
-                .pathSegment(domainTypeName)
-                .pathSegment(id.toString()).build().toUri();
-
-        return new Link(selfUri.toString(), "self");
-    }
-
     public Link selfLink(DomainTypeBasicConfiguration domainTypeConfig, Object id) {
-        return selfLink(domainTypeConfig.getPluralDomainTypeName(), id);
+        UriComponentsBuilder selfUriBuilder = ServletUriComponentsBuilder.fromCurrentServletMapping()
+                .pathSegment("rest")
+                .pathSegment(domainTypeConfig.getPluralDomainTypeName())
+                .pathSegment(id.toString());
+
+        return new Link(selfUriBuilder.build().toString(), "self");
     }
 }
