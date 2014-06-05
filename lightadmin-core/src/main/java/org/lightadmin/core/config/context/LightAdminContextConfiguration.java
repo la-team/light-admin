@@ -14,7 +14,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.ServletContextResourceLoader;
@@ -22,13 +21,15 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
 import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContext;
 import java.util.Arrays;
 import java.util.List;
@@ -43,14 +44,6 @@ import java.util.List;
 })
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
-
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor());
-    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -75,13 +68,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     @Autowired
     public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
         return new FileResourceLoader(globalAdministrationConfiguration, lightAdminConfiguration);
-    }
-
-    @Bean
-    public OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor() {
-        OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor = new OpenEntityManagerInViewInterceptor();
-        openEntityManagerInViewInterceptor.setEntityManagerFactory(entityManagerFactory);
-        return openEntityManagerInViewInterceptor;
     }
 
     @Bean

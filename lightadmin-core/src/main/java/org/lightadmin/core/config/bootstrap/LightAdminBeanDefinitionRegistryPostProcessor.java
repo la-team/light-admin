@@ -18,6 +18,7 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
+import org.springframework.orm.jpa.SharedEntityManagerCreator;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.ServletContextResourceLoader;
 import org.springframework.web.context.support.WebApplicationContextUtils;
@@ -141,7 +142,7 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
     private EntityManager findEntityManager(WebApplicationContext rootContext) {
         EntityManagerFactory entityManagerFactory = EntityManagerFactoryUtils.findEntityManagerFactory(rootContext, null);
 
-        return entityManagerFactory.createEntityManager();
+        return SharedEntityManagerCreator.createSharedEntityManager(entityManagerFactory);
     }
 
     private ServletContextResourceLoader newResourceLoader(ServletContext servletContext) {
