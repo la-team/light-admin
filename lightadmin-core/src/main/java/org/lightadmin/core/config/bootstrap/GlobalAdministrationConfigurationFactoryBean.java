@@ -12,6 +12,7 @@ import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareCon
 import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.support.HierarchicalConfigurationPostProcessor;
 import org.lightadmin.reporting.ProblemReporter;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
 import org.springframework.data.mapping.Association;
@@ -41,6 +42,18 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     private ConfigurationUnitsValidator<ConfigurationUnits> configurationUnitsValidator;
 
     private ConfigurationUnitPostProcessor[] configurationUnitPostProcessors;
+
+    public static GlobalAdministrationConfigurationFactoryBean newInstance(GlobalAdministrationConfigurationFactoryBean factoryBeanEtalon) throws Exception {
+        GlobalAdministrationConfigurationFactoryBean result = new GlobalAdministrationConfigurationFactoryBean();
+        result.setSingleton(false);
+        result.setRepositories(factoryBeanEtalon.getRepositories());
+        result.setConfigurationUnitsValidator(factoryBeanEtalon.getConfigurationUnitsValidator());
+        result.setDomainTypeAdministrationConfigurationFactory(factoryBeanEtalon.getDomainTypeAdministrationConfigurationFactory());
+        result.setMappingContext(factoryBeanEtalon.getMappingContext());
+        result.setBeanFactory(factoryBeanEtalon.getBeanFactory());
+        result.afterPropertiesSet();
+        return result;
+    }
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -134,5 +147,30 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
 
     public void setMappingContext(MappingContext<?, ?> mappingContext) {
         this.mappingContext = mappingContext;
+    }
+
+    public DomainTypeAdministrationConfigurationFactory getDomainTypeAdministrationConfigurationFactory() {
+        return domainTypeAdministrationConfigurationFactory;
+    }
+
+    public Set<ConfigurationUnits> getDomainTypeConfigurationUnits() {
+        return domainTypeConfigurationUnits;
+    }
+
+    public MappingContext<?, ?> getMappingContext() {
+        return mappingContext;
+    }
+
+    public Repositories getRepositories() {
+        return repositories;
+    }
+
+    public ConfigurationUnitsValidator<ConfigurationUnits> getConfigurationUnitsValidator() {
+        return configurationUnitsValidator;
+    }
+
+    @Override
+    public BeanFactory getBeanFactory() {
+        return super.getBeanFactory();
     }
 }

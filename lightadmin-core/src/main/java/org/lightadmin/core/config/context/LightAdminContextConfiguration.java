@@ -38,7 +38,7 @@ import java.util.List;
 @Import({
         LightAdminDataConfiguration.class,
         LightAdminDomainConfiguration.class,
-//        LightAdminRemoteConfiguration.class,
+        LightAdminRemoteConfiguration.class,
         NewLightAdminRepositoryRestMvcConfiguration.class,
         LightAdminViewConfiguration.class
 })
@@ -79,14 +79,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-
-//    @Bean
-//    @Autowired
-//    public ConversionService conversionService(DomainTypeToResourceConverter domainTypeToResourceConverter) {
-//        DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
-//        bean.addConverter(domainTypeToResourceConverter);
-//        return bean;
-//    }
 
     @Override
     public void configureHandlerExceptionResolvers(List<HandlerExceptionResolver> exceptionResolvers) {

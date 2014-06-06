@@ -1,7 +1,6 @@
 package org.lightadmin.core.config.management.rmi;
 
 import org.lightadmin.api.config.management.rmi.DataManipulationService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.jdbc.datasource.init.ResourceDatabasePopulator;
@@ -12,8 +11,11 @@ import static org.springframework.jdbc.datasource.init.DatabasePopulatorUtils.ex
 
 public class DataManipulationServiceImpl implements DataManipulationService {
 
-    @Autowired
     private DataSource dataSource;
+
+    public DataManipulationServiceImpl(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 
     @Override
     public void truncateDatabase() {
