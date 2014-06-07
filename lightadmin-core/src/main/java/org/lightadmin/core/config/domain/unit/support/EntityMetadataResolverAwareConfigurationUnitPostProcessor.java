@@ -13,12 +13,12 @@ public abstract class EntityMetadataResolverAwareConfigurationUnitPostProcessor 
     }
 
     @SuppressWarnings("unchecked")
-    protected PersistentEntity resolveEntityMetadata(ConfigurationUnit configurationUnit) {
+    protected PersistentEntity getPersistentEntity(ConfigurationUnit configurationUnit) {
         return mappingContext.getPersistentEntity(configurationUnit.getDomainType());
     }
 
     @SuppressWarnings("unchecked")
-    protected PersistentEntity resolveEntityMetadata(Class<?> domainType) {
+    protected PersistentEntity getPersistentEntity(Class<?> domainType) {
         return mappingContext.getPersistentEntity(domainType);
     }
 }

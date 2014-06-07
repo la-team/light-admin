@@ -1,5 +1,6 @@
 package org.lightadmin.core.config.bootstrap;
 
+import org.lightadmin.core.config.bootstrap.parsing.DomainConfigurationProblem;
 import org.lightadmin.core.config.bootstrap.parsing.validation.ConfigurationUnitsValidator;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfigurationFactory;
@@ -25,6 +26,7 @@ import org.springframework.data.repository.support.Repositories;
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
+import static java.lang.String.format;
 import static org.apache.commons.lang3.ArrayUtils.toArray;
 import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
 
@@ -77,10 +79,14 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
         ProblemReporter problemReporter = failFastReporter();
 
         for (ConfigurationUnits configurationUnits : domainTypeConfigurationUnits) {
+            if (notPersistentEntityType(configurationUnits.getDomainType())) {
+                problemReporter.error(new DomainConfigurationProblem(configurationUnits, format("Administration of non-persistent type %s is not supported.", configurationUnits.getDomainType().getSimpleName())));
+                continue;
+            }
+
+            configurationUnits = preprocessConfigurationUnits(configurationUnits);
 
             configurationUnitsValidator.validate(configurationUnits, problemReporter);
-
-            configurationUnits = processConfigurationUnits(configurationUnits);
 
             DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = domainTypeAdministrationConfigurationFactory.createAdministrationConfiguration(configurationUnits);
 
@@ -108,7 +114,7 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
         });
     }
 
-    private ConfigurationUnits processConfigurationUnits(final ConfigurationUnits configurationUnits) {
+    private ConfigurationUnits preprocessConfigurationUnits(final ConfigurationUnits configurationUnits) {
         final Set<ConfigurationUnit> processedConfigurationUnits = newLinkedHashSet();
         for (ConfigurationUnit configurationUnit : configurationUnits) {
             ConfigurationUnit processedConfigurationUnit = configurationUnit;
@@ -127,6 +133,10 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
             }
         }
         return false;
+    }
+
+    private boolean notPersistentEntityType(final Class<?> domainType) {
+        return !mappingContext.hasPersistentEntityFor(domainType);
     }
 
     public void setDomainTypeConfigurationUnits(Set<ConfigurationUnits> domainTypeConfigurationUnits) {

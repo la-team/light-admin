@@ -7,9 +7,7 @@ import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.data.mapping.SimplePropertyHandler;
+import org.springframework.data.mapping.*;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.ClassUtils;
 
@@ -34,19 +32,29 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
     private FieldSetConfigurationUnit fieldSetUnitWithPersistentFields(final Class<?> domainType, DomainConfigurationUnitType configurationUnitType) {
         final FieldSetConfigurationUnitBuilder fieldSetConfigurationUnitBuilder = new GenericFieldSetConfigurationUnitBuilder(domainType, configurationUnitType);
 
-        PersistentEntity persistentEntity = resolveEntityMetadata(domainType);
+        PersistentEntity persistentEntity = getPersistentEntity(domainType);
+
+        persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
+            @Override
+            public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
+                addField(association.getInverse(), fieldSetConfigurationUnitBuilder);
+            }
+        });
 
         persistentEntity.doWithProperties(new SimplePropertyHandler() {
             @Override
             public void doWithPersistentProperty(PersistentProperty<?> property) {
-                PersistentPropertyType persistentPropertyType = PersistentPropertyType.forPersistentProperty(property);
-                if (isSupportedAttributeType(persistentPropertyType)) {
-                    fieldSetConfigurationUnitBuilder.field(property.getName());
-                }
+                addField(property, fieldSetConfigurationUnitBuilder);
             }
         });
 
         return fieldSetConfigurationUnitBuilder.build();
+    }
+
+    private void addField(PersistentProperty<?> property, FieldSetConfigurationUnitBuilder fieldSetConfigurationUnitBuilder) {
+        if (isSupportedAttributeType(PersistentPropertyType.forPersistentProperty(property))) {
+            fieldSetConfigurationUnitBuilder.field(property.getName());
+        }
     }
 
     private boolean isEmptyFieldSetConfigurationUnit(ConfigurationUnit configurationUnit) {

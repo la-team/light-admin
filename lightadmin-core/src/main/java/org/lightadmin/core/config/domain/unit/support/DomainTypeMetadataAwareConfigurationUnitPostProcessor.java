@@ -16,9 +16,9 @@ public class DomainTypeMetadataAwareConfigurationUnitPostProcessor extends Entit
     @Override
     public ConfigurationUnit postProcess(final ConfigurationUnit configurationUnit, ConfigurationUnits configurationUnits) {
         if (ClassUtils.isAssignableValue(PersistentEntityAware.class, configurationUnit)) {
-            final PersistentEntity domainTypeEntityMetadata = resolveEntityMetadata(configurationUnit);
+            final PersistentEntity persistentEntity = getPersistentEntity(configurationUnit);
 
-            ((PersistentEntityAware) configurationUnit).setPersistentEntity(domainTypeEntityMetadata);
+            ((PersistentEntityAware) configurationUnit).setPersistentEntity(persistentEntity);
         }
         return configurationUnit;
     }
