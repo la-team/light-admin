@@ -24,18 +24,14 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
     @Override
     @SuppressWarnings("unchecked")
     public void registerDomainTypeConfiguration(ConfigurationUnits configurationUnits) {
-        try {
-            GlobalAdministrationConfiguration administrationConfiguration = newGlobalAdministrationConfigurationFactoryBeanFor(configurationUnits).getObject();
+        GlobalAdministrationConfiguration administrationConfiguration = newGlobalAdministrationConfiguration(configurationUnits);
 
-            for (Class<?> managedType : administrationConfiguration.getManagedDomainTypes()) {
-                globalAdministrationConfiguration.registerDomainTypeConfiguration(administrationConfiguration.forManagedDomainType(managedType));
-            }
+        for (Class<?> managedType : administrationConfiguration.getManagedDomainTypes()) {
+            globalAdministrationConfiguration.registerDomainTypeConfiguration(administrationConfiguration.forManagedDomainType(managedType));
+        }
 
-            for (Class<?> nonManagedType : administrationConfiguration.getNonManagedDomainTypes()) {
-                globalAdministrationConfiguration.registerNonDomainTypeConfiguration(administrationConfiguration.forDomainType(nonManagedType));
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        for (Class<?> nonManagedType : administrationConfiguration.getNonManagedDomainTypes()) {
+            globalAdministrationConfiguration.registerNonDomainTypeConfiguration(administrationConfiguration.forDomainType(nonManagedType));
         }
     }
 
@@ -62,6 +58,14 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
+    }
+
+    private GlobalAdministrationConfiguration newGlobalAdministrationConfiguration(ConfigurationUnits configurationUnits) {
+        try {
+            return newGlobalAdministrationConfigurationFactoryBeanFor(configurationUnits).getObject();
+        } catch (Exception e) {
+            throw (RuntimeException) e;
+        }
     }
 
     private GlobalAdministrationConfigurationFactoryBean newGlobalAdministrationConfigurationFactoryBeanFor(ConfigurationUnits configurationUnits) throws Exception {

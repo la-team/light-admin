@@ -27,7 +27,7 @@ public class CustomerTestEntityConfiguration {
     }
 
     public static ScopesConfigurationUnit scopes(final ScopesConfigurationUnitBuilder scopeBuilder) {
-        return scopeBuilder.scope("All", all()).defaultScope().scope("Buyers", filter(DomainTypePredicates.alwaysTrue())).scope("Sellers", specification(new DummySpecification())).scope("Deletion Test", specification(new DeleteTestSpecification())).build();
+        return scopeBuilder.scope("All", all()).defaultScope().scope("Buyers", filter(DomainTypePredicates.alwaysTrue())).scope("Sellers", specification(new DummySpecification())).scope("DeletionTest", specification(new DeleteTestSpecification())).build();
     }
 
     public static FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {

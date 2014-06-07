@@ -144,27 +144,36 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
 
         Object fieldValue = fieldValueEvaluator.evaluate(field, source);
 
-        if (persistentPropertyType == ASSOC_MULTI) {
-            Collection<DynamicPersistentEntityResource> resources = newArrayList();
-            for (Object entity : toIterable(fieldValue)) {
-                resources.add(dynamicPersistentEntityResource(entity));
-            }
-            fieldData.put("value", resources);
-        } else if (persistentPropertyType == ASSOC) {
-            fieldData.put("value", dynamicPersistentEntityResource(fieldValue));
-        } else {
-            fieldData.put("value", fieldValue);
-        }
-
         fieldData.put("name", field.getField());
         fieldData.put("title", field.getName());
         fieldData.put("type", persistentPropertyType.name());
+        fieldData.put("value", renderedValue(persistentPropertyType, fieldValue));
         fieldData.put("persistable", true);
         fieldData.put("primaryKey", field.isPrimaryKey());
         if (field.getRenderer() != null) {
             fieldData.put("label", field.getRenderer().apply(fieldValue));
         }
         return fieldData;
+    }
+
+    private Object renderedValue(PersistentPropertyType persistentPropertyType, Object fieldValue) {
+        if (fieldValue == null) {
+            return null;
+        }
+
+        if (persistentPropertyType == ASSOC_MULTI) {
+            Collection<DynamicPersistentEntityResource> resources = newArrayList();
+            for (Object entity : toIterable(fieldValue)) {
+                resources.add(dynamicPersistentEntityResource(entity));
+            }
+            return resources;
+        }
+
+        if (persistentPropertyType == ASSOC) {
+            return dynamicPersistentEntityResource(fieldValue);
+        }
+
+        return fieldValue;
     }
 
     private DynamicPersistentEntityResource<Object> dynamicPersistentEntityResource(Object entity) {

@@ -48,6 +48,9 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
             case ASSOC:
                 worker = n2oneEditControl;
                 break;
+            case EMBEDDED:
+                worker = simpleEditControl;
+                break;
             case MAP:
                 worker = mapEditControl;
                 break;

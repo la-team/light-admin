@@ -1,4 +1,5 @@
 package org.lightadmin.test.model;
+
 import org.lightadmin.demo.model.AbstractEntity;
 
 import javax.persistence.Entity;
@@ -19,8 +20,8 @@ public class FilterTestEntity extends AbstractEntity {
 
 	private Boolean booleanField;
 
-	public FilterTestEntity( final String textField, final int integerField, final BigDecimal decimalField, boolean booleanField ) {
-		this.textField = textField;
+    public FilterTestEntity(final String textField, final int integerField, final BigDecimal decimalField, Boolean booleanField) {
+        this.textField = textField;
 		this.integerField = integerField;
 		this.decimalField = decimalField;
 		this.booleanField = booleanField;
@@ -66,11 +67,11 @@ public class FilterTestEntity extends AbstractEntity {
 		return theResult.add( decimalField ).add( new BigDecimal( integerField ) ).add( new BigDecimal( primitiveIntegerField ) );
 	}
 
-	public boolean isBooleanField() {
-		return booleanField;
+    public Boolean isBooleanField() {
+        return booleanField;
 	}
 
-	public void setBooleanField( boolean booleanField ) {
-		this.booleanField = booleanField;
+    public void setBooleanField(Boolean booleanField) {
+        this.booleanField = booleanField;
 	}
 }

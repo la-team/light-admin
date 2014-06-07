@@ -27,7 +27,7 @@ public abstract class EntityNameExtractorFactory {
         private final String entityName;
 
         public PersistentEntityNameExtractor(PersistentEntity persistentEntity) {
-            this(persistentEntity.getName(), persistentEntity);
+            this(persistentEntity.getType().getSimpleName(), persistentEntity);
         }
 
         public PersistentEntityNameExtractor(String entityName, PersistentEntity persistentEntity) {
