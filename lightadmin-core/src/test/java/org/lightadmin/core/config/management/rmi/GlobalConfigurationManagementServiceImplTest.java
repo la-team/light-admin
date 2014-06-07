@@ -7,7 +7,6 @@ import org.junit.runner.RunWith;
 import org.lightadmin.api.config.annotation.Administration;
 import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
 import org.lightadmin.core.config.context.LightAdminRepositoryRestConfiguration;
-import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.test.IntegrationTest;
 import org.lightadmin.core.test.LightAdminConfigurationContextLoader;
 import org.lightadmin.core.test.LightAdminTestConfiguration;
@@ -18,6 +17,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static org.junit.Assert.*;
+import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromConfiguration;
 
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -35,14 +35,14 @@ public class GlobalConfigurationManagementServiceImplTest {
 
     @Test
     public void runtimeConfigurationRegistration() {
-        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
+        globalConfigurationManagementService.registerDomainTypeConfiguration(unitsFromConfiguration(AddressConfiguration.class));
 
         assertNotNull(globalConfigurationManagementService.getRegisteredDomainTypeConfiguration(Address.class));
     }
 
     @Test
     public void runtimeConfigurationRemoval() {
-        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
+        globalConfigurationManagementService.registerDomainTypeConfiguration(unitsFromConfiguration(AddressConfiguration.class));
 
         globalConfigurationManagementService.removeDomainTypeAdministrationConfiguration(Address.class);
 
@@ -53,8 +53,7 @@ public class GlobalConfigurationManagementServiceImplTest {
     public void runtimeMultipleConfigurationsRegistration() {
         assertTrue(globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().isEmpty());
 
-        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
-        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(CustomerConfiguration.class));
+        globalConfigurationManagementService.registerDomainTypeConfiguration(unitsFromConfiguration(AddressConfiguration.class), unitsFromConfiguration(CustomerConfiguration.class));
 
         assertEquals(2, globalConfigurationManagementService.getRegisteredDomainTypeConfigurations().size());
 
@@ -64,8 +63,7 @@ public class GlobalConfigurationManagementServiceImplTest {
 
     @Test
     public void runtimeConfigurationsCleanup() {
-        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(AddressConfiguration.class));
-        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(CustomerConfiguration.class));
+        globalConfigurationManagementService.registerDomainTypeConfiguration(unitsFromConfiguration(AddressConfiguration.class), unitsFromConfiguration(CustomerConfiguration.class));
 
         globalConfigurationManagementService.removeAllDomainTypeAdministrationConfigurations();
 

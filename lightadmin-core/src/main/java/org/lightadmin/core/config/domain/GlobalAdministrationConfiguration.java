@@ -1,20 +1,18 @@
 package org.lightadmin.core.config.domain;
 
-import org.apache.commons.lang3.ArrayUtils;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
 
+import static com.google.common.collect.Maps.newConcurrentMap;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 @SuppressWarnings("unchecked")
 public class GlobalAdministrationConfiguration {
 
-    private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
-    private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
+    private final Map<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = newConcurrentMap();
+    private final Map<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = newConcurrentMap();
 
     public void registerDomainTypeConfiguration(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
         managedDomainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
@@ -52,12 +50,7 @@ public class GlobalAdministrationConfiguration {
 
     public Class<?>[] getAllDomainTypesAsArray() {
         Set<Class<?>> allDomainTypes = getAllDomainTypes();
-
-        Class<?>[] domainTypes = new Class[]{};
-        for (Class<?> domainType : allDomainTypes) {
-            domainTypes = ArrayUtils.add(domainTypes, domainType);
-        }
-        return domainTypes;
+        return allDomainTypes.toArray(new Class<?>[allDomainTypes.size()]);
     }
 
     public Map<Class<?>, DomainTypeAdministrationConfiguration> getManagedDomainTypeConfigurations() {

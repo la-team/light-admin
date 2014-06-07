@@ -23,7 +23,7 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
 
     @Override
     @SuppressWarnings("unchecked")
-    public void registerDomainTypeConfiguration(ConfigurationUnits configurationUnits) {
+    public void registerDomainTypeConfiguration(ConfigurationUnits... configurationUnits) {
         GlobalAdministrationConfiguration administrationConfiguration = newGlobalAdministrationConfiguration(configurationUnits);
 
         for (Class<?> managedType : administrationConfiguration.getManagedDomainTypes()) {
@@ -60,7 +60,7 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
         this.applicationContext = applicationContext;
     }
 
-    private GlobalAdministrationConfiguration newGlobalAdministrationConfiguration(ConfigurationUnits configurationUnits) {
+    private GlobalAdministrationConfiguration newGlobalAdministrationConfiguration(ConfigurationUnits... configurationUnits) {
         try {
             return newGlobalAdministrationConfigurationFactoryBeanFor(configurationUnits).getObject();
         } catch (Exception e) {
@@ -68,9 +68,9 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
         }
     }
 
-    private GlobalAdministrationConfigurationFactoryBean newGlobalAdministrationConfigurationFactoryBeanFor(ConfigurationUnits configurationUnits) throws Exception {
+    private GlobalAdministrationConfigurationFactoryBean newGlobalAdministrationConfigurationFactoryBeanFor(ConfigurationUnits... configurationUnits) throws Exception {
         GlobalAdministrationConfigurationFactoryBean factoryBean = GlobalAdministrationConfigurationFactoryBean.newInstance(globalAdministrationConfigurationFactoryBean());
-        factoryBean.setDomainTypeConfigurationUnits(Sets.<ConfigurationUnits>newHashSet(configurationUnits));
+        factoryBean.setDomainTypeConfigurationUnits(Sets.newHashSet(configurationUnits));
         return factoryBean;
     }
 

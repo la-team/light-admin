@@ -3,7 +3,6 @@ package org.lightadmin;
 import org.junit.runner.RunWith;
 import org.lightadmin.api.config.management.rmi.DataManipulationService;
 import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
-import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.page.ListViewPage;
 import org.lightadmin.testContext.TestProfileSource;
 import org.lightadmin.util.ExtendedWebDriver;
@@ -17,6 +16,8 @@ import org.springframework.test.context.support.DependencyInjectionTestExecution
 import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
 import java.net.URL;
+
+import static org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter.unitsFromConfiguration;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestExecutionListeners(listeners = {
@@ -40,7 +41,7 @@ public abstract class SeleniumIntegrationTest {
     private LoginService loginService;
 
     protected void registerDomainTypeAdministrationConfiguration(Class configurationClass) {
-        globalConfigurationManagementService.registerDomainTypeConfiguration(ConfigurationUnitsConverter.unitsFromConfiguration(configurationClass));
+        globalConfigurationManagementService.registerDomainTypeConfiguration(unitsFromConfiguration(configurationClass));
     }
 
     protected void removeAllDomainTypeAdministrationConfigurations() {

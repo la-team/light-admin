@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public interface GlobalConfigurationManagementService {
 
-    void registerDomainTypeConfiguration(ConfigurationUnits configurationUnits);
+    void registerDomainTypeConfiguration(ConfigurationUnits... configurationUnits);
 
     void removeDomainTypeAdministrationConfiguration(Class<?> domainType);
 
