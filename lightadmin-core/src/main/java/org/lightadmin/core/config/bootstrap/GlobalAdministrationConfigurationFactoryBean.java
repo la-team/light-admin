@@ -8,10 +8,10 @@ import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.core.config.domain.unit.support.ConfigurationUnitPostProcessor;
-import org.lightadmin.core.config.domain.unit.support.DomainTypeMetadataAwareConfigurationUnitPostProcessor;
-import org.lightadmin.core.config.domain.unit.support.EmptyConfigurationUnitPostProcessor;
-import org.lightadmin.core.config.domain.unit.support.HierarchicalConfigurationPostProcessor;
+import org.lightadmin.core.config.domain.unit.processor.ConfigurationUnitPostProcessor;
+import org.lightadmin.core.config.domain.unit.processor.EmptyConfigurationUnitPostProcessor;
+import org.lightadmin.core.config.domain.unit.processor.HierarchicalConfigurationPostProcessor;
+import org.lightadmin.core.config.domain.unit.processor.VisitableConfigurationUnitPostProcessor;
 import org.lightadmin.reporting.ProblemReporter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -61,7 +61,7 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     public void afterPropertiesSet() throws Exception {
         this.configurationUnitPostProcessors = toArray(
                 new EmptyConfigurationUnitPostProcessor(mappingContext),
-                new DomainTypeMetadataAwareConfigurationUnitPostProcessor(mappingContext),
+                new VisitableConfigurationUnitPostProcessor(mappingContext),
                 new HierarchicalConfigurationPostProcessor());
 
         super.afterPropertiesSet();
@@ -79,7 +79,7 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
         ProblemReporter problemReporter = failFastReporter();
 
         for (ConfigurationUnits configurationUnits : domainTypeConfigurationUnits) {
-            if (notPersistentEntityType(configurationUnits.getDomainType())) {
+            if (nonPersistentEntityType(configurationUnits.getDomainType())) {
                 problemReporter.error(new DomainConfigurationProblem(configurationUnits, format("Administration of non-persistent type %s is not supported.", configurationUnits.getDomainType().getSimpleName())));
                 continue;
             }
@@ -135,7 +135,7 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
         return false;
     }
 
-    private boolean notPersistentEntityType(final Class<?> domainType) {
+    private boolean nonPersistentEntityType(final Class<?> domainType) {
         return !mappingContext.hasPersistentEntityFor(domainType);
     }
 

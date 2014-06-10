@@ -1,14 +1,14 @@
-package org.lightadmin.core.config.domain.unit.support;
+package org.lightadmin.core.config.domain.unit.processor;
 
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.context.MappingContext;
 
-public abstract class EntityMetadataResolverAwareConfigurationUnitPostProcessor implements ConfigurationUnitPostProcessor {
+public abstract class MappingContextAwareConfigurationUnitPostProcessor implements ConfigurationUnitPostProcessor {
 
     private final MappingContext mappingContext;
 
-    public EntityMetadataResolverAwareConfigurationUnitPostProcessor(final MappingContext mappingContext) {
+    public MappingContextAwareConfigurationUnitPostProcessor(final MappingContext mappingContext) {
         this.mappingContext = mappingContext;
     }
 

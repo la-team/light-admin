@@ -2,14 +2,10 @@ package org.lightadmin.core.config.domain.configuration;
 
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
-import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
 import org.lightadmin.core.config.domain.unit.DefaultFieldSetConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
-import org.lightadmin.core.persistence.metamodel.PersistentEntityAware;
-import org.springframework.data.mapping.PersistentEntity;
 
-public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfigurationUnit
-        implements EntityMetadataConfigurationUnit, PersistentEntityAware {
+public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfigurationUnit implements EntityMetadataConfigurationUnit {
 
     private EntityNameExtractor<?> nameExtractor;
 
@@ -52,10 +48,4 @@ public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfi
         return null;
     }
 
-    @Override
-    public void setPersistentEntity(final PersistentEntity persistenEntity) {
-        if (nameExtractor == null) {
-            this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity(this.singularName, persistenEntity);
-        }
-    }
 }

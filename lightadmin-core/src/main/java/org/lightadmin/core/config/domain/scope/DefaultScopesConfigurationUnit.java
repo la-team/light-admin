@@ -41,4 +41,5 @@ public class DefaultScopesConfigurationUnit extends DomainTypeConfigurationUnit 
     public DomainConfigurationUnitType getDomainConfigurationUnitType() {
         return DomainConfigurationUnitType.SCOPES;
     }
+
 }

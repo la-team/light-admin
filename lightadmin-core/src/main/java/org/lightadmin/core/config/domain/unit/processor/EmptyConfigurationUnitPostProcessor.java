@@ -1,4 +1,4 @@
-package org.lightadmin.core.config.domain.unit.support;
+package org.lightadmin.core.config.domain.unit.processor;
 
 import org.lightadmin.api.config.builder.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
@@ -11,10 +11,11 @@ import org.springframework.data.mapping.*;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.ClassUtils;
 
+import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.CONFIGURATION;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isSupportedAttributeType;
 
-public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverAwareConfigurationUnitPostProcessor {
+public class EmptyConfigurationUnitPostProcessor extends MappingContextAwareConfigurationUnitPostProcessor {
 
     public EmptyConfigurationUnitPostProcessor(final MappingContext mappingContext) {
         super(mappingContext);
@@ -34,17 +35,17 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
 
         PersistentEntity persistentEntity = getPersistentEntity(domainType);
 
-        persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
-            @Override
-            public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
-                addField(association.getInverse(), fieldSetConfigurationUnitBuilder);
-            }
-        });
-
         persistentEntity.doWithProperties(new SimplePropertyHandler() {
             @Override
             public void doWithPersistentProperty(PersistentProperty<?> property) {
                 addField(property, fieldSetConfigurationUnitBuilder);
+            }
+        });
+
+        persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
+            @Override
+            public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
+                addField(association.getInverse(), fieldSetConfigurationUnitBuilder);
             }
         });
 
@@ -53,7 +54,7 @@ public class EmptyConfigurationUnitPostProcessor extends EntityMetadataResolverA
 
     private void addField(PersistentProperty<?> property, FieldSetConfigurationUnitBuilder fieldSetConfigurationUnitBuilder) {
         if (isSupportedAttributeType(PersistentPropertyType.forPersistentProperty(property))) {
-            fieldSetConfigurationUnitBuilder.field(property.getName());
+            fieldSetConfigurationUnitBuilder.field(property.getName()).caption(capitalize(property.getName()));
         }
     }
 

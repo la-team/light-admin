@@ -1,50 +1,55 @@
 package org.lightadmin.core.config.domain.unit;
 
-import com.google.common.collect.FluentIterable;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
-import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
-import org.lightadmin.core.persistence.metamodel.PersistentEntityAware;
-import org.lightadmin.core.persistence.metamodel.PersistentPropertyAware;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.PersistentProperty;
+import org.lightadmin.core.config.domain.unit.handler.FieldHandler;
+import org.lightadmin.core.config.domain.unit.visitor.ConfigurationUnitVisitor;
+import org.lightadmin.core.config.domain.unit.visitor.VisitableConfigurationUnit;
 
 import java.util.Iterator;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.addPrimaryKeyPersistentField;
-import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.getPersistentField;
+import static com.google.common.collect.Sets.newTreeSet;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.persistentFields;
+import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.CONFIGURATION;
+import static org.springframework.util.ClassUtils.isAssignableValue;
 
 public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUnit
-        implements FieldSetConfigurationUnit, PersistentEntityAware, HierarchicalConfigurationUnit {
+        implements FieldSetConfigurationUnit, HierarchicalConfigurationUnit, VisitableConfigurationUnit {
 
     private static final long serialVersionUID = 1L;
 
     private final DomainConfigurationUnitType configurationUnitType;
 
-    private Set<FieldMetadata> fields = newLinkedHashSet();
+    private final AtomicInteger COUNTER = new AtomicInteger(1);
 
-    private ConfigurationUnit parentUnit;
+    private Set<FieldMetadata> fields = newLinkedHashSet();
 
     public DefaultFieldSetConfigurationUnit(Class<?> domainType, DomainConfigurationUnitType configurationUnitType) {
         super(domainType);
         this.configurationUnitType = configurationUnitType;
     }
 
+    @Override
     public void addField(FieldMetadata fieldMetadata) {
+        if (isPrimaryKeyField(fieldMetadata)) {
+            fieldMetadata.setSortOrder(0);
+        } else {
+            fieldMetadata.setSortOrder(COUNTER.getAndIncrement());
+        }
         fields.add(fieldMetadata);
     }
 
-    public Set<FieldMetadata> getFields() {
-        return newLinkedHashSet(fields);
-    }
-
     @Override
-    public FieldMetadata getField(String fieldName) {
-        return getPersistentField(fields, fieldName);
+    public Set<FieldMetadata> getFields() {
+        SortedSet<FieldMetadata> orderedFields = newTreeSet(new FieldMetadataUtils.FieldMetadataComparator());
+        orderedFields.addAll(this.fields);
+        return orderedFields;
     }
 
     @Override
@@ -64,40 +69,29 @@ public class DefaultFieldSetConfigurationUnit extends DomainTypeConfigurationUni
 
     @Override
     public DomainConfigurationUnitType getParentUnitType() {
-        return DomainConfigurationUnitType.CONFIGURATION;
+        return CONFIGURATION;
     }
 
     @Override
-    public void setPersistentEntity(PersistentEntity persistenEntity) {
-        final PersistentFieldMetadata primaryKeyField = getPersistentField(fields, persistenEntity.getIdProperty().getName());
-
-        if (primaryKeyField != null) {
-            primaryKeyField.setPrimaryKey(true);
-        } else {
-            fields = addPrimaryKeyPersistentField(fields, persistenEntity.getIdProperty());
-        }
-
-        for (FieldMetadata field : fields) {
-            if (field instanceof PersistentPropertyAware) {
-                Persistable persistable = (Persistable) field;
-                PersistentProperty persistentProperty = persistenEntity.getPersistentProperty(persistable.getField());
-                ((PersistentPropertyAware) field).setPersistentProperty(persistentProperty);
-            }
+    public void doWithFields(FieldHandler<FieldMetadata> handler) {
+        for (FieldMetadata field : getFields()) {
+            handler.doWithField(field);
         }
     }
 
     @Override
-    public void setParentUnit(ConfigurationUnit parentUnit) {
-        if (parentUnit instanceof FieldSetConfigurationUnit) {
-            Set<FieldMetadata> parentDecls = ((FieldSetConfigurationUnit) parentUnit).getFields();
-            FluentIterable<PersistentFieldMetadata> localDecls = FluentIterable.from(fields).filter(PersistentFieldMetadata.class);
-            for (PersistentFieldMetadata localDecl : localDecls) {
-                PersistentFieldMetadata parentDecl = FieldMetadataUtils.getPersistentField(parentDecls, localDecl.getField());
-                if (parentDecl != null) {
-                    localDecl.inheritFrom(parentDecl);
-                }
-            }
+    public void doWithPersistentFields(FieldHandler<PersistentFieldMetadata> handler) {
+        for (FieldMetadata field : persistentFields(getFields())) {
+            handler.doWithField((PersistentFieldMetadata) field);
         }
     }
 
+    @Override
+    public void accept(ConfigurationUnitVisitor<VisitableConfigurationUnit> configurationUnitVisitor) {
+        configurationUnitVisitor.visit(this);
+    }
+
+    private boolean isPrimaryKeyField(FieldMetadata fieldMetadata) {
+        return isAssignableValue(PersistentFieldMetadata.class, fieldMetadata) && ((PersistentFieldMetadata) fieldMetadata).isPrimaryKey();
+    }
 }

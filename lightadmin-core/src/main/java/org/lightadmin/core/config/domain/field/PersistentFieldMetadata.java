@@ -1,7 +1,6 @@
 package org.lightadmin.core.config.domain.field;
 
 import org.hibernate.validator.constraints.NotBlank;
-import org.lightadmin.core.persistence.metamodel.PersistentPropertyAware;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.springframework.data.mapping.PersistentProperty;
 
@@ -10,7 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.*;
 
-public class PersistentFieldMetadata extends AbstractFieldMetadata implements PersistentPropertyAware, Persistable {
+public class PersistentFieldMetadata extends AbstractFieldMetadata {
 
     private final String field;
 
@@ -28,24 +27,24 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Pe
         this.field = field;
     }
 
-    @Override
+    public static FieldMetadata keyField(final String name, final String field) {
+        return new PersistentFieldMetadata(name, field, true);
+    }
+
     public String getField() {
         return field;
     }
 
-    @Override
     public boolean isPrimaryKey() {
         return primaryKey;
     }
 
-    @Override
     public boolean isRequired() {
         return persistentProperty.isAnnotationPresent(NotNull.class)
                 || persistentProperty.isAnnotationPresent(NotBlank.class)
                 || persistentProperty.isAnnotationPresent(org.hibernate.validator.constraints.NotEmpty.class);
     }
 
-    @Override
     public boolean isGeneratedValue() {
         return persistentProperty.isAnnotationPresent(GeneratedValue.class);
     }
@@ -54,12 +53,10 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Pe
         this.primaryKey = primaryKey;
     }
 
-    @Override
     public void setPersistentProperty(final PersistentProperty persistentProperty) {
         this.persistentProperty = persistentProperty;
     }
 
-    @Override
     public PersistentProperty getPersistentProperty() {
         return persistentProperty;
     }

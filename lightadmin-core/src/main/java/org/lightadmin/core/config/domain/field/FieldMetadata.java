@@ -5,4 +5,6 @@ public interface FieldMetadata extends Identifiable, Nameable {
     boolean isSortable();
 
     int getSortOrder();
+
+    void setSortOrder(int sortOrder);
 }

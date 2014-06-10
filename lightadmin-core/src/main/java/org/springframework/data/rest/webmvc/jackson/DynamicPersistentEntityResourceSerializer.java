@@ -10,7 +10,6 @@ import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataUtils;
-import org.lightadmin.core.config.domain.field.Persistable;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.evaluator.FieldValueEvaluator;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
@@ -217,7 +216,7 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
         return fieldData;
     }
 
-    private String filePropertyLink(final Persistable persistable, final String domainTypeName, final Object id) {
+    private String filePropertyLink(final PersistentFieldMetadata persistable, final String domainTypeName, final Object id) {
         return UriComponentsBuilder.fromUri(restConfiguration.getBaseUri()).pathSegment(domainTypeName).pathSegment(id.toString()).pathSegment(persistable.getField()).pathSegment("file").build().toUri().toString();
     }
 

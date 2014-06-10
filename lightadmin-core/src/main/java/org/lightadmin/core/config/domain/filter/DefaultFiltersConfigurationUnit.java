@@ -3,9 +3,9 @@ package org.lightadmin.core.config.domain.filter;
 import org.lightadmin.api.config.unit.FiltersConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
-import org.lightadmin.core.persistence.metamodel.PersistentEntityAware;
-import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.PersistentProperty;
+import org.lightadmin.core.config.domain.unit.handler.FilterHandler;
+import org.lightadmin.core.config.domain.unit.visitor.ConfigurationUnitVisitor;
+import org.lightadmin.core.config.domain.unit.visitor.VisitableConfigurationUnit;
 import org.springframework.util.Assert;
 
 import java.util.Iterator;
@@ -13,7 +13,7 @@ import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 
-public class DefaultFiltersConfigurationUnit extends DomainTypeConfigurationUnit implements FiltersConfigurationUnit, PersistentEntityAware {
+public class DefaultFiltersConfigurationUnit extends DomainTypeConfigurationUnit implements FiltersConfigurationUnit {
 
     private final Set<FilterMetadata> filtersMetadata;
 
@@ -40,11 +40,14 @@ public class DefaultFiltersConfigurationUnit extends DomainTypeConfigurationUnit
     }
 
     @Override
-    public void setPersistentEntity(final PersistentEntity persistenEntity) {
-        for (FilterMetadata filterMetadata : filtersMetadata) {
-            PersistentProperty persistentProperty = persistenEntity.getPersistentProperty(filterMetadata.getFieldName());
-
-            filterMetadata.setPersistentProperty(persistentProperty);
+    public void doWithFilters(FilterHandler<FilterMetadata> handler) {
+        for (FilterMetadata filter : filtersMetadata) {
+            handler.doWithFilter(filter);
         }
+    }
+
+    @Override
+    public void accept(ConfigurationUnitVisitor<VisitableConfigurationUnit> configurationUnitVisitor) {
+        configurationUnitVisitor.visit(this);
     }
 }

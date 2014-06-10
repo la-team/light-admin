@@ -28,4 +28,5 @@ public class DefaultSidebarsConfigurationUnit extends DomainTypeConfigurationUni
     public List<SidebarMetadata> getSidebars() {
         return newLinkedList(sidabars);
     }
+
 }
