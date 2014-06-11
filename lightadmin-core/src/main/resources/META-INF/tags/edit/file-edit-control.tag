@@ -13,7 +13,6 @@
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
-<light:url var="fileUploadUrl" value="/rest/upload" scope="page"/>
 <light:url var="domainObjectUrl"
            value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
@@ -33,7 +32,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var file_upload_url = '${fileUploadUrl}';
+        var file_upload_url = '${filePropertyUrl}';
         var attribute_name = '${attributeMetadata.name}';
 
         var container = '${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}';

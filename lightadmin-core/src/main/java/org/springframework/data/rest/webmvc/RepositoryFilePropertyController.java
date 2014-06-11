@@ -95,8 +95,7 @@ public class RepositoryFilePropertyController extends AbstractRepositoryRestCont
         return ControllerUtils.toEmptyResponse(HttpStatus.OK);
     }
 
-
-    @RequestMapping(value = "/upload", method = {RequestMethod.PUT, RequestMethod.POST})
+    @RequestMapping(value = BASE_MAPPING + "/file", method = {RequestMethod.POST})
     public ResponseEntity<? extends ResourceSupport> saveFilePropertyOfEntity(final ServletServerHttpRequest request) throws Exception {
         final MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request.getServletRequest();
 

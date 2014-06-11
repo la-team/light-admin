@@ -39,15 +39,6 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     @Autowired
     private GlobalAdministrationConfiguration globalAdministrationConfiguration;
 
-    @Override
-    protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
-        config.setDefaultPageSize(10);
-        config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
-        config.exposeIdsFor(globalAdministrationConfiguration.getAllDomainTypesAsArray());
-        config.setReturnBodyOnCreate(true);
-        config.setReturnBodyOnUpdate(true);
-    }
-
     @Bean
     @Autowired
     public DynamicPersistentEntityResourceProcessor dynamicPersistentEntityResourceProcessor(GlobalAdministrationConfiguration globalAdministrationConfiguration) {
@@ -59,16 +50,36 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
         return new DynamicRepositoryInvokerFactory(repositories(), defaultConversionService());
     }
 
+    @Bean
+    public ConfigurationHandlerMethodArgumentResolver configurationHandlerMethodArgumentResolver() {
+        return new ConfigurationHandlerMethodArgumentResolver(globalAdministrationConfiguration, resourceMetadataHandlerMethodArgumentResolver());
+    }
+
+    @Bean
+    public DomainRepositoryEventListener domainRepositoryEventListener() {
+        return new DomainRepositoryEventListener();
+    }
+
+//    @Bean
+//    @Autowired
+//    public CustomAnnotatedHandlerRepositoryEventListener customAnnotatedHandlerRepositoryEventListener(LightAdminConfiguration lightAdminContext, AutowireCapableBeanFactory beanFactory) {
+//        return new CustomAnnotatedHandlerRepositoryEventListener(lightAdminContext, beanFactory);
+//    }
+
+    @Override
+    protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
+        config.setDefaultPageSize(10);
+        config.setBaseUri(lightAdminConfiguration.getApplicationRestBaseUrl());
+        config.exposeIdsFor(globalAdministrationConfiguration.getAllDomainTypesAsArray());
+        config.setReturnBodyOnCreate(true);
+        config.setReturnBodyOnUpdate(true);
+    }
+
     @Override
     public RequestMappingHandlerAdapter repositoryExporterHandlerAdapter() {
         RequestMappingHandlerAdapter requestMappingHandlerAdapter = super.repositoryExporterHandlerAdapter();
         configureRepositoryExporterHandlerAdapter(requestMappingHandlerAdapter);
         return requestMappingHandlerAdapter;
-    }
-
-    @Bean
-    public ConfigurationHandlerMethodArgumentResolver configurationHandlerMethodArgumentResolver() {
-        return new ConfigurationHandlerMethodArgumentResolver(globalAdministrationConfiguration, resourceMetadataHandlerMethodArgumentResolver());
     }
 
     @Override
@@ -86,11 +97,6 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     @Override
     protected void configureJacksonObjectMapper(ObjectMapper objectMapper) {
         objectMapper.registerModule(new DynamicPersistentEntityJackson2Module(globalAdministrationConfiguration, lightAdminConfiguration, config(), simplePersistentEntityResourceAssembler()));
-    }
-
-    @Bean
-    public DomainRepositoryEventListener domainRepositoryEventListener() {
-        return new DomainRepositoryEventListener();
     }
 
     @SuppressWarnings("unchecked")
