@@ -256,7 +256,7 @@ function loadDomainObjectForFormView(form) {
                         case 'FILE':
                             var fileSelected = attrVal.length > 0;
                             if (fileSelected) {
-                                selectFileFieldValue(form, attr, data[attr], restRepoUrl);
+                                selectFileFieldValue(form, attr, content[attr], restRepoUrl);
                             }
                             editor.val(attrVal.toString());
                             break;
