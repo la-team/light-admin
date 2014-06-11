@@ -1,5 +1,6 @@
 package org.lightadmin.demo.model;
 
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
@@ -8,42 +9,49 @@ import javax.persistence.ManyToOne;
 @Entity
 public class Address extends AbstractEntity {
 
-	private String street, city, country;
+    @NotBlank
+    private String street;
 
-	@ManyToOne
-	private Customer customer;
+    @NotBlank
+    private String city;
 
-	public Address( String street, String city, String country ) {
-		Assert.hasText( street, "Street must not be null or empty!" );
-		Assert.hasText( city, "City must not be null or empty!" );
-		Assert.hasText( country, "Country must not be null or empty!" );
+    @NotBlank
+    private String country;
 
-		this.street = street;
-		this.city = city;
-		this.country = country;
-	}
+    @ManyToOne
+    private Customer customer;
 
-	public Address() {
+    public Address(String street, String city, String country) {
+        Assert.hasText(street, "Street must not be null or empty!");
+        Assert.hasText(city, "City must not be null or empty!");
+        Assert.hasText(country, "Country must not be null or empty!");
 
-	}
+        this.street = street;
+        this.city = city;
+        this.country = country;
+    }
 
-	public Address getCopy() {
-		return new Address( this.street, this.city, this.country );
-	}
+    public Address() {
 
-	public String getStreet() {
-		return street;
-	}
+    }
 
-	public String getCity() {
-		return city;
-	}
+    public Address getCopy() {
+        return new Address(this.street, this.city, this.country);
+    }
 
-	public String getCountry() {
-		return country;
-	}
+    public String getStreet() {
+        return street;
+    }
 
-	public Customer getCustomer() {
-		return customer;
-	}
+    public String getCity() {
+        return city;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public Customer getCustomer() {
+        return customer;
+    }
 }

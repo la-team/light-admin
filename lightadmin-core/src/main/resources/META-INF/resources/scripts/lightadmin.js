@@ -408,17 +408,19 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback, met
                 var errorMessages = '';
                 for (var i = 0; i < errors.length; i++) {
                     var error = errors[i];
-                    var errorMessage = $('<div/>').text(error.message).html();
-                    if (!error.field) {
+                    var errorMessage = $('<div/>').text(error['message']).html();
+
+                    if (!error['property']) {
                         errorMessages += errorMessage + '<br>';
-                    }
-                    var messageDiv = $('#' + error.field + '-error', $(domForm));
-                    if (messageDiv.length > 0) {
-                        messageDiv.text(errorMessage);
-                    }
-                    var controlGroup = $('#' + error.field + '-control-group', $(domForm));
-                    if (controlGroup.length > 0) {
-                        controlGroup.addClass('error');
+                    } else {
+                        var messageDiv = $('#' + error['property'] + '-error', $(domForm));
+                        if (messageDiv.length > 0) {
+                            messageDiv.text(errorMessage);
+                        }
+                        var controlGroup = $('#' + error['property'] + '-control-group', $(domForm));
+                        if (controlGroup.length > 0) {
+                            controlGroup.addClass('error');
+                        }
                     }
                 }
                 if (errorMessages.length > 0) {

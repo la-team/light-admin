@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.webmvc.ConfigurationHandlerMethodArgumentResolver;
@@ -17,6 +18,7 @@ import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.data.rest.webmvc.jackson.DynamicPersistentEntityJackson2Module;
 import org.springframework.data.rest.webmvc.support.Projector;
+import org.springframework.validation.Validator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
@@ -27,6 +29,9 @@ import static org.springframework.beans.PropertyAccessorFactory.forDirectFieldAc
 
 @Configuration
 public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcConfiguration {
+
+    @Autowired
+    private Validator validator;
 
     @Autowired
     private LightAdminConfiguration lightAdminConfiguration;
@@ -64,6 +69,12 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     @Bean
     public ConfigurationHandlerMethodArgumentResolver configurationHandlerMethodArgumentResolver() {
         return new ConfigurationHandlerMethodArgumentResolver(globalAdministrationConfiguration, resourceMetadataHandlerMethodArgumentResolver());
+    }
+
+    @Override
+    protected void configureValidatingRepositoryEventListener(ValidatingRepositoryEventListener validatingListener) {
+        validatingListener.addValidator("beforeCreate", validator);
+        validatingListener.addValidator("beforeSave", validator);
     }
 
     @Override
