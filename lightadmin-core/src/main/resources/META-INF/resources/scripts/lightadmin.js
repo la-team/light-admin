@@ -686,7 +686,7 @@ function decorateFileUploader(container, file_input_id, attribute_name, browse_b
 
                 var result = $.parseJSON(response.response);
 
-                $(file_input_id).val(result['fileContent']);
+                $(file_input_id).val(result['content']['fileContent']);
             }
         }
     });

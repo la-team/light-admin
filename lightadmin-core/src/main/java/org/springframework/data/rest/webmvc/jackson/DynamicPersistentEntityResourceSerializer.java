@@ -23,7 +23,7 @@ import org.springframework.data.rest.webmvc.PersistentEntityResource;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.support.SimpleMapResource;
 import org.springframework.hateoas.Link;
-import org.springframework.web.util.UriComponentsBuilder;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -217,7 +217,13 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
     }
 
     private String filePropertyLink(final PersistentFieldMetadata persistable, final String domainTypeName, final Object id) {
-        return UriComponentsBuilder.fromUri(restConfiguration.getBaseUri()).pathSegment(domainTypeName).pathSegment(id.toString()).pathSegment(persistable.getField()).pathSegment("file").build().toUri().toString();
+        return ServletUriComponentsBuilder.fromCurrentServletMapping()
+                .pathSegment("rest")
+                .pathSegment(domainTypeName)
+                .pathSegment(id.toString())
+                .pathSegment(persistable.getField())
+                .pathSegment("file").build()
+                .toUri().toString();
     }
 
     private void addAttributeValue(SimpleMapResource resource, String attributeName, Object value) {
