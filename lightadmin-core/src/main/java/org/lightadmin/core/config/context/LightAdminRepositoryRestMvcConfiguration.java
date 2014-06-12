@@ -5,9 +5,13 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.rest.DomainRepositoryEventListener;
 import org.springframework.beans.ConfigurablePropertyAccessor;
+import org.springframework.beans.factory.BeanFactoryUtils;
+import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.repository.core.support.RepositoryFactoryInformation;
+import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
@@ -18,17 +22,21 @@ import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.data.rest.webmvc.jackson.DynamicPersistentEntityJackson2Module;
 import org.springframework.data.rest.webmvc.support.Projector;
+import org.springframework.util.ClassUtils;
 import org.springframework.validation.Validator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
 
+import java.io.Serializable;
 import java.util.List;
+import java.util.Map;
 
 import static com.google.common.collect.Lists.newLinkedList;
+import static com.google.common.collect.Maps.newHashMap;
 import static org.springframework.beans.PropertyAccessorFactory.forDirectFieldAccess;
 
 @Configuration
-public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcConfiguration {
+public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcConfiguration {
 
     @Autowired
     private Validator validator;
@@ -43,6 +51,11 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
     @Autowired
     public DynamicPersistentEntityResourceProcessor dynamicPersistentEntityResourceProcessor(GlobalAdministrationConfiguration globalAdministrationConfiguration) {
         return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration);
+    }
+
+    @Bean
+    public Repositories repositories() {
+        return configureRepositories(super.repositories());
     }
 
     @Bean
@@ -119,5 +132,34 @@ public class NewLightAdminRepositoryRestMvcConfiguration extends RepositoryRestM
                 return source;
             }
         });
+    }
+
+    private Repositories configureRepositories(Repositories repositories) {
+        ConfigurablePropertyAccessor configurablePropertyAccessor = forDirectFieldAccess(repositories);
+        ListableBeanFactory beanFactory = (ListableBeanFactory) configurablePropertyAccessor.getPropertyValue("beanFactory");
+        configurablePropertyAccessor.setPropertyValue("repositoryBeanNames", repositoryBeanNames(beanFactory));
+        configurablePropertyAccessor.setPropertyValue("repositoryFactoryInfos", repositoryFactoryInfos(beanFactory));
+        return repositories;
+    }
+
+    private Map<Class<?>, String> repositoryBeanNames(ListableBeanFactory beanFactory) {
+        Map<Class<?>, String> repositoryBeanNames = newHashMap();
+        for (String name : beanFactory.getBeanNamesForType(RepositoryFactoryInformation.class, false, false)) {
+            RepositoryFactoryInformation repositoryFactoryInformation = beanFactory.getBean(name, RepositoryFactoryInformation.class);
+            Class<?> userDomainType = ClassUtils.getUserClass(repositoryFactoryInformation.getRepositoryInformation().getDomainType());
+            repositoryBeanNames.put(userDomainType, BeanFactoryUtils.transformedBeanName(name));
+        }
+        return repositoryBeanNames;
+    }
+
+    @SuppressWarnings("unchecked")
+    private Map<Class<?>, RepositoryFactoryInformation<Object, Serializable>> repositoryFactoryInfos(ListableBeanFactory beanFactory) {
+        Map<Class<?>, RepositoryFactoryInformation<Object, Serializable>> repositoryFactoryInfos = newHashMap();
+        for (String name : beanFactory.getBeanNamesForType(RepositoryFactoryInformation.class, false, false)) {
+            RepositoryFactoryInformation repositoryFactoryInformation = beanFactory.getBean(name, RepositoryFactoryInformation.class);
+            Class<?> userDomainType = ClassUtils.getUserClass(repositoryFactoryInformation.getRepositoryInformation().getDomainType());
+            repositoryFactoryInfos.put(userDomainType, repositoryFactoryInformation);
+        }
+        return repositoryFactoryInfos;
     }
 }

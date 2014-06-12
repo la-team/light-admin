@@ -4,7 +4,7 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.StandardLightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
-import org.lightadmin.core.view.SeparateContainerTilesView;
+import org.lightadmin.core.view.LightAdminTilesView;
 import org.lightadmin.core.web.ApplicationController;
 import org.lightadmin.core.web.util.FileResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,9 +26,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles2.TilesViewResolver;
 
 import javax.servlet.ServletContext;
 import java.util.Arrays;
@@ -39,7 +39,7 @@ import java.util.List;
         LightAdminDataConfiguration.class,
         LightAdminDomainConfiguration.class,
         LightAdminRemoteConfiguration.class,
-        NewLightAdminRepositoryRestMvcConfiguration.class,
+        LightAdminRepositoryRestMvcConfiguration.class,
         LightAdminViewConfiguration.class
 })
 @EnableWebMvc
@@ -119,14 +119,17 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public ViewResolver viewResolver() {
-        final UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
-        viewResolver.setViewClass(SeparateContainerTilesView.class);
-        return viewResolver;
+        return new TilesViewResolver() {
+            @Override
+            protected Class<?> requiredViewClass() {
+                return LightAdminTilesView.class;
+            }
+        };
     }
 
     @Bean
     public TilesConfigurer tilesConfigurer() {
-        final String[] definitions = {"classpath*:META-INF/tiles/**/*.xml"};
+        final String[] definitions = {"classpath*:META-INF/tiles/definitions.xml"};
 
         final TilesConfigurer configurer = new TilesConfigurer();
         configurer.setTilesInitializer(lightAdminSpringTilesInitializer(definitions));
@@ -138,7 +141,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     private LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer(String[] definitions) {
         final LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer = new LightAdminSpringTilesInitializer();
-        lightAdminSpringTilesInitializer.setCheckRefresh(true);
         lightAdminSpringTilesInitializer.setDefinitions(definitions);
         lightAdminSpringTilesInitializer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
         return lightAdminSpringTilesInitializer;

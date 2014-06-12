@@ -6,8 +6,11 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -35,17 +38,17 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 
 @SuppressWarnings("unchecked")
 @RepositoryRestController
-public class RepositoryScopedSearchController extends AbstractRepositoryRestController {
+public class RepositoryScopedSearchController extends AbstractRepositoryRestController implements ApplicationContextAware {
 
     private static final String BASE_MAPPING = "/{repository}/scope/{scopeName}";
 
-    private SpecificationCreator specificationCreator;
+    private ApplicationContext applicationContext;
+    private ConversionService conversionService;
 
     @Autowired
-    public RepositoryScopedSearchController(GlobalAdministrationConfiguration configuration, @Qualifier("defaultConversionService") ConversionService conversionService, PagedResourcesAssembler<Object> pagedResourcesAssembler) {
+    public RepositoryScopedSearchController(@Qualifier("defaultConversionService") ConversionService conversionService, PagedResourcesAssembler<Object> pagedResourcesAssembler) {
         super(pagedResourcesAssembler);
-
-        this.specificationCreator = new SpecificationCreator(conversionService, configuration);
+        this.conversionService = conversionService;
     }
 
     @RequestMapping(value = BASE_MAPPING + "/search/count", method = RequestMethod.GET)
@@ -112,8 +115,16 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         return new ResponseEntity<>(resources, HttpStatus.OK);
     }
 
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
+        return applicationContext.getBean(GlobalAdministrationConfiguration.class);
+    }
+
+    private SpecificationCreator specificationCreator() {
+        return new SpecificationCreator(this.conversionService, globalAdministrationConfiguration());
+    }
+
     private Specification specificationFromRequest(WebRequest request, PersistentEntity<?, ?> persistentEntity) {
-        return specificationCreator.toSpecification(persistentEntity, request.getParameterMap());
+        return specificationCreator().toSpecification(persistentEntity, request.getParameterMap());
     }
 
     private long countItemsBySpecificationAndPredicate(DynamicRepositoryInvoker repository, final Specification specification, Predicate predicate) {
@@ -152,5 +163,10 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         final List<?> items = findItemsBySpecification(invoker, specification, pageable.getSort());
 
         return selectPage(newArrayList(filter(items, predicate)), pageable);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }

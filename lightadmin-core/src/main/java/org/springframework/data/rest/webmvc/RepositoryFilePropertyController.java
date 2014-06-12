@@ -4,7 +4,10 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.lightadmin.core.web.util.FileResourceLoader;
+import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.invoke.RepositoryInvoker;
@@ -33,20 +36,15 @@ import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.i
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
 @RepositoryRestController
-public class RepositoryFilePropertyController extends AbstractRepositoryRestController {
+public class RepositoryFilePropertyController extends AbstractRepositoryRestController implements ApplicationContextAware {
 
     private static final String BASE_MAPPING = "/{repository}/{id}/{property}";
 
-    private FileResourceLoader fileResourceLoader;
-    private OperationBuilder operationBuilder;
+    private ApplicationContext applicationContext;
 
     @Autowired
-    public RepositoryFilePropertyController(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration,
-                                            PagedResourcesAssembler<Object> pagedResourcesAssembler, FileResourceLoader fileResourceLoader) {
+    public RepositoryFilePropertyController(PagedResourcesAssembler<Object> pagedResourcesAssembler) {
         super(pagedResourcesAssembler);
-
-        this.operationBuilder = operationBuilder(configuration, lightAdminConfiguration);
-        this.fileResourceLoader = fileResourceLoader;
     }
 
     @RequestMapping(value = BASE_MAPPING + "/file", method = RequestMethod.GET)
@@ -66,7 +64,7 @@ public class RepositoryFilePropertyController extends AbstractRepositoryRestCont
         }
 
         if (isOfFileType(prop)) {
-            fileResourceLoader.downloadFile(domainObj, prop, (HttpServletResponse) response);
+            fileResourceLoader().downloadFile(domainObj, prop, (HttpServletResponse) response);
         }
     }
 
@@ -90,7 +88,7 @@ public class RepositoryFilePropertyController extends AbstractRepositoryRestCont
             return ControllerUtils.toEmptyResponse(HttpStatus.METHOD_NOT_ALLOWED);
         }
 
-        operationBuilder.deleteOperation(domainObj).perform(prop);
+        operation().deleteOperation(domainObj).perform(prop);
 
         return ControllerUtils.toEmptyResponse(HttpStatus.OK);
     }
@@ -115,5 +113,26 @@ public class RepositoryFilePropertyController extends AbstractRepositoryRestCont
         resource.put("fileName", fileEntry.getValue().getOriginalFilename());
         resource.put("fileContent", fileEntry.getValue().getBytes());
         return resource;
+    }
+
+    private OperationBuilder operation() {
+        return operationBuilder(globalAdministrationConfiguration(), lightAdminConfiguration());
+    }
+
+    private LightAdminConfiguration lightAdminConfiguration() {
+        return applicationContext.getBean(LightAdminConfiguration.class);
+    }
+
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
+        return applicationContext.getBean(GlobalAdministrationConfiguration.class);
+    }
+
+    private FileResourceLoader fileResourceLoader() {
+        return applicationContext.getBean(FileResourceLoader.class);
+    }
+
+    @Override
+    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
+        this.applicationContext = applicationContext;
     }
 }
