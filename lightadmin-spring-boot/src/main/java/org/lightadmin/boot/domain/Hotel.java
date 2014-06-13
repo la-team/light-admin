@@ -1,6 +1,5 @@
 package org.lightadmin.boot.domain;
 
-import org.hibernate.annotations.NaturalId;
 import org.hibernate.validator.constraints.NotBlank;
 
 import javax.persistence.*;
@@ -18,12 +17,10 @@ public class Hotel implements Serializable {
 
     @NotNull
     @ManyToOne
-    @NaturalId
     private City city;
 
     @NotBlank
     @Column
-    @NaturalId
     private String name;
 
     @NotBlank
