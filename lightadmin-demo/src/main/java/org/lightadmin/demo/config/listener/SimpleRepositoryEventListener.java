@@ -5,26 +5,23 @@ import org.lightadmin.demo.service.CustomerService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.core.annotation.HandleAfterSave;
-import org.springframework.data.rest.core.annotation.HandleBeforeSave;
-import org.springframework.data.rest.core.annotation.RepositoryEventHandler;
+import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
-@RepositoryEventHandler(Customer.class)
-public class CustomerRepositoryEventListener {
+public class SimpleRepositoryEventListener extends AbstractRepositoryEventListener<Customer> {
 
-    private final Logger logger = LoggerFactory.getLogger(CustomerRepositoryEventListener.class);
+    private final Logger logger = LoggerFactory.getLogger(SimpleRepositoryEventListener.class);
 
     @Autowired
     private CustomerService customerService;
 
-    @HandleBeforeSave
+    @Override
     public void onBeforeSave(Customer customer) {
         final boolean vipCustomer = customerService.isVIP(customer);
 
         logger.info("#handleBeforeSave: Customer {} is VIP: {}", customer, vipCustomer);
     }
 
-    @HandleAfterSave
+    @Override
     public void onAfterSave(Customer customer) {
         logger.info("#handleAfterSave: Hello");
     }

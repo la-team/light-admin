@@ -73,12 +73,6 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
         return new DomainRepositoryEventListener();
     }
 
-//    @Bean
-//    @Autowired
-//    public CustomAnnotatedHandlerRepositoryEventListener customAnnotatedHandlerRepositoryEventListener(LightAdminConfiguration lightAdminContext, AutowireCapableBeanFactory beanFactory) {
-//        return new CustomAnnotatedHandlerRepositoryEventListener(lightAdminContext, beanFactory);
-//    }
-
     @Override
     protected void configureRepositoryRestConfiguration(RepositoryRestConfiguration config) {
         config.setDefaultPageSize(10);

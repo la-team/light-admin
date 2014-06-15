@@ -4,11 +4,11 @@ import org.lightadmin.api.config.builder.EntityMetadataConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.common.AbstractFieldSetConfigurationBuilder;
+import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
 import static org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory.forNamedPersistentEntity;
 
-public class DefaultEntityMetadataConfigurationUnitBuilder extends AbstractFieldSetConfigurationBuilder<EntityMetadataConfigurationUnit, EntityMetadataConfigurationUnitBuilder>
-        implements EntityMetadataConfigurationUnitBuilder {
+public class DefaultEntityMetadataConfigurationUnitBuilder extends AbstractFieldSetConfigurationBuilder<EntityMetadataConfigurationUnit, EntityMetadataConfigurationUnitBuilder> implements EntityMetadataConfigurationUnitBuilder {
 
     private final DefaultEntityMetadataConfigurationUnit configurationUnit;
 
@@ -40,6 +40,12 @@ public class DefaultEntityMetadataConfigurationUnitBuilder extends AbstractField
     @Override
     public EntityMetadataConfigurationUnitBuilder pluralName(final String pluralName) {
         configurationUnit.setPluralName(pluralName);
+        return this;
+    }
+
+    @Override
+    public EntityMetadataConfigurationUnitBuilder repositoryEventListener(Class<? extends AbstractRepositoryEventListener> listenerClass) {
+        configurationUnit.setRepositoryEventListener(listenerClass);
         return this;
     }
 

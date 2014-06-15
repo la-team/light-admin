@@ -4,6 +4,7 @@ import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.api.config.utils.EnumElement;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
+import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
 public interface EntityMetadataConfigurationUnitBuilder extends ConfigurationUnitBuilder<EntityMetadataConfigurationUnit> {
 
@@ -19,4 +20,5 @@ public interface EntityMetadataConfigurationUnitBuilder extends ConfigurationUni
 
     EntityMetadataConfigurationUnitBuilder enumeration(EnumElement... elements);
 
+    EntityMetadataConfigurationUnitBuilder repositoryEventListener(Class<? extends AbstractRepositoryEventListener> listenerClass);
 }

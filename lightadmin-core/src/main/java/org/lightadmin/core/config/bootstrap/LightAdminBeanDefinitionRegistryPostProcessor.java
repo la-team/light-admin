@@ -12,11 +12,13 @@ import org.lightadmin.core.util.DynamicRepositoryBeanNameGenerator;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.jpa.repository.support.JpaRepositoryFactoryBean;
+import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 import org.springframework.orm.jpa.EntityManagerFactoryUtils;
 import org.springframework.orm.jpa.SharedEntityManagerCreator;
 import org.springframework.web.context.WebApplicationContext;
@@ -67,7 +69,7 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
 
         Set<Class> administrationConfigs = scanPackageForAdministrationClasses();
 
-        Set<ConfigurationUnits> configurationUnitsCollection = configurationUnits(rootContext, administrationConfigs);
+        Set<ConfigurationUnits> configurationUnits = configurationUnits(rootContext, administrationConfigs);
 
         registry.registerBeanDefinition(JPA_MAPPPING_CONTEXT_BEAN, mappingContext(entityManager));
 
@@ -78,8 +80,19 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
             registry.registerBeanDefinition(beanName(repoInterface), repositoryFactory(repoInterface, entityManager));
         }
 
-        registry.registerBeanDefinition(beanName(GlobalAdministrationConfiguration.class), globalAdministrationConfigurationFactoryBeanDefinition(configurationUnitsCollection));
+        registerRepositoryEventListeners(configurationUnits, registry);
+
+        registry.registerBeanDefinition(beanName(GlobalAdministrationConfiguration.class), globalAdministrationConfigurationFactoryBeanDefinition(configurationUnits));
         registry.registerBeanDefinition(beanName(DomainTypeAdministrationConfigurationFactory.class), domainTypeAdministrationConfigurationFactoryDefinition(entityManager));
+    }
+
+    private void registerRepositoryEventListeners(Set<ConfigurationUnits> configurationUnits, BeanDefinitionRegistry registry) {
+        for (ConfigurationUnits configurationUnit : configurationUnits) {
+            Class<? extends AbstractRepositoryEventListener> repositoryEventListenerClass = configurationUnit.getEntityConfiguration().getRepositoryEventListener();
+            if (repositoryEventListenerClass != null) {
+                registry.registerBeanDefinition(beanName(repositoryEventListenerClass), repositoryEventListener(repositoryEventListenerClass));
+            }
+        }
     }
 
     private Set<ConfigurationUnits> configurationUnits(WebApplicationContext rootContext, Set<Class> administrationConfigs) {
@@ -97,6 +110,12 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
             managedEntities.add(entity.getJavaType());
         }
         return managedEntities;
+    }
+
+    private BeanDefinition repositoryEventListener(Class<? extends AbstractRepositoryEventListener> repositoryEventListener) {
+        BeanDefinitionBuilder builder = rootBeanDefinition(repositoryEventListener);
+        builder.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_AUTODETECT);
+        return builder.getBeanDefinition();
     }
 
     private BeanDefinition configurationUnitsValidator(ResourceLoader resourceLoader) {
