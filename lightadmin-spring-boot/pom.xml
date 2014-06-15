@@ -8,15 +8,19 @@
         <version>1.1.1.RELEASE</version>
     </parent>
 
+    <groupId>org.lightadmin</groupId>
     <artifactId>lightadmin-spring-boot</artifactId>
 
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>LightAdmin Boot</name>
     <version>1.0.0.M3-SNAPSHOT</version>
     <description>Spring Boot Integration Sample</description>
 
     <properties>
-        <main.basedir>${basedir}/../..</main.basedir>
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+
+        <java.version>1.7</java.version>
     </properties>
 
     <dependencies>
@@ -39,6 +43,10 @@
             <artifactId>hsqldb</artifactId>
             <scope>runtime</scope>
         </dependency>
+        <!--<dependency>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-jetty</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>

@@ -19,7 +19,6 @@
 
     <modules>
         <module>lightadmin-demo</module>
-        <module>lightadmin-spring-boot</module>
         <module>lightadmin-tests</module>
     </modules>
 
