@@ -3,10 +3,8 @@ package org.lightadmin.core.config.context;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.StandardLightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.rest.DomainTypeToResourceConverter;
-import org.lightadmin.core.rest.RestConfigurationInitInterceptor;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
-import org.lightadmin.core.view.SeparateContainerTilesView;
+import org.lightadmin.core.view.LightAdminTilesView;
 import org.lightadmin.core.web.ApplicationController;
 import org.lightadmin.core.web.util.FileResourceLoader;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,11 +13,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.rest.webmvc.ServerHttpRequestMethodArgumentResolver;
-import org.springframework.format.support.DefaultFormattingConversionService;
-import org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.context.support.ServletContextResourceLoader;
@@ -27,35 +21,29 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ViewResolver;
-import org.springframework.web.servlet.config.annotation.*;
+import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
-import org.springframework.web.servlet.view.UrlBasedViewResolver;
 import org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory;
 import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles2.TilesViewResolver;
 
-import javax.persistence.EntityManagerFactory;
 import javax.servlet.ServletContext;
 import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @Import({
-        LightAdminDataConfiguration.class, LightAdminDomainConfiguration.class, LightAdminRemoteConfiguration.class, LightAdminRepositoryRestConfiguration.class, LightAdminViewConfiguration.class
+        LightAdminDataConfiguration.class,
+        LightAdminDomainConfiguration.class,
+        LightAdminRemoteConfiguration.class,
+        LightAdminRepositoryRestMvcConfiguration.class,
+        LightAdminViewConfiguration.class
 })
 @EnableWebMvc
 public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
-
-    @Autowired
-    private EntityManagerFactory entityManagerFactory;
-
-    @Autowired
-    private RestConfigurationInitInterceptor restConfigurationInitInterceptor;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addWebRequestInterceptor(openEntityManagerInViewInterceptor());
-        registry.addWebRequestInterceptor(restConfigurationInitInterceptor);
-    }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -83,13 +71,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     }
 
     @Bean
-    public OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor() {
-        OpenEntityManagerInViewInterceptor openEntityManagerInViewInterceptor = new OpenEntityManagerInViewInterceptor();
-        openEntityManagerInViewInterceptor.setEntityManagerFactory(entityManagerFactory);
-        return openEntityManagerInViewInterceptor;
-    }
-
-    @Bean
     public CommonsMultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
     }
@@ -97,16 +78,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     @Override
     public void configureDefaultServletHandling(final DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
-    }
-
-    @Bean
-    @Autowired
-    public ConversionService conversionService(List<Converter> converters) {
-        DefaultFormattingConversionService bean = new DefaultFormattingConversionService();
-        for (Converter converter : converters) {
-            bean.addConverter(converter);
-        }
-        return bean;
     }
 
     @Override
@@ -148,14 +119,17 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     public ViewResolver viewResolver() {
-        final UrlBasedViewResolver viewResolver = new UrlBasedViewResolver();
-        viewResolver.setViewClass(SeparateContainerTilesView.class);
-        return viewResolver;
+        return new TilesViewResolver() {
+            @Override
+            protected Class<?> requiredViewClass() {
+                return LightAdminTilesView.class;
+            }
+        };
     }
 
     @Bean
     public TilesConfigurer tilesConfigurer() {
-        final String[] definitions = {"classpath*:META-INF/tiles/**/*.xml"};
+        final String[] definitions = {"classpath*:META-INF/tiles/definitions.xml"};
 
         final TilesConfigurer configurer = new TilesConfigurer();
         configurer.setTilesInitializer(lightAdminSpringTilesInitializer(definitions));
@@ -167,7 +141,6 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     private LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer(String[] definitions) {
         final LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer = new LightAdminSpringTilesInitializer();
-        lightAdminSpringTilesInitializer.setCheckRefresh(true);
         lightAdminSpringTilesInitializer.setDefinitions(definitions);
         lightAdminSpringTilesInitializer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
         return lightAdminSpringTilesInitializer;
