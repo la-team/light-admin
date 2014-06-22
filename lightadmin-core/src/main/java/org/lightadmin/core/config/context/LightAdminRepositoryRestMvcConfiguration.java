@@ -16,7 +16,9 @@ import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
+import org.springframework.data.rest.core.support.DomainObjectMerger;
 import org.springframework.data.rest.webmvc.ConfigurationHandlerMethodArgumentResolver;
+import org.springframework.data.rest.webmvc.DynamicDomainObjectMerger;
 import org.springframework.data.rest.webmvc.DynamicPersistentEntityResourceProcessor;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
@@ -56,6 +58,11 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
     @Bean
     public Repositories repositories() {
         return configureRepositories(super.repositories());
+    }
+
+    @Bean
+    public DomainObjectMerger domainObjectMerger() throws Exception {
+        return new DynamicDomainObjectMerger(repositories(), defaultConversionService());
     }
 
     @Bean

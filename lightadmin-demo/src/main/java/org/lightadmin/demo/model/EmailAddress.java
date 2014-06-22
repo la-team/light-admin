@@ -2,6 +2,7 @@ package org.lightadmin.demo.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import org.hibernate.validator.constraints.Email;
 import org.springframework.util.Assert;
 
 import javax.persistence.Column;
@@ -12,22 +13,15 @@ import java.util.regex.Pattern;
 @JsonSerialize(using = ToStringSerializer.class)
 public class EmailAddress {
 
-    private static final String EMAIL_REGEX = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[A-Za-z0-9]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
-    private static final Pattern PATTERN = Pattern.compile(EMAIL_REGEX);
-
+    @Email
     @Column(name = "email")
     private String value;
-
-    public EmailAddress(String emailAddress) {
-        Assert.isTrue(isValid(emailAddress), "Invalid email address!");
-        this.value = emailAddress;
-    }
 
     protected EmailAddress() {
     }
 
-    public static boolean isValid(String source) {
-        return PATTERN.matcher(source).matches();
+    public EmailAddress(String emailAddress) {
+        this.value = emailAddress;
     }
 
     @Override
