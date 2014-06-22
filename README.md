@@ -64,10 +64,28 @@ Declare repository in your POM
       <updatePolicy>always</updatePolicy>
     </releases>
   </repository>
+  <repository>
+    <id>lightadmin-nexus-snapshots</id>
+    <url>http://lightadmin.org/nexus/content/repositories/snapshots</url>
+    <snapshots>
+      <enabled>true</enabled>
+      <updatePolicy>always</updatePolicy>
+    </snapshots>
+  </repository>  
 </repositories>
 ```
 
-Define maven dependency
+Define maven dependency for using with Spring 4.0.X and the newest Spring Data
+
+```xml
+<dependency>
+  <groupId>org.lightadmin</groupId>
+  <artifactId>lightadmin</artifactId>
+  <version>1.0.0.M3-SNAPSHOT</version>
+</dependency> 
+```
+
+If you want to use LightAdmin with older versions
 
 ```xml
 <dependency>
