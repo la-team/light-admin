@@ -5,7 +5,8 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.model.BeanWrapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,19 +19,19 @@ public class FileExistsRestOperation extends AbstractFileRestOperation {
         super(configuration, lightAdminConfiguration, entity);
     }
 
-    public boolean perform(AttributeMetadata attrMeta) throws IOException {
-        if (attrMeta.type().equals(byte[].class)) {
-            return ArrayUtils.isNotEmpty((byte[]) attrMeta.get(entity));
+    public boolean perform(PersistentProperty persistentProperty) throws IOException {
+        if (persistentProperty.getType().equals(byte[].class)) {
+            return ArrayUtils.isNotEmpty((byte[]) BeanWrapper.create(entity, null).getProperty(persistentProperty));
         }
 
-        if (attrMeta.hasAnnotation(FileReference.class)) {
-            FileReference fileReference = attrMeta.annotation(FileReference.class);
+        if (persistentProperty.isAnnotationPresent(FileReference.class)) {
+            FileReference fileReference = (FileReference) persistentProperty.findAnnotation(FileReference.class);
 
             if (getFile(fileReference.baseDirectory()).exists()) {
-                File file = referencedFile(attrMeta);
+                File file = referencedFile(persistentProperty);
                 return file.exists() && FileUtils.sizeOf(file) > 0;
             } else {
-                File file = fileStorageFile(attrMeta);
+                File file = fileStorageFile(persistentProperty);
                 return file.exists() && FileUtils.sizeOf(file) > 0;
             }
         }

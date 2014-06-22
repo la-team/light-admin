@@ -1,9 +1,11 @@
 package org.lightadmin.core.config;
 
 import org.apache.commons.lang3.BooleanUtils;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletContext;
 import java.io.File;
+import java.net.URI;
 
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.StringUtils.defaultIfBlank;
@@ -37,6 +39,11 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
         } else {
             this.securityLogoutUrl = servletContext.getContextPath() + defaultIfBlank(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY_LOGOUT_URL), "#");
         }
+    }
+
+    @Override
+    public URI getApplicationRestBaseUrl() {
+        return UriComponentsBuilder.fromUriString(LIGHT_ADMIN_REST_URL_DEFAULT).build().toUri();
     }
 
     @Override

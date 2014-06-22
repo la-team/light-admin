@@ -1,20 +1,20 @@
 package org.lightadmin.core.config.domain.configuration.support;
 
 import org.lightadmin.api.config.utils.EntityNameExtractor;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.mapping.model.BeanWrapper;
 
 import java.io.Serializable;
 
 public abstract class EntityNameExtractorFactory {
 
-    public static EntityNameExtractor<?> forPersistentEntity(DomainTypeEntityMetadata entityMetadata) {
-        return new PersistentEntityNameExtractor(entityMetadata);
+    public static EntityNameExtractor<?> forPersistentEntity(PersistentEntity persistentEntity) {
+        return new PersistentEntityNameExtractor(persistentEntity);
     }
 
-    public static EntityNameExtractor<?> forPersistentEntity(String entityName, DomainTypeEntityMetadata entityMetadata) {
-        return new PersistentEntityNameExtractor(entityName, entityMetadata);
+    public static EntityNameExtractor<?> forPersistentEntity(String entityName, PersistentEntity persistentEntity) {
+        return new PersistentEntityNameExtractor(entityName, persistentEntity);
     }
 
     public static EntityNameExtractor<?> forNamedPersistentEntity(String name) {
@@ -23,23 +23,24 @@ public abstract class EntityNameExtractorFactory {
 
     private static class PersistentEntityNameExtractor implements EntityNameExtractor<Object> {
 
-        private final DomainTypeEntityMetadata entityMetadata;
-
+        private final PersistentEntity persistentEntity;
         private final String entityName;
 
-        public PersistentEntityNameExtractor(final DomainTypeEntityMetadata entityMetadata) {
-            this.entityMetadata = entityMetadata;
-            this.entityName = entityMetadata.getEntityName();
+        public PersistentEntityNameExtractor(PersistentEntity persistentEntity) {
+            this(persistentEntity.getType().getSimpleName(), persistentEntity);
         }
 
-        public PersistentEntityNameExtractor(String entityName, final DomainTypeEntityMetadata entityMetadata) {
-            this.entityMetadata = entityMetadata;
+        public PersistentEntityNameExtractor(String entityName, PersistentEntity persistentEntity) {
+            this.persistentEntity = persistentEntity;
             this.entityName = entityName;
         }
 
         @Override
         public String apply(final Object entity) {
-            return String.format("%s #%s", entityName, entityMetadata.getIdAttribute().getValue(entity));
+            BeanWrapper wrapper = BeanWrapper.create(entity, null);
+            Object entityId = wrapper.getProperty(persistentEntity.getIdProperty());
+
+            return String.format("%s #%s", entityName, entityId);
         }
     }
 
@@ -53,8 +54,7 @@ public abstract class EntityNameExtractorFactory {
 
         @Override
         public String apply(final Object input) {
-            BeanWrapper beanWrapper = PropertyAccessorFactory.forBeanPropertyAccess(input);
-            return beanWrapper.getPropertyValue(nameField).toString();
+            return PropertyAccessorFactory.forBeanPropertyAccess(input).getPropertyValue(nameField).toString();
         }
     }
 }

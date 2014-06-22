@@ -9,7 +9,7 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-<tiles:useAttribute name="domainTypeEntityMetadata"/>
+<tiles:useAttribute name="persistentEntity"/>
 
 <tiles:useAttribute name="fields"/>
 
@@ -19,7 +19,8 @@
 <tiles:useAttribute name="entityPluralName"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
-<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
+<light:url var="domainObjectUrl"
+           value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
 <tiles:useAttribute name="dialogMode" ignore="true"/>
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
@@ -34,7 +35,8 @@
     </div>
 
     <light-jsp:breadcrumb>
-        <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
+        <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}"
+                                   link="${domainBaseUrl}"/>
         <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
     </light-jsp:breadcrumb>
 </c:if>
@@ -51,12 +53,15 @@
                 <div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
                     <label>
                         <strong>
-                            <c:out value="${light:capitalize(fieldEntry.name)}"/>:<c:if test="${fieldEntry.required}"><span class="req">*</span></c:if>
+                            <c:out value="${light:capitalize(fieldEntry.name)}"/>:<c:if
+                                test="${fieldEntry.required}"><span class="req">*</span></c:if>
                         </strong>
                     </label>
 
                     <div class="formRight">
-                        <light-jsp:edit-control domainType="${domainTypeAdministrationConfiguration.domainType}" fieldMetadata="${fieldEntry}" cssClass="input-xlarge" errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
+                        <light-jsp:edit-control domainType="${domainTypeAdministrationConfiguration.domainType}"
+                                                fieldMetadata="${fieldEntry}" cssClass="input-xlarge"
+                                                errorCssClass="error" disabled="${fieldEntry.primaryKey}"/>
                     </div>
                     <div class="fix"></div>
                 </div>
@@ -75,7 +80,7 @@
 
         formViewVisualDecoration(domain_form);
 
-        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json domainTypeMetadata="${domainTypeEntityMetadata}"  includeFields="${fields}"/>);
+        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json persistentEntity="${persistentEntity}"  includeFields="${fields}"/>);
         $(domain_form).data('lightadmin.domain-rest-base-url', "${domainObjectUrl}");
 
         loadDomainObjectForFormView($(domain_form));
@@ -91,10 +96,7 @@
 
         $(domain_form).submit(function () {
             return updateDomainObject(this, function (data) {
-                var link = $.grep(data.links, function (link) {
-                    return link.rel == 'selfDomainLink';
-                })[0];
-                window.location = link.href + '?updateSuccess=true';
+                window.location = data['_links']['selfDomainLink'].href + '?updateSuccess=true';
             });
         });
         </c:if>

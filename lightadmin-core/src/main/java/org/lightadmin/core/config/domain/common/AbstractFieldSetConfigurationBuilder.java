@@ -1,11 +1,5 @@
 package org.lightadmin.core.config.domain.common;
 
-import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.persistentField;
-import static org.springframework.util.ObjectUtils.nullSafeEquals;
-import static org.springframework.util.StringUtils.capitalize;
-
-import javax.servlet.jsp.tagext.SimpleTag;
-
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.collections15.functors.PrototypeFactory;
 import org.lightadmin.api.config.utils.Editors;
@@ -17,6 +11,12 @@ import org.lightadmin.core.config.domain.renderer.EnumRenderer;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnitBuilder;
+
+import javax.servlet.jsp.tagext.SimpleTag;
+
+import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.persistentField;
+import static org.springframework.util.ObjectUtils.nullSafeEquals;
+import static org.springframework.util.StringUtils.capitalize;
 
 public abstract class AbstractFieldSetConfigurationBuilder<T extends ConfigurationUnit, B extends ConfigurationUnitBuilder<T>>
         extends DomainTypeConfigurationUnitBuilder<T> {
@@ -93,7 +93,7 @@ public abstract class AbstractFieldSetConfigurationBuilder<T extends Configurati
     protected void assertValidEnumElements(final EnumElement[] elements) {
         for (int i = 0, n = elements.length; i < n; i++) {
             Object baseVal = elements[i].getValue();
-            for (int j = i+1; j < n; j++) {
+            for (int j = i + 1; j < n; j++) {
                 Object cmpVal = elements[j].getValue();
                 if (nullSafeEquals(baseVal, cmpVal)) {
                     throw new RuntimeException("Non-unique value of EnumElement: " + baseVal);

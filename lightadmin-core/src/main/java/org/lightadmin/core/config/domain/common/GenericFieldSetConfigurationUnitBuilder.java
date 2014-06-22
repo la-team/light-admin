@@ -1,14 +1,13 @@
 package org.lightadmin.core.config.domain.common;
 
-import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.customField;
-import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.transientField;
-
-
 import org.lightadmin.api.config.builder.FieldSetConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.api.config.utils.FieldValueRenderer;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.DefaultFieldSetConfigurationUnit;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
+
+import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.customField;
+import static org.lightadmin.core.config.domain.field.FieldMetadataFactory.transientField;
 
 public class GenericFieldSetConfigurationUnitBuilder extends AbstractFieldSetConfigurationBuilder<FieldSetConfigurationUnit, FieldSetConfigurationUnitBuilder>
         implements FieldSetConfigurationUnitBuilder {

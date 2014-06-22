@@ -8,7 +8,7 @@ import org.junit.experimental.categories.Category;
 import org.junit.runner.RunWith;
 import org.lightadmin.api.config.annotation.Administration;
 import org.lightadmin.api.config.management.rmi.GlobalConfigurationManagementService;
-import org.lightadmin.core.config.context.LightAdminRepositoryRestConfiguration;
+import org.lightadmin.core.config.context.LightAdminRepositoryRestMvcConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitsConverter;
 import org.lightadmin.core.test.IntegrationTest;
 import org.lightadmin.core.test.LightAdminConfigurationContextLoader;
@@ -26,7 +26,7 @@ import static org.junit.Assert.assertTrue;
 @Category(IntegrationTest.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(loader = LightAdminConfigurationContextLoader.class,
-        classes = {LightAdminTestConfiguration.class, LightAdminRepositoryRestConfiguration.class})
+        classes = {LightAdminTestConfiguration.class, LightAdminRepositoryRestMvcConfiguration.class})
 public class LightAdminConfigurationMonitoringServiceMBeanTest {
 
     @Autowired

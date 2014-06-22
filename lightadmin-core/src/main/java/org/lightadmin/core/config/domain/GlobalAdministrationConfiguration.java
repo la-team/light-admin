@@ -1,43 +1,26 @@
 package org.lightadmin.core.config.domain;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-
 import java.util.Collection;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Set;
 
+import static com.google.common.collect.Maps.newConcurrentMap;
+import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.apache.commons.lang3.StringUtils.equalsIgnoreCase;
 
 @SuppressWarnings("unchecked")
 public class GlobalAdministrationConfiguration {
 
-    private final DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory;
-    private final ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeAdministrationConfiguration>();
-    private final ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = new ConcurrentHashMap<Class<?>, DomainTypeBasicConfiguration>();
-
-    public GlobalAdministrationConfiguration(DomainTypeAdministrationConfigurationFactory domainTypeConfigurationFactory) {
-        this.domainTypeConfigurationFactory = domainTypeConfigurationFactory;
-    }
+    private final Map<Class<?>, DomainTypeAdministrationConfiguration> managedDomainTypeConfigurations = newConcurrentMap();
+    private final Map<Class<?>, DomainTypeBasicConfiguration> domainTypeConfigurations = newConcurrentMap();
 
     public void registerDomainTypeConfiguration(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
         managedDomainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
-        registerAssociationDomainTypeConfigurations(domainTypeAdministrationConfiguration);
+        domainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
     }
 
-    private void registerAssociationDomainTypeConfigurations(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
-
-        domainTypeConfigurations.put(domainTypeAdministrationConfiguration.getDomainType(), domainTypeAdministrationConfiguration);
-
-        DomainTypeEntityMetadata<DomainTypeAttributeMetadata> entityMetadata = domainTypeAdministrationConfiguration.getDomainTypeEntityMetadata();
-        for (DomainTypeAttributeMetadata attrMetadata : entityMetadata.getAttributes()) {
-            if (!attrMetadata.isAssociation()) {
-                continue;
-            }
-            Class<?> associationDomainType = attrMetadata.getAssociationDomainType();
-            DomainTypeBasicConfiguration associationTypeConfiguration = domainTypeConfigurationFactory.createNonManagedDomainTypeConfiguration(associationDomainType);
-            domainTypeConfigurations.putIfAbsent(associationDomainType, associationTypeConfiguration);
-        }
+    public void registerNonDomainTypeConfiguration(DomainTypeBasicConfiguration domainTypeBasicConfiguration) {
+        domainTypeConfigurations.put(domainTypeBasicConfiguration.getDomainType(), domainTypeBasicConfiguration);
     }
 
     public void removeDomainTypeConfiguration(final Class<?> domainType) {
@@ -48,6 +31,26 @@ public class GlobalAdministrationConfiguration {
         managedDomainTypeConfigurations.clear();
 
         domainTypeConfigurations.clear();
+    }
+
+    public Set<Class<?>> getManagedDomainTypes() {
+        return managedDomainTypeConfigurations.keySet();
+    }
+
+    public Set<Class<?>> getNonManagedDomainTypes() {
+        return domainTypeConfigurations.keySet();
+    }
+
+    public Set<Class<?>> getAllDomainTypes() {
+        final Set<Class<?>> domainTypes = newLinkedHashSet();
+        domainTypes.addAll(getNonManagedDomainTypes());
+        domainTypes.addAll(getManagedDomainTypes());
+        return domainTypes;
+    }
+
+    public Class<?>[] getAllDomainTypesAsArray() {
+        Set<Class<?>> allDomainTypes = getAllDomainTypes();
+        return allDomainTypes.toArray(new Class<?>[allDomainTypes.size()]);
     }
 
     public Map<Class<?>, DomainTypeAdministrationConfiguration> getManagedDomainTypeConfigurations() {
@@ -72,7 +75,7 @@ public class GlobalAdministrationConfiguration {
 
     public DomainTypeAdministrationConfiguration forEntityName(String entityName) {
         for (DomainTypeAdministrationConfiguration configuration : managedDomainTypeConfigurations.values()) {
-            if (equalsIgnoreCase(entityName, configuration.getDomainTypeName())) {
+            if (equalsIgnoreCase(entityName, configuration.getDomainTypeName()) || equalsIgnoreCase(entityName, configuration.getPluralDomainTypeName())) {
                 return configuration;
             }
         }

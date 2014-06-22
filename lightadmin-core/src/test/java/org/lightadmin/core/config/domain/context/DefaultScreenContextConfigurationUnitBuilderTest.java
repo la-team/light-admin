@@ -2,7 +2,7 @@ package org.lightadmin.core.config.domain.context;
 
 import org.junit.Test;
 import org.lightadmin.api.config.unit.ScreenContextConfigurationUnit;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 
 import static org.junit.Assert.assertEquals;
 

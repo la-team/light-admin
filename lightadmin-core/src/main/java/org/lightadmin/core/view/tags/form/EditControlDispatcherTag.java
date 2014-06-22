@@ -1,7 +1,8 @@
 package org.lightadmin.core.view.tags.form;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.lightadmin.core.view.editor.JspFragmentFieldControl;
+import org.springframework.data.mapping.PersistentProperty;
 
 import javax.servlet.jsp.JspContext;
 import javax.servlet.jsp.JspException;
@@ -13,7 +14,7 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 
     private static final String DISABLED = "disabled";
 
-    private DomainTypeAttributeMetadata attributeMetadata;
+    private PersistentProperty persistentProperty;
 
     private JspFragmentFieldControl customControl;
     private JspFragment simpleEditControl;
@@ -31,7 +32,7 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
             doWithStandardControl();
         } else {
             customControl.setParent(this);
-            customControl.setAttributeMetadata(attributeMetadata);
+            customControl.setPersistentProperty(persistentProperty);
             customControl.setJspContext(getJspContext());
             customControl.doTag();
         }
@@ -40,12 +41,15 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
     private void doWithStandardControl() throws JspException, IOException {
         JspContext context = getJspContext();
         JspFragment worker;
-        switch (attributeMetadata.getAttributeType()) {
+        switch (PersistentPropertyType.forPersistentProperty(persistentProperty)) {
             case ASSOC_MULTI:
                 worker = n2manyEditControl;
                 break;
             case ASSOC:
                 worker = n2oneEditControl;
+                break;
+            case EMBEDDED:
+                worker = simpleEditControl;
                 break;
             case MAP:
                 worker = mapEditControl;
@@ -79,8 +83,8 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
         }
     }
 
-    public void setAttributeMetadata(DomainTypeAttributeMetadata attributeMetadata) {
-        this.attributeMetadata = attributeMetadata;
+    public void setPersistentProperty(PersistentProperty persistentProperty) {
+        this.persistentProperty = persistentProperty;
     }
 
     public void setSimpleEditControl(JspFragment control) {

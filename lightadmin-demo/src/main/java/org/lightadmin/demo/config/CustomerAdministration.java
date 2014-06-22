@@ -7,6 +7,7 @@ import org.lightadmin.api.config.utils.DomainTypePredicates;
 import org.lightadmin.api.config.utils.DomainTypeSpecification;
 import org.lightadmin.api.config.utils.FieldValueRenderer;
 import org.lightadmin.api.config.utils.ScopeMetadataUtils;
+import org.lightadmin.demo.config.listener.SimpleRepositoryEventListener;
 import org.lightadmin.demo.model.Customer;
 import org.lightadmin.demo.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,9 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
         return configurationBuilder
                 .nameField("firstname")
                 .singularName("Customer")
-                .pluralName("Customers").build();
+                .pluralName("Customers")
+                .repositoryEventListener(SimpleRepositoryEventListener.class)
+                .build();
     }
 
     public ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {

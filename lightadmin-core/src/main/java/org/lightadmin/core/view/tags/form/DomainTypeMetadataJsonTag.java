@@ -1,81 +1,108 @@
 package org.lightadmin.core.view.tags.form;
 
-import org.codehaus.jackson.JsonFactory;
-import org.codehaus.jackson.JsonGenerator;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.rest.DomainTypeResourceSupport;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.lightadmin.core.view.tags.AbstractAutowiredTag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.*;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
+import org.springframework.hateoas.Link;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-import static org.codehaus.jackson.JsonGenerator.Feature.AUTO_CLOSE_TARGET;
-import static org.codehaus.jackson.JsonGenerator.Feature.QUOTE_FIELD_NAMES;
-
 public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
 
     private static final JsonFactory JSON_FACTORY = new JsonFactory();
 
     static {
-        JSON_FACTORY.configure(AUTO_CLOSE_TARGET, false);
-        JSON_FACTORY.configure(QUOTE_FIELD_NAMES, false);
+        JSON_FACTORY.configure(JsonGenerator.Feature.AUTO_CLOSE_TARGET, false);
+        JSON_FACTORY.configure(JsonGenerator.Feature.QUOTE_FIELD_NAMES, false);
     }
-
-    @Autowired
-    private DomainTypeResourceSupport support;
 
     @Autowired
     private GlobalAdministrationConfiguration globalConfiguration;
 
-    private DomainTypeEntityMetadata<DomainTypeAttributeMetadata> domainTypeMetadata;
+    @Autowired
+    private RepositoryRestConfiguration repositoryRestConfiguration;
+
+    private PersistentEntity persistentEntity;
 
     private Set<String> includedAttributes;
 
     @Override
     public void doTag() throws IOException {
-        JsonGenerator json = JSON_FACTORY.createJsonGenerator(getJspContext().getOut());
+        final JsonGenerator json = JSON_FACTORY.createJsonGenerator(getJspContext().getOut());
         json.writeStartObject();
         try {
-            for (DomainTypeAttributeMetadata attribMetadata : domainTypeMetadata.getAttributes()) {
-                if (includedAttributes != null && !includedAttributes.contains(attribMetadata.getName())) {
-                    continue;
-                }
-                try {
-                    json.writeObjectFieldStart(attribMetadata.getName());
-                    json.writeStringField("type", attribMetadata.getAttributeType().name());
-                    if (attribMetadata.isAssociation()) {
-                        writeAssociationMetadata(attribMetadata, json);
+            persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
+                @Override
+                public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
+                    PersistentProperty property = association.getInverse();
+                    if (includedAttributes != null && !includedAttributes.contains(property.getName())) {
+                        return;
                     }
-                } finally {
-                    json.writeEndObject();
+                    try {
+                        json.writeObjectFieldStart(property.getName());
+                        json.writeStringField("type", PersistentPropertyType.forPersistentProperty(property).name());
+                        writeAssociationMetadata(property, json);
+                    } catch (Exception ex) {
+                    } finally {
+                        try {
+                            json.writeEndObject();
+                        } catch (IOException e) {
+                        }
+                    }
                 }
-            }
+            });
+
+            persistentEntity.doWithProperties(new SimplePropertyHandler() {
+                @Override
+                public void doWithPersistentProperty(PersistentProperty<?> property) {
+                    if (includedAttributes != null && !includedAttributes.contains(property.getName())) {
+                        return;
+                    }
+                    try {
+                        json.writeObjectFieldStart(property.getName());
+                        json.writeStringField("type", PersistentPropertyType.forPersistentProperty(property).name());
+                    } catch (Exception ex) {
+                    } finally {
+                        try {
+                            json.writeEndObject();
+                        } catch (IOException e) {
+                        }
+                    }
+                }
+            });
         } finally {
             json.writeEndObject();
             json.close();
         }
     }
 
-    private void writeAssociationMetadata(DomainTypeAttributeMetadata attribMetadata, JsonGenerator json) throws IOException {
-        Class<?> attribDomainType = attribMetadata.isCollectionLike() ? attribMetadata.getElementType() : attribMetadata.getType();
+    private void writeAssociationMetadata(PersistentProperty persistentProperty, JsonGenerator json) throws IOException {
+        Class<?> attribDomainType = persistentProperty.getActualType();
+        DomainTypeBasicConfiguration entityDomainTypeConfig = globalConfiguration.forDomainType(persistentProperty.getOwner().getType());
         DomainTypeBasicConfiguration attribDomainTypeConfig = globalConfiguration.forDomainType(attribDomainType);
         if (attribDomainTypeConfig != null) {
-            DomainTypeAttributeMetadata idAttribMetadata = attribDomainTypeConfig.getDomainTypeEntityMetadata().getIdAttribute();
-            json.writeStringField("idAttribute", idAttribMetadata.getName());
-            String idPlaceholder = "{" + idAttribMetadata.getName() + "}";
-            json.writeStringField("hrefTemplate", support.selfLink(attribDomainTypeConfig, idPlaceholder).getHref());
+            PersistentProperty idProperty = persistentEntity.getIdProperty();
+            json.writeStringField("idAttribute", idProperty.getName());
+            json.writeStringField("rel", entityDomainTypeConfig.getPluralDomainTypeName() + "." + persistentProperty.getName());
+            String idPlaceholder = "{" + idProperty.getName() + "}";
+            json.writeStringField("hrefTemplate", selfLink(attribDomainTypeConfig, idPlaceholder).getHref());
         }
     }
 
-    public void setDomainTypeMetadata(DomainTypeEntityMetadata<DomainTypeAttributeMetadata> domainTypeMetadata) {
-        this.domainTypeMetadata = domainTypeMetadata;
+    public void setPersistentEntity(PersistentEntity persistentEntity) {
+        this.persistentEntity = persistentEntity;
     }
 
     public void setIncludeFields(Collection<FieldMetadata> fields) {
@@ -85,4 +112,12 @@ public class DomainTypeMetadataJsonTag extends AbstractAutowiredTag {
         }
     }
 
+    public Link selfLink(DomainTypeBasicConfiguration domainTypeConfig, Object id) {
+        UriComponentsBuilder selfUriBuilder = ServletUriComponentsBuilder.fromCurrentServletMapping()
+                .pathSegment("rest")
+                .pathSegment(domainTypeConfig.getPluralDomainTypeName())
+                .pathSegment(id.toString());
+
+        return new Link(selfUriBuilder.build().toString(), "self");
+    }
 }

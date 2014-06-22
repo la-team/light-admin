@@ -1,88 +1,119 @@
 package org.lightadmin.core.config.domain;
 
 import org.lightadmin.api.config.unit.*;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationSource;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
+import org.lightadmin.core.config.domain.field.FieldMetadata;
+import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.springframework.data.mapping.PersistentEntity;
+import org.springframework.data.repository.support.Repositories;
+import org.springframework.hateoas.RelProvider;
+import org.springframework.hateoas.core.EvoInflectorRelProvider;
 import org.springframework.util.Assert;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import static org.springframework.util.StringUtils.uncapitalize;
 
 public class DomainTypeAdministrationConfiguration implements DomainTypeBasicConfiguration {
 
+    private static RelProvider REL_PROVIDER = new EvoInflectorRelProvider();
+
     private final DynamicJpaRepository<?, ? extends Serializable> repository;
+    private final PersistentEntity persistentEntity;
+    private final ConfigurationUnits configurationUnits;
 
-    private final DomainConfigurationSource domainConfigurationSource;
+    public DomainTypeAdministrationConfiguration(Repositories repositories, ConfigurationUnits configurationUnits) {
+        Assert.notNull(repositories, "Repositories must not be null!");
+        Assert.notNull(configurationUnits, "ConfigurationUnits must not be null!");
 
-    public DomainTypeAdministrationConfiguration(DomainConfigurationSource domainConfigurationSource, final DynamicJpaRepository<?, ?> repository) {
-        Assert.notNull(domainConfigurationSource);
-        Assert.notNull(repository);
+        Class<?> domainType = configurationUnits.getDomainType();
 
-        this.domainConfigurationSource = domainConfigurationSource;
-        this.repository = repository;
+        this.repository = (DynamicJpaRepository<?, ? extends Serializable>) repositories.getRepositoryFor(domainType);
+        this.persistentEntity = repositories.getPersistentEntity(domainType);
+        this.configurationUnits = configurationUnits;
     }
 
     @Override
-    public DomainTypeEntityMetadata getDomainTypeEntityMetadata() {
-        return domainConfigurationSource.getDomainTypeEntityMetadata();
+    public PersistentEntity getPersistentEntity() {
+        return persistentEntity;
     }
 
     @Override
     public Class<?> getDomainType() {
-        return domainConfigurationSource.getDomainType();
+        return persistentEntity.getType();
     }
 
     @Override
-    public DynamicJpaRepository<?, ?> getRepository() {
+    public DynamicJpaRepository getRepository() {
         return repository;
     }
 
     @Override
     public String getDomainTypeName() {
-        return uncapitalize(getDomainTypeEntityMetadata().getEntityName());
+        return uncapitalize(getDomainType().getSimpleName());
+    }
+
+    @Override
+    public String getPluralDomainTypeName() {
+        return REL_PROVIDER.getCollectionResourceRelFor(getDomainType());
+    }
+
+    public Set<FieldMetadata> fieldsForUnit(DomainConfigurationUnitType configurationUnitType) {
+        switch (configurationUnitType) {
+            case LIST_VIEW:
+                return getListViewFragment().getFields();
+            case SHOW_VIEW:
+                return getShowViewFragment().getFields();
+            case FORM_VIEW:
+                return getFormViewFragment().getFields();
+            case QUICK_VIEW:
+                return getQuickViewFragment().getFields();
+            default:
+                return getShowViewFragment().getFields();
+        }
     }
 
     public FieldSetConfigurationUnit getQuickViewFragment() {
-        return domainConfigurationSource.getQuickViewFragment();
+        return configurationUnits.getQuickViewConfigurationUnit();
     }
 
     public FieldSetConfigurationUnit getListViewFragment() {
-        return domainConfigurationSource.getListViewFragment();
+        return configurationUnits.getListViewConfigurationUnit();
     }
 
     public FieldSetConfigurationUnit getShowViewFragment() {
-        return domainConfigurationSource.getShowViewFragment();
+        return configurationUnits.getShowViewConfigurationUnit();
     }
 
     public FieldSetConfigurationUnit getFormViewFragment() {
-        return domainConfigurationSource.getFormViewFragment();
+        return configurationUnits.getFormViewConfigurationUnit();
     }
 
     public ScreenContextConfigurationUnit getScreenContext() {
-        return domainConfigurationSource.getScreenContext();
+        return configurationUnits.getScreenContext();
     }
 
     public ScopesConfigurationUnit getScopes() {
-        return domainConfigurationSource.getScopes();
+        return configurationUnits.getScopes();
     }
 
     public SidebarsConfigurationUnit getSidebars() {
-        return domainConfigurationSource.getSidebars();
+        return configurationUnits.getSidebars();
     }
 
     public FiltersConfigurationUnit getFilters() {
-        return domainConfigurationSource.getFilters();
+        return configurationUnits.getFilters();
     }
 
     @Override
     public EntityMetadataConfigurationUnit getEntityConfiguration() {
-        return domainConfigurationSource.getEntityConfiguration();
+        return configurationUnits.getEntityConfiguration();
     }
 
     @Override
     public String getConfigurationName() {
-        return domainConfigurationSource.getConfigurationName();
+        return configurationUnits.getConfigurationClassName();
     }
 }

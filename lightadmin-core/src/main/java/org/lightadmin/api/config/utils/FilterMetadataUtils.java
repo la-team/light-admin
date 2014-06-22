@@ -5,7 +5,7 @@ import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadataFactory;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.util.Assert;
 
 public abstract class FilterMetadataUtils {
@@ -48,17 +48,18 @@ public abstract class FilterMetadataUtils {
         }
 
         @Override
+        public PersistentProperty getAttributeMetadata() {
+            return fieldMetadata.getPersistentProperty();
+        }
+
+        @Override
         public String getUuid() {
             return fieldMetadata.getUuid();
         }
 
         @Override
         public Class<?> getType() {
-            return fieldMetadata.getAttributeMetadata().getType();
-        }
-
-        public DomainTypeAttributeMetadata getAttributeMetadata() {
-            return this.fieldMetadata.getAttributeMetadata();
+            return fieldMetadata.getPersistentProperty().getType();
         }
 
         @Override
@@ -67,8 +68,8 @@ public abstract class FilterMetadataUtils {
         }
 
         @Override
-        public void setAttributeMetadata(final DomainTypeAttributeMetadata attributeMetadata) {
-            this.fieldMetadata.setAttributeMetadata(attributeMetadata);
+        public void setPersistentProperty(final PersistentProperty persistentProperty) {
+            this.fieldMetadata.setPersistentProperty(persistentProperty);
         }
 
         @Override

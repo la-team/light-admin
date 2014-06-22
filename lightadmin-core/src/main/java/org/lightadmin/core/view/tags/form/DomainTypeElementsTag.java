@@ -3,10 +3,11 @@ package org.lightadmin.core.view.tags.form;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.util.Pair;
 import org.lightadmin.core.view.tags.AbstractAutowiredTag;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.util.Assert;
 
 import javax.servlet.jsp.JspContext;
@@ -42,12 +43,12 @@ public class DomainTypeElementsTag extends AbstractAutowiredTag {
         List allElements = domainTypeConfiguration.getRepository().findAll();
         allElements = sortByNaturalOrder(allElements, domainTypeConfiguration);
 
-        DomainTypeAttributeMetadata idAttribute = domainTypeConfiguration.getDomainTypeEntityMetadata().getIdAttribute();
+        PersistentProperty idAttribute = domainTypeConfiguration.getPersistentEntity().getIdProperty();
         EntityNameExtractor<Object> nameExtractor = domainTypeConfiguration.getEntityConfiguration().getNameExtractor();
         JspContext jspContext = getJspContext();
         JspFragment tagBody = getJspBody();
         for (Object element : allElements) {
-            jspContext.setAttribute(idVar, idAttribute.getValue(element));
+            jspContext.setAttribute(idVar, BeanWrapper.create(element, null).getProperty(idAttribute));
             jspContext.setAttribute(stringRepresentationVar, exceptionAwareNameExtractor(nameExtractor, domainTypeConfiguration).apply(element));
             tagBody.invoke(null);
         }

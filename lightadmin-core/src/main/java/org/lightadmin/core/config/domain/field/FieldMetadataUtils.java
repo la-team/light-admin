@@ -6,8 +6,8 @@ import com.google.common.base.Predicates;
 import com.google.common.collect.Collections2;
 import org.apache.commons.lang3.StringUtils;
 import org.lightadmin.core.config.domain.filter.FilterMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 
+import java.io.Serializable;
 import java.util.Comparator;
 import java.util.Set;
 
@@ -58,15 +58,6 @@ public class FieldMetadataUtils {
         return null;
     }
 
-    public static Set<FieldMetadata> addPrimaryKeyPersistentField(final Set<FieldMetadata> fields, final DomainTypeAttributeMetadata idAttribute) {
-        final Set<FieldMetadata> fieldsWithPrimaryKey = newLinkedHashSet();
-        PersistentFieldMetadata idField = new PersistentFieldMetadata(StringUtils.capitalize(idAttribute.getName()), idAttribute.getName(), true);
-        idField.setAttributeMetadata(idAttribute);
-        fieldsWithPrimaryKey.add(idField);
-        fieldsWithPrimaryKey.addAll(fields);
-        return fieldsWithPrimaryKey;
-    }
-
     public static PersistentFieldMetadata getPersistentField(final Set<FieldMetadata> fields, String fieldName) {
         for (FieldMetadata field : persistentFields(fields)) {
             PersistentFieldMetadata persistentFieldMetadata = (PersistentFieldMetadata) field;
@@ -77,21 +68,30 @@ public class FieldMetadataUtils {
         return null;
     }
 
-    public static boolean containsPersistentField(final Set<FieldMetadata> fields, String fieldName) {
-        return getPersistentField(fields, fieldName) != null;
-    }
-
-    public static class FieldMetadataComparator implements Comparator<FieldMetadata> {
+    public static class FieldMetadataComparator implements Comparator<FieldMetadata>, Serializable {
 
         @Override
         public int compare(final FieldMetadata fieldMetadata, final FieldMetadata fieldMetadata2) {
+            if (isPrimaryKey(fieldMetadata)) {
+                return -1;
+            }
+
+            if (isPrimaryKey(fieldMetadata2)) {
+                return 1;
+            }
+
             if (fieldMetadata.getSortOrder() < fieldMetadata2.getSortOrder()) {
                 return -1;
             }
             if (fieldMetadata.getSortOrder() > fieldMetadata2.getSortOrder()) {
                 return 1;
             }
-            return 0;
+
+            return (fieldMetadata.equals(fieldMetadata2) ? 0 : 1);
+        }
+
+        private boolean isPrimaryKey(FieldMetadata fieldMetadata) {
+            return isAssignableValue(PersistentFieldMetadata.class, fieldMetadata) && ((PersistentFieldMetadata) fieldMetadata).isPrimaryKey();
         }
     }
 
@@ -100,14 +100,6 @@ public class FieldMetadataUtils {
         @Override
         public int compare(final Nameable nameable, final Nameable nameable2) {
             return nameable.getName().compareTo(nameable2.getName());
-        }
-    }
-
-    public static class DomainTypeAttributeMetadataComparator implements Comparator<DomainTypeAttributeMetadata> {
-
-        @Override
-        public int compare(final DomainTypeAttributeMetadata domainTypeAttributeMetadata, final DomainTypeAttributeMetadata domainTypeAttributeMetadata2) {
-            return domainTypeAttributeMetadata.getName().compareTo(domainTypeAttributeMetadata2.getName());
         }
     }
 

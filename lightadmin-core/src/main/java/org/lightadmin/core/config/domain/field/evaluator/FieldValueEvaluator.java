@@ -4,7 +4,7 @@ import org.lightadmin.core.config.domain.field.CustomFieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
-import org.lightadmin.core.util.DirectFieldAccessFallbackBeanWrapper;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareFieldValueRenderer;
 

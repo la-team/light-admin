@@ -1,8 +1,8 @@
 package org.lightadmin.core.config.domain;
 
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mapping.PersistentEntity;
 
 public interface DomainTypeBasicConfiguration {
 
@@ -12,9 +12,11 @@ public interface DomainTypeBasicConfiguration {
 
     String getDomainTypeName();
 
-    DomainTypeEntityMetadata getDomainTypeEntityMetadata();
+    String getPluralDomainTypeName();
 
-    DynamicJpaRepository<?, ?> getRepository();
+    PersistentEntity getPersistentEntity();
+
+    JpaRepository<?, ?> getRepository();
 
     EntityMetadataConfigurationUnit getEntityConfiguration();
 

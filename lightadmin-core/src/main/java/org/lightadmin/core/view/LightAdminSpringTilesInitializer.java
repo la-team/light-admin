@@ -6,54 +6,42 @@ import org.apache.tiles.definition.DefinitionsFactory;
 import org.apache.tiles.definition.DefinitionsFactoryException;
 import org.apache.tiles.definition.DefinitionsReader;
 import org.apache.tiles.definition.dao.BaseLocaleUrlDefinitionDAO;
-import org.apache.tiles.definition.dao.CachingLocaleUrlDefinitionDAO;
 import org.apache.tiles.definition.digester.DigesterDefinitionsReader;
+import org.apache.tiles.el.ELAttributeEvaluator;
+import org.apache.tiles.evaluator.AttributeEvaluator;
+import org.apache.tiles.evaluator.AttributeEvaluatorFactory;
+import org.apache.tiles.evaluator.BasicAttributeEvaluatorFactory;
+import org.apache.tiles.evaluator.impl.DirectAttributeEvaluator;
 import org.apache.tiles.factory.AbstractTilesContainerFactory;
 import org.apache.tiles.factory.BasicTilesContainerFactory;
 import org.apache.tiles.impl.BasicTilesContainer;
 import org.apache.tiles.locale.LocaleResolver;
 import org.apache.tiles.preparer.PreparerFactory;
-import org.apache.tiles.startup.BasicTilesInitializer;
+import org.apache.tiles.startup.AbstractTilesInitializer;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.ClassUtils;
 import org.springframework.web.servlet.view.tiles2.SpringLocaleResolver;
+import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 
+import javax.servlet.jsp.JspFactory;
 import java.io.IOException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
+public class LightAdminSpringTilesInitializer extends AbstractTilesInitializer {
+
+    private static final boolean tilesElPresent = ClassUtils.isPresent("org.apache.tiles.el.ELAttributeEvaluator", TilesConfigurer.class.getClassLoader());
+
 
     public static final String LIGHT_ADMIN_TILES_CONTAINER_ATTRIBUTE = "org.apache.tiles.CONTAINER.LightAdmin";
 
     private String[] definitions;
-    private boolean checkRefresh;
-    private boolean validateDefinitions;
 
     private Class<? extends PreparerFactory> preparerFactoryClass;
 
     @Override
     protected AbstractTilesContainerFactory createContainerFactory(TilesApplicationContext context) {
         return new SpringTilesContainerFactory();
-    }
-
-    public void setDefinitions(String[] definitions) {
-        this.definitions = definitions;
-    }
-
-    public void setCheckRefresh(boolean checkRefresh) {
-        this.checkRefresh = checkRefresh;
-    }
-
-    public void setValidateDefinitions(boolean validateDefinitions) {
-        this.validateDefinitions = validateDefinitions;
-    }
-
-    public void setPreparerFactoryClass(Class<? extends PreparerFactory> preparerFactoryClass) {
-        this.preparerFactoryClass = preparerFactoryClass;
     }
 
     @Override
@@ -69,8 +57,10 @@ public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
         }
 
         @Override
-        protected void registerRequestContextFactory(String className, List<TilesRequestContextFactory> factories, TilesRequestContextFactory parent) {
-            if (ClassUtils.isPresent(className, LightAdminSpringTilesInitializer.class.getClassLoader())) {
+        protected void registerRequestContextFactory(String className,
+                                                     List<TilesRequestContextFactory> factories, TilesRequestContextFactory parent) {
+            // Avoid Tiles 2.2 warn logging when default RequestContextFactory impl class not found
+            if (ClassUtils.isPresent(className, TilesConfigurer.class.getClassLoader())) {
                 super.registerRequestContextFactory(className, factories, parent);
             }
         }
@@ -80,7 +70,7 @@ public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
                                           TilesRequestContextFactory contextFactory) {
             if (definitions != null) {
                 try {
-                    List<URL> result = new LinkedList<URL>();
+                    List<URL> result = new LinkedList<>();
                     for (String definition : definitions) {
                         result.addAll(applicationContext.getResources(definition));
                     }
@@ -96,23 +86,16 @@ public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
         @Override
         protected BaseLocaleUrlDefinitionDAO instantiateLocaleDefinitionDao(TilesApplicationContext applicationContext,
                                                                             TilesRequestContextFactory contextFactory, LocaleResolver resolver) {
-            BaseLocaleUrlDefinitionDAO dao = super.instantiateLocaleDefinitionDao(
-                    applicationContext, contextFactory, resolver);
-            if (checkRefresh && dao instanceof CachingLocaleUrlDefinitionDAO) {
-                ((CachingLocaleUrlDefinitionDAO) dao).setCheckRefresh(checkRefresh);
-            }
-            return dao;
+            return super.instantiateLocaleDefinitionDao(applicationContext, contextFactory, resolver);
         }
 
         @Override
         protected DefinitionsReader createDefinitionsReader(TilesApplicationContext applicationContext,
                                                             TilesRequestContextFactory contextFactory) {
             DigesterDefinitionsReader reader = new DigesterDefinitionsReader();
-            if (!validateDefinitions) {
-                Map<String, String> map = new HashMap<String, String>();
-                map.put(DigesterDefinitionsReader.PARSER_VALIDATE_PARAMETER_NAME, Boolean.FALSE.toString());
-                reader.init(map);
-            }
+            Map<String, String> map = new HashMap<>();
+            map.put(DigesterDefinitionsReader.PARSER_VALIDATE_PARAMETER_NAME, Boolean.FALSE.toString());
+            reader.init(map);
             return reader;
         }
 
@@ -137,5 +120,35 @@ public class LightAdminSpringTilesInitializer extends BasicTilesInitializer {
                                                       TilesRequestContextFactory contextFactory) {
             return new SpringLocaleResolver();
         }
+
+        @Override
+        protected AttributeEvaluatorFactory createAttributeEvaluatorFactory(TilesApplicationContext applicationContext,
+                                                                            TilesRequestContextFactory contextFactory, LocaleResolver resolver) {
+            AttributeEvaluator evaluator;
+            if (tilesElPresent && JspFactory.getDefaultFactory() != null) {
+                evaluator = TilesElActivator.createEvaluator(applicationContext);
+            } else {
+                evaluator = new DirectAttributeEvaluator();
+            }
+            return new BasicAttributeEvaluatorFactory(evaluator);
+        }
+    }
+
+    private static class TilesElActivator {
+
+        public static AttributeEvaluator createEvaluator(TilesApplicationContext applicationContext) {
+            ELAttributeEvaluator evaluator = new ELAttributeEvaluator();
+            evaluator.setApplicationContext(applicationContext);
+            evaluator.init(Collections.<String, String>emptyMap());
+            return evaluator;
+        }
+    }
+
+    public void setDefinitions(String[] definitions) {
+        this.definitions = definitions;
+    }
+
+    public void setPreparerFactoryClass(Class<? extends PreparerFactory> preparerFactoryClass) {
+        this.preparerFactoryClass = preparerFactoryClass;
     }
 }

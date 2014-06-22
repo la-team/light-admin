@@ -12,7 +12,7 @@ import org.lightadmin.core.config.domain.sidebar.DefaultSidebarsConfigurationUni
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
+import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.*;
 import static org.lightadmin.core.util.DomainConfigurationUtils.initializeConfigurationUnitWithBuilder;
 import static org.lightadmin.core.util.DomainConfigurationUtils.isAnnotationBasedConfigurationCandidate;
 

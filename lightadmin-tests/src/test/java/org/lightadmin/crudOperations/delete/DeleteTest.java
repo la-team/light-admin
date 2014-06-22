@@ -59,7 +59,7 @@ public class DeleteTest extends SeleniumIntegrationTest {
     }
 
     private void assertScopeIsRecalculatedAfterDeletion() {
-        assertScopeCount("Deletion Test", 1, getStartPage());
+        assertScopeCount("DeletionTest", 1, getStartPage());
     }
 
     public static final String DELETED_ITEM_NAME = "To delete";

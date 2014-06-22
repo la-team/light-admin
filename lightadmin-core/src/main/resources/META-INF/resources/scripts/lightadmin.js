@@ -8,16 +8,15 @@
                     return null;
                 }
             }
-            var href = decodeURIComponent(attrMetadata.hrefTemplate).replace('{' + attrMetadata.idAttribute + '}', attrVal);
-            return {href: href};
+            return decodeURIComponent(attrMetadata.hrefTemplate).replace('{' + attrMetadata.idAttribute + '}', attrVal);
         }
 
-        var domainTypeEntityMetadata = $(this).data('lightadmin.domain-type-metadata');
+        var persistentEntity = $(this).data('lightadmin.domain-type-metadata');
 
         var json = {};
         $.each(this.serializeArray(), function () {
             var attrVal = this.value || '';
-            var attrMetadata = domainTypeEntityMetadata[this.name];
+            var attrMetadata = persistentEntity[this.name];
             var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
             if (attrType.indexOf('ASSOC') == 0) {
                 var href = resolveObjectHref(attrVal, attrMetadata);
@@ -33,7 +32,7 @@
                 json[this.name] = attrVal;
             }
         });
-        $.each(domainTypeEntityMetadata, function (attrName, attrMetadata) {
+        $.each(persistentEntity, function (attrName, attrMetadata) {
             var attrVal = json[attrName];
             if (attrVal != undefined && attrVal != '') {
                 return;
@@ -70,19 +69,19 @@ function dataTableRESTAdapter(sSource, aoData, fnCallback) {
     //page calculations
     var pageSize = paramMap.iDisplayLength;
     var start = paramMap.iDisplayStart;
-    var pageNum = (start == 0) ? 1 : (start / pageSize) + 1; // pageNum is 1 based
+//    var pageNum = (start == 0) ? 1 : (start / pageSize) + 1; // pageNum is 1 based
+    var pageNum = start / pageSize; // pageNum is 1 based
 
     // extract sort information
     var sortCol = paramMap.iSortCol_0;
     var sortDir = paramMap.sSortDir_0;
-    var sortName = paramMap['mDataProp_' + sortCol];
+    var sortName = paramMap['mDataProp_' + sortCol].replace('content.', '');
 
     //create new json structure for parameters for REST request
     var restParams = [];
-    restParams.push({"name": "limit", "value": pageSize});
+    restParams.push({"name": "size", "value": pageSize});
     restParams.push({"name": "page", "value": pageNum });
-    restParams.push({ "name": "sort", "value": sortName });
-    restParams.push({ "name": sortName + ".dir", "value": sortDir });
+    restParams.push({ "name": "sort", "value": sortName + ',' + sortDir });
 
     jQuery.ajax({
         "dataType": 'json',
@@ -122,7 +121,7 @@ function quickLook(aData) {
 
         var currentFieldIdx = 1;
         for (var prop in aData) {
-            if (prop != 'links' && prop != 'stringRepresentation' && prop != 'managedDomainType') {
+            if (prop != 'stringRepresentation' && prop != 'managedDomainType') {
                 var rowClass = '';
                 if (currentFieldIdx == 1) {
                     rowClass = 'noborder';
@@ -163,13 +162,13 @@ function bindInfoClickHandlers(tableElement, dataTable) {
             });
         } else {
             var aData = dataTable.fnGetData(nTr);
-            var restEntityUrl = aData.links[0].href;
+            var restEntityUrl = aData['_links']['self'].href;
             jQuery.ajax({
                 "dataType": 'json',
                 "type": "GET",
                 "url": restEntityUrl + '/unit/quickView',
                 "success": function (data) {
-                    var nDetailsRow = dataTable.fnOpen(nTr, quickLook(data), 'details');
+                    var nDetailsRow = dataTable.fnOpen(nTr, quickLook(data['content']), 'details');
                     $(nDetailsRow).addClass($(nDetailsRow).prev().attr('class'));
                     $('div.innerDetails', nDetailsRow).hide();
                     $('div.innerDetails', nDetailsRow).slideDown('slow', function () {
@@ -189,10 +188,11 @@ function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
         url: restRepoUrl,
         dataType: 'json',
         success: function (data) {
-            for (name in data) {
+            var content = data['content'];
+            for (var name in content) {
                 var field = showViewSection.find('[name="field-' + name + '"]');
                 if (field.length > 0) {
-                    field.html(FieldValueRenderer.render(data[name], 'showView'));
+                    field.html(FieldValueRenderer.render(content[name], 'showView'));
                 }
             }
             $("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: ''});
@@ -209,7 +209,7 @@ function loadDomainObjectForFormView(form) {
     }
 
     function selectOption(editor, attrMetadata, data) {
-        var objectIdData = data[attrMetadata.idAttribute];
+        var objectIdData = data['content'][attrMetadata.idAttribute];
         var objectId = $.isPlainObject(objectIdData) ? objectIdData.value : objectIdData;
         if (objectId == null) {
             objectId = '';
@@ -223,23 +223,24 @@ function loadDomainObjectForFormView(form) {
 
     var restRepoUrl = $(form).data('lightadmin.domain-rest-base-url');
 
-    var domainTypeEntityMetadata = $(form).data('lightadmin.domain-type-metadata');
+    var persistentEntity = $(form).data('lightadmin.domain-type-metadata');
 
     $.ajax({
         type: 'GET',
         url: restRepoUrl + '/unit/formView',
         dataType: 'json',
         success: function (data, textStatus) {
-            for (var attr in data) {
+            var content = data['content'];
+            for (var attr in content) {
                 var editor = form.find('[name="' + attr + '"]');
                 if (editor.length > 0) {
-                    var attrVal = data[attr].value;
+                    var attrVal = content[attr].value;
 
                     if (attrVal == null) {
                         continue;
                     }
 
-                    var attrMetadata = domainTypeEntityMetadata[attr];
+                    var attrMetadata = persistentEntity[attr];
                     var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
 
                     switch (attrType) {
@@ -255,7 +256,7 @@ function loadDomainObjectForFormView(form) {
                         case 'FILE':
                             var fileSelected = attrVal.length > 0;
                             if (fileSelected) {
-                                selectFileFieldValue(form, attr, data[attr], restRepoUrl);
+                                selectFileFieldValue(form, attr, content[attr], restRepoUrl);
                             }
                             editor.val(attrVal.toString());
                             break;
@@ -265,10 +266,10 @@ function loadDomainObjectForFormView(form) {
                                 break;
                             }
                         default:
-                            if (editor.prop('tagName')=='SELECT' && editor.find("option[value='"+attrVal+"']").length<=0) {
+                            if (editor.prop('tagName') == 'SELECT' && editor.find("option[value='" + attrVal + "']").length <= 0) {
                                 editor.append($('<option>', {
                                     value: attrVal,
-                                    text : attrVal
+                                    text: attrVal
                                 }));
                             }
                             editor.val(attrVal.toString());
@@ -378,22 +379,22 @@ function removeDomainObject(entityId, restUrl, callback) {
 }
 
 function saveDomainObject(domForm, successCallback) {
-    return saveOrUpdateDomainObject(domForm, false, successCallback);
+    return saveOrUpdateDomainObject(domForm, false, successCallback, 'POST');
 }
 
 function updateDomainObject(domForm, successCallback) {
-    return saveOrUpdateDomainObject(domForm, true, successCallback);
+    return saveOrUpdateDomainObject(domForm, false, successCallback, 'PUT');
 }
 
-function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback) {
+function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback, method) {
     $.each($(domForm).find('[id$=-error]'), function (index, element) {
         $(element).text('');
     });
     var jsonForm = $(domForm).serializeFormJSON(usePlaceholders);
     var restRepoUrl = $(domForm).data('lightadmin.domain-rest-base-url');
     $.ajax({
-        type: 'PUT',
-        url: restRepoUrl + '?returnBody=true',
+        type: method,
+        url: restRepoUrl,
         contentType: 'application/json',
         data: JSON.stringify(jsonForm),
         dataType: 'json',
@@ -407,17 +408,19 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback) {
                 var errorMessages = '';
                 for (var i = 0; i < errors.length; i++) {
                     var error = errors[i];
-                    var errorMessage = $('<div/>').text(error.message).html();
-                    if (!error.field) {
+                    var errorMessage = $('<div/>').text(error['message']).html();
+
+                    if (!error['property']) {
                         errorMessages += errorMessage + '<br>';
-                    }
-                    var messageDiv = $('#' + error.field + '-error', $(domForm));
-                    if (messageDiv.length > 0) {
-                        messageDiv.text(errorMessage);
-                    }
-                    var controlGroup = $('#' + error.field + '-control-group', $(domForm));
-                    if (controlGroup.length > 0) {
-                        controlGroup.addClass('error');
+                    } else {
+                        var messageDiv = $('#' + error['property'] + '-error', $(domForm));
+                        if (messageDiv.length > 0) {
+                            messageDiv.text(errorMessage);
+                        }
+                        var controlGroup = $('#' + error['property'] + '-control-group', $(domForm));
+                        if (controlGroup.length > 0) {
+                            controlGroup.addClass('error');
+                        }
                     }
                 }
                 if (errorMessages.length > 0) {
@@ -683,7 +686,7 @@ function decorateFileUploader(container, file_input_id, attribute_name, browse_b
 
                 var result = $.parseJSON(response.response);
 
-                $(file_input_id).val(result['fileContent']);
+                $(file_input_id).val(result['content']['fileContent']);
             }
         }
     });

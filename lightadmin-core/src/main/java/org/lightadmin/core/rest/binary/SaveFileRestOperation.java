@@ -3,8 +3,9 @@ package org.lightadmin.core.rest.binary;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.data.mapping.model.BeanWrapper;
 
 import java.io.File;
 import java.io.IOException;
@@ -21,16 +22,16 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
         super(configuration, lightAdminConfiguration, entity);
     }
 
-    public void perform(AttributeMetadata attrMeta, Object incomingValueObject) throws IOException {
-        if (attrMeta.type().equals(byte[].class)) {
+    public void perform(PersistentProperty attrMeta, Object incomingValueObject) throws IOException {
+        if (attrMeta.getType().equals(byte[].class)) {
             performDirectSave(attrMeta, (byte[]) incomingValueObject);
             return;
         }
 
-        if (attrMeta.hasAnnotation(FileReference.class)) {
+        if (attrMeta.isAnnotationPresent(FileReference.class)) {
             final byte[] incomingVal = incomingValue(incomingValueObject);
 
-            final FileReference fileReference = attrMeta.annotation(FileReference.class);
+            final FileReference fileReference = (FileReference) attrMeta.findAnnotation(FileReference.class);
             if (getFile(fileReference.baseDirectory()).exists()) {
                 performSaveAgainstReferenceField(attrMeta, incomingVal);
             } else {
@@ -39,9 +40,9 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
         }
     }
 
-    public void performCleanup(AttributeMetadata fileReferenceAttrMetadata) throws IOException {
-        final DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
-        final FileReference fileReference = fileReferenceAttrMetadata.annotation(FileReference.class);
+    public void performCleanup(PersistentProperty fileReferenceAttrMetadata) throws IOException {
+        final JpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+        final FileReference fileReference = (FileReference) fileReferenceAttrMetadata.findAnnotation(FileReference.class);
 
         if (getFile(fileReference.baseDirectory()).exists()) {
             File file = referencedFile(fileReferenceAttrMetadata);
@@ -67,7 +68,7 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
         return isBase64(incomingValue) ? decode(incomingValue) : incomingValue;
     }
 
-    private void performSaveToFileStorage(AttributeMetadata attrMeta, byte[] incomingVal) throws IOException {
+    private void performSaveToFileStorage(PersistentProperty attrMeta, byte[] incomingVal) throws IOException {
         String relativePath = relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attrMeta);
 
         File file = getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePath);
@@ -77,12 +78,12 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
             deleteQuietly(file);
         } else {
             writeByteArrayToFile(file, incomingVal);
-            attrMeta.set(relativePath, entity);
+            BeanWrapper.create(entity, null).setProperty(attrMeta, relativePath);
         }
     }
 
-    private void performSaveAgainstReferenceField(AttributeMetadata attrMeta, byte[] incomingVal) throws IOException {
-        final FileReference fileReference = attrMeta.annotation(FileReference.class);
+    private void performSaveAgainstReferenceField(PersistentProperty attrMeta, byte[] incomingVal) throws IOException {
+        final FileReference fileReference = (FileReference) attrMeta.findAnnotation(FileReference.class);
 
         String relativePath = relativePathToStoreBinaryAttrValue(domainTypeName(), idAttributeValue(), attrMeta);
 
@@ -93,7 +94,7 @@ public class SaveFileRestOperation extends AbstractFileRestOperation {
             deleteQuietly(file);
         } else {
             writeByteArrayToFile(file, incomingVal);
-            attrMeta.set(relativePath, entity);
+            BeanWrapper.create(entity, null).setProperty(attrMeta, relativePath);
         }
     }
 }

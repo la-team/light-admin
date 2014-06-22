@@ -3,13 +3,12 @@ package org.lightadmin.core.config.domain.unit;
 import org.junit.Test;
 import org.lightadmin.api.config.annotation.Administration;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
 
 import java.util.Set;
 
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static org.junit.Assert.*;
-import static org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType.*;
+import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.*;
 import static org.lightadmin.core.test.util.ConfigurationUnitsUtils.*;
 
 public class ConfigurationUnitsTest {

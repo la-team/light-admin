@@ -3,7 +3,7 @@ package org.lightadmin.core.config.domain.filter;
 import com.google.common.collect.Iterables;
 import org.junit.Test;
 import org.lightadmin.api.config.unit.FiltersConfigurationUnit;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;

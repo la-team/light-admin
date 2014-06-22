@@ -1,18 +1,18 @@
 package org.lightadmin.core.config.domain.field;
 
-import java.io.Serializable;
-import java.util.UUID;
-
-import javax.servlet.jsp.tagext.SimpleTag;
-
+import com.google.common.base.Objects;
 import org.apache.commons.collections15.Factory;
 import org.lightadmin.api.config.utils.FieldValueRenderer;
+
+import javax.servlet.jsp.tagext.SimpleTag;
+import java.io.Serializable;
+import java.util.UUID;
 
 public abstract class AbstractFieldMetadata implements FieldMetadata, Serializable {
 
     private String name;
 
-    private final int order;
+    private int order;
 
     private final UUID uuid;
 
@@ -43,6 +43,11 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
     @Override
     public int getSortOrder() {
         return order;
+    }
+
+    @Override
+    public void setSortOrder(int sortOrder) {
+        this.order = sortOrder;
     }
 
     @Override
@@ -103,4 +108,12 @@ public abstract class AbstractFieldMetadata implements FieldMetadata, Serializab
         return uuid.hashCode();
     }
 
+    @Override
+    public String toString() {
+        return Objects.toStringHelper(this)
+                .add("name", name)
+                .add("order", order)
+                .add("uuid", uuid)
+                .toString();
+    }
 }

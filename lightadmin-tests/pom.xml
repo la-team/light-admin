@@ -18,7 +18,7 @@
     <properties>
         <container.port>8080</container.port>
 
-        <spring.version>3.2.4.RELEASE</spring.version>
+        <spring.version>4.0.5.RELEASE</spring.version>
     </properties>
 
     <dependencies>
@@ -85,6 +85,11 @@
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
             <version>14.0</version>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>1.4.01</version>
         </dependency>
     </dependencies>
 

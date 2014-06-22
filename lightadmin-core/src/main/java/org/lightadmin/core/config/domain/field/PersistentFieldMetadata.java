@@ -1,23 +1,21 @@
 package org.lightadmin.core.config.domain.field;
 
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.ASSOC_MULTI;
-import static org.lightadmin.core.persistence.metamodel.DomainTypeAttributeType.FILE;
+import org.hibernate.validator.constraints.NotBlank;
+import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
+import org.springframework.data.mapping.PersistentProperty;
 
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
 
-import org.hibernate.validator.constraints.NotBlank;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadataAware;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.*;
 
-public class PersistentFieldMetadata extends AbstractFieldMetadata implements DomainTypeAttributeMetadataAware, Persistable {
+public class PersistentFieldMetadata extends AbstractFieldMetadata {
 
     private final String field;
 
     private boolean primaryKey;
 
-    private DomainTypeAttributeMetadata attributeMetadata;
+    private PersistentProperty persistentProperty;
 
     public PersistentFieldMetadata(final String name, final String field, boolean primaryKey) {
         this(name, field);
@@ -29,45 +27,44 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata implements Do
         this.field = field;
     }
 
-    @Override
+    public static FieldMetadata keyField(final String name, final String field) {
+        return new PersistentFieldMetadata(name, field, true);
+    }
+
     public String getField() {
         return field;
     }
 
-    @Override
     public boolean isPrimaryKey() {
         return primaryKey;
     }
 
-    @Override
     public boolean isRequired() {
-        return attributeMetadata.hasAnnotation(NotNull.class)
-                || attributeMetadata.hasAnnotation(NotBlank.class)
-                || attributeMetadata.hasAnnotation(org.hibernate.validator.constraints.NotEmpty.class);
+        return persistentProperty.isAnnotationPresent(NotNull.class)
+                || persistentProperty.isAnnotationPresent(NotBlank.class)
+                || persistentProperty.isAnnotationPresent(org.hibernate.validator.constraints.NotEmpty.class);
     }
 
-    @Override
     public boolean isGeneratedValue() {
-        return attributeMetadata.hasAnnotation(GeneratedValue.class);
+        return persistentProperty.isAnnotationPresent(GeneratedValue.class);
     }
 
     public void setPrimaryKey(final boolean primaryKey) {
         this.primaryKey = primaryKey;
     }
 
-    @Override
-    public void setAttributeMetadata(final DomainTypeAttributeMetadata attributeMetadata) {
-        this.attributeMetadata = attributeMetadata;
+    public void setPersistentProperty(final PersistentProperty persistentProperty) {
+        this.persistentProperty = persistentProperty;
     }
 
-    @Override
-    public DomainTypeAttributeMetadata getAttributeMetadata() {
-        return attributeMetadata;
+    public PersistentProperty getPersistentProperty() {
+        return persistentProperty;
     }
 
     @Override
     public boolean isSortable() {
-        return this.attributeMetadata.getAttributeType() != ASSOC && this.attributeMetadata.getAttributeType() != ASSOC_MULTI && this.attributeMetadata.getAttributeType() != FILE;
+        PersistentPropertyType persistentPropertyType = PersistentPropertyType.forPersistentProperty(persistentProperty);
+        return persistentPropertyType != ASSOC && persistentPropertyType != ASSOC_MULTI && persistentPropertyType != FILE;
     }
 
     @Override

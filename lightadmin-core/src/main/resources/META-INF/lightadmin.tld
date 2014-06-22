@@ -67,7 +67,7 @@
         <body-content>empty</body-content>
         <attribute>
             <description>Entity Attribute Metadata</description>
-            <name>attributeMetadata</name>
+            <name>persistentProperty</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -87,7 +87,7 @@
         <body-content>empty</body-content>
         <attribute>
             <description>Entity Attribute Metadata</description>
-            <name>attributeMetadata</name>
+            <name>persistentProperty</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
         </attribute>
@@ -166,35 +166,16 @@
         <tag-class>org.lightadmin.core.view.tags.form.DomainTypeMetadataJsonTag</tag-class>
         <body-content>empty</body-content>
         <attribute>
-            <name>domainTypeMetadata</name>
+            <name>persistentEntity</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata</type>
+            <type>org.springframework.data.mapping.PersistentProperty</type>
         </attribute>
         <attribute>
             <name>includeFields</name>
             <required>false</required>
             <rtexprvalue>true</rtexprvalue>
             <type>java.util.Collection</type>
-        </attribute>
-    </tag>
-
-    <tag>
-        <description>Renders dynamic entity attribute</description>
-        <name>attribute</name>
-        <tag-class>org.lightadmin.core.view.tags.AttributeRendererTag</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <description>Entity Attribute Metadata</description>
-            <name>attributeMetadata</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>Entity</description>
-            <name>entity</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
         </attribute>
     </tag>
 
@@ -280,6 +261,14 @@
         <name>isSimpleValueType</name>
         <function-class>org.springframework.beans.BeanUtils</function-class>
         <function-signature>boolean isSimpleValueType(java.lang.Class)</function-signature>
+    </function>
+
+    <function>
+        <name>persistentPropertyTypeOf</name>
+        <function-class>org.lightadmin.core.persistence.metamodel.PersistentPropertyType</function-class>
+        <function-signature>org.lightadmin.core.persistence.metamodel.PersistentPropertyType
+            forPersistentProperty(org.springframework.data.mapping.PersistentProperty)
+        </function-signature>
     </function>
 
 </taglib>

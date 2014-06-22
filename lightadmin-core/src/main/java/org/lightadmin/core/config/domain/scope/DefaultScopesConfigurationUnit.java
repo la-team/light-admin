@@ -1,7 +1,7 @@
 package org.lightadmin.core.config.domain.scope;
 
 import org.lightadmin.api.config.unit.ScopesConfigurationUnit;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.config.domain.unit.DomainTypeConfigurationUnit;
 import org.springframework.util.Assert;
 
@@ -41,4 +41,5 @@ public class DefaultScopesConfigurationUnit extends DomainTypeConfigurationUnit 
     public DomainConfigurationUnitType getDomainConfigurationUnitType() {
         return DomainConfigurationUnitType.SCOPES;
     }
+
 }

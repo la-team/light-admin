@@ -1,7 +1,7 @@
 package org.lightadmin.core.config;
 
 import net.sf.ehcache.constructs.web.filter.GzipFilter;
-import org.apache.commons.lang3.BooleanUtils;
+import org.lightadmin.core.config.bootstrap.LightAdminBeanDefinitionRegistryPostProcessor;
 import org.lightadmin.core.config.context.LightAdminContextConfiguration;
 import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
@@ -22,6 +22,7 @@ import java.io.File;
 import java.util.regex.Pattern;
 
 import static org.apache.commons.io.FileUtils.getFile;
+import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 import static org.lightadmin.core.web.util.WebContextUtils.servletContextAttributeName;
@@ -138,7 +139,9 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
     private AnnotationConfigWebApplicationContext lightAdminApplicationContext(final ServletContext servletContext) {
         AnnotationConfigWebApplicationContext webApplicationContext = new AnnotationConfigWebApplicationContext();
 
+        String basePackage = configurationsBasePackage(servletContext);
         webApplicationContext.register(configurations(servletContext));
+        webApplicationContext.addBeanFactoryPostProcessor(new LightAdminBeanDefinitionRegistryPostProcessor(basePackage, servletContext));
 
         webApplicationContext.setDisplayName("LightAdmin WebApplicationContext");
         webApplicationContext.setNamespace("lightadmin");
@@ -216,7 +219,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
     }
 
     private boolean lightAdminSecurityEnabled(final ServletContext servletContext) {
-        return BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
+        return toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
     }
 
     private String lightAdminGlobalFileStorageDirectory(final ServletContext servletContext) {
@@ -235,10 +238,6 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         }
 
         final File fileStorageDirectory = getFile(fileStorageDirectoryPath);
-        if (fileStorageDirectory.exists() && fileStorageDirectory.isDirectory()) {
-            return false;
-        }
-
-        return true;
+        return !fileStorageDirectory.exists() || !fileStorageDirectory.isDirectory();
     }
 }

@@ -2,22 +2,25 @@ package org.lightadmin.core.config.domain.configuration;
 
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
-import org.lightadmin.core.config.domain.configuration.support.EntityNameExtractorFactory;
 import org.lightadmin.core.config.domain.unit.DefaultFieldSetConfigurationUnit;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadata;
-import org.lightadmin.core.persistence.metamodel.DomainTypeEntityMetadataAware;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
+import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
-public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfigurationUnit
-        implements EntityMetadataConfigurationUnit,	DomainTypeEntityMetadataAware {
+public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfigurationUnit implements EntityMetadataConfigurationUnit {
 
     private EntityNameExtractor<?> nameExtractor;
+    private Class<? extends AbstractRepositoryEventListener> repositoryEventListener;
 
     private String singularName;
     private String pluralName;
 
     DefaultEntityMetadataConfigurationUnit(Class<?> domainType) {
         super(domainType, DomainConfigurationUnitType.CONFIGURATION);
+    }
+
+    @Override
+    public Class<? extends AbstractRepositoryEventListener> getRepositoryEventListener() {
+        return repositoryEventListener;
     }
 
     @Override
@@ -47,15 +50,13 @@ public class DefaultEntityMetadataConfigurationUnit extends DefaultFieldSetConfi
         this.pluralName = pluralName;
     }
 
+    public void setRepositoryEventListener(Class<? extends AbstractRepositoryEventListener> repositoryEventListener) {
+        this.repositoryEventListener = repositoryEventListener;
+    }
+
     @Override
     public DomainConfigurationUnitType getParentUnitType() {
         return null;
     }
 
-    @Override
-    public void setDomainTypeEntityMetadata(final DomainTypeEntityMetadata domainTypeEntityMetadata) {
-        if (nameExtractor == null) {
-            this.nameExtractor = EntityNameExtractorFactory.forPersistentEntity(this.singularName, domainTypeEntityMetadata);
-        }
-    }
 }

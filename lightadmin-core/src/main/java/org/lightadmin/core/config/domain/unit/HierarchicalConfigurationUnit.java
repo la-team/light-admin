@@ -1,11 +1,9 @@
 package org.lightadmin.core.config.domain.unit;
 
-import org.lightadmin.core.config.bootstrap.parsing.configuration.DomainConfigurationUnitType;
+import org.lightadmin.core.config.domain.unit.visitor.VisitableConfigurationUnit;
 
-public interface HierarchicalConfigurationUnit extends ConfigurationUnit {
+public interface HierarchicalConfigurationUnit extends ConfigurationUnit, VisitableConfigurationUnit {
 
     DomainConfigurationUnitType getParentUnitType();
-
-    void setParentUnit(ConfigurationUnit parentUnit);
 
 }

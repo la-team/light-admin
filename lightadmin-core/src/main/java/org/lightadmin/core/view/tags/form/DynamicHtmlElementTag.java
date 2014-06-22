@@ -1,9 +1,9 @@
 package org.lightadmin.core.view.tags.form;
 
-import org.lightadmin.core.persistence.metamodel.DomainTypeAttributeMetadata;
 import org.lightadmin.core.web.util.WebContextUtils;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.JpaEntityInformationSupport;
+import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.servlet.tags.form.AbstractHtmlInputElementTag;
 import org.springframework.web.servlet.tags.form.InputTag;
@@ -17,14 +17,14 @@ import java.io.Serializable;
 
 public class DynamicHtmlElementTag extends AbstractHtmlInputElementTag {
 
-    private DomainTypeAttributeMetadata attributeMetadata;
+    private PersistentProperty persistentProperty;
 
     @Override
     protected int writeTagContent(final TagWriter tagWriter) throws JspException {
-        if (attributeMetadata.isMapLike()) {
+        if (persistentProperty.isMap()) {
             return SKIP_BODY;
         }
-        if (attributeMetadata.isCollectionLike() || attributeMetadata.isSetLike()) {
+        if (persistentProperty.isCollectionLike()) {
             return selectTag().doStartTag();
         }
 
@@ -47,9 +47,9 @@ public class DynamicHtmlElementTag extends AbstractHtmlInputElementTag {
         selectTag.setCssClass(getCssClass());
         selectTag.setPageContext(pageContext);
         selectTag.setParent(getParent());
-        selectTag.setPath(attributeMetadata.getName());
+        selectTag.setPath(persistentProperty.getName());
 
-        final Class<?> optionElementClass = attributeMetadata.getElementType();
+        final Class<?> optionElementClass = persistentProperty.getActualType();
 
         final String idAttributeName = entityInformation(optionElementClass).getIdAttribute().getName();
 
@@ -61,18 +61,18 @@ public class DynamicHtmlElementTag extends AbstractHtmlInputElementTag {
     private InputTag inputTag() {
         InputTag inputTag = new InputTag();
         inputTag.setCssClass(getCssClass());
-        inputTag.setPath(attributeMetadata.getName());
+        inputTag.setPath(persistentProperty.getName());
         inputTag.setPageContext(pageContext);
         inputTag.setParent(getParent());
         return inputTag;
     }
 
-    public DomainTypeAttributeMetadata getAttributeMetadata() {
-        return attributeMetadata;
+    public PersistentProperty getPersistentProperty() {
+        return persistentProperty;
     }
 
-    public void setAttributeMetadata(final DomainTypeAttributeMetadata attributeMetadata) {
-        this.attributeMetadata = attributeMetadata;
+    public void setPersistentProperty(final PersistentProperty persistentProperty) {
+        this.persistentProperty = persistentProperty;
     }
 
     private Class<? extends Serializable> idType(final Class<?> typeClass) {

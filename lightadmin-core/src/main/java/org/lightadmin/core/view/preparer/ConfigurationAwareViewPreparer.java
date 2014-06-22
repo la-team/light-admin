@@ -37,7 +37,7 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer, Gl
     protected void execute(TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration) {
         addAttribute(attributeContext, DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration, true);
 
-        addAttribute(attributeContext, "domainTypeEntityMetadata", configuration.getDomainTypeEntityMetadata(), true);
+        addAttribute(attributeContext, "persistentEntity", configuration.getPersistentEntity(), true);
         addAttribute(attributeContext, "entityPluralName", configuration.getEntityConfiguration().getPluralName());
         addAttribute(attributeContext, "entitySingularName", entitySingularName(tilesContext, configuration));
 

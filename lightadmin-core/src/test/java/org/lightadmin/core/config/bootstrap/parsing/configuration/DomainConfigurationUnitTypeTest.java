@@ -1,6 +1,7 @@
 package org.lightadmin.core.config.bootstrap.parsing.configuration;
 
 import org.junit.Test;
+import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 
 import java.util.Set;
 

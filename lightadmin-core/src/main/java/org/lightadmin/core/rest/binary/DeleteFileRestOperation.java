@@ -3,7 +3,7 @@ package org.lightadmin.core.rest.binary;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.springframework.data.rest.repository.AttributeMetadata;
+import org.springframework.data.mapping.PersistentProperty;
 
 import java.io.File;
 
@@ -17,14 +17,14 @@ public class DeleteFileRestOperation extends AbstractFileRestOperation {
         super(configuration, lightAdminConfiguration, entity);
     }
 
-    public void perform(AttributeMetadata attrMeta) {
-        if (attrMeta.type().equals(byte[].class)) {
+    public void perform(PersistentProperty attrMeta) {
+        if (attrMeta.getType().equals(byte[].class)) {
             resetAttrValue(attrMeta);
             repository().save(entity);
             return;
         }
 
-        if (attrMeta.hasAnnotation(FileReference.class)) {
+        if (attrMeta.isAnnotationPresent(FileReference.class)) {
             if (deleteFile(attrMeta)) {
                 resetAttrValue(attrMeta);
                 repository().save(entity);
@@ -36,14 +36,14 @@ public class DeleteFileRestOperation extends AbstractFileRestOperation {
         }
     }
 
-    private boolean deleteFile(AttributeMetadata attrMeta) {
+    private boolean deleteFile(PersistentProperty attrMeta) {
         if (fieldLevelBaseDirectoryDefined(attrMeta)) {
             return deleteQuietly(referencedFile(attrMeta));
         }
         return deleteQuietly(fileStorageFile(attrMeta));
     }
 
-    private void removeDomainEntityDirectory(AttributeMetadata attrMeta) {
+    private void removeDomainEntityDirectory(PersistentProperty attrMeta) {
         if (fieldLevelBaseDirectoryDefined(attrMeta)) {
             removeDirectoryIfEmpty(referencedFileDomainEntityDirectory(attrMeta));
         } else {
@@ -51,7 +51,7 @@ public class DeleteFileRestOperation extends AbstractFileRestOperation {
         }
     }
 
-    private void removeDomainEntityAttributeDirectory(AttributeMetadata attrMeta) {
+    private void removeDomainEntityAttributeDirectory(PersistentProperty attrMeta) {
         if (fieldLevelBaseDirectoryDefined(attrMeta)) {
             removeDirectoryIfEmpty(referencedFileDomainEntityAttributeDirectory(attrMeta));
         } else {
@@ -65,11 +65,11 @@ public class DeleteFileRestOperation extends AbstractFileRestOperation {
         }
     }
 
-    private boolean fieldLevelBaseDirectoryDefined(AttributeMetadata attrMeta) {
+    private boolean fieldLevelBaseDirectoryDefined(PersistentProperty attrMeta) {
         return getFile(fileReference(attrMeta).baseDirectory()).exists();
     }
 
-    private FileReference fileReference(AttributeMetadata attrMeta) {
-        return attrMeta.annotation(FileReference.class);
+    private FileReference fileReference(PersistentProperty attrMeta) {
+        return (FileReference) attrMeta.findAnnotation(FileReference.class);
     }
 }
