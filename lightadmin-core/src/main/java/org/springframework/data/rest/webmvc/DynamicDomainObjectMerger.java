@@ -95,7 +95,7 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
                     return;
                 }
 
-                if (nullPolicy == APPLY_NULLS || ObjectUtils.nullSafeEquals(fromValue, targetWrapper.getProperty(persistentProperty))) {
+                if ((fromValue == null && nullPolicy == APPLY_NULLS) || !ObjectUtils.nullSafeEquals(fromValue, targetWrapper.getProperty(persistentProperty))) {
                     targetWrapper.setProperty(persistentProperty, fromValue);
                 }
             }
