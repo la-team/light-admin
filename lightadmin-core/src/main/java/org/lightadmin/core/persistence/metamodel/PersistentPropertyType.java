@@ -4,6 +4,7 @@ import org.lightadmin.api.config.annotation.FileReference;
 import org.springframework.data.mapping.PersistentProperty;
 
 import javax.persistence.Embedded;
+import javax.persistence.EmbeddedId;
 import java.util.Date;
 
 import static org.lightadmin.core.util.NumberUtils.isNumberFloat;
@@ -73,7 +74,7 @@ public enum PersistentPropertyType {
     public static PersistentPropertyType forPersistentProperty(PersistentProperty persistentProperty) {
         final Class<?> attrType = persistentProperty.getType();
 
-        if (persistentProperty.isAnnotationPresent(Embedded.class)) {
+        if (persistentProperty.isAnnotationPresent(Embedded.class) || persistentProperty.isAnnotationPresent(EmbeddedId.class)) {
             return PersistentPropertyType.EMBEDDED;
         }
 
