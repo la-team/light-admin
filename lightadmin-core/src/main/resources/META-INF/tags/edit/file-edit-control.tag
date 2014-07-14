@@ -8,7 +8,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-<tiles:useAttribute name="entityId"/>
+<tiles:useAttribute name="entityId" ignore="true"/>
 <tiles:useAttribute name="dialogMode" ignore="true"/>
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>

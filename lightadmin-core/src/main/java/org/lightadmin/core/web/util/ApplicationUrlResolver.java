@@ -49,7 +49,7 @@ public final class ApplicationUrlResolver {
     }
 
     public static String domainRestEntityBaseUrl(DomainTypeAdministrationConfiguration configuration, Object id) {
-        return domainRestBaseUrl(configuration) + "/" + id;
+        return domainRestBaseUrl(configuration) + "/" + (id == null ? 0 : id);
     }
 
     public static String domainRestScopeBaseUrl(DomainTypeAdministrationConfiguration configuration) {
