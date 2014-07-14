@@ -61,6 +61,7 @@
         <developer>
             <id>max-dev</id>
             <name>Maxim Kharchenko</name>
+            <email>kharchenko.max@gmail.com</email>
             <roles>
                 <role>developer</role>
             </roles>
@@ -68,6 +69,7 @@
         <developer>
             <id>aliubunia</id>
             <name>Anatolii Liubunia</name>
+            <email>aliubunia@gmail.com</email>
             <roles>
                 <role>developer</role>
             </roles>
@@ -75,6 +77,7 @@
         <developer>
             <id>ikostenko</id>
             <name>Irina Kostenko</name>
+            <email>iryna.kostenko@gmail.com</email>
             <roles>
                 <role>qa, test automation engineer</role>
             </roles>
@@ -96,7 +99,7 @@
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <hibernate-validator.version>5.0.3.Final</hibernate-validator.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
-        <guava.version>16.0.1</guava.version>
+        <guava.version>17.0</guava.version>
         <commons-lang3.version>3.2.1</commons-lang3.version>
         <commons-collections4.version>4.0</commons-collections4.version>
         <commons-fileupload.version>1.3.1</commons-fileupload.version>
@@ -352,16 +355,29 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.1</version>
+                <configuration>
+                    <showDeprecation>false</showDeprecation>
+                    <showWarnings>false</showWarnings>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.4</version>
+                <executions>
+                    <execution>
+                        <id>package-test-jar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>test-jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
                 <configuration>
                     <archive>
                         <manifest>
-                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                             <addDefaultSpecificationEntries>true</addDefaultSpecificationEntries>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
                         </manifest>
                     </archive>
                 </configuration>
@@ -372,12 +388,50 @@
                 <version>2.2.1</version>
                 <executions>
                     <execution>
-                        <id>attach-sources</id>
+                        <id>package-jars</id>
+                        <phase>package</phase>
                         <goals>
-                            <goal>jar-no-fork</goal>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
+                        </goals>
+                        <configuration>
+                            <includePom>true</includePom>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includePom>true</includePom>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>2.9.1</version>
+                <inherited>true</inherited>
+                <executions>
+                    <execution>
+                        <id>package-jars</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                            <goal>test-jar</goal>
                         </goals>
                     </execution>
                 </executions>
+                <configuration>
+                    <debug>true</debug>
+                    <minmemory>128m</minmemory>
+                    <maxmemory>1024m</maxmemory>
+                    <quiet>true</quiet>
+                    <doctitle>${project.name} ${project.version}</doctitle>
+                    <windowtitle>${project.name} ${project.version}</windowtitle>
+                    <testDoctitle>${project.name} ${project.version}</testDoctitle>
+                    <testWindowtitle>${project.name} ${project.version}</testWindowtitle>
+                    <splitindex>true</splitindex>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <linksource>true</linksource>
+                    <detectOfflineLinks>false</detectOfflineLinks>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
