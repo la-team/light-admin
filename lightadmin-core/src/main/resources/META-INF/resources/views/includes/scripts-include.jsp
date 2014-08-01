@@ -21,7 +21,7 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/flot/jquery.flot.resize.js"/>"></script>
 
 <script type="text/javascript"
-        src="<light:url value="/scripts/vendor/plugins/tables/jquery-dataTables.min.js"/>"></script>
+        src="<light:url value="/scripts/vendor/plugins/tables/jquery.dataTables.js"/>"></script>
 <script type="text/javascript"
         src="<light:url value="/scripts/vendor/plugins/tables/jquery-dataTables-fnReloadAjax.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/tables/colResizable.min.js"/>"></script>

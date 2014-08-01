@@ -48,8 +48,7 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
     private OperationBuilder operationBuilder;
 
     private GlobalAdministrationConfiguration adminConfiguration;
-    private RepositoryRestConfiguration restConfiguration;
-    private final PersistentEntityResourceAssembler persistentEntityResourceAssembler;
+    private PersistentEntityResourceAssembler persistentEntityResourceAssembler;
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     DynamicPersistentEntityResourceSerializer(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration, RepositoryRestConfiguration config, PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
@@ -57,7 +56,6 @@ class DynamicPersistentEntityResourceSerializer extends StdSerializer<DynamicPer
 
         this.persistentEntityResourceAssembler = persistentEntityResourceAssembler;
         this.adminConfiguration = globalAdministrationConfiguration;
-        this.restConfiguration = config;
 
         this.operationBuilder = operationBuilder(this.adminConfiguration, lightAdminConfiguration);
         this.fieldValueEvaluator = new FieldValueEvaluator();
