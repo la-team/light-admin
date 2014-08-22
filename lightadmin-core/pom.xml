@@ -93,6 +93,8 @@
 
         <spring.version>4.0.5.RELEASE</spring.version>
         <spring.security.version>3.2.4.RELEASE</spring.security.version>
+        <!--<spring.data.jpa.version>1.6.2.RELEASE</spring.data.jpa.version>-->
+        <!--<spring.data.rest.webmvc.version>2.1.2.RELEASE</spring.data.rest.webmvc.version>        -->
         <spring.data.jpa.version>1.6.0.RELEASE</spring.data.jpa.version>
         <spring.data.rest.webmvc.version>2.1.0.RELEASE</spring.data.rest.webmvc.version>
         <apache.tiles.version>2.2.2</apache.tiles.version>
@@ -248,11 +250,6 @@
         <dependency>
             <groupId>org.apache.tiles</groupId>
             <artifactId>tiles-el</artifactId>
-            <version>${apache.tiles.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tiles</groupId>
-            <artifactId>tiles-extras</artifactId>
             <version>${apache.tiles.version}</version>
         </dependency>
         <dependency>
