@@ -1,5 +1,7 @@
 package org.lightadmin.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.util.Assert;
 
@@ -35,6 +37,7 @@ public class Address extends AbstractEntity {
 
     }
 
+    @JsonIgnore
     public Address getCopy() {
         return new Address(this.street, this.city, this.country);
     }

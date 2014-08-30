@@ -35,6 +35,6 @@ public enum DomainConfigurationUnitType {
 
     @Override
     public String toString() {
-        return format("Domain Configuration Unit: %s", getName());
+        return getName();
     }
 }

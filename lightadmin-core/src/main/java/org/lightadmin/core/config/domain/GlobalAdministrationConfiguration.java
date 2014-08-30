@@ -69,6 +69,10 @@ public class GlobalAdministrationConfiguration {
         return managedDomainTypeConfigurations.get(domainType);
     }
 
+    public boolean isManagedDomainType(Class<?> domainType) {
+        return managedDomainTypeConfigurations.get(domainType) != null;
+    }
+
     public DomainTypeBasicConfiguration forDomainType(Class<?> domainType) {
         return domainTypeConfigurations.get(domainType);
     }

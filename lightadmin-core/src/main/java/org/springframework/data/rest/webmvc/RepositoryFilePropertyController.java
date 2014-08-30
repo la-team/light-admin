@@ -1,19 +1,16 @@
 package org.springframework.data.rest.webmvc;
 
+import com.google.common.collect.Maps;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.rest.binary.OperationBuilder;
 import org.lightadmin.core.web.util.FileResourceLoader;
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.invoke.RepositoryInvoker;
 import org.springframework.data.rest.webmvc.support.BackendId;
-import org.springframework.data.rest.webmvc.support.SimpleMapResource;
-import org.springframework.data.web.PagedResourcesAssembler;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.http.HttpHeaders;
@@ -36,15 +33,15 @@ import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.i
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 
 @RepositoryRestController
-public class RepositoryFilePropertyController extends AbstractRepositoryRestController implements ApplicationContextAware {
+public class RepositoryFilePropertyController {
 
     private static final String BASE_MAPPING = "/{repository}/{id}/{property}";
 
-    private ApplicationContext applicationContext;
+    private BeanFactory beanFactory;
 
     @Autowired
-    public RepositoryFilePropertyController(PagedResourcesAssembler<Object> pagedResourcesAssembler) {
-        super(pagedResourcesAssembler);
+    public RepositoryFilePropertyController(BeanFactory beanFactory) {
+        this.beanFactory = beanFactory;
     }
 
     @RequestMapping(value = BASE_MAPPING + "/file", method = RequestMethod.GET)
@@ -120,19 +117,25 @@ public class RepositoryFilePropertyController extends AbstractRepositoryRestCont
     }
 
     private LightAdminConfiguration lightAdminConfiguration() {
-        return applicationContext.getBean(LightAdminConfiguration.class);
+        return beanFactory.getBean(LightAdminConfiguration.class);
     }
 
     private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
-        return applicationContext.getBean(GlobalAdministrationConfiguration.class);
+        return beanFactory.getBean(GlobalAdministrationConfiguration.class);
     }
 
     private FileResourceLoader fileResourceLoader() {
-        return applicationContext.getBean(FileResourceLoader.class);
+        return beanFactory.getBean(FileResourceLoader.class);
     }
 
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
+    public static class SimpleMapResource extends Resource<Map<String, Object>> {
+
+        public SimpleMapResource() {
+            super(Maps.<String, Object>newLinkedHashMap());
+        }
+
+        public void put(String key, Object value) {
+            getContent().put(key, value);
+        }
     }
 }

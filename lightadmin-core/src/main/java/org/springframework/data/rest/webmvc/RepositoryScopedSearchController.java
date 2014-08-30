@@ -4,13 +4,10 @@ import com.google.common.base.Predicate;
 import org.lightadmin.api.config.utils.ScopeMetadataUtils;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
-import org.springframework.beans.BeansException;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -29,7 +26,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
-import java.util.Set;
 
 import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
@@ -38,17 +34,19 @@ import static org.springframework.data.jpa.domain.Specifications.where;
 
 @SuppressWarnings("unchecked")
 @RepositoryRestController
-public class RepositoryScopedSearchController extends AbstractRepositoryRestController implements ApplicationContextAware {
+public class RepositoryScopedSearchController extends AbstractRepositoryRestController {
 
     private static final String BASE_MAPPING = "/{repository}/scope/{scopeName}";
 
-    private ApplicationContext applicationContext;
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+    private final BeanFactory beanFactory;
 
     @Autowired
-    public RepositoryScopedSearchController(@Qualifier("defaultConversionService") ConversionService conversionService, PagedResourcesAssembler<Object> pagedResourcesAssembler) {
+    public RepositoryScopedSearchController(@Qualifier("defaultConversionService") ConversionService conversionService, PagedResourcesAssembler<Object> pagedResourcesAssembler, BeanFactory beanFactory) {
         super(pagedResourcesAssembler);
+
         this.conversionService = conversionService;
+        this.beanFactory = beanFactory;
     }
 
     @RequestMapping(value = BASE_MAPPING + "/search/count", method = RequestMethod.GET)
@@ -79,10 +77,7 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
     @RequestMapping(value = BASE_MAPPING + "/search", method = RequestMethod.GET)
     public ResponseEntity<?> filterEntities(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, WebRequest request, Pageable pageable, @PathVariable String scopeName) throws Exception {
         DynamicRepositoryInvoker repositoryInvoker = (DynamicRepositoryInvoker) repoRequest.getInvoker();
-        Set<FieldMetadata> listViewFields = domainTypeAdministrationConfiguration.getListViewFragment().getFields();
         PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();
-
-        DynamicPersistentEntityResourceAssembler dynamicPersistentEntityResourceAssembler = DynamicPersistentEntityResourceAssembler.wrap(assembler, listViewFields, false);
 
         final ScopeMetadata scope = domainTypeAdministrationConfiguration.getScopes().getScope(scopeName);
 
@@ -93,7 +88,7 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
 
             final Page page = findBySpecificationAndPredicate(repositoryInvoker, filterSpecification, predicateScope.predicate(), pageable);
 
-            Object resources = resultToResources(page, dynamicPersistentEntityResourceAssembler);
+            Object resources = resultToResources(page, assembler);
 
             return new ResponseEntity<>(resources, HttpStatus.OK);
         }
@@ -103,20 +98,20 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
 
             Page page = findItemsBySpecification(repositoryInvoker, and(scopeSpecification, filterSpecification), pageable);
 
-            Object resources = resultToResources(page, dynamicPersistentEntityResourceAssembler);
+            Object resources = resultToResources(page, assembler);
 
             return new ResponseEntity<>(resources, HttpStatus.OK);
         }
 
         Page page = findItemsBySpecification(repositoryInvoker, filterSpecification, pageable);
 
-        Object resources = resultToResources(page, dynamicPersistentEntityResourceAssembler);
+        Object resources = resultToResources(page, assembler);
 
         return new ResponseEntity<>(resources, HttpStatus.OK);
     }
 
     private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
-        return applicationContext.getBean(GlobalAdministrationConfiguration.class);
+        return beanFactory.getBean(GlobalAdministrationConfiguration.class);
     }
 
     private SpecificationCreator specificationCreator() {
@@ -163,10 +158,5 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         final List<?> items = findItemsBySpecification(invoker, specification, pageable.getSort());
 
         return selectPage(newArrayList(filter(items, predicate)), pageable);
-    }
-
-    @Override
-    public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-        this.applicationContext = applicationContext;
     }
 }

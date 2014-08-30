@@ -3,11 +3,15 @@ package org.lightadmin.core.config.domain.field;
 import org.hibernate.validator.constraints.NotBlank;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.util.ReflectionUtils;
 
 import javax.persistence.GeneratedValue;
 import javax.validation.constraints.NotNull;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.*;
+import static org.springframework.util.ReflectionUtils.invokeMethod;
 
 public class PersistentFieldMetadata extends AbstractFieldMetadata {
 
@@ -65,6 +69,19 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata {
     public boolean isSortable() {
         PersistentPropertyType persistentPropertyType = PersistentPropertyType.forPersistentProperty(persistentProperty);
         return persistentPropertyType != ASSOC && persistentPropertyType != ASSOC_MULTI && persistentPropertyType != FILE;
+    }
+
+    @Override
+    public Object getValue(Object entity) {
+        Method getter = persistentProperty.getGetter();
+        if (null != getter) {
+            return invokeMethod(getter, entity);
+        }
+        Field fld = persistentProperty.getField();
+        if (null != fld) {
+            return ReflectionUtils.getField(fld, entity);
+        }
+        return null;
     }
 
     @Override

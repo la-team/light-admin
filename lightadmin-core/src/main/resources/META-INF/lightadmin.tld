@@ -169,7 +169,7 @@
             <name>persistentEntity</name>
             <required>true</required>
             <rtexprvalue>true</rtexprvalue>
-            <type>org.springframework.data.mapping.PersistentProperty</type>
+            <type>org.springframework.data.mapping.PersistentEntity</type>
         </attribute>
         <attribute>
             <name>includeFields</name>

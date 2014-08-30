@@ -1,5 +1,7 @@
 package org.lightadmin.core.config.domain.field;
 
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
+
 public class TransientFieldMetadata extends AbstractFieldMetadata {
 
     private final String property;
@@ -11,5 +13,10 @@ public class TransientFieldMetadata extends AbstractFieldMetadata {
 
     public String getProperty() {
         return property;
+    }
+
+    @Override
+    public Object getValue(Object entity) {
+        return new DirectFieldAccessFallbackBeanWrapper(entity).getPropertyValue(property);
     }
 }

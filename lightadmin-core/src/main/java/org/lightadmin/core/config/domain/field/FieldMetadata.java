@@ -7,4 +7,6 @@ public interface FieldMetadata extends Identifiable, Nameable {
     int getSortOrder();
 
     void setSortOrder(int sortOrder);
+
+    Object getValue(Object entity);
 }

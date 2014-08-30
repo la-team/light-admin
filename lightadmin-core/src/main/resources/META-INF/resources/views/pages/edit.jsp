@@ -50,7 +50,7 @@
         </div>
         <fieldset>
             <c:forEach var="fieldEntry" items="${fields}" varStatus="status">
-                <div id="${fieldEntry.uuid}-control-group" class="rowElem ${status.first ? 'noborder' : ''}">
+                <div id="${fieldEntry.uuid}-control-group" class="${fieldEntry.primaryKey ? 'displayNone' : ''} rowElem ${status.first ? 'noborder' : ''}">
                     <label>
                         <strong>
                             <c:out value="${light:capitalize(fieldEntry.name)}"/>:<c:if
