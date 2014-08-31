@@ -18,7 +18,7 @@ package org.lightadmin.core.persistence.repository.event;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
-import org.lightadmin.core.rest.binary.OperationBuilder;
+import org.lightadmin.core.storage.OperationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;

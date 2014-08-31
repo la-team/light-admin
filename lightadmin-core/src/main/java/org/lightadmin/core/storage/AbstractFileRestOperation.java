@@ -13,8 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.core.rest.binary;
+package org.lightadmin.core.storage;
 
+import org.apache.commons.io.FileUtils;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
@@ -28,8 +29,6 @@ import java.io.File;
 
 import static java.lang.String.valueOf;
 import static org.apache.commons.io.FileUtils.getFile;
-import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToDomainStorageAttributeDirectory;
-import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToDomainStorageDirectory;
 
 public abstract class AbstractFileRestOperation {
 
@@ -55,20 +54,20 @@ public abstract class AbstractFileRestOperation {
 
     protected File referencedFileDomainEntityAttributeDirectory(PersistentProperty attrMeta) {
         final FileReference fileReference = (FileReference) attrMeta.findAnnotation(FileReference.class);
-        return getFile(fileReference.baseDirectory(), relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
+        return FileUtils.getFile(fileReference.baseDirectory(), FileStorageUtils.relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
     }
 
     protected File fileStorageDomainEntityAttributeDirectory(PersistentProperty attrMeta) {
-        return getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
+        return FileUtils.getFile(lightAdminConfiguration.getFileStorageDirectory(), FileStorageUtils.relativePathToDomainStorageAttributeDirectory(domainTypeName(), idAttributeValue(), attrMeta));
     }
 
     protected File referencedFileDomainEntityDirectory(PersistentProperty attrMeta) {
         final FileReference fileReference = (FileReference) attrMeta.findAnnotation(FileReference.class);
-        return getFile(fileReference.baseDirectory(), relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
+        return FileUtils.getFile(fileReference.baseDirectory(), FileStorageUtils.relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
     }
 
     protected File fileStorageDomainEntityDirectory() {
-        return getFile(lightAdminConfiguration.getFileStorageDirectory(), relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
+        return FileUtils.getFile(lightAdminConfiguration.getFileStorageDirectory(), FileStorageUtils.relativePathToDomainStorageDirectory(domainTypeName(), idAttributeValue()));
     }
 
     protected File referencedFile(PersistentProperty persistentProperty) {

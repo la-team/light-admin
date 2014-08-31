@@ -18,7 +18,7 @@ package org.lightadmin.core.web;
 import com.google.common.collect.Maps;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.rest.binary.OperationBuilder;
+import org.lightadmin.core.storage.OperationBuilder;
 import org.lightadmin.core.web.util.FileResourceLoader;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +47,7 @@ import java.io.Serializable;
 import java.util.Map;
 
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileType;
-import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
+import static org.lightadmin.core.storage.OperationBuilder.operationBuilder;
 import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.*;

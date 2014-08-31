@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.core.rest.binary;
+package org.lightadmin.core.storage;
 
 import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
@@ -26,7 +26,7 @@ import java.io.File;
 import java.io.IOException;
 
 import static org.apache.commons.io.FileUtils.*;
-import static org.lightadmin.core.rest.binary.FileStorageUtils.relativePathToStoreBinaryAttrValue;
+import static org.lightadmin.core.storage.FileStorageUtils.relativePathToStoreBinaryAttrValue;
 import static org.springframework.security.crypto.codec.Base64.decode;
 import static org.springframework.security.crypto.codec.Base64.isBase64;
 import static org.springframework.util.StringUtils.isEmpty;

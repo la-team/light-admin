@@ -23,7 +23,6 @@ import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
-import org.lightadmin.core.web.json.JsonConfigurationMetadata;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mapping.*;
 import org.springframework.hateoas.EntityLinks;

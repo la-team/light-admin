@@ -26,7 +26,7 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
-import org.lightadmin.core.rest.binary.OperationBuilder;
+import org.lightadmin.core.storage.OperationBuilder;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
@@ -50,7 +50,7 @@ import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.customF
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.transientFields;
 import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.*;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.FILE;
-import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
+import static org.lightadmin.core.storage.OperationBuilder.operationBuilder;
 import static org.lightadmin.core.web.util.ApplicationUrlResolver.selfDomainLink;
 
 @SuppressWarnings(value = {"unchecked", "unused"})
