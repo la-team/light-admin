@@ -16,9 +16,9 @@ import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
 import org.springframework.data.mapping.model.BeanWrapper;
+import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.ResourceProcessor;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,18 +33,21 @@ import static org.lightadmin.core.config.domain.configuration.support.ExceptionA
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.customFields;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.transientFields;
 import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.*;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.FILE;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
 import static org.lightadmin.core.web.util.ApplicationUrlResolver.selfDomainLink;
 
 @SuppressWarnings(value = {"unchecked", "unused"})
 public class DynamicPersistentEntityResourceProcessor implements ResourceProcessor<PersistentEntityResource<?>> {
 
-    private OperationBuilder operationBuilder;
-    private GlobalAdministrationConfiguration adminConfiguration;
+    private final GlobalAdministrationConfiguration adminConfiguration;
+    private final OperationBuilder operationBuilder;
+    private final EntityLinks entityLinks;
 
-    public DynamicPersistentEntityResourceProcessor(GlobalAdministrationConfiguration adminConfiguration, LightAdminConfiguration lightAdminConfiguration) {
-        this.adminConfiguration = adminConfiguration;
+    public DynamicPersistentEntityResourceProcessor(GlobalAdministrationConfiguration adminConfiguration, LightAdminConfiguration lightAdminConfiguration, EntityLinks entityLinks) {
         this.operationBuilder = operationBuilder(adminConfiguration, lightAdminConfiguration);
+        this.adminConfiguration = adminConfiguration;
+        this.entityLinks = entityLinks;
     }
 
     @Override
@@ -57,6 +60,7 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
         Link domainLink = domainLink(persistentEntityResource);
         boolean managedDomainType = adminConfiguration.isManagedDomainType(persistentEntity.getType());
         String primaryKey = persistentEntity.getIdProperty().getName();
+
         Map<DomainConfigurationUnitType, Map<String, Object>> dynamicProperties = dynamicPropertiesPerUnit(value, persistentEntity);
 
         PersistentEntityWrapper persistentEntityWrapper = new PersistentEntityWrapper(value, dynamicProperties, stringRepresentation, domainLink, managedDomainType, primaryKey);
@@ -112,7 +116,7 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
         persistentEntity.doWithProperties(new SimplePropertyHandler() {
             @Override
             public void doWithPersistentProperty(PersistentProperty<?> property) {
-                if (PersistentPropertyType.forPersistentProperty(property) == PersistentPropertyType.FILE) {
+                if (PersistentPropertyType.forPersistentProperty(property) == FILE) {
                     result.add(property);
                 }
             }
@@ -148,14 +152,8 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
         return wrapper.getProperty(persistentEntity.getIdProperty());
     }
 
-    private String filePropertyLink(final PersistentProperty persistentProperty, DomainTypeAdministrationConfiguration configuration, final Object id) {
-        return ServletUriComponentsBuilder.fromCurrentServletMapping()
-                .pathSegment("rest")
-                .pathSegment(configuration.getPluralDomainTypeName())
-                .pathSegment(id.toString())
-                .pathSegment(persistentProperty.getName())
-                .pathSegment("file").build()
-                .toUri().toString();
+    private String filePropertyLink(PersistentProperty persistentProperty, DomainTypeAdministrationConfiguration configuration, Object id) {
+        return entityLinks.linkForSingleResource(configuration.getDomainType(), id).slash(persistentProperty.getName()).slash("file").toUri().toString();
     }
 
     private boolean binaryDataExportNeeded(DomainConfigurationUnitType unit) {

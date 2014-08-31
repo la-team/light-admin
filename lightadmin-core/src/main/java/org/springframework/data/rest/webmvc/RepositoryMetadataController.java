@@ -2,10 +2,10 @@ package org.springframework.data.rest.webmvc;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @RepositoryRestController
@@ -24,6 +24,6 @@ public class RepositoryMetadataController {
     public HttpEntity<JsonConfigurationMetadata> schema(RootResourceInformation resourceInformation) {
         JsonConfigurationMetadata jsonConfigurationMetadata = domainTypeToJsonMetadataConverter.convert(resourceInformation.getPersistentEntity());
 
-        return new ResponseEntity<>(jsonConfigurationMetadata, HttpStatus.OK);
+        return new ResponseEntity<>(jsonConfigurationMetadata, OK);
     }
 }

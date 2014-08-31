@@ -22,6 +22,8 @@ import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.E
 
 public class DomainTypeToJsonMetadataConverter implements Converter<PersistentEntity, JsonConfigurationMetadata> {
 
+    private static final String ID_PLACEHOLDER = "{idPlaceholder}";
+
     private final GlobalAdministrationConfiguration globalAdministrationConfiguration;
     private final EntityLinks entityLinks;
 
@@ -87,6 +89,6 @@ public class DomainTypeToJsonMetadataConverter implements Converter<PersistentEn
             return null;
         }
 
-        return entityLinks.linkFor(persistentProperty.getActualType()).slash("{idPlaceholder}").withSelfRel();
+        return entityLinks.linkFor(persistentProperty.getActualType()).slash(ID_PLACEHOLDER).withSelfRel();
     }
 }

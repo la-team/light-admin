@@ -29,6 +29,6 @@ public class ConfigurationHandlerMethodArgumentResolver implements HandlerMethod
     public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer mavContainer, NativeWebRequest webRequest, WebDataBinderFactory binderFactory) throws Exception {
         ResourceMetadata resourceMetadata = resourceMetadataResolver.resolveArgument(parameter, mavContainer, webRequest, binderFactory);
 
-        return configuration.forDomainType(resourceMetadata.getDomainType());
+        return configuration.forManagedDomainType(resourceMetadata.getDomainType());
     }
 }

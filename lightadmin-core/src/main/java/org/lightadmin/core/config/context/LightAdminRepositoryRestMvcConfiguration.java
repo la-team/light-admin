@@ -40,7 +40,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     public DynamicPersistentEntityResourceProcessor dynamicPersistentEntityResourceProcessor() {
-        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), lightAdminConfiguration());
+        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), lightAdminConfiguration(), entityLinks());
     }
 
     @Bean
@@ -51,9 +51,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
     @Bean
     public Repositories repositories() {
         try {
-            RepositoriesFactoryBean repositoriesFactoryBean = new RepositoriesFactoryBean(beanFactory);
-            repositoriesFactoryBean.setSingleton(false);
-            return repositoriesFactoryBean.getObject();
+            return new RepositoriesFactoryBean(beanFactory).getObject();
         } catch (Exception e) {
             throw new BeanInstantiationException(Repositories.class, "Repositories bean instantiation problem!", e);
         }
@@ -76,7 +74,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     public DomainRepositoryEventListener domainRepositoryEventListener() {
-        return new DomainRepositoryEventListener();
+        return new DomainRepositoryEventListener(globalAdministrationConfiguration(), lightAdminConfiguration());
     }
 
     @Override

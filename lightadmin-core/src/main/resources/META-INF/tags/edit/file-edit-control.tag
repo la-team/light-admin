@@ -38,7 +38,9 @@
         var container = '${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}';
         var browse_button = '${attributeMetadata.name}-pickfiles${dialogMode ? '-dialog' : ''}';
         var file_input_id = '#${attributeMetadata.name}${dialogMode ? '-dialog' : ''}';
+        var container_selector = '#' + container;
 
-        decorateFileUploader(container, file_input_id, attribute_name, browse_button, file_upload_url);
+        var uploader = FileUploaderDecorator.decorate(container, file_input_id, attribute_name, browse_button, file_upload_url);
+        $(container_selector).data('plupload', uploader);
     });
 </script>

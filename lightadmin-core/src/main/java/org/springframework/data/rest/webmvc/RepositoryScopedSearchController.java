@@ -22,7 +22,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.context.request.WebRequest;
 
 import java.util.List;
@@ -31,6 +30,7 @@ import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
 import static org.lightadmin.api.config.utils.ScopeMetadataUtils.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
+import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @SuppressWarnings("unchecked")
 @RepositoryRestController
@@ -49,7 +49,7 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         this.beanFactory = beanFactory;
     }
 
-    @RequestMapping(value = BASE_MAPPING + "/search/count", method = RequestMethod.GET)
+    @RequestMapping(value = BASE_MAPPING + "/search/count", method = GET)
     public ResponseEntity<?> countItems(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, RootResourceInformation repoRequest, WebRequest request, @PathVariable String scopeName) {
         DynamicRepositoryInvoker repositoryInvoker = (DynamicRepositoryInvoker) repoRequest.getInvoker();
 
@@ -74,7 +74,7 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         return new ResponseEntity<>(countItemsBySpecification(repositoryInvoker, filterSpecification), HttpStatus.OK);
     }
 
-    @RequestMapping(value = BASE_MAPPING + "/search", method = RequestMethod.GET)
+    @RequestMapping(value = BASE_MAPPING + "/search", method = GET)
     public ResponseEntity<?> filterEntities(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, RootResourceInformation repoRequest, PersistentEntityResourceAssembler assembler, WebRequest request, Pageable pageable, @PathVariable String scopeName) throws Exception {
         DynamicRepositoryInvoker repositoryInvoker = (DynamicRepositoryInvoker) repoRequest.getInvoker();
         PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();

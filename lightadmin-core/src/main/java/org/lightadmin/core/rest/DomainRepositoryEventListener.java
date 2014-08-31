@@ -8,58 +8,75 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
-import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 
 public class DomainRepositoryEventListener extends AbstractRepositoryEventListener<Object> {
 
-    @Autowired
-    private GlobalAdministrationConfiguration configuration;
+    private final GlobalAdministrationConfiguration configuration;
+    private final OperationBuilder operationBuilder;
 
     @Autowired
-    private LightAdminConfiguration lightAdminConfiguration;
-
-    @Autowired
-    private Repositories repositories;
-
-    private OperationBuilder operationBuilder;
-
-    @PostConstruct
-    public void init() {
+    public DomainRepositoryEventListener(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration) {
+        this.configuration = configuration;
         this.operationBuilder = OperationBuilder.operationBuilder(configuration, lightAdminConfiguration);
     }
 
     @Override
     protected void onAfterSave(final Object entity) {
-        PersistentEntity<?, ?> persistentEntity = repositories.getPersistentEntity(entity.getClass());
+        Class<?> domainType = entity.getClass();
+        if (!configuration.isManagedDomainType(domainType)) {
+            return;
+        }
 
-        persistentEntity.doWithProperties(new SimplePropertyHandler() {
-            @Override
-            public void doWithPersistentProperty(PersistentProperty<?> property) {
-                if (PersistentPropertyType.isOfFileReferenceType(property)) {
-                    try {
-                        operationBuilder.saveOperation(entity).performCleanup(property);
-                    } catch (IOException e) {
-                    }
-                }
-            }
-        });
+        PersistentEntity<?, ?> persistentEntity = configuration.forManagedDomainType(domainType).getPersistentEntity();
+
+        persistentEntity.doWithProperties(new PersistentPropertyCleanupHandler(entity));
     }
 
     @Override
     protected void onBeforeDelete(final Object entity) {
-        PersistentEntity<?, ?> persistentEntity = repositories.getPersistentEntity(entity.getClass());
+        Class<?> domainType = entity.getClass();
+        if (!configuration.isManagedDomainType(domainType)) {
+            return;
+        }
 
-        persistentEntity.doWithProperties(new SimplePropertyHandler() {
-            @Override
-            public void doWithPersistentProperty(PersistentProperty<?> property) {
-                if (PersistentPropertyType.isOfFileReferenceType(property)) {
-                    operationBuilder.deleteOperation(entity).perform(property);
+        PersistentEntity<?, ?> persistentEntity = configuration.forManagedDomainType(domainType).getPersistentEntity();
+
+        persistentEntity.doWithProperties(new PersistentPropertyFileDeletionHandler(entity));
+    }
+
+    private class PersistentPropertyCleanupHandler implements SimplePropertyHandler {
+        private final Object entity;
+
+        public PersistentPropertyCleanupHandler(Object entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void doWithPersistentProperty(PersistentProperty<?> property) {
+            if (PersistentPropertyType.isOfFileReferenceType(property)) {
+                try {
+                    operationBuilder.saveOperation(entity).performCleanup(property);
+                } catch (IOException e) {
                 }
             }
-        });
+        }
+    }
+
+    private class PersistentPropertyFileDeletionHandler implements SimplePropertyHandler {
+        private final Object entity;
+
+        public PersistentPropertyFileDeletionHandler(Object entity) {
+            this.entity = entity;
+        }
+
+        @Override
+        public void doWithPersistentProperty(PersistentProperty<?> property) {
+            if (PersistentPropertyType.isOfFileReferenceType(property)) {
+                operationBuilder.deleteOperation(entity).perform(property);
+            }
+        }
     }
 }

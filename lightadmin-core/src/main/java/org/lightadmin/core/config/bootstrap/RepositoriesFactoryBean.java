@@ -25,6 +25,7 @@ public class RepositoriesFactoryBean extends AbstractFactoryBean<Repositories> {
 
     public RepositoriesFactoryBean(BeanFactory beanFactory) {
         setBeanFactory(beanFactory);
+        setSingleton(false);
     }
 
     @Override

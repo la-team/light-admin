@@ -1,4 +1,4 @@
-var FieldValueRenderer = function () {
+var FieldValueRenderer = (function () {
 
     function cutLongText(text) {
         var strValue = $.trim(text);
@@ -177,4 +177,4 @@ var FieldValueRenderer = function () {
             return createRenderer(propertyType, propertyValue, targetView).render(propertyValue);
         }
     };
-}();
+}());

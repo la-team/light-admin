@@ -35,4 +35,5 @@
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin-renderer.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin-datatables-ext.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin-view-decoration.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/lightadmin-fileuploader-decorator.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin.js"/>"></script>

@@ -14,12 +14,10 @@ import org.springframework.data.rest.webmvc.support.BackendId;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
@@ -31,6 +29,9 @@ import java.util.Map;
 
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileType;
 import static org.lightadmin.core.rest.binary.OperationBuilder.operationBuilder;
+import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.web.bind.annotation.RequestMethod.*;
 
 @RepositoryRestController
 public class RepositoryFilePropertyController {
@@ -44,7 +45,7 @@ public class RepositoryFilePropertyController {
         this.beanFactory = beanFactory;
     }
 
-    @RequestMapping(value = BASE_MAPPING + "/file", method = RequestMethod.GET)
+    @RequestMapping(value = BASE_MAPPING + "/file", method = GET)
     public void filePropertyOfEntity(RootResourceInformation repoRequest, ServletResponse response, @BackendId Serializable id, @PathVariable String property) throws Exception {
         PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();
         RepositoryInvoker invoker = repoRequest.getInvoker();
@@ -65,7 +66,7 @@ public class RepositoryFilePropertyController {
         }
     }
 
-    @RequestMapping(value = BASE_MAPPING + "/file", method = RequestMethod.DELETE)
+    @RequestMapping(value = BASE_MAPPING + "/file", method = DELETE)
     public ResponseEntity<?> deleteFileOfPropertyOfEntity(RootResourceInformation repoRequest, @BackendId Serializable id, @PathVariable String property) throws Exception {
         PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();
         RepositoryInvoker invoker = repoRequest.getInvoker();
@@ -82,15 +83,15 @@ public class RepositoryFilePropertyController {
         }
 
         if (!isOfFileType(prop)) {
-            return ControllerUtils.toEmptyResponse(HttpStatus.METHOD_NOT_ALLOWED);
+            return ControllerUtils.toEmptyResponse(METHOD_NOT_ALLOWED);
         }
 
         operation().deleteOperation(domainObj).perform(prop);
 
-        return ControllerUtils.toEmptyResponse(HttpStatus.OK);
+        return ControllerUtils.toEmptyResponse(OK);
     }
 
-    @RequestMapping(value = BASE_MAPPING + "/file", method = {RequestMethod.POST})
+    @RequestMapping(value = BASE_MAPPING + "/file", method = {POST})
     public ResponseEntity<? extends ResourceSupport> saveFilePropertyOfEntity(final ServletServerHttpRequest request) throws Exception {
         final MultipartHttpServletRequest multipartHttpServletRequest = (MultipartHttpServletRequest) request.getServletRequest();
 
@@ -99,10 +100,10 @@ public class RepositoryFilePropertyController {
         if (!fileMap.isEmpty()) {
             final Map.Entry<String, MultipartFile> fileEntry = fileMap.entrySet().iterator().next();
 
-            return ControllerUtils.toResponseEntity(HttpStatus.OK, new HttpHeaders(), fileResource(fileEntry));
+            return ControllerUtils.toResponseEntity(OK, new HttpHeaders(), fileResource(fileEntry));
         }
 
-        return ControllerUtils.toEmptyResponse(HttpStatus.METHOD_NOT_ALLOWED);
+        return ControllerUtils.toEmptyResponse(METHOD_NOT_ALLOWED);
     }
 
     private Resource<?> fileResource(Map.Entry<String, MultipartFile> fileEntry) throws IOException {
@@ -128,7 +129,7 @@ public class RepositoryFilePropertyController {
         return beanFactory.getBean(FileResourceLoader.class);
     }
 
-    public static class SimpleMapResource extends Resource<Map<String, Object>> {
+    private static class SimpleMapResource extends Resource<Map<String, Object>> {
 
         public SimpleMapResource() {
             super(Maps.<String, Object>newLinkedHashMap());
