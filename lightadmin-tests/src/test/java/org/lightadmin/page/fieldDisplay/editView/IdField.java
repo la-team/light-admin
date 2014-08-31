@@ -21,6 +21,6 @@ public class IdField extends SeleniumIntegrationTest {
 	public void isReadonly(){
 		editPage = getStartPage().editItem( 2 );
 
-		assertFalse( editPage.isFieldEditable( "id" ) );
+		assertFalse( editPage.isFieldDisplayed( "id" ) );
 	}
 }

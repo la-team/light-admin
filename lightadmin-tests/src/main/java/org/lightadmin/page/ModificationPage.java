@@ -97,6 +97,10 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		return editForm.findElement( By.id( fieldName ) ).isEnabled();
 	}
 
+    public boolean isFieldDisplayed( String fieldName ) {
+        return editForm.findElement( By.id( fieldName ) ).isDisplayed();
+    }
+
 	public void addValidFile( String fileName ) throws IOException, AWTException {
 		addFile( fileName );
 
