@@ -247,3 +247,5 @@ insert into TestLineItem (id, order_id, product_id, amount) values (113, 6, 1, 3
 insert into TestLineItem (id, order_id, product_id, amount) values (114, null, 1, 7);
 insert into TestLineItem (id, order_id, product_id, amount) values (115, 7, 3, 12);
 insert into TestLineItem (id, order_id, product_id, amount) values (116, 8, 2, 31);
+
+insert into EntityWithUUID (id, name) values ('5276eced-7e41-4933-94a0-77557e7d5b37', 'test');

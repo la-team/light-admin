@@ -17,3 +17,4 @@ TRUNCATE TABLE testcustomer_discount;
 TRUNCATE TABLE TestDiscountProgram;
 TRUNCATE TABLE TestCustomer;
 TRUNCATE TABLE TestProduct;
+TRUNCATE TABLE EntityWithUUID;

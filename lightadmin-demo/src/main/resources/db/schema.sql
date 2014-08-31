@@ -37,3 +37,5 @@ CREATE TABLE testcustomer_discount (customer_id BIGINT CONSTRAINT testcustomer_t
 CREATE TABLE testaddress (id BIGINT IDENTITY PRIMARY KEY, street VARCHAR(255), city VARCHAR(255), country VARCHAR(255));
 
 CREATE TABLE testorders_addresses (order_id BIGINT CONSTRAINT testorder_testaddress_order_ref REFERENCES testorders (id), address_id BIGINT CONSTRAINT testorder_testaddress_address_ref REFERENCES testaddress (id));
+
+CREATE TABLE EntityWithUUID (id VARCHAR(255) PRIMARY KEY, name VARCHAR(255));
