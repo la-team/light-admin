@@ -10,6 +10,7 @@ import org.springframework.test.annotation.IfProfileValue;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+//TODO: iko: add test for remembering user login/pwd
 @IfProfileValue( name = "security.enabled", value = "true" )
 public class LoginPageTest extends SeleniumIntegrationTest {
 
@@ -39,6 +40,4 @@ public class LoginPageTest extends SeleniumIntegrationTest {
 
 		assertEquals( "Your login attempt was not successful, try again.\n" + "Reason: Bad credentials.", returnedLoginPage.errorMessage() );
 	}
-
-	//TODO: iko: add test for remembering user login/pwd
 }
