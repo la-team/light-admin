@@ -30,6 +30,7 @@ import org.springframework.beans.ConfigurablePropertyAccessor;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
@@ -37,6 +38,7 @@ import org.springframework.data.rest.core.event.ValidatingRepositoryEventListene
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.validation.Validator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -48,6 +50,8 @@ import static com.google.common.collect.Lists.newLinkedList;
 import static org.springframework.beans.PropertyAccessorFactory.forDirectFieldAccess;
 
 @Configuration
+@ComponentScan(basePackages = {"org.lightadmin.core.web"},
+        includeFilters = @ComponentScan.Filter(RepositoryRestController.class), useDefaultFilters = false)
 public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcConfiguration {
 
     @Autowired
