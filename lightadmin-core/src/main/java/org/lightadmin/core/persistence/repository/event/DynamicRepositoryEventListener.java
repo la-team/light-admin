@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.core.rest;
+package org.lightadmin.core.persistence.repository.event;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -27,13 +27,13 @@ import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
 import java.io.IOException;
 
-public class DomainRepositoryEventListener extends AbstractRepositoryEventListener<Object> {
+public class DynamicRepositoryEventListener extends AbstractRepositoryEventListener<Object> {
 
     private final GlobalAdministrationConfiguration configuration;
     private final OperationBuilder operationBuilder;
 
     @Autowired
-    public DomainRepositoryEventListener(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration) {
+    public DynamicRepositoryEventListener(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration) {
         this.configuration = configuration;
         this.operationBuilder = OperationBuilder.operationBuilder(configuration, lightAdminConfiguration);
     }

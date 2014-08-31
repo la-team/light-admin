@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.rest.webmvc;
+package org.lightadmin.core.persistence.support;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;

@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.RepositoriesFactoryBean;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.rest.DomainRepositoryEventListener;
+import org.lightadmin.core.persistence.repository.event.DynamicRepositoryEventListener;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.ConfigurablePropertyAccessor;
 import org.springframework.beans.factory.ListableBeanFactory;
@@ -32,12 +32,12 @@ import org.springframework.data.rest.core.event.ValidatingRepositoryEventListene
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
-import org.springframework.data.rest.webmvc.ConfigurationHandlerMethodArgumentResolver;
-import org.springframework.data.rest.webmvc.DomainTypeToJsonMetadataConverter;
-import org.springframework.data.rest.webmvc.DynamicDomainObjectMerger;
-import org.springframework.data.rest.webmvc.DynamicPersistentEntityResourceProcessor;
+import org.lightadmin.core.web.support.ConfigurationHandlerMethodArgumentResolver;
+import org.lightadmin.core.web.json.DomainTypeToJsonMetadataConverter;
+import org.lightadmin.core.persistence.support.DynamicDomainObjectMerger;
+import org.lightadmin.core.web.support.DynamicPersistentEntityResourceProcessor;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
-import org.springframework.data.rest.webmvc.jackson.LightAdminJacksonModule;
+import org.lightadmin.core.web.json.LightAdminJacksonModule;
 import org.springframework.validation.Validator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
@@ -88,8 +88,8 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
     }
 
     @Bean
-    public DomainRepositoryEventListener domainRepositoryEventListener() {
-        return new DomainRepositoryEventListener(globalAdministrationConfiguration(), lightAdminConfiguration());
+    public DynamicRepositoryEventListener domainRepositoryEventListener() {
+        return new DynamicRepositoryEventListener(globalAdministrationConfiguration(), lightAdminConfiguration());
     }
 
     @Override

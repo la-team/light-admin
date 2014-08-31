@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.rest.webmvc.support;
+package org.lightadmin.core.persistence.support;
 
 import org.apache.commons.lang3.BooleanUtils;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;

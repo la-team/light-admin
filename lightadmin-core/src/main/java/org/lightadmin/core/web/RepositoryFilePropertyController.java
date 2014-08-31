@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.rest.webmvc;
+package org.lightadmin.core.web;
 
 import com.google.common.collect.Maps;
 import org.lightadmin.core.config.LightAdminConfiguration;
@@ -25,6 +25,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.invoke.RepositoryInvoker;
+import org.springframework.data.rest.webmvc.ControllerUtils;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.data.rest.webmvc.RootResourceInformation;
 import org.springframework.data.rest.webmvc.support.BackendId;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceSupport;

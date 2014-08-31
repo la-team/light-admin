@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.rest.webmvc;
+package org.lightadmin.core.web;
 
 import com.google.common.base.Predicate;
 import org.lightadmin.api.config.utils.ScopeMetadataUtils;
@@ -31,8 +31,13 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.rest.core.invoke.DynamicRepositoryInvoker;
-import org.springframework.data.rest.webmvc.support.SpecificationCreator;
+import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
+import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.data.rest.webmvc.RootResourceInformation;
+import org.lightadmin.core.persistence.support.SpecificationCreator;
 import org.springframework.data.web.PagedResourcesAssembler;
+import org.springframework.hateoas.Resource;
+import org.springframework.hateoas.Resources;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -43,23 +48,26 @@ import java.util.List;
 
 import static com.google.common.collect.Collections2.filter;
 import static com.google.common.collect.Lists.newArrayList;
+import static java.util.Collections.singletonList;
 import static org.lightadmin.api.config.utils.ScopeMetadataUtils.*;
 import static org.springframework.data.jpa.domain.Specifications.where;
+import static org.springframework.data.rest.webmvc.ControllerUtils.EMPTY_RESOURCE_LIST;
 import static org.springframework.web.bind.annotation.RequestMethod.GET;
 
 @SuppressWarnings("unchecked")
 @RepositoryRestController
-public class RepositoryScopedSearchController extends AbstractRepositoryRestController {
+public class RepositoryScopedSearchController {
 
     private static final String BASE_MAPPING = "/{repository}/scope/{scopeName}";
 
     private final ConversionService conversionService;
     private final BeanFactory beanFactory;
 
+    private final PagedResourcesAssembler pagedResourcesAssembler;
+
     @Autowired
     public RepositoryScopedSearchController(@Qualifier("defaultConversionService") ConversionService conversionService, PagedResourcesAssembler<Object> pagedResourcesAssembler, BeanFactory beanFactory) {
-        super(pagedResourcesAssembler);
-
+        this.pagedResourcesAssembler = pagedResourcesAssembler;
         this.conversionService = conversionService;
         this.beanFactory = beanFactory;
     }
@@ -125,12 +133,34 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         return new ResponseEntity<>(resources, HttpStatus.OK);
     }
 
-    private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
-        return beanFactory.getBean(GlobalAdministrationConfiguration.class);
+    protected Resources resultToResources(Object result, PersistentEntityResourceAssembler assembler) {
+        if (result instanceof Page) {
+            Page<Object> page = (Page<Object>) result;
+            return entitiesToResources(page, assembler);
+        }
+
+        if (result instanceof Iterable) {
+            return entitiesToResources((Iterable<Object>) result, assembler);
+        }
+
+        if (null == result) {
+            return new Resources(EMPTY_RESOURCE_LIST);
+        }
+
+        Resource<Object> resource = assembler.toResource(result);
+        return new Resources(singletonList(resource));
     }
 
-    private SpecificationCreator specificationCreator() {
-        return new SpecificationCreator(this.conversionService, globalAdministrationConfiguration());
+    protected Resources<? extends Resource<Object>> entitiesToResources(Page<Object> page, PersistentEntityResourceAssembler assembler) {
+        return pagedResourcesAssembler.toResource(page, assembler);
+    }
+
+    protected Resources<Resource<Object>> entitiesToResources(Iterable<Object> entities, PersistentEntityResourceAssembler assembler) {
+        List<Resource<Object>> resources = newArrayList();
+        for (Object obj : entities) {
+            resources.add(obj == null ? null : assembler.toResource(obj));
+        }
+        return new Resources<>(resources);
     }
 
     private Specification specificationFromRequest(WebRequest request, PersistentEntity<?, ?> persistentEntity) {
@@ -173,5 +203,13 @@ public class RepositoryScopedSearchController extends AbstractRepositoryRestCont
         final List<?> items = findItemsBySpecification(invoker, specification, pageable.getSort());
 
         return selectPage(newArrayList(filter(items, predicate)), pageable);
+    }
+
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
+        return beanFactory.getBean(GlobalAdministrationConfiguration.class);
+    }
+
+    private SpecificationCreator specificationCreator() {
+        return new SpecificationCreator(this.conversionService, globalAdministrationConfiguration());
     }
 }

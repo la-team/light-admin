@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.rest.webmvc;
+package org.lightadmin.core.web.json;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -23,6 +23,7 @@ import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.lightadmin.core.config.domain.field.TransientFieldMetadata;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
+import org.lightadmin.core.web.json.JsonConfigurationMetadata;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mapping.*;
 import org.springframework.hateoas.EntityLinks;
