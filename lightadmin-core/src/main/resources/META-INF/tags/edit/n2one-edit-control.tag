@@ -5,6 +5,7 @@
 
 <%@ attribute name="domainType" required="true" type="java.lang.Class" %>
 <%@ attribute name="attributeMetadata" required="true" type="org.springframework.data.mapping.PersistentProperty" %>
+<%@ attribute name="title" required="true" type="java.lang.String" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
 <%@ attribute name="modalViewEnabled" required="false" type="java.lang.Boolean" %>
@@ -15,7 +16,7 @@
 <div class="floatleft searchDrop">
     <select name="${attributeMetadata.name}" id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}"
             class="chzn-select" style="width: 302px;" ${disabled ? 'disabled' : ''}
-            data-placeholder="Select ${attributeMetadata.name}">
+            data-placeholder="Select ${title}">
         <option value=""></option>
         <light:domain-type-elements domainType="${attributeMetadata.type}" idVar="elementId"
                                     stringRepresentationVar="elementName">

@@ -26,7 +26,7 @@
                             <label id="filter-field-name"><strong><c:out value="${light:capitalize(filter.name)}"/>:</strong></label>
 
                             <div class="formRight">
-                                <light-jsp:filter-control domainType="${domainTypeAdministrationConfiguration.domainType}" attributeMetadata="${filter.attributeMetadata}" cssClass="input-xlarge"/>
+                                <light-jsp:filter-control domainType="${domainTypeAdministrationConfiguration.domainType}" filter="${filter}" cssClass="input-xlarge"/>
                             </div>
                             <div class="fix"></div>
                         </div>

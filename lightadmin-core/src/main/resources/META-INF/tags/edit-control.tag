@@ -35,7 +35,7 @@
                                      disabled="${disabled}"/>
     </jsp:attribute>
     <jsp:attribute name="n2oneEditControl">
-        <light-jsp:n2one-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}"
+        <light-jsp:n2one-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}" title="${fieldMetadata.name}"
                                       cssClass="${cssClass}" disabled="${disabled}" modalViewEnabled="${true}"/>
     </jsp:attribute>
     <jsp:attribute name="n2manyEditControl">

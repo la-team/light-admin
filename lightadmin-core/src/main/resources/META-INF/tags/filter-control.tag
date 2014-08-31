@@ -5,10 +5,11 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <%@ attribute name="domainType" required="true" type="java.lang.Class" %>
-<%@ attribute name="attributeMetadata" required="true" type="org.springframework.data.mapping.PersistentProperty" %>
+<%@ attribute name="filter" required="true" type="org.lightadmin.core.config.domain.filter.FilterMetadata" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
 <%@ attribute name="errorCssClass" required="false" type="java.lang.String" %>
 
+<c:set var="attributeMetadata" value="${filter.attributeMetadata}"/>
 <light:edit-control-dispatcher persistentProperty="${attributeMetadata}">
     <jsp:attribute name="numberEditControl">
         <light-jsp:number-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
@@ -27,7 +28,7 @@
         <jsp:text>File is not supported</jsp:text>
     </jsp:attribute>
     <jsp:attribute name="n2oneEditControl">
-        <light-jsp:n2one-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}"
+        <light-jsp:n2one-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}" title="${filter.name}"
                                       cssClass="${cssClass}" modalViewEnabled="${false}"/>
     </jsp:attribute>
     <jsp:attribute name="n2manyEditControl">
