@@ -15,12 +15,21 @@
  */
 package org.lightadmin.core.persistence.metamodel;
 
+import com.google.common.collect.Sets;
+import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.joda.time.LocalTime;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.springframework.data.mapping.PersistentProperty;
 
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.Set;
+import java.util.UUID;
 
 import static org.lightadmin.core.util.NumberUtils.isNumberFloat;
 import static org.lightadmin.core.util.NumberUtils.isNumberInteger;
@@ -48,7 +57,7 @@ public enum PersistentPropertyType {
             return BOOL;
         }
 
-        if (Date.class.isAssignableFrom(attrType)) {
+        if (isAssignableFrom(attrType, standardDateTypes()) || isAssignableFrom(attrType, jodaTypes())) {
             return DATE;
         }
 
@@ -60,7 +69,7 @@ public enum PersistentPropertyType {
             return NUMBER_FLOAT;
         }
 
-        if (String.class.equals(attrType)) {
+        if (String.class.equals(attrType) || UUID.class.equals(attrType)) {
             return STRING;
         }
 
@@ -109,5 +118,33 @@ public enum PersistentPropertyType {
         }
 
         return forType(attrType);
+    }
+
+    private static boolean isAssignableFrom(Class cls, Set<Class> types) {
+        for (Class<?> type : types) {
+            if (type.isAssignableFrom(cls)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private static Set<Class> standardDateTypes() {
+        return Sets.<Class>newHashSet(
+                Date.class,
+                Calendar.class,
+                java.sql.Date.class,
+                java.sql.Time.class,
+                Timestamp.class
+        );
+    }
+
+    private static Set<Class> jodaTypes() {
+        return Sets.<Class>newHashSet(
+                DateTime.class,
+                LocalDateTime.class,
+                LocalDate.class,
+                LocalTime.class
+        );
     }
 }

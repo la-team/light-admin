@@ -1,15 +1,15 @@
-insert into Customer (id, email, firstname, lastname) values (1, 'dave@dmband1.com', 'Dave', 'One')
-insert into Customer (id, email, firstname, lastname) values (2, 'carter@dmband2.com', 'Carter', 'Two');
-insert into Customer (id, email, firstname, lastname) values (3, 'martin@dmband3.com', 'Martin', 'Three');
-insert into Customer (id, email, firstname, lastname) values (4, 'caroline@dmband4.com', 'Caroline', 'Four')
-insert into Customer (id, email, firstname, lastname) values (5, 'gavin@dmband5.com', 'Gavin', 'Five');
-insert into Customer (id, email, firstname, lastname) values (6, 'luzek@dmband6.com', 'Luzek', 'Six');
-insert into Customer (id, email, firstname, lastname) values (7, 'karmak@dmband7.com', 'Karmak', 'Seven')
-insert into Customer (id, email, firstname, lastname) values (8, 'maxim@dmband8.com', 'Maxim', 'Eight');
-insert into Customer (id, email, firstname, lastname) values (9, 'irina@dmband9.com', 'Irina', 'Nine');
-insert into Customer (id, email, firstname, lastname) values (10, 'tolik@dmband10.com', 'Tolik', 'Ten')
-insert into Customer (id, email, firstname, lastname) values (11, 'sasha@dmband11.com', 'Sasha', 'Eleven');
-insert into Customer (id, email, firstname, lastname) values (12, 'pasha@dmband12.com', 'Pasha', 'Twelve');
+insert into Customer (id, email, firstname, lastname, reg_date) values (1, 'dave@dmband1.com', 'Dave', 'One', DATE '2011-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (2, 'carter@dmband2.com', 'Carter', 'Two', DATE '2012-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (3, 'martin@dmband3.com', 'Martin', 'Three', DATE '2013-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (4, 'caroline@dmband4.com', 'Caroline', 'Four', DATE '2014-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (5, 'gavin@dmband5.com', 'Gavin', 'Five', DATE '2015-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (6, 'luzek@dmband6.com', 'Luzek', 'Six', DATE '2016-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (7, 'karmak@dmband7.com', 'Karmak', 'Seven', DATE '2017-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (8, 'maxim@dmband8.com', 'Maxim', 'Eight', DATE '2018-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (9, 'irina@dmband9.com', 'Irina', 'Nine', DATE '2019-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (10, 'tolik@dmband10.com', 'Tolik', 'Ten', DATE '2001-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (11, 'sasha@dmband11.com', 'Sasha', 'Eleven', DATE '2002-04-03');
+insert into Customer (id, email, firstname, lastname, reg_date) values (12, 'pasha@dmband12.com', 'Pasha', 'Twelve', DATE '2003-04-03');
 
 insert into Address (id, street, city, country, customer_id) values (1, 'New York', 'New York', 'United States', 1);
 insert into Address (id, street, city, country, customer_id) values (2, 'London', 'London', 'England', 1);
@@ -19,9 +19,9 @@ insert into Address (id, street, city, country, customer_id) values (5, 'Copenha
 insert into Address (id, street, city, country, customer_id) values (6, 'Zurich', 'Zurich', 'Switzerland', 3);
 insert into Address (id, street, city, country, customer_id) values (7, 'Roma', 'Roma', 'Italia', 3);
 
-insert into Product (id, name, description, price, rel_date, retired) values (1, 'iPad', 'Apple tablet device', 499.1, DATE '2010-04-03', null);
-insert into Product (id, name, description, price, rel_date, retired) values (2, 'MacBook Pro', 'Apple notebook', 1299.5, DATE '2006-01-10', 0);
-insert into Product (id, name, description, price, rel_date, retired) values (3, 'Dock', 'Dock for iPhone/iPad', 49.4, null, 1);
+insert into Product (id, name, description, price, rel_date, retired, uuid_num) values (1, 'iPad', 'Apple tablet device', 499.1, DATE '2010-04-03', null, '5276eced-7e41-4933-94a0-77557e7d5b31');
+insert into Product (id, name, description, price, rel_date, retired, uuid_num) values (2, 'MacBook Pro', 'Apple notebook', 1299.5, DATE '2006-01-10', 0, '5276eced-7e41-4933-94a0-77557e7d5b32');
+insert into Product (id, name, description, price, rel_date, retired, uuid_num) values (3, 'Dock', 'Dock for iPhone/iPad', 49.4, null, 1, '5276eced-7e41-4933-94a0-77557e7d5b33');
 
 insert into Product_Attributes (attributes_key, product_id, attributes) values ('connector', 1, 'socket');
 insert into Product_Attributes (attributes_key, product_id, attributes) values ('connector', 3, 'plug');
@@ -63,28 +63,28 @@ insert into TestProduct (id, name, price) values (1, 'Product 1', 499.0);
 insert into TestProduct (id, name, price) values (2, 'Product 2', 1299.0);
 insert into TestProduct (id, name, price) values (3, 'Product 3', 49.0);
 
-insert into TestCustomer (id, email, firstname, lastname) values (1, 'dave@dmband1.com', 'Dave', 'Matthews1')
+insert into TestCustomer (id, email, firstname, lastname) values (1, 'dave@dmband1.com', 'Dave', 'Matthews1');
 insert into TestCustomer (id, email, firstname, lastname) values (2, 'carter@dmband2.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (3, 'boyd@dmband3.com', 'Boyd', 'Tinsley');
-insert into TestCustomer (id, email, firstname, lastname) values (4, 'dave@dmband4.com', 'Dave', 'Matthews2')
+insert into TestCustomer (id, email, firstname, lastname) values (4, 'dave@dmband4.com', 'Dave', 'Matthews2');
 insert into TestCustomer (id, email, firstname, lastname) values (5, 'carter@dmband5.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (6, 'boyd@dmband6.com', 'Boyd', 'Tinsley');
-insert into TestCustomer (id, email, firstname, lastname) values (7, 'dave@dmband7.com', 'Dave', 'Matthews3')
+insert into TestCustomer (id, email, firstname, lastname) values (7, 'dave@dmband7.com', 'Dave', 'Matthews3');
 insert into TestCustomer (id, email, firstname, lastname) values (8, 'carter@dmband8.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (9, 'boyd@dmband9.com', 'Boyd', 'Tinsley');
-insert into TestCustomer (id, email, firstname, lastname) values (10, 'dave@dmband10.com', 'Dave', 'Matthews4')
+insert into TestCustomer (id, email, firstname, lastname) values (10, 'dave@dmband10.com', 'Dave', 'Matthews4');
 insert into TestCustomer (id, email, firstname, lastname) values (11, 'carter@dmband11.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (12, 'boyd@dmband12.com', 'Boyd', 'Tinsley');
-insert into TestCustomer (id, email, firstname, lastname) values (13, 'dave@dmband13.com', 'Dave', 'Matthews5')
+insert into TestCustomer (id, email, firstname, lastname) values (13, 'dave@dmband13.com', 'Dave', 'Matthews5');
 insert into TestCustomer (id, email, firstname, lastname) values (14, 'carter@dmband14.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (15, 'boyd@dmband15.com', 'Boyd', 'Tinsley');
-insert into TestCustomer (id, email, firstname, lastname) values (16, 'dave@dmband16.com', 'Dave', 'Matthews6')
+insert into TestCustomer (id, email, firstname, lastname) values (16, 'dave@dmband16.com', 'Dave', 'Matthews6');
 insert into TestCustomer (id, email, firstname, lastname) values (17, 'carter@dmband17.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (18, 'boyd@dmband18.com', 'Boyd', 'Tinsley');
-insert into TestCustomer (id, email, firstname, lastname) values (19, 'dave@dmband19.com', 'Dave', 'Matthews7')
+insert into TestCustomer (id, email, firstname, lastname) values (19, 'dave@dmband19.com', 'Dave', 'Matthews7');
 insert into TestCustomer (id, email, firstname, lastname) values (20, 'carter@dmband20.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (21, 'boyd@dmband21.com', 'Boyd', 'Tinsley');
-insert into TestCustomer (id, email, firstname, lastname) values (22, 'dave@dmband22.com', 'Dave', 'Matthews8')
+insert into TestCustomer (id, email, firstname, lastname) values (22, 'dave@dmband22.com', 'Dave', 'Matthews8');
 insert into TestCustomer (id, email, firstname, lastname) values (23, 'carter@dmband23.com', 'Carter', 'Beauford');
 insert into TestCustomer (id, email, firstname, lastname) values (24, 'boyd@dmband24.com', 'Boyd', 'Tinsley');
 insert into TestCustomer (id, email, firstname, lastname) values (25, 'boyd@dmband25.com', 'Boyd', 'Matthews1');

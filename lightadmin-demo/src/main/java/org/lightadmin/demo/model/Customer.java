@@ -1,6 +1,8 @@
 package org.lightadmin.demo.model;
 
+import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.LocalDate;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -21,7 +23,11 @@ public class Customer extends AbstractEntity {
     @Column(unique = true)
 	private EmailAddress emailAddress;
 
-	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @Column(name = "REG_DATE")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
+    private LocalDate registrationDate;
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "customer_id")
 	private Set<Address> addresses;
 
@@ -48,7 +54,15 @@ public class Customer extends AbstractEntity {
 		this.addresses.add( address );
 	}
 
-	public String getFirstname() {
+    public LocalDate getRegistrationDate() {
+        return registrationDate;
+    }
+
+    public void setRegistrationDate(LocalDate registrationDate) {
+        this.registrationDate = registrationDate;
+    }
+
+    public String getFirstname() {
 		return firstname;
 	}
 

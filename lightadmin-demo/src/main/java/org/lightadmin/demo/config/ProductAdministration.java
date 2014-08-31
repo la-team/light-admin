@@ -68,6 +68,7 @@ public class ProductAdministration {
 
     public static FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("uuid").caption("UUID")
                 .field("name").caption("Name")
                 .field("type").caption("Type")
                 .field("description").caption("Description")

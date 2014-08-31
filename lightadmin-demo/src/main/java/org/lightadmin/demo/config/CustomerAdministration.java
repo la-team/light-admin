@@ -42,6 +42,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit listView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("emailAddress").caption("Email Address")
@@ -52,6 +53,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("discountPrograms").caption("Discount Programs")
@@ -61,6 +63,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("emailAddress").caption("Email Address")
@@ -71,6 +74,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("emailAddress").caption("Email Address")
@@ -88,6 +92,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
     public FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
         return filterBuilder.filters(
                 filter().field("id").caption("ID").build(),
+                filter().field("registrationDate").caption("Registration Date").build(),
                 filter().field("firstname").caption("First Name").build(),
                 filter().field("lastname").caption("Last Name").build(),
                 filter().field("emailAddress").caption("Email Address").build(),

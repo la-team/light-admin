@@ -1,5 +1,10 @@
 package org.lightadmin.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import org.hibernate.annotations.Type;
+import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
@@ -9,6 +14,7 @@ import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
+import java.util.UUID;
 
 @Entity
 public class Product extends AbstractEntity {
@@ -40,6 +46,10 @@ public class Product extends AbstractEntity {
     @Lob
     @Column(name = "PICTURE")
     private byte[] picture;
+
+    @Column(name = "UUID_NUM")
+    @Type(type = "org.hibernate.type.UUIDCharType")
+    private UUID uuid;
 
     public Product(String name, BigDecimal price) {
         this(name, price, null);
@@ -105,5 +115,13 @@ public class Product extends AbstractEntity {
 
     public void setPicture(final byte[] picture) {
         this.picture = picture;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 }
