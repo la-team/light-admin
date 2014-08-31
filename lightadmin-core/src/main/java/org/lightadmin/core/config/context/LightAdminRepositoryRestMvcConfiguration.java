@@ -45,7 +45,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     public DomainTypeToJsonMetadataConverter domainTypeToJsonMetadataConverter() {
-        return new DomainTypeToJsonMetadataConverter(globalAdministrationConfiguration());
+        return new DomainTypeToJsonMetadataConverter(globalAdministrationConfiguration(), entityLinks());
     }
 
     @Bean

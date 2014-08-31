@@ -1,7 +1,6 @@
 package org.springframework.data.rest.webmvc;
 
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
-import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.CustomFieldMetadata;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
@@ -11,22 +10,24 @@ import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.data.mapping.*;
+import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.*;
 import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.*;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.EMBEDDED;
 
 public class DomainTypeToJsonMetadataConverter implements Converter<PersistentEntity, JsonConfigurationMetadata> {
 
     private final GlobalAdministrationConfiguration globalAdministrationConfiguration;
+    private final EntityLinks entityLinks;
 
-    public DomainTypeToJsonMetadataConverter(GlobalAdministrationConfiguration globalAdministrationConfiguration) {
+    public DomainTypeToJsonMetadataConverter(GlobalAdministrationConfiguration globalAdministrationConfiguration, EntityLinks entityLinks) {
         this.globalAdministrationConfiguration = globalAdministrationConfiguration;
+        this.entityLinks = entityLinks;
     }
 
     @Override
@@ -57,12 +58,7 @@ public class DomainTypeToJsonMetadataConverter implements Converter<PersistentEn
 
         for (DomainConfigurationUnitType unitType : unitTypes) {
             for (FieldMetadata field : persistentFields(configuration.fieldsForUnit(unitType))) {
-                PersistentProperty persistentProperty = ((PersistentFieldMetadata) field).getPersistentProperty();
-                if (persistentProperty.isAssociation()) {
-                    jsonConfigurationMetadata.addAssociationProperty(persistentProperty.getAssociation(), associationRestLinkTemplate(persistentProperty), unitType);
-                } else {
-                    jsonConfigurationMetadata.addPersistentProperty(persistentProperty, unitType);
-                }
+                addPersistentProperty((PersistentFieldMetadata) field, unitType, jsonConfigurationMetadata);
             }
 
             for (FieldMetadata customField : customFields(configuration.fieldsForUnit(unitType))) {
@@ -77,17 +73,20 @@ public class DomainTypeToJsonMetadataConverter implements Converter<PersistentEn
         return jsonConfigurationMetadata;
     }
 
+    private void addPersistentProperty(PersistentFieldMetadata field, DomainConfigurationUnitType unitType, JsonConfigurationMetadata jsonConfigurationMetadata) {
+        PersistentProperty persistentProperty = field.getPersistentProperty();
+        if (persistentProperty.isAssociation()) {
+            jsonConfigurationMetadata.addAssociationProperty(field, associationRestLinkTemplate(persistentProperty), unitType);
+        } else {
+            jsonConfigurationMetadata.addPersistentProperty(field, unitType);
+        }
+    }
+
     public Link associationRestLinkTemplate(PersistentProperty persistentProperty) {
-        if (PersistentPropertyType.forPersistentProperty(persistentProperty) == PersistentPropertyType.EMBEDDED) {
+        if (PersistentPropertyType.forPersistentProperty(persistentProperty) == EMBEDDED) {
             return null;
         }
 
-        DomainTypeBasicConfiguration domainTypeBasicConfiguration = globalAdministrationConfiguration.forDomainType(persistentProperty.getActualType());
-        UriComponentsBuilder selfUriBuilder = ServletUriComponentsBuilder.fromCurrentServletMapping()
-                .pathSegment("rest")
-                .pathSegment(domainTypeBasicConfiguration.getPluralDomainTypeName())
-                .pathSegment("{idPlaceholder}");
-
-        return new Link(selfUriBuilder.build().toString(), "self");
+        return entityLinks.linkFor(persistentProperty.getActualType()).slash("{idPlaceholder}").withSelfRel();
     }
 }
