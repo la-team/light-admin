@@ -374,7 +374,7 @@ function modelFormViewDialog(elementToBind, domainTypeName, attributeName, domai
             });
 
             // TODO: Please enable "Save" action in modal dialogs for associations after fixit it
-            $("input[name='save-changes']", $(dialog_selector)).attr("disabled", "disabled");
+            $(":button[name='save-changes']", $(dialog_selector)).attr("disabled", "disabled");
 
             $(":button[name='save-changes']", $(dialog_selector)).click(function () {
                 $(form_selector, $(dialog_selector)).submit();
