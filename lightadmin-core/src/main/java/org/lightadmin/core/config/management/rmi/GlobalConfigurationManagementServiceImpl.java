@@ -23,17 +23,20 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
 import java.util.Collection;
 
 public class GlobalConfigurationManagementServiceImpl implements GlobalConfigurationManagementService, ApplicationContextAware {
 
-    private GlobalAdministrationConfiguration globalAdministrationConfiguration;
+    private final GlobalAdministrationConfiguration globalAdministrationConfiguration;
+    private final RepositoryRestConfiguration repositoryRestConfiguration;
 
     private ApplicationContext applicationContext;
 
-    public GlobalConfigurationManagementServiceImpl(GlobalAdministrationConfiguration globalAdministrationConfiguration) {
+    public GlobalConfigurationManagementServiceImpl(GlobalAdministrationConfiguration globalAdministrationConfiguration, RepositoryRestConfiguration repositoryRestConfiguration) {
         this.globalAdministrationConfiguration = globalAdministrationConfiguration;
+        this.repositoryRestConfiguration = repositoryRestConfiguration;
     }
 
     @Override
@@ -48,6 +51,8 @@ public class GlobalConfigurationManagementServiceImpl implements GlobalConfigura
         for (Class<?> nonManagedType : administrationConfiguration.getNonManagedDomainTypes()) {
             globalAdministrationConfiguration.registerNonDomainTypeConfiguration(administrationConfiguration.forDomainType(nonManagedType));
         }
+
+        repositoryRestConfiguration.exposeIdsFor(administrationConfiguration.getAllDomainTypesAsArray());
     }
 
     @Override

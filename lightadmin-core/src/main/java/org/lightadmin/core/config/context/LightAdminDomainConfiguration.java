@@ -23,6 +23,7 @@ import org.lightadmin.core.config.management.rmi.GlobalConfigurationManagementSe
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 
 import javax.sql.DataSource;
 
@@ -31,8 +32,8 @@ public class LightAdminDomainConfiguration {
 
     @Bean
     @Autowired
-    public GlobalConfigurationManagementService globalConfigurationManagementService(GlobalAdministrationConfiguration globalAdministrationConfiguration) {
-        return new GlobalConfigurationManagementServiceImpl(globalAdministrationConfiguration);
+    public GlobalConfigurationManagementService globalConfigurationManagementService(GlobalAdministrationConfiguration globalAdministrationConfiguration, RepositoryRestConfiguration repositoryRestConfiguration) {
+        return new GlobalConfigurationManagementServiceImpl(globalAdministrationConfiguration, repositoryRestConfiguration);
     }
 
     @Bean
