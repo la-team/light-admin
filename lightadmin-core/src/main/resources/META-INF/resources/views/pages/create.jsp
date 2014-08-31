@@ -18,13 +18,10 @@
 
 <tiles:useAttribute name="dialogMode" ignore="true"/>
 
-<c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
-
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}"/>
-<light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}"/>
 
+<c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 <c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
-
 <c:set var="domainTypeFormName" value="${domainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
 
 <c:if test="${not dialogMode}">
@@ -77,10 +74,6 @@
 
         formViewVisualDecoration($(domain_form));
 
-        $(domain_form).data('lightadmin.domain-type-metadata', <light:domain-type-metadata-json persistentEntity="${persistentEntity}"/>);
-
-        $(domain_form).data('lightadmin.domain-rest-base-url', "${domainRestBaseUrl}");
-
         <c:if test="${not dialogMode}">
         $(":button[name='cancel-changes']", $(domain_form)).click(function () {
             history.back();
@@ -92,10 +85,10 @@
 
         $(domain_form).submit(function () {
             return saveDomainObject(this, function (data) {
-                window.location = data['_links']['selfDomainLink'].href + '?updateSuccess=true';
+                var domainEntity = new DomainEntity(data);
+                window.location = domainEntity.getDomainLink() + '?updateSuccess=true';
             });
         });
-
         </c:if>
     });
 </script>

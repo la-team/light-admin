@@ -16,7 +16,7 @@ var FieldValueRenderer = function () {
 
     function UnknownTypeValueRenderer() {
         this.render = function (field) {
-            return field['value'];
+            return field;
         }
     }
 
@@ -30,26 +30,26 @@ var FieldValueRenderer = function () {
         this.targetView = targetView;
 
         this.render = function (field) {
-            if (field['value'].length == 0) {
+            if (field.length == 0) {
                 return '&nbsp;';
             }
 
             if (this.targetView == 'listView') {
-                return cutLongText(field['value']);
+                return cutLongText(field);
             }
-            return $.trim(field['value']);
+            return $.trim(field);
         }
     }
 
     function NumericValueRenderer() {
         this.render = function (field) {
-            return field['value'];
+            return field;
         }
     }
 
     function DateValueRenderer() {
         this.render = function (field) {
-            return field['value'];
+            return field;
         }
     }
 
@@ -76,7 +76,7 @@ var FieldValueRenderer = function () {
 
     function BooleanValueRenderer() {
         this.render = function (field) {
-            return field['value'] ? 'Yes' : 'No';
+            return field ? 'Yes' : 'No';
         }
     }
 
@@ -86,13 +86,13 @@ var FieldValueRenderer = function () {
 
         function renderItem(arrayItem, targetView) {
             if (isDomainObject(arrayItem)) {
-                return new DomainObjectValueRenderer(targetView).renderValue(arrayItem);
+                return new DomainObjectValueRenderer(targetView).render(arrayItem);
             }
             return arrayItem.toString();
         }
 
         this.render = function (field) {
-            var fieldValue = field['value'];
+            var fieldValue = field;
             var items = '';
             for (var arrayIndex in fieldValue) {
                 items += renderItem(fieldValue[arrayIndex], this.targetView) + '<br/>';
@@ -104,32 +104,30 @@ var FieldValueRenderer = function () {
     function DomainObjectValueRenderer(targetView) {
         this.targetView = targetView;
 
-        this.renderValue = function (dataValue) {
-            var stringRepresentation = dataValue['content']['stringRepresentation'];
+        this.render = function (dataValue) {
+            var domainEntity = new DomainEntity(dataValue);
 
-            var valueToRender = $.trim(stringRepresentation);
+            var valueToRender = $.trim(domainEntity.getStringRepresentation());
             if (this.targetView == 'listView') {
-                valueToRender = cutLongText(stringRepresentation);
+                valueToRender = cutLongText(domainEntity.getStringRepresentation());
             }
 
-            if (dataValue['content']['managedDomainType']) {
-                return "<a href='" + dataValue['_links']['selfDomainLink'].href + "'>" + valueToRender + "</a>";
+            if (domainEntity.isManagedType()) {
+                return "<a href='" + domainEntity.getDomainLink() + "'>" + valueToRender + "</a>";
             }
+
             return valueToRender;
         };
-        this.render = function (field) {
-            return this.renderValue(field['value']);
-        }
     }
 
     function isDomainObject(fieldValue) {
-        return typeof fieldValue === 'object' && fieldValue['content']['stringRepresentation'] !== undefined;
+        return $.isPlainObject(fieldValue) && fieldValue['string_representation'] !== undefined;
     }
 
-    function createRenderer(field, targetView) {
-        var fieldType = field['type'];
-        var fieldValue = field['value'];
-        var fieldLabel = field['label'];
+    function createRenderer(propertyType, propertyValue, targetView) {
+        var fieldType = propertyType;
+        var fieldValue = propertyValue;
+        var fieldLabel = undefined; //TODO: ???
 
         if (fieldLabel != undefined) {
             return new LabelRenderer();
@@ -167,12 +165,16 @@ var FieldValueRenderer = function () {
     }
 
     return {
-        render: function (field, targetView) {
-            if (field['value'] == null && !field['fileExists']) {
+        render: function (propertyName, propertyValue, propertyType, targetView) {
+            if (propertyValue == null) {
                 return new EmptyValueRenderer().render();
             }
 
-            return createRenderer(field, targetView).render(field);
+            if (propertyType == 'FILE' && !propertyValue['file_exists']) {
+                return new EmptyValueRenderer().render();
+            }
+
+            return createRenderer(propertyType, propertyValue, targetView).render(propertyValue);
         }
     };
 }();

@@ -55,9 +55,11 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
 
         String stringRepresentation = stringRepresentation(value, persistentEntity);
         Link domainLink = domainLink(persistentEntityResource);
+        boolean managedDomainType = adminConfiguration.isManagedDomainType(persistentEntity.getType());
+        String primaryKey = persistentEntity.getIdProperty().getName();
         Map<DomainConfigurationUnitType, Map<String, Object>> dynamicProperties = dynamicPropertiesPerUnit(value, persistentEntity);
 
-        PersistentEntityWrapper persistentEntityWrapper = new PersistentEntityWrapper(value, dynamicProperties, stringRepresentation, domainLink);
+        PersistentEntityWrapper persistentEntityWrapper = new PersistentEntityWrapper(value, dynamicProperties, stringRepresentation, domainLink, managedDomainType, primaryKey);
 
         return new PersistentEntityResource<>(persistentEntity, persistentEntityWrapper, links);
     }
@@ -202,20 +204,34 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
 
     static class PersistentEntityWrapper {
         private String stringRepresentation;
+        private boolean managedDomainType;
+        private String primaryKey;
         private Link domainLink;
         private Object persistentEntity;
         private Map<DomainConfigurationUnitType, Map<String, Object>> dynamicProperties;
 
-        public PersistentEntityWrapper(Object persistentEntity, Map<DomainConfigurationUnitType, Map<String, Object>> dynamicProperties, String stringRepresentation, Link domainLink) {
+        public PersistentEntityWrapper(Object persistentEntity, Map<DomainConfigurationUnitType, Map<String, Object>> dynamicProperties, String stringRepresentation, Link domainLink, boolean managedDomainType, String primaryKey) {
             this.stringRepresentation = stringRepresentation;
             this.domainLink = domainLink;
+            this.managedDomainType = managedDomainType;
             this.persistentEntity = persistentEntity;
             this.dynamicProperties = dynamicProperties;
+            this.primaryKey = primaryKey;
         }
 
         @JsonProperty("string_representation")
         public String getStringRepresentation() {
             return stringRepresentation;
+        }
+
+        @JsonProperty("primary_key")
+        public String getPrimaryKey() {
+            return primaryKey;
+        }
+
+        @JsonProperty("managed_type")
+        public boolean isManagedDomainType() {
+            return managedDomainType;
         }
 
         @JsonProperty("domain_link")

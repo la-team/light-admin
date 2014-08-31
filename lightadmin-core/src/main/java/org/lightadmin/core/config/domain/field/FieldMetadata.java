@@ -9,4 +9,6 @@ public interface FieldMetadata extends Identifiable, Nameable {
     void setSortOrder(int sortOrder);
 
     Object getValue(Object entity);
+
+    boolean isDynamic();
 }

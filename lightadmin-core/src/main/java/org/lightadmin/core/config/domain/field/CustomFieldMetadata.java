@@ -20,4 +20,9 @@ public class CustomFieldMetadata extends AbstractFieldMetadata {
     public Object getValue(Object entity) {
         return exceptionAwareFieldValueRenderer(this.renderer).apply(entity);
     }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
 }

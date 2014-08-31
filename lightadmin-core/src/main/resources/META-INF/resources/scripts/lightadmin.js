@@ -8,19 +8,19 @@
                     return null;
                 }
             }
-            return decodeURIComponent(attrMetadata.hrefTemplate).replace('{' + attrMetadata.idAttribute + '}', attrVal);
+            var rest_link_template = attrMetadata['rest_link']['href'];
+            return decodeURIComponent(rest_link_template).replace('{idPlaceholder}', attrVal);
         }
-
-        var persistentEntity = $(this).data('lightadmin.domain-type-metadata');
 
         var json = {};
         $.each(this.serializeArray(), function () {
             var attrVal = this.value || '';
-            var attrMetadata = persistentEntity[this.name];
-            var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
-            if (attrType.indexOf('ASSOC') == 0) {
-                var href = resolveObjectHref(attrVal, attrMetadata);
-                if (attrType == 'ASSOC_MULTI') {
+            var property = ConfigurationMetadataService.getProperty(this.name, 'formView');
+            var propertyType = property['type'];
+
+            if (propertyType.indexOf('ASSOC') == 0) {
+                var href = resolveObjectHref(attrVal, property);
+                if (propertyType == 'ASSOC_MULTI') {
                     if (!json[this.name]) {
                         json[this.name] = [];
                     }
@@ -32,7 +32,8 @@
                 json[this.name] = attrVal;
             }
         });
-        $.each(persistentEntity, function (attrName, attrMetadata) {
+
+        $.each(ConfigurationMetadataService.getDynamicProperties("formView"), function (attrName, attrMetadata) {
             var attrVal = json[attrName];
             if (attrVal != undefined && attrVal != '') {
                 return;
@@ -55,50 +56,6 @@
     };
 })(jQuery);
 
-function dataTableRESTAdapter(sSource, aoData, fnCallback) {
-    if (sSource == null || typeof sSource === 'undefined') {
-        return;
-    }
-
-    //extract name/value pairs into a simpler map for use later
-    var paramMap = {};
-    for (var i = 0; i < aoData.length; i++) {
-        paramMap[aoData[i].name] = aoData[i].value;
-    }
-
-    //page calculations
-    var pageSize = paramMap.iDisplayLength;
-    var start = paramMap.iDisplayStart;
-//    var pageNum = (start == 0) ? 1 : (start / pageSize) + 1; // pageNum is 1 based
-    var pageNum = start / pageSize; // pageNum is 1 based
-
-    // extract sort information
-    var sortCol = paramMap.iSortCol_0;
-    var sortDir = paramMap.sSortDir_0;
-    var sortName = paramMap['mDataProp_' + sortCol].replace('content.', '');
-
-    //create new json structure for parameters for REST request
-    var restParams = [];
-    restParams.push({"name": "size", "value": pageSize});
-    restParams.push({"name": "page", "value": pageNum });
-    restParams.push({ "name": "sort", "value": sortName + ',' + sortDir });
-
-    jQuery.ajax({
-        "dataType": 'json',
-        "type": "GET",
-        "url": sSource,
-        "data": restParams,
-        "success": function (data) {
-            data.iTotalRecords = data.page.totalElements;
-            data.iTotalDisplayRecords = data.page.totalElements;
-
-            getSearcher().onSearchCompleted();
-
-            fnCallback(data);
-        }
-    });
-}
-
 function getPrimaryKey(dataValue) {
     for (var prop in dataValue) {
         if ((dataValue[prop]['primaryKey'] !== undefined) && (dataValue[prop]['primaryKey'] == true)) {
@@ -108,91 +65,25 @@ function getPrimaryKey(dataValue) {
     return null;
 }
 
-function quickLook(aData) {
-    var primaryKey = getPrimaryKey(aData);
-
-    var fieldsCount = Object.keys(aData).length - 3;
-
-    var detailsHtmlBlock = '<div id="quickView-' + primaryKey + '" class="innerDetails">';
-
-    if (fieldsCount > 0) {
-        detailsHtmlBlock += '<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic mono">';
-        detailsHtmlBlock += '<tbody class="quick-view-data-section">';
-
-        var currentFieldIdx = 1;
-        for (var prop in aData) {
-            if (prop != 'stringRepresentation' && prop != 'managedDomainType') {
-                var rowClass = '';
-                if (currentFieldIdx == 1) {
-                    rowClass = 'noborder';
-                }
-                if (currentFieldIdx == fieldsCount) {
-                    rowClass = 'last';
-                }
-
-                detailsHtmlBlock += '<tr class="' + rowClass + '">';
-                detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + aData[prop]['title'] + ':</strong></td>';
-                detailsHtmlBlock += '<td class="qv-field-value">' + FieldValueRenderer.render(aData[prop], 'quickView') + '</td>';
-                detailsHtmlBlock += '</tr">';
-
-                currentFieldIdx++;
-            }
-        }
-
-        detailsHtmlBlock += '</tbody></table>';
-    }
-    detailsHtmlBlock += '</div>';
-
-    return detailsHtmlBlock;
-}
-
-/* Add event listener for opening and closing details
- * Note that the indicator for showing which row is open is not controlled by DataTables,
- * rather it is done here
- */
-function bindInfoClickHandlers(tableElement, dataTable) {
-    $('tbody td img.quickView', $(tableElement)).live('click', function () {
-        var infoImg = $(this);
-        var nTr = infoImg.parents('tr')[0];
-        if (dataTable.fnIsOpen(nTr)) {
-            $('div.innerDetails', $(nTr).next()[0]).slideUp('slow', function () {
-                dataTable.fnClose(nTr);
-                infoImg.attr('src', "../images/aNormal.png");
-                infoImg.attr('title', "Click for Quick View");
-            });
-        } else {
-            var aData = dataTable.fnGetData(nTr);
-            var restEntityUrl = aData['_links']['self'].href;
-            jQuery.ajax({
-                "dataType": 'json',
-                "type": "GET",
-                "url": restEntityUrl + '/unit/quickView',
-                "success": function (data) {
-                    var nDetailsRow = dataTable.fnOpen(nTr, quickLook(data['content']), 'details');
-                    $(nDetailsRow).addClass($(nDetailsRow).prev().attr('class'));
-                    $('div.innerDetails', nDetailsRow).hide();
-                    $('div.innerDetails', nDetailsRow).slideDown('slow', function () {
-                        infoImg.attr('src', "../images/aInactive.png");
-                        infoImg.attr('title', "Click to close Quick View");
-                        $("a[rel^='prettyPhoto']", $(nDetailsRow)).prettyPhoto({ social_tools: ''});
-                    });
-                }
-            });
-        }
-    });
-}
-
-function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
+function loadDomainObjectForShowView(showViewSection, entityId) {
     $.ajax({
         type: 'GET',
-        url: restRepoUrl,
+        url: ApplicationConfig.getDomainEntityRestUrl(entityId),
         dataType: 'json',
         success: function (data) {
-            var content = data['content'];
-            for (var name in content) {
-                var field = showViewSection.find('[name="field-' + name + '"]');
+            var domainEntity = new DomainEntity(data);
+            var fields = ConfigurationMetadataService.getDynamicPropertiesAsArray('showView');
+            for (var fieldIdx in fields) {
+                var property = fields[fieldIdx];
+
+                var propertyName = property['name'];
+                var propertyType = property['type'];
+
+                var propertyValue = domainEntity.getPropertyValue(property, 'showView');
+
+                var field = showViewSection.find('[name="field-' + propertyName + '"]');
                 if (field.length > 0) {
-                    field.html(FieldValueRenderer.render(content[name], 'showView'));
+                    field.html(FieldValueRenderer.render(propertyName, propertyValue, propertyType, 'showView'));
                 }
             }
             $("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: ''});
@@ -200,16 +91,17 @@ function loadDomainObjectForShowView(showViewSection, restRepoUrl) {
     });
 }
 
-function loadDomainObjectForFormView(form) {
+function loadDomainObjectForFormView(form, entityId) {
 
-    function selectOptions(editor, attrMetadata, data) {
+    function selectOptions(editor, data) {
         $.each(data, function () {
-            selectOption(editor, attrMetadata, this);
+            selectOption(editor, this);
         });
     }
 
-    function selectOption(editor, attrMetadata, data) {
-        var objectIdData = data['content'][attrMetadata.idAttribute];
+    function selectOption(editor, data) {
+        var domainEntity = new DomainEntity(data);
+        var objectIdData = domainEntity.getPrimaryKeyValue();
         var objectId = $.isPlainObject(objectIdData) ? objectIdData.value : objectIdData;
         if (objectId == null) {
             objectId = '';
@@ -221,62 +113,63 @@ function loadDomainObjectForFormView(form) {
         });
     }
 
-    var restRepoUrl = $(form).data('lightadmin.domain-rest-base-url');
-
-    var persistentEntity = $(form).data('lightadmin.domain-type-metadata');
-
     $.ajax({
         type: 'GET',
-        url: restRepoUrl + '/unit/formView',
+        url: ApplicationConfig.getDomainEntityRestUrl(entityId),
         dataType: 'json',
         success: function (data, textStatus) {
-            var content = data['content'];
-            for (var attr in content) {
-                var editor = form.find('[name="' + attr + '"]');
-                if (editor.length > 0) {
-                    var attrVal = content[attr].value;
+            var domainEntity = new DomainEntity(data);
+            var fields = ConfigurationMetadataService.getDynamicPropertiesAsArray('formView');
 
-                    if (attrVal == null) {
-                        continue;
-                    }
+            for (var fieldIdx in fields) {
+                var property = fields[fieldIdx];
+                var propertyName = property['name'];
+                var propertyType = property['type'];
 
-                    var attrMetadata = persistentEntity[attr];
-                    var attrType = attrMetadata ? attrMetadata.type : 'UNKNOWN';
+                var editor = form.find('[name="' + propertyName + '"]');
+                if (editor.length == 0) {
+                    continue;
+                }
 
-                    switch (attrType) {
-                        case 'ASSOC':
-                            selectOption(editor, attrMetadata, attrVal);
+                var propertyValue = domainEntity.getPropertyValue(property, 'formView');
+                if (propertyValue == null) {
+                    continue;
+                }
+
+                switch (propertyType) {
+                    case 'ASSOC':
+                        selectOption(editor, propertyValue);
+                        break;
+                    case 'ASSOC_MULTI':
+                        selectOptions(editor, propertyValue);
+                        break;
+                    case 'BOOL':
+                        editor.prop('checked', propertyValue);
+                        break;
+                    case 'FILE':
+                        var fileSelected = propertyValue.length > 0;
+                        if (fileSelected) {
+//                            selectFileFieldValue(form, attr, content[attr], restRepoUrl);
+                        }
+                        editor.val(propertyValue.toString());
+                        break;
+                    case 'STRING':
+                        if (editor.hasClass('wysiwyg')) {
+                            editor.wysiwyg("insertHtml", propertyValue);
                             break;
-                        case 'ASSOC_MULTI':
-                            selectOptions(editor, attrMetadata, attrVal);
-                            break;
-                        case 'BOOL':
-                            editor.prop('checked', attrVal);
-                            break;
-                        case 'FILE':
-                            var fileSelected = attrVal.length > 0;
-                            if (fileSelected) {
-                                selectFileFieldValue(form, attr, content[attr], restRepoUrl);
-                            }
-                            editor.val(attrVal.toString());
-                            break;
-                        case 'STRING':
-                            if (editor.hasClass('wysiwyg')) {
-                                editor.wysiwyg("insertHtml", attrVal);
-                                break;
-                            }
-                        default:
-                            if (editor.prop('tagName') == 'SELECT' && editor.find("option[value='" + attrVal + "']").length <= 0) {
-                                editor.append($('<option>', {
-                                    value: attrVal,
-                                    text: attrVal
-                                }));
-                            }
-                            editor.val(attrVal.toString());
-                            break;
-                    }
+                        }
+                    default:
+                        if (editor.prop('tagName') == 'SELECT' && editor.find("option[value='" + propertyValue + "']").length <= 0) {
+                            editor.append($('<option>', {
+                                value: propertyValue,
+                                text: propertyValue
+                            }));
+                        }
+                        editor.val(propertyValue.toString());
+                        break;
                 }
             }
+
             $.uniform.update();
             $(".chzn-select", $(form)).trigger("liszt:updated");
 
@@ -390,13 +283,18 @@ function saveOrUpdateDomainObject(domForm, usePlaceholders, successCallback, met
     $.each($(domForm).find('[id$=-error]'), function (index, element) {
         $(element).text('');
     });
+
     var jsonForm = $(domForm).serializeFormJSON(usePlaceholders);
-    var restRepoUrl = $(domForm).data('lightadmin.domain-rest-base-url');
+    var jsonData = JSON.stringify(jsonForm);
+
+    var primaryKey = ConfigurationMetadataService.getPrimaryKeyProperty()['name'];
+
+    var url = method == 'POST' ? ApplicationConfig.DOMAIN_ENTITY_BASE_REST_URL : ApplicationConfig.getDomainEntityRestUrl(jsonForm[primaryKey]);
     $.ajax({
         type: method,
-        url: restRepoUrl,
+        url: url,
         contentType: 'application/json',
-        data: JSON.stringify(jsonForm),
+        data: jsonData,
         dataType: 'json',
         success: function (data, textStatus) {
             successCallback(data);
@@ -462,104 +360,6 @@ function showMessageNote(message, messageTypeClass, beforeElement) {
                 $(this).remove();
             });
         });
-    });
-}
-
-function formViewVisualDecoration(container) {
-    $(".chzn-select", $(container)).chosen({allow_single_deselect: true});
-
-    $("select, input:checkbox, input:radio, input:file", $(container)).uniform();
-
-    $(".input-date", $(container)).datepicker({
-        autoSize: true,
-        appendText: '(YYYY-MM-DD)',
-        dateFormat: 'yy-mm-dd'
-    });
-
-    $(".input-date", $(container)).mask("9999-99-99");
-
-    $('.wysiwyg', $(container)).wysiwyg({
-        iFrameClass: "wysiwyg-input",
-        controls: {
-            bold: { visible: true },
-            italic: { visible: true },
-            underline: { visible: true },
-            strikeThrough: { visible: false },
-
-            justifyLeft: { visible: true },
-            justifyCenter: { visible: true },
-            justifyRight: { visible: true },
-            justifyFull: { visible: true },
-
-            indent: { visible: true },
-            outdent: { visible: true },
-
-            subscript: { visible: false },
-            superscript: { visible: false },
-
-            undo: { visible: true },
-            redo: { visible: true },
-
-            insertOrderedList: { visible: true },
-            insertUnorderedList: { visible: true },
-            insertHorizontalRule: { visible: false },
-
-            h1: {
-                visible: true,
-                className: 'h1',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h1>' : 'h1',
-                tags: ['h1'],
-                tooltip: 'Header 1'
-            },
-            h2: {
-                visible: true,
-                className: 'h2',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h2>' : 'h2',
-                tags: ['h2'],
-                tooltip: 'Header 2'
-            },
-            h3: {
-                visible: true,
-                className: 'h3',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h3>' : 'h3',
-                tags: ['h3'],
-                tooltip: 'Header 3'
-            },
-            h4: {
-                visible: true,
-                className: 'h4',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h4>' : 'h4',
-                tags: ['h4'],
-                tooltip: 'Header 4'
-            },
-            h5: {
-                visible: true,
-                className: 'h5',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h5>' : 'h5',
-                tags: ['h5'],
-                tooltip: 'Header 5'
-            },
-            h6: {
-                visible: true,
-                className: 'h6',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h6>' : 'h6',
-                tags: ['h6'],
-                tooltip: 'Header 6'
-            },
-
-            cut: { visible: true },
-            copy: { visible: true },
-            paste: { visible: true },
-            html: { visible: true },
-            increaseFontSize: { visible: false },
-            decreaseFontSize: { visible: false }
-        }
     });
 }
 

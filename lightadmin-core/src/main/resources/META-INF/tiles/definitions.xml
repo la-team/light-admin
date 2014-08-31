@@ -27,7 +27,7 @@
     </definition>
 
     <definition name="internal-layout" template="/views/layout/internal-layout.jsp" preparer="screenViewPreparer">
-        <put-attribute name="scripts-include" value="/views/includes/scripts-include.jsp"/>
+        <put-attribute name="common-scripts-include" value="/views/includes/common-scripts-include.jsp"/>
         <put-attribute name="top-navigation-section" value="/views/sections/top-navigation-section.jsp"/>
         <put-attribute name="header-section">
             <definition template="/views/sections/header-section.jsp" preparer="headerSectionViewPreparer"/>
@@ -38,31 +38,35 @@
         <put-attribute name="footer-section" value="/views/sections/footer-section.jsp"/>
     </definition>
 
+    <definition name="domain-internal-layout" extends="internal-layout">
+        <put-attribute name="domain-scripts-include" value="/views/includes/domain-scripts-include.jsp"/>
+    </definition>
+
     <definition name="dashboard-view" extends="internal-layout">
         <put-attribute name="main-section">
             <definition template="/views/pages/dashboard.jsp" preparer="dashboardViewPreparer"/>
         </put-attribute>
     </definition>
 
-    <definition name="list-view" extends="internal-layout">
+    <definition name="list-view" extends="domain-internal-layout">
         <put-attribute name="main-section">
             <definition template="/views/pages/list.jsp" preparer="listViewPreparer"/>
         </put-attribute>
     </definition>
 
-    <definition name="edit-view" extends="internal-layout">
+    <definition name="edit-view" extends="domain-internal-layout">
         <put-attribute name="main-section">
             <definition template="/views/pages/edit.jsp" preparer="formViewPreparer"/>
         </put-attribute>
     </definition>
 
-    <definition name="create-view" extends="internal-layout">
+    <definition name="create-view" extends="domain-internal-layout">
         <put-attribute name="main-section">
             <definition template="/views/pages/create.jsp" preparer="formViewPreparer"/>
         </put-attribute>
     </definition>
 
-    <definition name="show-view" extends="internal-layout">
+    <definition name="show-view" extends="domain-internal-layout">
         <put-attribute name="main-section">
             <definition template="/views/pages/show.jsp" preparer="showViewPreparer"/>
         </put-attribute>

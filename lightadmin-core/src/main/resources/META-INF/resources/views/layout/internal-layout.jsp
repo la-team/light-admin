@@ -27,7 +27,9 @@
     <link rel="stylesheet" type="text/css" href="<light:url value="/styles/lightadmin.css"/>">
     <link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Cuprum">
 
-    <tiles:insertAttribute name="scripts-include"/>
+    <tiles:insertAttribute name="common-scripts-include"/>
+
+    <tiles:insertAttribute name="domain-scripts-include" ignore="true"/>
 </head>
 
 <body>

@@ -51,5 +51,9 @@
                 speed: 200
             });
         });
+
+        $(function() {
+            decorateUIControls($("form[name='filter-form']"));
+        });
     </script>
 </c:if>

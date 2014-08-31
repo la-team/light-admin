@@ -160,25 +160,6 @@
         </attribute>
     </tag>
 
-    <tag>
-        <description>Writes domain type metadata in JSON format</description>
-        <name>domain-type-metadata-json</name>
-        <tag-class>org.lightadmin.core.view.tags.form.DomainTypeMetadataJsonTag</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <name>persistentEntity</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-            <type>org.springframework.data.mapping.PersistentEntity</type>
-        </attribute>
-        <attribute>
-            <name>includeFields</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-            <type>java.util.Collection</type>
-        </attribute>
-    </tag>
-
     <function>
         <name>domainTypeAdministrationConfigurationFor</name>
         <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>

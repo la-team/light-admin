@@ -1,5 +1,4 @@
-<%@ tag import="org.lightadmin.core.config.domain.field.FieldMetadataUtils" %>
-
+<%@ tag import="org.lightadmin.core.persistence.metamodel.PersistentPropertyType" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
@@ -10,11 +9,9 @@
 <%@ attribute name="fields" required="true" type="java.util.Set" %>
 <%@ attribute name="scopes" required="true" type="java.util.List" %>
 
-<c:set var="primaryKeyField" value="<%= FieldMetadataUtils.primaryKeyPersistentField( fields ) %>"/>
-<c:set var="pluralDomainTypeName" value="${domainTypeAdministrationConfiguration.pluralDomainTypeName}" scope="page"/>
-
-<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}"/>
-<light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
+<c:set var="ASSOC" value="<%= PersistentPropertyType.ASSOC %>"/>
+<c:set var="ASSOC_MULT" value="<%= PersistentPropertyType.ASSOC_MULTI %>"/>
+<c:set var="FILE" value="<%= PersistentPropertyType.FILE %>"/>
 
 <div class="table">
     <div class="head">
@@ -36,51 +33,52 @@
 </div>
 
 <script type="text/javascript">
-    function viewEntityUrl(entityId) {
-        return '${domainBaseUrl}' + '/' + entityId;
-    }
-
-    function editEntityUrl(entityId) {
-        return '${domainBaseUrl}' + '/' + entityId + '/edit';
-    }
-
     $(function () {
         var tableElement = $('#listViewTable');
 
         var dataTable = tableElement.dataTable({
             "bJQueryUI": true,
             "bStateSave": true,
-            "sAjaxDataProp": '_embedded.${pluralDomainTypeName}',
+            "sAjaxDataProp": '_embedded.persistentEntityWrappers',
             "aoColumnDefs": [
                 {
                     "bSortable": false,
                     "aTargets": [ 0 ],
                     "mData": null,
                     "sClass": "center",
-                    "mRender": function (data, type, full) {
+                    "mRender": function () {
                         return '<img class="quickView" src="<light:url value='/images/aNormal.png'/>" style="cursor:pointer;" title="Click for Quick View"/>';
                     }
                 },
-                <c:forEach var="field" items="${fields}" varStatus="status">
+            <c:forEach var="field" items="${fields}" varStatus="status">
+                <c:set var="propertyName" value="${field.uuid}"/>
                 {
                     "bSortable": ${field.sortable},
                     "aTargets": [ ${status.index + 1 } ],
-                    "mData": 'content.${field.uuid}',
-                    "mRender": function (data) {
-                        return FieldValueRenderer.render(data, 'listView');
+            <c:choose>
+                <c:when test="${(not field.dynamic) and (light:persistentPropertyTypeOf(field.persistentProperty) eq ASSOC or light:persistentPropertyTypeOf(field.persistentProperty) eq ASSOC_MULT)}">
+                    "mData": function(source) {
+                        var domainEntity = new DomainEntity(source);
+                        var propertyMetadata = ConfigurationMetadataService.getProperty('${propertyName}', 'listView');
+                        return domainEntity.getPropertyValue(propertyMetadata, 'listView');
+                    },
+                </c:when>
+                <c:otherwise>
+                    "mData": '${field.dynamic or light:persistentPropertyTypeOf(field.persistentProperty) eq FILE? 'dynamic_properties.listView.' : 'original_properties.'}${propertyName}',
+                </c:otherwise>
+            </c:choose>
+                    "mRender": function (innerData) {
+                        return mRenderFieldValue(innerData, '${propertyName}');
                     },
                     "sClass": "data-cell"
                 },
-                </c:forEach>
+            </c:forEach>
                 {
                     "bSortable": false,
                     "aTargets": [ ${fn:length(fields) + 1 } ],
                     "mData": null,
                     "sClass": "center",
-                    "mRender": function (data, type, full) {
-                        var entityId = full['content']['${primaryKeyField.uuid}']['value'];
-                        return renderActions(entityId);
-                    }
+                    "mRender": mRenderActions
                 }
             ],
             "aaSorting": [
@@ -113,19 +111,7 @@
             "bFilter": false,
             "bInfo": false,
             "sDom": '<""f>t<"F"lp>',
-            "fnDrawCallback": function (oSettings) {
-                $("a.removeBtn").click(function () {
-                    var entityId = $(this).attr('data-entity-id');
-                    jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
-                        if (r) {
-                            removeDomainObject(entityId, '${domainRestUrl}', function () {
-                                getSearcher().search();
-                            });
-                        }
-                    });
-                });
-                $("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: ''});
-            },
+            "fnDrawCallback": fnDrawCallback,
             "fnInitComplete": function () {
                 this.fnAdjustColumnSizing();
             }
@@ -137,25 +123,42 @@
 
         bindInfoClickHandlers(tableElement, dataTable);
 
-        $(".chzn-select").chosen({allow_single_deselect: true});
-
-        $("select, input:checkbox, input:radio, input:file").uniform();
-
-        $(".input-date").datepicker({
-            autoSize: true,
-            appendText: '(YYYY-MM-DD)',
-            dateFormat: 'yy-mm-dd'
-        });
-
     });
 
-    function renderActions(entityId) {
+    function fnDrawCallback(oSettings) {
+        $("a.removeBtn").click(function () {
+            var entityId = $(this).attr('data-entity-id');
+            jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
+                if (r) {
+                    removeDomainObject(entityId, ApplicationConfig.DOMAIN_ENTITY_BASE_REST_URL, function () {
+                        getSearcher().search();
+                    });
+                }
+            });
+        });
+        $("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: ''});
+    }
+
+    function mRenderFieldValue(innerData, propertyName) {
+        var propertyMetadata = ConfigurationMetadataService.getProperty(propertyName, 'listView');
+
+        return FieldValueRenderer.render(propertyName, innerData, propertyMetadata['type'], 'listView');
+    }
+
+    function mRenderActions(data, type, full) {
+        var domainEntity = new DomainEntity(full);
+        var primaryKeyProperty = ConfigurationMetadataService.getPrimaryKeyProperty();
+        var entityId = domainEntity.getPropertyValue(primaryKeyProperty, 'listView');
+
+        var viewEntityUrl = ApplicationConfig.getDomainEntityUrl(entityId);
+        var editEntityUrl = ApplicationConfig.getEditDomainEntityUrl(entityId);
+
         var viewImg = '<light:url value='/images/icons/dark/info.png'/>';
         var editImg = '<light:url value='/images/icons/dark/pencil.png'/>';
         var removeImg = '<light:url value='/images/icons/dark/basket.png'/>';
 
-        var html = "<a href='" + viewEntityUrl(entityId) + "' title='View' class='btn14 mr5'><img src='" + viewImg + "' alt='View'></a>";
-        html += "<a href='" + editEntityUrl(entityId) + "' title='Edit' class='btn14 mr5'><img src='" + editImg + "' alt='Edit'></a>";
+        var html = "<a href='" + viewEntityUrl + "' title='View' class='btn14 mr5'><img src='" + viewImg + "' alt='View'></a>";
+        html += "<a href='" + editEntityUrl + "' title='Edit' class='btn14 mr5'><img src='" + editImg + "' alt='Edit'></a>";
         html += "<a href='#' title='Remove' class='btn14 mr5 removeBtn' data-entity-id='" + entityId + "'><img src='" + removeImg + "' alt='Remove'></a>";
 
         return html;

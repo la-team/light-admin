@@ -16,8 +16,6 @@
 <tiles:useAttribute name="entityId"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
-<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
-<light:url var="domainRestUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
 <div class="title">
     <h5><c:out value="Show ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
@@ -50,7 +48,7 @@
 </div>
 
 <script type="text/javascript">
-    loadDomainObjectForShowView($('#data-section'), '${domainObjectUrl}/unit/showView');
+    loadDomainObjectForShowView($('#data-section'), '${entityId}');
 
     <c:if test="${not empty (param['updateSuccess'])}">
     showSuccessMessageNote('<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!');
@@ -58,11 +56,12 @@
 
     $(function () {
         var entity_id = '${entityId}';
+
         $("a.remove_button").click(function () {
             jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
                 if (r) {
-                    removeDomainObject(entity_id, '${domainRestUrl}', function () {
-                        window.location = '${domainBaseUrl}';
+                    removeDomainObject(entity_id, ApplicationConfig.DOMAIN_ENTITY_BASE_REST_URL, function () {
+                        window.location = ApplicationConfig.DOMAIN_ENTITY_BASE_URL;
                     });
                 }
             });

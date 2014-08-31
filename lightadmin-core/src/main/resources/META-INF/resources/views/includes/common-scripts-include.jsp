@@ -69,10 +69,6 @@
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.timeentry.min.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/vendor/plugins/ui/jquery.prettyPhoto.js"/>"></script>
 
-<script type="text/javascript" src="<light:url value="/scripts/lightadmin-search.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/lightadmin-renderer.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/lightadmin.js"/>"></script>
-
 <script type="text/javascript" src="<light:url value="/scripts/vendor/charts/chart.js"/>"></script>
 
 <script type="text/javascript">

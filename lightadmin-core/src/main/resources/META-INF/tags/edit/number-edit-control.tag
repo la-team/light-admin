@@ -13,7 +13,7 @@
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
 <input id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}"
-       name="${attributeMetadata.name}" ${disabled ? 'disabled' : ''} type="text"/>
+       name="${attributeMetadata.name}" ${disabled ? 'readonly' : ''} type="text"/>
 
 <c:set var="numberIntegerType" value="<%= PersistentPropertyType.NUMBER_INTEGER %>"/>
 <c:set var="numberFloatType" value="<%= PersistentPropertyType.NUMBER_FLOAT %>"/>

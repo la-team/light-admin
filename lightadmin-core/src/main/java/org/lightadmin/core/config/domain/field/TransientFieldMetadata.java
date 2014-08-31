@@ -19,4 +19,9 @@ public class TransientFieldMetadata extends AbstractFieldMetadata {
     public Object getValue(Object entity) {
         return new DirectFieldAccessFallbackBeanWrapper(entity).getPropertyValue(property);
     }
+
+    @Override
+    public boolean isDynamic() {
+        return true;
+    }
 }

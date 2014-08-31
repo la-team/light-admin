@@ -89,4 +89,9 @@ public class PersistentFieldMetadata extends AbstractFieldMetadata {
         return field;
     }
 
+    @Override
+    public boolean isDynamic() {
+        return false;
+    }
+
 }
