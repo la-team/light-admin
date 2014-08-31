@@ -10,11 +10,10 @@
     <version>1.0.0.M3-SNAPSHOT</version>
 
     <name>LightAdmin</name>
-    <description>Pluggable data management solution for Java web applications developed in a "Rapid" manner
-    </description>
+    <description>Pluggable data management solution for Java web applications developed in a "Rapid" manner</description>
     <url>http://lightadmin.org</url>
 
-    <inceptionYear>2013</inceptionYear>
+    <inceptionYear>2012</inceptionYear>
 
     <organization>
         <name>LA Team</name>
