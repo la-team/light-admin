@@ -152,7 +152,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
             }
             result.add(argumentResolver);
         }
-        return argumentResolvers;
+        return result;
     }
 
     private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
