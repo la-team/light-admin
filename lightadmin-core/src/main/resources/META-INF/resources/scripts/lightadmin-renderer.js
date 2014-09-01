@@ -30,49 +30,49 @@ var FieldValueRenderer = (function () {
     }
 
     function UnknownTypeValueRenderer() {
-        this.render = function (field) {
-            return field;
+        this.render = function (propertyName, propertyValue) {
+            return propertyValue;
         }
     }
 
     function LabelRenderer() {
-        this.render = function (field) {
-            return field['label'];
+        this.render = function (propertyName, propertyValue) {
+            return propertyValue['label'];
         }
     }
 
     function StringValueRenderer(targetView) {
         this.targetView = targetView;
 
-        this.render = function (field) {
-            if (field.length == 0) {
+        this.render = function (propertyName, propertyValue) {
+            if (propertyValue.length == 0) {
                 return '&nbsp;';
             }
 
             if (this.targetView == 'listView') {
-                return cutLongText(field);
+                return cutLongText(propertyValue);
             }
-            return $.trim(field);
+            return $.trim(propertyValue);
         }
     }
 
     function NumericValueRenderer() {
-        this.render = function (field) {
-            return field;
+        this.render = function (propertyName, propertyValue) {
+            return propertyValue;
         }
     }
 
     function DateValueRenderer() {
-        this.render = function (field) {
-            return field;
+        this.render = function (propertyName, propertyValue) {
+            return propertyValue;
         }
     }
 
     function FileValueRenderer(targetView) {
         this.targetView = targetView;
 
-        this.render = function (field) {
-            if (!field['fileExists']) {
+        this.render = function (propertyName, propertyValue) {
+            if (!propertyValue['file_exists']) {
                 return '&nbsp;';
             }
 
@@ -83,15 +83,15 @@ var FieldValueRenderer = (function () {
                 height = '150';
             }
 
-            var imageUrl = field['fileUrl'] + '?height=' + height;
+            var imageUrl = propertyValue['href'] + '?height=' + height;
 
-            return "<a href='" + field['fileUrl'] + "' title='' rel='prettyPhoto'>" + "<img name='" + field['name'] + "' src='" + imageUrl + "' height='" + height + "'/></a>";
+            return "<a href='" + propertyValue['href'] + "' title='' rel='prettyPhoto'>" + "<img name='" + propertyName + "' src='" + imageUrl + "' height='" + height + "'/></a>";
         }
     }
 
     function BooleanValueRenderer() {
-        this.render = function (field) {
-            return field ? 'Yes' : 'No';
+        this.render = function (propertyName, propertyValue) {
+            return propertyValue ? 'Yes' : 'No';
         }
     }
 
@@ -99,18 +99,17 @@ var FieldValueRenderer = (function () {
 
         this.targetView = targetView;
 
-        function renderItem(arrayItem, targetView) {
+        function renderItem(propertyName, arrayItem, targetView) {
             if (isDomainObject(arrayItem)) {
-                return new DomainObjectValueRenderer(targetView).render(arrayItem);
+                return new DomainObjectValueRenderer(targetView).render(propertyName, arrayItem);
             }
             return arrayItem.toString();
         }
 
-        this.render = function (field) {
-            var fieldValue = field;
+        this.render = function (propertyName, propertyValue) {
             var items = '';
-            for (var arrayIndex in fieldValue) {
-                items += renderItem(fieldValue[arrayIndex], this.targetView) + '<br/>';
+            for (var arrayIndex in propertyValue) {
+                items += renderItem(propertyName, propertyValue[arrayIndex], this.targetView) + '<br/>';
             }
             return items.length != 0 ? items : '&nbsp;';
         }
@@ -119,8 +118,8 @@ var FieldValueRenderer = (function () {
     function DomainObjectValueRenderer(targetView) {
         this.targetView = targetView;
 
-        this.render = function (dataValue) {
-            var domainEntity = new DomainEntity(dataValue);
+        this.render = function (propertyName, propertyValue) {
+            var domainEntity = new DomainEntity(propertyValue);
 
             var valueToRender = $.trim(domainEntity.getStringRepresentation());
             if (this.targetView == 'listView') {
@@ -189,7 +188,7 @@ var FieldValueRenderer = (function () {
                 return new EmptyValueRenderer().render();
             }
 
-            return createRenderer(propertyType, propertyValue, targetView).render(propertyValue);
+            return createRenderer(propertyType, propertyValue, targetView).render(propertyName, propertyValue);
         }
     };
 }());

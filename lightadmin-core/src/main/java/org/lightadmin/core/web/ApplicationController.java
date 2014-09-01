@@ -35,6 +35,7 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import java.io.Serializable;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 
 @Controller
 @SuppressWarnings({"unused", "unchecked"})
@@ -164,10 +165,14 @@ public class ApplicationController {
     }
 
     private String redirectTo(final String url) {
-        if ("/".equals(lightAdminConfiguration.getApplicationBaseUrl())) {
-            return "redirect:" + url;
-        }
+        return "redirect:" + absoluteUrlOf(applicationUrl(url));
+    }
 
-        return String.format("redirect:%s%s", lightAdminConfiguration.getApplicationBaseUrl(), url);
+    private String absoluteUrlOf(String url) {
+        return fromCurrentContextPath().path(url).build().toUriString();
+    }
+
+    private String applicationUrl(String value) {
+        return lightAdminConfiguration.getApplicationUrl(value);
     }
 }

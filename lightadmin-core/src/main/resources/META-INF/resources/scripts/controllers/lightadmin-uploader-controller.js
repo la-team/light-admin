@@ -19,37 +19,26 @@
  *
  * @author Maxim Kharchenko (kharchenko.max@gmail.com)
  */
-function selectFileFieldValue(form, attr, attr_value, restRepoUrl) {
-    var editor = form.find('[name="' + attr + '"]');
-    var field_name = $(editor).attr('name');
-    var url = restRepoUrl + '/' + attr + '/file';
 
+function FileUploaderController(resourceName, form, attr) {
+
+    var editor = form.find('[name="' + attr + '"]');
     var uploader_container = $(editor).parent('div');
+    var plupload_container = $(uploader_container).parent('div');
+    var uploader = $(plupload_container).data('plupload');
 
     var remove_button = $('span.action.remove', uploader_container);
     var add_button = $("span.action.add", uploader_container);
 
-    var plupload_container = $(uploader_container).parent('div');
-
-    var uploader = $(plupload_container).data('plupload');
-
+    var field_name = $(editor).attr('name');
     var picture_container_id = field_name + '-picture-container';
 
-    var picture_container_html = "<div id='" + picture_container_id + "' style='margin-top:10px;'>" + FieldValueRenderer.render(attr_value, 'formView') + "</div>";
-
-    $('span.filename', uploader_container).html('File selected');
-
-    uploader_container.after(picture_container_html);
-
-    add_button.hide();
-    remove_button.show();
-
-    remove_button.click(function () {
+    function removeFile(entityId) {
         jConfirm('Are you sure you want to remove this file from server? It won\'t be recoverable!', 'Confirmation Dialog', function (r) {
             if (r) {
                 $.ajax({
                     type: 'DELETE',
-                    url: url,
+                    url: ApplicationConfig.getDomainEntityFilePropertyRestUrl(resourceName, entityId, attr),
                     contentType: 'application/json',
                     dataType: 'json',
                     success: function () {
@@ -76,5 +65,26 @@ function selectFileFieldValue(form, attr, attr_value, restRepoUrl) {
                 });
             }
         });
-    });
+    }
+
+    return {
+        selectFile: function (entityId, attr_value) {
+            var property = ConfigurationMetadataService.getProperty(resourceName, attr, 'formView');
+
+            var valueToRender = FieldValueRenderer.render(property['name'], attr_value, property['type'], 'formView');
+
+            var picture_container_html = "<div id='" + picture_container_id + "' style='margin-top:10px;'>" + valueToRender + "</div>";
+
+            $('span.filename', uploader_container).html('File selected');
+
+            uploader_container.after(picture_container_html);
+
+            add_button.hide();
+            remove_button.show();
+
+            remove_button.click(function () {
+                removeFile(entityId);
+            });
+        }
+    }
 }

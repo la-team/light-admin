@@ -185,7 +185,7 @@ function LoadDomainEntityAction(resourceName) {
                 case 'FILE':
                     var fileSelected = propertyValue.length > 0;
                     if (fileSelected) {
-//                            selectFileFieldValue(form, attr, content[attr], restRepoUrl);
+                        new FileUploaderController(resourceName, form, propertyName).selectFile(domainEntity.getPrimaryKeyValue(), propertyValue);
                     }
                     editor.val(propertyValue.toString());
                     break;
