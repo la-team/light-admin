@@ -23,8 +23,7 @@
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
-<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
-<c:set var="domainTypeFormName" value="${domainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
+<c:set var="domainTypeFormName" value="${domainTypeAdministrationConfiguration.pluralDomainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
 
 <c:if test="${not dialogMode}">
     <div class="title">
@@ -77,7 +76,7 @@
 
         formViewVisualDecoration(domain_form);
 
-        loadDomainObjectForFormView($(domain_form), '${entityId}');
+        new FormViewController(ApplicationConfig.RESOURCE_NAME).loadDomainEntity('${entityId}', $(domain_form));
 
         <c:if test="${not dialogMode}">
         $(":button[name='cancel-changes']", $(domain_form)).click(function () {
@@ -89,8 +88,7 @@
         });
 
         $(domain_form).submit(function () {
-            return updateDomainObject(this, function (data) {
-                var domainEntity = new DomainEntity(data);
+            return new FormViewController(ApplicationConfig.RESOURCE_NAME).updateDomainEntity(this, function (domainEntity) {
                 window.location = domainEntity.getDomainLink() + '?updateSuccess=true';
             });
         });

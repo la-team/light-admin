@@ -21,8 +21,7 @@
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}"/>
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
-<c:set var="domainTypeName" value="${domainTypeAdministrationConfiguration.domainTypeName}" scope="page"/>
-<c:set var="domainTypeFormName" value="${domainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
+<c:set var="domainTypeFormName" value="${domainTypeAdministrationConfiguration.pluralDomainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
 
 <c:if test="${not dialogMode}">
     <div class="title">
@@ -84,8 +83,7 @@
         });
 
         $(domain_form).submit(function () {
-            return saveDomainObject(this, function (data) {
-                var domainEntity = new DomainEntity(data);
+            return new FormViewController(ApplicationConfig.RESOURCE_NAME).saveDomainEntity(this, function(domainEntity) {
                 window.location = domainEntity.getDomainLink() + '?updateSuccess=true';
             });
         });

@@ -59,7 +59,7 @@
                 <c:when test="${(not field.dynamic) and (light:persistentPropertyTypeOf(field.persistentProperty) eq ASSOC or light:persistentPropertyTypeOf(field.persistentProperty) eq ASSOC_MULT)}">
                     "mData": function(source) {
                         var domainEntity = new DomainEntity(source);
-                        var propertyMetadata = ConfigurationMetadataService.getProperty('${propertyName}', 'listView');
+                        var propertyMetadata = ConfigurationMetadataService.getProperty(ApplicationConfig.RESOURCE_NAME, '${propertyName}', 'listView');
                         return domainEntity.getPropertyValue(propertyMetadata, 'listView');
                     },
                 </c:when>
@@ -131,7 +131,7 @@
             var entityId = $(this).attr('data-entity-id');
             jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
                 if (r) {
-                    removeDomainObject(entityId, ApplicationConfig.DOMAIN_ENTITY_BASE_REST_URL, function () {
+                    new FormViewController(ApplicationConfig.RESOURCE_NAME).removeDomainEntity(entityId, function () {
                         getSearcher().search();
                     });
                 }
@@ -141,18 +141,18 @@
     }
 
     function mRenderFieldValue(innerData, propertyName) {
-        var propertyMetadata = ConfigurationMetadataService.getProperty(propertyName, 'listView');
+        var propertyMetadata = ConfigurationMetadataService.getProperty(ApplicationConfig.RESOURCE_NAME, propertyName, 'listView');
 
         return FieldValueRenderer.render(propertyName, innerData, propertyMetadata['type'], 'listView');
     }
 
     function mRenderActions(data, type, full) {
         var domainEntity = new DomainEntity(full);
-        var primaryKeyProperty = ConfigurationMetadataService.getPrimaryKeyProperty();
+        var primaryKeyProperty = ConfigurationMetadataService.getPrimaryKeyProperty(ApplicationConfig.RESOURCE_NAME);
         var entityId = domainEntity.getPropertyValue(primaryKeyProperty, 'listView');
 
-        var viewEntityUrl = ApplicationConfig.getDomainEntityUrl(entityId);
-        var editEntityUrl = ApplicationConfig.getEditDomainEntityUrl(entityId);
+        var viewEntityUrl = ApplicationConfig.getDomainEntityUrl(ApplicationConfig.RESOURCE_NAME, entityId);
+        var editEntityUrl = ApplicationConfig.getEditDomainEntityUrl(ApplicationConfig.RESOURCE_NAME, entityId);
 
         var viewImg = '<light:url value='/images/icons/dark/info.png'/>';
         var editImg = '<light:url value='/images/icons/dark/pencil.png'/>';

@@ -13,8 +13,7 @@
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
-<light:url var="domainObjectUrl"
-           value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
+<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
 
 <c:set var="filePropertyUrl" value="${domainObjectUrl}/${attributeMetadata.name}/file" scope="page"/>
 
@@ -32,7 +31,7 @@
 
 <script type="text/javascript">
     $(function () {
-        var file_upload_url = '${filePropertyUrl}';
+        var file_upload_url = ApplicationConfig.getDomainEntityRestUrl('${domainTypeAdministrationConfiguration.pluralDomainTypeName}', '${entityId}');
         var attribute_name = '${attributeMetadata.name}';
 
         var container = '${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}';

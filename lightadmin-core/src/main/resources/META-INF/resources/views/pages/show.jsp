@@ -48,10 +48,10 @@
 </div>
 
 <script type="text/javascript">
-    loadDomainObjectForShowView($('#data-section'), '${entityId}');
+    ShowViewController.handle($('#data-section'), '${entityId}');
 
     <c:if test="${not empty (param['updateSuccess'])}">
-    showSuccessMessageNote('<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!');
+    NotificationController.showSuccessMessageNote('<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!');
     </c:if>
 
     $(function () {
@@ -60,8 +60,8 @@
         $("a.remove_button").click(function () {
             jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
                 if (r) {
-                    removeDomainObject(entity_id, ApplicationConfig.DOMAIN_ENTITY_BASE_REST_URL, function () {
-                        window.location = ApplicationConfig.DOMAIN_ENTITY_BASE_URL;
+                    new FormViewController(ApplicationConfig.RESOURCE_NAME).removeDomainEntity(entity_id, function() {
+                        window.location = ApplicationConfig.getDomainEntityCollectionUrl(ApplicationConfig.RESOURCE_NAME);
                     });
                 }
             });

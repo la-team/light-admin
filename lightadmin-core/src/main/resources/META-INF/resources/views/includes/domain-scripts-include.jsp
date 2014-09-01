@@ -6,24 +6,34 @@
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
-<light:url var="domainRestBaseUrl" value="${light:domainRestBaseUrl(domainTypeAdministrationConfiguration)}"/>
-<light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}"/>
+<light:url var="baseUrl" value="${light:baseUrl()}"/>
+<light:url var="restBaseUrl" value="${light:restBaseUrl()}"/>
 
 <script type="text/javascript">
     var ApplicationConfig = (function () {
         return {
-            DOMAIN_ENTITY_BASE_REST_URL: '${domainRestBaseUrl}',
-            DOMAIN_ENTITY_METADATA_REST_URL: '${domainRestBaseUrl}/metadata',
-            DOMAIN_ENTITY_BASE_URL: '${domainBaseUrl}',
+            RESOURCE_NAME: '${domainTypeAdministrationConfiguration.pluralDomainTypeName}',
 
-            getDomainEntityRestUrl: function(entityId) {
-                return this.DOMAIN_ENTITY_BASE_REST_URL + '/' + entityId;
+            BASE_URL: '${baseUrl}',
+            REST_BASE_URL: '${restBaseUrl}',
+
+            getDomainEntityCollectionUrl: function(resourceName) {
+                return this.BASE_URL + '/' + resourceName;
             },
-            getDomainEntityUrl: function(entityId) {
-                return this.DOMAIN_ENTITY_BASE_URL + '/' + entityId;
+            getDomainEntityCollectionRestUrl: function(resourceName) {
+                return this.REST_BASE_URL + '/' + resourceName;
             },
-            getEditDomainEntityUrl: function(entityId) {
-                return this.DOMAIN_ENTITY_BASE_URL + '/' + entityId + '/edit';
+            getDomainEntityMetadataRestUrl: function(resourceName) {
+                return this.getDomainEntityCollectionRestUrl(resourceName) + '/metadata';
+            },
+            getDomainEntityRestUrl: function(resourceName, entityId) {
+                return this.getDomainEntityCollectionRestUrl(resourceName) + '/' + entityId;
+            },
+            getDomainEntityUrl: function(resourceName, entityId) {
+                return this.getDomainEntityCollectionUrl(resourceName) + '/' + entityId;
+            },
+            getEditDomainEntityUrl: function(resourceName, entityId) {
+                return this.getDomainEntityUrl(resourceName, entityId) + '/edit';
             }
         };
     }());
@@ -33,8 +43,14 @@
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin-service.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin-search.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin-renderer.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/lightadmin-datatables-ext.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/lightadmin-view-decoration.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/lightadmin-fileuploader-decorator.js"/>"></script>
 <script type="text/javascript" src="<light:url value="/scripts/lightadmin-serializer.js"/>"></script>
-<script type="text/javascript" src="<light:url value="/scripts/lightadmin.js"/>"></script>
+
+<script type="text/javascript" src="<light:url value="/scripts/decorators/lightadmin-datatables-ext.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/decorators/lightadmin-view-decoration.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/decorators/lightadmin-fileuploader-decorator.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/controllers/lightadmin-dialog-controller.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/controllers/lightadmin-notification-controller.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/controllers/lightadmin-formview-controller.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/controllers/lightadmin-quickview-controller.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/controllers/lightadmin-showview-controller.js"/>"></script>
+<script type="text/javascript" src="<light:url value="/scripts/controllers/lightadmin-uploader-controller.js"/>"></script>

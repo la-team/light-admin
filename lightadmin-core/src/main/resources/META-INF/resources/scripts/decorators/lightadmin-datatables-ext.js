@@ -37,7 +37,7 @@ function bindInfoClickHandlers(tableElement, dataTable) {
                 "url": domainEntity.getSelfRestLink(),
                 "success": function (data) {
                     var domainEntity = new DomainEntity(data);
-                    var nDetailsRow = dataTable.fnOpen(nTr, quickLook(domainEntity), 'details');
+                    var nDetailsRow = dataTable.fnOpen(nTr, QuickViewController.handle(domainEntity), 'details');
                     $(nDetailsRow).addClass($(nDetailsRow).prev().attr('class'));
                     $('div.innerDetails', nDetailsRow).hide();
                     $('div.innerDetails', nDetailsRow).slideDown('slow', function () {
@@ -49,51 +49,6 @@ function bindInfoClickHandlers(tableElement, dataTable) {
             });
         }
     });
-}
-
-function quickLook(domainEntity) {
-    var primaryKeyProperty = ConfigurationMetadataService.getPrimaryKeyProperty();
-    var primaryKey = domainEntity.getPropertyValue(primaryKeyProperty, 'quickView');
-
-    var fields = ConfigurationMetadataService.getDynamicPropertiesAsArray('quickView');
-    var fieldsCount = fields.length;
-
-    var detailsHtmlBlock = '<div id="quickView-' + primaryKey + '" class="innerDetails">';
-
-    if (fieldsCount > 0) {
-        detailsHtmlBlock += '<table cellpadding="0" cellspacing="0" width="100%" class="tableStatic mono">';
-        detailsHtmlBlock += '<tbody class="quick-view-data-section">';
-
-        var currentFieldIdx = 0;
-        for (var prop in fields) {
-            var property = fields[prop];
-
-            var propertyName = property['name'];
-            var propertyType = property['type'];
-            var propertyTitle = property['title'];
-            var propertyValue = domainEntity.getPropertyValue(property, 'quickView');
-
-            var rowClass = '';
-            if (currentFieldIdx == 0) {
-                rowClass = 'noborder';
-            }
-            if (currentFieldIdx == fieldsCount - 1) {
-                rowClass = 'last';
-            }
-
-            detailsHtmlBlock += '<tr class="' + rowClass + '">';
-            detailsHtmlBlock += '<td width="20%" align="right" class="qv-field-name"><strong>' + propertyTitle + ':</strong></td>';
-            detailsHtmlBlock += '<td class="qv-field-value">' + FieldValueRenderer.render(propertyName, propertyValue, propertyType, 'quickView') + '</td>';
-            detailsHtmlBlock += '</tr">';
-
-            currentFieldIdx++;
-        }
-
-        detailsHtmlBlock += '</tbody></table>';
-    }
-    detailsHtmlBlock += '</div>';
-
-    return detailsHtmlBlock;
 }
 
 function dataTableRESTAdapter(sSource, aoData, fnCallback) {

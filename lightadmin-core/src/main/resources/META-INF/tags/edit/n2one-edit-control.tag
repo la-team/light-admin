@@ -30,7 +30,6 @@
 
 <c:if test="${(domainType ne attributeMetadata.type) and (not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
     <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
-    <light:url var="domainBaseUrl" value='${light:domainBaseUrl(domainTypeAdministrationConfiguration)}'/>
 
     <div class="floatleft" style="margin-left: 5px;">
         <a id="link-dialog-${attributeMetadata.name}" href="javascript:void(0);" title="Create ${domainTypeName}"
@@ -40,11 +39,10 @@
 
     <script type="text/javascript">
         $(function () {
-            modelFormViewDialog(
-                    $("#link-dialog-${attributeMetadata.name}"),
-                    '${domainTypeName}',
+            ModalDialogController.show(
+                    '${domainTypeAdministrationConfiguration.pluralDomainTypeName}',
                     '${attributeMetadata.name}',
-                    '${domainBaseUrl}'
+                    $("#link-dialog-${attributeMetadata.name}")
             );
         });
     </script>

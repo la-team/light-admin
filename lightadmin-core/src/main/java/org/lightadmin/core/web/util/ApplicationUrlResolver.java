@@ -53,6 +53,14 @@ public final class ApplicationUrlResolver {
         return globalAdministrationConfiguration(getCurrentRequest().getServletContext()).forManagedDomainType(type);
     }
 
+    public static String restBaseUrl() {
+        return "/rest";
+    }
+
+    public static String baseUrl() {
+        return "/domain";
+    }
+
     public static String domainRestBaseUrl(DomainTypeAdministrationConfiguration configuration) {
         return "/rest/" + configuration.getPluralDomainTypeName();
     }

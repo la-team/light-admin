@@ -20,13 +20,11 @@
     </light:domain-type-elements>
 </select>
 
-<c:set var="domainTypeAdministrationConfiguration"
-       value="${light:domainTypeAdministrationConfigurationFor(attributeMetadata.actualType)}"/>
+<c:set var="domainTypeAdministrationConfiguration" value="${light:domainTypeAdministrationConfigurationFor(attributeMetadata.actualType)}"/>
 
 <c:if test="${(domainType ne attributeMetadata.actualType) and (not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
 
     <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
-    <light:url var="domainBaseUrl" value='${light:domainBaseUrl(domainTypeAdministrationConfiguration)}'/>
 
     <div style="float: right; margin-top: 10px; display: inline-block;">
         <a id="link-dialog-${attributeMetadata.name}" href="javascript:void(0);" title="Create ${domainTypeName}"
@@ -36,11 +34,10 @@
 
     <script type="text/javascript">
         $(function () {
-            modelFormViewDialog(
-                    $("#link-dialog-${attributeMetadata.name}"),
-                    '${domainTypeName}',
+            ModalDialogController.show(
+                    '${domainTypeAdministrationConfiguration.pluralDomainTypeName}',
                     '${attributeMetadata.name}',
-                    '${domainBaseUrl}'
+                    $("#link-dialog-${attributeMetadata.name}")
             );
         });
     </script>

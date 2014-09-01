@@ -170,6 +170,18 @@
     </function>
 
     <function>
+        <name>restBaseUrl</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>java.lang.String restBaseUrl()</function-signature>
+    </function>
+
+    <function>
+        <name>baseUrl</name>
+        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
+        <function-signature>java.lang.String baseUrl()</function-signature>
+    </function>
+
+    <function>
         <name>domainBaseUrl</name>
         <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
         <function-signature>java.lang.String

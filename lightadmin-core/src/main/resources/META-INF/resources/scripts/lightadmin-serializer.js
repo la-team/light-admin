@@ -14,7 +14,8 @@
  * limitations under the License.
  */
 (function ($) {
-    $.fn.serializeFormJSON = function (usePlaceholders) {
+    $.fn.serializeFormJSON = function (resourceName, usePlaceholders) {
+
         function resolveObjectHref(attrVal, attrMetadata) {
             if (attrVal == '') {
                 if (usePlaceholders) {
@@ -30,7 +31,7 @@
         var json = {};
         $.each(this.serializeArray(), function () {
             var attrVal = this.value || '';
-            var property = ConfigurationMetadataService.getProperty(this.name, 'formView');
+            var property = ConfigurationMetadataService.getProperty(resourceName, this.name, 'formView');
             var propertyType = property['type'];
 
             if (propertyType.indexOf('ASSOC') == 0) {
@@ -48,7 +49,7 @@
             }
         });
 
-        $.each(ConfigurationMetadataService.getDynamicProperties("formView"), function (attrName, attrMetadata) {
+        $.each(ConfigurationMetadataService.getDynamicProperties(resourceName, "formView"), function (attrName, attrMetadata) {
             var attrVal = json[attrName];
             if (attrVal != undefined && attrVal != '') {
                 return;

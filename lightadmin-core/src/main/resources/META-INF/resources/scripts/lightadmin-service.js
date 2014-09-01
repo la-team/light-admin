@@ -15,56 +15,61 @@
  */
 var ConfigurationMetadataService = (function () {
 
-    function initialize() {
-        $.ajax({
-            url: ApplicationConfig.DOMAIN_ENTITY_METADATA_REST_URL,
-            dataType: 'json',
-            async: false,
-            success: function(data) {
-                name = data['name'];
-                managed_type = data['managed_type'];
-                dynamic_properties = data['dynamic_properties'];
-                original_properties = data['original_properties'];
-            }
-        });
+    function ResourceMetadata(rawResourceMetadata) {
+        this.name = rawResourceMetadata['name'];
+        this.managed_type = rawResourceMetadata['managed_type'];
+        this.dynamic_properties = rawResourceMetadata['dynamic_properties'];
+        this.original_properties = rawResourceMetadata['original_properties'];
     }
 
-    var name = '';
-    var managed_type = '';
-    var dynamic_properties = {};
-    var original_properties = {};
+    function loadResourceMetadata(resourceName) {
+        var resourceMetadata = {};
+        $.ajax({
+            url: ApplicationConfig.getDomainEntityMetadataRestUrl(resourceName),
+            dataType: 'json',
+            async: false,
+            success: function (rawResourceMetadata) {
+                resourceMetadata = new ResourceMetadata(rawResourceMetadata);
+            }
+        });
+        return resourceMetadata;
+    }
 
-    initialize();
+    var resourcesMetada = {};
 
     return {
-        getName: function () {
-            return name;
+        getResourceMetadata: function (resourceName) {
+            if (resourceName in resourcesMetada) {
+                return resourcesMetada[resourceName];
+            }
+            resourcesMetada[resourceName] = loadResourceMetadata(resourceName);
+            return resourcesMetada[resourceName];
         },
-        isManagedType: function () {
-            return managed_type;
-        },
-        getPrimaryKeyProperty: function() {
+        getPrimaryKeyProperty: function (resourceName) {
             var result = null;
-            $.each(this.getOriginalProperties(), function(key, value) {
+            $.each(this.getOriginalProperties(resourceName), function (key, value) {
                 if (value['primaryKey']) {
                     result = value;
                 }
             });
             return result;
         },
-        getDynamicProperties: function(unitType) {
-            return dynamic_properties[unitType];
+        getDynamicProperties: function (resourceName, unitType) {
+            return this.getResourceMetadata(resourceName).dynamic_properties[unitType];
         },
-        getOriginalProperties: function() {
-            return original_properties;
+        getOriginalProperties: function (resourceName) {
+            return this.getResourceMetadata(resourceName).original_properties;
         },
-        getProperty: function(name, unitType) {
-            var original_property = original_properties[name];
-            return original_property ? original_property : dynamic_properties[unitType][name];
+        getProperty: function (resourceName, name, unitType) {
+            var original_property = this.getResourceMetadata(resourceName).original_properties[name];
+            if (original_property) {
+                return original_property;
+            }
+            return this.getResourceMetadata(resourceName).dynamic_properties[unitType][name];
         },
-        getDynamicPropertiesAsArray: function(unitType) {
+        getDynamicPropertiesAsArray: function (resourceName, unitType) {
             var result = [];
-            $.each(this.getDynamicProperties(unitType), function(key, value) {
+            $.each(this.getDynamicProperties(resourceName, unitType), function (key, value) {
                 result.push(value);
             });
             return result;
