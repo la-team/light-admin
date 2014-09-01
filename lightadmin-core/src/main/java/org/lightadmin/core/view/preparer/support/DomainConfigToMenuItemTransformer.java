@@ -19,20 +19,23 @@ import org.apache.tiles.beans.MenuItem;
 import org.apache.tiles.beans.SimpleMenuItem;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.util.Transformer;
+import org.lightadmin.core.web.support.DomainEntityLinks;
 
-import static org.lightadmin.core.web.util.ApplicationUrlResolver.domainBaseUrl;
 import static org.springframework.util.StringUtils.capitalize;
 
 public class DomainConfigToMenuItemTransformer implements Transformer<DomainTypeAdministrationConfiguration, MenuItem> {
 
-    public static final DomainConfigToMenuItemTransformer INSTANCE = new DomainConfigToMenuItemTransformer();
+    private final DomainEntityLinks domainEntityLinks;
 
-    private DomainConfigToMenuItemTransformer() {
+    public DomainConfigToMenuItemTransformer(DomainEntityLinks domainEntityLinks) {
+        this.domainEntityLinks = domainEntityLinks;
     }
 
     @Override
     public MenuItem apply(final DomainTypeAdministrationConfiguration domainConfiguration) {
-        return menuItem(capitalize(domainConfiguration.getEntityConfiguration().getPluralName()), domainBaseUrl(domainConfiguration));
+        String url = domainEntityLinks.linkToCollectionResource(domainConfiguration.getDomainType()).getHref();
+
+        return menuItem(capitalize(domainConfiguration.getEntityConfiguration().getPluralName()), url);
     }
 
     private MenuItem menuItem(final String name, final String url) {

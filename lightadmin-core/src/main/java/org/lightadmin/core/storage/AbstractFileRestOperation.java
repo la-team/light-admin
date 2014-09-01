@@ -23,6 +23,7 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.model.BeanWrapper;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 import org.springframework.util.ClassUtils;
 
 import java.io.File;
@@ -84,9 +85,8 @@ public abstract class AbstractFileRestOperation {
     }
 
     protected Object idAttributeValue() {
-        BeanWrapper beanWrapper = BeanWrapper.create(entity, null);
-
-        return beanWrapper.getProperty(domainTypeAdministrationConfiguration.getPersistentEntity().getIdProperty());
+        PersistentProperty idProperty = domainTypeAdministrationConfiguration.getPersistentEntity().getIdProperty();
+        return new DirectFieldAccessFallbackBeanWrapper(entity).getPropertyValue(idProperty.getName());
     }
 
     protected String domainTypeName() {

@@ -23,6 +23,8 @@ import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.util.Pair;
 import org.lightadmin.core.view.preparer.support.DomainConfigToMenuItemTransformer;
 import org.lightadmin.core.view.preparer.support.MenuItemComparator;
+import org.lightadmin.core.web.support.DomainEntityLinks;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.Comparator;
@@ -32,6 +34,9 @@ import static com.google.common.collect.Lists.newLinkedList;
 import static java.util.Collections.sort;
 
 public class DashboardViewPreparer extends ConfigurationAwareViewPreparer {
+
+    @Autowired
+    private DomainEntityLinks domainEntityLinks;
 
     @Override
     protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration) {
@@ -57,6 +62,6 @@ public class DashboardViewPreparer extends ConfigurationAwareViewPreparer {
     }
 
     private MenuItem menuItem(final DomainTypeAdministrationConfiguration configuration) {
-        return DomainConfigToMenuItemTransformer.INSTANCE.apply(configuration);
+        return new DomainConfigToMenuItemTransformer(domainEntityLinks).apply(configuration);
     }
 }

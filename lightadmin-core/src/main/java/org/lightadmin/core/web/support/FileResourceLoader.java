@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.core.web.util;
+package org.lightadmin.core.web.support;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
@@ -25,7 +25,7 @@ import org.springframework.data.mapping.PersistentProperty;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-import static org.lightadmin.core.util.ResponseUtils.*;
+import static org.lightadmin.core.web.util.ResponseUtils.*;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 
 @SuppressWarnings("unused")

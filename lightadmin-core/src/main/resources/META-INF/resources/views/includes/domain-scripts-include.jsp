@@ -26,8 +26,17 @@
             getDomainEntityMetadataRestUrl: function(resourceName) {
                 return this.getDomainEntityCollectionRestUrl(resourceName) + '/metadata';
             },
+            getDomainEntitySearchScopeRestUrl: function(resourceName) {
+                return this.getDomainEntityCollectionRestUrl(resourceName) + '/scope';
+            },
             getDomainEntityRestUrl: function(resourceName, entityId) {
                 return this.getDomainEntityCollectionRestUrl(resourceName) + '/' + entityId;
+            },
+            getDomainEntityPropertyRestUrl: function(resourceName, entityId, propertyName) {
+                return this.getDomainEntityRestUrl(resourceName, entityId) + '/' + propertyName;
+            },
+            getDomainEntityFilePropertyRestUrl: function(resourceName, entityId, propertyName) {
+                return this.getDomainEntityPropertyRestUrl(resourceName, entityId, propertyName) + '/file';
             },
             getDomainEntityUrl: function(resourceName, entityId) {
                 return this.getDomainEntityCollectionUrl(resourceName) + '/' + entityId;

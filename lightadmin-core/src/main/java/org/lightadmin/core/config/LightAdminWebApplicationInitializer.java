@@ -19,6 +19,7 @@ import net.sf.ehcache.constructs.web.filter.GzipFilter;
 import org.lightadmin.core.config.bootstrap.LightAdminBeanDefinitionRegistryPostProcessor;
 import org.lightadmin.core.config.context.LightAdminContextConfiguration;
 import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
+import org.lightadmin.core.util.LightAdminConfigurationUtils;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
 import org.springframework.core.annotation.Order;
@@ -28,6 +29,7 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
+import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.ResourceServlet;
 
 import javax.servlet.ServletContext;
@@ -40,12 +42,13 @@ import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.BooleanUtils.toBoolean;
 import static org.apache.commons.lang3.StringUtils.isBlank;
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
-import static org.lightadmin.core.web.util.WebContextUtils.servletContextAttributeName;
 import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 @SuppressWarnings("unused")
 @Order(LOWEST_PRECEDENCE)
 public class LightAdminWebApplicationInitializer implements WebApplicationInitializer {
+
+    public static String SERVLET_CONTEXT_ATTRIBUTE_NAME = FrameworkServlet.SERVLET_CONTEXT_PREFIX + LightAdminConfigurationUtils.LIGHT_ADMIN_DISPATCHER_NAME;
 
     private static final Pattern BASE_URL_PATTERN = Pattern.compile("(/)|(/[\\w-]+)+");
 
@@ -172,7 +175,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
     private DelegatingFilterProxy springSecurityFilterChain() {
         final DelegatingFilterProxy securityFilterChain = new DelegatingFilterProxy("springSecurityFilterChain");
-        securityFilterChain.setContextAttribute(servletContextAttributeName());
+        securityFilterChain.setContextAttribute(SERVLET_CONTEXT_ATTRIBUTE_NAME);
         return securityFilterChain;
     }
 

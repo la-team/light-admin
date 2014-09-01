@@ -21,8 +21,6 @@ import java.util.List;
 
 public class EnumFieldEditControl extends JspFragmentFieldControl {
 
-    private static final long serialVersionUID = 1L;
-
     private final List<EnumElement> elements;
 
     public EnumFieldEditControl(List<EnumElement> elements) {

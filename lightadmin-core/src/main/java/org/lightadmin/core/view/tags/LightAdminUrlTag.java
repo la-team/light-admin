@@ -20,8 +20,6 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 
-import static org.lightadmin.core.web.util.WebContextUtils.getWebApplicationContext;
-
 public class LightAdminUrlTag extends org.springframework.web.servlet.tags.UrlTag {
 
     @Override
@@ -40,6 +38,6 @@ public class LightAdminUrlTag extends org.springframework.web.servlet.tags.UrlTa
     }
 
     private LightAdminConfiguration lightAdminContext() {
-        return getWebApplicationContext(pageContext.getServletContext()).getBean(LightAdminConfiguration.class);
+        return getRequestContext().getWebApplicationContext().getBean(LightAdminConfiguration.class);
     }
 }

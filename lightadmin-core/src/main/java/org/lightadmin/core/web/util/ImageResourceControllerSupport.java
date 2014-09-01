@@ -36,7 +36,7 @@ import static org.imgscalr.Scalr.Method.SPEED;
 import static org.imgscalr.Scalr.Mode.AUTOMATIC;
 import static org.imgscalr.Scalr.OP_ANTIALIAS;
 import static org.imgscalr.Scalr.resize;
-import static org.lightadmin.core.util.ResponseUtils.responseHeader;
+import static org.lightadmin.core.web.util.ResponseUtils.responseHeader;
 import static org.springframework.http.HttpStatus.*;
 import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 import static org.springframework.http.MediaType.parseMediaType;
@@ -78,7 +78,7 @@ public class ImageResourceControllerSupport {
     }
 
     private ResponseEntity<?> imageResourceResponse(byte[] content, MediaType mediaType) {
-        return new ResponseEntity<byte[]>(content, responseHeader(content, mediaType), OK);
+        return new ResponseEntity<>(content, responseHeader(content, mediaType), OK);
     }
 
     private ResponseEntity serverErrorResponse() {

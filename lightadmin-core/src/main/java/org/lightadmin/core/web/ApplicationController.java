@@ -16,14 +16,15 @@
 package org.lightadmin.core.web;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.core.convert.ConversionService;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,7 +35,6 @@ import org.springframework.web.servlet.mvc.multiaction.NoSuchRequestHandlingMeth
 import java.io.Serializable;
 
 import static org.springframework.http.HttpStatus.FORBIDDEN;
-import static org.springframework.util.ClassUtils.isAssignable;
 
 @Controller
 @SuppressWarnings({"unused", "unchecked"})
@@ -42,9 +42,8 @@ public class ApplicationController {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationController.class);
 
-    public static final String BEAN_FACTORY_KEY = "beanFactory";
-    public static final String ADMINISTRATION_CONFIGURATION_KEY = "administrationConfiguration";
     public static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = "domainTypeAdministrationConfiguration";
+    public static final String BEAN_FACTORY_KEY = "beanFactory";
 
     @Autowired
     private GlobalAdministrationConfiguration configuration;
@@ -53,11 +52,11 @@ public class ApplicationController {
     private ConfigurableApplicationContext appContext;
 
     @Autowired
-    @Qualifier("defaultConversionService")
-    private ConversionService conversionService;
+    private LightAdminConfiguration lightAdminConfiguration;
 
     @Autowired
-    private LightAdminConfiguration lightAdminContext;
+    @Qualifier("defaultConversionService")
+    private ConversionService conversionService;
 
     @ExceptionHandler(Exception.class)
     public ModelAndView handleException(Exception ex) {
@@ -150,9 +149,13 @@ public class ApplicationController {
     }
 
     private Object findEntityOfDomain(String entityId, String domainTypeName) {
-        final Serializable resolvedEntityId = resolveEntityId(entityId, configuration.forEntityName(domainTypeName).getPersistentEntity());
+        DomainTypeAdministrationConfiguration domainTypeConfiguration = configuration.forEntityName(domainTypeName);
+        DynamicJpaRepository repository = domainTypeConfiguration.getRepository();
 
-        return repositoryForEntity(domainTypeName).findOne(resolvedEntityId);
+        PersistentEntity persistentEntity = domainTypeConfiguration.getPersistentEntity();
+        Serializable id = (Serializable) conversionService.convert(entityId, persistentEntity.getIdProperty().getActualType());
+
+        return repository.findOne(id);
     }
 
     private void addDomainTypeConfigurationToModel(String domainTypeName, Model model) {
@@ -160,26 +163,11 @@ public class ApplicationController {
         model.addAttribute(BEAN_FACTORY_KEY, appContext.getAutowireCapableBeanFactory());
     }
 
-    private JpaRepository repositoryForEntity(final String domainType) {
-        return configuration.forEntityName(domainType).getRepository();
-    }
-
     private String redirectTo(final String url) {
-        if ("/".equals(lightAdminContext.getApplicationBaseUrl())) {
+        if ("/".equals(lightAdminConfiguration.getApplicationBaseUrl())) {
             return "redirect:" + url;
         }
 
-        return String.format("redirect:%s%s", lightAdminContext.getApplicationBaseUrl(), url);
-    }
-
-    private Serializable resolveEntityId(String entityId, PersistentEntity persistentEntity) {
-        return stringToSerializable(entityId, persistentEntity.getIdProperty().getActualType());
-    }
-
-    private <V extends Serializable> V stringToSerializable(String s, Class<V> targetType) {
-        if (isAssignable(targetType, String.class)) {
-            return (V) s;
-        }
-        return conversionService.convert(s, targetType);
+        return String.format("redirect:%s%s", lightAdminConfiguration.getApplicationBaseUrl(), url);
     }
 }

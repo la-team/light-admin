@@ -100,9 +100,9 @@ function FilterComponent( filterFormContainerName, searcher ) {
 
 }
 
-function Searcher( domainRestScopeBaseUrl ) {
+function Searcher( resourceName ) {
 
-	this.domainRestScopeBaseUrl = domainRestScopeBaseUrl;
+	this.domainRestScopeBaseUrl = ApplicationConfig.getDomainEntitySearchScopeRestUrl(resourceName);
 
 	this.scopesComponent = null;
 	this.filterComponent = null;
@@ -149,9 +149,11 @@ function Searcher( domainRestScopeBaseUrl ) {
 	}
 }
 
-function createSearcher( domainRestScopeBaseUrl ) {
-	var searcher = new Searcher( domainRestScopeBaseUrl );
+function createSearcher( resourceName ) {
+    var searcher = new Searcher( resourceName );
+
 	$( document ).data( 'lightadmin.searcher', searcher );
+
 	return searcher;
 }
 

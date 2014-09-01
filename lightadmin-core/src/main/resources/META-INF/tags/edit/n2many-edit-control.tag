@@ -1,3 +1,4 @@
+<%@ tag import="org.lightadmin.core.config.domain.GlobalAdministrationConfiguration" %>
 <%@ tag body-content="empty" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
@@ -10,6 +11,8 @@
 <%@ attribute name="modalViewEnabled" required="false" type="java.lang.Boolean" %>
 
 <tiles:useAttribute name="dialogMode" ignore="true"/>
+<tiles:useAttribute name="globalConfiguration"/>
+
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
 <select name="${attributeMetadata.name}" multiple="multiple" class="chzn-select"
@@ -20,25 +23,26 @@
     </light:domain-type-elements>
 </select>
 
-<c:set var="domainTypeAdministrationConfiguration" value="${light:domainTypeAdministrationConfigurationFor(attributeMetadata.actualType)}"/>
+<c:if test="${(domainType ne attributeMetadata.actualType) and (not dialogMode) and modalViewEnabled}">
+    <c:if test="<%= ((GlobalAdministrationConfiguration)globalConfiguration).isManagedDomainType(attributeMetadata.getActualType())%>">
 
-<c:if test="${(domainType ne attributeMetadata.actualType) and (not dialogMode) and modalViewEnabled and (domainTypeAdministrationConfiguration ne null)}">
+        <c:set var="domainTypeAdministrationConfiguration" value="<%= ((GlobalAdministrationConfiguration)globalConfiguration).forManagedDomainType(attributeMetadata.getActualType()) %>"/>
+        <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
 
-    <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
+        <div style="float: right; margin-top: 10px; display: inline-block;">
+            <a id="link-dialog-${attributeMetadata.name}" href="javascript:void(0);" title="Create ${domainTypeName}"
+               class="btn14 mr5"><img src="<light:url value='/images/icons/dark/create.png'/>"
+                                      alt="Create ${domainTypeName}"></a>
+        </div>
 
-    <div style="float: right; margin-top: 10px; display: inline-block;">
-        <a id="link-dialog-${attributeMetadata.name}" href="javascript:void(0);" title="Create ${domainTypeName}"
-           class="btn14 mr5"><img src="<light:url value='/images/icons/dark/create.png'/>"
-                                  alt="Create ${domainTypeName}"></a>
-    </div>
-
-    <script type="text/javascript">
-        $(function () {
-            ModalDialogController.show(
-                    '${domainTypeAdministrationConfiguration.pluralDomainTypeName}',
-                    '${attributeMetadata.name}',
-                    $("#link-dialog-${attributeMetadata.name}")
-            );
-        });
-    </script>
+        <script type="text/javascript">
+            $(function () {
+                ModalDialogController.show(
+                        '${domainTypeAdministrationConfiguration.pluralDomainTypeName}',
+                        '${attributeMetadata.name}',
+                        $("#link-dialog-${attributeMetadata.name}")
+                );
+            });
+        </script>
+    </c:if>
 </c:if>

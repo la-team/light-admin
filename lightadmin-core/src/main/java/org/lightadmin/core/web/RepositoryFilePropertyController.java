@@ -19,7 +19,7 @@ import com.google.common.collect.Maps;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.storage.OperationBuilder;
-import org.lightadmin.core.web.util.FileResourceLoader;
+import org.lightadmin.core.web.support.FileResourceLoader;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PersistentEntity;

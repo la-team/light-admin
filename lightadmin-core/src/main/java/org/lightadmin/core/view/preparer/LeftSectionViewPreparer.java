@@ -23,6 +23,8 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.view.preparer.support.DomainConfigToMenuItemTransformer;
 import org.lightadmin.core.view.preparer.support.MenuItemComparator;
+import org.lightadmin.core.web.support.DomainEntityLinks;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.Collection;
 import java.util.List;
@@ -32,6 +34,9 @@ import static com.google.common.collect.Lists.newArrayList;
 import static java.util.Collections.sort;
 
 public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
+
+    @Autowired
+    private DomainEntityLinks domainEntityLinks;
 
     @Override
     protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration) {
@@ -49,7 +54,7 @@ public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
     }
 
     private Collection<MenuItem> menuItems(Collection<DomainTypeAdministrationConfiguration> configurations) {
-        final List<MenuItem> menuItems = newArrayList(transform(configurations, DomainConfigToMenuItemTransformer.INSTANCE));
+        final List<MenuItem> menuItems = newArrayList(transform(configurations, new DomainConfigToMenuItemTransformer(domainEntityLinks)));
 
         sort(menuItems, MenuItemComparator.INSTANCE);
 

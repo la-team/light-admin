@@ -5,9 +5,8 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <%@ attribute name="scopes" required="true" rtexprvalue="true" type="java.util.List" %>
-<%@ attribute name="domainTypeAdministrationConfiguration" required="true" type="org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration" %>
 
-<light:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
+<%@ attribute name="domainTypeAdministrationConfiguration" required="true" type="org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration" %>
 
 <c:if test="${not empty scopes}">
 	<div class="scopes" id="scopes">
@@ -24,6 +23,6 @@
 	</div>
 
 	<script type="text/javascript">
-		var SCOPES_COMPONENT = new ScopesComponent( '#scopes', getSearcher(), '${domainRestScopeBaseUrl}' );
+		var SCOPES_COMPONENT = new ScopesComponent( '#scopes', getSearcher(), ApplicationConfig.getDomainEntitySearchScopeRestUrl('${domainTypeAdministrationConfiguration.pluralDomainTypeName}') );
 	</script>
 </c:if>

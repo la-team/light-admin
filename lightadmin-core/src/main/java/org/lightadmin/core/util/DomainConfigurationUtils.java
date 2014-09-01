@@ -20,14 +20,16 @@ import org.lightadmin.api.config.annotation.Administration;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnit;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnitBuilder;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
-import org.springframework.beans.BeanUtils;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 
+import static org.springframework.beans.BeanUtils.instantiateClass;
 import static org.springframework.core.annotation.AnnotationUtils.findAnnotation;
+import static org.springframework.util.ClassUtils.getConstructorIfAvailable;
+import static org.springframework.util.ClassUtils.getMethodIfAvailable;
 import static org.springframework.util.ReflectionUtils.invokeMethod;
 
 public abstract class DomainConfigurationUtils {
@@ -56,16 +58,8 @@ public abstract class DomainConfigurationUtils {
         return ClassUtils.isAssignable(AdministrationConfiguration.class, clazz);
     }
 
-    public static boolean isConfigurationCandidate(Class clazz) {
-        return isAnnotationBasedConfigurationCandidate(clazz) || isSuperClassBasedConfigurationCandidate(clazz);
-    }
-
     private static boolean hasAdministrationAnnotation(Class clazz) {
         return findAnnotation(clazz, Administration.class) != null;
-    }
-
-    public static boolean isConfigurationCandidate(Object candidate) {
-        return ClassUtils.isAssignableValue(Class.class, candidate) && isConfigurationCandidate((Class) candidate);
     }
 
     @SuppressWarnings({"unchecked"})
@@ -73,7 +67,7 @@ public abstract class DomainConfigurationUtils {
         final Class<? extends AdministrationConfiguration> configurationClass = configurationInstance.getClass();
         final Class<?> domainType = configurationDomainType(configurationClass);
 
-        final Method method = ClassUtils.getMethodIfAvailable(configurationClass, configurationUnitType.getName(), builderInterface);
+        final Method method = getMethodIfAvailable(configurationClass, configurationUnitType.getName(), builderInterface);
 
         final ConfigurationUnitBuilder<T> builder = instantiateBuilder(concreteBuilderClass, domainType, configurationUnitType);
 
@@ -88,7 +82,7 @@ public abstract class DomainConfigurationUtils {
     public static <T extends ConfigurationUnit> T initializeConfigurationUnitWithBuilder(final Class<?> configurationClass, DomainConfigurationUnitType configurationUnitType, Class<? extends ConfigurationUnitBuilder<T>> builderInterface, Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass) {
         final Class<?> domainType = configurationDomainType(configurationClass);
 
-        final Method method = ClassUtils.getMethodIfAvailable(configurationClass, configurationUnitType.getName(), builderInterface);
+        final Method method = getMethodIfAvailable(configurationClass, configurationUnitType.getName(), builderInterface);
 
         final ConfigurationUnitBuilder<T> builder = instantiateBuilder(concreteBuilderClass, domainType, configurationUnitType);
         if (method != null) {
@@ -103,17 +97,17 @@ public abstract class DomainConfigurationUtils {
     }
 
     private static <T extends ConfigurationUnit> ConfigurationUnitBuilder<T> instantiateBuilder(final Class<? extends ConfigurationUnitBuilder<T>> concreteBuilderClass, final Class domainType, DomainConfigurationUnitType configurationUnitType) {
-        Constructor<? extends ConfigurationUnitBuilder<T>> extendedConstructor = ClassUtils.getConstructorIfAvailable(concreteBuilderClass, Class.class, DomainConfigurationUnitType.class);
+        Constructor<? extends ConfigurationUnitBuilder<T>> extendedConstructor = getConstructorIfAvailable(concreteBuilderClass, Class.class, DomainConfigurationUnitType.class);
 
         if (extendedConstructor != null) {
-            return BeanUtils.instantiateClass(extendedConstructor, domainType, configurationUnitType);
+            return instantiateClass(extendedConstructor, domainType, configurationUnitType);
         }
 
-        Constructor<? extends ConfigurationUnitBuilder<T>> constructor = ClassUtils.getConstructorIfAvailable(concreteBuilderClass, Class.class);
+        Constructor<? extends ConfigurationUnitBuilder<T>> constructor = getConstructorIfAvailable(concreteBuilderClass, Class.class);
         if (constructor != null) {
-            return BeanUtils.instantiateClass(constructor, domainType);
+            return instantiateClass(constructor, domainType);
         }
 
-        return BeanUtils.instantiateClass(concreteBuilderClass);
+        return instantiateClass(concreteBuilderClass);
     }
 }

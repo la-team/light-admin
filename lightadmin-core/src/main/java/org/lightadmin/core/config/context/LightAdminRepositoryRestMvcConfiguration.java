@@ -26,6 +26,8 @@ import org.lightadmin.core.web.json.LightAdminJacksonModule;
 import org.lightadmin.core.web.support.ConfigurationHandlerMethodArgumentResolver;
 import org.lightadmin.core.web.support.DynamicPersistentEntityResourceAssemblerArgumentResolver;
 import org.lightadmin.core.web.support.DynamicPersistentEntityResourceProcessor;
+import org.lightadmin.core.web.support.DomainEntityLinks;
+import org.lightadmin.core.web.support.DynamicRepositoryEntityLinks;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,8 +62,18 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
     private ListableBeanFactory beanFactory;
 
     @Bean
+    public DomainEntityLinks domainEntityLinks() {
+        return new DomainEntityLinks(globalAdministrationConfiguration(), backendIdConverterRegistry(), lightAdminConfiguration());
+    }
+
+    @Bean
+    public DynamicRepositoryEntityLinks entityLinks() {
+        return DynamicRepositoryEntityLinks.wrap(super.entityLinks());
+    }
+
+    @Bean
     public DynamicPersistentEntityResourceProcessor dynamicPersistentEntityResourceProcessor() {
-        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), lightAdminConfiguration(), entityLinks());
+        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), lightAdminConfiguration(), entityLinks(), domainEntityLinks());
     }
 
     @Bean

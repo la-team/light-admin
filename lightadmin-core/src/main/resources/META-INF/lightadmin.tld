@@ -61,26 +61,6 @@
     </tag>
 
     <tag>
-        <description>Renders dynamic html element using the bound value.</description>
-        <name>dynamic-element</name>
-        <tag-class>org.lightadmin.core.view.tags.form.DynamicHtmlElementTag</tag-class>
-        <body-content>empty</body-content>
-        <attribute>
-            <description>Entity Attribute Metadata</description>
-            <name>persistentProperty</name>
-            <required>true</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <attribute>
-            <description>Equivalent to "class" - HTML Optional Attribute</description>
-            <name>cssClass</name>
-            <required>false</required>
-            <rtexprvalue>true</rtexprvalue>
-        </attribute>
-        <dynamic-attributes>true</dynamic-attributes>
-    </tag>
-
-    <tag>
         <description>Renders html form element control</description>
         <name>edit-control-dispatcher</name>
         <tag-class>org.lightadmin.core.view.tags.form.EditControlDispatcherTag</tag-class>
@@ -161,15 +141,6 @@
     </tag>
 
     <function>
-        <name>domainTypeAdministrationConfigurationFor</name>
-        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-        <function-signature>
-            org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration
-            domainTypeAdministrationConfiguration(java.lang.Class)
-        </function-signature>
-    </function>
-
-    <function>
         <name>restBaseUrl</name>
         <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
         <function-signature>java.lang.String restBaseUrl()</function-signature>
@@ -190,36 +161,6 @@
     </function>
 
     <function>
-        <name>domainRestEntityBaseUrl</name>
-        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-        <function-signature>java.lang.String
-            domainRestEntityBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration,java.lang.Object)
-        </function-signature>
-    </function>
-
-    <function>
-        <name>domainRestBaseUrl</name>
-        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-        <function-signature>java.lang.String
-            domainRestBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)
-        </function-signature>
-    </function>
-
-    <function>
-        <name>domainRestScopeBaseUrl</name>
-        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-        <function-signature>java.lang.String
-            domainRestScopeBaseUrl(org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration)
-        </function-signature>
-    </function>
-
-    <function>
-        <name>filePropertyRestUrl</name>
-        <function-class>org.lightadmin.core.web.util.ApplicationUrlResolver</function-class>
-        <function-signature>java.lang.String filePropertyRestUrl(java.lang.Object,java.lang.String)</function-signature>
-    </function>
-
-    <function>
         <name>cutLongText</name>
         <function-class>org.lightadmin.core.util.NamingUtils</function-class>
         <function-signature>java.lang.String cutLongText(java.lang.String)</function-signature>
@@ -229,31 +170,6 @@
         <name>capitalize</name>
         <function-class>org.springframework.util.StringUtils</function-class>
         <function-signature>java.lang.String capitalize(java.lang.String)</function-signature>
-    </function>
-
-    <function>
-        <name>uncapitalize</name>
-        <function-class>org.springframework.util.StringUtils</function-class>
-        <function-signature>java.lang.String uncapitalize(java.lang.String)</function-signature>
-    </function>
-
-    <function>
-        <name>invokeMethod</name>
-        <function-class>org.springframework.util.ReflectionUtils</function-class>
-        <function-signature>java.lang.Object invokeMethod(java.lang.reflect.Method,java.lang.Object,java.lang.Object...)
-        </function-signature>
-    </function>
-
-    <function>
-        <name>isPrimitiveOrWrapper</name>
-        <function-class>org.springframework.util.ClassUtils</function-class>
-        <function-signature>boolean isPrimitiveOrWrapper(java.lang.Class)</function-signature>
-    </function>
-
-    <function>
-        <name>isSimpleValueType</name>
-        <function-class>org.springframework.beans.BeanUtils</function-class>
-        <function-signature>boolean isSimpleValueType(java.lang.Class)</function-signature>
     </function>
 
     <function>

@@ -17,9 +17,6 @@
 <tiles:useAttribute name="entitySingularName"/>
 <tiles:useAttribute name="entityPluralName"/>
 
-<light:url var="domainRestScopeBaseUrl" value="${light:domainRestScopeBaseUrl(domainTypeAdministrationConfiguration)}"
-           scope="page"/>
-
 <div class="title"><h5><c:out value="${light:capitalize(light:cutLongText(entityPluralName))}"/></h5></div>
 
 <light-jsp:breadcrumb>
@@ -27,7 +24,7 @@
 </light-jsp:breadcrumb>
 
 <script type="text/javascript">
-    var SEARCHER = createSearcher('${domainRestScopeBaseUrl}');
+    var SEARCHER = createSearcher('${domainTypeAdministrationConfiguration.pluralDomainTypeName}');
 </script>
 
 <light-jsp:search filters="${filters}"/>

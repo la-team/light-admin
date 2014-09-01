@@ -28,12 +28,9 @@ import static javax.servlet.jsp.PageContext.REQUEST_SCOPE;
 
 public class JspFragmentFieldControl extends SimpleTagSupport implements Serializable, Cloneable {
 
-    private static final long serialVersionUID = 1L;
-
     private final String jspPath;
 
     protected PersistentProperty persistentProperty;
-
     protected String field;
 
     public JspFragmentFieldControl(String jspPath) {
@@ -42,7 +39,6 @@ public class JspFragmentFieldControl extends SimpleTagSupport implements Seriali
 
     @Override
     public void doTag() throws JspException, IOException {
-
         addAttribute("field", field);
         addAttribute("attributeMetadata", persistentProperty);
         prepare();
@@ -72,5 +68,4 @@ public class JspFragmentFieldControl extends SimpleTagSupport implements Seriali
 
     protected void prepare() {
     }
-
 }

@@ -29,8 +29,7 @@
     </div>
 
     <light-jsp:breadcrumb>
-        <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}"
-                                   link="${domainBaseUrl}"/>
+        <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entityPluralName))}" link="${domainBaseUrl}"/>
         <light-jsp:breadcrumb-item name="${light:capitalize(light:cutLongText(entitySingularName))}"/>
     </light-jsp:breadcrumb>
 </c:if>

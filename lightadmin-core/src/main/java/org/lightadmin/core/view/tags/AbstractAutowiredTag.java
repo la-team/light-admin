@@ -30,5 +30,4 @@ public abstract class AbstractAutowiredTag extends SimpleTagSupport {
         AutowireCapableBeanFactory beanFactory = (AutowireCapableBeanFactory) context.findAttribute(ApplicationController.BEAN_FACTORY_KEY);
         beanFactory.autowireBean(this);
     }
-
 }

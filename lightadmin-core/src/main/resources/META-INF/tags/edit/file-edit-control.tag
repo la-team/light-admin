@@ -13,10 +13,6 @@
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
-<light:url var="domainObjectUrl" value="${light:domainRestEntityBaseUrl(domainTypeAdministrationConfiguration, entityId)}" scope="page"/>
-
-<c:set var="filePropertyUrl" value="${domainObjectUrl}/${attributeMetadata.name}/file" scope="page"/>
-
 <div id="${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}" style="text-align: left;">
     <div class="uploader" style="z-index: 1;">
         <input type="hidden" class="fileInput" id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}"
@@ -31,8 +27,8 @@
 
 <script type="text/javascript">
     $(function () {
-        var file_upload_url = ApplicationConfig.getDomainEntityRestUrl('${domainTypeAdministrationConfiguration.pluralDomainTypeName}', '${entityId}');
         var attribute_name = '${attributeMetadata.name}';
+        var file_upload_url = ApplicationConfig.getDomainEntityFilePropertyRestUrl('${domainTypeAdministrationConfiguration.pluralDomainTypeName}', '${entityId}', attribute_name);
 
         var container = '${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}';
         var browse_button = '${attributeMetadata.name}-pickfiles${dialogMode ? '-dialog' : ''}';
