@@ -183,11 +183,11 @@ function LoadDomainEntityAction(resourceName) {
                     editor.prop('checked', propertyValue);
                     break;
                 case 'FILE':
-                    var fileSelected = propertyValue.length > 0;
+                    var fileSelected = propertyValue['file_exists'];
                     if (fileSelected) {
                         new FileUploaderController(resourceName, form, propertyName).selectFile(domainEntity.getPrimaryKeyValue(), propertyValue);
                     }
-                    editor.val(propertyValue.toString());
+                    editor.val(propertyValue['value']);
                     break;
                 case 'STRING':
                     if (editor.hasClass('wysiwyg')) {
