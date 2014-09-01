@@ -115,6 +115,9 @@
         <hibernate-entitymanager.version>4.3.4.Final</hibernate-entitymanager.version>
         <junit.version>4.11</junit.version>
         <easymock.version>3.2</easymock.version>
+        <usertype.jodatime.version>2.0.1</usertype.jodatime.version>
+        <jackson-datatype-joda.version>2.3.0</jackson-datatype-joda.version>
+        <jackson-datatype-hibernate4.version>2.2.2</jackson-datatype-hibernate4.version>
     </properties>
 
     <prerequisites>
@@ -292,17 +295,17 @@
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.jodatime</artifactId>
-            <version>2.0.1</version>
+            <version>${usertype.jodatime.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
-            <version>2.3.0</version>
+            <version>${jackson-datatype-joda.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate4</artifactId>
-            <version>2.2.2</version>
+            <version>${jackson-datatype-hibernate4.version}</version>
         </dependency>
 
         <dependency>

@@ -20,8 +20,6 @@ import org.springframework.hateoas.core.LinkBuilderSupport;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.net.URI;
-
 /**
  * TODO: Document me!
  *
@@ -32,16 +30,15 @@ public class DomainLinkBuilder extends LinkBuilderSupport<DomainLinkBuilder> {
     public static final String DOMAIN_BASE_URI = "/domain";
 
     public DomainLinkBuilder(LightAdminConfiguration lightAdminConfiguration) {
-        this(prepareBuilder(UriComponentsBuilder.fromUriString(lightAdminConfiguration.getApplicationUrl(DOMAIN_BASE_URI)).build().toUri()));
+        this(prepareBuilder(lightAdminConfiguration.getApplicationUrl(DOMAIN_BASE_URI)));
     }
 
     private DomainLinkBuilder(UriComponentsBuilder builder) {
         super(builder);
     }
 
-    private static UriComponentsBuilder prepareBuilder(URI baseUri) {
-        return baseUri.isAbsolute() ? UriComponentsBuilder.fromUri(baseUri)
-                : ServletUriComponentsBuilder.fromCurrentServletMapping().path(baseUri.toString());
+    private static UriComponentsBuilder prepareBuilder(String baseUrl) {
+        return ServletUriComponentsBuilder.fromCurrentContextPath().pathSegment(baseUrl);
     }
 
     @Override

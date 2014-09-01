@@ -17,27 +17,40 @@ package org.lightadmin.core.view.tags;
 
 import org.lightadmin.core.config.LightAdminConfiguration;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
+
+import static org.springframework.beans.PropertyAccessorFactory.forDirectFieldAccess;
+import static org.springframework.web.servlet.support.ServletUriComponentsBuilder.fromCurrentContextPath;
 
 public class LightAdminUrlTag extends org.springframework.web.servlet.tags.UrlTag {
 
+    private static final String URL_TYPE_ABSOLUTE = "://";
+
     @Override
     public int doEndTag() throws JspException {
-        final String applicationBaseUrl = lightAdminContext().getApplicationBaseUrl();
-
-        if (!"/".equals(applicationBaseUrl)) {
-            setContext(contextPath() + applicationBaseUrl);
+        if (isRelative(getValue())) {
+            setValue(absoluteUrlOf(applicationUrl(getValue())));
         }
-
         return super.doEndTag();
     }
 
-    private String contextPath() {
-        return ((HttpServletRequest) pageContext.getRequest()).getContextPath();
+    private String absoluteUrlOf(String applicationBaseUrl) {
+        return fromCurrentContextPath().path(applicationBaseUrl).build().toUriString();
     }
 
-    private LightAdminConfiguration lightAdminContext() {
+    private boolean isRelative(String value) {
+        return !value.contains(URL_TYPE_ABSOLUTE);
+    }
+
+    private String getValue() {
+        return (String) forDirectFieldAccess(this).getPropertyValue("value");
+    }
+
+    private String applicationUrl(String value) {
+        return lightAdminConfiguration().getApplicationUrl(value);
+    }
+
+    private LightAdminConfiguration lightAdminConfiguration() {
         return getRequestContext().getWebApplicationContext().getBean(LightAdminConfiguration.class);
     }
 }

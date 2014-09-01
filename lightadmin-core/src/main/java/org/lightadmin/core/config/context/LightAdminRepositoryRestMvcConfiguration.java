@@ -23,11 +23,7 @@ import org.lightadmin.core.persistence.repository.event.DynamicRepositoryEventLi
 import org.lightadmin.core.persistence.support.DynamicDomainObjectMerger;
 import org.lightadmin.core.web.json.DomainTypeToJsonMetadataConverter;
 import org.lightadmin.core.web.json.LightAdminJacksonModule;
-import org.lightadmin.core.web.support.ConfigurationHandlerMethodArgumentResolver;
-import org.lightadmin.core.web.support.DynamicPersistentEntityResourceAssemblerArgumentResolver;
-import org.lightadmin.core.web.support.DynamicPersistentEntityResourceProcessor;
-import org.lightadmin.core.web.support.DomainEntityLinks;
-import org.lightadmin.core.web.support.DynamicRepositoryEntityLinks;
+import org.lightadmin.core.web.support.*;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -28,7 +28,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
 
+import static org.lightadmin.core.util.NamingUtils.entityId;
+import static org.lightadmin.core.util.NamingUtils.entityName;
+
 public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
+
+    private static final String GLOBAL_ADMINISTRATION_CONFIGURATION_KEY = "globalConfiguration";
 
     @Autowired
     protected GlobalAdministrationConfiguration globalAdministrationConfiguration;
@@ -42,9 +47,18 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
     }
 
     protected void execute(TilesRequestContext tilesContext, AttributeContext attributeContext, GlobalAdministrationConfiguration configuration) {
+        addAttribute(attributeContext, GLOBAL_ADMINISTRATION_CONFIGURATION_KEY, globalAdministrationConfiguration, true);
     }
 
     protected void execute(TilesRequestContext tilesContext, AttributeContext attributeContext, DomainTypeAdministrationConfiguration configuration) {
+        addAttribute(attributeContext, ApplicationController.DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY, configuration, true);
+
+        addAttribute(attributeContext, "persistentEntity", configuration.getPersistentEntity(), true);
+        addAttribute(attributeContext, "entityPluralName", configuration.getEntityConfiguration().getPluralName(), true);
+        addAttribute(attributeContext, "entitySingularName", entitySingularName(tilesContext, configuration), true);
+
+        addAttribute(attributeContext, "entity", entityFromRequest(tilesContext), true);
+        addAttribute(attributeContext, "entityId", entityId(configuration, entityFromRequest(tilesContext)), true);
     }
 
     protected DomainTypeAdministrationConfiguration domainTypeConfiguration(final TilesRequestContext tilesContext) {
@@ -64,5 +78,17 @@ public abstract class ConfigurationAwareViewPreparer implements ViewPreparer {
 
     protected void addAttribute(AttributeContext attributeContext, String attributeName, Object attributeValue, boolean cascade) {
         attributeContext.putAttribute(attributeName, new Attribute(attributeValue), cascade);
+    }
+
+    private String entitySingularName(final TilesRequestContext tilesContext, final DomainTypeAdministrationConfiguration configuration) {
+        final Object entity = entityFromRequest(tilesContext);
+        if (entity == null) {
+            return configuration.getEntityConfiguration().getSingularName();
+        }
+        return entityName(configuration, entity);
+    }
+
+    private Object entityFromRequest(TilesRequestContext tilesContext) {
+        return attributeFromRequest(tilesContext, "entity");
     }
 }
