@@ -24,9 +24,9 @@ import org.lightadmin.core.persistence.support.DynamicDomainObjectMerger;
 import org.lightadmin.core.web.json.DomainTypeToJsonMetadataConverter;
 import org.lightadmin.core.web.json.LightAdminJacksonModule;
 import org.lightadmin.core.web.support.ConfigurationHandlerMethodArgumentResolver;
+import org.lightadmin.core.web.support.DynamicPersistentEntityResourceAssemblerArgumentResolver;
 import org.lightadmin.core.web.support.DynamicPersistentEntityResourceProcessor;
 import org.springframework.beans.BeanInstantiationException;
-import org.springframework.beans.ConfigurablePropertyAccessor;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -39,6 +39,7 @@ import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
+import org.springframework.data.rest.webmvc.config.PersistentEntityResourceAssemblerArgumentResolver;
 import org.springframework.data.rest.webmvc.config.RepositoryRestMvcConfiguration;
 import org.springframework.validation.Validator;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
@@ -48,6 +49,7 @@ import java.util.List;
 
 import static com.google.common.collect.Lists.newLinkedList;
 import static org.springframework.beans.PropertyAccessorFactory.forDirectFieldAccess;
+import static org.springframework.util.ClassUtils.isAssignableValue;
 
 @Configuration
 @ComponentScan(basePackages = {"org.lightadmin.core.web"},
@@ -131,26 +133,37 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @SuppressWarnings("unchecked")
     private void configureRepositoryExporterHandlerAdapter(RequestMappingHandlerAdapter requestMappingHandlerAdapter) {
-        ConfigurablePropertyAccessor configurablePropertyAccessor = forDirectFieldAccess(requestMappingHandlerAdapter);
+        List<HandlerMethodArgumentResolver> defaultArgumentResolvers = (List<HandlerMethodArgumentResolver>) forDirectFieldAccess(requestMappingHandlerAdapter).getPropertyValue("argumentResolvers");
 
-        List<HandlerMethodArgumentResolver> defaultArgumentResolvers = (List<HandlerMethodArgumentResolver>) configurablePropertyAccessor.getPropertyValue("argumentResolvers");
+        List<HandlerMethodArgumentResolver> argumentResolvers = decorateArgumentResolvers(defaultArgumentResolvers);
 
-        List<HandlerMethodArgumentResolver> argumentResolvers = newLinkedList();
-        argumentResolvers.addAll(defaultArgumentResolvers);
         argumentResolvers.add(configurationHandlerMethodArgumentResolver());
 
-        configurablePropertyAccessor.setPropertyValue("argumentResolvers", argumentResolvers);
+        forDirectFieldAccess(requestMappingHandlerAdapter).setPropertyValue("argumentResolvers", argumentResolvers);
     }
 
-    protected GlobalAdministrationConfiguration globalAdministrationConfiguration() {
+    private List<HandlerMethodArgumentResolver> decorateArgumentResolvers(List<HandlerMethodArgumentResolver> argumentResolvers) {
+        List<HandlerMethodArgumentResolver> result = newLinkedList();
+        for (HandlerMethodArgumentResolver argumentResolver : argumentResolvers) {
+            if (isAssignableValue(PersistentEntityResourceAssemblerArgumentResolver.class, argumentResolver)) {
+                PersistentEntityResourceAssemblerArgumentResolver persistentEntityResourceAssemblerArgumentResolver = (PersistentEntityResourceAssemblerArgumentResolver) argumentResolver;
+                result.add(new DynamicPersistentEntityResourceAssemblerArgumentResolver(persistentEntityResourceAssemblerArgumentResolver));
+                continue;
+            }
+            result.add(argumentResolver);
+        }
+        return argumentResolvers;
+    }
+
+    private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
         return beanFactory.getBean(GlobalAdministrationConfiguration.class);
     }
 
-    protected Validator validator() {
+    private Validator validator() {
         return beanFactory.getBean("validator", Validator.class);
     }
 
-    protected LightAdminConfiguration lightAdminConfiguration() {
+    private LightAdminConfiguration lightAdminConfiguration() {
         return beanFactory.getBean(LightAdminConfiguration.class);
     }
 }

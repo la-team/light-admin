@@ -4,6 +4,7 @@ import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.math.BigDecimal;
 @Entity
 public class LineItem extends AbstractEntity {
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Product product;
 
 	@NotNull

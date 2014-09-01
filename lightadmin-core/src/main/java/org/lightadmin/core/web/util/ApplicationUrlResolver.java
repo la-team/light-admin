@@ -18,8 +18,8 @@ package org.lightadmin.core.web.util;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.rest.webmvc.PersistentEntityResource;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 import org.springframework.hateoas.Link;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -40,15 +40,9 @@ public final class ApplicationUrlResolver {
         UriComponentsBuilder selfUriBuilder = ServletUriComponentsBuilder.fromCurrentServletMapping()
                 .pathSegment("domain")
                 .pathSegment(domainTypeBasicConfiguration.getDomainTypeName())
-                .pathSegment(idValue(resource).toString());
+                .pathSegment(idAttributeValue(resource.getContent(), resource.getPersistentEntity()).toString());
 
         return new Link(selfUriBuilder.build().toString(), "selfDomainLink");
-    }
-
-    @SuppressWarnings("unchecked")
-    private static Serializable idValue(PersistentEntityResource<?> resource) {
-        BeanWrapper beanWrapper = BeanWrapper.create(resource.getContent(), null);
-        return (Serializable) beanWrapper.getProperty(resource.getPersistentEntity().getIdProperty());
     }
 
     public static String domainBaseUrl(DomainTypeAdministrationConfiguration configuration) {
@@ -84,7 +78,7 @@ public final class ApplicationUrlResolver {
         return globalAdministrationConfiguration(currentRequest.getServletContext()).forManagedDomainType(entity.getClass());
     }
 
-    private static Object idAttributeValue(Object entity, PersistentEntity persistentProperty) {
-        return BeanWrapper.create(entity, null).getProperty(persistentProperty.getIdProperty());
+    private static Serializable idAttributeValue(Object entity, PersistentEntity persistentEntity) {
+        return (Serializable) new DirectFieldAccessFallbackBeanWrapper(entity).getPropertyValue(persistentEntity.getIdProperty().getName());
     }
 }
