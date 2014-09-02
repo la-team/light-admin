@@ -22,10 +22,10 @@ import org.lightadmin.api.config.builder.ScreenContextConfigurationUnitBuilder;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
 import org.lightadmin.api.config.unit.ScreenContextConfigurationUnit;
-import org.lightadmin.test.model.EntityWithUuid;
+import org.lightadmin.test.model.EntityWithUUID;
 
 @SuppressWarnings("unused")
-@Administration(EntityWithUuid.class)
+@Administration(EntityWithUUID.class)
 public class EntityWithUUIDConfiguration {
 
     public static EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {

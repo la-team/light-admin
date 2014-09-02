@@ -27,7 +27,7 @@ import javax.persistence.Id;
  * @author Maxim Kharchenko (kharchenko.max@gmail.com)
  */
 @Entity
-public class EntityWithUuid {
+public class EntityWithUUID {
 
     @Id
     @GeneratedValue(generator = "system-uuid")
@@ -49,7 +49,7 @@ public class EntityWithUuid {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        EntityWithUuid that = (EntityWithUuid) o;
+        EntityWithUUID that = (EntityWithUUID) o;
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
 
