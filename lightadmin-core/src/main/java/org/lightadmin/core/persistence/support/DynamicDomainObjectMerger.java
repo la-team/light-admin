@@ -17,37 +17,46 @@ package org.lightadmin.core.persistence.support;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
+import org.lightadmin.core.config.LightAdminConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.storage.OperationBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.mapping.*;
 import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
-import org.springframework.util.ObjectUtils;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileReferenceType;
 import static org.springframework.data.rest.core.support.DomainObjectMerger.NullHandlingPolicy.APPLY_NULLS;
+import static org.springframework.util.ObjectUtils.nullSafeEquals;
 
 public class DynamicDomainObjectMerger extends DomainObjectMerger {
 
     private final Repositories repositories;
     private final ConversionService conversionService;
+    private final OperationBuilder operationBuilder;
 
     /**
      * Creates a new {@link DomainObjectMerger} for the given {@link Repositories} and {@link ConversionService}.
      *
-     * @param repositories      must not be {@literal null}.
-     * @param conversionService must not be {@literal null}.
+     * @param repositories                      must not be {@literal null}.
+     * @param conversionService                 must not be {@literal null}.
+     * @param globalAdministrationConfiguration
+     * @param lightAdminConfiguration
      */
     @Autowired
-    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService) {
+    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService, GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
         super(repositories, conversionService);
 
         this.repositories = repositories;
         this.conversionService = conversionService;
+        this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, lightAdminConfiguration);
     }
 
     /**
@@ -58,7 +67,7 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
      * @param nullPolicy how to handle {@literal null} values in the source object.
      */
     @Override
-    public void merge(final Object from, Object target, final NullHandlingPolicy nullPolicy) {
+    public void merge(final Object from, final Object target, final NullHandlingPolicy nullPolicy) {
         if (from == null || target == null) {
             return;
         }
@@ -77,8 +86,16 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
                     return;
                 }
 
-                if (ObjectUtils.nullSafeEquals(sourceValue, targetValue)) {
+                if (nullSafeEquals(sourceValue, targetValue)) {
                     return;
+                }
+
+                if (isOfFileReferenceType(persistentProperty)) {
+                    try {
+                        operationBuilder.saveOperation(target).perform(persistentProperty, sourceValue);
+                        return;
+                    } catch (IOException e) {
+                    }
                 }
 
                 if (nullPolicy == APPLY_NULLS || sourceValue != null) {
@@ -110,7 +127,7 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
                     return;
                 }
 
-                if ((fromValue == null && nullPolicy == APPLY_NULLS) || !ObjectUtils.nullSafeEquals(fromValue, targetWrapper.getProperty(persistentProperty))) {
+                if ((fromValue == null && nullPolicy == APPLY_NULLS) || !nullSafeEquals(fromValue, targetWrapper.getProperty(persistentProperty))) {
                     targetWrapper.setProperty(persistentProperty, fromValue);
                 }
             }
@@ -166,13 +183,13 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
     }
 
     private boolean itemsEqual(Object item1, Object item2, final PersistentProperty<?> idProperty) {
-        if (ObjectUtils.nullSafeEquals(item1, item2)) {
+        if (nullSafeEquals(item1, item2)) {
             return true;
         }
 
         String sourceItemIdValue = BeanWrapper.create(item1, null).getProperty(idProperty).toString();
         String itemIdValue = BeanWrapper.create(item2, null).getProperty(idProperty).toString();
 
-        return ObjectUtils.nullSafeEquals(itemIdValue, sourceItemIdValue);
+        return nullSafeEquals(itemIdValue, sourceItemIdValue);
     }
 }

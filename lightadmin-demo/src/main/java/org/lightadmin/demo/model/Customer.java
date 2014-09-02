@@ -3,6 +3,7 @@ package org.lightadmin.demo.model;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.LocalDate;
+import org.lightadmin.api.config.annotation.FileReference;
 import org.springframework.util.Assert;
 
 import javax.persistence.*;
@@ -28,7 +29,7 @@ public class Customer extends AbstractEntity {
     private LocalDate registrationDate;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-	@JoinColumn(name = "customer_id")
+	@JoinColumn(name = "CUSTOMER_ID")
 	private Set<Address> addresses;
 
 	@ManyToMany
@@ -37,6 +38,10 @@ public class Customer extends AbstractEntity {
 			   inverseJoinColumns = @JoinColumn(name = "discount_program_id", referencedColumnName = "ID")
 	)
 	private Set<DiscountProgram> discountPrograms;
+
+    @Column(name = "AVATAR_FILE_URL")
+    @FileReference(baseDirectory = "/Users/max/Desktop/lightadmin-demo")
+    private String avatar;
 
 	public Customer( String firstname, String lastname ) {
 		Assert.hasText( firstname );
@@ -53,6 +58,14 @@ public class Customer extends AbstractEntity {
 		Assert.notNull( address );
 		this.addresses.add( address );
 	}
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
 
     public LocalDate getRegistrationDate() {
         return registrationDate;

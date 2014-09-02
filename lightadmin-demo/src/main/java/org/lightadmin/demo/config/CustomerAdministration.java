@@ -42,6 +42,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit listView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("avatar").caption("Avatar")
                 .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
@@ -53,6 +54,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("avatar").caption("Avatar")
                 .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
@@ -63,6 +65,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("avatar").caption("Avatar")
                 .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
@@ -74,6 +77,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
 
     public FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
+                .field("avatar").caption("Avatar")
                 .field("registrationDate").caption("Registration Date")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
