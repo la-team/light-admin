@@ -85,16 +85,16 @@ public class RepositoryScopedSearchController {
         if (isPredicateScope(scope)) {
             final PredicateScopeMetadata predicateScope = (PredicateScopeMetadata) scope;
 
-            return new ResponseEntity<>(countItemsBySpecificationAndPredicate(repositoryInvoker, filterSpecification, predicateScope.predicate()), HttpStatus.OK);
+            return new ResponseEntity(countItemsBySpecificationAndPredicate(repositoryInvoker, filterSpecification, predicateScope.predicate()), HttpStatus.OK);
         }
 
         if (isSpecificationScope(scope)) {
             final Specification scopeSpecification = ((ScopeMetadataUtils.SpecificationScopeMetadata) scope).specification();
 
-            return new ResponseEntity<>(countItemsBySpecification(repositoryInvoker, and(scopeSpecification, filterSpecification)), HttpStatus.OK);
+            return new ResponseEntity(countItemsBySpecification(repositoryInvoker, and(scopeSpecification, filterSpecification)), HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(countItemsBySpecification(repositoryInvoker, filterSpecification), HttpStatus.OK);
+        return new ResponseEntity(countItemsBySpecification(repositoryInvoker, filterSpecification), HttpStatus.OK);
     }
 
     @RequestMapping(value = BASE_MAPPING + "/search", method = GET)
@@ -113,7 +113,7 @@ public class RepositoryScopedSearchController {
 
             Object resources = resultToResources(page, assembler);
 
-            return new ResponseEntity<>(resources, HttpStatus.OK);
+            return new ResponseEntity(resources, HttpStatus.OK);
         }
 
         if (isSpecificationScope(scope)) {
@@ -123,14 +123,14 @@ public class RepositoryScopedSearchController {
 
             Object resources = resultToResources(page, assembler);
 
-            return new ResponseEntity<>(resources, HttpStatus.OK);
+            return new ResponseEntity(resources, HttpStatus.OK);
         }
 
         Page page = findItemsBySpecification(repositoryInvoker, filterSpecification, pageable);
 
         Object resources = resultToResources(page, assembler);
 
-        return new ResponseEntity<>(resources, HttpStatus.OK);
+        return new ResponseEntity(resources, HttpStatus.OK);
     }
 
     protected Resources resultToResources(Object result, PersistentEntityResourceAssembler assembler) {
@@ -160,7 +160,7 @@ public class RepositoryScopedSearchController {
         for (Object obj : entities) {
             resources.add(obj == null ? null : assembler.toResource(obj));
         }
-        return new Resources<>(resources);
+        return new Resources(resources);
     }
 
     private Specification specificationFromRequest(WebRequest request, PersistentEntity<?, ?> persistentEntity) {
@@ -196,7 +196,7 @@ public class RepositoryScopedSearchController {
     private Page<?> selectPage(List<Object> items, Pageable pageable) {
         final List<Object> itemsOnPage = items.subList(pageable.getOffset(), Math.min(items.size(), pageable.getOffset() + pageable.getPageSize()));
 
-        return new PageImpl<>(itemsOnPage, pageable, items.size());
+        return new PageImpl(itemsOnPage, pageable, items.size());
     }
 
     private Page findBySpecificationAndPredicate(DynamicRepositoryInvoker invoker, final Specification specification, Predicate predicate, final Pageable pageable) {

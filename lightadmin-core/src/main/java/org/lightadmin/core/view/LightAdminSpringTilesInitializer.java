@@ -41,7 +41,12 @@ import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
 import javax.servlet.jsp.JspFactory;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static com.google.common.collect.Lists.newLinkedList;
+import static com.google.common.collect.Maps.newHashMap;
 
 public class LightAdminSpringTilesInitializer extends AbstractTilesInitializer {
 
@@ -85,7 +90,7 @@ public class LightAdminSpringTilesInitializer extends AbstractTilesInitializer {
                                           TilesRequestContextFactory contextFactory) {
             if (definitions != null) {
                 try {
-                    List<URL> result = new LinkedList<>();
+                    List<URL> result = newLinkedList();
                     for (String definition : definitions) {
                         result.addAll(applicationContext.getResources(definition));
                     }
@@ -108,7 +113,7 @@ public class LightAdminSpringTilesInitializer extends AbstractTilesInitializer {
         protected DefinitionsReader createDefinitionsReader(TilesApplicationContext applicationContext,
                                                             TilesRequestContextFactory contextFactory) {
             DigesterDefinitionsReader reader = new DigesterDefinitionsReader();
-            Map<String, String> map = new HashMap<>();
+            Map<String, String> map = newHashMap();
             map.put(DigesterDefinitionsReader.PARSER_VALIDATE_PARAMETER_NAME, Boolean.FALSE.toString());
             reader.init(map);
             return reader;

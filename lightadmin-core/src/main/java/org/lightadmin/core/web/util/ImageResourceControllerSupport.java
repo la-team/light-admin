@@ -78,7 +78,7 @@ public class ImageResourceControllerSupport {
     }
 
     private ResponseEntity<?> imageResourceResponse(byte[] content, MediaType mediaType) {
-        return new ResponseEntity<>(content, responseHeader(content, mediaType), OK);
+        return new ResponseEntity<Object>(content, responseHeader(content, mediaType), OK);
     }
 
     private ResponseEntity serverErrorResponse() {

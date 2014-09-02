@@ -80,7 +80,7 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
 
         PersistentEntityWrapper persistentEntityWrapper = new PersistentEntityWrapper(value, dynamicProperties, stringRepresentation, domainLink, managedDomainType, primaryKey);
 
-        return new PersistentEntityResource<>(persistentEntity, persistentEntityWrapper, links);
+        return new PersistentEntityResource<Object>(persistentEntity, persistentEntityWrapper, links);
     }
 
     private String stringRepresentation(Object value, PersistentEntity persistentEntity) {

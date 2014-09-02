@@ -43,6 +43,6 @@ public class RepositoryMetadataController {
     public HttpEntity<JsonConfigurationMetadata> schema(RootResourceInformation resourceInformation) {
         JsonConfigurationMetadata jsonConfigurationMetadata = domainTypeToJsonMetadataConverter.convert(resourceInformation.getPersistentEntity());
 
-        return new ResponseEntity<>(jsonConfigurationMetadata, OK);
+        return new ResponseEntity<JsonConfigurationMetadata>(jsonConfigurationMetadata, OK);
     }
 }

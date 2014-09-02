@@ -11,7 +11,7 @@ public class FieldMetadataComparatorTest {
 
     @Test
     public void testCompare() {
-        Set<FieldMetadata> fields = new TreeSet<>(new FieldMetadataUtils.FieldMetadataComparator());
+        Set<FieldMetadata> fields = new TreeSet<FieldMetadata>(new FieldMetadataUtils.FieldMetadataComparator());
         fields.add(new CustomFieldMetadata("custom", null));
         fields.add(new PersistentFieldMetadata("persistent", "persistent"));
         fields.add(new PersistentFieldMetadata("persistent-key", "persistent-key", true));
