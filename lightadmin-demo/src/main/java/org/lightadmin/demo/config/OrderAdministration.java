@@ -1,6 +1,6 @@
 package org.lightadmin.demo.config;
 
-import org.lightadmin.api.config.annotation.Administration;
+import org.lightadmin.api.config.AdministrationConfiguration;
 import org.lightadmin.api.config.builder.*;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
@@ -18,21 +18,20 @@ import static java.lang.String.format;
 import static org.springframework.util.StringUtils.collectionToDelimitedString;
 
 @SuppressWarnings("unused")
-@Administration(Order.class)
-public class OrderAdministration {
+public class OrderAdministration extends AdministrationConfiguration<Order> {
 
-    public static EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
+    public EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
         return configurationBuilder
                 .nameExtractor(orderNameExtractor())
                 .singularName("Order")
                 .pluralName("Orders").build();
     }
 
-    public static ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
+    public ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
         return screenContextBuilder.screenName("Orders Administration").build();
     }
 
-    public static FieldSetConfigurationUnit listView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit listView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .dynamic("customer.firstname").caption("Customer First Name")
                 .dynamic("customer.lastname").caption("Customer Last Name")
@@ -41,7 +40,7 @@ public class OrderAdministration {
                 .renderable(lineItemsFieldValueRenderer()).caption("Order Items").build();
     }
 
-    public static FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("customer").caption("Customer")
                 .field("billingAddress").caption("Billing Address")
@@ -49,14 +48,14 @@ public class OrderAdministration {
                 .renderable(lineItemsFieldValueRenderer()).caption("Order Items").build();
     }
 
-    public static FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("customer").caption("Customer")
                 .field("shippingAddress").caption("Shipping Address")
                 .renderable(lineItemsFieldValueRenderer()).caption("Order Items").build();
     }
 
-    public static FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("customer").caption("Customer")
                 .field("billingAddress").caption("Billing Address")
@@ -64,7 +63,7 @@ public class OrderAdministration {
                 .field("lineItems").caption("Order Items").build();
     }
 
-    public static FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
+    public FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
         return filterBuilder
                 .filter("Customer", "customer")
                 .filter("Billing Address", "billingAddress")

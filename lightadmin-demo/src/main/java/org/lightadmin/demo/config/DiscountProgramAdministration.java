@@ -1,6 +1,6 @@
 package org.lightadmin.demo.config;
 
-import org.lightadmin.api.config.annotation.Administration;
+import org.lightadmin.api.config.AdministrationConfiguration;
 import org.lightadmin.api.config.builder.*;
 import org.lightadmin.api.config.unit.EntityMetadataConfigurationUnit;
 import org.lightadmin.api.config.unit.FieldSetConfigurationUnit;
@@ -9,45 +9,44 @@ import org.lightadmin.api.config.unit.ScreenContextConfigurationUnit;
 import org.lightadmin.demo.model.DiscountProgram;
 
 @SuppressWarnings("unused")
-@Administration(DiscountProgram.class)
-public class DiscountProgramAdministration {
+public class DiscountProgramAdministration extends AdministrationConfiguration<DiscountProgram> {
 
-    public static EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
+    public EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
         return configurationBuilder
                 .nameField("name")
                 .singularName("Discount Program")
                 .pluralName("Discounts").build();
     }
 
-    public static ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
+    public ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
         return screenContextBuilder.screenName("Discounts Administration").build();
     }
 
-    public static FieldSetConfigurationUnit listView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit listView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("customers").caption("Customers").build();
     }
 
-    public static FieldSetConfigurationUnit quickView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit quickView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("customers").caption("Customers").build();
     }
 
-    public static FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("customers").caption("Customers").build();
     }
 
-    public static FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("customers").caption("Customers").build();
     }
 
-    public static FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
+    public FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
         return filterBuilder
                 .filter("Name", "name")
                 .filter("Customers", "customers").build();

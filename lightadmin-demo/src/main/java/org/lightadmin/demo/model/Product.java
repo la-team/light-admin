@@ -1,10 +1,6 @@
 package org.lightadmin.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
 

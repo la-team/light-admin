@@ -1,20 +1,17 @@
 package org.lightadmin.demo.config;
 
-import org.lightadmin.api.config.annotation.Administration;
+import org.lightadmin.api.config.AdministrationConfiguration;
 import org.lightadmin.api.config.builder.*;
 import org.lightadmin.api.config.unit.*;
-import org.lightadmin.api.config.utils.EnumElement;
 import org.lightadmin.demo.model.Product;
 
-import static org.lightadmin.api.config.utils.Editors.enumeration;
 import static org.lightadmin.api.config.utils.Editors.wysiwyg;
 import static org.lightadmin.api.config.utils.EnumElement.element;
 
 @SuppressWarnings("unused")
-@Administration(Product.class)
-public class ProductAdministration {
+public class ProductAdministration extends AdministrationConfiguration<Product> {
 
-    public static EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
+    public EntityMetadataConfigurationUnit configuration(EntityMetadataConfigurationUnitBuilder configurationBuilder) {
         return configurationBuilder
                 .nameField("name")
                 .singularName("Product")
@@ -26,11 +23,11 @@ public class ProductAdministration {
                 .build();
     }
 
-    public static ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
+    public ScreenContextConfigurationUnit screenContext(ScreenContextConfigurationUnitBuilder screenContextBuilder) {
         return screenContextBuilder.screenName("Products Administration").build();
     }
 
-    public static FieldSetConfigurationUnit listView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit listView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("type").caption("Type").enumeration(
@@ -44,7 +41,7 @@ public class ProductAdministration {
                 .field("picture").caption("Picture").build();
     }
 
-    public static FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit showView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("type").caption("Type")
@@ -55,7 +52,7 @@ public class ProductAdministration {
                 .field("picture").caption("Picture").build();
     }
 
-    public static FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit formView(final PersistentFieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("type").caption("Type")
@@ -66,7 +63,7 @@ public class ProductAdministration {
                 .field("picture").caption("Picture").build();
     }
 
-    public static FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
+    public FieldSetConfigurationUnit quickView(final FieldSetConfigurationUnitBuilder fragmentBuilder) {
         return fragmentBuilder
                 .field("uuid").caption("UUID")
                 .field("name").caption("Name")
@@ -77,7 +74,7 @@ public class ProductAdministration {
                 .field("picture").caption("Picture").build();
     }
 
-    public static FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
+    public FiltersConfigurationUnit filters(final FiltersConfigurationUnitBuilder filterBuilder) {
         return filterBuilder
                 .filter("Name", "name")
                 .filter("Description", "description")
@@ -86,7 +83,7 @@ public class ProductAdministration {
                 .filter("Retired", "retired").build();
     }
 
-    public static SidebarsConfigurationUnit sidebars(final SidebarsConfigurationUnitBuilder sidebarsBuilder) {
+    public SidebarsConfigurationUnit sidebars(final SidebarsConfigurationUnitBuilder sidebarsBuilder) {
         return sidebarsBuilder
                 .sidebar("Custom Sidebar", "/WEB-INF/admin/sidebars/sidebar.jsp")
                 .build();

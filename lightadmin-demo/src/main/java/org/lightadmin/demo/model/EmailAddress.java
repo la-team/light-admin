@@ -3,11 +3,9 @@ package org.lightadmin.demo.model;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.hibernate.validator.constraints.Email;
-import org.springframework.util.Assert;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
-import java.util.regex.Pattern;
 
 @Embeddable
 @JsonSerialize(using = ToStringSerializer.class)
