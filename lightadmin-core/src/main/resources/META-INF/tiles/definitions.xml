@@ -5,7 +5,7 @@
 <tiles-definitions>
 
     <definition name="external-layout" template="/views/layout/external-layout.jsp" preparer="screenViewPreparer">
-        <put-attribute name="scripts-include" value="/views/includes/scripts-include.jsp"/>
+        <put-attribute name="scripts-include" value="/views/includes/common-scripts-include.jsp"/>
         <put-attribute name="top-navigation-section" value="/views/sections/top-navigation-section.jsp"/>
         <put-attribute name="footer-section" value="/views/sections/footer-section.jsp"/>
     </definition>

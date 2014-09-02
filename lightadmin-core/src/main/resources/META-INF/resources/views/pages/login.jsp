@@ -18,7 +18,7 @@
 
     <div class="loginPanel">
         <div class="head"><h5 class="iUser">Login</h5></div>
-        <form action="<light:url value='j_spring_security_check'/>" id="login-form" class="mainForm" method="POST">
+        <form action="<light:url value='/j_spring_security_check'/>" id="login-form" class="mainForm" method="POST">
             <fieldset>
                 <div class="loginRow noborder">
                     <label for="req1"><spring:message code="label.username"/>:</label>
