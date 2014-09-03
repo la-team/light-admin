@@ -52,7 +52,17 @@ We'll do our best to get your changes in!
 
 ## Getting started ##
 
-Declare repository in your POM
+Declare maven dependency for using with Spring 4.0.X directly from Maven Central
+
+```xml
+<dependency>
+  <groupId>org.lightadmin</groupId>
+  <artifactId>lightadmin</artifactId>
+  <version>1.0.0.RC1</version>
+</dependency> 
+```
+
+If you want to use LightAdmin with Spring 3.2.X, you will need to declare our Nexus repositories in your POM
 
 ```xml
 <repositories>
@@ -75,17 +85,7 @@ Declare repository in your POM
 </repositories>
 ```
 
-Define maven dependency for using with Spring 4.0.X and the newest Spring Data
-
-```xml
-<dependency>
-  <groupId>org.lightadmin</groupId>
-  <artifactId>lightadmin</artifactId>
-  <version>1.0.0.M3-SNAPSHOT</version>
-</dependency> 
-```
-
-If you want to use LightAdmin with older versions
+And dependency
 
 ```xml
 <dependency>
