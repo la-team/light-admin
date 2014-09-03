@@ -13,15 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.springframework.data.rest.core.invoke;
+package org.lightadmin.core.persistence.repository.invoker;
 
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.repository.core.RepositoryInformation;
+import org.springframework.data.rest.core.invoke.RepositoryInvoker;
 
 import java.io.Serializable;
 import java.lang.reflect.Method;
@@ -31,12 +30,12 @@ import java.util.Map;
 @SuppressWarnings("unchecked")
 public class DynamicRepositoryInvokerWrapper implements DynamicRepositoryInvoker {
 
-    private DynamicJpaRepository<?, ?> repository;
-    private RepositoryInvoker repositoryInvoker;
+    private final DynamicJpaRepository<?, ?> repository;
+    private final RepositoryInvoker repositoryInvoker;
 
-    public DynamicRepositoryInvokerWrapper(DynamicJpaRepository<Object, Serializable> repository, RepositoryInformation information, ConversionService conversionService) {
-        this.repository = repository;
-        this.repositoryInvoker = new PagingAndSortingRepositoryInvoker(repository, information, conversionService);
+    public DynamicRepositoryInvokerWrapper(DynamicJpaRepository dynamicRepository, RepositoryInvoker repositoryInvoker) {
+        this.repository = dynamicRepository;
+        this.repositoryInvoker = repositoryInvoker;
     }
 
     @Override

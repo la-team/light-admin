@@ -33,7 +33,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
-import org.springframework.data.rest.core.invoke.DynamicRepositoryInvokerFactory;
+import org.lightadmin.core.persistence.repository.invoker.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -93,7 +93,9 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     public RepositoryInvokerFactory repositoryInvokerFactory() {
-        return new DynamicRepositoryInvokerFactory(repositories(), defaultConversionService());
+        RepositoryInvokerFactory repositoryInvokerFactory = super.repositoryInvokerFactory();
+
+        return new DynamicRepositoryInvokerFactory(repositories(), repositoryInvokerFactory);
     }
 
     @Bean

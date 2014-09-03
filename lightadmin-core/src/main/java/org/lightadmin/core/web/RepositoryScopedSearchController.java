@@ -31,7 +31,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.rest.core.invoke.DynamicRepositoryInvoker;
+import org.lightadmin.core.persistence.repository.invoker.DynamicRepositoryInvoker;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.rest.webmvc.RootResourceInformation;
