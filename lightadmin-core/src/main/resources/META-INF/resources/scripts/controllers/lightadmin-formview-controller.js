@@ -184,10 +184,12 @@ function LoadDomainEntityAction(resourceName) {
                     break;
                 case 'FILE':
                     var fileSelected = propertyValue['file_exists'];
+                    var fileUploaderController = new FileUploaderController(resourceName, form, propertyName);
                     if (fileSelected) {
-                        new FileUploaderController(resourceName, form, propertyName).selectFile(domainEntity.getPrimaryKeyValue(), propertyValue);
+                        fileUploaderController.selectFile(domainEntity.getPrimaryKeyValue(), propertyValue);
                     }
-                    editor.val(propertyValue['value']);
+                    var filePropertyValue = fileUploaderController.loadFile(domainEntity.getPrimaryKeyValue());
+                    editor.val(filePropertyValue['value']);
                     break;
                 case 'STRING':
                     if (editor.hasClass('wysiwyg')) {

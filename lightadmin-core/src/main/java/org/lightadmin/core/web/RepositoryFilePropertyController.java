@@ -15,21 +15,22 @@
  */
 package org.lightadmin.core.web;
 
-import com.google.common.collect.Maps;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.storage.OperationBuilder;
+import org.lightadmin.core.web.support.DynamicRepositoryEntityLinks;
+import org.lightadmin.core.web.support.FilePropertyValue;
 import org.lightadmin.core.web.support.FileResourceLoader;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.rest.core.invoke.RepositoryInvoker;
-import org.springframework.data.rest.webmvc.ControllerUtils;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.data.rest.webmvc.RootResourceInformation;
 import org.springframework.data.rest.webmvc.support.BackendId;
+import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.ResourceSupport;
 import org.springframework.http.HttpHeaders;
@@ -48,6 +49,8 @@ import java.util.Map;
 
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileType;
 import static org.lightadmin.core.storage.OperationBuilder.operationBuilder;
+import static org.springframework.data.rest.webmvc.ControllerUtils.toEmptyResponse;
+import static org.springframework.data.rest.webmvc.ControllerUtils.toResponseEntity;
 import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.web.bind.annotation.RequestMethod.*;
@@ -85,6 +88,29 @@ public class RepositoryFilePropertyController {
         }
     }
 
+    @RequestMapping(value = BASE_MAPPING + "/binary", method = GET)
+    public ResponseEntity<?> filePropertyValueOfEntity(RootResourceInformation repoRequest, @BackendId Serializable id, @PathVariable String property) throws Exception {
+        PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();
+        RepositoryInvoker invoker = repoRequest.getInvoker();
+
+        Object domainObj = invoker.invokeFindOne(id);
+
+        if (null == domainObj) {
+            throw new ResourceNotFoundException();
+        }
+
+        PersistentProperty<?> prop = persistentEntity.getPersistentProperty(property);
+        if (null == prop) {
+            throw new ResourceNotFoundException();
+        }
+
+        if (isOfFileType(prop)) {
+            return toResponseEntity(OK, new HttpHeaders(), new Resource<FilePropertyValue>(evaluateFilePropertyValue(domainObj, prop)));
+        }
+
+        return toEmptyResponse(METHOD_NOT_ALLOWED);
+    }
+
     @RequestMapping(value = BASE_MAPPING + "/file", method = DELETE)
     public ResponseEntity<?> deleteFileOfPropertyOfEntity(RootResourceInformation repoRequest, @BackendId Serializable id, @PathVariable String property) throws Exception {
         PersistentEntity<?, ?> persistentEntity = repoRequest.getPersistentEntity();
@@ -102,12 +128,12 @@ public class RepositoryFilePropertyController {
         }
 
         if (!isOfFileType(prop)) {
-            return ControllerUtils.toEmptyResponse(METHOD_NOT_ALLOWED);
+            return toEmptyResponse(METHOD_NOT_ALLOWED);
         }
 
         operation().deleteOperation(domainObj).perform(prop);
 
-        return ControllerUtils.toEmptyResponse(OK);
+        return toEmptyResponse(OK);
     }
 
     @RequestMapping(value = BASE_MAPPING + "/file", method = {POST})
@@ -119,17 +145,37 @@ public class RepositoryFilePropertyController {
         if (!fileMap.isEmpty()) {
             final Map.Entry<String, MultipartFile> fileEntry = fileMap.entrySet().iterator().next();
 
-            return ControllerUtils.toResponseEntity(OK, new HttpHeaders(), fileResource(fileEntry));
+            return toResponseEntity(OK, new HttpHeaders(), fileResource(fileEntry));
         }
 
-        return ControllerUtils.toEmptyResponse(METHOD_NOT_ALLOWED);
+        return toEmptyResponse(METHOD_NOT_ALLOWED);
     }
 
-    private Resource<?> fileResource(Map.Entry<String, MultipartFile> fileEntry) throws IOException {
-        SimpleMapResource resource = new SimpleMapResource();
-        resource.put("fileName", fileEntry.getValue().getOriginalFilename());
-        resource.put("fileContent", fileEntry.getValue().getBytes());
-        return resource;
+    private FilePropertyValue evaluateFilePropertyValue(Object instance, PersistentProperty persistentProperty) {
+        try {
+            boolean fileExists = operation().fileExistsOperation(instance).perform(persistentProperty);
+
+            if (!fileExists) {
+                return new FilePropertyValue(fileExists);
+            }
+
+            Link fileLink = entityLinks().linkForFilePropertyLink(instance, persistentProperty);
+
+            byte[] fileData = operation().getOperation(instance).perform(persistentProperty);
+
+            return new FilePropertyValue(fileLink, fileData);
+
+        } catch (Exception e) {
+            throw new ResourceNotFoundException(e.getMessage());
+        }
+    }
+
+    private Resource<FilePropertyValue> fileResource(Map.Entry<String, MultipartFile> fileEntry) throws IOException {
+        MultipartFile multipartFile = fileEntry.getValue();
+
+        FilePropertyValue filePropertyValue = new FilePropertyValue(multipartFile.getOriginalFilename(), multipartFile.getBytes());
+
+        return new Resource<FilePropertyValue>(filePropertyValue);
     }
 
     private OperationBuilder operation() {
@@ -148,14 +194,7 @@ public class RepositoryFilePropertyController {
         return beanFactory.getBean(FileResourceLoader.class);
     }
 
-    private static class SimpleMapResource extends Resource<Map<String, Object>> {
-
-        public SimpleMapResource() {
-            super(Maps.<String, Object>newLinkedHashMap());
-        }
-
-        public void put(String key, Object value) {
-            getContent().put(key, value);
-        }
+    private DynamicRepositoryEntityLinks entityLinks() {
+        return beanFactory.getBean(DynamicRepositoryEntityLinks.class);
     }
 }

@@ -38,6 +38,9 @@
             getDomainEntityFilePropertyRestUrl: function(resourceName, entityId, propertyName) {
                 return this.getDomainEntityPropertyRestUrl(resourceName, entityId, propertyName) + '/file';
             },
+            getDomainEntityFilePropertyValueRestUrl: function(resourceName, entityId, propertyName) {
+                return this.getDomainEntityPropertyRestUrl(resourceName, entityId, propertyName) + '/binary';
+            },
             getDomainEntityUrl: function(resourceName, entityId) {
                 return this.getDomainEntityCollectionUrl(resourceName) + '/' + entityId;
             },

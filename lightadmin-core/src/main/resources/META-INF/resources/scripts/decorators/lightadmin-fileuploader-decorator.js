@@ -68,7 +68,7 @@ var FileUploaderDecorator = (function () {
 
                         var result = $.parseJSON(response.response);
 
-                        $(file_input_id).val(result['content']['fileContent']);
+                        $(file_input_id).val(result['value']);
                     }
                 }
             });

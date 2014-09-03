@@ -17,7 +17,6 @@ package org.lightadmin.core.web.support;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonUnwrapped;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
@@ -113,7 +112,7 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
         for (DomainConfigurationUnitType unit : units) {
             Map<String, Object> dynamicProperties = newLinkedHashMap();
             for (PersistentProperty persistentProperty : persistentProperties) {
-                dynamicProperties.put(persistentProperty.getName(), evaluateFilePropertyValue(persistentProperty, value, managedDomainTypeConfiguration, binaryDataExportNeeded(unit)));
+                dynamicProperties.put(persistentProperty.getName(), evaluateFilePropertyValue(persistentProperty, value));
             }
             for (FieldMetadata customField : customFields(managedDomainTypeConfiguration.fieldsForUnit(unit))) {
                 dynamicProperties.put(customField.getUuid(), customField.getValue(value));
@@ -139,70 +138,15 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
         return result;
     }
 
-    private Object evaluateFilePropertyValue(PersistentProperty persistentProperty, Object value, DomainTypeAdministrationConfiguration configuration, boolean binaryDataExportNeeded) {
+    private FilePropertyValue evaluateFilePropertyValue(PersistentProperty persistentProperty, Object value) {
         try {
             boolean fileExists = operationBuilder.fileExistsOperation(value).perform(persistentProperty);
-
             if (!fileExists) {
                 return new FilePropertyValue(fileExists);
             }
-
-            Link fileLink = entityLinks.linkForFilePropertyLink(value, persistentProperty);
-
-            if (!binaryDataExportNeeded) {
-                return new FilePropertyValue(fileLink);
-            }
-
-            byte[] fileData = operationBuilder.getOperation(value).perform(persistentProperty);
-
-            return new FilePropertyValue(fileLink, fileData);
-
+            return new FilePropertyValue(entityLinks.linkForFilePropertyLink(value, persistentProperty));
         } catch (Exception e) {
             return null;
-        }
-    }
-
-    private boolean binaryDataExportNeeded(DomainConfigurationUnitType unit) {
-        return unit == FORM_VIEW;
-    }
-
-    static class FilePropertyValue {
-        private boolean fileExists;
-        private Link fileLink;
-        private byte[] value;
-
-        FilePropertyValue(boolean fileExists) {
-            this.fileExists = fileExists;
-        }
-
-        public FilePropertyValue(Link fileLink) {
-            this(true);
-            this.fileLink = fileLink;
-        }
-
-        public FilePropertyValue(Link fileLink, byte[] value) {
-            this(fileLink);
-            this.value = value;
-        }
-
-        @JsonUnwrapped
-        @JsonProperty("file_exists")
-        public boolean isFileExists() {
-            return fileExists;
-        }
-
-        @JsonUnwrapped
-        @JsonInclude(NON_NULL)
-        @JsonProperty("file_link")
-        public Link getFileLink() {
-            return fileLink;
-        }
-
-        @JsonUnwrapped
-        @JsonInclude(NON_EMPTY)
-        @JsonProperty("value")
-        public byte[] getValue() {
-            return value;
         }
     }
 

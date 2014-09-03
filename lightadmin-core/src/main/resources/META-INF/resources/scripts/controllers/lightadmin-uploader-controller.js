@@ -67,7 +67,23 @@ function FileUploaderController(resourceName, form, attr) {
         });
     }
 
+    function loadFilePropertyValue(resourceName, entityId, propertyName) {
+        var filePropertyValue = {};
+        $.ajax({
+            url: ApplicationConfig.getDomainEntityFilePropertyValueRestUrl(resourceName, entityId, propertyName),
+            dataType: 'json',
+            async: false,
+            success: function (rawFilePropertyValue) {
+                filePropertyValue = rawFilePropertyValue;
+            }
+        });
+        return filePropertyValue;
+    }
+
     return {
+        loadFile: function(entityId) {
+            return loadFilePropertyValue(resourceName, entityId, attr);
+        },
         selectFile: function (entityId, attr_value) {
             var property = ConfigurationMetadataService.getProperty(resourceName, attr, 'formView');
 
