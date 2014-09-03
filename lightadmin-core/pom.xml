@@ -7,10 +7,11 @@
     <groupId>org.lightadmin</groupId>
     <artifactId>lightadmin</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.0.M3-SNAPSHOT</version>
+    <version>1.0.0.RC1</version>
 
     <name>LightAdmin</name>
-    <description>Pluggable data management solution for Java web applications developed in a "Rapid" manner</description>
+    <description>Pluggable data management solution for Java web applications developed in a "Rapid" manner
+    </description>
     <url>http://lightadmin.org</url>
 
     <inceptionYear>2012</inceptionYear>
@@ -44,17 +45,6 @@
         <system>jenkins</system>
         <url>http://lightadmin.org/jenkins</url>
     </ciManagement>
-
-    <distributionManagement>
-        <snapshotRepository>
-            <id>lightadmin-nexus</id>
-            <url>http://lightadmin.org/nexus/content/repositories/snapshots</url>
-        </snapshotRepository>
-        <repository>
-            <id>lightadmin-nexus</id>
-            <url>http://lightadmin.org/nexus/content/repositories/releases</url>
-        </repository>
-    </distributionManagement>
 
     <developers>
         <developer>
@@ -401,50 +391,12 @@
                 <version>2.2.1</version>
                 <executions>
                     <execution>
-                        <id>package-jars</id>
-                        <phase>package</phase>
+                        <id>attach-sources</id>
                         <goals>
-                            <goal>jar</goal>
-                            <goal>test-jar</goal>
-                        </goals>
-                        <configuration>
-                            <includePom>true</includePom>
-                        </configuration>
-                    </execution>
-                </executions>
-                <configuration>
-                    <includePom>true</includePom>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>2.9.1</version>
-                <inherited>true</inherited>
-                <executions>
-                    <execution>
-                        <id>package-jars</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>jar</goal>
-                            <goal>test-jar</goal>
+                            <goal>jar-no-fork</goal>
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <debug>true</debug>
-                    <minmemory>128m</minmemory>
-                    <maxmemory>1024m</maxmemory>
-                    <quiet>true</quiet>
-                    <doctitle>${project.name} ${project.version}</doctitle>
-                    <windowtitle>${project.name} ${project.version}</windowtitle>
-                    <testDoctitle>${project.name} ${project.version}</testDoctitle>
-                    <testWindowtitle>${project.name} ${project.version}</testWindowtitle>
-                    <splitindex>true</splitindex>
-                    <encoding>${project.build.sourceEncoding}</encoding>
-                    <linksource>true</linksource>
-                    <detectOfflineLinks>false</detectOfflineLinks>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -492,6 +444,88 @@
                     </execution>
                 </executions>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-release-plugin</artifactId>
+                <configuration>
+                    <arguments>-Dmaven.wagon.http.ssl.insecure=true -Dmaven.wagon.http.ssl.allowall=true</arguments>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>home-distribution</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>lightadmin-nexus</id>
+                    <url>http://lightadmin.org/nexus/content/repositories/snapshots</url>
+                </snapshotRepository>
+
+                <repository>
+                    <id>lightadmin-nexus</id>
+                    <url>http://lightadmin.org/nexus/content/repositories/releases</url>
+                </repository>
+            </distributionManagement>
+        </profile>
+        <profile>
+            <id>oss-distribution</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.2</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>oss</serverId>
+                            <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+                            <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.5</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>2.9.1</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
