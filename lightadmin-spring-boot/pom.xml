@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.1.1.RELEASE</version>
+        <version>1.1.5.RELEASE</version>
     </parent>
 
     <groupId>org.lightadmin</groupId>
@@ -21,6 +21,10 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <java.version>1.7</java.version>
+
+        <main.basedir>${basedir}/../..</main.basedir>
+        <m2eclipse.wtp.contextRoot>/</m2eclipse.wtp.contextRoot>
+        <tomcat.version>8.0.8</tomcat.version>
     </properties>
 
     <dependencies>
@@ -28,7 +32,6 @@
             <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin</artifactId>
             <version>1.0.0.BUILD-SNAPSHOT</version>
-            <type>jar</type>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -37,29 +40,32 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jetty</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <scope>runtime</scope>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>org.springframework.boot</groupId>-->
-        <!--<artifactId>spring-boot-starter-jetty</artifactId>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
+            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

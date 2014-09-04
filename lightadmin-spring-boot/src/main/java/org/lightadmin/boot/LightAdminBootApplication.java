@@ -23,18 +23,17 @@ import static org.springframework.core.Ordered.HIGHEST_PRECEDENCE;
 @Order(HIGHEST_PRECEDENCE)
 public class LightAdminBootApplication extends SpringBootServletInitializer {
 
-    @Override
-    public void onStartup(ServletContext servletContext) throws ServletException {
-        LightAdmin.configure(servletContext)
-                .basePackage("org.lightadmin.boot.administration")
-                .baseUrl("/admin")
-                .security(false)
-                .backToSiteUrl("http://lightadmin.org");
+//    @Override
+//    public void onStartup(ServletContext servletContext) throws ServletException {
+//        LightAdmin.configure(servletContext)
+//                .basePackage("org.lightadmin.boot.administration")
+//                .baseUrl("/admin")
+//                .security(false)
+//                .backToSiteUrl("http://lightadmin.org");
+//
+//        super.onStartup(servletContext);
+//    }
 
-        super.onStartup(servletContext);
-    }
-
-    // TODO: max: Initializer responsible to start application in "embedded" mode (in progress)
     @Bean
     public ServletContextInitializer servletContextInitializer() {
         return new ServletContextInitializer() {

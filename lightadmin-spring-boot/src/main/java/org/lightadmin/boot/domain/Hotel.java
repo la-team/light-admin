@@ -39,6 +39,10 @@ public class Hotel implements Serializable {
         this.name = name;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public City getCity() {
         return this.city;
     }

@@ -43,6 +43,10 @@ public class City implements Serializable {
         this.country = country;
     }
 
+    public Long getId() {
+        return id;
+    }
+
     public String getName() {
         return this.name;
     }
