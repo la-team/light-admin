@@ -22,7 +22,14 @@ function DomainEntity(data) {
     this.original_properties = data['original_properties'];
     this.dynamic_properties = data['dynamic_properties'];
 
-    function loadAssociationValue(domainEntity, propertyMetadata) {
+    function getDynamicAssociationValue(domainEntity, propertyMetadata, unitType) {
+        var propertyName = propertyMetadata['name'];
+
+        return domainEntity.dynamic_properties[unitType][propertyName];
+    }
+
+    /* Too slow to be "true" :) */
+    function loadAssociationValueFromServer(domainEntity, propertyMetadata) {
         var associationLink = domainEntity.getAssociationLink(propertyMetadata);
         var propertyType = propertyMetadata['type'];
         var associationValue = null;
@@ -77,7 +84,7 @@ function DomainEntity(data) {
         var propertyType = propertyMetadata['type'];
 
         if (!isDynamicProperty && (propertyType == 'ASSOC' || propertyType == 'ASSOC_MULTI')) {
-            return loadAssociationValue(this, propertyMetadata);
+            return getDynamicAssociationValue(this, propertyMetadata, unitType);
         } else if (isDynamicProperty || propertyType == 'FILE') {
             return this.dynamic_properties[unitType][propertyName];
         }

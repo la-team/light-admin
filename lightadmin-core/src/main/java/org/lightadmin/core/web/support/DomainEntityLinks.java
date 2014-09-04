@@ -37,10 +37,10 @@ import java.io.Serializable;
  */
 public class DomainEntityLinks extends AbstractEntityLinks {
 
-    private GlobalAdministrationConfiguration globalAdministrationConfiguration;
+    private final GlobalAdministrationConfiguration globalAdministrationConfiguration;
     private final LightAdminConfiguration lightAdminConfiguration;
 
-    private PluginRegistry<BackendIdConverter, Class<?>> idConverters;
+    private final PluginRegistry<BackendIdConverter, Class<?>> idConverters;
 
     public DomainEntityLinks(GlobalAdministrationConfiguration globalAdministrationConfiguration, PluginRegistry<BackendIdConverter, Class<?>> idConverters, LightAdminConfiguration lightAdminConfiguration) {
         this.globalAdministrationConfiguration = globalAdministrationConfiguration;
@@ -63,6 +63,7 @@ public class DomainEntityLinks extends AbstractEntityLinks {
     @Override
     public LinkBuilder linkFor(Class<?> type) {
         DomainTypeAdministrationConfiguration configuration = globalAdministrationConfiguration.forManagedDomainType(type);
+        Assert.notNull(configuration, "You can't get a domain link to non-managed persistent entity");
 
         return new DomainLinkBuilder(lightAdminConfiguration).slash(configuration.getPluralDomainTypeName());
     }
