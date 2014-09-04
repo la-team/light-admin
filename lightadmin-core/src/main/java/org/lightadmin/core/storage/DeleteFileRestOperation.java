@@ -26,7 +26,7 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
-public class DeleteFileRestOperation extends AbstractFileRestOperation {
+class DeleteFileRestOperation extends AbstractFileRestOperation {
 
     public DeleteFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
         super(configuration, lightAdminConfiguration, entity);

@@ -31,7 +31,7 @@ import static org.springframework.security.crypto.codec.Base64.decode;
 import static org.springframework.security.crypto.codec.Base64.isBase64;
 import static org.springframework.util.StringUtils.isEmpty;
 
-public class SaveFileRestOperation extends AbstractFileRestOperation {
+class SaveFileRestOperation extends AbstractFileRestOperation {
 
     protected SaveFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
         super(configuration, lightAdminConfiguration, entity);

@@ -30,7 +30,7 @@ import java.io.OutputStream;
 import static org.apache.commons.io.FileUtils.*;
 import static org.springframework.util.FileCopyUtils.copy;
 
-public class GetFileRestOperation extends AbstractFileRestOperation {
+class GetFileRestOperation extends AbstractFileRestOperation {
 
     protected GetFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
         super(configuration, lightAdminConfiguration, entity);

@@ -15,11 +15,9 @@
  */
 package org.lightadmin.core.persistence.repository.event;
 
-import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
-import org.lightadmin.core.storage.OperationBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.lightadmin.core.storage.FileResourceStorage;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
@@ -30,12 +28,11 @@ import java.io.IOException;
 public class DynamicRepositoryEventListener extends AbstractRepositoryEventListener<Object> {
 
     private final GlobalAdministrationConfiguration configuration;
-    private final OperationBuilder operationBuilder;
+    private final FileResourceStorage fileResourceStorage;
 
-    @Autowired
-    public DynamicRepositoryEventListener(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration) {
+    public DynamicRepositoryEventListener(GlobalAdministrationConfiguration configuration, FileResourceStorage fileResourceStorage) {
         this.configuration = configuration;
-        this.operationBuilder = OperationBuilder.operationBuilder(configuration, lightAdminConfiguration);
+        this.fileResourceStorage = fileResourceStorage;
     }
 
     @Override
@@ -73,7 +70,7 @@ public class DynamicRepositoryEventListener extends AbstractRepositoryEventListe
         public void doWithPersistentProperty(PersistentProperty<?> property) {
             if (PersistentPropertyType.isOfFileReferenceType(property)) {
                 try {
-                    operationBuilder.saveOperation(entity).performCleanup(property);
+                    fileResourceStorage.save(entity, property);
                 } catch (IOException e) {
                 }
             }
@@ -90,7 +87,7 @@ public class DynamicRepositoryEventListener extends AbstractRepositoryEventListe
         @Override
         public void doWithPersistentProperty(PersistentProperty<?> property) {
             if (PersistentPropertyType.isOfFileReferenceType(property)) {
-                operationBuilder.deleteOperation(entity).perform(property);
+                fileResourceStorage.delete(entity, property);
             }
         }
     }

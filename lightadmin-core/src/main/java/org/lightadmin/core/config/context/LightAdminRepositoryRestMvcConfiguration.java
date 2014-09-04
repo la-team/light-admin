@@ -20,7 +20,9 @@ import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.RepositoriesFactoryBean;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.repository.event.DynamicRepositoryEventListener;
+import org.lightadmin.core.persistence.repository.invoker.DynamicRepositoryInvokerFactory;
 import org.lightadmin.core.persistence.support.DynamicDomainObjectMerger;
+import org.lightadmin.core.storage.FileResourceStorage;
 import org.lightadmin.core.web.json.DomainTypeToJsonMetadataConverter;
 import org.lightadmin.core.web.json.LightAdminJacksonModule;
 import org.lightadmin.core.web.support.*;
@@ -33,7 +35,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.config.RepositoryRestConfiguration;
 import org.springframework.data.rest.core.event.ValidatingRepositoryEventListener;
-import org.lightadmin.core.persistence.repository.invoker.DynamicRepositoryInvokerFactory;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
 import org.springframework.data.rest.webmvc.RepositoryRestController;
@@ -69,7 +70,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     public DynamicPersistentEntityResourceProcessor dynamicPersistentEntityResourceProcessor() {
-        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), lightAdminConfiguration(), entityLinks(), domainEntityLinks());
+        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), fileResourceStorage(), entityLinks(), domainEntityLinks());
     }
 
     @Bean
@@ -88,7 +89,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     public DomainObjectMerger domainObjectMerger() throws Exception {
-        return new DynamicDomainObjectMerger(repositories(), defaultConversionService(), globalAdministrationConfiguration(), lightAdminConfiguration());
+        return new DynamicDomainObjectMerger(repositories(), defaultConversionService(), fileResourceStorage());
     }
 
     @Bean
@@ -104,8 +105,9 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
     }
 
     @Bean
-    public DynamicRepositoryEventListener domainRepositoryEventListener() {
-        return new DynamicRepositoryEventListener(globalAdministrationConfiguration(), lightAdminConfiguration());
+    @Autowired
+    public DynamicRepositoryEventListener domainRepositoryEventListener(GlobalAdministrationConfiguration configuration, FileResourceStorage fileResourceStorage) {
+        return new DynamicRepositoryEventListener(configuration, fileResourceStorage);
     }
 
     @Override
@@ -167,6 +169,10 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
         return beanFactory.getBean(GlobalAdministrationConfiguration.class);
+    }
+
+    private FileResourceStorage fileResourceStorage() {
+        return beanFactory.getBean(FileResourceStorage.class);
     }
 
     private Validator validator() {

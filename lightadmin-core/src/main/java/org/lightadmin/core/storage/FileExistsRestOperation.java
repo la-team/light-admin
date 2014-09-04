@@ -28,7 +28,7 @@ import java.io.IOException;
 
 import static org.apache.commons.io.FileUtils.getFile;
 
-public class FileExistsRestOperation extends AbstractFileRestOperation {
+class FileExistsRestOperation extends AbstractFileRestOperation {
 
     protected FileExistsRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
         super(configuration, lightAdminConfiguration, entity);

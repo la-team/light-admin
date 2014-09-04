@@ -15,9 +15,7 @@
  */
 package org.lightadmin.core.web;
 
-import org.lightadmin.core.config.LightAdminConfiguration;
-import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.storage.OperationBuilder;
+import org.lightadmin.core.storage.FileResourceStorage;
 import org.lightadmin.core.web.support.DynamicRepositoryEntityLinks;
 import org.lightadmin.core.web.support.FilePropertyValue;
 import org.lightadmin.core.web.support.FileResourceLoader;
@@ -48,7 +46,6 @@ import java.io.Serializable;
 import java.util.Map;
 
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileType;
-import static org.lightadmin.core.storage.OperationBuilder.operationBuilder;
 import static org.springframework.data.rest.webmvc.ControllerUtils.toEmptyResponse;
 import static org.springframework.data.rest.webmvc.ControllerUtils.toResponseEntity;
 import static org.springframework.http.HttpStatus.METHOD_NOT_ALLOWED;
@@ -131,7 +128,7 @@ public class RepositoryFilePropertyController {
             return toEmptyResponse(METHOD_NOT_ALLOWED);
         }
 
-        operation().deleteOperation(domainObj).perform(prop);
+        fileResourceStorage().delete(domainObj, prop);
 
         return toEmptyResponse(OK);
     }
@@ -153,15 +150,13 @@ public class RepositoryFilePropertyController {
 
     private FilePropertyValue evaluateFilePropertyValue(Object instance, PersistentProperty persistentProperty) {
         try {
-            boolean fileExists = operation().fileExistsOperation(instance).perform(persistentProperty);
-
-            if (!fileExists) {
-                return new FilePropertyValue(fileExists);
+            if (!fileResourceStorage().fileExists(instance, persistentProperty)) {
+                return new FilePropertyValue(false);
             }
 
             Link fileLink = entityLinks().linkForFilePropertyLink(instance, persistentProperty);
 
-            byte[] fileData = operation().getOperation(instance).perform(persistentProperty);
+            byte[] fileData = fileResourceStorage().load(instance, persistentProperty);
 
             return new FilePropertyValue(fileLink, fileData);
 
@@ -178,20 +173,12 @@ public class RepositoryFilePropertyController {
         return new Resource<FilePropertyValue>(filePropertyValue);
     }
 
-    private OperationBuilder operation() {
-        return operationBuilder(globalAdministrationConfiguration(), lightAdminConfiguration());
-    }
-
-    private LightAdminConfiguration lightAdminConfiguration() {
-        return beanFactory.getBean(LightAdminConfiguration.class);
-    }
-
-    private GlobalAdministrationConfiguration globalAdministrationConfiguration() {
-        return beanFactory.getBean(GlobalAdministrationConfiguration.class);
-    }
-
     private FileResourceLoader fileResourceLoader() {
         return beanFactory.getBean(FileResourceLoader.class);
+    }
+
+    private FileResourceStorage fileResourceStorage() {
+        return beanFactory.getBean(FileResourceStorage.class);
     }
 
     private DynamicRepositoryEntityLinks entityLinks() {

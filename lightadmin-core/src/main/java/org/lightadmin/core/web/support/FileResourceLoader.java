@@ -15,10 +15,9 @@
  */
 package org.lightadmin.core.web.support;
 
-import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.storage.OperationBuilder;
+import org.lightadmin.core.storage.FileResourceStorage;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 
@@ -31,18 +30,16 @@ import static org.springframework.http.MediaType.APPLICATION_OCTET_STREAM;
 @SuppressWarnings("unused")
 public class FileResourceLoader {
 
-    private final GlobalAdministrationConfiguration globalAdministrationConfiguration;
+    private final GlobalAdministrationConfiguration configuration;
+    private final FileResourceStorage fileResourceStorage;
 
-    private final OperationBuilder operationBuilder;
-
-    public FileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
-        this.globalAdministrationConfiguration = globalAdministrationConfiguration;
-
-        this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, lightAdminConfiguration);
+    public FileResourceLoader(GlobalAdministrationConfiguration configuration, FileResourceStorage fileResourceStorage) {
+        this.configuration = configuration;
+        this.fileResourceStorage = fileResourceStorage;
     }
 
     public void downloadFile(Object entity, PersistentProperty<?> persistentProperty, HttpServletResponse response) throws IOException {
-        final long size = operationBuilder.getOperation(entity).performCopy(persistentProperty, response.getOutputStream());
+        final long size = fileResourceStorage.copy(entity, persistentProperty, response.getOutputStream());
         final String eTag = eTag(entity.getClass(), persistentProperty.getName(), size);
 
         addImageResourceHeaders(response, octetStreamResponseHeader(APPLICATION_OCTET_STREAM, size, eTag));
@@ -55,7 +52,7 @@ public class FileResourceLoader {
     }
 
     private PersistentProperty attributeMetadata(Class<?> domainType, String field) {
-        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = globalAdministrationConfiguration.forManagedDomainType(domainType);
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forManagedDomainType(domainType);
 
         PersistentEntity persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
 

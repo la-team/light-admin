@@ -18,6 +18,8 @@ package org.lightadmin.core.config.context;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.StandardLightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.storage.FileResourceStorage;
+import org.lightadmin.core.storage.FileSystemStorage;
 import org.lightadmin.core.view.LightAdminSpringTilesInitializer;
 import org.lightadmin.core.view.LightAdminTilesView;
 import org.lightadmin.core.web.ApplicationController;
@@ -81,8 +83,14 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
 
     @Bean
     @Autowired
-    public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
-        return new FileResourceLoader(globalAdministrationConfiguration, lightAdminConfiguration);
+    public FileResourceStorage fileResourceStorage(GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
+        return new FileSystemStorage(globalAdministrationConfiguration, lightAdminConfiguration);
+    }
+
+    @Bean
+    @Autowired
+    public FileResourceLoader fileResourceLoader(GlobalAdministrationConfiguration globalAdministrationConfiguration, FileResourceStorage fileResourceStorage) {
+        return new FileResourceLoader(globalAdministrationConfiguration, fileResourceStorage);
     }
 
     @Bean

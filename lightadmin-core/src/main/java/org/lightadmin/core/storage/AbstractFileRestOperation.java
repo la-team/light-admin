@@ -31,7 +31,7 @@ import java.io.File;
 import static java.lang.String.valueOf;
 import static org.apache.commons.io.FileUtils.getFile;
 
-public abstract class AbstractFileRestOperation {
+abstract class AbstractFileRestOperation {
 
     protected final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration;
 

@@ -17,10 +17,7 @@ package org.lightadmin.core.persistence.support;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import org.lightadmin.core.config.LightAdminConfiguration;
-import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.storage.OperationBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.lightadmin.core.storage.FileResourceStorage;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.mapping.*;
 import org.springframework.data.mapping.model.BeanWrapper;
@@ -40,23 +37,14 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
 
     private final Repositories repositories;
     private final ConversionService conversionService;
-    private final OperationBuilder operationBuilder;
+    private final FileResourceStorage fileResourceStorage;
 
-    /**
-     * Creates a new {@link DomainObjectMerger} for the given {@link Repositories} and {@link ConversionService}.
-     *
-     * @param repositories                      must not be {@literal null}.
-     * @param conversionService                 must not be {@literal null}.
-     * @param globalAdministrationConfiguration
-     * @param lightAdminConfiguration
-     */
-    @Autowired
-    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService, GlobalAdministrationConfiguration globalAdministrationConfiguration, LightAdminConfiguration lightAdminConfiguration) {
+    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService, FileResourceStorage fileResourceStorage) {
         super(repositories, conversionService);
 
         this.repositories = repositories;
         this.conversionService = conversionService;
-        this.operationBuilder = OperationBuilder.operationBuilder(globalAdministrationConfiguration, lightAdminConfiguration);
+        this.fileResourceStorage = fileResourceStorage;
     }
 
     /**
@@ -92,7 +80,7 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
 
                 if (isOfFileReferenceType(persistentProperty)) {
                     try {
-                        operationBuilder.saveOperation(target).perform(persistentProperty, sourceValue);
+                        fileResourceStorage.save(target, persistentProperty, sourceValue);
                         return;
                     } catch (IOException e) {
                     }

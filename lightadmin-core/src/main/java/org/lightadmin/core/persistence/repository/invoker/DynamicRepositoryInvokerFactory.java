@@ -16,16 +16,9 @@
 package org.lightadmin.core.persistence.repository.invoker;
 
 import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
-import org.springframework.core.convert.ConversionService;
-import org.springframework.data.repository.core.RepositoryInformation;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.invoke.RepositoryInvoker;
 import org.springframework.data.rest.core.invoke.RepositoryInvokerFactory;
-import org.springframework.util.Assert;
-
-import java.util.Map;
-
-import static com.google.common.collect.Maps.newHashMap;
 
 public class DynamicRepositoryInvokerFactory implements RepositoryInvokerFactory {
 
@@ -43,5 +36,5 @@ public class DynamicRepositoryInvokerFactory implements RepositoryInvokerFactory
         RepositoryInvoker repositoryInvoker = delegate.getInvokerFor(domainType);
 
         return new DynamicRepositoryInvokerWrapper(dynamicJpaRepository, repositoryInvoker);
-   }
+    }
 }

@@ -24,10 +24,10 @@ import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_EMPTY;
 import static com.fasterxml.jackson.annotation.JsonInclude.Include.NON_NULL;
 
 /**
-* TODO: Document me!
-*
-* @author Maxim Kharchenko (kharchenko.max@gmail.com)
-*/
+ * TODO: Document me!
+ *
+ * @author Maxim Kharchenko (kharchenko.max@gmail.com)
+ */
 public class FilePropertyValue {
     private boolean fileExists;
     private Link fileLink;

@@ -18,14 +18,13 @@ package org.lightadmin.core.web.support;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.lightadmin.api.config.utils.EntityNameExtractor;
-import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.config.domain.field.FieldMetadata;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
-import org.lightadmin.core.storage.OperationBuilder;
+import org.lightadmin.core.storage.FileResourceStorage;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
@@ -47,21 +46,20 @@ import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.customF
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.transientFields;
 import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.*;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.FILE;
-import static org.lightadmin.core.storage.OperationBuilder.operationBuilder;
 
 @SuppressWarnings(value = {"unchecked", "unused"})
 public class DynamicPersistentEntityResourceProcessor implements ResourceProcessor<PersistentEntityResource<?>> {
 
     private final GlobalAdministrationConfiguration adminConfiguration;
-    private final OperationBuilder operationBuilder;
     private final DynamicRepositoryEntityLinks entityLinks;
     private final DomainEntityLinks domainEntityLinks;
+    private final FileResourceStorage fileResourceStorage;
 
-    public DynamicPersistentEntityResourceProcessor(GlobalAdministrationConfiguration adminConfiguration, LightAdminConfiguration lightAdminConfiguration, DynamicRepositoryEntityLinks entityLinks, DomainEntityLinks domainEntityLinks) {
-        this.operationBuilder = operationBuilder(adminConfiguration, lightAdminConfiguration);
+    public DynamicPersistentEntityResourceProcessor(GlobalAdministrationConfiguration adminConfiguration, FileResourceStorage fileResourceStorage, DynamicRepositoryEntityLinks entityLinks, DomainEntityLinks domainEntityLinks) {
         this.adminConfiguration = adminConfiguration;
         this.domainEntityLinks = domainEntityLinks;
         this.entityLinks = entityLinks;
+        this.fileResourceStorage = fileResourceStorage;
     }
 
     @Override
@@ -140,9 +138,8 @@ public class DynamicPersistentEntityResourceProcessor implements ResourceProcess
 
     private FilePropertyValue evaluateFilePropertyValue(PersistentProperty persistentProperty, Object value) {
         try {
-            boolean fileExists = operationBuilder.fileExistsOperation(value).perform(persistentProperty);
-            if (!fileExists) {
-                return new FilePropertyValue(fileExists);
+            if (!fileResourceStorage.fileExists(value, persistentProperty)) {
+                return new FilePropertyValue(false);
             }
             return new FilePropertyValue(entityLinks.linkForFilePropertyLink(value, persistentProperty));
         } catch (Exception e) {
