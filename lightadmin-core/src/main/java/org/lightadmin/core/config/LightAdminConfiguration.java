@@ -34,6 +34,8 @@ public interface LightAdminConfiguration {
 
     String getBackToSiteUrl();
 
+    String getHelpUrl();
+
     File getFileStorageDirectory();
 
     boolean isFileStreamingEnabled();

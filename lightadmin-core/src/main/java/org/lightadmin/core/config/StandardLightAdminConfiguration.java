@@ -34,6 +34,7 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     private final boolean securityEnabled;
     private final String securityLogoutUrl;
     private final String backToSiteUrl;
+    private final String helpUrl;
     private final File fileStorageDirectory;
     private final boolean fileStreaming;
     private final String basePackage;
@@ -44,6 +45,7 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
         this.applicationBaseUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_URL);
         this.applicationBaseNoEndSeparator = urlWithoutEndSeparator(this.applicationBaseUrl);
         this.backToSiteUrl = backToSiteUrl(servletContext);
+        this.helpUrl = helpUrl(servletContext);
 
         this.fileStorageDirectory = fileStorageDirectory(servletContext);
         this.fileStreaming = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING));
@@ -82,6 +84,11 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     }
 
     @Override
+    public String getHelpUrl() {
+        return helpUrl;
+    }
+
+    @Override
     public String getApplicationBaseUrl() {
         return applicationBaseUrl;
     }
@@ -110,15 +117,13 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     private String backToSiteUrl(ServletContext servletContext) {
         final String backToSiteUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BACK_TO_SITE_URL);
 
-        if (isBlank(backToSiteUrl)) {
-            return "#";
-        }
+        return isBlank(backToSiteUrl) ? LIGHT_ADMINISTRATION_BACK_TO_SITE_DEFAULT_URL : backToSiteUrl;
+    }
 
-        if (backToSiteUrl.startsWith("/")) {
-            return servletContext.getContextPath() + backToSiteUrl;
-        }
+    private String helpUrl(ServletContext servletContext) {
+        final String helpUrl = servletContext.getInitParameter(LIGHT_ADMINISTRATION_HELP_URL);
 
-        return backToSiteUrl;
+        return isBlank(helpUrl) ? LIGHT_ADMINISTRATION_HELP_DEFAULT_URL : helpUrl;
     }
 
     private String urlWithoutEndSeparator(String url) {

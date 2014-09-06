@@ -57,24 +57,29 @@ import org.springframework.security.web.authentication.rememberme.TokenBasedReme
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 import org.springframework.security.web.savedrequest.RequestCache;
-import org.springframework.security.web.util.AntPathRequestMatcher;
-import org.springframework.security.web.util.AnyRequestMatcher;
+import org.springframework.security.web.util.matcher.AnyRequestMatcher;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
+import org.springframework.security.web.util.matcher.RequestMatcher;
 
 import javax.servlet.Filter;
 import java.io.IOException;
 import java.util.*;
 
+import static com.google.common.collect.Lists.newArrayList;
+import static com.google.common.collect.Maps.newLinkedHashMap;
 import static java.util.Arrays.asList;
 
 @Configuration
 public class LightAdminSecurityConfiguration {
 
-    private static final String ROLE_ADMIN = "ROLE_ADMIN";
     private static final String REMEMBER_ME_DIGEST_KEY = "LightAdmin";
+    private static final String ROLE_ADMIN = "ROLE_ADMIN";
 
     private static final String[] PUBLIC_RESOURCES = {
-            "/images/**", "/scripts/**", "/styles/**", "/rest/**/file",
-            "/login", "/page-not-found", "/access-denied"
+            "/images/**", "/scripts/**", "/styles/**",
+            "/rest/**/file",
+            "/login", "/page-not-found", "/access-denied",
+            "/dynamic/logo"
     };
 
     @Value("classpath:users.properties")
@@ -86,13 +91,12 @@ public class LightAdminSecurityConfiguration {
     @Bean
     @Autowired
     public FilterChainProxy springSecurityFilterChain(Filter filterSecurityInterceptor, Filter authenticationFilter, Filter rememberMeAuthenticationFilter, Filter logoutFilter, Filter exceptionTranslationFilter, Filter securityContextPersistenceFilter) {
-
-        List<SecurityFilterChain> filterChains = new ArrayList<SecurityFilterChain>();
+        List<SecurityFilterChain> filterChains = newArrayList();
         for (String pattern : PUBLIC_RESOURCES) {
             filterChains.add(new DefaultSecurityFilterChain(new AntPathRequestMatcher(applicationUrl(pattern))));
         }
 
-        filterChains.add(new DefaultSecurityFilterChain(new AnyRequestMatcher(), securityContextPersistenceFilter, exceptionTranslationFilter, logoutFilter, authenticationFilter, rememberMeAuthenticationFilter, filterSecurityInterceptor));
+        filterChains.add(new DefaultSecurityFilterChain(AnyRequestMatcher.INSTANCE, securityContextPersistenceFilter, exceptionTranslationFilter, logoutFilter, authenticationFilter, rememberMeAuthenticationFilter, filterSecurityInterceptor));
 
         return new FilterChainProxy(filterChains);
     }
@@ -109,8 +113,8 @@ public class LightAdminSecurityConfiguration {
     }
 
     private FilterInvocationSecurityMetadataSource securityMetadataSource() {
-        LinkedHashMap<org.springframework.security.web.util.matcher.RequestMatcher, Collection<ConfigAttribute>> map = new LinkedHashMap<org.springframework.security.web.util.matcher.RequestMatcher, Collection<ConfigAttribute>>();
-        map.put(new AnyRequestMatcher(), asList((ConfigAttribute) new SecurityConfig(ROLE_ADMIN)));
+        LinkedHashMap<RequestMatcher, Collection<ConfigAttribute>> map = newLinkedHashMap();
+        map.put(AnyRequestMatcher.INSTANCE, asList((ConfigAttribute) new SecurityConfig(ROLE_ADMIN)));
         return new DefaultFilterInvocationSecurityMetadataSource(map);
     }
 

@@ -36,15 +36,20 @@
                 </div>
             </sec:authorize>
 
-            <sec:authorize ifNotGranted="ROLE_ADMIN">
-                <div class="userNav">
-                    <ul>
-                        <li>
-                            <a href="http://lightadmin.org/getting-started/" title=""><img src="<light:url value='/images/icons/topnav/help.png'/>" alt=""><span>Help</span></a>
-                        </li>
-                    </ul>
-                </div>
-            </sec:authorize>
+            <div class="userNav">
+                <ul>
+                    <li>
+                        <a href="<c:out value='${lightAdminConfiguration.helpUrl}'/>"><img src="<light:url value='/images/icons/topnav/help.png'/>" alt=""><span>Help</span></a>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="userNav">
+                <iframe allowtransparency="true" frameborder="0" scrolling="no"
+                        src="https://platform.twitter.com/widgets/tweet_button.html?lang=en&url=http%3A%2F%2Flightadmin.org&related=lightadm_team&text=LightAdmin%20-%20Pluggable%20data%20administration%20UI%20library%20for%20Spring%20Boot&hashtags=LightAdmin,springboot"
+                        style="width:130px; height:20px; position: relative; right: -35px; top: 8px;"></iframe>
+            </div>
+
             <div class="fix"></div>
         </div>
     </div>

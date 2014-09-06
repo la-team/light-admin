@@ -23,8 +23,10 @@ import org.lightadmin.core.util.LightAdminConfigurationUtils;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
 import org.springframework.core.annotation.Order;
+import org.springframework.core.io.Resource;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
+import org.springframework.web.context.support.ServletContextResourceLoader;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.filter.DelegatingFilterProxy;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
@@ -35,6 +37,7 @@ import org.springframework.web.servlet.ResourceServlet;
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.util.regex.Pattern;
 
@@ -72,6 +75,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         }
 
         registerCusomResourceServlet(servletContext);
+        registerLogoResourceServlet(servletContext);
 
         registerLightAdminDispatcher(servletContext);
 
@@ -90,8 +94,8 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         registerTilesDecorationFilter(servletContext);
 
         registerGZipFilter(servletContext,
-                resourceMapping("/styles/*", servletContext),
-                resourceMapping("/scripts/*", servletContext)
+                resourceServletMapping(servletContext, "/styles/*"),
+                resourceServletMapping(servletContext, "/scripts/*")
         );
     }
 
@@ -121,7 +125,21 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
         ServletRegistration.Dynamic customResourceServletRegistration = servletContext.addServlet(LIGHT_ADMIN_CUSTOM_RESOURCE_SERVLET_NAME, resourceServlet);
         customResourceServletRegistration.setLoadOnStartup(2);
-        customResourceServletRegistration.addMapping(customResourceServletMapping(servletContext));
+        customResourceServletRegistration.addMapping(resourceServletMapping(servletContext, LIGHT_ADMIN_CUSTOM_FRAGMENT_SERVLET_URL));
+    }
+
+    private void registerLogoResourceServlet(final ServletContext servletContext) {
+        ServletRegistration.Dynamic customResourceServletRegistration = servletContext.addServlet(LIGHT_ADMIN_LOGO_RESOURCE_SERVLET_NAME, logoResourceServlet(servletContext));
+        customResourceServletRegistration.setLoadOnStartup(3);
+        customResourceServletRegistration.addMapping(resourceServletMapping(servletContext, LIGHT_ADMIN_LOGO_SERVLET_URL));
+    }
+
+    private ResourceServlet logoResourceServlet(ServletContext servletContext) {
+        Resource resource = servletContextResourceLoader(servletContext).getResource(LIGHT_ADMIN_CUSTOM_LOGO_LOCATION);
+        if (resource.exists()) {
+            return concreteResourceServlet(LIGHT_ADMIN_CUSTOM_LOGO_LOCATION);
+        }
+        return concreteResourceServlet(resourceServletMapping(servletContext, LIGHT_ADMIN_DEFAULT_LOGO_LOCATION));
     }
 
     private void registerTilesDecorationFilter(final ServletContext servletContext) {
@@ -190,20 +208,12 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         return !BASE_URL_PATTERN.matcher(url).matches();
     }
 
-    private String resourceMapping(String resource, ServletContext servletContext) {
+    private String resourceServletMapping(ServletContext servletContext, String location) {
         if (rootUrl(lightAdminBaseUrl(servletContext))) {
-            return resource;
+            return location;
         }
 
-        return lightAdminBaseUrl(servletContext) + resource;
-    }
-
-    private String customResourceServletMapping(ServletContext servletContext) {
-        if (rootUrl(lightAdminBaseUrl(servletContext))) {
-            return "/custom";
-        }
-
-        return lightAdminBaseUrl(servletContext) + "/custom";
+        return lightAdminBaseUrl(servletContext) + location;
     }
 
     private String urlMapping(String baseUrl) {
@@ -257,5 +267,23 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
 
         final File fileStorageDirectory = getFile(fileStorageDirectoryPath);
         return !fileStorageDirectory.exists() || !fileStorageDirectory.isDirectory();
+    }
+
+    private ServletContextResourceLoader servletContextResourceLoader(ServletContext servletContext) {
+        return new ServletContextResourceLoader(servletContext);
+    }
+
+    private ResourceServlet concreteResourceServlet(final String location) {
+        return new ResourceServlet() {
+            {
+                setApplyLastModified(true);
+                setContentType("image/png");
+            }
+
+            @Override
+            protected String determineResourceUrl(HttpServletRequest request) {
+                return location;
+            }
+        };
     }
 }

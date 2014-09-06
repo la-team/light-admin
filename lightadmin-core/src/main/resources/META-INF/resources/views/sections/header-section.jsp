@@ -8,8 +8,8 @@
 
 <div id="header" class="wrapper">
 	<div class="logo">
-		<a href="<light:url value='/'/>">
-			<img src="<light:url value='/images/loginLogo_2-1.png'/>" alt=""/>
+		<a href="<light:url value='/'/>" title="To Dashboard">
+			<img src="<light:url value='/dynamic/logo'/>"/>
 		</a>
 	</div>
 	<div class="middleNav">

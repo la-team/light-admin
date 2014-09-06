@@ -22,13 +22,26 @@ public class LightAdminConfigurationUtils {
     public static final String LIGHT_ADMINISTRATION_SECURITY = "light:administration:security";
     public static final String LIGHT_ADMINISTRATION_SECURITY_LOGOUT_URL = "light:administration:security-logout-url";
     public static final String LIGHT_ADMINISTRATION_BACK_TO_SITE_URL = "light:administration:back-to-site-url";
+    public static final String LIGHT_ADMINISTRATION_HELP_URL = "light:administration:help-url";
     public static final String LIGHT_ADMINISTRATION_FILE_STORAGE_PATH = "light:administration:file-storage";
     public static final String LIGHT_ADMINISTRATION_FILE_STREAMING = "light:administration:file-streaming";
 
     public static final String LIGHT_ADMIN_DISPATCHER_NAME = "lightadmin-dispatcher";
     public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_SERVLET_NAME = "lightadmin-cusom-resource-servlet";
+    public static final String LIGHT_ADMIN_LOGO_RESOURCE_SERVLET_NAME = "lightadmin-logo-resource-servlet";
     public static final String LIGHT_ADMIN_DISPATCHER_REDIRECTOR_NAME = "lightadmin-dispatcher-redirector";
+
     public static final String LIGHT_ADMIN_SECURITY_LOGOUT_URL_DEFAULT = "/logout";
 
     public static final String LIGHT_ADMIN_REST_URL_DEFAULT = "/rest";
+
+    public static final String LIGHT_ADMIN_CUSTOM_LOGO_LOCATION = "/WEB-INF/admin/images/logo.png";
+    public static final String LIGHT_ADMIN_DEFAULT_LOGO_LOCATION = "/images/loginLogo_2-1.png";
+
+    public static final String LIGHT_ADMIN_CUSTOM_FRAGMENT_SERVLET_URL = "/dynamic/custom";
+    public static final String LIGHT_ADMIN_LOGO_SERVLET_URL = "/dynamic/logo";
+
+    public static final String LIGHT_ADMINISTRATION_BACK_TO_SITE_DEFAULT_URL = "http://lightadmin.org";
+    public static final String LIGHT_ADMINISTRATION_HELP_DEFAULT_URL = "http://lightadmin.org/getting-started/";
+
 }

@@ -28,6 +28,11 @@
     </context-param>
 
     <context-param>
+        <param-name>light:administration:help-url</param-name>
+        <param-value>http://lightadmin.org/getting-started/</param-value>
+    </context-param>
+
+    <context-param>
         <param-name>light:administration:base-package</param-name>
         <param-value>org.lightadmin.demo.config</param-value>
     </context-param>

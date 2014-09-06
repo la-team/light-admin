@@ -81,7 +81,7 @@
 
         $("div.custom-resource").each(function () {
             var customResourceContainer = $(this);
-            var customResourceServletUrl = "<light:url value='/custom'/>";
+            var customResourceServletUrl = "<light:url value='/dynamic/custom'/>";
             var customResourceUrl = $("div.body", customResourceContainer).attr('data-resource-url');
             $.ajax({
                 type: 'GET',

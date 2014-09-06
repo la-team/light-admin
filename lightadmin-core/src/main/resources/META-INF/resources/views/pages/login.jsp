@@ -4,7 +4,7 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
 <div class="loginWrapper" style="width: 320px;">
-    <div class="loginLogo"><img src="<light:url value='/images/loginLogo_2-1.png'/>" alt=""/></div>
+    <div class="loginLogo"><img src="<light:url value='/dynamic/logo'/>"/></div>
 
     <c:if test="${not empty param.login_error}">
         <div class="nNote nWarning hideit">
