@@ -2,12 +2,6 @@
 
 <img src="https://travis-ci.org/la-team/light-admin.png?branch=master"/>
 
-<iframe allowtransparency="true" frameborder="0" scrolling="no"
-        src="https://platform.twitter.com/widgets/tweet_button.html?lang=en&url=http%3A%2F%2Flightadmin.org&related=lightadm_team&text=LightAdmin%20-%20Pluggable%20data%20administration%20UI%20library%20for%20Spring%20Boot&hashtags=LightAdmin,springboot&size=large"
-        style="width:130px; height:20px; position: absolute; right: 0; top: 62px; z-index: 1; margin-right: 160px;"></iframe>
-
-
-
 The primary goal of the project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
 
