@@ -19,6 +19,7 @@ import javax.servlet.ServletContext;
 
 import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
 
+@SuppressWarnings("unused")
 public class LightAdmin {
 
     private final ServletContext servletContext;
@@ -53,6 +54,11 @@ public class LightAdmin {
 
     public LightAdmin backToSiteUrl(String backToSiteUrl) {
         servletContext.setInitParameter(LIGHT_ADMINISTRATION_BACK_TO_SITE_URL, backToSiteUrl);
+        return this;
+    }
+
+    public LightAdmin helpUrl(String helpUrl) {
+        servletContext.setInitParameter(LIGHT_ADMINISTRATION_HELP_URL, helpUrl);
         return this;
     }
 
