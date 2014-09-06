@@ -123,7 +123,7 @@
 
         bindInfoClickHandlers(tableElement, dataTable);
 
-        decorateUIControls($('#listViewTable_paginate'));  // TODO: Fix stylization
+        decorateUIControls($('#listViewTable_length'));
     });
 
     function fnDrawCallback(oSettings) {
