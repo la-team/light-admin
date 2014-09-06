@@ -29,6 +29,7 @@ import org.springframework.hateoas.EntityLinks;
 import org.springframework.hateoas.Link;
 
 import java.util.List;
+import java.util.Set;
 
 import static com.google.common.collect.Lists.newArrayList;
 import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.*;
@@ -74,16 +75,20 @@ public class DomainTypeToJsonMetadataConverter implements Converter<PersistentEn
         List<DomainConfigurationUnitType> unitTypes = newArrayList(LIST_VIEW, FORM_VIEW, SHOW_VIEW, QUICK_VIEW);
 
         for (DomainConfigurationUnitType unitType : unitTypes) {
-            for (FieldMetadata field : persistentFields(configuration.fieldsForUnit(unitType))) {
-                addPersistentProperty((PersistentFieldMetadata) field, unitType, jsonConfigurationMetadata);
-            }
+            Set<FieldMetadata> fieldForUnit = configuration.fieldsForUnit(unitType);
 
-            for (FieldMetadata customField : customFields(configuration.fieldsForUnit(unitType))) {
-                jsonConfigurationMetadata.addDynamicProperty((CustomFieldMetadata) customField, unitType);
-            }
+            for (FieldMetadata field : fieldForUnit) {
+                if (persistentFieldMetadataPredicate().apply(field)) {
+                    addPersistentProperty((PersistentFieldMetadata) field, unitType, jsonConfigurationMetadata);
+                }
 
-            for (FieldMetadata transientField : transientFields(configuration.fieldsForUnit(unitType))) {
-                jsonConfigurationMetadata.addDynamicProperty((TransientFieldMetadata) transientField, unitType);
+                if (customFieldMetadataPredicate().apply(field)) {
+                    jsonConfigurationMetadata.addDynamicProperty((CustomFieldMetadata) field, unitType);
+                }
+
+                if (transientFieldMetadataPredicate().apply(field)) {
+                    jsonConfigurationMetadata.addDynamicProperty((TransientFieldMetadata) field, unitType);
+                }
             }
         }
 
