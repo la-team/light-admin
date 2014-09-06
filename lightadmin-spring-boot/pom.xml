@@ -13,7 +13,7 @@
 
     <packaging>jar</packaging>
     <name>LightAdmin Boot</name>
-    <version>1.0.0.RELEASE</version>
+    <version>1.0.1.BUILD-SNAPSHOT</version>
     <description>Spring Boot Integration Sample</description>
 
     <properties>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin</artifactId>
-            <version>1.0.0.RELEASE</version>
+            <version>1.0.1.BUILD-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

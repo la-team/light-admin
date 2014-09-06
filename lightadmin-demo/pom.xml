@@ -7,11 +7,11 @@
     <parent>
         <artifactId>lightadmin-parent</artifactId>
         <groupId>org.lightadmin</groupId>
-        <version>1.0.0.RELEASE</version>
+        <version>1.0.1.BUILD-SNAPSHOT</version>
     </parent>
 
     <artifactId>lightadmin-demo</artifactId>
-    <version>1.0.0.RELEASE</version>
+    <version>1.0.1.BUILD-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>LightAdmin Demo</name>
@@ -29,7 +29,7 @@
         <dependency>
             <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin</artifactId>
-            <version>1.0.0.RELEASE</version>
+            <version>1.0.1.BUILD-SNAPSHOT</version>
         </dependency>
 
         <dependency>
