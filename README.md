@@ -1,4 +1,4 @@
-# LightAdmin - Pluggable data administration UI library for Java web applications
+# LightAdmin - Pluggable data administration UI library for Spring Boot
 
 <img src="https://travis-ci.org/la-team/light-admin.png?branch=master"/>
 
