@@ -58,7 +58,7 @@ Declare maven dependency for using with Spring 4.0.X directly from Maven Central
 <dependency>
   <groupId>org.lightadmin</groupId>
   <artifactId>lightadmin</artifactId>
-  <version>1.0.0.RC1</version>
+  <version>1.0.0.RELEASE</version>
 </dependency> 
 ```
 
