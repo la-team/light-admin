@@ -111,6 +111,7 @@
         <metrics-spring.version>3.0.1</metrics-spring.version>
         <swagger-springmvc.version>0.8.8</swagger-springmvc.version>
         <usertype-core.version>3.2.0.GA</usertype-core.version>
+        <lightadmin.version>1.0.1.BUILD-SNAPSHOT</lightadmin.version>
     </properties>
 
     <repositories>
@@ -179,6 +180,11 @@
     </prerequisites>
 
     <dependencies>
+        <dependency>
+            <groupId>org.lightadmin</groupId>
+            <artifactId>lightadmin</artifactId>
+            <version>${lightadmin.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.codahale.metrics</groupId>
             <artifactId>metrics-core</artifactId>
@@ -370,6 +376,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
