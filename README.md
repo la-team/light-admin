@@ -27,8 +27,8 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * Live demo: [lightadmin.org/demo](http://lightadmin.org/demo)
 * CI Server: [lightadmin.org/jenkins](http://lightadmin.org/jenkins)
 * Use Google Groups for posting questions: [groups.google.com/group/lightadmin](http://groups.google.com/group/lightadmin)
-* Use Stack Overflow for posting questions with "lightadmin" tag
-* Contact LightAdmin Team directly on Twitter: @lightadm_team
+* Use Stack Overflow for posting questions with "*lightadmin*" tag
+* Contact LightAdmin Team directly on Twitter: *@lightadm_team*
 
 ## Bug Reports ##
 
