@@ -55,12 +55,10 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-tomcat</artifactId>
-            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-jasper</artifactId>
-            <!--<scope>provided</scope>-->
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -79,6 +77,11 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <jvmArguments>
+                        -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
+                    </jvmArguments>
+                </configuration>
             </plugin>
         </plugins>
     </build>

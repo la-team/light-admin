@@ -103,11 +103,12 @@
         <collections-generic.version>4.01</collections-generic.version>
         <javassist.version>3.18.1-GA</javassist.version>
         <hibernate-entitymanager.version>4.3.6.Final</hibernate-entitymanager.version>
-        <junit.version>4.11</junit.version>
-        <easymock.version>3.2</easymock.version>
-        <usertype.jodatime.version>2.0.1</usertype.jodatime.version>
+        <usertype.jadira.version>3.2.0.GA</usertype.jadira.version>
+        <joda-time.hibernate.version>1.3</joda-time.hibernate.version>
         <jackson-datatype-joda.version>2.3.0</jackson-datatype-joda.version>
         <jackson-datatype-hibernate4.version>2.2.2</jackson-datatype-hibernate4.version>
+        <junit.version>4.11</junit.version>
+        <easymock.version>3.2</easymock.version>
     </properties>
 
     <prerequisites>
@@ -283,9 +284,19 @@
             <version>${joda-time.version}</version>
         </dependency>
         <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time-hibernate</artifactId>
+            <version>${joda-time.hibernate.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.jadira.usertype</groupId>
-            <artifactId>usertype.jodatime</artifactId>
-            <version>${usertype.jodatime.version}</version>
+            <artifactId>usertype.core</artifactId>
+            <version>${usertype.jadira.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jadira.usertype</groupId>
+            <artifactId>usertype.spi</artifactId>
+            <version>${usertype.jadira.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>

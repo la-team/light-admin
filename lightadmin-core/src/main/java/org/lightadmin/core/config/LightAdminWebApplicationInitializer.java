@@ -92,11 +92,6 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         registerCharsetFilter(servletContext);
 
         registerTilesDecorationFilter(servletContext);
-
-        registerGZipFilter(servletContext,
-                resourceServletMapping(servletContext, "/styles/*"),
-                resourceServletMapping(servletContext, "/scripts/*")
-        );
     }
 
     private void registerLightAdminDispatcher(final ServletContext servletContext) {
