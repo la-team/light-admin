@@ -1,0 +1,15 @@
+target
+node
+node_modules
+.idea
+*.iml
+.classpath
+.project
+.settings
+.tmp
+.merge_file*
+.sass-cache
+.DS_Store
+src/main/webapp/dist
+.gradle
+build

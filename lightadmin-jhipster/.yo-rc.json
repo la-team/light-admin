@@ -1,0 +1,18 @@
+{
+  "generator-jhipster": {
+    "baseName": "lightadmin-jhipster",
+    "packageName": "org.lightadmin.jhipster",
+    "packageFolder": "org/lightadmin/jhipster",
+    "authenticationType": "cookie",
+    "hibernateCache": "ehcache",
+    "clusteredHttpSession": "no",
+    "websocket": "no",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Memory",
+    "prodDatabaseType": "mysql",
+    "useCompass": false,
+    "buildTool": "maven",
+    "frontendBuilder": "grunt",
+    "javaVersion": "7"
+  }
+}
