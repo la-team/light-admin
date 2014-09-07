@@ -92,6 +92,10 @@ public class UserAdministration extends AdministrationConfiguration<User> {
                 .field("activationKey").caption("Actication Key")
                 .field("authorities").caption("Authorities")
                 .field("persistentTokens").caption("Persistent Tokens")
+                .field("createdDate").caption("Created Date")
+                .field("createdBy").caption("Created By")
+                .field("lastModifiedBy").caption("Last Modified By")
+                .field("lastModifiedDate").caption("Last Modified Date")
                 .build();
     }
 
