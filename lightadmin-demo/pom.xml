@@ -22,6 +22,7 @@
         <spring.version>4.0.5.RELEASE</spring.version>
         <hibernate.version>4.3.1.Final</hibernate.version>
         <logback.version>1.0.9</logback.version>
+        <lightadmin.version>1.0.1.BUILD-SNAPSHOT</lightadmin.version>
     </properties>
 
     <dependencies>
@@ -29,7 +30,7 @@
         <dependency>
             <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin</artifactId>
-            <version>1.0.1.BUILD-SNAPSHOT</version>
+            <version>${lightadmin.version}</version>
         </dependency>
 
         <dependency>
