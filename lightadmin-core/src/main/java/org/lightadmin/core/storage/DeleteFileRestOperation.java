@@ -18,6 +18,8 @@ package org.lightadmin.core.storage;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mapping.PersistentProperty;
 
 import java.io.File;
@@ -27,6 +29,8 @@ import static org.apache.commons.io.FileUtils.getFile;
 import static org.apache.commons.lang3.ArrayUtils.isEmpty;
 
 class DeleteFileRestOperation extends AbstractFileRestOperation {
+
+    private static final Logger logger = LoggerFactory.getLogger(DeleteFileRestOperation.class);
 
     public DeleteFileRestOperation(GlobalAdministrationConfiguration configuration, LightAdminConfiguration lightAdminConfiguration, Object entity) {
         super(configuration, lightAdminConfiguration, entity);
@@ -40,6 +44,7 @@ class DeleteFileRestOperation extends AbstractFileRestOperation {
         }
 
         if (attrMeta.isAnnotationPresent(FileReference.class)) {
+            logger.info("Performing delete operation on @FileReference property {}", attrMeta.getName());
             if (deleteFile(attrMeta)) {
                 resetAttrValue(attrMeta);
                 repository().save(entity);
@@ -53,25 +58,45 @@ class DeleteFileRestOperation extends AbstractFileRestOperation {
 
     private boolean deleteFile(PersistentProperty attrMeta) {
         if (fieldLevelBaseDirectoryDefined(attrMeta)) {
-            return deleteQuietly(referencedFile(attrMeta));
+            File referencedFile = referencedFile(attrMeta);
+
+            logger.info("Deleting property-related file {}", referencedFile.getAbsolutePath());
+            return deleteQuietly(referencedFile);
         }
-        return deleteQuietly(fileStorageFile(attrMeta));
+
+        File fileStorageFile = fileStorageFile(attrMeta);
+        logger.info("Deleting property-related file {}", fileStorageFile.getAbsolutePath());
+        return deleteQuietly(fileStorageFile);
     }
 
     private void removeDomainEntityDirectory(PersistentProperty attrMeta) {
-        if (fieldLevelBaseDirectoryDefined(attrMeta)) {
-            removeDirectoryIfEmpty(referencedFileDomainEntityDirectory(attrMeta));
-        } else {
-            removeDirectoryIfEmpty(fileStorageDomainEntityDirectory());
-        }
+        File domainEntityDirectory = domainEntityDirectory(attrMeta);
+
+        logger.info("Deleting entity-related directory {}", domainEntityDirectory.getAbsolutePath());
+
+        removeDirectoryIfEmpty(domainEntityDirectory);
     }
 
     private void removeDomainEntityAttributeDirectory(PersistentProperty attrMeta) {
-        if (fieldLevelBaseDirectoryDefined(attrMeta)) {
-            removeDirectoryIfEmpty(referencedFileDomainEntityAttributeDirectory(attrMeta));
-        } else {
-            removeDirectoryIfEmpty(fileStorageDomainEntityAttributeDirectory(attrMeta));
+        File directoryToRemove = domainEntityAttributeDirectory(attrMeta);
+
+        logger.info("Deleting property-related directory {}", directoryToRemove.getAbsolutePath());
+
+        removeDirectoryIfEmpty(directoryToRemove);
+    }
+
+    private File domainEntityDirectory(PersistentProperty persistentProperty) {
+        if (fieldLevelBaseDirectoryDefined(persistentProperty)) {
+            return referencedFileDomainEntityDirectory(persistentProperty);
         }
+        return fileStorageDomainEntityDirectory();
+    }
+
+    private File domainEntityAttributeDirectory(PersistentProperty persistentProperty) {
+        if (fieldLevelBaseDirectoryDefined(persistentProperty)) {
+            return referencedFileDomainEntityAttributeDirectory(persistentProperty);
+        }
+        return fileStorageDomainEntityAttributeDirectory(persistentProperty);
     }
 
     private void removeDirectoryIfEmpty(File domainEntityDirectory) {

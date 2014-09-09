@@ -41,7 +41,7 @@ import static org.springframework.web.servlet.support.ServletUriComponentsBuilde
 @SuppressWarnings({"unused", "unchecked"})
 public class ApplicationController {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ApplicationController.class);
+    private static final Logger logger = LoggerFactory.getLogger(ApplicationController.class);
 
     public static final String DOMAIN_TYPE_ADMINISTRATION_CONFIGURATION_KEY = "domainTypeAdministrationConfiguration";
     public static final String BEAN_FACTORY_KEY = "beanFactory";
