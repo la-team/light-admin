@@ -40,6 +40,8 @@ import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.i
  */
 public class FileManipulationStrategyFactory {
 
+    private static final NoopFileManipulationStrategy NOOP_FILE_MANIPULATION_STRATEGY = new NoopFileManipulationStrategy();
+
     private final GlobalAdministrationConfiguration configuration;
     private final LightAdminConfiguration lightAdminConfiguration;
 
@@ -50,23 +52,21 @@ public class FileManipulationStrategyFactory {
 
     public FileManipulationStrategy createForFileProperty(PersistentProperty persistentProperty) {
         PersistentEntity persistentEntity = persistentProperty.getOwner();
-        Class type = persistentEntity.getType();
-
-        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forManagedDomainType(ClassUtils.getUserClass(type));
 
         if (isOfBinaryFileType(persistentProperty)) {
             return createBinaryFileManipulationStrategy();
         }
 
         if (isOfFileReferenceType(persistentProperty)) {
-            return createReferenceFileManipulationStrategy(persistentEntity, domainTypeAdministrationConfiguration);
+            return createReferenceFileManipulationStrategy(persistentEntity);
         }
 
-        return new NoOperationFileManipulationStrategy();
+        return NOOP_FILE_MANIPULATION_STRATEGY;
     }
 
-    private FileManipulationStrategy createReferenceFileManipulationStrategy(PersistentEntity persistentEntity, DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration) {
+    private FileManipulationStrategy createReferenceFileManipulationStrategy(PersistentEntity persistentEntity) {
         File fileStorageDirectory = lightAdminConfiguration.getFileStorageDirectory();
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forManagedDomainType(ClassUtils.getUserClass(persistentEntity.getType()));
         String domainTypeName = domainTypeAdministrationConfiguration.getDomainTypeName();
 
         FilePathResolver pathResolver = new ReferenceFilePathResolver(fileStorageDirectory, persistentEntity, domainTypeName);
@@ -78,7 +78,7 @@ public class FileManipulationStrategyFactory {
         return new BinaryFileManipulationStrategy();
     }
 
-    private static class NoOperationFileManipulationStrategy implements FileManipulationStrategy {
+    private static class NoopFileManipulationStrategy implements FileManipulationStrategy {
         @Override
         public void deleteFile(Object entity, PersistentProperty persistentProperty) {
         }
