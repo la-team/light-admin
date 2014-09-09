@@ -18,14 +18,21 @@
     <properties>
         <container.port>8080</container.port>
 
-        <spring.version>4.0.5.RELEASE</spring.version>
+        <spring.version>4.1.0.RELEASE</spring.version>
+        <javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
+        <slf4j-api.version>1.7.7</slf4j-api.version>
+        <logback-classic.version>1.1.2</logback-classic.version>
+        <selenium-java.version>2.32.0</selenium-java.version>
+        <guava.version>18.0</guava.version>
+        <xml-apis.version>1.4.01</xml-apis.version>
+        <junit.version>4.11</junit.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>2.32.0</version>
+            <version>${selenium-java.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
@@ -42,12 +49,13 @@
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>1.7.5</version>
+            <version>${slf4j-api.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>jcl-over-slf4j</artifactId>
-            <version>1.7.5</version>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback-classic.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
@@ -68,7 +76,7 @@
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>2.2.1</version>
+            <version>${javax.servlet.jsp-api.version}</version>
         </dependency>
 
         <dependency>
@@ -79,17 +87,17 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.11</version>
+            <version>${junit.version}</version>
         </dependency>
         <dependency>
             <groupId>com.google.guava</groupId>
             <artifactId>guava</artifactId>
-            <version>14.0</version>
+            <version>${guava.version}</version>
         </dependency>
         <dependency>
             <groupId>xml-apis</groupId>
             <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
+            <version>${xml-apis.version}</version>
         </dependency>
     </dependencies>
 

@@ -80,7 +80,7 @@
         <maven.compiler.source>1.6</maven.compiler.source>
         <maven.compiler.target>1.6</maven.compiler.target>
 
-        <spring.version>4.0.7.RELEASE</spring.version>
+        <spring.version>4.1.0.RELEASE</spring.version>
         <spring.security.version>3.2.5.RELEASE</spring.security.version>
         <spring.data.jpa.version>1.6.4.RELEASE</spring.data.jpa.version>
         <spring.data.rest.webmvc.version>2.1.4.RELEASE</spring.data.rest.webmvc.version>
@@ -105,8 +105,9 @@
         <hibernate-entitymanager.version>4.3.6.Final</hibernate-entitymanager.version>
         <usertype.jadira.version>3.2.0.GA</usertype.jadira.version>
         <joda-time.hibernate.version>1.3</joda-time.hibernate.version>
-        <jackson-datatype-joda.version>2.3.0</jackson-datatype-joda.version>
-        <jackson-datatype-hibernate4.version>2.2.2</jackson-datatype-hibernate4.version>
+        <jackson.version>2.3.4</jackson.version>
+        <slf4j.version>1.7.7</slf4j.version>
+        <logback.version>1.1.2</logback.version>
         <junit.version>4.11</junit.version>
         <easymock.version>3.2</easymock.version>
     </properties>
@@ -299,14 +300,29 @@
             <version>${usertype.jadira.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-joda</artifactId>
-            <version>${jackson-datatype-joda.version}</version>
+            <version>${jackson.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.datatype</groupId>
             <artifactId>jackson-datatype-hibernate4</artifactId>
-            <version>${jackson-datatype-hibernate4.version}</version>
+            <version>${jackson.version}</version>
         </dependency>
 
         <dependency>
@@ -319,10 +335,36 @@
             <artifactId>tika-core</artifactId>
             <version>${tika-core.version}</version>
         </dependency>
+
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
+            <groupId>javax.servlet.jsp.jstl</groupId>
+            <artifactId>jstl-api</artifactId>
             <version>${jstl.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet.jsp</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jstl-impl</artifactId>
+            <version>${jstl.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>javax.servlet</groupId>
+                    <artifactId>servlet-api</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>javax.servlet.jsp</groupId>
+                    <artifactId>jsp-api</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>
@@ -335,6 +377,12 @@
             <artifactId>javax.servlet.jsp-api</artifactId>
             <version>${javax.servlet.jsp-api.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
         </dependency>
 
         <dependency>
@@ -364,6 +412,7 @@
     </dependencies>
 
     <build>
+        <defaultGoal>install</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

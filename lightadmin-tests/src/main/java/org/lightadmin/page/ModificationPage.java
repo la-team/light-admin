@@ -101,6 +101,10 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
         return editForm.findElement( By.id( fieldName ) ).isDisplayed();
     }
 
+    public boolean isFieldReanOnly(String fieldName) {
+        return "true".equals(editForm.findElement( By.id( fieldName ) ).getAttribute("readonly"));
+    }
+
 	public void addValidFile( String fileName ) throws IOException, AWTException {
 		addFile( fileName );
 

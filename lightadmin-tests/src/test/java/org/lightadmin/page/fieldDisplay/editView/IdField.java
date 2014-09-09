@@ -8,7 +8,7 @@ import org.lightadmin.config.OrderTestEntityWithComplexFields;
 import org.lightadmin.data.Domain;
 import org.lightadmin.page.EditPage;
 
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 //Covers LA-74: https://github.com/max-dev/light-admin/issues/74
 @RunWithConfiguration( {OrderTestEntityWithComplexFields.class })
@@ -21,6 +21,6 @@ public class IdField extends SeleniumIntegrationTest {
 	public void isReadonly(){
 		editPage = getStartPage().editItem( 2 );
 
-		assertFalse( editPage.isFieldDisplayed( "id" ) );
+		assertTrue(editPage.isFieldReanOnly("id"));
 	}
 }

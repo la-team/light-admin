@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>1.1.5.RELEASE</version>
+        <version>1.1.6.RELEASE</version>
     </parent>
 
     <groupId>org.lightadmin</groupId>
@@ -25,13 +25,16 @@
         <main.basedir>${basedir}/../..</main.basedir>
         <m2eclipse.wtp.contextRoot>/</m2eclipse.wtp.contextRoot>
         <tomcat.version>8.0.8</tomcat.version>
+
+        <lightadmin.version>1.0.1.BUILD-SNAPSHOT</lightadmin.version>
+        <springloaded.version>1.2.0.RELEASE</springloaded.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin</artifactId>
-            <version>1.0.1.BUILD-SNAPSHOT</version>
+            <version>${lightadmin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -63,7 +66,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -77,6 +79,13 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>springloaded</artifactId>
+                        <version>${springloaded.version}</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <jvmArguments>
                         -Xdebug -Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005
