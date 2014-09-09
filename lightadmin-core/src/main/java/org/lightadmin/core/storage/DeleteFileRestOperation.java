@@ -36,49 +36,49 @@ class DeleteFileRestOperation extends AbstractFileRestOperation {
         super(configuration, lightAdminConfiguration, entity);
     }
 
-    public void perform(PersistentProperty attrMeta) {
-        if (attrMeta.getType().equals(byte[].class)) {
-            resetAttrValue(attrMeta);
-            repository().save(entity);
-            return;
-        }
-
-        if (attrMeta.isAnnotationPresent(FileReference.class)) {
-            logger.info("Performing delete operation on @FileReference property {}", attrMeta.getName());
-            if (deleteFile(attrMeta)) {
-                resetAttrValue(attrMeta);
-                repository().save(entity);
-
-                removeDomainEntityAttributeDirectory(attrMeta);
-            }
-
-            removeDomainEntityDirectory(attrMeta);
+    public void perform(PersistentProperty persistentProperty) {
+        if (isOfBinaryType(persistentProperty)) {
+            deletePropertyValue(persistentProperty);
+        } else if (hasFileReferenceAnnotation(persistentProperty)) {
+            deleteFileReferencedPropertyValue(persistentProperty);
         }
     }
 
-    private boolean deleteFile(PersistentProperty attrMeta) {
-        if (fieldLevelBaseDirectoryDefined(attrMeta)) {
-            File referencedFile = referencedFile(attrMeta);
+    private void deleteFileReferencedPropertyValue(PersistentProperty persistentProperty) {
+        logger.info("Performing delete operation on @FileReference property {}", persistentProperty.getName());
+
+        if (deleteFile(persistentProperty)) {
+            deletePropertyValue(persistentProperty);
+
+            removeDomainEntityAttributeDirectory(persistentProperty);
+        }
+
+        removeDomainEntityDirectory(persistentProperty);
+    }
+
+    private boolean deleteFile(PersistentProperty persistentProperty) {
+        if (fieldLevelBaseDirectoryDefined(persistentProperty)) {
+            File referencedFile = referencedFile(persistentProperty);
 
             logger.info("Deleting property-related file {}", referencedFile.getAbsolutePath());
             return deleteQuietly(referencedFile);
         }
 
-        File fileStorageFile = fileStorageFile(attrMeta);
+        File fileStorageFile = fileStorageFile(persistentProperty);
         logger.info("Deleting property-related file {}", fileStorageFile.getAbsolutePath());
         return deleteQuietly(fileStorageFile);
     }
 
-    private void removeDomainEntityDirectory(PersistentProperty attrMeta) {
-        File domainEntityDirectory = domainEntityDirectory(attrMeta);
+    private void removeDomainEntityDirectory(PersistentProperty persistentProperty) {
+        File domainEntityDirectory = domainEntityDirectory(persistentProperty);
 
         logger.info("Deleting entity-related directory {}", domainEntityDirectory.getAbsolutePath());
 
         removeDirectoryIfEmpty(domainEntityDirectory);
     }
 
-    private void removeDomainEntityAttributeDirectory(PersistentProperty attrMeta) {
-        File directoryToRemove = domainEntityAttributeDirectory(attrMeta);
+    private void removeDomainEntityAttributeDirectory(PersistentProperty persistentProperty) {
+        File directoryToRemove = domainEntityAttributeDirectory(persistentProperty);
 
         logger.info("Deleting property-related directory {}", directoryToRemove.getAbsolutePath());
 
@@ -105,11 +105,24 @@ class DeleteFileRestOperation extends AbstractFileRestOperation {
         }
     }
 
-    private boolean fieldLevelBaseDirectoryDefined(PersistentProperty attrMeta) {
-        return getFile(fileReference(attrMeta).baseDirectory()).exists();
+    private boolean fieldLevelBaseDirectoryDefined(PersistentProperty persistentProperty) {
+        return getFile(fileReference(persistentProperty).baseDirectory()).exists();
     }
 
-    private FileReference fileReference(PersistentProperty attrMeta) {
-        return (FileReference) attrMeta.findAnnotation(FileReference.class);
+    private FileReference fileReference(PersistentProperty persistentProperty) {
+        return (FileReference) persistentProperty.findAnnotation(FileReference.class);
+    }
+
+    private void deletePropertyValue(PersistentProperty persistentProperty) {
+        resetAttrValue(persistentProperty);
+        repository().save(entity);
+    }
+
+    private boolean hasFileReferenceAnnotation(PersistentProperty persistentProperty) {
+        return persistentProperty.isAnnotationPresent(FileReference.class);
+    }
+
+    private boolean isOfBinaryType(PersistentProperty persistentProperty) {
+        return persistentProperty.getType().equals(byte[].class);
     }
 }
