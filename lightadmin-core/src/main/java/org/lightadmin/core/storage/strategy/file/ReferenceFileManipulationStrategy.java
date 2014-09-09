@@ -21,6 +21,8 @@ import org.springframework.data.mapping.PersistentProperty;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * TODO: Document me!
@@ -29,39 +31,55 @@ import java.io.OutputStream;
  */
 public class ReferenceFileManipulationStrategy implements FileManipulationStrategy {
 
-    private final FilePathResolver pathResolver;
+    private final Map<Class<? extends ReferenceFileCommand>, ReferenceFileCommand> commandRegistry;
 
     public ReferenceFileManipulationStrategy(FilePathResolver filePathResolver) {
-        this.pathResolver = filePathResolver;
+        this.commandRegistry = createRegistry(filePathResolver);
     }
 
     @Override
     public void deleteFile(Object entity, PersistentProperty persistentProperty) {
-        new ReferenceFileDeletionCommand(pathResolver).execute(entity, persistentProperty);
+        getCommand(ReferenceFileDeletionCommand.class).execute(entity, persistentProperty);
     }
 
     @Override
     public boolean fileExists(Object entity, PersistentProperty persistentProperty) throws IOException {
-        return new ReferenceFileExistsCommand(pathResolver).execute(entity, persistentProperty);
+        return getCommand(ReferenceFileExistsCommand.class).execute(entity, persistentProperty);
     }
 
     @Override
     public byte[] loadFile(Object entity, PersistentProperty persistentProperty) throws IOException {
-        return new ReferenceFileRetrievalCommand(pathResolver).execute(entity, persistentProperty);
+        return getCommand(ReferenceFileRetrievalCommand.class).execute(entity, persistentProperty);
     }
 
     @Override
     public long copyFile(Object entity, PersistentProperty persistentProperty, OutputStream outputStream) throws IOException {
-        return new ReferenceFileCopyCommand(pathResolver).execute(entity, persistentProperty, outputStream);
+        return getCommand(ReferenceFileCopyCommand.class).execute(entity, persistentProperty, outputStream);
     }
 
     @Override
     public void saveFile(Object entity, PersistentProperty persistentProperty, Object value) throws IOException {
-        new ReferenceFileSaveCommand(pathResolver).execute(entity, persistentProperty, value);
+        getCommand(ReferenceFileSaveCommand.class).execute(entity, persistentProperty, value);
     }
 
     @Override
     public void cleanup(Object entity, PersistentProperty persistentProperty) throws IOException {
-        new ReferenceFileCleanupCommand(pathResolver).execute(entity, persistentProperty);
+        getCommand(ReferenceFileCleanupCommand.class).execute(entity, persistentProperty);
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends ReferenceFileCommand> T getCommand(Class<T> commandClass) {
+        return (T) commandRegistry.get(commandClass);
+    }
+
+    private Map<Class<? extends ReferenceFileCommand>, ReferenceFileCommand> createRegistry(FilePathResolver pathResolver) {
+        Map<Class<? extends ReferenceFileCommand>, ReferenceFileCommand> commandRegistry = new HashMap<Class<? extends ReferenceFileCommand>, ReferenceFileCommand>();
+        commandRegistry.put(ReferenceFileDeletionCommand.class, new ReferenceFileDeletionCommand(pathResolver));
+        commandRegistry.put(ReferenceFileExistsCommand.class, new ReferenceFileExistsCommand(pathResolver));
+        commandRegistry.put(ReferenceFileRetrievalCommand.class, new ReferenceFileRetrievalCommand(pathResolver));
+        commandRegistry.put(ReferenceFileCopyCommand.class, new ReferenceFileCopyCommand(pathResolver));
+        commandRegistry.put(ReferenceFileSaveCommand.class, new ReferenceFileSaveCommand(pathResolver));
+        commandRegistry.put(ReferenceFileCleanupCommand.class, new ReferenceFileCleanupCommand(pathResolver));
+        return commandRegistry;
     }
 }
