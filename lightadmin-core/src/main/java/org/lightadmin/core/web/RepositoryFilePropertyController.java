@@ -130,6 +130,8 @@ public class RepositoryFilePropertyController {
 
         fileResourceStorage().delete(domainObj, prop);
 
+        invoker.invokeSave(domainObj);
+
         return toEmptyResponse(OK);
     }
 
@@ -149,14 +151,16 @@ public class RepositoryFilePropertyController {
     }
 
     private FilePropertyValue evaluateFilePropertyValue(Object instance, PersistentProperty persistentProperty) {
+        FileResourceStorage fileResourceStorage = fileResourceStorage();
+
         try {
-            if (!fileResourceStorage().fileExists(instance, persistentProperty)) {
+            if (!fileResourceStorage.fileExists(instance, persistentProperty)) {
                 return new FilePropertyValue(false);
             }
 
             Link fileLink = entityLinks().linkForFilePropertyLink(instance, persistentProperty);
 
-            byte[] fileData = fileResourceStorage().load(instance, persistentProperty);
+            byte[] fileData = fileResourceStorage.load(instance, persistentProperty);
 
             return new FilePropertyValue(fileLink, fileData);
 

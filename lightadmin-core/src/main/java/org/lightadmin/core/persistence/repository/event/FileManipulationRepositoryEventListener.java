@@ -15,49 +15,70 @@
  */
 package org.lightadmin.core.persistence.repository.event;
 
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.lightadmin.core.storage.FileResourceStorage;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
-import org.springframework.data.rest.core.event.AbstractRepositoryEventListener;
 
 import java.io.IOException;
 
-public class DynamicRepositoryEventListener extends AbstractRepositoryEventListener<Object> {
+public class FileManipulationRepositoryEventListener extends ManagedRepositoryEventListener {
 
-    private final GlobalAdministrationConfiguration configuration;
     private final FileResourceStorage fileResourceStorage;
 
-    public DynamicRepositoryEventListener(GlobalAdministrationConfiguration configuration, FileResourceStorage fileResourceStorage) {
-        this.configuration = configuration;
+    public FileManipulationRepositoryEventListener(GlobalAdministrationConfiguration configuration, FileResourceStorage fileResourceStorage) {
+        super(configuration);
         this.fileResourceStorage = fileResourceStorage;
     }
 
     @Override
     protected void onAfterSave(final Object entity) {
         Class<?> domainType = entity.getClass();
-        if (!configuration.isManagedDomainType(domainType)) {
-            return;
-        }
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = this.configuration.forManagedDomainType(domainType);
 
-        PersistentEntity<?, ?> persistentEntity = configuration.forManagedDomainType(domainType).getPersistentEntity();
+        PersistentEntity<?, ?> persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
 
         persistentEntity.doWithProperties(new PersistentPropertyCleanupHandler(entity));
+
+        DynamicJpaRepository repository = domainTypeAdministrationConfiguration.getRepository();
+
+        repository.save(entity);
     }
 
     @Override
     protected void onBeforeDelete(final Object entity) {
         Class<?> domainType = entity.getClass();
-        if (!configuration.isManagedDomainType(domainType)) {
-            return;
-        }
+        DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = this.configuration.forManagedDomainType(domainType);
 
-        PersistentEntity<?, ?> persistentEntity = configuration.forManagedDomainType(domainType).getPersistentEntity();
+        PersistentEntity<?, ?> persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
 
         persistentEntity.doWithProperties(new PersistentPropertyFileDeletionHandler(entity));
     }
+
+    @Override
+    protected void onAfterDelete(Object entity) {
+        Class<?> domainType = entity.getClass();
+
+    }
+
+//    private void removeDomainEntityDirectory(Object entity, PersistentProperty persistentProperty) {
+//        File domainEntityDirectory = domainEntityDirectory(entity, persistentProperty);
+//
+//        logger.info("Deleting entity-related directory {}", domainEntityDirectory.getAbsolutePath());
+//
+//        removeDirectoryIfEmpty(domainEntityDirectory);
+//    }
+//
+//    private File domainEntityDirectory(Object entity, PersistentProperty persistentProperty) {
+//        if (fieldLevelBaseDirectoryDefined(persistentProperty)) {
+//            return pathResolver.referencedFileDomainEntityDirectory(entity, persistentProperty);
+//        }
+//        return pathResolver.fileStorageDomainEntityDirectory(entity);
+//    }
 
     private class PersistentPropertyCleanupHandler implements SimplePropertyHandler {
         private final Object entity;
@@ -70,7 +91,7 @@ public class DynamicRepositoryEventListener extends AbstractRepositoryEventListe
         public void doWithPersistentProperty(PersistentProperty<?> property) {
             if (PersistentPropertyType.isOfFileReferenceType(property)) {
                 try {
-                    fileResourceStorage.save(entity, property);
+                    fileResourceStorage.cleanup(entity, property);
                 } catch (IOException e) {
                 }
             }

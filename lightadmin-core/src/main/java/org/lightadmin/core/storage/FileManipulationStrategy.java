@@ -25,18 +25,17 @@ import java.io.OutputStream;
  *
  * @author Maxim Kharchenko (kharchenko.max@gmail.com)
  */
-public interface FileResourceStorage {
+public interface FileManipulationStrategy {
 
-    void delete(Object instance, PersistentProperty persistentProperty);
+    void deleteFile(Object entity, PersistentProperty persistentProperty);
 
-    void save(Object instance, PersistentProperty attrMeta, Object value) throws IOException;
+    boolean fileExists(Object entity, PersistentProperty persistentProperty) throws IOException;
 
-    void cleanup(Object instance, PersistentProperty persistentProperty) throws IOException;
+    byte[] loadFile(Object entity, PersistentProperty persistentProperty) throws IOException;
 
-    boolean fileExists(Object instance, PersistentProperty persistentProperty) throws IOException;
+    long copyFile(Object entity, PersistentProperty persistentProperty, OutputStream outputStream) throws IOException;
 
-    byte[] load(Object instance, PersistentProperty persistentProperty) throws IOException;
+    void saveFile(Object entity, PersistentProperty persistentProperty, Object value) throws IOException;
 
-    long copy(Object instance, PersistentProperty persistentProperty, OutputStream outputStream) throws IOException;
-
+    void cleanup(Object entity, PersistentProperty persistentProperty) throws IOException;
 }

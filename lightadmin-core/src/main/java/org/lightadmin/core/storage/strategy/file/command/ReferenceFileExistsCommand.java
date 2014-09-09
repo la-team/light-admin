@@ -13,30 +13,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.core.storage;
+package org.lightadmin.core.storage.strategy.file.command;
 
+import org.apache.commons.io.FileUtils;
+import org.lightadmin.core.storage.strategy.file.FilePathResolver;
 import org.springframework.data.mapping.PersistentProperty;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.File;
 
 /**
  * TODO: Document me!
  *
  * @author Maxim Kharchenko (kharchenko.max@gmail.com)
  */
-public interface FileResourceStorage {
+public class ReferenceFileExistsCommand extends ReferenceFileCommand {
 
-    void delete(Object instance, PersistentProperty persistentProperty);
+    public ReferenceFileExistsCommand(FilePathResolver pathResolver) {
+        super(pathResolver);
+    }
 
-    void save(Object instance, PersistentProperty attrMeta, Object value) throws IOException;
+    public boolean execute(Object entity, PersistentProperty persistentProperty) {
+        File propertyFileReference = pathResolver.persistentPropertyFileReference(entity, persistentProperty);
 
-    void cleanup(Object instance, PersistentProperty persistentProperty) throws IOException;
-
-    boolean fileExists(Object instance, PersistentProperty persistentProperty) throws IOException;
-
-    byte[] load(Object instance, PersistentProperty persistentProperty) throws IOException;
-
-    long copy(Object instance, PersistentProperty persistentProperty, OutputStream outputStream) throws IOException;
-
+        return propertyFileReference.exists() && propertyFileReference.isFile() && FileUtils.sizeOf(propertyFileReference) > 0;
+    }
 }

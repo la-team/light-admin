@@ -19,7 +19,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.bootstrap.RepositoriesFactoryBean;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
-import org.lightadmin.core.persistence.repository.event.DynamicRepositoryEventListener;
+import org.lightadmin.core.persistence.repository.event.FileManipulationRepositoryEventListener;
 import org.lightadmin.core.persistence.repository.invoker.DynamicRepositoryInvokerFactory;
 import org.lightadmin.core.persistence.support.DynamicDomainObjectMerger;
 import org.lightadmin.core.storage.FileResourceStorage;
@@ -106,8 +106,8 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     @Autowired
-    public DynamicRepositoryEventListener domainRepositoryEventListener(GlobalAdministrationConfiguration configuration, FileResourceStorage fileResourceStorage) {
-        return new DynamicRepositoryEventListener(configuration, fileResourceStorage);
+    public FileManipulationRepositoryEventListener domainRepositoryEventListener(GlobalAdministrationConfiguration configuration, FileResourceStorage fileResourceStorage) {
+        return new FileManipulationRepositoryEventListener(configuration, fileResourceStorage);
     }
 
     @Override

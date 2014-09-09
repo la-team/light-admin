@@ -13,30 +13,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.core.storage;
+package org.lightadmin.core.storage.strategy.file;
 
 import org.springframework.data.mapping.PersistentProperty;
 
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.File;
 
 /**
  * TODO: Document me!
  *
  * @author Maxim Kharchenko (kharchenko.max@gmail.com)
  */
-public interface FileResourceStorage {
+public interface FilePathResolver {
 
-    void delete(Object instance, PersistentProperty persistentProperty);
+    File persistentPropertyFileReference(Object entity, PersistentProperty persistentProperty);
 
-    void save(Object instance, PersistentProperty attrMeta, Object value) throws IOException;
+    File persistentPropertyFileDirectory(Object entity, PersistentProperty persistentProperty);
 
-    void cleanup(Object instance, PersistentProperty persistentProperty) throws IOException;
-
-    boolean fileExists(Object instance, PersistentProperty persistentProperty) throws IOException;
-
-    byte[] load(Object instance, PersistentProperty persistentProperty) throws IOException;
-
-    long copy(Object instance, PersistentProperty persistentProperty, OutputStream outputStream) throws IOException;
-
+    String persistentPropertyFileRelativePath(Object entity, PersistentProperty persistentProperty);
 }
