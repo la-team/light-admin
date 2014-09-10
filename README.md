@@ -19,6 +19,11 @@ by bringing pluggable fully operational data management back-end for JPA based a
 * <b>REST API</b>: Enriching your application with REST API based on [Spring Data REST](http://www.springsource.org/spring-data/rest)
 * <b>Easy integration</b>: Servlet 2.5/3.0 web applications supported
 
+## Integration examples ##
+
+* [LightAdmin and Spring Boot](https://github.com/la-team/lightadmin-springboot)
+* [LightAdmin and JHipster](https://github.com/la-team/lightadmin-jhipster)
+
 ## Documentation & Support ##
 
 * Web site: [lightadmin.org](http://lightadmin.org)
