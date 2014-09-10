@@ -17,6 +17,8 @@ package org.lightadmin.core.storage.strategy.file.command;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.lightadmin.core.storage.strategy.file.FilePathResolver;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mapping.PersistentProperty;
 
 import java.io.File;
@@ -34,14 +36,22 @@ import static org.springframework.security.crypto.codec.Base64.isBase64;
  */
 public class ReferenceFileSaveCommand extends ReferenceFileCommand {
 
+    private static final Logger logger = LoggerFactory.getLogger(ReferenceFileSaveCommand.class);
+
     public ReferenceFileSaveCommand(FilePathResolver pathResolver) {
         super(pathResolver);
     }
 
     public void execute(Object entity, PersistentProperty persistentProperty, Object incomingValueObject) throws IOException {
+        logger.info("Starting save command execution for {}", persistentProperty.getName());
+
         byte[] incomingVal = incomingValue(incomingValueObject);
 
+        logger.info("Received data for persisting {}: {}", persistentProperty.getName(), incomingVal);
+
         String relativePath = pathResolver.persistentPropertyFileRelativePath(entity, persistentProperty);
+
+        logger.info("Property {} relative file path {}", persistentProperty.getName(), relativePath);
 
         File file = pathResolver.persistentPropertyFileReference(entity, persistentProperty);
 

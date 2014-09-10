@@ -19,11 +19,16 @@ import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.persistence.metamodel.PersistentPropertyType;
 import org.lightadmin.core.storage.FileResourceStorage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 
 public class FileManipulationRepositoryEventListener extends ManagedRepositoryEventListener {
+
+    private static final Logger logger = LoggerFactory.getLogger(FileManipulationRepositoryEventListener.class);
 
     private final FileResourceStorage fileResourceStorage;
 
@@ -40,6 +45,25 @@ public class FileManipulationRepositoryEventListener extends ManagedRepositoryEv
         PersistentEntity<?, ?> persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
 
         persistentEntity.doWithProperties(new PersistentPropertyFileDeletionHandler(entity));
+    }
+
+    @Override
+    protected void onBeforeSave(final Object entity) {
+        final Class<?> domainType = entity.getClass();
+        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = this.configuration.forManagedDomainType(domainType);
+
+        PersistentEntity<?, ?> persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
+
+        logger.info("One step before saving {}", domainTypeAdministrationConfiguration.getDomainTypeName());
+
+        persistentEntity.doWithProperties(new SimplePropertyHandler() {
+            @Override
+            public void doWithPersistentProperty(PersistentProperty<?> property) {
+                Object propertyValue = new DirectFieldAccessFallbackBeanWrapper(entity).getPropertyValue(property.getName());
+
+                logger.info("Property {} has a value of {}", property.getName(), propertyValue);
+            }
+        });
     }
 
     private class PersistentPropertyFileDeletionHandler implements SimplePropertyHandler {
