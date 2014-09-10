@@ -80,7 +80,7 @@ public class ReferenceFilePathResolver implements FilePathResolver {
     }
 
     private String persistentEntityRootDirectoryRelativePath(Object entity) {
-        return Joiner.on(separator).join(ROOT_DIRECTORY_NAME, this.domainTypeName, idPropertyValue(entity));
+        return Joiner.on(separator).join("", ROOT_DIRECTORY_NAME, this.domainTypeName, idPropertyValue(entity));
     }
 
     private FileReference fileReferenceAnnotation(PersistentProperty persistentProperty) {

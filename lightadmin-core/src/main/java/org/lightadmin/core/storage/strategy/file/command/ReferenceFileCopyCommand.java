@@ -23,7 +23,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 
-import static org.apache.commons.io.FileUtils.sizeOf;
 import static org.apache.commons.io.IOUtils.closeQuietly;
 import static org.springframework.util.FileCopyUtils.copy;
 
@@ -59,8 +58,6 @@ public class ReferenceFileCopyCommand extends ReferenceFileCommand {
     }
 
     private long copyToOutputStream(File file, OutputStream outputStream) throws IOException {
-        copy(new FileInputStream(file), outputStream);
-
-        return sizeOf(file);
+        return copy(new FileInputStream(file), outputStream);
     }
 }

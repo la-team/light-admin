@@ -15,6 +15,7 @@
  */
 package org.lightadmin.core.storage.strategy.file.command;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.lightadmin.core.storage.strategy.file.FilePathResolver;
 import org.springframework.data.mapping.PersistentProperty;
 
@@ -25,7 +26,6 @@ import static org.apache.commons.io.FileUtils.deleteQuietly;
 import static org.apache.commons.io.FileUtils.writeByteArrayToFile;
 import static org.springframework.security.crypto.codec.Base64.decode;
 import static org.springframework.security.crypto.codec.Base64.isBase64;
-import static org.springframework.util.StringUtils.isEmpty;
 
 /**
  * TODO: Document me!
@@ -45,7 +45,7 @@ public class ReferenceFileSaveCommand extends ReferenceFileCommand {
 
         File file = pathResolver.persistentPropertyFileReference(entity, persistentProperty);
 
-        if (isEmpty(incomingVal)) {
+        if (ArrayUtils.isEmpty(incomingVal)) {
             resetPropertyValue(entity, persistentProperty);
             deleteQuietly(file);
             return;
