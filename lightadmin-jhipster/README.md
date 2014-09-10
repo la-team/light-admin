@@ -1,2 +1,0 @@
-README for lightadmin-jhipster
-==========================
