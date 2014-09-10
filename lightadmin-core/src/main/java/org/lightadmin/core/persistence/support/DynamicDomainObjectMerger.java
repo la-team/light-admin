@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static java.lang.String.format;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileReferenceType;
 import static org.springframework.data.rest.core.support.DomainObjectMerger.NullHandlingPolicy.APPLY_NULLS;
 import static org.springframework.util.ObjectUtils.nullSafeEquals;
@@ -86,10 +87,11 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
                     try {
                         logger.info("Merging property {}", persistentProperty.getName());
                         fileResourceStorage.save(target, persistentProperty, sourceValue);
-                        logger.info("Merging property {} value {}", persistentProperty.getName(), targetWrapper.getProperty(persistentProperty));
-                        return;
+                        logger.info("Merged property {} has a value of {}", persistentProperty.getName(), targetWrapper.getProperty(persistentProperty));
                     } catch (IOException e) {
+                        logger.error(format("Something bad happened during merging property %s", persistentProperty.getName()), e);
                     }
+                    return;
                 }
 
                 if (nullPolicy == APPLY_NULLS || sourceValue != null) {
