@@ -18,6 +18,8 @@ package org.lightadmin.core.persistence.support;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
 import org.lightadmin.core.storage.FileResourceStorage;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.mapping.*;
 import org.springframework.data.mapping.model.BeanWrapper;
@@ -34,6 +36,8 @@ import static org.springframework.data.rest.core.support.DomainObjectMerger.Null
 import static org.springframework.util.ObjectUtils.nullSafeEquals;
 
 public class DynamicDomainObjectMerger extends DomainObjectMerger {
+
+    private static final Logger logger = LoggerFactory.getLogger(DynamicDomainObjectMerger.class);
 
     private final Repositories repositories;
     private final ConversionService conversionService;
@@ -80,7 +84,9 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
 
                 if (isOfFileReferenceType(persistentProperty)) {
                     try {
+                        logger.info("Merging property {}", persistentProperty.getName());
                         fileResourceStorage.save(target, persistentProperty, sourceValue);
+                        logger.info("Merging property {} value {}", persistentProperty.getName(), targetWrapper.getProperty(persistentProperty));
                         return;
                     } catch (IOException e) {
                     }

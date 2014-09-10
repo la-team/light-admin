@@ -40,6 +40,10 @@ public abstract class ReferenceFileCommand {
         beanWrapper(entity).setPropertyValue(persistentProperty.getName(), value);
     }
 
+    protected Object getPropertyValue(Object entity, PersistentProperty persistentProperty) {
+        return beanWrapper(entity).getPropertyValue(persistentProperty.getName());
+    }
+
     private DirectFieldAccessFallbackBeanWrapper beanWrapper(Object instance) {
         return new DirectFieldAccessFallbackBeanWrapper(instance);
     }

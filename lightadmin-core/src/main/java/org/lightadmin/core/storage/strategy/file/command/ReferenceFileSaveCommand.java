@@ -56,13 +56,29 @@ public class ReferenceFileSaveCommand extends ReferenceFileCommand {
         File file = pathResolver.persistentPropertyFileReference(entity, persistentProperty);
 
         if (ArrayUtils.isEmpty(incomingVal)) {
+            logger.info("Incoming value is empty");
+
             resetPropertyValue(entity, persistentProperty);
-            deleteQuietly(file);
+
+            logger.info("Resetted property value to {}", getPropertyValue(entity, persistentProperty));
+
+            boolean fileDeleted = deleteQuietly(file);
+            if (fileDeleted) {
+                logger.info("File {} has been deleted", file);
+            }
+
             return;
         }
 
+        logger.info("Writing binary data to file {}: {}", file, incomingVal);
+
         writeByteArrayToFile(file, incomingVal);
+
+        logger.info("Settign property {} new value {}", persistentProperty.getName(), relativePath);
+
         setPropertyValue(entity, persistentProperty, relativePath);
+
+        logger.info("Current property {} value is {}", persistentProperty.getName(), getPropertyValue(entity, persistentProperty));
     }
 
     private byte[] incomingValue(Object incomingValueObject) {
