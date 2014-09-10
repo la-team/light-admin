@@ -27,6 +27,7 @@ import java.io.File;
 import static java.io.File.separator;
 import static java.lang.String.valueOf;
 import static org.apache.commons.io.FileUtils.getFile;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
 /**
  * TODO: Document me!
@@ -72,6 +73,12 @@ public class ReferenceFilePathResolver implements FilePathResolver {
 
     @Override
     public String persistentPropertyFileRelativePath(Object entity, PersistentProperty persistentProperty) {
+        String propertyValue = propertyValueAsString(entity, persistentProperty);
+
+        if (isNotBlank(propertyValue)) {
+            return propertyValue;
+        }
+
         return Joiner.on(separator).join(persistentPropertyFileDirectoryRelativePath(entity, persistentProperty), FILE_NAME);
     }
 
