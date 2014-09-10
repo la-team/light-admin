@@ -94,4 +94,24 @@
             </plugin>
         </plugins>
     </build>
+
+	<repositories>
+		<repository>
+			<id>lightadmin-nexus-releases</id>
+			<url>http://lightadmin.org/nexus/content/repositories/releases</url>
+			<releases>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</releases>
+		</repository>
+		<repository>
+			<id>lightadmin-nexus-snapshots</id>
+			<url>http://lightadmin.org/nexus/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>  
+	</repositories>
+
 </project>
