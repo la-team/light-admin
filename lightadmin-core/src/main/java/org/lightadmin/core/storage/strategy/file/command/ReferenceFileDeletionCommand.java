@@ -78,12 +78,14 @@ public class ReferenceFileDeletionCommand extends ReferenceFileCommand {
     }
 
     private boolean removeDirectoryIfEmpty(File domainEntityDirectory) {
-        long sizeOfDirectory = sizeOfDirectory(domainEntityDirectory);
-
-        if (sizeOfDirectory != 0) {
-            return deleteQuietly(domainEntityDirectory);
+        if (!domainEntityDirectory.exists()) {
+            return false;
         }
 
-        return false;
+        if (sizeOfDirectory(domainEntityDirectory) == 0) {
+            return false;
+        }
+
+        return deleteQuietly(domainEntityDirectory);
     }
 }
