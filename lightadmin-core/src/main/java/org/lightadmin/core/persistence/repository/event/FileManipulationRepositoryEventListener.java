@@ -75,12 +75,13 @@ public class FileManipulationRepositoryEventListener extends ManagedRepositoryEv
         DynamicJpaRepository repository = repositoryFor(entity.getClass());
 
         FileReferenceProperties fileReferenceProperties = fileReferencePropertiesContext.get();
+        try {
+            persistentEntity.doWithProperties(new FileReferencePropertiesSaveHandler(entity, fileReferenceProperties));
 
-        persistentEntity.doWithProperties(new FileReferencePropertiesSaveHandler(entity, fileReferenceProperties));
-
-        fileReferencePropertiesContext.remove();
-
-        repository.save(entity);
+            repository.save(entity);
+        } finally {
+            fileReferencePropertiesContext.remove();
+        }
     }
 
     @Override
