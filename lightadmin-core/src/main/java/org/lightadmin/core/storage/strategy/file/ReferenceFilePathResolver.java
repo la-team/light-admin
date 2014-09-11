@@ -75,7 +75,7 @@ public class ReferenceFilePathResolver implements FilePathResolver {
     public String persistentPropertyFileRelativePath(Object entity, PersistentProperty persistentProperty) {
         String propertyValue = propertyValueAsString(entity, persistentProperty);
 
-        if (isNotBlank(propertyValue)) {
+        if (isNotBlank(propertyValue) && getFile(propertyValue).exists()) {
             return propertyValue;
         }
 

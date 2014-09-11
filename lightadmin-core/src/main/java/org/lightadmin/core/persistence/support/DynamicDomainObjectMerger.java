@@ -26,13 +26,10 @@ import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
 import static com.google.common.collect.Lists.newArrayList;
-import static java.lang.String.format;
-import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isOfFileReferenceType;
 import static org.springframework.data.rest.core.support.DomainObjectMerger.NullHandlingPolicy.APPLY_NULLS;
 import static org.springframework.util.ObjectUtils.nullSafeEquals;
 
@@ -42,14 +39,12 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
 
     private final Repositories repositories;
     private final ConversionService conversionService;
-    private final FileResourceStorage fileResourceStorage;
 
-    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService, FileResourceStorage fileResourceStorage) {
+    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService) {
         super(repositories, conversionService);
 
         this.repositories = repositories;
         this.conversionService = conversionService;
-        this.fileResourceStorage = fileResourceStorage;
     }
 
     /**
@@ -80,17 +75,6 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
                 }
 
                 if (nullSafeEquals(sourceValue, targetValue)) {
-                    return;
-                }
-
-                if (isOfFileReferenceType(persistentProperty)) {
-                    try {
-                        logger.info("Merging property {}", persistentProperty.getName());
-                        fileResourceStorage.save(target, persistentProperty, sourceValue);
-                        logger.info("Merged property {} has a value of {}", persistentProperty.getName(), targetWrapper.getProperty(persistentProperty));
-                    } catch (IOException e) {
-                        logger.error(format("Something bad happened during merging property %s", persistentProperty.getName()), e);
-                    }
                     return;
                 }
 

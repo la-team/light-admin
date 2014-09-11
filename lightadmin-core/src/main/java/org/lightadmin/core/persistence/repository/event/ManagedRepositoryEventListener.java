@@ -15,8 +15,11 @@
  */
 package org.lightadmin.core.persistence.repository.event;
 
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.persistence.repository.DynamicJpaRepository;
 import org.springframework.context.ApplicationListener;
+import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.rest.core.event.*;
 
 /**
@@ -101,5 +104,17 @@ public abstract class ManagedRepositoryEventListener implements ApplicationListe
      * @param entity The entity that was just deleted.
      */
     protected void onAfterDelete(Object entity) {
+    }
+
+    protected DomainTypeAdministrationConfiguration configurationFor(Class<?> clazz) {
+        return this.configuration.forManagedDomainType(clazz);
+    }
+
+    protected PersistentEntity persistentEntityFor(Class<?> clazz) {
+        return configurationFor(clazz).getPersistentEntity();
+    }
+
+    protected DynamicJpaRepository repositoryFor(Class<?> clazz) {
+        return configurationFor(clazz).getRepository();
     }
 }

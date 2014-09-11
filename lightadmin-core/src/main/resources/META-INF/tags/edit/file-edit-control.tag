@@ -27,8 +27,10 @@
 
 <script type="text/javascript">
     $(function () {
+        var resourceName = '${domainTypeAdministrationConfiguration.pluralDomainTypeName}';
         var attribute_name = '${attributeMetadata.name}';
-        var file_upload_url = ApplicationConfig.getDomainEntityFilePropertyRestUrl('${domainTypeAdministrationConfiguration.pluralDomainTypeName}', '${entityId}', attribute_name);
+        var entityId = '${entityId}';
+        var file_upload_url = ApplicationConfig.getDomainEntityFilePropertyRestUrl(resourceName, $.isNumeric( entityId ) ? entityId : 0, attribute_name);
 
         var container = '${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}';
         var browse_button = '${attributeMetadata.name}-pickfiles${dialogMode ? '-dialog' : ''}';
