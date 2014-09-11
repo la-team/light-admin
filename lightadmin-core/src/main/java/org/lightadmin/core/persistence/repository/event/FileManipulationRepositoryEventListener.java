@@ -36,7 +36,7 @@ public class FileManipulationRepositoryEventListener extends ManagedRepositoryEv
 
     private static final Logger logger = LoggerFactory.getLogger(FileManipulationRepositoryEventListener.class);
 
-    private final ThreadLocal<FileReferenceProperties> newFileItemsContext = newFileItemsContext();
+    private final ThreadLocal<FileReferenceProperties> fileReferencePropertiesContext = newFileItemsContext();
 
     private final FileResourceStorage fileResourceStorage;
 
@@ -66,7 +66,7 @@ public class FileManipulationRepositoryEventListener extends ManagedRepositoryEv
 
         persistentEntity.doWithProperties(new FileReferencePropertiesValueEraser(entity, fileReferenceProperties));
 
-        newFileItemsContext.set(fileReferenceProperties);
+        fileReferencePropertiesContext.set(fileReferenceProperties);
     }
 
     @Override
@@ -74,11 +74,11 @@ public class FileManipulationRepositoryEventListener extends ManagedRepositoryEv
         PersistentEntity persistentEntity = persistentEntityFor(entity.getClass());
         DynamicJpaRepository repository = repositoryFor(entity.getClass());
 
-        FileReferenceProperties fileReferenceProperties = newFileItemsContext.get();
+        FileReferenceProperties fileReferenceProperties = fileReferencePropertiesContext.get();
 
         persistentEntity.doWithProperties(new FileReferencePropertiesSaveHandler(entity, fileReferenceProperties));
 
-        newFileItemsContext.remove();
+        fileReferencePropertiesContext.remove();
 
         repository.save(entity);
     }
