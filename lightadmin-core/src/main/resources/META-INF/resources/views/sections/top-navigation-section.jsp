@@ -45,6 +45,7 @@
             </div>
 
             <div class="userNav">
+                <img id="support-ukraine" style="height: 20px;position: relative;top: 8px;left: 25px; cursor: pointer;" title="Support Ukraine" src="<light:url value='/images/ukraine-peace.png'/>">
                 <iframe allowtransparency="true" frameborder="0" scrolling="no"
                         src="https://platform.twitter.com/widgets/tweet_button.html?lang=en&url=http%3A%2F%2Flightadmin.org&related=lightadm_team&text=%23LightAdmin%20-%20Pluggable%20%23CRUD%20administration%20UI%20library%20for%20%23SpringBoot%20on%20top%20of%20%23SpringData,%20%23JPA%20and%20%23REST"
                         style="width:130px; height:20px; position: relative; right: -35px; top: 8px;"></iframe>

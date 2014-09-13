@@ -75,6 +75,10 @@
     $(function () {
         $.ajaxSetup({ cache: false });
 
+        $("#support-ukraine").click(function() {
+            document.location.href = "http://wings-phoenix.org.ua/en/donate-instructions";
+        });
+
         $("a.not-implemented").click(function () {
             jAlert('Sorry mate, but this feature is not yet implemented.', 'Coming soon...');
         });

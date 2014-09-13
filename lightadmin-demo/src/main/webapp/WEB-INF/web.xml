@@ -8,6 +8,16 @@
     <description>LightAdmin - Administration framework for Java web applications. [DEMO]</description>
 
     <context-param>
+        <param-name>light:configurer:base-url</param-name>
+        <param-value>/logger</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>light:configurer:back-to-site-url</param-name>
+        <param-value>http://lightadmin.org</param-value>
+    </context-param>
+
+    <context-param>
         <param-name>light:administration:base-url</param-name>
         <param-value>/admin</param-value>
     </context-param>

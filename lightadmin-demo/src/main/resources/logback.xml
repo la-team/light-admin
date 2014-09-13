@@ -1,22 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
 
-	<appender name="console" class="ch.qos.logback.core.ConsoleAppender">
-		<encoder>
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
             <charset>utf-8</charset>
-			<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-		</encoder>
-	</appender>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
 
-	<logger name="org.lightadmin.core" level="info" />
-	<logger name="org.lightadmin.demo" level="info" />
+    <appender name="MessageSendingAppender" class="org.lightadmin.logging.configurer.logback.MessageSendingAppender"/>
 
-	<logger name="org.springframework" level="warn" />
+    <logger name="org.lightadmin.core" level="info"/>
+    <logger name="org.lightadmin.demo" level="info"/>
 
-	<logger name="org.hibernate" level="warn" />
+    <logger name="org.springframework" level="warn"/>
 
-	<root level="warn">
-		<appender-ref ref="console" />
-	</root>
+    <logger name="org.hibernate" level="warn"/>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <root level="WARN">
+        <appender-ref ref="MessageSendingAppender"/>
+    </root>
 
 </configuration>

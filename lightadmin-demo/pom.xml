@@ -22,7 +22,10 @@
         <spring.version>4.1.0.RELEASE</spring.version>
         <hibernate.version>4.3.6.Final</hibernate.version>
         <logback.version>1.1.2</logback.version>
+
         <lightadmin.version>1.0.1.BUILD-SNAPSHOT</lightadmin.version>
+        <light-logging-configurer.version>1.0.0.BUILD-SNAPSHOT</light-logging-configurer.version>
+
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <hibernate-validator.version>5.0.3.Final</hibernate-validator.version>
         <validation-api.version>1.1.0.Final</validation-api.version>
@@ -38,6 +41,11 @@
             <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin</artifactId>
             <version>${lightadmin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.lightadmin</groupId>
+            <artifactId>light-logging-configurer</artifactId>
+            <version>${light-logging-configurer.version}</version>
         </dependency>
 
         <dependency>
