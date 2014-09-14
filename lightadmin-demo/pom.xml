@@ -24,7 +24,7 @@
         <logback.version>1.1.2</logback.version>
 
         <lightadmin.version>1.0.1.RELEASE</lightadmin.version>
-        <light-logging-configurer.version>1.0.0.BUILD-SNAPSHOT</light-logging-configurer.version>
+        <light-logging-configurer.version>1.0.0.RC1</light-logging-configurer.version>
 
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
         <hibernate-validator.version>5.0.3.Final</hibernate-validator.version>
