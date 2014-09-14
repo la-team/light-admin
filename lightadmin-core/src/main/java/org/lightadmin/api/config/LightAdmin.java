@@ -71,4 +71,9 @@ public class LightAdmin {
         servletContext.setInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING, Boolean.toString(fileStreaming));
         return this;
     }
+
+    public LightAdmin demoMode() {
+        servletContext.setInitParameter(LIGHT_ADMINISTRATION_DEMO_MODE, Boolean.toString(true));
+        return this;
+    }
 }

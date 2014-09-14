@@ -38,6 +38,7 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     private final File fileStorageDirectory;
     private final boolean fileStreaming;
     private final String basePackage;
+    private final boolean demoMode;
 
     public StandardLightAdminConfiguration(ServletContext servletContext) {
         this.basePackage = servletContext.getInitParameter(LIGHT_ADMINISTRATION_BASE_PACKAGE);
@@ -49,6 +50,8 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
 
         this.fileStorageDirectory = fileStorageDirectory(servletContext);
         this.fileStreaming = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_FILE_STREAMING));
+
+        this.demoMode = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_DEMO_MODE));
 
         this.securityEnabled = BooleanUtils.toBoolean(servletContext.getInitParameter(LIGHT_ADMINISTRATION_SECURITY));
         if (securityEnabled) {
@@ -101,6 +104,10 @@ public class StandardLightAdminConfiguration implements LightAdminConfiguration 
     @Override
     public boolean isSecurityEnabled() {
         return securityEnabled;
+    }
+
+    public boolean isDemoMode() {
+        return demoMode;
     }
 
     @Override
