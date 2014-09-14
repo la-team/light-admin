@@ -7,7 +7,7 @@
     <groupId>org.lightadmin</groupId>
     <artifactId>lightadmin</artifactId>
     <packaging>jar</packaging>
-    <version>1.0.1.BUILD-SNAPSHOT</version>
+    <version>1.0.1.RELEASE</version>
 
     <name>LightAdmin</name>
     <description>Pluggable data management solution for Java web applications developed in a "Rapid" manner
