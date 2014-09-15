@@ -23,6 +23,7 @@ by bringing pluggable fully operational data management back-end for JPA based a
 
 * [LightAdmin and Spring Boot](https://github.com/la-team/lightadmin-springboot)
 * [LightAdmin and JHipster](https://github.com/la-team/lightadmin-jhipster)
+* [LightAdmin running on Heroku](https://github.com/la-team/lightadmin-heroku)
 
 ## Documentation & Support ##
 
