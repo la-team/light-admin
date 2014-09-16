@@ -72,6 +72,8 @@
 
         formViewVisualDecoration($(domain_form));
 
+        new FormViewController(ApplicationConfig.RESOURCE_NAME).loadDomainEntity(null, $(domain_form));
+
         <c:if test="${not dialogMode}">
         $(":button[name='cancel-changes']", $(domain_form)).click(function () {
             history.back();

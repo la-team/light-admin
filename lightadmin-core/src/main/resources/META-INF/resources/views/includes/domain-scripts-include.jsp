@@ -32,6 +32,9 @@
             getDomainEntityRestUrl: function(resourceName, entityId) {
                 return this.getDomainEntityCollectionRestUrl(resourceName) + '/' + entityId;
             },
+            getNewDomainEntityRestUrl: function(resourceName) {
+                return this.getDomainEntityCollectionRestUrl(resourceName) + '/new';
+            },
             getDomainEntityPropertyRestUrl: function(resourceName, entityId, propertyName) {
                 return this.getDomainEntityRestUrl(resourceName, entityId) + '/' + propertyName;
             },

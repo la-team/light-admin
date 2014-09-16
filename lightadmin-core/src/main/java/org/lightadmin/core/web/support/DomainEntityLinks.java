@@ -80,6 +80,10 @@ public class DomainEntityLinks extends AbstractEntityLinks {
 
     @Override
     public Link linkToSingleResource(Class<?> type, Object id) {
+        if (id == null) {
+            return linkFor(type).slash("new").withSelfRel();
+        }
+
         Assert.isInstanceOf(Serializable.class, id, "Id must be assignable to Serializable!");
 
         String mappedId = idConverters.getPluginFor(type, BackendIdConverter.DefaultIdConverter.INSTANCE).toRequestId((Serializable) id, type);

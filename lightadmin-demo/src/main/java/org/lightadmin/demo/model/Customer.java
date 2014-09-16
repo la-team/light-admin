@@ -13,8 +13,8 @@ import java.util.Set;
 public class Customer extends AbstractEntity {
 
 	@Column(length = 64)
-	@NotEmpty
-	private String firstname;
+    @NotEmpty
+	private String firstname = "John Doe";
 
 	@Column(length = 64)
 	@NotEmpty

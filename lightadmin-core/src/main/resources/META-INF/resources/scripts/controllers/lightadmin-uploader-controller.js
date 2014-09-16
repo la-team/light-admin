@@ -68,7 +68,11 @@ function FileUploaderController(resourceName, form, attr) {
     }
 
     function loadFilePropertyValue(resourceName, entityId, propertyName) {
-        var filePropertyValue = {};
+        var filePropertyValue = { file_exists: false };
+        if (entityId == null || entityId == 0) {
+            return filePropertyValue;
+        }
+
         $.ajax({
             url: ApplicationConfig.getDomainEntityFilePropertyValueRestUrl(resourceName, entityId, propertyName),
             dataType: 'json',

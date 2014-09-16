@@ -22,6 +22,7 @@
     </contextListener>
 
     <root level="WARN">
+        <appender-ref ref="console"/>
         <appender-ref ref="MessageSendingAppender"/>
     </root>
 

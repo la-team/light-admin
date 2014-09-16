@@ -221,11 +221,18 @@ function LoadDomainEntityAction(resourceName) {
         }
     }
 
+    function getDomainEntityRestUrl(resourceName, entityId) {
+        if (entityId == null || entityId == 0) {
+            return ApplicationConfig.getNewDomainEntityRestUrl(resourceName);
+        }
+        return ApplicationConfig.getDomainEntityRestUrl(resourceName, entityId);
+    }
+
     return {
         perform: function (entityId, form) {
             $.ajax({
                 type: 'GET',
-                url: ApplicationConfig.getDomainEntityRestUrl(resourceName, entityId),
+                url: getDomainEntityRestUrl(resourceName, entityId),
                 dataType: 'json',
                 success: function (data) {
                     prepareForm(new DomainEntity(data), form);

@@ -71,6 +71,9 @@ public class DynamicRepositoryEntityLinks implements EntityLinks {
 
     @Override
     public Link linkToSingleResource(Class<?> type, Object id) {
+        if (id == null) {
+            return linkFor(type).slash("new").withSelfRel();
+        }
         return delegate.linkToSingleResource(type, id);
     }
 
