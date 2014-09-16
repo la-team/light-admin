@@ -85,7 +85,7 @@ public class FileManipulationRepositoryEventListener extends ManagedRepositoryEv
     }
 
     @Override
-    protected void onBeforeDelete(final Object entity) {
+    protected void onAfterDelete(final Object entity) {
         PersistentEntity persistentEntity = persistentEntityFor(entity.getClass());
 
         persistentEntity.doWithProperties(new PersistentPropertyFileDeletionHandler(entity));
