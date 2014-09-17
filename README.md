@@ -70,7 +70,17 @@ Declare maven dependency for using with Spring 4.0.X directly from Maven Central
 </dependency> 
 ```
 
-If you want to use LightAdmin with Spring 3.2.X, you will need to declare our Nexus repositories in your POM
+or
+
+```xml
+<dependency>
+  <groupId>org.lightadmin</groupId>
+  <artifactId>lightadmin</artifactId>
+  <version>1.1.0.BUILD-SNAPSHOT</version>
+</dependency> 
+```
+
+For snapshots and LightAdmin compatible with Spring 3.2.X, please declare LA Nexus repositories:
 
 ```xml
 <repositories>
