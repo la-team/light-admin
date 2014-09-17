@@ -89,7 +89,7 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
 
     @Bean
     public DomainObjectMerger domainObjectMerger() throws Exception {
-        return new DynamicDomainObjectMerger(repositories(), defaultConversionService());
+        return new DynamicDomainObjectMerger(repositories(), defaultConversionService(), globalAdministrationConfiguration());
     }
 
     @Bean

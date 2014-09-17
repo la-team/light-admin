@@ -19,7 +19,8 @@ import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.api.config.utils.FieldValueRenderer;
 import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.util.Transformer;
-import org.springframework.data.mapping.model.BeanWrapper;
+import org.springframework.beans.BeanWrapper;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 
 import static java.lang.String.format;
 
@@ -31,15 +32,14 @@ public abstract class ExceptionAwareTransformer implements Transformer<Object, S
     public static Transformer<Object, String> exceptionAwareNameExtractor(final EntityNameExtractor<Object> entityNameExtractor, final DomainTypeBasicConfiguration domainTypeBasicConfiguration) {
         return new ExceptionAwareTransformer() {
             @Override
-            public String apply(final Object input) {
+            public String apply(final Object instance) {
                 try {
-                    return entityNameExtractor.apply(input);
+                    return entityNameExtractor.apply(instance);
                 } catch (Exception ex) {
+                    BeanWrapper beanWrapper = new DirectFieldAccessFallbackBeanWrapper(instance);
+
                     String domainTypeName = domainTypeBasicConfiguration.getDomainTypeName();
-
-                    BeanWrapper beanWrapper = BeanWrapper.create(input, null);
-
-                    Object id = beanWrapper.getProperty(domainTypeBasicConfiguration.getPersistentEntity().getIdProperty());
+                    Object id = beanWrapper.getPropertyValue(domainTypeBasicConfiguration.getPersistentEntity().getIdProperty().getName());
 
                     return format("%s #%s", domainTypeName, String.valueOf(id));
                 }

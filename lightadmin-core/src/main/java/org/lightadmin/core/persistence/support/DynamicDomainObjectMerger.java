@@ -17,19 +17,23 @@ package org.lightadmin.core.persistence.support;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Iterables;
-import org.lightadmin.core.storage.FileResourceStorage;
+import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
+import org.lightadmin.core.config.domain.field.PersistentFieldMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.mapping.*;
-import org.springframework.data.mapping.model.BeanWrapper;
 import org.springframework.data.repository.support.Repositories;
 import org.springframework.data.rest.core.support.DomainObjectMerger;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 
 import java.util.Collection;
 import java.util.Iterator;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static org.lightadmin.core.config.domain.field.FieldMetadataUtils.getPersistentField;
 import static org.springframework.data.rest.core.support.DomainObjectMerger.NullHandlingPolicy.APPLY_NULLS;
 import static org.springframework.util.ObjectUtils.nullSafeEquals;
 
@@ -37,14 +41,12 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
 
     private static final Logger logger = LoggerFactory.getLogger(DynamicDomainObjectMerger.class);
 
-    private final Repositories repositories;
-    private final ConversionService conversionService;
+    private final GlobalAdministrationConfiguration configuration;
 
-    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService) {
+    public DynamicDomainObjectMerger(Repositories repositories, ConversionService conversionService, GlobalAdministrationConfiguration configuration) {
         super(repositories, conversionService);
 
-        this.repositories = repositories;
-        this.conversionService = conversionService;
+        this.configuration = configuration;
     }
 
     /**
@@ -60,15 +62,17 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
             return;
         }
 
-        final BeanWrapper<Object> fromWrapper = BeanWrapper.create(from, conversionService);
-        final BeanWrapper<Object> targetWrapper = BeanWrapper.create(target, conversionService);
-        final PersistentEntity<?, ?> entity = repositories.getPersistentEntity(target.getClass());
+        final BeanWrapper fromWrapper = beanWrapper(from);
+        final BeanWrapper targetWrapper = beanWrapper(target);
+
+        final DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration = configuration.forManagedDomainType(target.getClass());
+        final PersistentEntity<?, ?> entity = domainTypeAdministrationConfiguration.getPersistentEntity();
 
         entity.doWithProperties(new SimplePropertyHandler() {
             @Override
             public void doWithPersistentProperty(PersistentProperty<?> persistentProperty) {
-                Object sourceValue = fromWrapper.getProperty(persistentProperty);
-                Object targetValue = targetWrapper.getProperty(persistentProperty);
+                Object sourceValue = fromWrapper.getPropertyValue(persistentProperty.getName());
+                Object targetValue = targetWrapper.getPropertyValue(persistentProperty.getName());
 
                 if (entity.isIdProperty(persistentProperty)) {
                     return;
@@ -78,8 +82,12 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
                     return;
                 }
 
+                if (propertyIsHiddenInFormView(persistentProperty, domainTypeAdministrationConfiguration)) {
+                    return;
+                }
+
                 if (nullPolicy == APPLY_NULLS || sourceValue != null) {
-                    targetWrapper.setProperty(persistentProperty, sourceValue);
+                    targetWrapper.setPropertyValue(persistentProperty.getName(), sourceValue);
                 }
             }
         });
@@ -90,8 +98,16 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
             public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
                 PersistentProperty<?> persistentProperty = association.getInverse();
 
-                Object fromValue = fromWrapper.getProperty(persistentProperty);
-                Object targetValue = targetWrapper.getProperty(persistentProperty);
+                Object fromValue = fromWrapper.getPropertyValue(persistentProperty.getName());
+                Object targetValue = targetWrapper.getPropertyValue(persistentProperty.getName());
+
+                if (propertyIsHiddenInFormView(persistentProperty, domainTypeAdministrationConfiguration)) {
+                    return;
+                }
+
+                if ((fromValue == null && nullPolicy == APPLY_NULLS)) {
+                    targetWrapper.setPropertyValue(persistentProperty.getName(), fromValue);
+                }
 
                 if (persistentProperty.isCollectionLike()) {
                     Collection<Object> sourceCollection = (Collection) fromValue;
@@ -107,11 +123,17 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
                     return;
                 }
 
-                if ((fromValue == null && nullPolicy == APPLY_NULLS) || !nullSafeEquals(fromValue, targetWrapper.getProperty(persistentProperty))) {
-                    targetWrapper.setProperty(persistentProperty, fromValue);
+                if (!nullSafeEquals(fromValue, targetWrapper.getPropertyValue(persistentProperty.getName()))) {
+                    targetWrapper.setPropertyValue(persistentProperty.getName(), fromValue);
                 }
             }
         });
+    }
+
+    private boolean propertyIsHiddenInFormView(PersistentProperty persistentProperty, DomainTypeAdministrationConfiguration configuration) {
+        PersistentFieldMetadata persistentField = getPersistentField(configuration.getFormViewFragment().getFields(), persistentProperty.getName());
+
+        return persistentField == null;
     }
 
     private void addReferencedItems(Collection<Object> targetCollection, Collection<Object> candidatesForAddition) {
@@ -151,7 +173,7 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
     }
 
     private boolean mathesAny(Collection<Object> collection, final Object item) {
-        final PersistentEntity<?, ?> persistentEntity = repositories.getPersistentEntity(item.getClass());
+        final PersistentEntity<?, ?> persistentEntity = configuration.forManagedDomainType(item.getClass()).getPersistentEntity();
         final PersistentProperty<?> idProperty = persistentEntity.getIdProperty();
 
         return Iterables.any(collection, new Predicate<Object>() {
@@ -167,9 +189,13 @@ public class DynamicDomainObjectMerger extends DomainObjectMerger {
             return true;
         }
 
-        String sourceItemIdValue = BeanWrapper.create(item1, null).getProperty(idProperty).toString();
-        String itemIdValue = BeanWrapper.create(item2, null).getProperty(idProperty).toString();
+        Object sourceItemIdValue = beanWrapper(item1).getPropertyValue(idProperty.getName());
+        Object itemIdValue = beanWrapper(item2).getPropertyValue(idProperty.getName());
 
         return nullSafeEquals(itemIdValue, sourceItemIdValue);
+    }
+
+    private DirectFieldAccessFallbackBeanWrapper beanWrapper(Object item1) {
+        return new DirectFieldAccessFallbackBeanWrapper(item1);
     }
 }

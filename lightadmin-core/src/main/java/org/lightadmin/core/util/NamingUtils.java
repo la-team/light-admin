@@ -17,9 +17,10 @@ package org.lightadmin.core.util;
 
 import org.lightadmin.api.config.utils.EntityNameExtractor;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.data.mapping.model.BeanWrapper;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 
 import static org.apache.commons.lang3.StringUtils.trim;
 import static org.lightadmin.core.config.domain.configuration.support.ExceptionAwareTransformer.exceptionAwareNameExtractor;
@@ -41,7 +42,9 @@ public class NamingUtils {
         PersistentEntity persistentEntity = domainTypeAdministrationConfiguration.getPersistentEntity();
         PersistentProperty idProperty = persistentEntity.getIdProperty();
 
-        return String.valueOf(BeanWrapper.create(entity, null).getProperty(idProperty));
+        BeanWrapper beanWrapper = new DirectFieldAccessFallbackBeanWrapper(entity);
+
+        return String.valueOf(beanWrapper.getPropertyValue(idProperty.getName()));
     }
 
     public static String cutLongText(String text) {

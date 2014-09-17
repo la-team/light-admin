@@ -20,9 +20,10 @@ import org.lightadmin.core.config.domain.DomainTypeBasicConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
 import org.lightadmin.core.util.Pair;
 import org.lightadmin.core.view.tags.AbstractAutowiredTag;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mapping.PersistentProperty;
-import org.springframework.data.mapping.model.BeanWrapper;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 import org.springframework.util.Assert;
 
 import javax.servlet.jsp.JspContext;
@@ -63,7 +64,9 @@ public class DomainTypeElementsTag extends AbstractAutowiredTag {
         JspContext jspContext = getJspContext();
         JspFragment tagBody = getJspBody();
         for (Object element : allElements) {
-            jspContext.setAttribute(idVar, BeanWrapper.create(element, null).getProperty(idAttribute));
+            BeanWrapper beanWrapper = new DirectFieldAccessFallbackBeanWrapper(element);
+
+            jspContext.setAttribute(idVar, beanWrapper.getPropertyValue(idAttribute.getName()));
             jspContext.setAttribute(stringRepresentationVar, exceptionAwareNameExtractor(nameExtractor, domainTypeConfiguration).apply(element));
             tagBody.invoke(null);
         }

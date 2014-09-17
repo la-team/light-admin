@@ -16,9 +16,10 @@
 package org.lightadmin.core.config.domain.configuration.support;
 
 import org.lightadmin.api.config.utils.EntityNameExtractor;
+import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.PropertyAccessorFactory;
 import org.springframework.data.mapping.PersistentEntity;
-import org.springframework.data.mapping.model.BeanWrapper;
+import org.springframework.data.util.DirectFieldAccessFallbackBeanWrapper;
 
 import java.io.Serializable;
 
@@ -52,8 +53,8 @@ public abstract class EntityNameExtractorFactory {
 
         @Override
         public String apply(final Object entity) {
-            BeanWrapper wrapper = BeanWrapper.create(entity, null);
-            Object entityId = wrapper.getProperty(persistentEntity.getIdProperty());
+            BeanWrapper beanWrapper = new DirectFieldAccessFallbackBeanWrapper(entity);
+            Object entityId = beanWrapper.getPropertyValue(persistentEntity.getIdProperty().getName());
 
             return String.format("%s #%s", entityName, entityId);
         }

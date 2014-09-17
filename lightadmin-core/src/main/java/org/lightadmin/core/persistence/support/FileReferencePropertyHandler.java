@@ -20,10 +20,10 @@ import org.springframework.data.mapping.PersistentProperty;
 import org.springframework.data.mapping.SimplePropertyHandler;
 
 /**
-* TODO: Document me!
-*
-* @author Maxim Kharchenko (kharchenko.max@gmail.com)
-*/
+ * TODO: Document me!
+ *
+ * @author Maxim Kharchenko (kharchenko.max@gmail.com)
+ */
 public abstract class FileReferencePropertyHandler implements SimplePropertyHandler {
     @Override
     public final void doWithPersistentProperty(PersistentProperty<?> property) {
