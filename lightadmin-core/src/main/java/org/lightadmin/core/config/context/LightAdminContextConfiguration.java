@@ -51,6 +51,8 @@ import javax.servlet.ServletContext;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.springframework.web.servlet.DispatcherServlet.VIEW_RESOLVER_BEAN_NAME;
+
 @Configuration
 @Import({
         LightAdminDataConfiguration.class,
@@ -140,7 +142,7 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
         return new ApplicationController();
     }
 
-    @Bean
+    @Bean(name = VIEW_RESOLVER_BEAN_NAME)
     public ViewResolver viewResolver() {
         return new TilesViewResolver() {
             @Override

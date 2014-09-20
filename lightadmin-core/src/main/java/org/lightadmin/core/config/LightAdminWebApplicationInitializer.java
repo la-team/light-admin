@@ -98,6 +98,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         final AnnotationConfigWebApplicationContext webApplicationContext = lightAdminApplicationContext(servletContext);
 
         final DispatcherServlet lightAdminDispatcher = new DispatcherServlet(webApplicationContext);
+        lightAdminDispatcher.setDetectAllViewResolvers(false);
 
         ServletRegistration.Dynamic lightAdminDispatcherRegistration = servletContext.addServlet(LIGHT_ADMIN_DISPATCHER_NAME, lightAdminDispatcher);
         lightAdminDispatcherRegistration.setLoadOnStartup(3);
