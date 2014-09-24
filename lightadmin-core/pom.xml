@@ -95,7 +95,7 @@
 
         <spring.version>4.1.0.RELEASE</spring.version>
         <spring.security.version>3.2.5.RELEASE</spring.security.version>
-        <spring.data.jpa.version>1.6.4.RELEASE</spring.data.jpa.version>
+        <spring.data.jpa.version>1.7.0.RELEASE</spring.data.jpa.version>
         <spring.data.rest.webmvc.version>2.1.4.RELEASE</spring.data.rest.webmvc.version>
         <apache.tiles.version>2.2.2</apache.tiles.version>
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
