@@ -34,6 +34,7 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
                         element("SP", "S"),
                         element("TB", "T"),
                         element("OT", "O"))
+                .field("productType").caption("Product Type")
                 .field("description").caption("Description")
                 .field("price").caption("Price")
                 .field("retired").caption("Out of production")
@@ -46,6 +47,7 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("type").caption("Type")
+                .field("productType").caption("Product Type")
                 .field("description").caption("Description")
                 .field("price").caption("Price")
                 .field("retired").caption("Out of production")
@@ -58,6 +60,10 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
         return fragmentBuilder
                 .field("name").caption("Name")
                 .field("type").caption("Type")
+                .field("productType").caption("Product Type").enumeration(
+                        element("SMARTPHONE", "Smartphone"),
+                        element("TABLET", "Tablet"),
+                        element("OTHER", "Other"))
                 .field("description").caption("Description").editor(wysiwyg())
                 .field("price").caption("Price")
                 .field("releaseDate").caption("Released on")

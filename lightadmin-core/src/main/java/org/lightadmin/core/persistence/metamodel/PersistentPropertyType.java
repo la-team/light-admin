@@ -21,6 +21,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.LocalTime;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.springframework.data.mapping.PersistentProperty;
+import org.springframework.util.ClassUtils;
 
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
@@ -46,6 +47,7 @@ public enum PersistentPropertyType {
     FILE,
     ASSOC,
     ASSOC_MULTI,
+    ENUM,
     EMBEDDED,
     MAP,
     UNKNOWN;
@@ -66,6 +68,10 @@ public enum PersistentPropertyType {
 
         if (persistentProperty.isMap()) {
             return PersistentPropertyType.MAP;
+        }
+
+        if (ClassUtils.isAssignable(Enum.class, attrType)) {
+            return ENUM;
         }
 
         if (forType(attrType) == STRING && persistentProperty.isAnnotationPresent(FileReference.class)) {

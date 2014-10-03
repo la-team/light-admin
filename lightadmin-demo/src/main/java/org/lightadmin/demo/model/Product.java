@@ -26,6 +26,11 @@ public class Product extends AbstractEntity {
     @Basic
     private String type;
 
+    @NotNull
+    @Column(name = "product_type", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private ProductType productType;
+
     @Size(max = 255)
     private String description;
 
@@ -135,5 +140,13 @@ public class Product extends AbstractEntity {
 
     public void setReleaseTime(Date releaseTime) {
         this.releaseTime = releaseTime;
+    }
+
+    public ProductType getProductType() {
+        return productType;
+    }
+
+    public void setProductType(ProductType productType) {
+        this.productType = productType;
     }
 }
