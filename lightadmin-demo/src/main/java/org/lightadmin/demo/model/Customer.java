@@ -2,7 +2,9 @@ package org.lightadmin.demo.model;
 
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
+import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
+import org.joda.time.LocalDateTime;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.springframework.util.Assert;
 
@@ -27,6 +29,10 @@ public class Customer extends AbstractEntity {
     @Column(name = "REG_DATE")
     @Type(type="org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
     private LocalDate registrationDate;
+
+    @Column(name = "REG_DATE_TIME")
+    @Type(type="org.jadira.usertype.dateandtime.joda.PersistentDateTime")
+    private DateTime registrationDateTime;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "CUSTOMER_ID")
@@ -114,4 +120,12 @@ public class Customer extends AbstractEntity {
 	public void setDiscountPrograms( final Set<DiscountProgram> discountPrograms ) {
 		this.discountPrograms = discountPrograms;
 	}
+
+    public DateTime getRegistrationDateTime() {
+        return registrationDateTime;
+    }
+
+    public void setRegistrationDateTime(DateTime registrationDateTime) {
+        this.registrationDateTime = registrationDateTime;
+    }
 }

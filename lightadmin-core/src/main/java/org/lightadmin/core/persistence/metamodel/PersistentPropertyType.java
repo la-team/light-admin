@@ -15,7 +15,6 @@
  */
 package org.lightadmin.core.persistence.metamodel;
 
-import com.google.common.collect.Sets;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalDateTime;
@@ -25,10 +24,11 @@ import org.springframework.data.mapping.PersistentProperty;
 
 import javax.persistence.Embedded;
 import javax.persistence.EmbeddedId;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Set;
 import java.util.UUID;
 
 import static org.lightadmin.core.util.NumberUtils.isNumberFloat;
@@ -41,59 +41,14 @@ public enum PersistentPropertyType {
     NUMBER_FLOAT,
     BOOL,
     DATE,
+    TIME,
+    DATE_TIME,
     FILE,
     ASSOC,
     ASSOC_MULTI,
     EMBEDDED,
     MAP,
     UNKNOWN;
-
-    public static boolean isSupportedAttributeType(PersistentPropertyType attributeType) {
-        return attributeType != UNKNOWN;
-    }
-
-    public static PersistentPropertyType forType(Class<?> attrType) {
-        if (Boolean.class.equals(attrType) || boolean.class.equals(attrType)) {
-            return BOOL;
-        }
-
-        if (isAssignableFrom(attrType, standardDateTypes()) || isAssignableFrom(attrType, jodaTypes())) {
-            return DATE;
-        }
-
-        if (isNumberInteger(attrType)) {
-            return NUMBER_INTEGER;
-        }
-
-        if (isNumberFloat(attrType)) {
-            return NUMBER_FLOAT;
-        }
-
-        if (String.class.equals(attrType) || UUID.class.equals(attrType)) {
-            return STRING;
-        }
-
-        if (byte[].class.equals(attrType)) {
-            return FILE;
-        }
-
-        return UNKNOWN;
-    }
-
-    public static boolean isOfBinaryFileType(PersistentProperty persistentProperty) {
-        return forType(persistentProperty.getType()) == FILE;
-    }
-
-    public static boolean isOfFileReferenceType(PersistentProperty persistentProperty) {
-        if (forType(persistentProperty.getType()) == STRING && persistentProperty.isAnnotationPresent(FileReference.class)) {
-            return true;
-        }
-        return false;
-    }
-
-    public static boolean isOfFileType(PersistentProperty persistentProperty) {
-        return isOfBinaryFileType(persistentProperty) || isOfFileReferenceType(persistentProperty);
-    }
 
     public static PersistentPropertyType forPersistentProperty(PersistentProperty persistentProperty) {
         final Class<?> attrType = persistentProperty.getType();
@@ -117,34 +72,120 @@ public enum PersistentPropertyType {
             return PersistentPropertyType.FILE;
         }
 
+        if (isOfDateType(persistentProperty)) {
+            return DATE;
+        }
+
+        if (isOfTimeType(persistentProperty)) {
+            return TIME;
+        }
+
+        if (isOfDateTimeType(persistentProperty)) {
+            return DATE_TIME;
+        }
+
         return forType(attrType);
     }
 
-    private static boolean isAssignableFrom(Class cls, Set<Class> types) {
-        for (Class<?> type : types) {
-            if (type.isAssignableFrom(cls)) {
-                return true;
-            }
+    private static boolean isOfTimeType(PersistentProperty persistentProperty) {
+        Class attrType = persistentProperty.getType();
+
+        if (java.sql.Time.class.equals(attrType)) {
+            return true;
+        }
+
+        if (LocalTime.class.equals(attrType)) {
+            return true;
+        }
+
+        if (Date.class.equals(attrType) || Calendar.class.equals(attrType)) {
+            return hasTemporalType(persistentProperty, TemporalType.TIME);
+        }
+
+        return false;
+    }
+
+    private static boolean isOfDateType(PersistentProperty persistentProperty) {
+        Class<?> attrType = persistentProperty.getType();
+
+        if (java.sql.Date.class.equals(attrType)) {
+            return true;
+        }
+
+        if (LocalDate.class.equals(attrType)) {
+            return true;
+        }
+
+        if (Date.class.equals(attrType) || Calendar.class.equals(attrType)) {
+            return hasTemporalType(persistentProperty, TemporalType.DATE);
+        }
+
+        return false;
+    }
+
+    private static boolean isOfDateTimeType(PersistentProperty persistentProperty) {
+        Class<?> attrType = persistentProperty.getType();
+
+        if (Timestamp.class.equals(attrType)) {
+            return true;
+        }
+
+        if (DateTime.class.equals(attrType) || LocalDateTime.class.equals(attrType)) {
+            return true;
+        }
+
+        if (Date.class.equals(attrType) || Calendar.class.equals(attrType)) {
+            return hasTemporalType(persistentProperty, TemporalType.TIMESTAMP);
+        }
+
+        return false;
+    }
+
+    public static boolean isSupportedAttributeType(PersistentPropertyType attributeType) {
+        return attributeType != UNKNOWN;
+    }
+
+    public static boolean isOfBinaryFileType(PersistentProperty persistentProperty) {
+        return forType(persistentProperty.getType()) == FILE;
+    }
+
+    public static boolean isOfFileReferenceType(PersistentProperty persistentProperty) {
+        if (forType(persistentProperty.getType()) == STRING && persistentProperty.isAnnotationPresent(FileReference.class)) {
+            return true;
         }
         return false;
     }
 
-    private static Set<Class> standardDateTypes() {
-        return Sets.<Class>newHashSet(
-                Date.class,
-                Calendar.class,
-                java.sql.Date.class,
-                java.sql.Time.class,
-                Timestamp.class
-        );
+    public static boolean isOfFileType(PersistentProperty persistentProperty) {
+        return isOfBinaryFileType(persistentProperty) || isOfFileReferenceType(persistentProperty);
     }
 
-    private static Set<Class> jodaTypes() {
-        return Sets.<Class>newHashSet(
-                DateTime.class,
-                LocalDateTime.class,
-                LocalDate.class,
-                LocalTime.class
-        );
+    private static PersistentPropertyType forType(Class<?> attrType) {
+        if (Boolean.class.equals(attrType) || boolean.class.equals(attrType)) {
+            return BOOL;
+        }
+
+        if (isNumberInteger(attrType)) {
+            return NUMBER_INTEGER;
+        }
+
+        if (isNumberFloat(attrType)) {
+            return NUMBER_FLOAT;
+        }
+
+        if (String.class.equals(attrType) || UUID.class.equals(attrType)) {
+            return STRING;
+        }
+
+        if (byte[].class.equals(attrType)) {
+            return FILE;
+        }
+
+        return UNKNOWN;
+    }
+
+    private static boolean hasTemporalType(PersistentProperty persistentProperty, TemporalType temporalType) {
+        Temporal temporal = (Temporal) persistentProperty.findAnnotation(Temporal.class);
+        return temporal != null && temporal.value() == temporalType;
     }
 }

@@ -22,9 +22,17 @@ function decorateUIControls(container) {
 
     $(".input-date", $(container)).datepicker({
         autoSize: true,
-        appendText: '(YYYY-MM-DD)',
+//        appendText: '(YYYY-MM-DD)',
         dateFormat: 'yy-mm-dd'
     });
+
+    $( '.timepicker' ).timeEntry( {
+        show24Hours: true, // 24 hours format
+        showSeconds: true, // Show seconds?
+        spinnerImage: ApplicationConfig.BASE_URL + 'images/ui/spinnerUpDown.png', // Arrows image
+        spinnerSize: [17, 26, 0], // Image size
+        spinnerIncDecOnly: true // Only up and down arrows
+    } );
 }
 
 function formViewVisualDecoration(container) {

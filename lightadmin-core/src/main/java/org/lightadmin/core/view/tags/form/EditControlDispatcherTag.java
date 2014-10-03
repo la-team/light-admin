@@ -37,6 +37,8 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
     private JspFragment booleanEditControl;
     private JspFragment fileEditControl;
     private JspFragment dateEditControl;
+    private JspFragment timeEditControl;
+    private JspFragment dateTimeEditControl;
     private JspFragment n2oneEditControl;
     private JspFragment n2manyEditControl;
     private JspFragment mapEditControl;
@@ -74,6 +76,12 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
                 break;
             case DATE:
                 worker = dateEditControl;
+                break;
+            case TIME:
+                worker = timeEditControl;
+                break;
+            case DATE_TIME:
+                worker = dateTimeEditControl;
                 break;
             case NUMBER_INTEGER:
                 worker = numberEditControl;
@@ -136,5 +144,13 @@ public class EditControlDispatcherTag extends SimpleTagSupport {
 
     public void setFileEditControl(final JspFragment fileEditControl) {
         this.fileEditControl = fileEditControl;
+    }
+
+    public void setTimeEditControl(JspFragment timeEditControl) {
+        this.timeEditControl = timeEditControl;
+    }
+
+    public void setDateTimeEditControl(JspFragment dateTimeEditControl) {
+        this.dateTimeEditControl = dateTimeEditControl;
     }
 }

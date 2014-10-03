@@ -91,3 +91,22 @@ function DomainEntity(data) {
         return this.original_properties[propertyName];
     }
 }
+
+function DateTime(dateTimeValue) {
+
+    var date = '';
+    var time = '';
+
+    if (dateTimeValue != null && dateTimeValue.indexOf("T") > -1) {
+        date = dateTimeValue.split('T')[0];
+        time = dateTimeValue.split('T')[1].substr(0, 8);
+    }
+
+    this.getDate = function() {
+        return date;
+    };
+
+    this.getTime = function() {
+        return time;
+    };
+}

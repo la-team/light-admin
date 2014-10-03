@@ -28,10 +28,26 @@
             return decodeURIComponent(rest_link_template).replace('{idPlaceholder}', attrVal);
         }
 
+        function isPartialPropertyField(name) {
+            return name.indexOf("_time") > -1;
+        }
+
         var json = {};
         $.each(this.serializeArray(), function () {
             var attrVal = this.value || '';
+
             var property = ConfigurationMetadataService.getProperty(resourceName, this.name, 'formView');
+
+            if (property == null) {
+                if ( isPartialPropertyField(this.name) && attrVal.length != 0) {
+                    var main_property_name = this.name.substr(0, this.name.indexOf("_time"));
+                    if (json[main_property_name] != null && json[main_property_name].length != 0) {
+                        json[main_property_name] = json[main_property_name] + 'T' + attrVal;
+                    }
+                }
+                return;
+            }
+
             var propertyType = property['type'];
 
             if (propertyType.indexOf('ASSOC') == 0) {

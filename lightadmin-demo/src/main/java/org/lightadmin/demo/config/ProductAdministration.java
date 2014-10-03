@@ -38,6 +38,7 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
                 .field("price").caption("Price")
                 .field("retired").caption("Out of production")
                 .field("releaseDate").caption("Released on")
+                .field("releaseTime").caption("Released on time")
                 .field("picture").caption("Picture").build();
     }
 
@@ -49,6 +50,7 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
                 .field("price").caption("Price")
                 .field("retired").caption("Out of production")
                 .field("releaseDate").caption("Released on")
+                .field("releaseTime").caption("Released on time")
                 .field("picture").caption("Picture").build();
     }
 
@@ -59,6 +61,7 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
                 .field("description").caption("Description").editor(wysiwyg())
                 .field("price").caption("Price")
                 .field("releaseDate").caption("Released on")
+                .field("releaseTime").caption("Released on time")
                 .field("retired").caption("Out of production")
                 .field("picture").caption("Picture").build();
     }
@@ -80,6 +83,7 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
                 .filter("Description", "description")
                 .filter("Price", "price")
                 .filter("Released on", "releaseDate")
+                .filter("Released on time", "releaseTime")
                 .filter("Retired", "retired").build();
     }
 

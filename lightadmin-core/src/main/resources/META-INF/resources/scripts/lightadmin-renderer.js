@@ -68,6 +68,24 @@ var FieldValueRenderer = (function () {
         }
     }
 
+    function TimeValueRenderer() {
+        this.render = function (propertyName, propertyValue) {
+            return propertyValue;
+        }
+    }
+
+    function DateTimeValueRenderer() {
+        this.render = function(propertyName, propertyValue) {
+            if (propertyValue != null && propertyValue.indexOf("T") > -1) {
+                var date = propertyValue.split('T')[0];
+                var time = propertyValue.split('T')[1];
+
+                return date + ' ' + time.substr(0, 8);
+            }
+            return '';
+        }
+    }
+
     function FileValueRenderer(targetView) {
         this.targetView = targetView;
 
@@ -157,6 +175,14 @@ var FieldValueRenderer = (function () {
 
         if (fieldType == 'DATE') {
             return new DateValueRenderer();
+        }
+
+        if (fieldType == 'TIME') {
+            return new TimeValueRenderer();
+        }
+
+        if (fieldType == 'DATE_TIME') {
+            return new DateTimeValueRenderer();
         }
 
         if (fieldType == 'FILE') {

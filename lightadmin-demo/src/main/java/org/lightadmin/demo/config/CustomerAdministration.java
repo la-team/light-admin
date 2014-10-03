@@ -44,6 +44,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
         return fragmentBuilder
                 .field("avatar").caption("Avatar")
                 .field("registrationDate").caption("Registration Date")
+                .field("registrationDateTime").caption("Registration Date Time")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("emailAddress").caption("Email Address")
@@ -67,6 +68,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
         return fragmentBuilder
                 .field("avatar").caption("Avatar")
                 .field("registrationDate").caption("Registration Date")
+                .field("registrationDateTime").caption("Registration Date Time")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("emailAddress").caption("Email Address")
@@ -79,6 +81,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
         return fragmentBuilder
                 .field("avatar").caption("Avatar")
                 .field("registrationDate").caption("Registration Date")
+                .field("registrationDateTime").caption("Registration Date Time")
                 .field("firstname").caption("First Name")
                 .field("lastname").caption("Last Name")
                 .field("emailAddress").caption("Email Address")
@@ -97,6 +100,7 @@ public class CustomerAdministration extends AdministrationConfiguration<Customer
         return filterBuilder.filters(
                 filter().field("id").caption("ID").build(),
                 filter().field("registrationDate").caption("Registration Date").build(),
+                filter().field("registrationDateTime").caption("Registration Date Time").build(),
                 filter().field("firstname").caption("First Name").build(),
                 filter().field("lastname").caption("Last Name").build(),
                 filter().field("emailAddress").caption("Email Address").build(),

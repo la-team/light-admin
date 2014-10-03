@@ -34,6 +34,14 @@
         <light-jsp:date-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
                                      disabled="${disabled}"/>
     </jsp:attribute>
+    <jsp:attribute name="timeEditControl">
+        <light-jsp:time-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
+                                     disabled="${disabled}"/>
+    </jsp:attribute>
+    <jsp:attribute name="dateTimeEditControl">
+        <light-jsp:datetime-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"
+                                     disabled="${disabled}"/>
+    </jsp:attribute>
     <jsp:attribute name="n2oneEditControl">
         <light-jsp:n2one-edit-control domainType="${domainType}" attributeMetadata="${attributeMetadata}" title="${fieldMetadata.name}"
                                       cssClass="${cssClass}" disabled="${disabled}" modalViewEnabled="${true}"/>

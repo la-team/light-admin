@@ -102,6 +102,16 @@
             <fragment>true</fragment>
         </attribute>
         <attribute>
+            <name>timeEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
+            <name>dateTimeEditControl</name>
+            <required>true</required>
+            <fragment>true</fragment>
+        </attribute>
+        <attribute>
             <name>n2oneEditControl</name>
             <required>true</required>
             <fragment>true</fragment>

@@ -24,6 +24,12 @@
     <jsp:attribute name="dateEditControl">
         <light-jsp:date-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"/>
     </jsp:attribute>
+    <jsp:attribute name="timeEditControl">
+        <light-jsp:time-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"/>
+    </jsp:attribute>
+    <jsp:attribute name="dateTimeEditControl">
+        <light-jsp:datetime-edit-control attributeMetadata="${attributeMetadata}" cssClass="${cssClass}"/>
+    </jsp:attribute>
     <jsp:attribute name="fileEditControl">
         <jsp:text>File is not supported</jsp:text>
     </jsp:attribute>

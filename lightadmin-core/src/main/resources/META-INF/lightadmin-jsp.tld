@@ -50,6 +50,14 @@
 		<name>date-edit-control</name>
 		<path>/META-INF/tags/edit/date-edit-control.tag</path>
 	</tag-file>
+    <tag-file>
+        <name>time-edit-control</name>
+        <path>/META-INF/tags/edit/time-edit-control.tag</path>
+    </tag-file>
+    <tag-file>
+        <name>datetime-edit-control</name>
+        <path>/META-INF/tags/edit/datetime-edit-control.tag</path>
+    </tag-file>
 	<tag-file>
 		<name>n2many-edit-control</name>
 		<path>/META-INF/tags/edit/n2many-edit-control.tag</path>

@@ -105,7 +105,15 @@ public class SpecificationCreator {
                 return associationAttributesPredicate(persistentProperty, attributeName, parameterValues);
             }
 
-            if (isDateType(persistentProperty)) {
+            if (isOfDateType(persistentProperty)) {
+                return dateAttributePredicate(attributeName, parameterValue);
+            }
+
+            if (isOfTimeType(persistentProperty)) {
+                return dateAttributePredicate(attributeName, parameterValue);
+            }
+
+            if (isOfDateTimeType(persistentProperty)) {
                 return dateAttributePredicate(attributeName, parameterValue);
             }
 
@@ -185,8 +193,16 @@ public class SpecificationCreator {
             return builder.and();
         }
 
-        private boolean isDateType(final PersistentProperty attribute) {
+        private boolean isOfDateType(final PersistentProperty attribute) {
             return PersistentPropertyType.forPersistentProperty(attribute) == DATE;
+        }
+
+        private boolean isOfTimeType(final PersistentProperty attribute) {
+            return PersistentPropertyType.forPersistentProperty(attribute) == TIME;
+        }
+
+        private boolean isOfDateTimeType(final PersistentProperty attribute) {
+            return PersistentPropertyType.forPersistentProperty(attribute) == DATE_TIME;
         }
 
         private boolean isAssociation(final PersistentProperty attribute) {

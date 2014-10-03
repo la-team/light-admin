@@ -6,7 +6,7 @@
 
 <tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
 
-<light:url var="baseUrl" value="${light:baseUrl()}"/>
+<light:url var="baseUrl" value="/"/>
 <light:url var="restBaseUrl" value="${light:restBaseUrl()}"/>
 
 <script type="text/javascript">
@@ -18,7 +18,7 @@
             REST_BASE_URL: '${restBaseUrl}',
 
             getDomainEntityCollectionUrl: function(resourceName) {
-                return this.BASE_URL + '/' + resourceName;
+                return this.BASE_URL + 'domain/' + resourceName;
             },
             getDomainEntityCollectionRestUrl: function(resourceName) {
                 return this.REST_BASE_URL + '/' + resourceName;

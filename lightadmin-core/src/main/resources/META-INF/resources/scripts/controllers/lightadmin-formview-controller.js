@@ -191,6 +191,14 @@ function LoadDomainEntityAction(resourceName) {
                     var filePropertyValue = fileUploaderController.loadFile(domainEntity.getPrimaryKeyValue());
                     editor.val(filePropertyValue['value']);
                     break;
+                case 'DATE_TIME':
+                    var timeEditor = form.find('[name="' + propertyName + '_time"]');
+
+                    var dateTime = new DateTime(propertyValue.toString());
+                    editor.val(dateTime.getDate());
+                    timeEditor.val(dateTime.getTime());
+
+                    break;
                 case 'STRING':
                     if (editor.hasClass('wysiwyg')) {
                         editor.wysiwyg("insertHtml", propertyValue);

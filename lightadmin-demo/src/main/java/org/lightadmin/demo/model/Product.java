@@ -1,5 +1,9 @@
 package org.lightadmin.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.SqlTimeSerializer;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import org.hibernate.annotations.Type;
 import org.springframework.format.annotation.NumberFormat;
 import org.springframework.util.Assert;
@@ -38,6 +42,10 @@ public class Product extends AbstractEntity {
     @Temporal(TemporalType.DATE)
     @Column(name = "REL_DATE")
     private Date releaseDate;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "REL_TIME")
+    private Date releaseTime;
 
     @Lob
     @Column(name = "PICTURE")
@@ -119,5 +127,13 @@ public class Product extends AbstractEntity {
 
     public void setUuid(UUID uuid) {
         this.uuid = uuid;
+    }
+
+    public Date getReleaseTime() {
+        return releaseTime;
+    }
+
+    public void setReleaseTime(Date releaseTime) {
+        this.releaseTime = releaseTime;
     }
 }
