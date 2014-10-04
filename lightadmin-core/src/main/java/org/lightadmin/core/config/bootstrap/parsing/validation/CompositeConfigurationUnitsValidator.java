@@ -26,7 +26,7 @@ import org.lightadmin.core.config.domain.scope.ScopeMetadata;
 import org.lightadmin.core.config.domain.sidebar.SidebarMetadata;
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
-import org.lightadmin.reporting.ProblemReporter;
+import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.data.mapping.context.MappingContext;
 

@@ -16,7 +16,7 @@
 package org.lightadmin.core.config.bootstrap.parsing.validation;
 
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
-import org.lightadmin.reporting.ProblemReporter;
+import org.lightadmin.core.reporting.ProblemReporter;
 
 public interface ConfigurationUnitsValidator<T extends ConfigurationUnits> {
 

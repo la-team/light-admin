@@ -17,7 +17,7 @@ package org.lightadmin.core.config.bootstrap.parsing;
 
 import org.lightadmin.core.config.domain.unit.ConfigurationUnits;
 import org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType;
-import org.lightadmin.reporting.Problem;
+import org.lightadmin.core.reporting.Problem;
 
 @SuppressWarnings("unused")
 public class DomainConfigurationProblem extends Problem {

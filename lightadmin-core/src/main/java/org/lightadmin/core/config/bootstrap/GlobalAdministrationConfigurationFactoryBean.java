@@ -27,7 +27,7 @@ import org.lightadmin.core.config.domain.unit.processor.ConfigurationUnitPostPro
 import org.lightadmin.core.config.domain.unit.processor.EmptyConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.processor.HierarchicalConfigurationPostProcessor;
 import org.lightadmin.core.config.domain.unit.processor.VisitableConfigurationUnitPostProcessor;
-import org.lightadmin.reporting.ProblemReporter;
+import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.AbstractFactoryBean;
@@ -43,7 +43,7 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.ArrayUtils.toArray;
-import static org.lightadmin.reporting.ProblemReporterFactory.failFastReporter;
+import static org.lightadmin.core.reporting.ProblemReporterFactory.failFastReporter;
 
 @SuppressWarnings("unused")
 public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactoryBean<GlobalAdministrationConfiguration> implements InitializingBean {

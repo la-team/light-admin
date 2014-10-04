@@ -13,15 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.reporting;
+package org.lightadmin.core.reporting;
 
-public abstract class ProblemReporterFactory {
+import java.util.Collection;
 
-    public static ProblemReporter failFastReporter() {
-        return new FailFastProblemReporter();
-    }
+public interface ProblemReporter {
 
-    public static ProblemReporter loggingReporter() {
-        return new ProblemReporterLogImpl();
-    }
+    void fatal(Problem problem);
+
+    void error(Problem problem);
+
+    void errors(Collection<? extends Problem> problems);
+
+    void warning(Problem problem);
 }

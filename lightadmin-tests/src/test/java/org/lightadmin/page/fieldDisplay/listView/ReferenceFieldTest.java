@@ -3,7 +3,7 @@ package org.lightadmin.page.fieldDisplay.listView;
 import org.junit.Test;
 import org.lightadmin.SeleniumIntegrationTest;
 import org.lightadmin.config.ChildEntityConfiguration;
-import org.lightadmin.reporting.ConfigurationProblemException;
+import org.lightadmin.core.reporting.ConfigurationProblemException;
 
 public class ReferenceFieldTest extends SeleniumIntegrationTest {
 

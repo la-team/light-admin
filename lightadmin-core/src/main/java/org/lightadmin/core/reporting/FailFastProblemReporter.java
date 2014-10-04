@@ -13,25 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.lightadmin.reporting;
+package org.lightadmin.core.reporting;
 
 import java.util.Collection;
 
-public class ConfigurationProblemException extends RuntimeException {
+class FailFastProblemReporter implements ProblemReporter {
 
-    public ConfigurationProblemException(Problem problem) {
-        super(problem.getMessage());
+    @Override
+    public void fatal(final Problem problem) {
+        throw new ConfigurationProblemException(problem);
     }
 
-    public ConfigurationProblemException(Collection<? extends Problem> problems) {
-        super(combineMessages(problems));
+    @Override
+    public void error(final Problem problem) {
+        throw new ConfigurationProblemException(problem);
     }
 
-    private static String combineMessages(Collection<? extends Problem> problems) {
-        final StringBuilder messageBuilder = new StringBuilder();
-        for (Problem problem : problems) {
-            messageBuilder.append(problem.getMessage()).append('\n');
-        }
-        return messageBuilder.toString();
+    @Override
+    public void errors(Collection<? extends Problem> problems) {
+        throw new ConfigurationProblemException(problems);
+    }
+
+    @Override
+    public void warning(final Problem problem) {
+        throw new ConfigurationProblemException(problem);
     }
 }
