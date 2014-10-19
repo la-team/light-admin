@@ -107,6 +107,7 @@
                     "sLast": "Last"
                 }
             },
+            "sScrollX": "100%",
             "bLengthChange": true,
             "bFilter": false,
             "bInfo": false,
@@ -124,6 +125,11 @@
         bindInfoClickHandlers(tableElement, dataTable);
 
         decorateUIControls($('#listViewTable_length'));
+
+        $(window).bind('resize', function () {
+            dataTable.fnAdjustColumnSizing();
+        });
+
     });
 
     function fnDrawCallback(oSettings) {
