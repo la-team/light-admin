@@ -1,0 +1,76 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0" metadata-complete="false">
+
+    <display-name>LightAdmin DEMO</display-name>
+
+    <description>LightAdmin - Administration framework for Java web applications. [DEMO]</description>
+
+    <context-param>
+        <param-name>light:configurer:base-url</param-name>
+        <param-value>/logger</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>light:configurer:back-to-site-url</param-name>
+        <param-value>http://lightadmin.org</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>light:administration:base-url</param-name>
+        <param-value>/admin</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>light:administration:security</param-name>
+        <param-value>false</param-value>
+    </context-param>
+
+    <!--<context-param>-->
+    <!--<param-name>light:administration:security-logout-url</param-name>-->
+    <!--<param-value>/logout</param-value>-->
+    <!--</context-param>-->
+
+    <context-param>
+        <param-name>light:administration:back-to-site-url</param-name>
+        <param-value>http://lightadmin.org</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>light:administration:help-url</param-name>
+        <param-value>http://lightadmin.org/getting-started/</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>light:administration:base-package</param-name>
+        <param-value>org.lightadmin.demo.config</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:/spring/spring-context.xml</param-value>
+    </context-param>
+
+    <context-param>
+        <param-name>spring.profiles.active</param-name>
+        <param-value>test-env</param-value>
+    </context-param>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <listener>
+        <listener-class>ch.qos.logback.classic.selector.servlet.ContextDetachingSCL</listener-class>
+    </listener>
+
+    <welcome-file-list>
+        <welcome-file>admin</welcome-file>
+    </welcome-file-list>
+
+    <session-config>
+        <session-timeout>60</session-timeout>
+    </session-config>
+
+</web-app>

@@ -18,7 +18,7 @@
     </properties>
 
     <modules>
-        <module>lightadmin-demo</module>
+        <module>lightadmin-sandbox</module>
         <module>lightadmin-tests</module>
     </modules>
 

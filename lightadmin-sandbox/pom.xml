@@ -10,11 +10,11 @@
         <version>1.1.0.BUILD-SNAPSHOT</version>
     </parent>
 
-    <artifactId>lightadmin-demo</artifactId>
+    <artifactId>lightadmin-sandbox</artifactId>
     <version>1.1.0.BUILD-SNAPSHOT</version>
     <packaging>war</packaging>
 
-    <name>LightAdmin Demo</name>
+    <name>LightAdmin SandBox</name>
 
     <properties>
         <container.port>8080</container.port>
@@ -164,7 +164,7 @@
     </dependencies>
 
     <build>
-        <finalName>lightadmin-demo</finalName>
+        <finalName>lightadmin-sandbox</finalName>
         <plugins>
             <!--
             Unpacks JSP pages bundled with LightAdmin JAR artifact to make them
