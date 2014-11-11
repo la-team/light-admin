@@ -207,10 +207,10 @@
                             <deployables>
                                 <deployable>
                                     <groupId>${project.groupId}</groupId>
-                                    <artifactId>lightadmin-demo</artifactId>
+                                    <artifactId>lightadmin-sandbox</artifactId>
                                     <type>war</type>
                                     <properties>
-                                        <context>lightadmin-demo</context>
+                                        <context>lightadmin-sandbox</context>
                                     </properties>
                                 </deployable>
                             </deployables>
