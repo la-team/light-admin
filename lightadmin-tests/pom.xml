@@ -36,13 +36,13 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>lightadmin-demo</artifactId>
+            <artifactId>lightadmin-sandbox</artifactId>
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>lightadmin-demo</artifactId>
+            <artifactId>lightadmin-sandbox</artifactId>
             <version>${project.version}</version>
             <classifier>classes</classifier>
         </dependency>
