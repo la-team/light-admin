@@ -19,29 +19,29 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 
 public class Problem {
 
-    private final String message;
-
-    private final Throwable rootCause;
-
-    public Problem(final String message) {
-        this(message, null);
+    public enum ProblemLevel {
+        ERROR, WARNING
     }
 
-    public Problem(final String message, final Throwable rootCause) {
+    private final String message;
+
+    private ProblemLevel problemLevel = ProblemLevel.ERROR;
+
+    public Problem(String message, ProblemLevel problemLevel) {
         this.message = message;
-        this.rootCause = rootCause;
+        this.problemLevel = problemLevel;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public Throwable getRootCause() {
-        return rootCause;
+    public ProblemLevel getProblemLevel() {
+        return problemLevel;
     }
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).append("message", message).append("rootCause", rootCause).toString();
+        return new ToStringBuilder(this).append("message", message).append("problemLevel", problemLevel).toString();
     }
 }

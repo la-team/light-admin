@@ -19,11 +19,7 @@ import java.util.Collection;
 
 public interface ProblemReporter {
 
-    void fatal(Problem problem);
+    void handle(Problem problem);
 
-    void error(Problem problem);
-
-    void errors(Collection<? extends Problem> problems);
-
-    void warning(Problem problem);
+    void handle(Collection<? extends Problem> problems);
 }

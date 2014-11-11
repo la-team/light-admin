@@ -82,11 +82,11 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
         final Class<?> domainType = configurationUnits.getDomainType();
 
         if (notPersistentEntityType(domainType)) {
-            problemReporter.error(new DomainConfigurationProblem(configurationUnits, format("Non-persistent type %s is not supported.", domainType.getSimpleName())));
+            problemReporter.handle(new DomainConfigurationProblem(configurationUnits, format("Non-persistent type %s is not supported.", domainType.getSimpleName())));
         }
 
         if (!hasConstructor(domainType)) {
-            problemReporter.error(new DomainConfigurationProblem(configurationUnits, format("Type %s must have default constructor.", domainType.getSimpleName())));
+            problemReporter.handle(new DomainConfigurationProblem(configurationUnits, format("Type %s must have default constructor.", domainType.getSimpleName())));
         }
     }
 
@@ -97,7 +97,7 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
         for (SidebarMetadata sidebar : sidebars) {
             final String jspFilePath = sidebar.getJspFilePath();
             if (!resourceLoader.getResource(jspFilePath).exists()) {
-                problemReporter.error(new DomainConfigurationProblem(configurationUnits, SIDEBARS, "Wrong jsp file path defined for sidebar " + jspFilePath));
+                problemReporter.handle(new DomainConfigurationProblem(configurationUnits, SIDEBARS, "Wrong jsp file path defined for sidebar " + jspFilePath));
             }
         }
     }
@@ -119,14 +119,14 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
     void validateSpecificationScope(final ScopeMetadata scope, final ConfigurationUnits configurationUnits, final ProblemReporter problemReporter) {
         SpecificationScopeMetadata specificationScopeMetadata = (SpecificationScopeMetadata) scope;
         if (specificationScopeMetadata.specification() == null) {
-            problemReporter.error(new DomainConfigurationProblem(configurationUnits, SCOPES, "Filtering specification not defined for scope " + scope.getName()));
+            problemReporter.handle(new DomainConfigurationProblem(configurationUnits, SCOPES, "Filtering specification not defined for scope " + scope.getName()));
         }
     }
 
     void validatePredicateScope(final ScopeMetadata scope, final ConfigurationUnits configurationUnits, final ProblemReporter problemReporter) {
         PredicateScopeMetadata predicateScopeMetadata = (PredicateScopeMetadata) scope;
         if (predicateScopeMetadata.predicate() == null) {
-            problemReporter.error(new DomainConfigurationProblem(configurationUnits, SCOPES, "Filtering predicate not defined for scope " + scope.getName()));
+            problemReporter.handle(new DomainConfigurationProblem(configurationUnits, SCOPES, "Filtering predicate not defined for scope " + scope.getName()));
         }
     }
 
@@ -164,7 +164,7 @@ public class CompositeConfigurationUnitsValidator implements ConfigurationUnitsV
         for (FieldMetadata field : fields) {
             final Collection<? extends DomainConfigurationProblem> problems = fieldMetadataValidator.validateFieldMetadata(field, configurationUnits.getDomainType(), newDomainConfigurationValidationContext(configurationUnits, configurationUnitType));
             if (!problems.isEmpty()) {
-                problemReporter.errors(problems);
+                problemReporter.handle(problems);
             }
         }
     }

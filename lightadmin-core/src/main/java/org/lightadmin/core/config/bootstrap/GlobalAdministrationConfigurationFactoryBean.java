@@ -27,6 +27,7 @@ import org.lightadmin.core.config.domain.unit.processor.ConfigurationUnitPostPro
 import org.lightadmin.core.config.domain.unit.processor.EmptyConfigurationUnitPostProcessor;
 import org.lightadmin.core.config.domain.unit.processor.HierarchicalConfigurationPostProcessor;
 import org.lightadmin.core.config.domain.unit.processor.VisitableConfigurationUnitPostProcessor;
+import org.lightadmin.core.reporting.DefaultProblemReporter;
 import org.lightadmin.core.reporting.ProblemReporter;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.InitializingBean;
@@ -43,10 +44,11 @@ import java.util.Set;
 import static com.google.common.collect.Sets.newLinkedHashSet;
 import static java.lang.String.format;
 import static org.apache.commons.lang3.ArrayUtils.toArray;
-import static org.lightadmin.core.reporting.ProblemReporterFactory.failFastReporter;
 
 @SuppressWarnings("unused")
 public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactoryBean<GlobalAdministrationConfiguration> implements InitializingBean {
+
+    private ProblemReporter problemReporter = DefaultProblemReporter.INSTANCE;
 
     private DomainTypeAdministrationConfigurationFactory domainTypeAdministrationConfigurationFactory;
 
@@ -91,11 +93,9 @@ public class GlobalAdministrationConfigurationFactoryBean extends AbstractFactor
     protected GlobalAdministrationConfiguration createInstance() throws Exception {
         GlobalAdministrationConfiguration globalAdministrationConfiguration = new GlobalAdministrationConfiguration();
 
-        ProblemReporter problemReporter = failFastReporter();
-
         for (ConfigurationUnits configurationUnits : domainTypeConfigurationUnits) {
             if (nonPersistentEntityType(configurationUnits.getDomainType())) {
-                problemReporter.error(new DomainConfigurationProblem(configurationUnits, format("Administration of non-persistent type %s is not supported.", configurationUnits.getDomainType().getSimpleName())));
+                problemReporter.handle(new DomainConfigurationProblem(configurationUnits, format("Administration of non-persistent type %s is not supported.", configurationUnits.getDomainType().getSimpleName())));
                 continue;
             }
 

@@ -24,16 +24,24 @@ public class DomainConfigurationProblem extends Problem {
 
     private final ConfigurationUnits configurationUnits;
 
-    private DomainConfigurationUnitType configurationUnitType;
+    private final DomainConfigurationUnitType configurationUnitType;
 
-    public DomainConfigurationProblem(final ConfigurationUnits configurationUnits, final String message) {
-        super(message);
+    public DomainConfigurationProblem(final ConfigurationUnits configurationUnits, DomainConfigurationUnitType configurationUnitType, final String message, ProblemLevel problemLevel) {
+        super(message, problemLevel);
         this.configurationUnits = configurationUnits;
+        this.configurationUnitType = configurationUnitType;
     }
 
     public DomainConfigurationProblem(final ConfigurationUnits configurationUnits, DomainConfigurationUnitType configurationUnitType, final String message) {
-        this(configurationUnits, message);
-        this.configurationUnitType = configurationUnitType;
+        this(configurationUnits, configurationUnitType, message, ProblemLevel.ERROR);
+    }
+
+    public DomainConfigurationProblem(final ConfigurationUnits configurationUnits, final String message, ProblemLevel problemLevel) {
+        this(configurationUnits, null, message, problemLevel);
+    }
+
+    public DomainConfigurationProblem(final ConfigurationUnits configurationUnits, final String message) {
+        this(configurationUnits, message, ProblemLevel.ERROR);
     }
 
     @Override
