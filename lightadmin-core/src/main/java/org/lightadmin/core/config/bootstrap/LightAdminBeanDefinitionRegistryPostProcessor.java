@@ -122,7 +122,8 @@ public class LightAdminBeanDefinitionRegistryPostProcessor implements BeanDefini
     private Iterable<Class<?>> managedEntities(EntityManager entityManager) {
         Set<Class<?>> managedEntities = newHashSet();
         for (EntityType<?> entity : entityManager.getMetamodel().getEntities()) {
-            managedEntities.add(entity.getJavaType());
+            if (entity.getJavaType() != null)
+                managedEntities.add(entity.getJavaType());
         }
         return managedEntities;
     }
