@@ -1,6 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
+
+<tiles:useAttribute name="lightAdminConfiguration" ignore="true"/>
 
 <!-- Footer -->
 <div id="footer">
@@ -8,6 +12,8 @@
         <span><a href="http://lightadmin.org" title="LightAdmin"><spring:message code="application.copyright"/>.</a> All rights reserved.</span>
     </div>
 </div>
+
+<c:if test="${lightAdminConfiguration.demoMode}">
 
 <script type="text/javascript">
     var _gaq = _gaq || [];
@@ -48,3 +54,5 @@
     <div><img src="//mc.yandex.ru/watch/21714952" style="position:absolute; left:-9999px;" alt=""/></div>
 </noscript>
 <!-- /Yandex.Metrika counter -->
+
+</c:if>
