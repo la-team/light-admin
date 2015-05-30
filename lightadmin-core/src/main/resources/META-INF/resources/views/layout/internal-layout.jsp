@@ -8,7 +8,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<tiles:useAttribute name="screenContext" ignore="true"/>
+<tiles:importAttribute name="screenContext" ignore="true"/>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>

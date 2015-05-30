@@ -7,13 +7,13 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
-<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-<tiles:useAttribute name="fields"/>
+<tiles:importAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:importAttribute name="fields"/>
 
-<tiles:useAttribute name="entitySingularName"/>
-<tiles:useAttribute name="entityPluralName"/>
+<tiles:importAttribute name="entitySingularName"/>
+<tiles:importAttribute name="entityPluralName"/>
 
-<tiles:useAttribute name="entityId"/>
+<tiles:importAttribute name="entityId"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 

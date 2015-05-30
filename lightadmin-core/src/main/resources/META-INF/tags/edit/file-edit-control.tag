@@ -7,9 +7,9 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-<tiles:useAttribute name="entityId" ignore="true"/>
-<tiles:useAttribute name="dialogMode" ignore="true"/>
+<tiles:importAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:importAttribute name="entityId" ignore="true"/>
+<tiles:importAttribute name="dialogMode" ignore="true"/>
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 

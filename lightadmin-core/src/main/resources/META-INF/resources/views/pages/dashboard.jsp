@@ -5,7 +5,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
-<tiles:useAttribute name="dashboardDomainTypes"/>
+<tiles:importAttribute name="dashboardDomainTypes"/>
 
 <div class="title">
 	<h5><spring:message code="application.menu.dashboard"/></h5>

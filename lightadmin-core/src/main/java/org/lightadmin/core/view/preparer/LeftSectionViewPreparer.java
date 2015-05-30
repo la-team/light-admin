@@ -17,7 +17,7 @@ package org.lightadmin.core.view.preparer;
 
 import org.apache.tiles.AttributeContext;
 import org.apache.tiles.beans.MenuItem;
-import org.apache.tiles.context.TilesRequestContext;
+import org.apache.tiles.request.Request;
 import org.lightadmin.api.config.unit.SidebarsConfigurationUnit;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -39,12 +39,12 @@ public class LeftSectionViewPreparer extends ConfigurationAwareViewPreparer {
     private DomainEntityLinks domainEntityLinks;
 
     @Override
-    protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration) {
+    protected void execute(final Request request, final AttributeContext attributeContext, final GlobalAdministrationConfiguration configuration) {
         addAttribute(attributeContext, "menuItems", menuItems(configuration.getManagedDomainTypeConfigurations().values()));
     }
 
     @Override
-    protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration) {
+    protected void execute(final Request request, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration) {
         final SidebarsConfigurationUnit sidebarsConfigurationUnit = configuration.getSidebars();
         final String selectedMenuItemName = configuration.getEntityConfiguration().getPluralName();
 

@@ -6,10 +6,10 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<tiles:useAttribute name="menuItems"/>
-<tiles:useAttribute name="selectedMenuItemName" ignore="true"/>
+<tiles:importAttribute name="menuItems"/>
+<tiles:importAttribute name="selectedMenuItemName" ignore="true"/>
 
-<tiles:useAttribute name="sidebars" ignore="true"/>
+<tiles:importAttribute name="sidebars" ignore="true"/>
 
 <!-- Left navigation -->
 <div class="leftNav">

@@ -7,33 +7,36 @@
     <parent>
         <groupId>org.lightadmin</groupId>
         <artifactId>lightadmin-parent</artifactId>
-        <version>1.1.0.BUILD-SNAPSHOT</version>
+        <version>1.2.0.BUILD-SNAPSHOT</version>
     </parent>
 
     <artifactId>lightadmin-tests</artifactId>
-    <version>1.1.0.BUILD-SNAPSHOT</version>
+    <version>1.2.0.BUILD-SNAPSHOT</version>
 
     <name>LightAdmin Selenium</name>
 
     <properties>
         <container.port>8080</container.port>
 
-        <spring.version>4.1.0.RELEASE</spring.version>
-        <javax.servlet.jsp-api.version>2.3.1</javax.servlet.jsp-api.version>
-        <slf4j-api.version>1.7.7</slf4j-api.version>
-        <logback-classic.version>1.1.2</logback-classic.version>
+        <spring.platform.version>1.1.2.RELEASE</spring.platform.version>
+
         <selenium-java.version>2.45.0</selenium-java.version>
-        <guava.version>18.0</guava.version>
         <xml-apis.version>1.4.01</xml-apis.version>
-        <junit.version>4.11</junit.version>
     </properties>
 
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>io.spring.platform</groupId>
+                <artifactId>platform-bom</artifactId>
+                <version>${spring.platform.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium-java.version}</version>
-        </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>lightadmin-sandbox</artifactId>
@@ -46,21 +49,36 @@
             <version>${project.version}</version>
             <classifier>classes</classifier>
         </dependency>
+
+        <dependency>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>${selenium-java.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>xml-apis</groupId>
+            <artifactId>xml-apis</artifactId>
+            <version>${xml-apis.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
-            <version>${slf4j-api.version}</version>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
-            <version>${logback-classic.version}</version>
             <scope>runtime</scope>
         </dependency>
+
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
-            <version>${spring.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-logging</groupId>
@@ -71,33 +89,20 @@
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
-            <version>${spring.version}</version>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet.jsp</groupId>
             <artifactId>javax.servlet.jsp-api</artifactId>
-            <version>${javax.servlet.jsp-api.version}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-test</artifactId>
-            <version>${spring.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.google.guava</groupId>
-            <artifactId>guava</artifactId>
-            <version>${guava.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>${xml-apis.version}</version>
         </dependency>
     </dependencies>
 

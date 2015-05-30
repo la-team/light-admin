@@ -16,7 +16,7 @@
 package org.lightadmin.core.view.preparer;
 
 import org.apache.tiles.AttributeContext;
-import org.apache.tiles.context.TilesRequestContext;
+import org.apache.tiles.request.Request;
 import org.lightadmin.core.config.LightAdminConfiguration;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.GlobalAdministrationConfiguration;
@@ -28,15 +28,15 @@ public class ScreenViewPreparer extends ConfigurationAwareViewPreparer {
     private LightAdminConfiguration lightAdminConfiguration;
 
     @Override
-    protected void execute(TilesRequestContext tilesContext, AttributeContext attributeContext, GlobalAdministrationConfiguration configuration) {
-        super.execute(tilesContext, attributeContext, configuration);
+    protected void execute(Request request, AttributeContext attributeContext, GlobalAdministrationConfiguration configuration) {
+        super.execute(request, attributeContext, configuration);
 
         addAttribute(attributeContext, "lightAdminConfiguration", lightAdminConfiguration, true);
     }
 
     @Override
-    protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration) {
-        super.execute(tilesContext, attributeContext, configuration);
+    protected void execute(final Request request, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration) {
+        super.execute(request, attributeContext, configuration);
 
         addAttribute(attributeContext, "screenContext", configuration.getScreenContext(), true);
     }

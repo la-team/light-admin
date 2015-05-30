@@ -7,11 +7,11 @@
     <parent>
         <artifactId>lightadmin-parent</artifactId>
         <groupId>org.lightadmin</groupId>
-        <version>1.1.0.BUILD-SNAPSHOT</version>
+        <version>1.2.0.BUILD-SNAPSHOT</version>
     </parent>
 
     <artifactId>lightadmin-sandbox</artifactId>
-    <version>1.1.0.BUILD-SNAPSHOT</version>
+    <version>1.2.0.BUILD-SNAPSHOT</version>
     <packaging>war</packaging>
 
     <name>LightAdmin SandBox</name>
@@ -19,10 +19,11 @@
     <properties>
         <container.port>8080</container.port>
 
-        <lightadmin.version>1.1.0.BUILD-SNAPSHOT</lightadmin.version>
+        <lightadmin.version>1.2.0.BUILD-SNAPSHOT</lightadmin.version>
         <light-logging-configurer.version>1.0.0.BUILD-SNAPSHOT</light-logging-configurer.version>
 
         <spring.platform.version>1.1.2.RELEASE</spring.platform.version>
+
         <jstl.version>1.2</jstl.version>
     </properties>
 

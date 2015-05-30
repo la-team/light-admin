@@ -17,7 +17,7 @@ package org.lightadmin.core.view.preparer;
 
 import com.google.common.collect.Collections2;
 import org.apache.tiles.AttributeContext;
-import org.apache.tiles.context.TilesRequestContext;
+import org.apache.tiles.request.Request;
 import org.lightadmin.api.config.utils.ScopeMetadataUtils;
 import org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration;
 import org.lightadmin.core.config.domain.scope.ScopeMetadata;
@@ -33,8 +33,8 @@ import static org.lightadmin.api.config.utils.ScopeMetadataUtils.*;
 public class ListViewPreparer extends ConfigurationAwareViewPreparer {
 
     @Override
-    protected void execute(final TilesRequestContext tilesContext, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration) {
-        super.execute(tilesContext, attributeContext, configuration);
+    protected void execute(final Request request, final AttributeContext attributeContext, final DomainTypeAdministrationConfiguration configuration) {
+        super.execute(request, attributeContext, configuration);
 
         addAttribute(attributeContext, "fields", configuration.getListViewFragment().getFields());
 

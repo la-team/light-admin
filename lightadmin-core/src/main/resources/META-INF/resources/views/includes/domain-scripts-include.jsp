@@ -4,7 +4,7 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:importAttribute name="domainTypeAdministrationConfiguration"/>
 
 <light:url var="baseUrl" value="/"/>
 <light:url var="restBaseUrl" value="${light:restBaseUrl()}"/>

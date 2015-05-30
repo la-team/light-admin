@@ -6,7 +6,7 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<tiles:useAttribute name="lightAdminConfiguration" ignore="true"/>
+<tiles:importAttribute name="lightAdminConfiguration" ignore="true"/>
 
 <div id="topNav">
     <div class="fixed">

@@ -4,7 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 
-<tiles:useAttribute name="lightAdminConfiguration" ignore="true"/>
+<tiles:importAttribute name="lightAdminConfiguration" ignore="true"/>
 
 <!-- Footer -->
 <div id="footer">

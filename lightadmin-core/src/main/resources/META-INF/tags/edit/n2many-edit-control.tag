@@ -10,10 +10,11 @@
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
 <%@ attribute name="modalViewEnabled" required="false" type="java.lang.Boolean" %>
 
-<tiles:useAttribute name="dialogMode" ignore="true"/>
-<tiles:useAttribute name="globalConfiguration"/>
+<tiles:importAttribute name="dialogMode" ignore="true"/>
+<tiles:importAttribute name="globalConfiguration"/>
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
+<jsp:useBean id="globalConfiguration" type="org.lightadmin.core.config.domain.GlobalAdministrationConfiguration"/>
 
 <select name="${attributeMetadata.name}" multiple="multiple" class="chzn-select"
         data-placeholder=" " ${disabled ? 'disabled' : ''}>
@@ -24,7 +25,7 @@
 </select>
 
 <c:if test="${(domainType ne attributeMetadata.actualType) and (not dialogMode) and modalViewEnabled}">
-    <c:if test="<%= ((GlobalAdministrationConfiguration)globalConfiguration).isManagedDomainType(attributeMetadata.getActualType())%>">
+    <c:if test="<%= globalConfiguration.isManagedDomainType(attributeMetadata.getActualType())%>">
 
         <c:set var="domainTypeAdministrationConfiguration" value="<%= ((GlobalAdministrationConfiguration)globalConfiguration).forManagedDomainType(attributeMetadata.getActualType()) %>"/>
         <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>

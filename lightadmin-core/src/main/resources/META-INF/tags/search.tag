@@ -9,7 +9,7 @@
 <%@ attribute name="filters" required="true" rtexprvalue="true"
               type="org.lightadmin.api.config.unit.FiltersConfigurationUnit" %>
 
-<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:importAttribute name="domainTypeAdministrationConfiguration"/>
 
 <c:set var="tag_search_filterList" value="<%= Iterables.toArray( filters, org.lightadmin.core.config.domain.filter.FilterMetadata.class ) %>"/>
 

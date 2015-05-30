@@ -9,7 +9,7 @@
 <%@ attribute name="allowEmpty" required="false" type="java.lang.Boolean" %>
 <%@ attribute name="disabled" required="false" type="java.lang.Boolean" %>
 
-<tiles:useAttribute name="dialogMode" ignore="true"/>
+<tiles:importAttribute name="dialogMode" ignore="true"/>
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 
 <input id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}"

@@ -8,17 +8,17 @@
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 
-<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
-<tiles:useAttribute name="persistentEntity"/>
+<tiles:importAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:importAttribute name="persistentEntity"/>
 
-<tiles:useAttribute name="fields"/>
+<tiles:importAttribute name="fields"/>
 
-<tiles:useAttribute name="entityId"/>
+<tiles:importAttribute name="entityId"/>
 
-<tiles:useAttribute name="entitySingularName"/>
-<tiles:useAttribute name="entityPluralName"/>
+<tiles:importAttribute name="entitySingularName"/>
+<tiles:importAttribute name="entityPluralName"/>
 
-<tiles:useAttribute name="dialogMode" ignore="true"/>
+<tiles:importAttribute name="dialogMode" ignore="true"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
 

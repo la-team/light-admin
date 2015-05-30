@@ -7,7 +7,9 @@
     <groupId>org.lightadmin</groupId>
     <artifactId>lightadmin</artifactId>
     <packaging>jar</packaging>
-    <version>1.1.0.BUILD-SNAPSHOT</version>
+
+    <version>1.2.0.BUILD-SNAPSHOT</version>
+
     <name>LightAdmin</name>
     <description>Pluggable data management solution for Java web applications developed in a "Rapid" manner
     </description>
@@ -95,7 +97,6 @@
 
         <spring.platform.version>1.1.2.RELEASE</spring.platform.version>
 
-        <apache.tiles.version>2.2.2</apache.tiles.version>
         <commons-collections4.version>4.0</commons-collections4.version>
         <imgscalr-lib.version>4.2</imgscalr-lib.version>
         <tika-core.version>1.4</tika-core.version>
@@ -121,94 +122,6 @@
                 <version>${spring.platform.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.tiles</groupId>
-                <artifactId>tiles-core</artifactId>
-                <version>${apache.tiles.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tiles</groupId>
-                <artifactId>tiles-api</artifactId>
-                <version>${apache.tiles.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tiles</groupId>
-                <artifactId>tiles-template</artifactId>
-                <version>${apache.tiles.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tiles</groupId>
-                <artifactId>tiles-servlet</artifactId>
-                <version>${apache.tiles.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tiles</groupId>
-                <artifactId>tiles-jsp</artifactId>
-                <version>${apache.tiles.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tiles</groupId>
-                <artifactId>tiles-el</artifactId>
-                <version>${apache.tiles.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-collections4</artifactId>
-                <version>${commons-collections4.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.sourceforge.collections</groupId>
-                <artifactId>collections-generic</artifactId>
-                <version>${collections-generic.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache-web</artifactId>
-                <version>${ehcache-web.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time-hibernate</artifactId>
-                <version>${joda-time.hibernate.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.jadira.usertype</groupId>
-                <artifactId>usertype.core</artifactId>
-                <version>${usertype.jadira.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jadira.usertype</groupId>
-                <artifactId>usertype.spi</artifactId>
-                <version>${usertype.jadira.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.imgscalr</groupId>
-                <artifactId>imgscalr-lib</artifactId>
-                <version>${imgscalr-lib.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.tika</groupId>
-                <artifactId>tika-core</artifactId>
-                <version>${tika-core.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.web</groupId>
-                <artifactId>jstl-impl</artifactId>
-                <version>${jstl.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.easymock</groupId>
-                <artifactId>easymock</artifactId>
-                <version>${easymock.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -304,7 +217,7 @@
         </dependency>
         <dependency>
             <groupId>org.apache.tiles</groupId>
-            <artifactId>tiles-template</artifactId>
+            <artifactId>tiles-extras</artifactId>
         </dependency>
         <dependency>
             <groupId>org.apache.tiles</groupId>
@@ -337,14 +250,17 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-collections4</artifactId>
+            <version>${commons-collections4.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sourceforge.collections</groupId>
             <artifactId>collections-generic</artifactId>
+            <version>${collections-generic.version}</version>
         </dependency>
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-web</artifactId>
+            <version>${ehcache-web.version}</version>
         </dependency>
         <dependency>
             <groupId>joda-time</groupId>
@@ -353,14 +269,17 @@
         <dependency>
             <groupId>joda-time</groupId>
             <artifactId>joda-time-hibernate</artifactId>
+            <version>${joda-time.hibernate.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.core</artifactId>
+            <version>${usertype.jadira.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jadira.usertype</groupId>
             <artifactId>usertype.spi</artifactId>
+            <version>${usertype.jadira.version}</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -386,10 +305,17 @@
         <dependency>
             <groupId>org.imgscalr</groupId>
             <artifactId>imgscalr-lib</artifactId>
+            <version>${imgscalr-lib.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.tika</groupId>
             <artifactId>tika-core</artifactId>
+            <version>${tika-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.el</groupId>
+            <artifactId>javax.el-api</artifactId>
         </dependency>
 
         <dependency>
@@ -399,6 +325,7 @@
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jstl-impl</artifactId>
+            <version>${jstl.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>javax.servlet</groupId>
@@ -448,6 +375,7 @@
         <dependency>
             <groupId>org.easymock</groupId>
             <artifactId>easymock</artifactId>
+            <version>${easymock.version}</version>
             <scope>test</scope>
         </dependency>
     </dependencies>

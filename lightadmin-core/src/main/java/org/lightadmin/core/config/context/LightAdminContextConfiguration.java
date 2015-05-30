@@ -43,9 +43,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver;
-import org.springframework.web.servlet.view.tiles2.SpringBeanPreparerFactory;
-import org.springframework.web.servlet.view.tiles2.TilesConfigurer;
-import org.springframework.web.servlet.view.tiles2.TilesViewResolver;
+import org.springframework.web.servlet.view.tiles3.SpringBeanPreparerFactory;
+import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
+import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 import javax.servlet.ServletContext;
 import java.util.Arrays;
@@ -160,14 +160,10 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
         configurer.setTilesInitializer(lightAdminSpringTilesInitializer(definitions));
         configurer.setDefinitions(definitions);
         configurer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
-        configurer.setCheckRefresh(true);
         return configurer;
     }
 
     private LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer(String[] definitions) {
-        final LightAdminSpringTilesInitializer lightAdminSpringTilesInitializer = new LightAdminSpringTilesInitializer();
-        lightAdminSpringTilesInitializer.setDefinitions(definitions);
-        lightAdminSpringTilesInitializer.setPreparerFactoryClass(SpringBeanPreparerFactory.class);
-        return lightAdminSpringTilesInitializer;
+        return new LightAdminSpringTilesInitializer(definitions);
     }
 }

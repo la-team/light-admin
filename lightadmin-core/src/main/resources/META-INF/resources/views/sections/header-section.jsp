@@ -4,7 +4,7 @@
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
-<tiles:useAttribute name="domainTypeAdministrationConfiguration" ignore="true"/>
+<tiles:importAttribute name="domainTypeAdministrationConfiguration" ignore="true"/>
 
 <div id="header" class="wrapper">
 	<div class="logo">

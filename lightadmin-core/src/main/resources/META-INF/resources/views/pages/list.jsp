@@ -7,15 +7,15 @@
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
-<tiles:useAttribute name="fields"/>
-<tiles:useAttribute name="scopes"/>
-<tiles:useAttribute name="filters"/>
+<tiles:importAttribute name="fields"/>
+<tiles:importAttribute name="scopes"/>
+<tiles:importAttribute name="filters"/>
 
-<tiles:useAttribute name="persistentEntity"/>
-<tiles:useAttribute name="domainTypeAdministrationConfiguration"/>
+<tiles:importAttribute name="persistentEntity"/>
+<tiles:importAttribute name="domainTypeAdministrationConfiguration"/>
 
-<tiles:useAttribute name="entitySingularName"/>
-<tiles:useAttribute name="entityPluralName"/>
+<tiles:importAttribute name="entitySingularName"/>
+<tiles:importAttribute name="entityPluralName"/>
 
 <div class="title"><h5><c:out value="${light:capitalize(light:cutLongText(entityPluralName))}"/></h5></div>
 
