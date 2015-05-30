@@ -2,6 +2,7 @@ package org.lightadmin.page.fieldDisplay;
 
 import org.hamcrest.CoreMatchers;
 import org.hamcrest.core.CombinableMatcher;
+import org.junit.Ignore;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -58,6 +59,7 @@ public class ConfigurationValidationTest extends SeleniumIntegrationTest {
 		exceptionTrigger.triggerException();
 	}
 
+    @Ignore("Test is outdated: Problem level was changed from 'ERROR' to 'WARNING' and is written to log instead of throwing exception")
 	//Covers LA-89 (https://github.com/max-dev/light-admin/issues/89)
 	@Test
 	public void missingFileReferenceDirectoryIsValidated() {

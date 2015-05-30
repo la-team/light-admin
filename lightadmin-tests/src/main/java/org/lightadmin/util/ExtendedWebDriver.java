@@ -8,6 +8,8 @@ public interface ExtendedWebDriver extends WebDriver {
 
 	public void waitForElementVisible( WebElement element );
 
+    public void waitForElementVisible( WebElement element, long timeout );
+
 	public void waitForElementInvisible( WebElement element );
 
 	public boolean isElementPresent( WebElement element );

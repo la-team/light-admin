@@ -48,7 +48,12 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 
     @Override
     public void waitForElementVisible(final WebElement element) throws TimeoutException {
-        new WebDriverWait(webDriver, webDriverTimeout).until(new Predicate<WebDriver>() {
+        waitForElementVisible(element, webDriverTimeout);
+    }
+
+    @Override
+    public void waitForElementVisible(final WebElement element, long timeout) {
+        new WebDriverWait(webDriver, timeout).until(new Predicate<WebDriver>() {
             @Override
             public boolean apply(WebDriver input) {
                 return isElementPresent(element);

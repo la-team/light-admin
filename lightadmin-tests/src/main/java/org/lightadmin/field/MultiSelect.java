@@ -70,7 +70,7 @@ public class MultiSelect extends BaseField implements BaseSelect {
 
 		WebElement valueList = theField.findElement(By.className("chzn-drop"));
 
-		webDriver().waitForElementVisible( valueList );
+		webDriver().waitForElementVisible( valueList, 10 );
 
 		final WebElement optionToSelect = findOptionByText(valueList, option);
 		assert optionToSelect != null;
