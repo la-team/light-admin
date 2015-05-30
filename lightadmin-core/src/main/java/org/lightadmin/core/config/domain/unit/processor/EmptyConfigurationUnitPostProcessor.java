@@ -26,6 +26,11 @@ import org.springframework.data.mapping.*;
 import org.springframework.data.mapping.context.MappingContext;
 import org.springframework.util.ClassUtils;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
+import static com.google.common.collect.Lists.newArrayList;
 import static org.apache.commons.lang3.StringUtils.capitalize;
 import static org.lightadmin.core.config.domain.unit.DomainConfigurationUnitType.CONFIGURATION;
 import static org.lightadmin.core.persistence.metamodel.PersistentPropertyType.isSupportedAttributeType;
@@ -50,19 +55,13 @@ public class EmptyConfigurationUnitPostProcessor extends MappingContextAwareConf
 
         PersistentEntity persistentEntity = getPersistentEntity(domainType);
 
-        persistentEntity.doWithProperties(new SimplePropertyHandler() {
-            @Override
-            public void doWithPersistentProperty(PersistentProperty<?> property) {
-                addField(property, fieldSetConfigurationUnitBuilder);
-            }
-        });
+        final List<PersistentProperty<?>> persistentProperties = persistentPropertiesOf(persistentEntity);
 
-        persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
-            @Override
-            public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
-                addField(association.getInverse(), fieldSetConfigurationUnitBuilder);
-            }
-        });
+        Collections.sort(persistentProperties, new PersistentPropertyComparator());
+
+        for (PersistentProperty<?> persistentProperty : persistentProperties) {
+            addField(persistentProperty, fieldSetConfigurationUnitBuilder);
+        }
 
         return fieldSetConfigurationUnitBuilder.build();
     }
@@ -75,5 +74,42 @@ public class EmptyConfigurationUnitPostProcessor extends MappingContextAwareConf
 
     private boolean isEmptyFieldSetConfigurationUnit(ConfigurationUnit configurationUnit) {
         return ClassUtils.isAssignableValue(FieldSetConfigurationUnit.class, configurationUnit) && ((FieldSetConfigurationUnit) configurationUnit).isEmpty();
+    }
+
+    private List<PersistentProperty<?>> persistentPropertiesOf(PersistentEntity persistentEntity) {
+        final List<PersistentProperty<?>> persistentProperties = newArrayList();
+
+        persistentEntity.doWithProperties(new SimplePropertyHandler() {
+            @Override
+            public void doWithPersistentProperty(PersistentProperty<?> property) {
+                persistentProperties.add(property);
+            }
+        });
+
+        persistentEntity.doWithAssociations(new SimpleAssociationHandler() {
+            @Override
+            public void doWithAssociation(Association<? extends PersistentProperty<?>> association) {
+                persistentProperties.add(association.getInverse());
+            }
+        });
+
+        return persistentProperties;
+    }
+
+    private static class PersistentPropertyComparator implements Comparator<PersistentProperty> {
+        @Override
+        public int compare(final PersistentProperty persistentProperty1, final PersistentProperty persistentProperty2) {
+            if (isPrimaryKey(persistentProperty1)) {
+                return -1;
+            }
+            if (isPrimaryKey(persistentProperty2)) {
+                return 1;
+            }
+            return persistentProperty1.getName().compareTo(persistentProperty2.getName());
+        }
+
+        private boolean isPrimaryKey(PersistentProperty persistentProperty) {
+            return persistentProperty.isIdProperty();
+        }
     }
 }

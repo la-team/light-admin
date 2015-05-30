@@ -44,11 +44,12 @@ public class TestOrder extends AbstractEntity {
 		this.name = name;
 	}
 
-	public void addLineItems( TestLineItem entity ) {
-		this.lineItems.add( entity );
-	}
+    public void setLineItems(List<TestLineItem> lineItems) {
+        this.lineItems.clear();
+        this.lineItems.addAll(lineItems);
+    }
 
-	public List<TestLineItem> getLineItems() {
+    public List<TestLineItem> getLineItems() {
 		return lineItems;
 	}
 

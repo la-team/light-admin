@@ -22,14 +22,22 @@ public class DefaultFieldsTest extends SeleniumIntegrationTest {
         String[] quickViewFieldNames = quickViewComponent.getQuickViewFieldNames();
         String[] quickViewFieldValues = quickViewComponent.getQuickViewFieldValues();
 
-        assertQuickViewFields(new String[]{"Id:", "Name:", "DueDate:", "ShippingAddresses:", "Customer:", "LineItems:"}, quickViewFieldNames);
+        assertQuickViewFields(new String[]{
+                "Id:",
+                "Customer:",
+                "DueDate:",
+                "LineItems:",
+                "Name:",
+                "ShippingAddresses:"
+        }, quickViewFieldNames);
+
         assertFieldValues(new String[]{
                 "3",
-                "Order3: 3 line items",
-                "2010-01-01",
-                " ",
                 "TestCustomer #17",
-                "TestLineItem #101\n" + "TestLineItem #102\n" + "TestLineItem #103"
+                "2010-01-01",
+                "TestLineItem #101\n" + "TestLineItem #102\n" + "TestLineItem #103",
+                "Order3: 3 line items",
+                " "
         }, quickViewFieldValues);
     }
 }
