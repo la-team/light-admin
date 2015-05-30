@@ -29,7 +29,7 @@ public class NamingUtils {
 
     @SuppressWarnings("unchecked")
     public static String entityName(DomainTypeAdministrationConfiguration domainTypeAdministrationConfiguration, Object entity) {
-        final EntityNameExtractor nameExtractor = domainTypeAdministrationConfiguration.getEntityConfiguration().getNameExtractor();
+        final EntityNameExtractor<Object> nameExtractor = domainTypeAdministrationConfiguration.getEntityConfiguration().getNameExtractor();
 
         return exceptionAwareNameExtractor(nameExtractor, domainTypeAdministrationConfiguration).apply(entity);
     }

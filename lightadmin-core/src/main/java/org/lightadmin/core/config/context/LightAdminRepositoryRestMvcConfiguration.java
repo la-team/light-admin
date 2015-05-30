@@ -64,13 +64,13 @@ public class LightAdminRepositoryRestMvcConfiguration extends RepositoryRestMvcC
     }
 
     @Bean
-    public DynamicRepositoryEntityLinks entityLinks() {
+    public DynamicRepositoryEntityLinks dynamicRepositoryEntityLinks() {
         return DynamicRepositoryEntityLinks.wrap(super.entityLinks());
     }
 
     @Bean
     public DynamicPersistentEntityResourceProcessor dynamicPersistentEntityResourceProcessor() {
-        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), fileResourceStorage(), entityLinks(), domainEntityLinks(), resourceMappings());
+        return new DynamicPersistentEntityResourceProcessor(globalAdministrationConfiguration(), fileResourceStorage(), dynamicRepositoryEntityLinks(), domainEntityLinks(), resourceMappings());
     }
 
     @Bean

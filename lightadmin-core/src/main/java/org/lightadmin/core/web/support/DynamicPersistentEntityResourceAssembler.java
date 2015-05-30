@@ -18,6 +18,7 @@ package org.lightadmin.core.web.support;
 import org.springframework.data.mapping.PersistentEntity;
 import org.springframework.data.repository.core.EntityInformation;
 import org.springframework.data.repository.support.Repositories;
+import org.springframework.data.rest.core.mapping.ResourceMappings;
 import org.springframework.data.rest.webmvc.PersistentEntityResourceAssembler;
 import org.springframework.data.rest.webmvc.support.Projector;
 import org.springframework.hateoas.EntityLinks;
@@ -36,7 +37,7 @@ import static org.springframework.beans.PropertyAccessorFactory.forDirectFieldAc
 public class DynamicPersistentEntityResourceAssembler extends PersistentEntityResourceAssembler {
 
     public DynamicPersistentEntityResourceAssembler(PersistentEntityResourceAssembler resourceAssembler) {
-        super(repositories(resourceAssembler), entityLinks(resourceAssembler), projector(resourceAssembler));
+        super(repositories(resourceAssembler), entityLinks(resourceAssembler), projector(resourceAssembler), mappings(resourceAssembler));
     }
 
     /**
@@ -58,6 +59,10 @@ public class DynamicPersistentEntityResourceAssembler extends PersistentEntityRe
         EntityInformation<Object, Serializable> entityInformation = repositories.getEntityInformationFor(instanceType);
         Serializable id = entityInformation.getId(instance);
 
+        if (id == null) {
+            return entityLinks(this).linkToCollectionResource(entity.getType()).withSelfRel();
+        }
+
         return entityLinks(this).linkToSingleResource(entity.getType(), id).withSelfRel();
     }
 
@@ -71,5 +76,9 @@ public class DynamicPersistentEntityResourceAssembler extends PersistentEntityRe
 
     private static Projector projector(PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
         return (Projector) forDirectFieldAccess(persistentEntityResourceAssembler).getPropertyValue("projector");
+    }
+
+    private static ResourceMappings mappings(PersistentEntityResourceAssembler persistentEntityResourceAssembler) {
+        return (ResourceMappings) forDirectFieldAccess(persistentEntityResourceAssembler).getPropertyValue("mappings");
     }
 }
