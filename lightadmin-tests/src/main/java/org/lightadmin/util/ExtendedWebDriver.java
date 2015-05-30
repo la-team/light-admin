@@ -21,4 +21,6 @@ public interface ExtendedWebDriver extends WebDriver {
 	public void clear( WebElement element );
 
 	public void forceFocusOnCurrentWindow();
+
+	public void scrollTo(int pixels);
 }

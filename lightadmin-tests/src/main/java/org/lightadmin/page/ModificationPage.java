@@ -9,6 +9,7 @@ import org.lightadmin.field.SmartSelect;
 import org.openqa.selenium.By;
 import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.Locatable;
 import org.openqa.selenium.support.FindBy;
 import org.springframework.core.io.DefaultResourceLoader;
 
@@ -62,6 +63,8 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 	}
 
 	public ShowViewPage submit() {
+		webDriver().scrollTo(500);
+		((Locatable) saveButton).getCoordinates().inViewPort();
 		saveButton.click();
 
 		return new ShowViewPage( seleniumContext, domainName, getItemId() ).get();
@@ -122,7 +125,7 @@ public abstract class ModificationPage<P extends SecuredPage<P>> extends Secured
 		if ( theSelect.getAttribute( "class" ).contains( "multi" ) ) {
 			return new MultiSelect( theSelect, seleniumContext );
 		} else
-			return new SmartSelect( theSelect.findElement( By.xpath( "a" ) ), seleniumContext );
+			return new SmartSelect( theSelect, seleniumContext );
 	}
 
 	private WebElement getMultiSelectElement( String fieldName ) {

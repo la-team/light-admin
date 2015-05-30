@@ -2,6 +2,7 @@ package org.lightadmin.util;
 
 import com.google.common.base.Predicate;
 import org.openqa.selenium.*;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.List;
@@ -9,10 +10,10 @@ import java.util.Set;
 
 public class ExtendedWebDriverImpl implements ExtendedWebDriver {
 
-    private WebDriver webDriver;
+    private RemoteWebDriver webDriver;
     private long webDriverTimeout;
 
-    public ExtendedWebDriverImpl(final WebDriver webDriver, final long webDriverTimeout) {
+    public ExtendedWebDriverImpl(final RemoteWebDriver webDriver, final long webDriverTimeout) {
         this.webDriver = webDriver;
         this.webDriverTimeout = webDriverTimeout;
     }
@@ -82,6 +83,11 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
     @Override
     public void forceFocusOnCurrentWindow() {
         webDriver.switchTo().window(webDriver.getWindowHandle());
+    }
+
+    @Override
+    public void scrollTo(int pixels) {
+        webDriver.executeScript("window.scrollBy(0, " + pixels +")");
     }
 
     @Override

@@ -55,11 +55,11 @@ public class QuickViewComponent extends DynamicComponent<QuickViewComponent> {
 	}
 
 	private WebElement getShowButton() {
-		return dataTableElement.findElement( By.xpath( "//tbody/tr[td[text()=" + itemId + "]]//img[@title='Click for Quick View']" ) );
+		return dataTableElement.findElement( By.xpath( ".//img[@title='Click for Quick View']" ) );
 	}
 
 	private WebElement getHideButton() {
-		return dataTableElement.findElement( By.xpath( "//tbody/tr[td[text()=" + itemId + "]]//img[@title='Click to close Quick View']" ) );
+		return dataTableElement.findElement( By.xpath( ".//img[@title='Click to close Quick View']" ) );
 	}
 
 	private WebElement getQuickViewContainer() {

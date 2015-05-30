@@ -18,7 +18,7 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	public static final String DEFAULT_SCOPE_LABEL = "All";
 	private Domain domain;
 
-	@FindBy(id = "listViewTable")
+	@FindBy(id = "listViewTable_wrapper")
 	private WebElement listViewTable;
 
 	private FilterFormComponent filterFormComponent;

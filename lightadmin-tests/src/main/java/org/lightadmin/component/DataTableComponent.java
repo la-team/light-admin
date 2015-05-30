@@ -6,6 +6,7 @@ import org.lightadmin.page.EditPage;
 import org.lightadmin.util.WebElementTransformer;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.Locatable;
 
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -15,7 +16,7 @@ public class DataTableComponent extends StaticComponent {
 
 	private final WebElement dataTableElement;
 
-	private Map<String, Column> columns = new LinkedHashMap<String, Column>();
+	private Map<String, Column> columns = new LinkedHashMap<>();
 
 	public DataTableComponent( final WebElement dataTableElement, final SeleniumContext seleniumContext ) {
 		super( seleniumContext );
@@ -25,10 +26,12 @@ public class DataTableComponent extends StaticComponent {
 	}
 
 	private Map<String, Column> setColumnHeaders() {
-		List<String> columnNames = WebElementTransformer.transform( dataTableElement.findElements( By.xpath( "thead//th[contains(@class,'header')]/div" ) ) );
+		List<WebElement> columnElements =
+				dataTableElement.findElements(By.xpath(".//div[contains(@class, 'dataTables_scrollHeadInner')]//thead//th[contains(@class, 'header')]/div"));
 
-		for ( String columnName : columnNames ) {
-			columns.put( columnName, new Column( columnName ) );
+		for ( WebElement columnElement : columnElements ) {
+			Column column = new Column(columnElement);
+			columns.put( column.getName(), column );
 		}
 
 		return columns;
@@ -68,7 +71,7 @@ public class DataTableComponent extends StaticComponent {
 	}
 
 	private WebElement getRowForItem( int itemId ) {
-		return dataTableElement.findElement( By.xpath( "tbody/tr[td[text()=" + itemId + "]]" ) );
+		return dataTableElement.findElement( By.xpath( ".//div[contains(@class, 'dataTables_scrollBody')]//tbody/tr[td[text()=" + itemId + "]]" ) );
 	}
 
 	public WebElement getRowForItem( String itemName ) {
@@ -76,7 +79,7 @@ public class DataTableComponent extends StaticComponent {
 	}
 
 	private int getItemIdByName( String itemName ) {
-		return Integer.parseInt( dataTableElement.findElement( By.xpath( "tbody/tr[td[contains(text(), '" + itemName + "')]]/td[2]" ) ).getText() );
+		return Integer.parseInt( dataTableElement.findElement( By.xpath( ".//div[contains(@class, 'dataTables_scrollBody')]//tbody/tr[td[contains(text(), '" + itemName + "')]]/td[2]" ) ).getText() );
 	}
 
 	private WebElement dataRowElement( int rowIndex ) {
@@ -84,17 +87,19 @@ public class DataTableComponent extends StaticComponent {
 	}
 
 	private List<WebElement> dataRowElements() {
-		return dataTableElement.findElements( By.xpath( "tbody/tr[td[contains(@class, 'data-cell')]]" ) );
+		return dataTableElement.findElements( By.xpath( ".//div[contains(@class, 'dataTables_scrollBody')]//tbody/tr[td[contains(@class, 'data-cell')]]" ) );
 	}
 
 	private List<WebElement> cellElements( WebElement rowElement ) {
 		return rowElement.findElements( By.xpath( "td[contains(@class,'data-cell')]" ) );
 	}
 
-	public EditPage editItem( int itemId, String domainName ) {
-		getRowForItem( itemId ).findElement( By.xpath( ".//a[@title='Edit']" ) ).click();
+	public EditPage editItem(int itemId, String domainName) {
+		final WebElement row = getRowForItem(itemId);
+		((Locatable) row).getCoordinates().inViewPort();
+		row.findElement(By.xpath(".//a[@title='Edit']")).click();
 
-		return new EditPage( seleniumContext, domainName, itemId ).get();
+		return new EditPage(seleniumContext, domainName, itemId).get();
 	}
 
 	public void deleteItemByName( String itemName ) {
@@ -106,8 +111,8 @@ public class DataTableComponent extends StaticComponent {
 		private WebElement headerElement;
 		private String currentSorting;
 
-		public Column( String fieldLabel ) {
-			this.headerElement = dataTableElement.findElement( By.xpath( "thead//th/div[text()=\'" + fieldLabel + "\']" ) );
+		public Column( WebElement headerElement ) {
+			this.headerElement = headerElement;
 		}
 
 		public void sortDescending() {
@@ -145,6 +150,10 @@ public class DataTableComponent extends StaticComponent {
 
 		private boolean isSortedAscending() {
 			return currentSorting.endsWith( "sorting_asc" );
+		}
+
+		public String getName() {
+			return headerElement.getText();
 		}
 	}
 }

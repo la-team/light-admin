@@ -6,6 +6,7 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -73,8 +74,8 @@ public class SeleniumConfig {
         }
     }
 
-    public WebDriver webDriver() {
-        final WebDriver driver = webDriver(environment.getProperty("selenium.browser"));
+    public RemoteWebDriver webDriver() {
+        final RemoteWebDriver driver = webDriver(environment.getProperty("selenium.browser"));
 
         driver.manage().timeouts().implicitlyWait(webDriverWaitTimeout(), TimeUnit.SECONDS);
 
@@ -87,7 +88,7 @@ public class SeleniumConfig {
         return environment.getProperty("element.wait.sec", Long.class);
     }
 
-    private WebDriver webDriver(final String seleniumBrowser) {
+    private RemoteWebDriver webDriver(final String seleniumBrowser) {
         if ("chrome".equals(seleniumBrowser)) {
             return new ChromeDriver();
         }

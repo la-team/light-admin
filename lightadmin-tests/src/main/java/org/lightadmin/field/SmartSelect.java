@@ -13,18 +13,22 @@ public class SmartSelect extends BaseField implements BaseSelect {
 	@FindBy( className = "chzn-single" )
 	private WebElement dropDownContainer;
 
-	@FindBy( className = "chzn-results" )
-	private WebElement valueList;
-
 	@FindBy( className = "search-choice-close" )
 	private WebElement clearButton;
+
+	private WebElement valueList;
 
 	@FindBy( tagName = "input" )
 	private WebElement searchField;
 
+	private WebElement link;
+
 	public SmartSelect( WebElement theElement, SeleniumContext seleniumContext ) {
 		super( seleniumContext );
 		this.theElement = theElement;
+
+		link = theElement.findElement(By.tagName("a"));
+		valueList = theElement.findElement(By.className("chzn-results"));
 	}
 
 	@Override
@@ -60,12 +64,11 @@ public class SmartSelect extends BaseField implements BaseSelect {
 			if ( option.getText().equals( labelToSelect ) )
 				option.click();
 		}
-
 	}
 
 	private void expandOptionList() {
-		if ( !dropDownContainer.getCssValue( "class" ).contains( "with-drop" ) ) {
-			theElement.click();
+		if ( !dropDownContainer.getAttribute( "class" ).contains( "with-drop" ) ) {
+			link.click();
 		}
 	}
 
