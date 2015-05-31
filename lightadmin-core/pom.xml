@@ -316,6 +316,7 @@
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
