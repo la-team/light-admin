@@ -18,38 +18,17 @@
 
     <properties>
         <container.port>8080</container.port>
-
-        <lightadmin.version>1.2.0.BUILD-SNAPSHOT</lightadmin.version>
-        <light-logging-configurer.version>1.0.0.BUILD-SNAPSHOT</light-logging-configurer.version>
-
-        <spring.platform.version>1.1.2.RELEASE</spring.platform.version>
-
-        <jstl.version>1.2</jstl.version>
     </properties>
-
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.spring.platform</groupId>
-                <artifactId>platform-bom</artifactId>
-                <version>${spring.platform.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
 
     <dependencies>
 
         <dependency>
             <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin</artifactId>
-            <version>${lightadmin.version}</version>
         </dependency>
         <dependency>
             <groupId>org.lightadmin</groupId>
             <artifactId>light-logging-configurer</artifactId>
-            <version>${light-logging-configurer.version}</version>
         </dependency>
 
         <dependency>
@@ -118,17 +97,6 @@
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>jstl-impl</artifactId>
-            <version>${jstl.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.servlet.jsp</groupId>
-                    <artifactId>jsp-api</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>javax.servlet</groupId>

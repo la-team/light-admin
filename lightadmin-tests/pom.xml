@@ -18,33 +18,19 @@
     <properties>
         <container.port>8080</container.port>
 
-        <spring.platform.version>1.1.2.RELEASE</spring.platform.version>
-
         <selenium-java.version>2.45.0</selenium-java.version>
         <xml-apis.version>1.4.01</xml-apis.version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.spring.platform</groupId>
-                <artifactId>platform-bom</artifactId>
-                <version>${spring.platform.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin-sandbox</artifactId>
             <version>${project.version}</version>
             <type>war</type>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
+            <groupId>org.lightadmin</groupId>
             <artifactId>lightadmin-sandbox</artifactId>
             <version>${project.version}</version>
             <classifier>classes</classifier>
