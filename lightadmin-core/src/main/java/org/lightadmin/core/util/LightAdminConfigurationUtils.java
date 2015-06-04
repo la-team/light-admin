@@ -35,7 +35,7 @@ public class LightAdminConfigurationUtils {
 
     public static final String LIGHT_ADMIN_REST_URL_DEFAULT = "/rest";
 
-    public static final String LIGHT_ADMIN_CUSTOM_LOGO_LOCATION = "/WEB-INF/admin/images/logo.png";
+    public static final String LIGHT_ADMIN_CUSTOM_LOGO_LOCATION = "/images/customLogo.png";
     public static final String LIGHT_ADMIN_DEFAULT_LOGO_LOCATION = "/images/loginLogo_2-1.png";
 
     public static final String LIGHT_ADMIN_CUSTOM_FRAGMENT_SERVLET_URL = "/dynamic/custom";
