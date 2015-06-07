@@ -10,6 +10,6 @@ public class UnsupportedFieldTypeAdministration extends AdministrationConfigurat
 	public FieldSetConfigurationUnit quickView(FieldSetConfigurationUnitBuilder fragmentBuilder) {
 		return fragmentBuilder
 				.field( "name" ).caption( "Name" )
-				.field( "theEnum" ).caption( "Field Of Unsupported Type" ).build();
+				.field( "unsupportedType" ).caption( "Field Of Unsupported Type" ).build();
 	}
 }
