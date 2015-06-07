@@ -95,7 +95,7 @@ public class ProductAdministration extends AdministrationConfiguration<Product> 
 
     public SidebarsConfigurationUnit sidebars(final SidebarsConfigurationUnitBuilder sidebarsBuilder) {
         return sidebarsBuilder
-                .sidebar("Custom Sidebar", "/WEB-INF/admin/sidebars/sidebar.jsp")
+                .sidebar("Custom Sidebar", "/WEB-INF/lightadmin/sidebars/sidebar.jsp")
                 .build();
     }
 }

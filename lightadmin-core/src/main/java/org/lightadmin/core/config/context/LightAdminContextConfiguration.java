@@ -51,6 +51,7 @@ import javax.servlet.ServletContext;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_CUSTOM_RESOURCE_CLASSPATH_LOCATION;
 import static org.springframework.web.servlet.DispatcherServlet.VIEW_RESOLVER_BEAN_NAME;
 
 @Configuration
@@ -68,7 +69,7 @@ public class LightAdminContextConfiguration extends WebMvcConfigurerAdapter {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/styles/**").addResourceLocations("classpath:/META-INF/resources/styles/");
         registry.addResourceHandler("/scripts/**").addResourceLocations("classpath:/META-INF/resources/scripts/");
-        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/META-INF/resources/images/").setCachePeriod(31556926);
+        registry.addResourceHandler("/images/**").addResourceLocations("classpath:/META-INF/resources/images/", LIGHT_ADMIN_CUSTOM_RESOURCE_CLASSPATH_LOCATION + "/images/").setCachePeriod(31556926);
     }
 
     @Bean

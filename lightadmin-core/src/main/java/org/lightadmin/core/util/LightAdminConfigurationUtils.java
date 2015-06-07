@@ -35,8 +35,17 @@ public class LightAdminConfigurationUtils {
 
     public static final String LIGHT_ADMIN_REST_URL_DEFAULT = "/rest";
 
-    public static final String LIGHT_ADMIN_CUSTOM_LOGO_LOCATION = "/images/customLogo.png";
-    public static final String LIGHT_ADMIN_DEFAULT_LOGO_LOCATION = "/images/loginLogo_2-1.png";
+    public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO = "/images/lightadmin-custom-logo.png";
+
+    public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_WEB_INF_LOCATION = "/WEB-INF/lightadmin";
+    public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO_WEB_INF_LOCATION = LIGHT_ADMIN_CUSTOM_RESOURCE_WEB_INF_LOCATION + LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO;
+
+    public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_FRAGMENT_LOCATION = LIGHT_ADMIN_CUSTOM_RESOURCE_WEB_INF_LOCATION + "/**/*.jsp";
+
+    public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_CLASSPATH_LOCATION = "classpath:/META-INF/resources/lightadmin";
+    public static final String LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO_CLASSPATH_LOCATION = LIGHT_ADMIN_CUSTOM_RESOURCE_CLASSPATH_LOCATION + LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO;
+
+    public static final String LIGHT_ADMIN_DEFAULT_LOGO_LOCATION = "/images/lightadmin-logo.png";
 
     public static final String LIGHT_ADMIN_CUSTOM_FRAGMENT_SERVLET_URL = "/dynamic/custom";
     public static final String LIGHT_ADMIN_LOGO_SERVLET_URL = "/dynamic/logo";

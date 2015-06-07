@@ -15,38 +15,17 @@
  */
 package org.lightadmin.core.config;
 
-import java.io.File;
-import java.util.regex.Pattern;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRegistration;
-import javax.servlet.http.HttpServletRequest;
 import net.sf.ehcache.constructs.web.filter.GzipFilter;
-import static org.apache.commons.io.FileUtils.getFile;
-import static org.apache.commons.lang3.BooleanUtils.toBoolean;
-import static org.apache.commons.lang3.StringUtils.isBlank;
 import org.lightadmin.core.config.bootstrap.LightAdminBeanDefinitionRegistryPostProcessor;
 import org.lightadmin.core.config.context.LightAdminContextConfiguration;
 import org.lightadmin.core.config.context.LightAdminSecurityConfiguration;
 import org.lightadmin.core.util.LightAdminConfigurationUtils;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_PACKAGE;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_BASE_URL;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_FILE_STORAGE_PATH;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMINISTRATION_SECURITY;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_CUSTOM_FRAGMENT_SERVLET_URL;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_CUSTOM_LOGO_LOCATION;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_CUSTOM_RESOURCE_SERVLET_NAME;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_DEFAULT_LOGO_LOCATION;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_DISPATCHER_NAME;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_DISPATCHER_REDIRECTOR_NAME;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_LOGO_RESOURCE_SERVLET_NAME;
-import static org.lightadmin.core.util.LightAdminConfigurationUtils.LIGHT_ADMIN_LOGO_SERVLET_URL;
 import org.lightadmin.core.view.TilesContainerEnrichmentFilter;
 import org.lightadmin.core.web.DispatcherRedirectorServlet;
-import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 import org.springframework.core.annotation.Order;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.web.WebApplicationInitializer;
 import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 import org.springframework.web.context.support.ServletContextResourceLoader;
@@ -56,6 +35,19 @@ import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.FrameworkServlet;
 import org.springframework.web.servlet.ResourceServlet;
+
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.ServletRegistration;
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
+import java.util.regex.Pattern;
+
+import static org.apache.commons.io.FileUtils.getFile;
+import static org.apache.commons.lang3.BooleanUtils.toBoolean;
+import static org.apache.commons.lang3.StringUtils.isBlank;
+import static org.lightadmin.core.util.LightAdminConfigurationUtils.*;
+import static org.springframework.core.Ordered.LOWEST_PRECEDENCE;
 
 @SuppressWarnings("unused")
 @Order(LOWEST_PRECEDENCE)
@@ -84,7 +76,7 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
             return;
         }
 
-        registerCusomResourceServlet(servletContext);
+        registerCustomResourceServlet(servletContext);
         registerLogoResourceServlet(servletContext);
 
         registerLightAdminDispatcher(servletContext);
@@ -123,9 +115,9 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         lightAdminDispatcherRedirectorRegistration.addMapping(lightAdminBaseUrl(servletContext));
     }
 
-    private void registerCusomResourceServlet(final ServletContext servletContext) {
+    private void registerCustomResourceServlet(final ServletContext servletContext) {
         final ResourceServlet resourceServlet = new ResourceServlet();
-        resourceServlet.setAllowedResources("/WEB-INF/admin/**/*.jsp");
+        resourceServlet.setAllowedResources(LIGHT_ADMIN_CUSTOM_RESOURCE_FRAGMENT_LOCATION);
         resourceServlet.setApplyLastModified(true);
         resourceServlet.setContentType("text/html");
 
@@ -141,10 +133,16 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
     }
 
 	private ResourceServlet logoResourceServlet(ServletContext servletContext) {
-		Resource resource = new ClassPathResource("/META-INF/resources" + LIGHT_ADMIN_CUSTOM_LOGO_LOCATION);
-		if (resource.exists()) {
-			return concreteResourceServlet(resourceServletMapping(servletContext, LIGHT_ADMIN_CUSTOM_LOGO_LOCATION));
-		}
+        Resource classPathResource = defaultResourceLoader().getResource(LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO_CLASSPATH_LOCATION);
+        if (classPathResource.exists()) {
+            return concreteResourceServlet(resourceServletMapping(servletContext, LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO));
+        }
+
+        Resource webResource = servletContextResourceLoader(servletContext).getResource(LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO_WEB_INF_LOCATION);
+        if (webResource.exists()) {
+            return concreteResourceServlet(LIGHT_ADMIN_CUSTOM_RESOURCE_LOGO_WEB_INF_LOCATION);
+        }
+
 		return concreteResourceServlet(resourceServletMapping(servletContext, LIGHT_ADMIN_DEFAULT_LOGO_LOCATION));
 	}
 
@@ -275,8 +273,12 @@ public class LightAdminWebApplicationInitializer implements WebApplicationInitia
         return !fileStorageDirectory.exists() || !fileStorageDirectory.isDirectory();
     }
 
-    private ServletContextResourceLoader servletContextResourceLoader(ServletContext servletContext) {
+    private ResourceLoader servletContextResourceLoader(ServletContext servletContext) {
         return new ServletContextResourceLoader(servletContext);
+    }
+
+    private ResourceLoader defaultResourceLoader() {
+        return new DefaultResourceLoader();
     }
 
     private ResourceServlet concreteResourceServlet(final String location) {
