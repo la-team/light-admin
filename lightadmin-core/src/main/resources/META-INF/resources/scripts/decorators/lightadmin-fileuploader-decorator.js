@@ -28,9 +28,9 @@ var FileUploaderDecorator = (function () {
                 flash_swf_url: 'vendor/plugins/plupload/js/Moxie.swf',
                 silverlight_xap_url: 'vendor/plugins/plupload/js/Moxie.xap',
                 filters: {
-                    max_file_size: '10mb',
+                    max_file_size: $('#'+container).data("limit")+'mb',
                     mime_types: [
-                        {title: "Image files", extensions: "jpg,jpeg,png"}
+                        {title: "Files", extensions: $('#'+container).data("extensions")}
                     ]
                 },
 
@@ -54,9 +54,9 @@ var FileUploaderDecorator = (function () {
                         var errorMessage = err.message + (err.file ? " File: " + err.file.name : "");
 
                         if (errorCode == -600) {
-                            errorMessage = 'Selected file ' + (err.file ? err.file.name + ' ' : "") + 'exceeds file size limit of 10MB';
+                            errorMessage = 'Selected file ' + (err.file ? err.file.name + ' ' : "") + 'exceeds file size limit of '+$('#'+container).data("limit")+'MB';
                         } else if (errorCode == -601 || errorCode == -700) {
-                            errorMessage = "Selected file type is not supported (" + (err.file ? err.file.name : "") + "). Please select JPG or PNG file.";
+                            errorMessage = "Selected file type is not supported (" + (err.file ? err.file.name : "") + "). Please select a file with extension "+$('#'+container).data("extensions")+".";
                         }
 
                         jAlert(errorMessage, 'Upload file operation failure');

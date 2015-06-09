@@ -1,4 +1,4 @@
-<%@ tag body-content="empty" %>
+<%@ tag body-content="empty" import="org.lightadmin.api.config.annotation.FileReference" %>
 <%@ attribute name="attributeMetadata" required="true"
               type="org.springframework.data.mapping.PersistentProperty" %>
 <%@ attribute name="cssClass" required="false" type="java.lang.String" %>
@@ -12,8 +12,12 @@
 <tiles:importAttribute name="dialogMode" ignore="true"/>
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
-
-<div id="${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}" style="text-align: left;">
+<c:set var="fileReferenceConstraints" value='${light:findAnnotationByName(attributeMetadata, "org.lightadmin.api.config.annotation.FileReference$Constraints")}' />
+<c:if test="${fileReferenceConstraints ne null}">
+    <c:set var="extensions" value="${light:getAnnotationValue(fileReferenceConstraints, 'value')}" />
+    <c:set var="limit" value="${light:getAnnotationValue(fileReferenceConstraints, 'limit')}" />
+</c:if>
+<div id="${attributeMetadata.name}-file-container${dialogMode ? '-dialog' : ''}" style="text-align: left;" data-extensions="${extensions ne null ? extensions : 'jpg,jpeg,png'}" data-limit="${limit ne null ? limit : '10'}">
     <div class="uploader" style="z-index: 1;">
         <input type="hidden" class="fileInput" id="${attributeMetadata.name}${dialogMode ? '-dialog' : ''}"
                name="${attributeMetadata.name}" size="24" style="opacity: 0;">

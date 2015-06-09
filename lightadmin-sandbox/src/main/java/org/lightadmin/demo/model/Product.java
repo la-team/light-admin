@@ -1,20 +1,23 @@
 package org.lightadmin.demo.model;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.SqlTimeSerializer;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import org.hibernate.annotations.Type;
-import org.springframework.format.annotation.NumberFormat;
-import org.springframework.util.Assert;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Map;
 import java.util.UUID;
+import javax.persistence.Basic;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Lob;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import org.hibernate.annotations.Type;
+import org.springframework.format.annotation.NumberFormat;
+import org.springframework.util.Assert;
 
 @Entity
 public class Product extends AbstractEntity {
@@ -54,6 +57,7 @@ public class Product extends AbstractEntity {
 
     @Lob
     @Column(name = "PICTURE")
+    //@FileReference.Constraints("jpg,jpeg,png,gif")
     private byte[] picture;
 
     @Column(name = "UUID_NUM")
