@@ -190,4 +190,16 @@
         </function-signature>
     </function>
 
+    <function>
+        <name>findAnnotationByName</name>
+        <function-class>org.lightadmin.core.util.AnnotationUtils</function-class>
+        <function-signature>java.lang.annotation.Annotation findAnnotationByName(org.springframework.data.mapping.PersistentProperty, java.lang.String)</function-signature>
+    </function>
+
+    <function>
+        <name>getAnnotationValue</name>
+        <function-class>org.lightadmin.core.util.AnnotationUtils</function-class>
+        <function-signature>java.lang.Object getAnnotationValue(java.lang.annotation.Annotation, java.lang.String)</function-signature>
+    </function>
+
 </taglib>

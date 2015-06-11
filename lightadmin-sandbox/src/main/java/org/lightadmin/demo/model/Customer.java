@@ -1,15 +1,20 @@
 package org.lightadmin.demo.model;
 
+import java.util.Set;
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import org.hibernate.annotations.Type;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
-import org.joda.time.LocalDateTime;
 import org.lightadmin.api.config.annotation.FileReference;
 import org.springframework.util.Assert;
-
-import javax.persistence.*;
-import java.util.Set;
 
 @Entity
 public class Customer extends AbstractEntity {
@@ -47,6 +52,7 @@ public class Customer extends AbstractEntity {
 
     @Column(name = "AVATAR_FILE_URL")
     @FileReference(baseDirectory = "/Users/max/Desktop/lightadmin-demo")
+    @FileReference.Constraints(value = "png", limit = 2)
     private String avatar;
 
 	public Customer( String firstname, String lastname ) {
