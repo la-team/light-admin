@@ -63,12 +63,11 @@ public class ComplexFields extends SeleniumIntegrationTest {
 
 		createPage.searchAndSelect( "customer", "c", "New Customer" );
 
-		// we use short names here because otherwise it cannot be selected
-		createPage.searchAndSelect( "shippingAddresses", "A", "Rome, Italy" );
-		createPage.searchAndSelect( "shippingAddresses", "k", "Kiev, Ukraine" );
+		createPage.searchAndSelect( "shippingAddresses", "Rome", "Rome, Italy" );
+		createPage.searchAndSelect( "shippingAddresses", "Ukraine", "Kiev, Ukraine" );
 
 		createPage.searchAndSelect( "lineItems", "55", "Product: Product 2; Amount: 1; Total: 1299.00" );
-		createPage.searchAndSelect( "lineItems", "49", "67. Product: Product 3; Amount: 1; Total: 49.00" );
+		createPage.searchAndSelect( "lineItems", "49.00", "67. Product: Product 3; Amount: 1; Total: 49.00" );
 
 		showView = createPage.submit();
 

@@ -2,6 +2,7 @@ package org.lightadmin.field;
 
 import org.lightadmin.SeleniumContext;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.internal.Locatable;
 
@@ -10,6 +11,7 @@ import java.util.List;
 public class MultiSelect extends BaseField implements BaseSelect {
 
 	private final WebElement theField;
+	private WebElement optionList;
 
 	public MultiSelect( WebElement webElement, SeleniumContext seleniumContext ) {
 		super( seleniumContext );
@@ -40,7 +42,11 @@ public class MultiSelect extends BaseField implements BaseSelect {
 
 	@Override
 	public void searchAndSelect( String searchString, String labelToSelect ) {
-		theField.click();
+
+		if (!hasSelectedOptions()) {
+			theField.click();
+		}
+
 		theField.findElement(By.tagName("input")).sendKeys(searchString);
 		select( labelToSelect );
 	}
@@ -66,13 +72,11 @@ public class MultiSelect extends BaseField implements BaseSelect {
 	}
 
 	private void addSelection( String option ) {
-		theField.click();
+		optionList = theField.findElement(By.className("chzn-drop"));
 
-		WebElement valueList = theField.findElement(By.className("chzn-drop"));
+		expandOptionList();
 
-		webDriver().waitForElementVisible( valueList, 10 );
-
-		final WebElement optionToSelect = findOptionByText(valueList, option);
+		final WebElement optionToSelect = findOptionByText(optionList, option);
 		assert optionToSelect != null;
 
 		( ( Locatable ) optionToSelect ).getCoordinates().inViewPort();
@@ -81,7 +85,23 @@ public class MultiSelect extends BaseField implements BaseSelect {
 		webDriver().waitForElementVisible( getSelectedOption( option ) );
 	}
 
+	private void expandOptionList() {
+		if (!optionList.isDisplayed()) {
+			theField.click();
+			webDriver().waitForElementVisible(optionList, 10);
+		}
+	}
+
 	private WebElement getSelectedOption( String value ) {
 		return theField.findElement( By.xpath( "//li[span[contains(text(),'" + value + "')]]" ) );
+	}
+
+	private boolean hasSelectedOptions() {
+		try {
+			theField.findElement(By.className("search-choice"));
+		} catch (NoSuchElementException e) {
+			return false;
+		}
+		return true;
 	}
 }
