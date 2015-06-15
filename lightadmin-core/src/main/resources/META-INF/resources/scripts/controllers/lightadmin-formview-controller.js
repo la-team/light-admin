@@ -147,11 +147,14 @@ function LoadDomainEntityAction(resourceName) {
         if (objectId == null) {
             objectId = '';
         }
-        editor.find('option').each(function (index, option) {
-            if (option.value == objectId) {
-                option.selected = true;
-            }
-        });
+
+        var $option = editor.find('option[value="' + objectId + '"]');
+        if ($option.length === 0) {
+            editor.append("<option value='" + objectId + "' selected='selected'>" + objectId + "</option>");
+        } else {
+            $option.prop('selected', true);
+        }
+
     }
 
     function prepareForm(domainEntity, form) {
@@ -163,6 +166,7 @@ function LoadDomainEntityAction(resourceName) {
             var propertyType = property['type'];
 
             var editor = form.find('[name="' + propertyName + '"]');
+            var editorN2MAll = form.find('[name="' + propertyName + '-n2mall"]');
             if (editor.length == 0) {
                 continue;
             }
@@ -178,6 +182,19 @@ function LoadDomainEntityAction(resourceName) {
                     break;
                 case 'ASSOC_MULTI':
                     selectOptions(editor, propertyValue);
+
+                    if (editorN2MAll.length > 0) {
+                        
+                        editor.find("option").each(function(i,e){
+                            var detached = editorN2MAll.find('option[value="'+$(e).val()+'"]').detach();
+                            editorN2MAll.append(detached);
+                        });
+                        
+                        selectOptions(editorN2MAll, propertyValue);
+                        
+                    } else {
+                        selectOptions(editor, propertyValue);
+                    }
                     break;
                 case 'BOOL':
                     editor.prop('checked', propertyValue);
@@ -219,7 +236,7 @@ function LoadDomainEntityAction(resourceName) {
         $.uniform.update();
         $(".chzn-select", $(form)).trigger("liszt:updated");
 
-        $("a[rel^='prettyPhoto']", $(form)).prettyPhoto({ social_tools: ''});
+        $("a[rel^='prettyPhoto']", $(form)).prettyPhoto({social_tools: ''});
     }
 
     function collectErrorMessages(errors) {
