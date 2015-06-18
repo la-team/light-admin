@@ -56,7 +56,7 @@ var ModalDialogController = (function () {
 
             var parent_form = $(elementToBind).parents('form')[0];
 
-            var managed_select = $("select[name='" + attributeName + "']", parent_form);
+            var managed_select = $("select[name='" + attributeName + "'], select[name='" + attributeName + "-n2mall']", parent_form);
 
             $(elementToBind).click(function () {
                 if ($(dialog_selector).length) {

@@ -35,7 +35,7 @@
         <c:set var="domainTypeName" value="${light:cutLongText(domainTypeAdministrationConfiguration.domainTypeName)}"/>
 
         <div style="float: right; margin-top: 10px; display: inline-block;">
-            <a id="link-dialog-${attributeMetadata.name}-n2mall" href="javascript:void(0);" title="Create ${domainTypeName}"
+            <a id="link-dialog-${attributeMetadata.name}" href="javascript:void(0);" title="Create ${domainTypeName}"
                class="btn14 mr5"><img src="<light:url value='/images/icons/dark/create.png'/>"
                                       alt="Create ${domainTypeName}"></a>
         </div>
@@ -44,33 +44,34 @@
             $(function () {
                 ModalDialogController.show(
                         '${domainTypeAdministrationConfiguration.pluralDomainTypeName}',
-                        '${attributeMetadata.name}-n2mall',
+                        '${attributeMetadata.name}',
                         $("#link-dialog-${attributeMetadata.name}")
                 );
             });
-            
-            (function(){
-                
-                $('select[name="${attributeMetadata.name}-n2mall"]').change(function(){
-                    
-                    var $options = $(this).find("option");
-                    
-                    for(var i=0; i<$options.length; i++){
-                        var $option = $($options[i]);
-                        var value = $option.attr("value");
-                        
-                        if ($option.is(":selected")){
-                            if ($('select[name="${attributeMetadata.name}"] option[value="'+value+'"]').length===0){
-                                $('select[name="${attributeMetadata.name}"]').append("<option value='"+value+"' selected='selected'>"+value+"</option>");
-                            }
-                        } else {
-                            $('select[name="${attributeMetadata.name}"] option[value="'+value+'"]').remove();
-                        }
-                    }
-                    
-                });
-                
-            })();
         </script>
     </c:if>
 </c:if>
+<script type="text/javascript">
+    (function(){
+
+        $('select[name="${attributeMetadata.name}-n2mall"]').change(function(){
+
+            var $options = $(this).find("option");
+
+            for(var i=0; i<$options.length; i++){
+                var $option = $($options[i]);
+                var value = $option.attr("value");
+
+                if ($option.is(":selected")){
+                    if ($('select[name="${attributeMetadata.name}"] option[value="'+value+'"]').length===0){
+                        $('select[name="${attributeMetadata.name}"]').append("<option value='"+value+"' selected='selected'>"+value+"</option>");
+                    }
+                } else {
+                    $('select[name="${attributeMetadata.name}"] option[value="'+value+'"]').remove();
+                }
+            }
+
+        });
+
+    })();
+</script>
