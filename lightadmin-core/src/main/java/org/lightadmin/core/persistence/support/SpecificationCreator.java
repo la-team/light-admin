@@ -132,7 +132,7 @@ public class SpecificationCreator {
 
         private Predicate stringAttributePredicate(final String attributeName, final String parameterValue) {
             if (isNotBlank(parameterValue)) {
-                return builder.like(root.<String>get(attributeName), "%" + parameterValue + "%");
+                return builder.like(builder.lower(root.<String>get(attributeName)), "%" + parameterValue.toLowerCase() + "%");
             }
 
             return builder.and();
