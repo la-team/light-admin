@@ -54,9 +54,9 @@ public class FilterTest extends SeleniumIntegrationTest {
 	}
 
 	@Test
-	public void textFilterIsCaseSensitive() {
+	public void textFilterIsCaseInsensitive() {
 		getStartPage().openAdvancedSearch();
-		getStartPage().filter( "textField", "Case Sensitivity Test" );
+		getStartPage().filter( "textField", "CASE sensitivity TeSt" );
 
 		assertTableData( expectedResult4, getStartPage().getDataTable(), webDriver(), webDriverTimeout() );
 	}
@@ -90,7 +90,10 @@ public class FilterTest extends SeleniumIntegrationTest {
 	private static final String[][] expectedResult1 = {{"1", "integer search test", "1234567", "521", "22.2", ""}};
 	private static final String[][] expectedResult2 = {{"2", "decimal search test", "456", "31264", "1499.99", ""}};
 	private static final String[][] expectedResult3 = {{"3", "管#<,&«$'(*@×¢¤₤€¥ª ™®© ØøÅåÆæĈę ¦_{~>½", "789", "62342", "22.2", ""}};
-	private static final String[][] expectedResult4 = {{"4", "Case Sensitivity Test", "901", "823", "22.2", "Yes"}};
+	private static final String[][] expectedResult4 = {
+            {"4", "Case Sensitivity Test", "901", "823", "22.2", "Yes"},
+            {"5", "Case sensitivity test", "901", "9521", "22.2", "No"}
+    };
 	private static final String[][] expectedResult5 = {
 		{"6", "query partial search test", "234", "9164", "22.2", "Yes"},
 		{"7", "partial querysearch test", "345", "612325", "22.2", "Yes"},
