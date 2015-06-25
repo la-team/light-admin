@@ -54,8 +54,8 @@ public class ComplexFields extends SeleniumIntegrationTest {
 						"Vesterbrogade, Copenhagen, Denmark",
 
 				"LineItem Id: 113; Product Name: Product 1\n" +
-						"LineItem Id: 110; Product Name: Product 3\n" +
-						"LineItem Id: 114; Product Name: Product 1",
+						"LineItem Id: 114; Product Name: Product 1\n" +
+						"LineItem Id: 110; Product Name: Product 3",
 
 				"19657.00",
 				"2013-10-08"},
@@ -75,10 +75,10 @@ public class ComplexFields extends SeleniumIntegrationTest {
 
 				"LineItem Id: 108; Product Name: Product 1\n" +
 						"LineItem Id: 109; Product Name: Product 2\n" +
-						"LineItem Id: 110; Product Name: Product 3\n" +
-						"LineItem Id: 114; Product Name: Product 1",
+						"LineItem Id: 101; Product Name: Product 1\n" +
+						"LineItem Id: 99; Product Name: Product 3",
 
-				"20671.00",
+				"23019.00",
 				" "},
 				showView.getFieldValuesExcludingId() );
 	}
@@ -123,7 +123,7 @@ public class ComplexFields extends SeleniumIntegrationTest {
 
 		editPage.select( "shippingAddresses", "Kreschatik, Kiev, Ukraine" );
 		editPage.select( "lineItems",
-				"110. Product: Product 3; Amount: 4; Total: 196.00", "114. Product: Product 1; Amount: 7; Total: 3493.00" );
+				"101. Product: Product 1; Amount: 12; Total: 5988.00", "99. Product: Product 3; Amount: 1; Total: 49.00" );
 
 		showView = editPage.submit();
 	}
@@ -139,8 +139,8 @@ public class ComplexFields extends SeleniumIntegrationTest {
 		editPage.replaceFieldSelections( "lineItems",
 				new String[]{ "111. Product: Product 3; Amount: 6; Total: 294.00",
 						"112. Product: Product 2; Amount: 12; Total: 15588.00" },
-				new String[]{ "110. Product: Product 3; Amount: 4; Total: 196.00",
-						"114. Product: Product 1; Amount: 7; Total: 3493.00" } );
+				new String[]{ "114. Product: Product 1; Amount: 7; Total: 3493.00",
+						"110. Product: Product 3; Amount: 4; Total: 196.00" } );
 
 		showView = editPage.submit();
 	}

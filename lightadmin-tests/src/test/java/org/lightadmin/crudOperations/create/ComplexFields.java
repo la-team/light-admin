@@ -66,8 +66,8 @@ public class ComplexFields extends SeleniumIntegrationTest {
 		createPage.searchAndSelect( "shippingAddresses", "Rome", "Rome, Italy" );
 		createPage.searchAndSelect( "shippingAddresses", "Ukraine", "Kiev, Ukraine" );
 
-		createPage.searchAndSelect( "lineItems", "55", "Product: Product 2; Amount: 1; Total: 1299.00" );
 		createPage.searchAndSelect( "lineItems", "49.00", "67. Product: Product 3; Amount: 1; Total: 49.00" );
+		createPage.searchAndSelect( "lineItems", "55", "Product: Product 2; Amount: 1; Total: 1299.00" );
 
 		showView = createPage.submit();
 
@@ -75,8 +75,8 @@ public class ComplexFields extends SeleniumIntegrationTest {
 				"New Customer",
 				"Kreschatik, Kiev, Ukraine\n" +
 						"Via Aurelia, Rome, Italy",
-				"LineItem Id: 55; Product Name: Product 2\n" +
-						"LineItem Id: 67; Product Name: Product 3",
+				"LineItem Id: 67; Product Name: Product 3\n" +
+						"LineItem Id: 55; Product Name: Product 2",
 				"1348.00",
 				" "  }, showView.getFieldValuesExcludingId() );
 	}
