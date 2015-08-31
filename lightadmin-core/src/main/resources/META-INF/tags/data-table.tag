@@ -144,6 +144,7 @@
             });
         });
         $("a[rel^='prettyPhoto']").prettyPhoto({ social_tools: ''});
+        $("#listViewTable").attr("data-loaded", true);
     }
 
     function mRenderFieldValue(innerData, propertyName) {
