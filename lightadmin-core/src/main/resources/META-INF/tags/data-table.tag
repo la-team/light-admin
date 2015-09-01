@@ -133,6 +133,7 @@
     });
 
     function fnDrawCallback(oSettings) {
+        $("#listViewTable").attr("data-loaded", true);
         $("a.removeBtn").click(function () {
             var entityId = $(this).attr('data-entity-id');
             jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {

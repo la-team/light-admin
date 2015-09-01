@@ -79,6 +79,8 @@ function dataTableRESTAdapter(sSource, aoData, fnCallback) {
     restParams.push({"name": "page", "value": pageNum });
     restParams.push({ "name": "sort", "value": sortName + ',' + sortDir });
 
+    $(this).attr("data-loaded", false);
+
     jQuery.ajax({
         "dataType": 'json',
         "type": "GET",
