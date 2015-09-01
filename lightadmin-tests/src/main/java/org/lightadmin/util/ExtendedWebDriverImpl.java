@@ -96,6 +96,11 @@ public class ExtendedWebDriverImpl implements ExtendedWebDriver {
     }
 
     @Override
+    public void executeJavaScript(String script) {
+        webDriver.executeScript(script);
+    }
+
+    @Override
     public void get(final String url) {
         webDriver.get(url);
     }

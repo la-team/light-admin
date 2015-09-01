@@ -25,4 +25,6 @@ public interface ExtendedWebDriver extends WebDriver {
 	public void forceFocusOnCurrentWindow();
 
 	public void scrollTo(int pixels);
+
+	public void executeJavaScript(String script);
 }

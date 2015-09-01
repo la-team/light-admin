@@ -21,6 +21,9 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	@FindBy(id = "listViewTable_wrapper")
 	private WebElement listViewTable;
 
+	@FindBy(xpath = "//*[@id='listViewTable' and @data-loaded='true']")
+	private WebElement listViewTableData;
+
 	private FilterFormComponent filterFormComponent;
 
 	public ListViewPage( SeleniumContext seleniumContext, Domain domain ) {
@@ -42,7 +45,8 @@ public class ListViewPage extends SecuredPage<ListViewPage> {
 	@Override
 	protected void isLoaded() throws Error {
 		try {
-			webDriver().waitForElementVisible( listViewTable );
+			webDriver().waitForElementVisible( listViewTableData );
+			webDriver().executeJavaScript("document.getElementById('listViewTable').setAttribute('data-loaded', 'false')");
 		} catch ( TimeoutException e ) {
 			fail( "ListViewTable was not found on ListViewPage" );
 		}
