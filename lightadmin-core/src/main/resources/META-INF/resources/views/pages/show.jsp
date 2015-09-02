@@ -6,6 +6,7 @@
 
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
+<%@ taglib prefix="bean" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <tiles:importAttribute name="domainTypeAdministrationConfiguration"/>
 <tiles:importAttribute name="fields"/>
@@ -16,6 +17,11 @@
 <tiles:importAttribute name="entityId"/>
 
 <light:url var="domainBaseUrl" value="${light:domainBaseUrl(domainTypeAdministrationConfiguration)}" scope="page"/>
+<spring:message code="edit" var="edit"/>
+<spring:message code="remove" var="remove"/>
+<spring:message code="confirmation.dialog" var="confrmation_dialog"/>
+<spring:message code="are.you.sure" var="are_you_sure"/>
+<spring:message code="update.operation.has.been.performed.successfully" var="update_successfully"/>
 
 <div class="title">
     <h5><c:out value="Show ${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
@@ -31,8 +37,8 @@
         <h5 class="iList"><c:out value="${light:capitalize(light:cutLongText(entitySingularName))}"/></h5>
 
         <div style="float: right;margin-top: 5px;display: inline-block;">
-            <a href="${domainBaseUrl}/${entityId}/edit" title="Edit" class="btn14 mr5"><img src="<light:url value='/images/icons/dark/pencil.png'/>" alt="Edit"></a>
-            <a href="javascript:void(0);" title="Remove" class="btn14 mr5 remove_button"><img src="<light:url value='/images/icons/dark/basket.png'/>" alt="Remove"></a>
+            <a href="${domainBaseUrl}/${entityId}/edit" title="${edit}" class="btn14 mr5"><img src="<light:url value='/images/icons/dark/pencil.png'/>" alt="${edit}"></a>
+            <a href="javascript:void(0);" title="${edit}" class="btn14 mr5 remove_button"><img src="<light:url value='/images/icons/dark/basket.png'/>" alt="${remove}"></a>
         </div>
     </div>
     <table cellpadding="0" cellspacing="0" width="100%" class="tableStatic">
@@ -51,14 +57,14 @@
     ShowViewController.handle($('#data-section'), '${entityId}');
 
     <c:if test="${not empty (param['updateSuccess'])}">
-    NotificationController.showSuccessMessageNote('<c:out value="${light:capitalize(entitySingularName)}"/> update operation has been performed successfully!');
+    NotificationController.showSuccessMessageNote('<c:out value="${light:capitalize(entitySingularName)}"/> ${update_successfully}');
     </c:if>
 
     $(function () {
         var entity_id = '${entityId}';
 
         $("a.remove_button").click(function () {
-            jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
+            jConfirm('${are_you_sure}', '${confrmation_dialog}', function (r) {
                 if (r) {
                     new FormViewController(ApplicationConfig.RESOURCE_NAME).removeDomainEntity(entity_id, function() {
                         window.location = ApplicationConfig.getDomainEntityCollectionUrl(ApplicationConfig.RESOURCE_NAME);

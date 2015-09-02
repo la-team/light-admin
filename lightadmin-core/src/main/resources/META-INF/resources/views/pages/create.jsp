@@ -22,6 +22,8 @@
 
 <c:set var="dialogMode" value="${dialogMode eq null ? false : true}"/>
 <c:set var="domainTypeFormName" value="${domainTypeAdministrationConfiguration.pluralDomainTypeName}${dialogMode ? '-dialog-form' : '-form'}"/>
+<spring:message code="cancel" var="cancel"/>
+<spring:message code="save.changes" var="save_changes"/>
 
 <c:if test="${not dialogMode}">
     <div class="title">
@@ -60,8 +62,8 @@
             </c:forEach>
         </fieldset>
         <div class="wizNav">
-            <input name="cancel-changes" class="basicBtn" value="Cancel" type="button">
-            <input name="save-changes" class="blueBtn" value="Save" type="button">
+            <input name="cancel-changes" class="basicBtn" value="${cancel}" type="button">
+            <input name="save-changes" class="blueBtn" value="${save_changes}" type="button">
         </div>
     </div>
 </form>
