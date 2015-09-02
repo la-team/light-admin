@@ -6,9 +6,10 @@
 
 <tiles:importAttribute name="domainTypeAdministrationConfiguration" ignore="true"/>
 
+<spring:message code="to.dashboard" var="to_dashboard"/>
 <div id="header" class="wrapper">
 	<div class="logo">
-		<a href="<light:url value='/'/>" title="To Dashboard">
+		<a href="<light:url value='/'/>" title="${to_dashboard}">
 			<img src="<light:url value='/dynamic/logo'/>"/>
 		</a>
 	</div>

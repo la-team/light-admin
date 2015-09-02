@@ -4,6 +4,7 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 <%@ taglib prefix="light-jsp" uri="http://www.lightadmin.org/jsp" %>
+<%@ taglib prefix="bean" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <%@ attribute name="domainTypeAdministrationConfiguration" required="true" type="org.lightadmin.core.config.domain.DomainTypeAdministrationConfiguration" %>
 <%@ attribute name="fields" required="true" type="java.util.Set" %>
@@ -12,6 +13,22 @@
 <c:set var="ASSOC" value="<%= PersistentPropertyType.ASSOC %>"/>
 <c:set var="ASSOC_MULT" value="<%= PersistentPropertyType.ASSOC_MULTI %>"/>
 <c:set var="FILE" value="<%= PersistentPropertyType.FILE %>"/>
+
+<spring:message code="click.for.quick.view" var="click_quick"/>
+<spring:message code="no.data.available.in.table" var="no_data"/>
+<spring:message code="no.matching.records.found" var="no_matching"/>
+<spring:message code="loading" var="loading"/>
+<spring:message code="search" var="search"/>
+<spring:message code="processing" var="processing"/>
+<spring:message code="page.next" var="page_next"/>
+<spring:message code="page.prev" var="page_prev"/>
+<spring:message code="page.first" var="page_first"/>
+<spring:message code="page.last" var="page_last"/>
+<spring:message code="are.you.sure" var="are_sure"/>
+
+<spring:message code="edit" var="edit"/>
+<spring:message code="remove" var="remove"/>
+<spring:message code="view" var="view"/>
 
 <div class="table">
     <div class="head">
@@ -25,7 +42,7 @@
             <c:forEach var="field" items="${fields}">
                 <th class="header"><c:out value="${field.name}"/></th>
             </c:forEach>
-            <th>Actions</th>
+            <th><bean:message key="actions"/></th>
         </tr>
         </thead>
         <tbody/>
@@ -47,7 +64,7 @@
                     "mData": null,
                     "sClass": "center",
                     "mRender": function () {
-                        return '<img class="quickView" src="<light:url value='/images/aNormal.png'/>" style="cursor:pointer;" title="Click for Quick View"/>';
+                        return '<img class="quickView" src="<light:url value='/images/aNormal.png'/>" style="cursor:pointer;" title="${click_quick}"/>';
                     }
                 },
             <c:forEach var="field" items="${fields}" varStatus="status">
@@ -88,23 +105,23 @@
             "fnServerData": dataTableRESTAdapter,
             "sPaginationType": "full_numbers",
             "oLanguage": {
-                "sProcessing": "Processing...",
+                "sProcessing": "${processing}",
                 "sLengthMenu": "<span class='itemsPerPage'>Items per page:</span> <span style='font-size: 11px;'>_MENU_</span>",
-                "sZeroRecords": "No matching records found",
-                "sEmptyTable": "No data available in table",
-                "sLoadingRecords": "Loading...",
+                "sZeroRecords": "${no_matching}",
+                "sEmptyTable": "${no_data}",
+                "sLoadingRecords": "${loading}",
                 "sInfo": "Showing _START_ to _END_ of _TOTAL_ entries",
                 "sInfoEmpty": "Showing 0 to 0 of 0 entries",
                 "sInfoFiltered": "(_MAX_ in total)",
                 "sInfoPostFix": "",
                 "sInfoThousands": ",",
-                "sSearch": "Search:",
+                "sSearch": "${search}",
                 "sUrl": "",
                 "oPaginate": {
-                    "sFirst": "First",
-                    "sPrevious": "Prev",
-                    "sNext": "Next",
-                    "sLast": "Last"
+                    "sFirst": "${page_first}",
+                    "sPrevious": "${page_prev}",
+                    "sNext": "${page_next}",
+                    "sLast": "${page_last}"
                 }
             },
             "sScrollX": "100%",
@@ -135,7 +152,7 @@
     function fnDrawCallback(oSettings) {
         $("a.removeBtn").click(function () {
             var entityId = $(this).attr('data-entity-id');
-            jConfirm('Are you sure?', 'Confirmation Dialog', function (r) {
+            jConfirm('${are_sure}', '${confirm_dialog}', function (r) {
                 if (r) {
                     new FormViewController(ApplicationConfig.RESOURCE_NAME).removeDomainEntity(entityId, function () {
                         getSearcher().search();
@@ -164,9 +181,9 @@
         var editImg = '<light:url value='/images/icons/dark/pencil.png'/>';
         var removeImg = '<light:url value='/images/icons/dark/basket.png'/>';
 
-        var html = "<a href='" + viewEntityUrl + "' title='View' class='btn14 mr5'><img src='" + viewImg + "' alt='View'></a>";
-        html += "<a href='" + editEntityUrl + "' title='Edit' class='btn14 mr5'><img src='" + editImg + "' alt='Edit'></a>";
-        html += "<a href='#' title='Remove' class='btn14 mr5 removeBtn' data-entity-id='" + entityId + "'><img src='" + removeImg + "' alt='Remove'></a>";
+        var html = "<a href='" + viewEntityUrl + "' title='${view}' class='btn14 mr5'><img src='" + viewImg + "' alt='${view}'></a>";
+        html += "<a href='" + editEntityUrl + "' title='${edit}' class='btn14 mr5'><img src='" + editImg + "' alt='${edit}'></a>";
+        html += "<a href='#' title='${remove}' class='btn14 mr5 removeBtn' data-entity-id='" + entityId + "'><img src='" + removeImg + "' alt='${remove}'></a>";
 
         return html;
     }
