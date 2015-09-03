@@ -239,7 +239,7 @@ By default, the app will run in 'embedded' mode which does not require any exter
 
 1. Navigate into demo application directory:
 
-		$ cd lightadmin-demo
+		$ cd lightadmin-sandbox
 
 2. Launch Tomcat from the command line:
 
@@ -247,7 +247,7 @@ By default, the app will run in 'embedded' mode which does not require any exter
 
 3. Access the deployed webapp at 
 
-		http://localhost:8080/lightadmin-demo
+		http://localhost:8080/lightadmin-sandbox
 
 ## LightAdmin integration example
 
