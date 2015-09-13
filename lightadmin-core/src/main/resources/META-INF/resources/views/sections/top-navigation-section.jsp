@@ -23,7 +23,7 @@
                 </ul>
             </div>
 
-            <sec:authorize ifAllGranted="ROLE_ADMIN">
+            <sec:authorize access="isAuthenticated()">
                 <div class="welcome">
                     <a href="#" title="">
                         <img src="<light:url value='/images/userPic.png'/>" alt=""/></a>
