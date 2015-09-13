@@ -40,6 +40,7 @@ function formViewVisualDecoration(container) {
 
     $('.wysiwyg', $(container)).wysiwyg({
         iFrameClass: "wysiwyg-input",
+        removeHeadings: true,
         controls: {
             bold: { visible: true },
             italic: { visible: true },
@@ -67,48 +68,48 @@ function formViewVisualDecoration(container) {
             h1: {
                 visible: true,
                 className: 'h1',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h1>' : 'h1',
+                command: 'formatBlock',
+                arguments: '<h1>',
                 tags: ['h1'],
                 tooltip: 'Header 1'
             },
             h2: {
                 visible: true,
                 className: 'h2',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h2>' : 'h2',
+                command: 'formatBlock',
+                arguments: '<h2>',
                 tags: ['h2'],
                 tooltip: 'Header 2'
             },
             h3: {
                 visible: true,
                 className: 'h3',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h3>' : 'h3',
+                command: 'formatBlock',
+                arguments: '<h3>',
                 tags: ['h3'],
                 tooltip: 'Header 3'
             },
             h4: {
                 visible: true,
                 className: 'h4',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h4>' : 'h4',
+                command: 'formatBlock',
+                arguments: '<h4>',
                 tags: ['h4'],
                 tooltip: 'Header 4'
             },
             h5: {
                 visible: true,
                 className: 'h5',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h5>' : 'h5',
+                command: 'formatBlock',
+                arguments: '<h5>',
                 tags: ['h5'],
                 tooltip: 'Header 5'
             },
             h6: {
                 visible: true,
                 className: 'h6',
-                command: ($.browser.msie || $.browser.safari) ? 'formatBlock' : 'heading',
-                arguments: ($.browser.msie || $.browser.safari) ? '<h6>' : 'h6',
+                command: 'formatBlock',
+                arguments: '<h6>',
                 tags: ['h6'],
                 tooltip: 'Header 6'
             },
