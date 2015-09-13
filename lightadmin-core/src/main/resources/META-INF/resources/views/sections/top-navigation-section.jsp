@@ -8,14 +8,16 @@
 
 <tiles:importAttribute name="lightAdminConfiguration" ignore="true"/>
 
+<spring:message code="back.to.site" var="back_to_site"/>
+
 <div id="topNav">
     <div class="fixed">
         <div class="wrapper">
             <div class="userNav" style="float:left;">
                 <ul>
                     <li>
-                        <a href="<c:out value='${lightAdminConfiguration.backToSiteUrl}'/>" title="Back to Site">
-                            <img src="<light:url value='/images/icons/topnav/mainWebsite.png'/>" alt=""><span>Back to Site</span>
+                        <a href="<c:out value='${lightAdminConfiguration.backToSiteUrl}'/>" title="${back_to_site}">
+                            <img src="<light:url value='/images/icons/topnav/mainWebsite.png'/>" alt=""><span>${back_to_site}</span>
                         </a>
                     </li>
                 </ul>

@@ -2,6 +2,9 @@
 
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
+
+<spring:message code="back.to.dashboard" var="back_to_dashboard"/>
 
 <div class="wrapper">
 	<div class="errorPage">
@@ -12,7 +15,7 @@
 
 		<p>Oops! Sorry, an error has occured.<br/> Requested page not found!</p>
 
-		<div class="backToDash"><a href="<light:url value='/dashboard'/>" title="Back to Dashboard"
-								   class="seaBtn button">Back to Dashboard</a></div>
+		<div class="backToDash"><a href="<light:url value='/dashboard'/>" title="${back_to_dashboard}"
+								   class="seaBtn button">${back_to_dashboard}</a></div>
 	</div>
 </div>

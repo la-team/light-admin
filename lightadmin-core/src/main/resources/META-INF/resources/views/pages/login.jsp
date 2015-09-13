@@ -3,6 +3,10 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags" %>
 <%@ taglib prefix="light" uri="http://www.lightadmin.org/tags" %>
 
+<spring:message code="log.me.in" var="log_me_in"/>
+<spring:message code="please.enter.your.password" var="please_password"/>
+<spring:message code="please.enter.your.name" var="please_name"/>
+
 <div class="loginWrapper" style="width: 320px;">
     <div class="loginLogo"><img src="<light:url value='/dynamic/logo'/>"/></div>
 
@@ -17,7 +21,7 @@
     </c:if>
 
     <div class="loginPanel">
-        <div class="head"><h5 class="iUser">Login</h5></div>
+        <div class="head"><h5 class="iUser"><spring:message code="login"/></h5></div>
         <form action="<light:url value='/j_spring_security_check'/>" id="login-form" class="mainForm" method="POST">
             <fieldset>
                 <div class="loginRow noborder">
@@ -25,7 +29,7 @@
 
                     <div class="loginInput">
                         <input type="text" name="j_username" class="validate[required]" id="req1"
-                               placeholder="Please enter your name here"
+                               placeholder="${please_name}"
                                value='<c:if test="${not empty param.login_error}"><c:out value="${SPRING_SECURITY_LAST_USERNAME}"/></c:if>'/>
                     </div>
                     <div class="fix"></div>
@@ -36,7 +40,7 @@
 
                     <div class="loginInput">
                         <input type="password" name="j_password" class="validate[required]" id="req2"
-                               placeholder="Please enter your password"/>
+                               placeholder="${please_password}"/>
                     </div>
                     <div class="fix"></div>
                 </div>
@@ -45,7 +49,7 @@
                     <div class="rememberMe"><input type="checkbox" id="_spring_security_remember_me"
                                                    name="_spring_security_remember_me"/><label
                             for="_spring_security_remember_me">Remember me</label></div>
-                    <input id="signIn" type="submit" value="Log me in" class="greyishBtn submitForm"/>
+                    <input id="signIn" type="submit" value="${log_me_in}" class="greyishBtn submitForm"/>
 
                     <div class="fix"></div>
                 </div>
