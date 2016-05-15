@@ -2,10 +2,8 @@
 
 <img src="https://travis-ci.org/la-team/light-admin.png?branch=master"/>
 
-The primary goal of the project is to speed up application development 
+The primary goal of this PoC project is to speed up application development 
 by bringing pluggable fully operational data management back-end for JPA based applications and to relieve your codebase for more important stuff.
-
-[Light Admin](http://lightadmin.org) makes it possible to <b>focus on the stuff that matters</b> instead of spending time on auxiliary functionality.
 
 ## Features ##
 
