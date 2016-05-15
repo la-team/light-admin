@@ -1,4 +1,4 @@
-# LightAdmin - Pluggable CRUD and data administration UI library for Java web applications developed in a "Rapid" manner
+# LightAdmin - [PoC] Pluggable CRUD UI library for Java web applications
 
 <img src="https://travis-ci.org/la-team/light-admin.png?branch=master"/>
 
